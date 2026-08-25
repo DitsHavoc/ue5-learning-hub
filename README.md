@@ -1,6 +1,6 @@
-# UE5 Learning Hub v3.9.0 — Hardened Co-Teaching
+# UE5 Learning Hub v3.10.0 — Hardened Co-Teaching
 
-V3.9 is a reliability/security release rather than a feature-sprawl release.
+V3.10 is a reliability/security release rather than a feature-sprawl release.
 
 ## Co-teaching
 
@@ -55,3 +55,21 @@ Already applied to the current live Supabase project:
 Do not rerun them on the existing live project.
 
 Microsoft SSO remains optional and disabled.
+
+
+## V3.10 — Visual Accuracy Pass
+
+- Integrated five current classroom UE screenshots:
+  - Editor
+  - Events / execution
+  - Branches
+  - Functions
+  - Data Table
+- Current classroom captures appear before concept diagrams.
+- Old UE5.0 book screenshots were removed as primary visuals where a current owned screenshot is now available.
+- Every lesson now includes one or more **Official Unreal Engine 5.8 reference** links.
+- SaveGame uses Epic's current Save/Load documentation as its accuracy reference; no forced local screenshot is required.
+- Epic documentation artwork is **not copied into the package**. Students open the current official documentation in a new tab.
+- Existing concept diagrams remain clearly labelled as concept diagrams, not exact Unreal UI.
+
+No database migration is required for V3.10.

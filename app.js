@@ -192,6 +192,21 @@ function visual(l){
   }).join('')}</div>`;
 }
 
+function officialReferences(l){
+  const refs=l.officialRefs||[];
+  if(!refs.length)return '';
+  return `<div class="official-ref-block">
+    <div class="official-ref-head"><div><span class="deep-label">CURRENT SOURCE OF TRUTH</span><h3>Official Unreal Engine 5.8 reference</h3></div><span class="ue58-badge">UE 5.8</span></div>
+    <p class="official-ref-intro">Use these Epic pages when Unreal's interface or behaviour differs from an older screenshot. They are the canonical current reference for this lesson.</p>
+    <div class="official-ref-grid">${refs.map(r=>`<a class="official-ref-card" href="${esc(r.url)}" target="_blank" rel="noopener">
+      <span class="official-ref-source">${esc(r.source||'Epic Games')} • ${esc(r.version||'UE5.8')}</span>
+      <strong>${esc(r.title)}</strong>
+      <p>${esc(r.note||'Open the current official Unreal Engine documentation.')}</p>
+      <span class="official-ref-open">Open current Epic docs ↗</span>
+    </a>`).join('')}</div>
+  </div>`;
+}
+
 function deepDive(l){
   const d=l.deepDive;if(!d)return '';
   return `<div class="deep-dive">
@@ -406,7 +421,7 @@ function lessonPage(id){
       </div>` : ''}
       ${deepDive(l)}
       <h3 class="concept-title">Key terms</h3>
-      <div class="goal-grid">${l.concepts.map(c=>`<div class="concept"><strong>${esc(c[0])}</strong><br>${esc(c[1])}</div>`).join('')}</div>${visual(l)}
+      <div class="goal-grid">${l.concepts.map(c=>`<div class="concept"><strong>${esc(c[0])}</strong><br>${esc(c[1])}</div>`).join('')}</div>${visual(l)}${officialReferences(l)}
     </section>
 
     <section class="content-card guided-section" id="guided"><span class="eyebrow">03 • Guided build</span><h2>Follow it once</h2><p>Predict the result before pressing Play. Understand the system rather than racing the steps.</p>${guidedBuild(l)}</section>

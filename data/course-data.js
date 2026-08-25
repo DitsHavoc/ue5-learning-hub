@@ -1,5 +1,5 @@
 window.UE5_COURSE_DATA = {
-  "version": "3.9.0",
+  "version": "3.10.0",
   "buildDate": "25 Aug 2026",
   "paths": [
     {
@@ -155,9 +155,11 @@ window.UE5_COURSE_DATA = {
       ],
       "goodPractice": "Name things when their purpose becomes clear. Cube_74 tells the next developer nothing.",
       "visual": {
-        "type": "book",
-        "src": "assets/book/editor-overview.webp",
-        "caption": "Reference figure from the supplied UE5 Blueprint book: Level Editor overview."
+        "type": "screenshot",
+        "src": "assets/ue5/current/editor-main-window.webp",
+        "caption": "Current classroom UE5 capture: Level Editor with Viewport, Outliner, Details and Content Browser visible.",
+        "authenticUI": true,
+        "versionNote": "Current classroom Unreal Engine capture (Aug 2026)."
       },
       "bookRef": "Chapter 1: Exploring the Blueprint Editor",
       "explanation": {
@@ -298,11 +300,11 @@ window.UE5_COURSE_DATA = {
       },
       "visuals": [
         {
-          "type": "book",
-          "src": "assets/book/editor-overview.webp",
-          "caption": "Reference figure from the supplied UE5 Blueprint book: Level Editor overview.",
+          "type": "screenshot",
+          "src": "assets/ue5/current/editor-main-window.webp",
+          "caption": "Current classroom UE5 capture: Level Editor with Viewport, Outliner, Details and Content Browser visible.",
           "authenticUI": true,
-          "versionNote": "Supplied book reference (UE5.0-era). Current Unreal may look slightly different."
+          "versionNote": "Current classroom Unreal Engine capture (Aug 2026)."
         },
         {
           "type": "diagram",
@@ -315,6 +317,15 @@ window.UE5_COURSE_DATA = {
           "src": "assets/diagrams/gold/editor-example.svg",
           "caption": "Original classroom worked example: Change a lamp already in the level.",
           "authenticUI": false
+        }
+      ],
+      "officialRefs": [
+        {
+          "title": "Unreal Editor Interface",
+          "url": "https://dev.epicgames.com/documentation/unreal-engine/unreal-editor-interface?lang=en-US",
+          "note": "Current Epic reference for the Level Editor panels, toolbar and layout.",
+          "source": "Epic Games",
+          "version": "UE5.8"
         }
       ]
     },
@@ -597,6 +608,22 @@ window.UE5_COURSE_DATA = {
           "caption": "Original classroom worked example: Checkpoint beacon.",
           "authenticUI": false
         }
+      ],
+      "officialRefs": [
+        {
+          "title": "Components Window",
+          "url": "https://dev.epicgames.com/documentation/unreal-engine/components-window-in-unreal-engine",
+          "note": "Current Blueprint Editor Components window and component workflow.",
+          "source": "Epic Games",
+          "version": "UE5.8"
+        },
+        {
+          "title": "Components",
+          "url": "https://dev.epicgames.com/documentation/unreal-engine/components-in-unreal-engine?lang=en-US",
+          "note": "Epic overview of Actor, Scene and Primitive Components.",
+          "source": "Epic Games",
+          "version": "UE5.8"
+        }
       ]
     },
     {
@@ -874,6 +901,15 @@ window.UE5_COURSE_DATA = {
           "caption": "Original classroom worked example: Reusable door family.",
           "authenticUI": false
         }
+      ],
+      "officialRefs": [
+        {
+          "title": "Blueprint Class Assets",
+          "url": "https://dev.epicgames.com/documentation/unreal-engine/blueprint-class-assets-in-unreal-engine",
+          "note": "Current Epic definition of Blueprint Classes, parent classes and reusable instances.",
+          "source": "Epic Games",
+          "version": "UE5.8"
+        }
       ]
     },
     {
@@ -990,9 +1026,11 @@ window.UE5_COURSE_DATA = {
       ],
       "goodPractice": "Prove where execution stops before randomly changing nodes.",
       "visual": {
-        "type": "diagram",
-        "src": "assets/diagrams/execution-flow.svg",
-        "caption": "Original classroom diagram: event and execution flow."
+        "type": "screenshot",
+        "src": "assets/ue5/current/events-execution-real.webp",
+        "caption": "Current classroom UE5 capture: Event BeginPlay driving a clear execution chain into a stored reference.",
+        "authenticUI": true,
+        "versionNote": "Current classroom Unreal Engine capture (Aug 2026)."
       },
       "bookRef": "Chapter 2: Events, actions and execution path",
       "explanation": {
@@ -1133,6 +1171,13 @@ window.UE5_COURSE_DATA = {
       },
       "visuals": [
         {
+          "type": "screenshot",
+          "src": "assets/ue5/current/events-execution-real.webp",
+          "caption": "Current classroom UE5 capture: Event BeginPlay driving a clear execution chain into a stored reference.",
+          "authenticUI": true,
+          "versionNote": "Current classroom Unreal Engine capture (Aug 2026)."
+        },
+        {
           "type": "diagram",
           "src": "assets/diagrams/execution-flow.svg",
           "caption": "Original classroom diagram: event and execution flow.",
@@ -1149,6 +1194,15 @@ window.UE5_COURSE_DATA = {
           "src": "assets/diagrams/gold/events-example.svg",
           "caption": "Original classroom worked example: Facility powers up.",
           "authenticUI": false
+        }
+      ],
+      "officialRefs": [
+        {
+          "title": "Blueprint Foundations",
+          "url": "https://dev.epicgames.com/documentation/unreal-engine/blueprint-foundations",
+          "note": "Epic foundation reference for Event Graphs, execution and common Blueprint concepts.",
+          "source": "Epic Games",
+          "version": "UE5.8"
         }
       ]
     },
@@ -1444,6 +1498,15 @@ window.UE5_COURSE_DATA = {
           "caption": "Original classroom worked example: Door configuration.",
           "authenticUI": false
         }
+      ],
+      "officialRefs": [
+        {
+          "title": "Blueprint Variables",
+          "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-variables-in-unreal-engine",
+          "note": "Current variable types, Get/Set nodes, Instance Editable, defaults and properties.",
+          "source": "Epic Games",
+          "version": "UE5.8"
+        }
       ]
     },
     {
@@ -1596,9 +1659,11 @@ window.UE5_COURSE_DATA = {
       ],
       "goodPractice": "Name the state as a question you can answer clearly: HasKey, IsDead, CanInteract, PowerOn. Keep each outcome readable, test both paths, and use Print String or breakpoints to inspect the value feeding Condition when debugging.",
       "visual": {
-        "type": "diagram",
-        "src": "assets/diagrams/branch-flow.svg",
-        "caption": "Original classroom diagram: a Branch choosing between open and locked behaviour."
+        "type": "screenshot",
+        "src": "assets/ue5/current/branch-node-real.webp",
+        "caption": "Current classroom UE5 capture: real Branch nodes controlling crate extraction rules in gameplay logic.",
+        "authenticUI": true,
+        "versionNote": "Current classroom Unreal Engine capture (Aug 2026)."
       },
       "bookRef": "Blueprints Visual Scripting for Unreal Engine 5, Chapter 2: relational/logical operators and flow control",
       "explanation": {
@@ -1752,6 +1817,13 @@ window.UE5_COURSE_DATA = {
       ],
       "visuals": [
         {
+          "type": "screenshot",
+          "src": "assets/ue5/current/branch-node-real.webp",
+          "caption": "Current classroom UE5 capture: real Branch nodes controlling crate extraction rules in gameplay logic.",
+          "authenticUI": true,
+          "versionNote": "Current classroom Unreal Engine capture (Aug 2026)."
+        },
+        {
           "type": "diagram",
           "src": "assets/diagrams/branch-node-anatomy.svg",
           "caption": "Original classroom diagram: the four parts of a Branch node and what each pin means.",
@@ -1783,7 +1855,16 @@ window.UE5_COURSE_DATA = {
           "What happened on the False path?",
           "What went wrong during testing, and how did you diagnose it?"
         ]
-      }
+      },
+      "officialRefs": [
+        {
+          "title": "Blueprints Quick Start Guide",
+          "url": "https://dev.epicgames.com/documentation/unreal-engine/quick-start-guide-for-blueprints-visual-scripting-in-unreal-engine",
+          "note": "Current Epic Blueprint workflow reference; use alongside the real Branch screenshot below.",
+          "source": "Epic Games",
+          "version": "UE5.8"
+        }
+      ]
     },
     {
       "id": "functions",
@@ -1899,9 +1980,11 @@ window.UE5_COURSE_DATA = {
       ],
       "goodPractice": "If a block has a clear name and may be reused, a Function is often a better home.",
       "visual": {
-        "type": "book",
-        "src": "assets/book/function-example.webp",
-        "caption": "Reference figure from the supplied book: a simple Function example."
+        "type": "screenshot",
+        "src": "assets/ue5/current/function-real.webp",
+        "caption": "Current classroom UE5 capture: a real UpdateOverheadWidget Function using variables, a cast, maths and a widget update call.",
+        "authenticUI": true,
+        "versionNote": "Current classroom Unreal Engine capture (Aug 2026)."
       },
       "bookRef": "Chapter 2: Macros versus functions versus events",
       "explanation": {
@@ -2042,11 +2125,11 @@ window.UE5_COURSE_DATA = {
       },
       "visuals": [
         {
-          "type": "book",
-          "src": "assets/book/function-example.webp",
-          "caption": "Reference figure from the supplied book: a simple Function example.",
+          "type": "screenshot",
+          "src": "assets/ue5/current/function-real.webp",
+          "caption": "Current classroom UE5 capture: a real UpdateOverheadWidget Function using variables, a cast, maths and a widget update call.",
           "authenticUI": true,
-          "versionNote": "Supplied book reference (UE5.0-era). Current Unreal may look slightly different."
+          "versionNote": "Current classroom Unreal Engine capture (Aug 2026)."
         },
         {
           "type": "diagram",
@@ -2059,6 +2142,22 @@ window.UE5_COURSE_DATA = {
           "src": "assets/diagrams/gold/functions-example.svg",
           "caption": "Original classroom worked example: CalculateDamage.",
           "authenticUI": false
+        }
+      ],
+      "officialRefs": [
+        {
+          "title": "Functions",
+          "url": "https://dev.epicgames.com/documentation/unreal-engine/functions-in-unreal-engine?lang=en-US",
+          "note": "Current Epic reference for Function graphs, calls and access.",
+          "source": "Epic Games",
+          "version": "UE5.8"
+        },
+        {
+          "title": "Creating Functions",
+          "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/creating-functions-in-unreal-engine",
+          "note": "Step-by-step current UE workflow for creating and calling a Function.",
+          "source": "Epic Games",
+          "version": "UE5.8"
         }
       ]
     },
@@ -2340,6 +2439,15 @@ window.UE5_COURSE_DATA = {
           "caption": "Original classroom worked example: Player health vs game rules.",
           "authenticUI": false
         }
+      ],
+      "officialRefs": [
+        {
+          "title": "Gameplay Framework",
+          "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/gameplay-framework-in-unreal-engine",
+          "note": "Current relationships and responsibilities for GameMode, GameState, PlayerController, Pawn and related classes.",
+          "source": "Epic Games",
+          "version": "UE5.8"
+        }
       ]
     },
     {
@@ -2615,6 +2723,15 @@ window.UE5_COURSE_DATA = {
           "src": "assets/diagrams/gold/references-casting-example.svg",
           "caption": "Original classroom worked example: Overlap only cares about the player.",
           "authenticUI": false
+        }
+      ],
+      "officialRefs": [
+        {
+          "title": "Blueprint Communications",
+          "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-communications-in-unreal-engine",
+          "note": "Current Epic examples of references and communication between Blueprints.",
+          "source": "Epic Games",
+          "version": "UE5.8"
         }
       ]
     },
@@ -2897,6 +3014,22 @@ window.UE5_COURSE_DATA = {
           "caption": "Original classroom worked example: Universal Interact.",
           "authenticUI": false
         }
+      ],
+      "officialRefs": [
+        {
+          "title": "Blueprint Interface",
+          "url": "https://dev.epicgames.com/documentation/unreal-engine/blueprint-interface-in-unreal-engine?lang=en-US",
+          "note": "Current Epic reference for defining and implementing common Blueprint messages.",
+          "source": "Epic Games",
+          "version": "UE5.8"
+        },
+        {
+          "title": "Event Dispatchers",
+          "url": "https://dev.epicgames.com/documentation/unreal-engine/event-dispatchers-in-unreal-engine",
+          "note": "Current Epic reference for creating, binding and calling Event Dispatchers.",
+          "source": "Epic Games",
+          "version": "UE5.8"
+        }
       ]
     },
     {
@@ -3174,6 +3307,15 @@ window.UE5_COURSE_DATA = {
           "src": "assets/diagrams/gold/collision-example.svg",
           "caption": "Original classroom worked example: Checkpoint volume.",
           "authenticUI": false
+        }
+      ],
+      "officialRefs": [
+        {
+          "title": "Collision Overview",
+          "url": "https://dev.epicgames.com/documentation/unreal-engine/collision-in-unreal-engine---overview",
+          "note": "Current Object Types, Collision Responses and Trace Responses.",
+          "source": "Epic Games",
+          "version": "UE5.8"
         }
       ]
     },
@@ -3456,6 +3598,22 @@ window.UE5_COURSE_DATA = {
           "caption": "Original classroom worked example: Look-to-interact.",
           "authenticUI": false
         }
+      ],
+      "officialRefs": [
+        {
+          "title": "Traces with Raycasts",
+          "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/traces-with-raycasts-in-unreal-engine",
+          "note": "Current Epic landing page for Blueprint traces, raycasts, channels and hit results.",
+          "source": "Epic Games",
+          "version": "UE5.8"
+        },
+        {
+          "title": "Single Line Trace by Channel",
+          "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/using-a-single-line-trace-raycast-by-channel-in-unreal-engine",
+          "note": "Current real Blueprint node setup for a Line Trace by Channel.",
+          "source": "Epic Games",
+          "version": "UE5.8"
+        }
       ]
     },
     {
@@ -3730,6 +3888,15 @@ window.UE5_COURSE_DATA = {
           "src": "assets/diagrams/gold/timelines-example.svg",
           "caption": "Original classroom worked example: Sliding security door.",
           "authenticUI": false
+        }
+      ],
+      "officialRefs": [
+        {
+          "title": "Editing Timelines",
+          "url": "https://dev.epicgames.com/documentation/unreal-engine/editing-timelines-in-unreal-engine",
+          "note": "Current Timeline Editor, track types, keys and playback controls.",
+          "source": "Epic Games",
+          "version": "UE5.8"
         }
       ]
     },
@@ -4012,6 +4179,15 @@ window.UE5_COURSE_DATA = {
           "caption": "Original classroom worked example: Health HUD.",
           "authenticUI": false
         }
+      ],
+      "officialRefs": [
+        {
+          "title": "UMG UI Designer Quick Start",
+          "url": "https://dev.epicgames.com/documentation/unreal-engine/umg-ui-designer-quick-start-guide-in-unreal-engine",
+          "note": "Current Widget Blueprint and UMG workflow, including runtime viewport use.",
+          "source": "Epic Games",
+          "version": "UE5.8"
+        }
       ]
     },
     {
@@ -4282,6 +4458,22 @@ window.UE5_COURSE_DATA = {
           "caption": "Original classroom worked example: Checkpoint continue.",
           "authenticUI": false
         }
+      ],
+      "officialRefs": [
+        {
+          "title": "Saving and Loading Your Game",
+          "url": "https://dev.epicgames.com/documentation/unreal-engine/saving-and-loading-your-game-in-unreal-engine?lang=en-US",
+          "note": "Current Epic SaveGame model: custom SaveGame class, Create Save Game Object, save to slot and load from slot.",
+          "source": "Epic Games",
+          "version": "UE5.8"
+        },
+        {
+          "title": "Save Game to Slot",
+          "url": "https://dev.epicgames.com/documentation/unreal-engine/BlueprintAPI/SaveGame/SaveGametoSlot",
+          "note": "Current Blueprint API reference for Save Game to Slot.",
+          "source": "Epic Games",
+          "version": "UE5.8"
+        }
       ]
     },
     {
@@ -4417,9 +4609,11 @@ window.UE5_COURSE_DATA = {
       ],
       "goodPractice": "Good data structures make gameplay logic simpler, not merely more sophisticated.",
       "visual": {
-        "type": "book",
-        "src": "assets/book/containers.webp",
-        "caption": "Reference figure from the supplied book: container variable types."
+        "type": "screenshot",
+        "src": "assets/ue5/current/datatable-real.webp",
+        "caption": "Current classroom UE5 capture: a real Data Table using a Struct row type with gameplay trait values.",
+        "authenticUI": true,
+        "versionNote": "Current classroom Unreal Engine capture (Aug 2026)."
       },
       "bookRef": "Chapter 13: Data Structures and Flow Control",
       "explanation": {
@@ -4564,11 +4758,11 @@ window.UE5_COURSE_DATA = {
       },
       "visuals": [
         {
-          "type": "book",
-          "src": "assets/book/containers.webp",
-          "caption": "Reference figure from the supplied book: container variable types.",
+          "type": "screenshot",
+          "src": "assets/ue5/current/datatable-real.webp",
+          "caption": "Current classroom UE5 capture: a real Data Table using a Struct row type with gameplay trait values.",
           "authenticUI": true,
-          "versionNote": "Supplied book reference (UE5.0-era). Current Unreal may look slightly different."
+          "versionNote": "Current classroom Unreal Engine capture (Aug 2026)."
         },
         {
           "type": "diagram",
@@ -4581,6 +4775,15 @@ window.UE5_COURSE_DATA = {
           "src": "assets/diagrams/gold/data-example.svg",
           "caption": "Original classroom worked example: Inventory definitions.",
           "authenticUI": false
+        }
+      ],
+      "officialRefs": [
+        {
+          "title": "Data Driven Gameplay Elements",
+          "url": "https://dev.epicgames.com/documentation/unreal-engine/data-driven-gameplay-elements-in-unreal-engine?lang=en-US",
+          "note": "Current DataTable concepts, row structures, import and editor workflow.",
+          "source": "Epic Games",
+          "version": "UE5.8"
         }
       ]
     },
@@ -4851,6 +5054,29 @@ window.UE5_COURSE_DATA = {
           "src": "assets/diagrams/gold/ai-example.svg",
           "caption": "Original classroom worked example: Patrol → Chase.",
           "authenticUI": false
+        }
+      ],
+      "officialRefs": [
+        {
+          "title": "Behavior Trees",
+          "url": "https://dev.epicgames.com/documentation/unreal-engine/behavior-trees-in-unreal-engine",
+          "note": "Current Behavior Tree and Blackboard workflow.",
+          "source": "Epic Games",
+          "version": "UE5.8"
+        },
+        {
+          "title": "Behavior Tree Overview",
+          "url": "https://dev.epicgames.com/documentation/unreal-engine/behavior-tree-in-unreal-engine---overview",
+          "note": "Current execution order, Decorators, Blackboard keys and decision flow.",
+          "source": "Epic Games",
+          "version": "UE5.8"
+        },
+        {
+          "title": "Navigation Mesh",
+          "url": "https://dev.epicgames.com/documentation/unreal-engine/overview-of-how-to-modify-the-navigation-mesh-in-unreal-engine",
+          "note": "Current NavMesh/pathfinding reference.",
+          "source": "Epic Games",
+          "version": "UE5.8"
         }
       ]
     },
@@ -5133,6 +5359,15 @@ window.UE5_COURSE_DATA = {
           "caption": "Original classroom worked example: Idle ↔ movement.",
           "authenticUI": false
         }
+      ],
+      "officialRefs": [
+        {
+          "title": "Animation Blueprints",
+          "url": "https://dev.epicgames.com/documentation/unreal-engine/animation-blueprints-in-unreal-engine",
+          "note": "Current Animation Blueprint Editor, AnimGraph and animation logic reference.",
+          "source": "Epic Games",
+          "version": "UE5.8"
+        }
       ]
     },
     {
@@ -5413,6 +5648,15 @@ window.UE5_COURSE_DATA = {
           "src": "assets/diagrams/gold/practice-example.svg",
           "caption": "Original classroom worked example: Player death.",
           "authenticUI": false
+        }
+      ],
+      "officialRefs": [
+        {
+          "title": "Blueprint Best Practices",
+          "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-best-practices-in-unreal-engine",
+          "note": "Epic guidance on reusable Blueprint Classes, event-driven logic and maintainability.",
+          "source": "Epic Games",
+          "version": "UE5.8"
         }
       ]
     },
@@ -5701,6 +5945,22 @@ window.UE5_COURSE_DATA = {
           "src": "assets/diagrams/gold/complexity-example.svg",
           "caption": "Original classroom worked example: Interact input spaghetti.",
           "authenticUI": false
+        }
+      ],
+      "officialRefs": [
+        {
+          "title": "Blueprint Best Practices",
+          "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-best-practices-in-unreal-engine",
+          "note": "Epic guidance for maintainable Blueprint structure.",
+          "source": "Epic Games",
+          "version": "UE5.8"
+        },
+        {
+          "title": "Blueprint Debugging Example",
+          "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-debugging-example-in-unreal-engine",
+          "note": "Current breakpoints, Watches, active wires and debugging workflow.",
+          "source": "Epic Games",
+          "version": "UE5.8"
         }
       ]
     }
