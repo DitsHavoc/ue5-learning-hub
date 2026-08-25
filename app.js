@@ -198,6 +198,12 @@ function docVisuals(l,slot){
   return `<div class="inline-visual-story epic"><div class="visual-story-head"><span class="deep-label">OFFICIAL UE5.8 SCREENSHOT${xs.length>1?'S':''}</span><h3>See the real Unreal interface</h3><p>Official Epic documentation imagery placed beside the concept it explains.</p></div><div class="visual-story-grid">${xs.map((v,i)=>zoomableImage({src:v.src,alt:`${l.title} official Unreal Engine screenshot ${i+1}`,caption:v.caption||'',sourceUrl:v.sourceUrl||'',sourceTitle:v.sourceTitle||'',kind:'epic',eager:false})).join('')}</div></div>`;
 }
 
+function motionMedia(l,slot){
+  const xs=(l.motionMedia||[]).filter(v=>(v.slot||'concept')===slot);
+  if(!xs.length)return '';
+  return `<div class="motion-media-story"><div class="visual-story-head"><span class="deep-label">WATCH IT HAPPEN</span><h3>See the system moving in Unreal</h3><p>Short official Epic clips are used where motion explains the idea better than another still image. Players load only when you press Play.</p></div><div class="motion-media-grid">${xs.map((v,i)=>`<article class="motion-media-card"><div class="motion-player-shell" data-video-shell><div class="motion-player-placeholder"><span class="motion-play-icon">▶</span><strong>${esc(v.title)}</strong><p>${esc(v.note||'')}</p><button class="button small primary" type="button" data-action="load-video" data-embed="${esc(v.embed)}" data-title="${esc(v.title)}">▶ Play official Epic clip</button></div></div><div class="motion-media-meta"><span>EPIC GAMES • UNREAL ENGINE 5.8</span><a href="${esc(v.sourceUrl)}" target="_blank" rel="noopener">Open source lesson ↗</a></div></article>`).join('')}</div></div>`;
+}
+
 function officialReferences(l){
   const refs=l.officialRefs||[];
   if(!refs.length)return '';
@@ -430,6 +436,7 @@ function lessonPage(id){
       ${l.explanation ? `<div class="explain-lead"><h3>What is it?</h3><p>${esc(l.explanation.what)}</p></div>
       ${currentVisuals(l)}
       ${docVisuals(l,'intro')}
+      ${motionMedia(l,'intro')}
       <div class="explain-grid">
         <div class="explain-box why"><span>WHY IT MATTERS</span><p>${esc(l.explanation.why)}</p></div>
         <div class="explain-box mental"><span>HOW TO THINK ABOUT IT</span><p>${esc(l.explanation.mental)}</p></div>
@@ -437,11 +444,14 @@ function lessonPage(id){
         <div class="explain-box use"><span>WHEN YOU'D USE IT</span><p>${esc(l.explanation.use)}</p></div>
       </div>` : ''}
       ${docVisuals(l,'concept')}
+      ${motionMedia(l,'concept')}
       ${inlineExercise(l,0)}
       ${docVisuals(l,'practice')}
+      ${motionMedia(l,'practice')}
       ${deepDive(l)}
       ${conceptVisuals(l)}
       ${docVisuals(l,'deeper')}
+      ${motionMedia(l,'deeper')}
       ${inlineExercise(l,1)}
       <h3 class="concept-title">Key terms</h3>
       <div class="goal-grid">${l.concepts.map(c=>`<div class="concept"><strong>${esc(c[0])}</strong><br>${esc(c[1])}</div>`).join('')}</div>
@@ -1195,6 +1205,21 @@ document.addEventListener('click',async e=>{
   const b=e.target.closest('[data-action]');if(!b)return;
   const a=b.dataset.action;
   if(a==='open-image'){openImageLightbox(b);}
+  else if(a==='load-video'){
+    const shell=b.closest('[data-video-shell]');
+    if(!shell)return;
+    const src=b.dataset.embed||'';
+    if(!src.startsWith('https://dev.epicgames.com/')){toast('Video source was blocked for safety.');return}
+    const iframe=document.createElement('iframe');
+    iframe.className='epic-motion-iframe';
+    iframe.src=src;
+    iframe.title=b.dataset.title||'Unreal Engine video';
+    iframe.loading='lazy';
+    iframe.allow='autoplay; fullscreen; picture-in-picture; encrypted-media';
+    iframe.setAttribute('allowfullscreen','');
+    iframe.referrerPolicy='strict-origin-when-cross-origin';
+    shell.replaceChildren(iframe);
+  }
   else if(a==='close-image'){closeImageLightbox();}
   else if(a==='scroll'){document.getElementById(b.dataset.target)?.scrollIntoView({behavior:'smooth',block:'start'});}
   else if(a==='complete') await setLessonComplete(b.dataset.lesson);

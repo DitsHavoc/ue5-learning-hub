@@ -1,5 +1,5 @@
 window.UE5_COURSE_DATA = {
-  "version": "3.13.0",
+  "version": "3.14.0",
   "buildDate": "25 Aug 2026",
   "paths": [
     {
@@ -727,6 +727,16 @@ window.UE5_COURSE_DATA = {
           "slot": "deeper",
           "type": "epic-doc"
         }
+      ],
+      "motionMedia": [
+        {
+          "slot": "intro",
+          "title": "Adding Components to the Player Blueprint",
+          "note": "Watch Epic add Components inside a real Player Blueprint. Use this before the Components exercise so the panel and workflow are recognisable.",
+          "embed": "https://dev.epicgames.com/community/api/cms/videos/V_o3Rroz/embed.html",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/module-2-create-a-flashlight-with-enhanced-input",
+          "sourceTitle": "Epic UE5.8 — Create a Flashlight with Enhanced Input"
+        }
       ]
     },
     {
@@ -1057,6 +1067,16 @@ window.UE5_COURSE_DATA = {
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "slot": "intro",
           "type": "epic-doc"
+        }
+      ],
+      "motionMedia": [
+        {
+          "slot": "intro",
+          "title": "Introduction to the Player Blueprint",
+          "note": "A short official overview of working inside a reusable Player Blueprint class.",
+          "embed": "https://dev.epicgames.com/community/api/cms/videos/V_02MEXM/embed.html",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/module-2-create-a-flashlight-with-enhanced-input",
+          "sourceTitle": "Epic UE5.8 — Create a Flashlight with Enhanced Input"
         }
       ]
     },
@@ -1394,7 +1414,17 @@ window.UE5_COURSE_DATA = {
           "check": "You can state exactly what causes each execution path to begin."
         }
       ],
-      "docVisuals": []
+      "docVisuals": [],
+      "motionMedia": [
+        {
+          "slot": "practice",
+          "title": "Creating Coin Counter Blueprint Functionality",
+          "note": "Watch a real Blueprint gameplay interaction being wired and executed. Focus on what starts the logic and how execution moves through the graph.",
+          "embed": "https://dev.epicgames.com/community/api/cms/videos/V_xrG6Fm/embed.html",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/module-3-create-a-coin-pickup-with-modeling-tools-and-blueprints",
+          "sourceTitle": "Epic UE5.8 — Create a Coin Pickup with Blueprints"
+        }
+      ]
     },
     {
       "id": "variables",
@@ -1765,6 +1795,16 @@ window.UE5_COURSE_DATA = {
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "slot": "practice",
           "type": "epic-doc"
+        }
+      ],
+      "motionMedia": [
+        {
+          "slot": "concept",
+          "title": "Binding UI Elements to Blueprint Variables",
+          "note": "A useful real-world example of values stored in Blueprint driving something the player sees.",
+          "embed": "https://dev.epicgames.com/community/api/cms/videos/V_3eri2o/embed.html",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/module-4-build-a-hud-with-unreal-motion-graphics",
+          "sourceTitle": "Epic UE5.8 — Build a HUD with Unreal Motion Graphics"
         }
       ]
     },
@@ -2544,6 +2584,16 @@ window.UE5_COURSE_DATA = {
           "slot": "deeper",
           "type": "epic-doc"
         }
+      ],
+      "motionMedia": [
+        {
+          "slot": "deeper",
+          "title": "Creating Game Timer Blueprint Logic",
+          "note": "Watch a larger piece of Blueprint logic organised into a purposeful gameplay system, then compare its readability with your own function/macro decisions.",
+          "embed": "https://dev.epicgames.com/community/api/cms/videos/V_nTH7j6/embed.html",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/module-3-creating-the-game-timer-in-unreal-engine",
+          "sourceTitle": "Epic UE5.8 — Creating the Game Timer"
+        }
       ]
     },
     {
@@ -2885,6 +2935,16 @@ window.UE5_COURSE_DATA = {
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "slot": "practice",
           "type": "epic-doc"
+        }
+      ],
+      "motionMedia": [
+        {
+          "slot": "deeper",
+          "title": "Building a Level Checkpoint",
+          "note": "A system-level example: world trigger, player state and respawn behaviour must cooperate instead of living as isolated nodes.",
+          "embed": "https://dev.epicgames.com/community/api/cms/videos/V_owUMlG/embed.html",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/module-6-creating-level-checkpoints-and-kill-volumes-in-unreal-engine",
+          "sourceTitle": "Epic UE5.8 — Level Checkpoints and Kill Volumes"
         }
       ]
     },
@@ -3946,6 +4006,16 @@ window.UE5_COURSE_DATA = {
           "slot": "practice",
           "type": "epic-doc"
         }
+      ],
+      "motionMedia": [
+        {
+          "slot": "practice",
+          "title": "Creating a Kill Volume",
+          "note": "See overlap/collision become an actual gameplay rule: touching the volume sends the player back.",
+          "embed": "https://dev.epicgames.com/community/api/cms/videos/V_3nG3Hm/embed.html",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/module-6-creating-level-checkpoints-and-kill-volumes-in-unreal-engine",
+          "sourceTitle": "Epic UE5.8 — Level Checkpoints and Kill Volumes"
+        }
       ]
     },
     {
@@ -4649,6 +4719,16 @@ window.UE5_COURSE_DATA = {
           "slot": "practice",
           "type": "epic-doc"
         }
+      ],
+      "motionMedia": [
+        {
+          "slot": "concept",
+          "title": "Animating a Moving Platform with Blueprint Logic",
+          "note": "A moving platform makes changing a value over time visible immediately. Watch the motion, then relate it back to Timeline / interpolation thinking.",
+          "embed": "https://dev.epicgames.com/community/api/cms/videos/V_HCKYRN/embed.html",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/module-7-building-more-game-obstacles-in-unreal-engine",
+          "sourceTitle": "Epic UE5.8 — Building More Game Obstacles"
+        }
       ]
     },
     {
@@ -4999,6 +5079,32 @@ window.UE5_COURSE_DATA = {
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "slot": "practice",
           "type": "epic-doc"
+        }
+      ],
+      "motionMedia": [
+        {
+          "slot": "intro",
+          "title": "Introducing Unreal Motion Graphics (UMG)",
+          "note": "Official introduction to the Widget/UMG workflow before students build their own HUD.",
+          "embed": "https://dev.epicgames.com/community/api/cms/videos/V_Ejb16P/embed.html",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/module-4-build-a-hud-with-unreal-motion-graphics",
+          "sourceTitle": "Epic UE5.8 — Build a HUD with Unreal Motion Graphics"
+        },
+        {
+          "slot": "practice",
+          "title": "Creating and Displaying Widget Blueprints",
+          "note": "Shows the practical step from Widget Blueprint asset to an interface visible during gameplay.",
+          "embed": "https://dev.epicgames.com/community/api/cms/videos/V_4kxwkw/embed.html",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/module-4-build-a-hud-with-unreal-motion-graphics",
+          "sourceTitle": "Epic UE5.8 — Build a HUD with Unreal Motion Graphics"
+        },
+        {
+          "slot": "deeper",
+          "title": "Animating a Start Countdown in UMG",
+          "note": "Useful motion example showing that UI can animate and then trigger/communicate with Blueprint gameplay logic.",
+          "embed": "https://dev.epicgames.com/community/api/cms/videos/V_bN8AMp/embed.html",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/module-2-setting-up-the-start-countdown-in-unreal-engine",
+          "sourceTitle": "Epic UE5.8 — Setting Up the Start Countdown"
         }
       ]
     },
@@ -6429,6 +6535,16 @@ window.UE5_COURSE_DATA = {
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "slot": "deeper",
           "type": "epic-doc"
+        }
+      ],
+      "motionMedia": [
+        {
+          "slot": "concept",
+          "title": "Playing Animation on a Skeletal Mesh",
+          "note": "A short official motion example showing animation applied to a character asset in Unreal.",
+          "embed": "https://dev.epicgames.com/community/api/cms/videos/V_Cmatef/embed.html",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/skeletal-mesh-assets-in-unreal-engine",
+          "sourceTitle": "Epic UE5.8 — Skeletal Mesh Assets"
         }
       ]
     },
