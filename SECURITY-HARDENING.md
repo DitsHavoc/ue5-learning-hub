@@ -1,4 +1,4 @@
-# V3.10 Security Hardening
+# V3.12 Security Hardening
 
 ## Permission matrix
 

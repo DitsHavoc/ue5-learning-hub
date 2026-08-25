@@ -1,5 +1,5 @@
 window.UE5_COURSE_DATA = {
-  "version": "3.10.0",
+  "version": "3.12.0",
   "buildDate": "25 Aug 2026",
   "paths": [
     {
@@ -300,11 +300,16 @@ window.UE5_COURSE_DATA = {
       },
       "visuals": [
         {
-          "type": "screenshot",
+          "type": "ue5",
           "src": "assets/ue5/current/editor-main-window.webp",
-          "caption": "Current classroom UE5 capture: Level Editor with Viewport, Outliner, Details and Content Browser visible.",
-          "authenticUI": true,
-          "versionNote": "Current classroom Unreal Engine capture (Aug 2026)."
+          "caption": "Current Unreal Editor workspace from a real classroom project. Students can see the Viewport in the centre, the Place Actors panel on the left, the Outliner and Details on the right, and the Content Browser / Content Drawer area at the bottom.",
+          "authenticUI": true
+        },
+        {
+          "type": "ue5",
+          "src": "assets/ue5/current/editor-panels-closeup.webp",
+          "caption": "Closer look at the core panels students use most often when starting out: Place Actors on the left, the main toolbar across the top, and the Content Browser at the bottom for locating folders and Blueprint assets.",
+          "authenticUI": true
         },
         {
           "type": "diagram",
@@ -326,6 +331,42 @@ window.UE5_COURSE_DATA = {
           "note": "Current Epic reference for the Level Editor panels, toolbar and layout.",
           "source": "Epic Games",
           "version": "UE5.8"
+        }
+      ],
+      "visualPlacement": "inline-top",
+      "inlineExercises": [
+        {
+          "kind": "try",
+          "title": "Find the editor by touch",
+          "task": "Without using notes, point out the Viewport, Outliner, Details and Content Browser/Drawer in your own project.",
+          "steps": [
+            "Select any Actor in the Viewport.",
+            "Find the same Actor in the Outliner.",
+            "Change one transform value in Details and watch the Viewport."
+          ],
+          "check": "You can move between the four panels without hunting for them."
+        },
+        {
+          "kind": "test",
+          "title": "Break your orientation on purpose",
+          "task": "Make one small editor change, predict what will happen, then verify it.",
+          "steps": [
+            "Rename an Actor in the Outliner.",
+            "Move or rotate it using Details instead of the gizmo.",
+            "Undo and redo the change."
+          ],
+          "check": "You can explain which panel changed the Actor and which panel only organised it."
+        },
+        {
+          "kind": "modify",
+          "title": "Make the workspace yours",
+          "task": "Create a tidy mini-work area rather than leaving default clutter.",
+          "steps": [
+            "Create one useful folder in the Outliner.",
+            "Create one useful folder in the Content Browser.",
+            "Move/rename assets or Actors so another student could understand the scene."
+          ],
+          "check": "Your scene and project structure are clearer than when you started."
         }
       ]
     },
@@ -624,6 +665,41 @@ window.UE5_COURSE_DATA = {
           "source": "Epic Games",
           "version": "UE5.8"
         }
+      ],
+      "inlineExercises": [
+        {
+          "kind": "try",
+          "title": "Build one Actor from components",
+          "task": "Create a simple Actor Blueprint using more than one Component.",
+          "steps": [
+            "Add a Static Mesh Component.",
+            "Add a Box Collision Component.",
+            "Rename both Components clearly."
+          ],
+          "check": "The Components panel shows a readable parent/child hierarchy."
+        },
+        {
+          "kind": "test",
+          "title": "Component or whole Actor?",
+          "task": "Change a Component transform and compare it with moving the Actor instance.",
+          "steps": [
+            "Offset the mesh inside the Blueprint.",
+            "Compile and inspect the placed Actor.",
+            "Move the whole Actor in the level."
+          ],
+          "check": "You can explain local Component placement versus Actor world placement."
+        },
+        {
+          "kind": "modify",
+          "title": "Add one useful capability",
+          "task": "Add a Component that changes what the Actor can do.",
+          "steps": [
+            "Choose a Point Light, Audio, Arrow, Scene or another sensible Component.",
+            "Place it correctly in the hierarchy.",
+            "Explain why it belongs on this Actor."
+          ],
+          "check": "The extra Component has a clear gameplay or presentation purpose."
+        }
       ]
     },
     {
@@ -910,6 +986,41 @@ window.UE5_COURSE_DATA = {
           "source": "Epic Games",
           "version": "UE5.8"
         }
+      ],
+      "inlineExercises": [
+        {
+          "kind": "try",
+          "title": "Prove Class versus Instance",
+          "task": "Place two instances of the same Blueprint Class.",
+          "steps": [
+            "Create or open a reusable Actor Blueprint.",
+            "Place it twice in the level.",
+            "Change the transform of only one instance."
+          ],
+          "check": "Both objects share the same Class but remain separate instances."
+        },
+        {
+          "kind": "test",
+          "title": "Default or override?",
+          "task": "Change a Class Default, then compare it with an overridden instance value.",
+          "steps": [
+            "Make one variable Instance Editable.",
+            "Give one instance a different value.",
+            "Change the Class Default and observe both instances."
+          ],
+          "check": "You can explain why an override may not follow the new default."
+        },
+        {
+          "kind": "modify",
+          "title": "Design for reuse",
+          "task": "Create a third instance that looks/behaves different without duplicating the Blueprint.",
+          "steps": [
+            "Use Instance Editable variables.",
+            "Keep the underlying logic shared.",
+            "Give the third instance a deliberate variation."
+          ],
+          "check": "One Class now supports multiple useful variations."
+        }
       ]
     },
     {
@@ -1171,11 +1282,16 @@ window.UE5_COURSE_DATA = {
       },
       "visuals": [
         {
-          "type": "screenshot",
+          "type": "ue5",
           "src": "assets/ue5/current/events-execution-real.webp",
-          "caption": "Current classroom UE5 capture: Event BeginPlay driving a clear execution chain into a stored reference.",
-          "authenticUI": true,
-          "versionNote": "Current classroom Unreal Engine capture (Aug 2026)."
+          "caption": "A real Event Graph example. Event BeginPlay triggers the white execution wire, runs Get All Actors of Class, then stores the result in a variable. This is exactly the sort of linear execution chain students build constantly in UE5.",
+          "authenticUI": true
+        },
+        {
+          "type": "ue5",
+          "src": "assets/ue5/current/events-execution-closeup.webp",
+          "caption": "Close-up on the start of the chain. Notice that execution enters from Event BeginPlay through the white wire, while blue data pins carry values separately.",
+          "authenticUI": true
         },
         {
           "type": "diagram",
@@ -1203,6 +1319,42 @@ window.UE5_COURSE_DATA = {
           "note": "Epic foundation reference for Event Graphs, execution and common Blueprint concepts.",
           "source": "Epic Games",
           "version": "UE5.8"
+        }
+      ],
+      "visualPlacement": "inline-top",
+      "inlineExercises": [
+        {
+          "kind": "try",
+          "title": "Watch execution begin",
+          "task": "Build the smallest visible event chain.",
+          "steps": [
+            "Connect Event BeginPlay to Print String.",
+            "Add a second Print String after it.",
+            "Predict the order before pressing Play."
+          ],
+          "check": "Both messages appear in the order you predicted."
+        },
+        {
+          "kind": "test",
+          "title": "Break the white wire",
+          "task": "Disconnect one execution wire and retest.",
+          "steps": [
+            "Predict which nodes will stop running.",
+            "Press Play.",
+            "Reconnect the wire and verify the chain returns."
+          ],
+          "check": "You can explain why data sitting in a graph does not execute by itself."
+        },
+        {
+          "kind": "modify",
+          "title": "Add another cause",
+          "task": "Add a second Event that starts a different path.",
+          "steps": [
+            "Use an overlap, hit, input or another suitable Event.",
+            "Give it visibly different feedback.",
+            "Trigger both Events separately."
+          ],
+          "check": "You can state exactly what causes each execution path to begin."
         }
       ]
     },
@@ -1506,6 +1658,41 @@ window.UE5_COURSE_DATA = {
           "note": "Current variable types, Get/Set nodes, Instance Editable, defaults and properties.",
           "source": "Epic Games",
           "version": "UE5.8"
+        }
+      ],
+      "inlineExercises": [
+        {
+          "kind": "try",
+          "title": "Store two kinds of state",
+          "task": "Create one Boolean and one numeric variable.",
+          "steps": [
+            "Give both clear names.",
+            "Set sensible default values.",
+            "Drag each into the graph as Get."
+          ],
+          "check": "You can identify their types and current values."
+        },
+        {
+          "kind": "test",
+          "title": "Get versus Set",
+          "task": "Change a value during play and prove the difference between reading and writing.",
+          "steps": [
+            "Use Set to change a variable.",
+            "Read it afterwards with Get.",
+            "Print or otherwise display the result."
+          ],
+          "check": "The runtime value changes only when the Set executes."
+        },
+        {
+          "kind": "modify",
+          "title": "Expose a designer control",
+          "task": "Make one useful variable Instance Editable.",
+          "steps": [
+            "Choose a value designers might reasonably tune.",
+            "Change it on two placed instances.",
+            "Test both instances."
+          ],
+          "check": "The same Blueprint produces different results without duplicated logic."
         }
       ]
     },
@@ -1817,11 +2004,16 @@ window.UE5_COURSE_DATA = {
       ],
       "visuals": [
         {
-          "type": "screenshot",
+          "type": "ue5",
           "src": "assets/ue5/current/branch-node-real.webp",
-          "caption": "Current classroom UE5 capture: real Branch nodes controlling crate extraction rules in gameplay logic.",
-          "authenticUI": true,
-          "versionNote": "Current classroom Unreal Engine capture (Aug 2026)."
+          "caption": "Real gameplay Blueprint logic using Branch nodes. This shows a true production example: the first Branch checks whether the crate is already extracted, and the second Branch tests whether the correct soldier is carrying it.",
+          "authenticUI": true
+        },
+        {
+          "type": "ue5",
+          "src": "assets/ue5/current/branch-condition-closeup.webp",
+          "caption": "Close-up on the first decision. The Branch receives a Boolean condition and then routes execution to the True or False pin. This is the exact node shape students should recognise in Unreal.",
+          "authenticUI": true
         },
         {
           "type": "diagram",
@@ -1863,6 +2055,42 @@ window.UE5_COURSE_DATA = {
           "note": "Current Epic Blueprint workflow reference; use alongside the real Branch screenshot below.",
           "source": "Epic Games",
           "version": "UE5.8"
+        }
+      ],
+      "visualPlacement": "inline-top",
+      "inlineExercises": [
+        {
+          "kind": "try",
+          "title": "Make one decision",
+          "task": "Create a Boolean-driven Branch with visible feedback.",
+          "steps": [
+            "Create a Boolean such as HasKey.",
+            "Connect it to Branch Condition.",
+            "Give True and False different Print String messages."
+          ],
+          "check": "Both outcomes are wired and readable."
+        },
+        {
+          "kind": "test",
+          "title": "Force both outcomes",
+          "task": "Prove you tested True and False rather than only the happy path.",
+          "steps": [
+            "Run once with the Boolean False.",
+            "Run once with it True.",
+            "Predict the message before each test."
+          ],
+          "check": "Both paths execute exactly when expected."
+        },
+        {
+          "kind": "modify",
+          "title": "Add a second rule",
+          "task": "Make access depend on one more piece of state.",
+          "steps": [
+            "Add a second Boolean or comparison.",
+            "Combine it cleanly with the first rule.",
+            "Keep the final decision readable."
+          ],
+          "check": "You can explain the complete condition in one sentence."
         }
       ]
     },
@@ -2125,11 +2353,16 @@ window.UE5_COURSE_DATA = {
       },
       "visuals": [
         {
-          "type": "screenshot",
+          "type": "ue5",
           "src": "assets/ue5/current/function-real.webp",
-          "caption": "Current classroom UE5 capture: a real UpdateOverheadWidget Function using variables, a cast, maths and a widget update call.",
-          "authenticUI": true,
-          "versionNote": "Current classroom Unreal Engine capture (Aug 2026)."
+          "caption": "A real function from a classroom project. UpdateOverheadWidget gathers values, casts to the correct widget type, then sends clean inputs into another function call. This is exactly why functions help organise repeated logic.",
+          "authenticUI": true
+        },
+        {
+          "type": "ue5",
+          "src": "assets/ue5/current/function-update-closeup.webp",
+          "caption": "Close-up of the reusable logic inside the function. Inputs are processed, the widget reference is validated through a cast, and a dedicated update function is called with readable parameters.",
+          "authenticUI": true
         },
         {
           "type": "diagram",
@@ -2158,6 +2391,42 @@ window.UE5_COURSE_DATA = {
           "note": "Step-by-step current UE workflow for creating and calling a Function.",
           "source": "Epic Games",
           "version": "UE5.8"
+        }
+      ],
+      "visualPlacement": "inline-top",
+      "inlineExercises": [
+        {
+          "kind": "try",
+          "title": "Extract one clear job",
+          "task": "Create a Function that performs one reusable calculation or action.",
+          "steps": [
+            "Give it a verb-based name.",
+            "Add at least one input.",
+            "Return a value or perform one clearly defined job."
+          ],
+          "check": "The Function name describes exactly what it does."
+        },
+        {
+          "kind": "test",
+          "title": "Call it twice",
+          "task": "Prove the Function is reusable rather than hard-coded.",
+          "steps": [
+            "Call it with one set of inputs.",
+            "Call it again with different inputs.",
+            "Compare the results."
+          ],
+          "check": "Both calls use the same Function but produce appropriate results."
+        },
+        {
+          "kind": "modify",
+          "title": "Change once, fix everywhere",
+          "task": "Edit the Function implementation and retest both call sites.",
+          "steps": [
+            "Change the formula or internal behaviour.",
+            "Compile.",
+            "Retest both calls without editing either call site."
+          ],
+          "check": "One edit updates every use of the Function."
         }
       ]
     },
@@ -2448,6 +2717,41 @@ window.UE5_COURSE_DATA = {
           "source": "Epic Games",
           "version": "UE5.8"
         }
+      ],
+      "inlineExercises": [
+        {
+          "kind": "try",
+          "title": "Name the owner",
+          "task": "Inspect the framework Classes in your project.",
+          "steps": [
+            "Find the Character/Pawn.",
+            "Find the PlayerController and GameMode.",
+            "Identify GameInstance/GameState if present."
+          ],
+          "check": "You can give one sensible responsibility for each Class you found."
+        },
+        {
+          "kind": "test",
+          "title": "Where should this variable live?",
+          "task": "Choose three example values and decide their owner before building them.",
+          "steps": [
+            "Player health.",
+            "Current match score/rules.",
+            "A value that must survive a level change."
+          ],
+          "check": "You can justify each location using lifetime and responsibility."
+        },
+        {
+          "kind": "modify",
+          "title": "Move one responsibility",
+          "task": "Take one piece of logic/data currently in an awkward place and relocate it conceptually or practically.",
+          "steps": [
+            "Name the current owner.",
+            "Name the better owner.",
+            "Explain what reference/communication is then required."
+          ],
+          "check": "The new location makes the system easier to reason about."
+        }
       ]
     },
     {
@@ -2732,6 +3036,41 @@ window.UE5_COURSE_DATA = {
           "note": "Current Epic examples of references and communication between Blueprints.",
           "source": "Epic Games",
           "version": "UE5.8"
+        }
+      ],
+      "inlineExercises": [
+        {
+          "kind": "try",
+          "title": "Hold a useful reference",
+          "task": "Get or store a reference to another gameplay object.",
+          "steps": [
+            "Choose an object you genuinely need to talk to.",
+            "Obtain/store the reference.",
+            "Use it to read or call something simple."
+          ],
+          "check": "The reference points to the intended instance, not just the Class."
+        },
+        {
+          "kind": "test",
+          "title": "Make a cast fail safely",
+          "task": "Test the same cast with a wrong object type.",
+          "steps": [
+            "Predict whether the cast should succeed.",
+            "Trigger the failure case.",
+            "Provide safe failure behaviour or feedback."
+          ],
+          "check": "The system does not assume every object is the desired type."
+        },
+        {
+          "kind": "modify",
+          "title": "Reduce repeated casting",
+          "task": "If you repeatedly cast to the same object, improve the pattern.",
+          "steps": [
+            "Store a validated reference where appropriate.",
+            "Reuse that reference.",
+            "Keep an Is Valid/failure route where needed."
+          ],
+          "check": "The graph communicates intent more clearly and avoids needless repeated work."
         }
       ]
     },
@@ -3030,6 +3369,41 @@ window.UE5_COURSE_DATA = {
           "source": "Epic Games",
           "version": "UE5.8"
         }
+      ],
+      "inlineExercises": [
+        {
+          "kind": "try",
+          "title": "Send one generic message",
+          "task": "Create/implement a simple Blueprint Interface message such as Interact.",
+          "steps": [
+            "Add one Interface function.",
+            "Implement it on one Actor.",
+            "Call it through an object reference."
+          ],
+          "check": "The caller does not need the receiver’s concrete Class logic."
+        },
+        {
+          "kind": "test",
+          "title": "One message, two behaviours",
+          "task": "Implement the same Interface on a second Actor.",
+          "steps": [
+            "Give the second Actor a different response.",
+            "Call the same Interface message on both.",
+            "Compare results."
+          ],
+          "check": "The same message produces class-specific behaviour."
+        },
+        {
+          "kind": "modify",
+          "title": "Broadcast a change",
+          "task": "Use an Event Dispatcher for a one-to-many notification.",
+          "steps": [
+            "Create a Dispatcher on the object that owns the state change.",
+            "Bind at least one listener.",
+            "Call the Dispatcher and verify the listener responds."
+          ],
+          "check": "The sender does not directly control every listener."
+        }
       ]
     },
     {
@@ -3316,6 +3690,41 @@ window.UE5_COURSE_DATA = {
           "note": "Current Object Types, Collision Responses and Trace Responses.",
           "source": "Epic Games",
           "version": "UE5.8"
+        }
+      ],
+      "inlineExercises": [
+        {
+          "kind": "try",
+          "title": "Build a trigger",
+          "task": "Create a collision volume that overlaps the player.",
+          "steps": [
+            "Add/select a collision Component.",
+            "Enable overlap events.",
+            "Print a message on BeginOverlap."
+          ],
+          "check": "Walking into the volume triggers once as expected."
+        },
+        {
+          "kind": "test",
+          "title": "Block, overlap, ignore",
+          "task": "Change one collision response and predict the effect.",
+          "steps": [
+            "Test Block.",
+            "Test Overlap.",
+            "Test Ignore for the same relevant channel/object."
+          ],
+          "check": "You can describe the practical difference between all three responses."
+        },
+        {
+          "kind": "modify",
+          "title": "Create a purposeful response",
+          "task": "Tune collision for a real gameplay object.",
+          "steps": [
+            "Choose what should physically block it.",
+            "Choose what should only trigger it.",
+            "Choose what should be ignored."
+          ],
+          "check": "Its collision setup matches the gameplay intention rather than a default preset by accident."
         }
       ]
     },
@@ -3614,6 +4023,41 @@ window.UE5_COURSE_DATA = {
           "source": "Epic Games",
           "version": "UE5.8"
         }
+      ],
+      "inlineExercises": [
+        {
+          "kind": "try",
+          "title": "Fire a visible trace",
+          "task": "Create a Line Trace By Channel and turn on debug drawing.",
+          "steps": [
+            "Choose sensible Start and End points.",
+            "Use a suitable Trace Channel.",
+            "Press Play and observe the debug line."
+          ],
+          "check": "The trace appears where you expected it to travel."
+        },
+        {
+          "kind": "test",
+          "title": "Read the Hit Result",
+          "task": "Use the trace result rather than only drawing the line.",
+          "steps": [
+            "Check Return Value or break the Hit Result.",
+            "Print the Hit Actor name.",
+            "Aim at empty space and an Actor."
+          ],
+          "check": "The system distinguishes hit from no-hit correctly."
+        },
+        {
+          "kind": "modify",
+          "title": "Make the trace useful",
+          "task": "Turn the trace into a small interaction test.",
+          "steps": [
+            "Choose a maximum range.",
+            "React only to a suitable Actor/object.",
+            "Give feedback when the target is valid."
+          ],
+          "check": "The trace now supports an actual gameplay decision."
+        }
       ]
     },
     {
@@ -3897,6 +4341,41 @@ window.UE5_COURSE_DATA = {
           "note": "Current Timeline Editor, track types, keys and playback controls.",
           "source": "Epic Games",
           "version": "UE5.8"
+        }
+      ],
+      "inlineExercises": [
+        {
+          "kind": "try",
+          "title": "Animate one value",
+          "task": "Create a Timeline with a Float track from 0 to 1.",
+          "steps": [
+            "Add two keys.",
+            "Set a sensible duration.",
+            "Use Update to drive a visible value through Lerp."
+          ],
+          "check": "The value changes smoothly over time."
+        },
+        {
+          "kind": "test",
+          "title": "Play and reverse",
+          "task": "Test the same Timeline in both directions.",
+          "steps": [
+            "Trigger Play.",
+            "Trigger Reverse.",
+            "Watch the driven property return smoothly."
+          ],
+          "check": "One Timeline handles both directions without duplicated animation logic."
+        },
+        {
+          "kind": "modify",
+          "title": "Change the feel",
+          "task": "Alter the curve or duration deliberately.",
+          "steps": [
+            "Try a faster/slower length.",
+            "Change interpolation/easing if appropriate.",
+            "Compare the game feel."
+          ],
+          "check": "You can explain how the Timeline shape affects the player experience."
         }
       ]
     },
@@ -4188,6 +4667,41 @@ window.UE5_COURSE_DATA = {
           "source": "Epic Games",
           "version": "UE5.8"
         }
+      ],
+      "inlineExercises": [
+        {
+          "kind": "try",
+          "title": "Put a Widget on screen",
+          "task": "Create a minimal Widget Blueprint and display it during play.",
+          "steps": [
+            "Add one Text or Progress Bar.",
+            "Create the Widget from gameplay logic.",
+            "Add it to the Viewport."
+          ],
+          "check": "The Widget appears exactly once when intended."
+        },
+        {
+          "kind": "test",
+          "title": "Drive UI from game state",
+          "task": "Make one UI element show a gameplay value.",
+          "steps": [
+            "Choose health, objective, ammo or another useful state.",
+            "Update the Widget through a clear reference/function/event.",
+            "Change the state during play."
+          ],
+          "check": "The UI reflects gameplay state and does not own the source value."
+        },
+        {
+          "kind": "modify",
+          "title": "Make it survive different screens",
+          "task": "Improve layout behaviour.",
+          "steps": [
+            "Set useful anchors/alignment.",
+            "Resize the PIE window or viewport.",
+            "Check text and bars remain readable."
+          ],
+          "check": "The UI layout behaves sensibly at more than one resolution/aspect."
+        }
       ]
     },
     {
@@ -4474,6 +4988,41 @@ window.UE5_COURSE_DATA = {
           "source": "Epic Games",
           "version": "UE5.8"
         }
+      ],
+      "inlineExercises": [
+        {
+          "kind": "try",
+          "title": "Create a tiny save object",
+          "task": "Create a SaveGame Blueprint with one value worth preserving.",
+          "steps": [
+            "Create a SaveGame Class.",
+            "Add one clearly named variable.",
+            "Create the SaveGame object and set that value."
+          ],
+          "check": "You have a save object containing deliberate game data."
+        },
+        {
+          "kind": "test",
+          "title": "Save, change, load",
+          "task": "Prove persistence by changing the live value after saving.",
+          "steps": [
+            "Save the object to a named slot.",
+            "Change/reset the live value.",
+            "Load the slot and restore/print the saved value."
+          ],
+          "check": "The loaded value comes from the save, not the current runtime state."
+        },
+        {
+          "kind": "modify",
+          "title": "Add one checkpoint detail",
+          "task": "Extend the save with one more useful field.",
+          "steps": [
+            "Choose something such as checkpoint ID/objective/state.",
+            "Save it with the first value.",
+            "Reload and apply it safely."
+          ],
+          "check": "Two related pieces of progress survive a fresh load."
+        }
       ]
     },
     {
@@ -4758,11 +5307,16 @@ window.UE5_COURSE_DATA = {
       },
       "visuals": [
         {
-          "type": "screenshot",
+          "type": "ue5",
           "src": "assets/ue5/current/datatable-real.webp",
-          "caption": "Current classroom UE5 capture: a real Data Table using a Struct row type with gameplay trait values.",
-          "authenticUI": true,
-          "versionNote": "Current classroom Unreal Engine capture (Aug 2026)."
+          "caption": "A real Data Table from a project. Each row stores a trait and a set of gameplay modifiers. This is the kind of content-authoring workflow that stops you hard-coding every value directly inside Blueprints.",
+          "authenticUI": true
+        },
+        {
+          "type": "ue5",
+          "src": "assets/ue5/current/datatable-rows-closeup.webp",
+          "caption": "Close-up of the table rows and columns. Students should notice the Row Name, the trait name, and the stat columns that can all be edited without changing the Blueprint logic itself.",
+          "authenticUI": true
         },
         {
           "type": "diagram",
@@ -4784,6 +5338,42 @@ window.UE5_COURSE_DATA = {
           "note": "Current DataTable concepts, row structures, import and editor workflow.",
           "source": "Epic Games",
           "version": "UE5.8"
+        }
+      ],
+      "visualPlacement": "inline-top",
+      "inlineExercises": [
+        {
+          "kind": "try",
+          "title": "Define one row shape",
+          "task": "Create a Struct intended for Data Table rows.",
+          "steps": [
+            "Add three related fields.",
+            "Use clear field names/types.",
+            "Create a Data Table using that Struct."
+          ],
+          "check": "The Data Table columns match the Struct fields."
+        },
+        {
+          "kind": "test",
+          "title": "Read one row",
+          "task": "Retrieve a row by name and use at least one value.",
+          "steps": [
+            "Add two different rows.",
+            "Get one row in Blueprint.",
+            "Print/use a field from the returned Struct."
+          ],
+          "check": "Changing the row data changes the result without changing the graph logic."
+        },
+        {
+          "kind": "modify",
+          "title": "Author content, not code",
+          "task": "Add a third content row without editing the Blueprint graph.",
+          "steps": [
+            "Duplicate/create a row.",
+            "Give it distinct values.",
+            "Run the same lookup/use path."
+          ],
+          "check": "New content works through data authoring alone."
         }
       ]
     },
@@ -5078,6 +5668,41 @@ window.UE5_COURSE_DATA = {
           "source": "Epic Games",
           "version": "UE5.8"
         }
+      ],
+      "inlineExercises": [
+        {
+          "kind": "try",
+          "title": "Prove navigation first",
+          "task": "Set up NavMesh and get one AI character moving.",
+          "steps": [
+            "Place/size a Nav Mesh Bounds Volume.",
+            "Press P and confirm walkable space is green.",
+            "Use a simple Move To target."
+          ],
+          "check": "The AI can reach a valid destination before any Behaviour Tree complexity is added."
+        },
+        {
+          "kind": "test",
+          "title": "Watch the brain work",
+          "task": "Run a basic Behaviour Tree with a Blackboard key.",
+          "steps": [
+            "Open the Behaviour Tree while PIE is running.",
+            "Watch the active branch highlight.",
+            "Change/acquire a Blackboard value and observe the branch change."
+          ],
+          "check": "You can identify which Blackboard value caused the behaviour change."
+        },
+        {
+          "kind": "modify",
+          "title": "Add patrol versus chase",
+          "task": "Give the AI one extra state/condition.",
+          "steps": [
+            "Keep patrol as the fallback.",
+            "Use a target/seen-player condition for chase.",
+            "Test entering and leaving the condition."
+          ],
+          "check": "The AI switches behaviours predictably and returns to a valid fallback."
+        }
       ]
     },
     {
@@ -5368,6 +5993,41 @@ window.UE5_COURSE_DATA = {
           "source": "Epic Games",
           "version": "UE5.8"
         }
+      ],
+      "inlineExercises": [
+        {
+          "kind": "try",
+          "title": "Make a two-state machine",
+          "task": "Create or inspect Idle and Move states in an Animation Blueprint.",
+          "steps": [
+            "Open the State Machine.",
+            "Ensure both states have animations.",
+            "Create transitions in both directions."
+          ],
+          "check": "The graph has a valid route between Idle and Move."
+        },
+        {
+          "kind": "test",
+          "title": "Drive the transition",
+          "task": "Use a gameplay/animation variable such as Speed to control transitions.",
+          "steps": [
+            "Observe the live variable in PIE.",
+            "Move and stop the character.",
+            "Watch the active state change."
+          ],
+          "check": "The transition is caused by a measurable variable, not guesswork."
+        },
+        {
+          "kind": "modify",
+          "title": "Change the threshold",
+          "task": "Deliberately alter the transition rule.",
+          "steps": [
+            "Raise/lower the Speed threshold.",
+            "Test the character again.",
+            "Decide which threshold feels correct and explain why."
+          ],
+          "check": "You can connect transition logic to visible animation behaviour."
+        }
       ]
     },
     {
@@ -5657,6 +6317,41 @@ window.UE5_COURSE_DATA = {
           "note": "Epic guidance on reusable Blueprint Classes, event-driven logic and maintainability.",
           "source": "Epic Games",
           "version": "UE5.8"
+        }
+      ],
+      "inlineExercises": [
+        {
+          "kind": "try",
+          "title": "Find misplaced responsibility",
+          "task": "Choose one graph and circle/name logic that belongs somewhere else.",
+          "steps": [
+            "Identify what the logic does.",
+            "Identify which object actually owns that behaviour/data.",
+            "Explain why the current location is awkward."
+          ],
+          "check": "You can justify a better owner before moving anything."
+        },
+        {
+          "kind": "test",
+          "title": "Move one responsibility",
+          "task": "Refactor one small behaviour into the owning Blueprint/Class.",
+          "steps": [
+            "Move the logic.",
+            "Reconnect communication/reference cleanly.",
+            "Retest the original gameplay behaviour."
+          ],
+          "check": "The game still works with clearer ownership."
+        },
+        {
+          "kind": "modify",
+          "title": "Make the intent visible",
+          "task": "Improve the refactored Blueprint for the next person.",
+          "steps": [
+            "Rename variables/functions.",
+            "Add a useful Category/Tooltip/comment.",
+            "Remove one unnecessary dependency or wire crossing if possible."
+          ],
+          "check": "A classmate could understand the responsibility faster than before."
         }
       ]
     },
@@ -5961,6 +6656,41 @@ window.UE5_COURSE_DATA = {
           "note": "Current breakpoints, Watches, active wires and debugging workflow.",
           "source": "Epic Games",
           "version": "UE5.8"
+        }
+      ],
+      "inlineExercises": [
+        {
+          "kind": "try",
+          "title": "Choose one messy region",
+          "task": "Pick a Blueprint graph with duplicated or tangled logic.",
+          "steps": [
+            "Identify one repeated job.",
+            "Mark its inputs and outputs.",
+            "Choose Function, Macro or another suitable extraction."
+          ],
+          "check": "You can explain what the extracted unit will own."
+        },
+        {
+          "kind": "test",
+          "title": "Refactor without changing behaviour",
+          "task": "Extract the logic and prove the game still behaves identically.",
+          "steps": [
+            "Refactor the selected region.",
+            "Compile and test the same scenario.",
+            "Compare outputs/behaviour before and after."
+          ],
+          "check": "The structure improved without silently changing gameplay."
+        },
+        {
+          "kind": "modify",
+          "title": "Do a human-readability pass",
+          "task": "Treat the Blueprint as something another developer must maintain.",
+          "steps": [
+            "Rename vague nodes/variables/functions.",
+            "Add comments only where they explain intent.",
+            "Straighten execution flow and reduce unnecessary crossings."
+          ],
+          "check": "The graph tells a clearer story from left to right."
         }
       ]
     }

@@ -207,6 +207,20 @@ function officialReferences(l){
   </div>`;
 }
 
+
+function inlineExercise(l,index){
+  const x=l.inlineExercises?.[index];
+  if(!x)return '';
+  const label=x.kind==='try'?'TRY IT NOW':x.kind==='test'?'TEST IT IN PLAY':'MAKE IT YOURS';
+  const icon=x.kind==='try'?'▶':x.kind==='test'?'◉':'✦';
+  return `<section class="inline-exercise ${x.kind}"><div class="inline-exercise-head"><span class="inline-exercise-icon">${icon}</span><div><span class="deep-label">${label}</span><h3>${esc(x.title)}</h3></div></div><p class="inline-exercise-task">${esc(x.task)}</p><ol>${x.steps.map(s=>`<li>${esc(s)}</li>`).join('')}</ol><div class="inline-exercise-check"><b>Success check:</b> ${esc(x.check)}</div></section>`;
+}
+
+function learnMediaBlock(l){
+  const media = `${visual(l)}${officialReferences(l)}`;
+  if(!media.trim())return '';
+  return `<div class="learn-media-block"><div class="learn-media-head"><span class="deep-label">SEE IT IN UNREAL</span><h3>Visual reference near the explanation</h3><p>Look at the real Unreal image first, then use the concept diagram underneath to simplify what the system is doing.</p></div>${media}</div>`;
+}
 function deepDive(l){
   const d=l.deepDive;if(!d)return '';
   return `<div class="deep-dive">
@@ -419,12 +433,16 @@ function lessonPage(id){
         <div class="explain-box example"><span>GAME / BLUEPRINT EXAMPLE</span><p>${esc(l.explanation.example)}</p></div>
         <div class="explain-box use"><span>WHEN YOU'D USE IT</span><p>${esc(l.explanation.use)}</p></div>
       </div>` : ''}
+      ${learnMediaBlock(l)}
+      ${inlineExercise(l,0)}
       ${deepDive(l)}
+      ${inlineExercise(l,1)}
       <h3 class="concept-title">Key terms</h3>
-      <div class="goal-grid">${l.concepts.map(c=>`<div class="concept"><strong>${esc(c[0])}</strong><br>${esc(c[1])}</div>`).join('')}</div>${visual(l)}${officialReferences(l)}
+      <div class="goal-grid">${l.concepts.map(c=>`<div class="concept"><strong>${esc(c[0])}</strong><br>${esc(c[1])}</div>`).join('')}</div>
+      ${inlineExercise(l,2)}
     </section>
 
-    <section class="content-card guided-section" id="guided"><span class="eyebrow">03 • Guided build</span><h2>Follow it once</h2><p>Predict the result before pressing Play. Understand the system rather than racing the steps.</p>${guidedBuild(l)}</section>
+    <section class="content-card guided-section" id="guided"><span class="eyebrow">03 • Full guided build</span><h2>Put the pieces together</h2><p>The short exercises above make you stop and prove each idea. This walkthrough now combines the lesson into one complete working build.</p>${guidedBuild(l)}</section>
     <section class="content-card guided-hidden-note"><span class="eyebrow">Independent mode</span><h2>Guided steps hidden</h2><p>Use the aim, explanation and challenges as your brief. Switch back only when the walkthrough is genuinely needed.</p></section>
 
     <section class="content-card" id="check"><span class="eyebrow">04 • Quick check</span><h2>Do you understand the idea?</h2>${quizHtml(l)}</section>
