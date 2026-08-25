@@ -361,10 +361,11 @@ p { line-height:1.65; }
   position:sticky;top:95px;align-self:start;
   border:1px solid var(--line);background:var(--panel);border-radius:14px;padding:13px;
 }
-.lesson-nav a{
-  display:block;color:#94a2b5;padding:7px 8px;font-size:11px;border-radius:7px
+.lesson-nav a, .lesson-nav .lesson-jump{
+  display:block;width:100%;text-align:left;color:#94a2b5;padding:7px 8px;font-size:11px;border-radius:7px;
+  border:0;background:transparent;cursor:pointer;font-weight:600
 }
-.lesson-nav a:hover{background:#18202b;color:white}
+.lesson-nav a:hover, .lesson-nav .lesson-jump:hover{background:#18202b;color:white}
 .lesson-nav hr{border:0;border-top:1px solid var(--line);margin:10px 0}
 .lesson-nav .complete-button{margin-top:8px}
 
@@ -447,23 +448,13 @@ p { line-height:1.65; }
 
 
 .lesson-media {
-  margin: 16px 0 0;
-  border:1px solid #314158;
-  background:#0f1620;
-  border-radius:13px;
-  overflow:hidden;
+  margin:16px 0 0;border:1px solid #314158;background:#0f1620;border-radius:13px;overflow:hidden;
 }
-.lesson-media img{
-  display:block;
-  width:100%;
-  height:auto;
+.lesson-media img {
+  display:block;width:100%;height:auto;max-height:620px;object-fit:contain;background:#0a0f15;
 }
-.lesson-media figcaption{
-  padding:10px 12px;
-  border-top:1px solid #314158;
-  color:#96a5b8;
-  font-size:11px;
-  line-height:1.5;
+.lesson-media figcaption {
+  padding:10px 12px;border-top:1px solid #314158;color:#96a5b8;font-size:11px;line-height:1.5;
 }
 
 .media-placeholder {
