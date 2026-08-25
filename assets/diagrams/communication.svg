@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 380">
+<defs><marker id="a" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#55b5ff"/></marker></defs>
+<rect width="900" height="380" rx="28" fill="#0c1119"/>
+<g font-family="Arial, sans-serif">
+<rect x="70" y="125" width="220" height="120" rx="18" fill="#151d28" stroke="#4d9bcf" stroke-width="3"/><text x="105" y="178" fill="white" font-size="22" font-weight="700">Player</text><text x="105" y="207" fill="#9eacbd" font-size="15">Has the reference</text>
+<rect x="610" y="125" width="220" height="120" rx="18" fill="#151d28" stroke="#9a75db" stroke-width="3"/><text x="647" y="178" fill="white" font-size="22" font-weight="700">Door</text><text x="647" y="207" fill="#9eacbd" font-size="15">Owns door state</text>
+<path d="M290 166 H600" stroke="#55b5ff" stroke-width="5" marker-end="url(#a)"/><text x="357" y="150" fill="#75c4ff" font-size="15">Direct call / Interface message</text>
+<path d="M610 218 H300" stroke="#9a75db" stroke-width="4" marker-end="url(#a)"/><text x="385" y="245" fill="#b994f2" font-size="15">Dispatcher / response</text>
+<text x="70" y="315" fill="#7f91a7" font-size="16">Communication works best when each Blueprint still owns its own internal state.</text>
+</g></svg>

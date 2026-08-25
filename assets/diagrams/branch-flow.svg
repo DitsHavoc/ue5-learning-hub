@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360">
+<defs><marker id="a" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#e7edf7"/></marker></defs>
+<rect width="900" height="360" rx="28" fill="#0c1119"/>
+<g font-family="Arial, sans-serif">
+<rect x="70" y="105" width="230" height="145" rx="14" fill="#1a222f" stroke="#8d68c8" stroke-width="3"/>
+<rect x="70" y="105" width="230" height="40" rx="14" fill="#694a9c"/><text x="92" y="132" fill="white" font-size="20" font-weight="700">Branch</text>
+<text x="92" y="180" fill="#b9c5d5" font-size="16">Condition: HasKey?</text><circle cx="281" cy="172" r="8" fill="#b653c0"/>
+<text x="240" y="202" fill="#64d797" font-size="14">TRUE</text><text x="238" y="231" fill="#f16c78" font-size="14">FALSE</text>
+<path d="M300 198 C430 198, 430 95, 565 95" stroke="#64d797" stroke-width="5" fill="none" marker-end="url(#a)"/>
+<path d="M300 227 C430 227, 430 274, 565 274" stroke="#f16c78" stroke-width="5" fill="none" marker-end="url(#a)"/>
+<rect x="575" y="42" width="250" height="105" rx="14" fill="#17231e" stroke="#64d797" stroke-width="3"/><text x="603" y="100" fill="#dff7e9" font-size="20" font-weight="700">Open Door</text>
+<rect x="575" y="221" width="250" height="105" rx="14" fill="#281a1d" stroke="#f16c78" stroke-width="3"/><text x="603" y="279" fill="#ffe7ea" font-size="20" font-weight="700">Show “Locked”</text>
+<text x="70" y="315" fill="#7f91a7" font-size="16">A Branch asks a true/false question and sends execution down one path.</text>
+</g></svg>

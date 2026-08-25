@@ -1,0 +1,64 @@
+UE5 LEARNING HUB v2.0.0 — CLEAN DEPLOY
+
+IMPORTANT
+=========
+This is a complete rebuild. Do not merge it with the old V1 files.
+
+1. In GitHub Desktop choose:
+   Repository > Show in Explorer
+
+2. In the repository folder DELETE the old website contents:
+   - index.html
+   - app.js
+   - styles.css
+   - README.md
+   - data folder
+   - assets folder
+   - any old app-v1.*, lessons-v1.*, ue5-v1.* files/folders
+
+   DO NOT delete the hidden .git folder.
+
+3. Extract ue5-learning-hub-v2.0.0-CLEAN-REBUILD.zip.
+
+4. Copy the CONTENTS of the ZIP into the repository root.
+
+Your repository root must look like:
+
+   index.html
+   app.js
+   styles.css
+   README.md
+   DEPLOY-CLEAN.txt
+   data/
+       course-data.js
+   assets/
+       book/
+       diagrams/
+
+There must NOT be an extra folder such as:
+   ue5-learning-hub-v2/index.html
+
+5. GitHub Desktop:
+   Commit to main
+   Push origin
+
+6. Render should be:
+   Branch: main
+   Build command: blank
+   Publish directory: .
+
+7. When Render finishes, open the site.
+
+SUCCESS CHECK
+=============
+Look at the BOTTOM-RIGHT corner.
+
+It must say:
+
+   UE5 HUB v2.0.0
+
+If it says anything else, the new build is NOT what Render is serving.
+Do not change any code at that point; check the Render repository/branch/root settings.
+
+The right-hand lesson navigation in v2.0.0 uses JavaScript scroll buttons,
+not hash links, so it cannot collide with the #/lesson/... router.

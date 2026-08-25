@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 310">
+<defs><marker id="a" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#e7edf7"/></marker></defs>
+<rect width="900" height="310" rx="28" fill="#0c1119"/>
+<g font-family="Arial, sans-serif">
+<rect x="50" y="82" width="220" height="132" rx="14" fill="#1a222f" stroke="#d7525e" stroke-width="3"/>
+<rect x="50" y="82" width="220" height="38" rx="14" fill="#a82e3d"/><text x="70" y="107" fill="white" font-size="18" font-weight="700">Event BeginPlay</text>
+<circle cx="251" cy="157" r="8" fill="#fff"/><text x="70" y="165" fill="#aeb9ca" font-size="15">Something happens</text>
+<rect x="340" y="82" width="220" height="132" rx="14" fill="#1a222f" stroke="#4c97c9" stroke-width="3"/>
+<rect x="340" y="82" width="220" height="38" rx="14" fill="#356e98"/><text x="360" y="107" fill="white" font-size="18" font-weight="700">Set Health</text>
+<circle cx="359" cy="157" r="8" fill="#fff"/><circle cx="541" cy="157" r="8" fill="#fff"/>
+<text x="380" y="165" fill="#aeb9ca" font-size="15">Action runs</text>
+<rect x="630" y="82" width="220" height="132" rx="14" fill="#1a222f" stroke="#4c97c9" stroke-width="3"/>
+<rect x="630" y="82" width="220" height="38" rx="14" fill="#356e98"/><text x="650" y="107" fill="white" font-size="18" font-weight="700">Print String</text>
+<circle cx="649" cy="157" r="8" fill="#fff"/><text x="670" y="165" fill="#aeb9ca" font-size="15">Next action</text>
+<path d="M259 157 H331" stroke="#eef4ff" stroke-width="5" fill="none" marker-end="url(#a)"/>
+<path d="M549 157 H621" stroke="#eef4ff" stroke-width="5" fill="none" marker-end="url(#a)"/>
+<text x="50" y="260" fill="#7f91a7" font-size="16">The white execution wire tells Blueprint logic WHEN to run and in what order.</text>
+</g></svg>
