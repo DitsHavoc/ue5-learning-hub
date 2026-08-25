@@ -1,4 +1,4 @@
-UE5 LEARNING HUB v3.4.0
+UE5 LEARNING HUB v3.5.0
 
 FRONTEND DEPLOY:
 Replace the existing site contents with the CONTENTS of this ZIP.
@@ -29,14 +29,14 @@ Publish directory .
 
 SUCCESS CHECK:
 Bottom-right should show:
-UE5 HUB v3.4.0 • BACKEND READY
+UE5 HUB v3.5.0 • BACKEND READY
 
 BACKEND READY means:
 • Supabase database is connected
-• V3.4 evidence/classes/notifications schema is already live
+• V3.5 evidence/classes/notifications schema is already live
 • Microsoft SSO is still intentionally disabled pending college approval
 
 DATABASE:
-The V3.4 migrations have already been applied to the current Supabase project.
+The V3.5 migrations have already been applied to the current Supabase project.
 Do NOT rerun them there.
 The SQL/migrations files are included for portability, future installs and version history.

@@ -1,4 +1,4 @@
-// UE5 Learning Hub v3.4.0
+// UE5 Learning Hub v3.5.0
 // Supabase backend is connected using a PUBLIC publishable key.
 // Microsoft / Entra sign-in is intentionally disabled pending college approval.
 // Never place a service_role key or Microsoft client secret here.

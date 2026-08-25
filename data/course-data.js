@@ -1,5 +1,5 @@
 window.UE5_COURSE_DATA = {
-  "version": "3.4.0",
+  "version": "3.5.0",
   "buildDate": "25 Aug 2026",
   "paths": [
     {
@@ -44,7 +44,7 @@ window.UE5_COURSE_DATA = {
       "id": "editor",
       "path": "foundations",
       "order": 1,
-      "title": "Know Your Unreal Editor",
+      "title": "Unreal Editor: Find, Select & Control",
       "short": "Find, place, organise and edit things without getting lost.",
       "difficulty": "Beginner",
       "duration": "25 min",
@@ -178,13 +178,147 @@ window.UE5_COURSE_DATA = {
           "Screenshot of organised level"
         ],
         "polish": "Use lighting or simple material colour to make the intended route readable."
-      }
+      },
+      "deepDive": {
+        "find": {
+          "title": "Where do I find/use Know Your Unreal Editor?",
+          "steps": [
+            "The Viewport fills the centre of the main Level Editor.",
+            "Open the Content Drawer with the button at the bottom of the Editor or its shortcut.",
+            "The Outliner is normally on the upper-right and lists Actors in the current level.",
+            "The Details panel sits below/alongside the Outliner and changes when you select something."
+          ],
+          "note": "If a panel disappears, use the Window menu to reopen common Editor panels instead of resetting the whole project."
+        },
+        "anatomy": [
+          [
+            "Viewport",
+            "Navigate the level, select objects and manipulate their transforms."
+          ],
+          [
+            "Outliner",
+            "Shows Actors that currently exist in the open level; use it to select and organise them."
+          ],
+          [
+            "Details",
+            "Shows editable properties for whatever is selected: transform, components, materials and exposed variables."
+          ],
+          [
+            "Content Drawer",
+            "Stores project assets such as Blueprints, meshes, materials, textures, sounds and maps."
+          ],
+          [
+            "Toolbar",
+            "Contains common project actions such as Play and save/build-related controls."
+          ]
+        ],
+        "process": [
+          "Decide whether you are looking for a level Actor or a project asset.",
+          "Select the Actor/asset in the appropriate panel.",
+          "Inspect its properties instead of guessing where the setting lives.",
+          "Make one controlled change.",
+          "Save the correct asset or level and test the result."
+        ],
+        "examples": [
+          {
+            "title": "Change a lamp already in the level",
+            "question": "Is this the placed Actor or the source asset?",
+            "condition": "Placed Actor",
+            "true": "Select it in Viewport/Outliner and edit its Details.",
+            "false": "If you need the source Blueprint/mesh, locate that asset in the Content Drawer.",
+            "why": "It separates level instances from project assets."
+          },
+          {
+            "title": "Fix a prop in the wrong place",
+            "question": "Which property controls position?",
+            "condition": "Transform",
+            "true": "Inspect Location/Rotation/Scale in Details and compare World/Local behaviour.",
+            "false": "Do not duplicate or reimport the asset just to fix a transform.",
+            "why": "The Details panel exposes the selected Actor's transform directly."
+          }
+        ],
+        "remember": [
+          "Outliner = things in this level; Content Drawer = assets in the project.",
+          "Details only describes the current selection.",
+          "Name and folder things while the project is small.",
+          "Save both changed assets and maps deliberately."
+        ]
+      },
+      "guidedDetailed": [
+        {
+          "title": "Open a Third Person project",
+          "do": "Open a Third Person project.",
+          "why": "You need a known project before practising navigation.",
+          "check": "The Third Person map is open and playable."
+        },
+        {
+          "title": "Identify the Viewport, Outliner, Details and Content Drawer",
+          "do": "Identify the Viewport, Outliner, Details and Content Drawer.",
+          "why": "These four panels answer most early Unreal questions.",
+          "check": "You can point to each panel without hunting."
+        },
+        {
+          "title": "Place three Static Mesh Actors",
+          "do": "Place three Static Mesh Actors.",
+          "why": "Placing simple Actors lets you practise without extra gameplay complexity.",
+          "check": "Three separate mesh Actors are visible in the level."
+        },
+        {
+          "title": "Rename them in the Outliner",
+          "do": "Rename them in the Outliner.",
+          "why": "Readable names make the Outliner useful once the level grows.",
+          "check": "The Outliner shows meaningful names rather than generic duplicates."
+        },
+        {
+          "title": "Change Location, Rotation and Scale",
+          "do": "Change Location, Rotation and Scale.",
+          "why": "Transforms are the core of positioning anything in 3D.",
+          "check": "Each Actor has a visibly different transform and you can restore it."
+        },
+        {
+          "title": "Create a Learning folder in the Content Drawer and save",
+          "do": "Create a Learning folder in the Content Drawer and save.",
+          "why": "Folder structure established early prevents a chaotic project later.",
+          "check": "A Learning folder exists and the level/project changes are saved."
+        }
+      ],
+      "evidencePrompt": {
+        "show": [
+          "A screenshot of the Editor with Viewport, Outliner, Details and Content Drawer visible.",
+          "A neatly named set of placed Actors in the Outliner.",
+          "One Actor selected with its Transform visible in Details.",
+          "Your organised Learning/project folder structure."
+        ],
+        "reflection": [
+          "Which panel would you use to find a placed Actor and why?",
+          "Which panel would you use to find a Blueprint asset?",
+          "What mistake cost you the most time while learning the interface?",
+          "What naming/folder rule will you use in the main project?"
+        ]
+      },
+      "visuals": [
+        {
+          "type": "book",
+          "src": "assets/book/editor-overview.webp",
+          "caption": "Reference figure from the supplied UE5 Blueprint book: Level Editor overview."
+        },
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/gold/editor-process.svg",
+          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence."
+        },
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/gold/editor-example.svg",
+          "caption": "Original classroom worked example: Change a lamp already in the level."
+        }
+      ]
     },
     {
       "id": "actors-components",
       "path": "foundations",
       "order": 2,
-      "title": "Actors & Components",
+      "title": "Actors & Components: Build Objects Properly",
       "short": "Understand the pieces behind objects placed in a level.",
       "difficulty": "Beginner",
       "duration": "30 min",
@@ -317,13 +451,151 @@ window.UE5_COURSE_DATA = {
           "Placed in the main game map"
         ],
         "polish": "Add sound or lighting feedback without adding complex gameplay logic yet."
-      }
+      },
+      "deepDive": {
+        "find": {
+          "title": "Where do I find/use Actors & Components?",
+          "steps": [
+            "Create or open an Actor Blueprint.",
+            "Use the Components panel in the Blueprint Editor to add Components.",
+            "Select a Component to edit its transform/properties in Details.",
+            "Drag Components in the hierarchy to understand parent/child relationships."
+          ],
+          "note": "Components are added to an Actor; they are not separate placed Actors unless you deliberately use a Child Actor Component."
+        },
+        "anatomy": [
+          [
+            "Actor",
+            "The whole object that exists in the world."
+          ],
+          [
+            "Root Component",
+            "The top transform parent for Scene Components."
+          ],
+          [
+            "Scene Component",
+            "A Component that has a transform and can parent children."
+          ],
+          [
+            "Static Mesh Component",
+            "Provides visible 3D geometry."
+          ],
+          [
+            "Collision Component",
+            "Provides a shape used for blocking, overlaps or queries."
+          ],
+          [
+            "Audio/Light Components",
+            "Add capabilities without creating another independent Actor."
+          ]
+        ],
+        "process": [
+          "Start with the gameplay object you want to represent.",
+          "Add only the Components needed for its capabilities.",
+          "Arrange the hierarchy so parent/child transforms make sense.",
+          "Configure each Component in Details.",
+          "Place the Actor and test the combined result as one object."
+        ],
+        "examples": [
+          {
+            "title": "Checkpoint beacon",
+            "question": "What pieces make one checkpoint?",
+            "condition": "One reusable Actor",
+            "true": "Mesh + collision + light + audio live as Components inside BP_Checkpoint.",
+            "false": "Avoid placing four unrelated Actors and hoping they stay together.",
+            "why": "The checkpoint becomes one reusable object with one owner."
+          },
+          {
+            "title": "Door with prompt zone",
+            "question": "Should the prompt volume move with the door frame?",
+            "condition": "Child Scene Component",
+            "true": "Parent the collision/prompt Component appropriately so its transform follows the Actor.",
+            "false": "Do not manually reposition a separate trigger every time the door moves.",
+            "why": "Hierarchy gives predictable relative transforms."
+          }
+        ],
+        "remember": [
+          "Build the object from capabilities, not from a giant Event Graph.",
+          "Child Scene Components transform relative to their parent.",
+          "One Actor can contain many Components.",
+          "Reusable behaviour may later belong in an Actor Component."
+        ]
+      },
+      "guidedDetailed": [
+        {
+          "title": "Create BP_PracticeBeacon as an Actor Blueprint",
+          "do": "Create BP_PracticeBeacon as an Actor Blueprint.",
+          "why": "A fresh Actor Blueprint makes ownership clear.",
+          "check": "BP_PracticeBeacon is an Actor Blueprint."
+        },
+        {
+          "title": "Add a Static Mesh",
+          "do": "Add a Static Mesh.",
+          "why": "The mesh gives the object a visible body.",
+          "check": "The mesh is visible in the Blueprint viewport."
+        },
+        {
+          "title": "Add a Point Light",
+          "do": "Add a Point Light.",
+          "why": "The light demonstrates a non-mesh capability.",
+          "check": "The Point Light changes the object's appearance."
+        },
+        {
+          "title": "Add Box Collision",
+          "do": "Add Box Collision.",
+          "why": "Collision adds detection/physical capability.",
+          "check": "Box Collision is visible with sensible dimensions."
+        },
+        {
+          "title": "Arrange the hierarchy and transforms",
+          "do": "Arrange the hierarchy and transforms.",
+          "why": "Hierarchy practice teaches relative transforms.",
+          "check": "Moving the parent causes child Scene Components to follow predictably."
+        },
+        {
+          "title": "Compile and place the Blueprint into the level",
+          "do": "Compile and place the Blueprint into the level.",
+          "why": "Placing an instance proves the assembled Actor works as a reusable object.",
+          "check": "The placed Blueprint behaves as one object in the level."
+        }
+      ],
+      "evidencePrompt": {
+        "show": [
+          "Components hierarchy inside the Blueprint.",
+          "A Details view showing one Component's settings.",
+          "The assembled Actor placed in the level.",
+          "A short note or screenshot showing how parent/child transforms behave."
+        ],
+        "reflection": [
+          "Why is the checkpoint one Actor rather than several loose Actors?",
+          "Which Component provides collision and which provides visuals?",
+          "What does the Root Component control?",
+          "What capability would you add as another Component in your main game?"
+        ]
+      },
+      "visuals": [
+        {
+          "type": "book",
+          "src": "assets/book/blueprint-editor.webp",
+          "caption": "Reference figure from the supplied book: Blueprint Editor layout."
+        },
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/gold/actors-components-process.svg",
+          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence."
+        },
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/gold/actors-components-example.svg",
+          "caption": "Original classroom worked example: Checkpoint beacon."
+        }
+      ]
     },
     {
       "id": "blueprint-classes",
       "path": "foundations",
       "order": 3,
-      "title": "Blueprint Classes & Instances",
+      "title": "Blueprint Classes & Instances: Reuse Without Duplication",
       "short": "Build reusable game objects instead of one-off level hacks.",
       "difficulty": "Beginner",
       "duration": "35 min",
@@ -456,13 +728,147 @@ window.UE5_COURSE_DATA = {
           "Changing the Class updates all instances"
         ],
         "polish": "Expose two designer-friendly settings that change presentation without changing the core Blueprint."
-      }
+      },
+      "deepDive": {
+        "find": {
+          "title": "Where do I find/use Blueprint Classes & Instances?",
+          "steps": [
+            "In the Content Drawer, choose Add/New → Blueprint Class.",
+            "Pick the parent class that best matches the object you are creating.",
+            "Open the Blueprint to edit Class defaults and Components.",
+            "Place multiple instances into the level and edit exposed values in each instance's Details."
+          ],
+          "note": "Changing the Class changes every instance unless an instance has intentionally overridden an exposed value."
+        },
+        "anatomy": [
+          [
+            "Blueprint Class",
+            "Reusable definition of structure, defaults and behaviour."
+          ],
+          [
+            "Instance",
+            "One placed or spawned object created from that Class."
+          ],
+          [
+            "Class Default",
+            "Starting value inherited by instances."
+          ],
+          [
+            "Instance Editable",
+            "Allows a specific placed instance to override a variable."
+          ],
+          [
+            "Parent Class",
+            "Defines inherited capabilities such as Actor, Pawn or Character."
+          ]
+        ],
+        "process": [
+          "Choose the right parent Class.",
+          "Build shared Components/logic once in the Class.",
+          "Compile the Class.",
+          "Place several instances.",
+          "Expose only useful designer-facing variables and vary them per instance."
+        ],
+        "examples": [
+          {
+            "title": "Reusable door family",
+            "question": "Do these doors share the same behaviour?",
+            "condition": "Same Class",
+            "true": "Use BP_Door instances with per-instance OpenDistance/Locked values.",
+            "false": "Do not duplicate BP_Door_A, BP_Door_B and BP_Door_C just for small settings.",
+            "why": "One bug fix then updates the whole family."
+          },
+          {
+            "title": "Colour-coded terminals",
+            "question": "Is colour a property or a completely different object type?",
+            "condition": "Property difference",
+            "true": "Expose a colour/material choice on one terminal Class.",
+            "false": "Create a separate Class only when behaviour/structure genuinely differs.",
+            "why": "Instances are designed for controlled variation."
+          }
+        ],
+        "remember": [
+          "Class = recipe; instance = one object made from it.",
+          "Prefer exposed data over duplicated Classes.",
+          "Choose the parent Class deliberately.",
+          "A change to shared Class logic should not require editing every level instance."
+        ]
+      },
+      "guidedDetailed": [
+        {
+          "title": "Create BP_ColourBlock",
+          "do": "Create BP_ColourBlock.",
+          "why": "A simple Class keeps the example focused.",
+          "check": "BP_ColourBlock exists and compiles."
+        },
+        {
+          "title": "Add a cube Static Mesh",
+          "do": "Add a cube Static Mesh.",
+          "why": "A visible cube makes instance differences obvious.",
+          "check": "The Class contains the expected mesh."
+        },
+        {
+          "title": "Compile and place three instances",
+          "do": "Compile and place three instances.",
+          "why": "Multiple instances prove reuse.",
+          "check": "Three instances are placed."
+        },
+        {
+          "title": "Change transforms on each instance",
+          "do": "Change transforms on each instance.",
+          "why": "Different transforms show instances remain independent world objects.",
+          "check": "Each instance has its own transform."
+        },
+        {
+          "title": "Edit the Class and observe all instances update",
+          "do": "Edit the Class and observe all instances update.",
+          "why": "Editing the Class proves shared changes propagate.",
+          "check": "A Class edit appears on all instances after compile."
+        },
+        {
+          "title": "Expose one useful variable and give each instance a different value",
+          "do": "Expose one useful variable and give each instance a different value.",
+          "why": "An exposed variable demonstrates intentional per-instance variation.",
+          "check": "The exposed variable can differ between instances without duplicating the Blueprint."
+        }
+      ],
+      "evidencePrompt": {
+        "show": [
+          "The Blueprint Class in the Content Drawer.",
+          "Three instances in the same level.",
+          "The same exposed variable showing different values on two instances.",
+          "A before/after showing a Class change propagate to all instances."
+        ],
+        "reflection": [
+          "What belongs in the Class and what can vary per instance?",
+          "Why is duplicating near-identical Blueprints risky?",
+          "What variable did you expose and why?",
+          "Where could this pattern reduce duplication in Signal Lost?"
+        ]
+      },
+      "visuals": [
+        {
+          "type": "book",
+          "src": "assets/book/blueprint-editor.webp",
+          "caption": "Reference figure from the supplied book: the Blueprint Class Editor and its main panels."
+        },
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/gold/blueprint-classes-process.svg",
+          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence."
+        },
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/gold/blueprint-classes-example.svg",
+          "caption": "Original classroom worked example: Reusable door family."
+        }
+      ]
     },
     {
       "id": "events",
       "path": "blueprints",
       "order": 1,
-      "title": "Events & Execution",
+      "title": "Events & Execution: Make Logic Actually Run",
       "short": "Understand what starts Blueprint logic and the order it runs.",
       "difficulty": "Beginner",
       "duration": "35 min",
@@ -595,13 +1001,147 @@ window.UE5_COURSE_DATA = {
           "No unnecessary Event Tick"
         ],
         "polish": "Replace one debug message with visible world feedback."
-      }
+      },
+      "deepDive": {
+        "find": {
+          "title": "Where do I find/use Events & Execution?",
+          "steps": [
+            "Open any Blueprint Event Graph.",
+            "Right-click and search for events available to that Blueprint.",
+            "Common entry events include BeginPlay, overlap/hit events and input-related events depending on setup.",
+            "Use execution wires to follow what runs after the event."
+          ],
+          "note": "An Event is an entry point. Data nodes sitting in the graph do not run by themselves just because they are connected visually."
+        },
+        "anatomy": [
+          [
+            "Event Node",
+            "Starts an execution path when that event occurs."
+          ],
+          [
+            "Execution Pin",
+            "White arrow pin controlling when actions run."
+          ],
+          [
+            "Data Pin",
+            "Carries a value; it does not itself decide execution order."
+          ],
+          [
+            "Event BeginPlay",
+            "Fires when that Actor begins play."
+          ],
+          [
+            "Event Tick",
+            "Runs every frame and should be used only when continuous per-frame work is genuinely required."
+          ]
+        ],
+        "process": [
+          "Something happens in the game/runtime.",
+          "The matching Event fires.",
+          "Execution follows the white wire in order.",
+          "Each action may read or change data.",
+          "Debugging asks where the execution path stopped or never started."
+        ],
+        "examples": [
+          {
+            "title": "Facility powers up",
+            "question": "When should initial state be created?",
+            "condition": "Actor begins play",
+            "true": "Use BeginPlay to initialise state/UI references that need to exist once.",
+            "false": "Do not put one-time setup on Tick.",
+            "why": "The lifetime of the event matches the job."
+          },
+          {
+            "title": "Checkpoint trigger",
+            "question": "What causes activation?",
+            "condition": "Player overlaps volume",
+            "true": "BeginOverlap starts checkpoint logic.",
+            "false": "If no overlap occurs, no execution should run.",
+            "why": "Event choice should describe the gameplay cause."
+          }
+        ],
+        "remember": [
+          "If execution never reaches a node, that node cannot affect gameplay.",
+          "White wires answer 'when'; coloured pins answer 'with what data'.",
+          "Use Print String or breakpoints to prove an Event fired.",
+          "Tick is not a default event for ordinary logic."
+        ]
+      },
+      "guidedDetailed": [
+        {
+          "title": "Create BP_EventPractice",
+          "do": "Create BP_EventPractice.",
+          "why": "A dedicated practice Blueprint isolates event flow.",
+          "check": "The practice Blueprint exists and is placed if required."
+        },
+        {
+          "title": "Connect Event BeginPlay to Print String",
+          "do": "Connect Event BeginPlay to Print String.",
+          "why": "Print String immediately proves BeginPlay fired.",
+          "check": "BeginPlay produces visible debug output."
+        },
+        {
+          "title": "Add two more Print String actions",
+          "do": "Add two more Print String actions.",
+          "why": "A chain makes execution order visible.",
+          "check": "Messages appear in your predicted order."
+        },
+        {
+          "title": "Predict the order before testing",
+          "do": "Predict the order before testing.",
+          "why": "Prediction forces reasoning about order.",
+          "check": "Disconnecting a wire prevents later messages."
+        },
+        {
+          "title": "Disconnect one execution wire and retest",
+          "do": "Disconnect one execution wire and retest.",
+          "why": "Breaking a wire demonstrates that downstream nodes no longer execute.",
+          "check": "Reconnecting restores the chain."
+        },
+        {
+          "title": "Add a second Event and compare when each fires",
+          "do": "Add a second Event and compare when each fires.",
+          "why": "A second event shows that different causes can start separate execution paths.",
+          "check": "You can explain exactly what causes each event to fire."
+        }
+      ],
+      "evidencePrompt": {
+        "show": [
+          "An Event Graph with a clearly readable execution chain.",
+          "In-game Print String proof that the event fired.",
+          "A second event with a different trigger.",
+          "A screenshot showing where execution was intentionally broken for debugging."
+        ],
+        "reflection": [
+          "What event starts your main mechanic?",
+          "What is the difference between an execution pin and data pin?",
+          "Why would Tick be a poor choice for a one-off setup?",
+          "How did you prove whether an event fired?"
+        ]
+      },
+      "visuals": [
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/execution-flow.svg",
+          "caption": "Original classroom diagram: event and execution flow."
+        },
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/gold/events-process.svg",
+          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence."
+        },
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/gold/events-example.svg",
+          "caption": "Original classroom worked example: Facility powers up."
+        }
+      ]
     },
     {
       "id": "variables",
       "path": "blueprints",
       "order": 2,
-      "title": "Variables & Data Types",
+      "title": "Variables & Data Types: Store Game State",
       "short": "Let the game remember health, ammo, state and references.",
       "difficulty": "Beginner",
       "duration": "40 min",
@@ -747,7 +1287,145 @@ window.UE5_COURSE_DATA = {
           "Exposed variables use Tooltips"
         ],
         "polish": "Group related designer-facing variables into Categories."
-      }
+      },
+      "deepDive": {
+        "find": {
+          "title": "Where do I find/use Variables & Data Types?",
+          "steps": [
+            "Open a Blueprint and use the Variables section of My Blueprint.",
+            "Click + to create a variable and name it before choosing its type.",
+            "Select the variable to edit type, default value, Category, Tooltip and Instance Editable settings in Details.",
+            "Drag the variable into the graph and choose Get to read or Set to change it."
+          ],
+          "note": "Compile after creating/changing variables so defaults and instance-editable options become available consistently."
+        },
+        "anatomy": [
+          [
+            "Name",
+            "Describes what the value means, not merely its type."
+          ],
+          [
+            "Type",
+            "Controls what kind of data can be stored."
+          ],
+          [
+            "Default Value",
+            "Value used before gameplay changes it."
+          ],
+          [
+            "Get",
+            "Reads the current stored value."
+          ],
+          [
+            "Set",
+            "Changes the stored value."
+          ],
+          [
+            "Instance Editable",
+            "Lets a level instance override a designer-facing value."
+          ]
+        ],
+        "process": [
+          "Decide what state the game needs to remember.",
+          "Choose the smallest clear data type.",
+          "Give it a meaningful name/default.",
+          "Get the value when logic needs to read it.",
+          "Set it only when gameplay intentionally changes the state."
+        ],
+        "examples": [
+          {
+            "title": "Door configuration",
+            "question": "What information describes the door?",
+            "condition": "Different kinds of data",
+            "true": "IsLocked = Boolean; OpenDistance = Float; RequiredKey = appropriate reference/id.",
+            "false": "Do not store every value as text or create multiple vague 'Value' variables.",
+            "why": "Types communicate intent and reduce invalid data."
+          },
+          {
+            "title": "Player health",
+            "question": "Does the value change over time?",
+            "condition": "Persistent gameplay state",
+            "true": "Store Health, Get it to display/check, Set it when damage/healing occurs.",
+            "false": "A temporary calculation result may belong in a local variable instead.",
+            "why": "Variables are for information the object needs to remember."
+          }
+        ],
+        "remember": [
+          "Get reads; Set changes.",
+          "Names should communicate meaning: CurrentHealth beats Number1.",
+          "Boolean names often read well as questions/states: IsDead, HasKey, CanInteract.",
+          "Expose only variables a designer needs to edit."
+        ]
+      },
+      "guidedDetailed": [
+        {
+          "title": "Create Health as a Float with default 100",
+          "do": "Create Health as a Float with default 100.",
+          "why": "Health is a clear numeric state with an obvious default.",
+          "check": "Health is a Float and defaults to 100."
+        },
+        {
+          "title": "Create IsActive as a Boolean",
+          "do": "Create IsActive as a Boolean.",
+          "why": "IsActive demonstrates two-state logic.",
+          "check": "IsActive is Boolean with an intentional default."
+        },
+        {
+          "title": "Get Health and print it on BeginPlay",
+          "do": "Get Health and print it on BeginPlay.",
+          "why": "Reading before changing proves what the Blueprint currently stores.",
+          "check": "The initial print matches the default Health."
+        },
+        {
+          "title": "Set Health to a new value and print again",
+          "do": "Set Health to a new value and print again.",
+          "why": "Setting then reading shows state persistence across execution steps.",
+          "check": "After Set, the second print shows the new value."
+        },
+        {
+          "title": "Make one variable Instance Editable",
+          "do": "Make one variable Instance Editable.",
+          "why": "Instance Editable demonstrates controlled designer variation.",
+          "check": "A placed instance exposes only the intended variable."
+        },
+        {
+          "title": "Add a useful Tooltip",
+          "do": "Add a useful Tooltip.",
+          "why": "A Tooltip turns an exposed setting into self-documenting content.",
+          "check": "Hovering/inspecting the exposed variable explains its purpose."
+        }
+      ],
+      "evidencePrompt": {
+        "show": [
+          "Variables panel showing clearly named variables/types.",
+          "A Get and Set example in the Event Graph.",
+          "One Instance Editable variable in a placed Actor's Details.",
+          "A Tooltip/Category used to document a designer-facing setting."
+        ],
+        "reflection": [
+          "Why did you choose each variable type?",
+          "What is the difference between Get and Set?",
+          "Which values should be Instance Editable and which should stay internal?",
+          "How could a bad variable name make debugging harder?"
+        ]
+      },
+      "visuals": [
+        {
+          "type": "book",
+          "src": "assets/book/variables-panel.webp",
+          "caption": "Reference figure from the supplied book: variables in My Blueprint."
+        },
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/gold/variables-process.svg",
+          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence."
+        },
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/gold/variables-example.svg",
+          "caption": "Original classroom worked example: Door configuration."
+        }
+      ]
     },
     {
       "id": "branches",
@@ -1089,7 +1767,7 @@ window.UE5_COURSE_DATA = {
       "id": "functions",
       "path": "blueprints",
       "order": 4,
-      "title": "Functions & Macros",
+      "title": "Functions & Macros: Reuse Logic Clearly",
       "short": "Package repeated logic behind clear names.",
       "difficulty": "Intermediate",
       "duration": "45 min",
@@ -1222,13 +1900,147 @@ window.UE5_COURSE_DATA = {
           "Behaviour unchanged after refactor"
         ],
         "polish": "Create a validation Function such as CanInteract, CanOpenDoor or CanTakeDamage."
-      }
+      },
+      "deepDive": {
+        "find": {
+          "title": "Where do I find/use Functions & Macros?",
+          "steps": [
+            "In My Blueprint, click + beside Functions or use the add menu.",
+            "Name the Function after one clear job.",
+            "Select the Function entry/result nodes to add inputs and outputs in Details.",
+            "Call the Function from another graph by dragging/searching its name."
+          ],
+          "note": "A Function should describe intent. If its name needs 'AndAndAnd' to explain three unrelated jobs, split the responsibilities."
+        },
+        "anatomy": [
+          [
+            "Function",
+            "Named reusable graph that performs one job."
+          ],
+          [
+            "Input",
+            "Data supplied by the caller."
+          ],
+          [
+            "Output",
+            "Result returned to the caller."
+          ],
+          [
+            "Local Variable",
+            "Temporary working data that exists only inside the Function."
+          ],
+          [
+            "Call Site",
+            "The node used elsewhere to execute the Function."
+          ]
+        ],
+        "process": [
+          "Spot repeated or conceptually self-contained logic.",
+          "Give the job a clear verb-led name.",
+          "Turn changing values into inputs rather than hard-coding them.",
+          "Return only results the caller needs.",
+          "Call/test it from more than one situation to prove reuse."
+        ],
+        "examples": [
+          {
+            "title": "CalculateDamage",
+            "question": "What part of damage is reusable?",
+            "condition": "BaseDamage × Multiplier",
+            "true": "A Function accepts both values and returns FinalDamage.",
+            "false": "Do not copy the maths into every weapon Blueprint.",
+            "why": "One formula becomes one maintainable source of truth."
+          },
+          {
+            "title": "CanOpenDoor",
+            "question": "Does this door meet its access rules?",
+            "condition": "Inputs: access state/power",
+            "true": "Return a Boolean and let the caller decide what feedback/action follows.",
+            "false": "Do not make a tiny check secretly control unrelated UI, sound and save data.",
+            "why": "A focused Function is easier to test and reuse."
+          }
+        ],
+        "remember": [
+          "Functions reduce duplication and reveal intent.",
+          "Inputs beat hard-coded values when behaviour must be reusable.",
+          "Use local variables for temporary working values.",
+          "Refactoring into a Function should make the top-level graph easier to read."
+        ]
+      },
+      "guidedDetailed": [
+        {
+          "title": "Create BP_FunctionPractice",
+          "do": "Create BP_FunctionPractice.",
+          "why": "A practice Actor gives a safe refactoring space.",
+          "check": "CalculateDamage exists and has a clear name."
+        },
+        {
+          "title": "Create CalculateDamage",
+          "do": "Create CalculateDamage.",
+          "why": "Two Float inputs demonstrate parameterised reuse.",
+          "check": "BaseDamage and Multiplier are Float inputs."
+        },
+        {
+          "title": "Add BaseDamage and Multiplier Float inputs",
+          "do": "Add BaseDamage and Multiplier Float inputs.",
+          "why": "A returned Float shows that Functions can calculate results.",
+          "check": "FinalDamage is returned from the Function."
+        },
+        {
+          "title": "Return FinalDamage",
+          "do": "Return FinalDamage.",
+          "why": "Printing the result proves the call worked.",
+          "check": "The first call prints the expected result."
+        },
+        {
+          "title": "Call it from BeginPlay and print the result",
+          "do": "Call it from BeginPlay and print the result.",
+          "why": "Different arguments prove the Function is not hard-coded.",
+          "check": "A second call with different inputs produces a different correct result."
+        },
+        {
+          "title": "Call it again with different values",
+          "do": "Call it again with different values.",
+          "why": "Comparing call sites demonstrates why one Function is easier to maintain than copies.",
+          "check": "Changing the Function formula changes both call sites."
+        }
+      ],
+      "evidencePrompt": {
+        "show": [
+          "The Function definition with inputs/outputs.",
+          "Two different call sites using the same Function.",
+          "Before/after top-level graph showing reduced duplication.",
+          "A clear Function name that describes gameplay intent."
+        ],
+        "reflection": [
+          "What logic did you move into a Function and why?",
+          "Which values became inputs?",
+          "What result does the Function return?",
+          "How would duplicated logic make future changes harder?"
+        ]
+      },
+      "visuals": [
+        {
+          "type": "book",
+          "src": "assets/book/function-example.webp",
+          "caption": "Reference figure from the supplied book: a simple Function example."
+        },
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/gold/functions-process.svg",
+          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence."
+        },
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/gold/functions-example.svg",
+          "caption": "Original classroom worked example: CalculateDamage."
+        }
+      ]
     },
     {
       "id": "framework",
       "path": "framework",
       "order": 1,
-      "title": "Gameplay Framework",
+      "title": "Gameplay Framework: Put Logic in the Right Place",
       "short": "Know where rules, player bodies and persistent data belong.",
       "difficulty": "Intermediate",
       "duration": "50 min",
@@ -1365,13 +2177,147 @@ window.UE5_COURSE_DATA = {
           "One ownership decision documented"
         ],
         "polish": "Draw a simple class/responsibility diagram for the project."
-      }
+      },
+      "deepDive": {
+        "find": {
+          "title": "Where do I find/use Gameplay Framework?",
+          "steps": [
+            "Open the Third Person Character to inspect a Character/Pawn in context.",
+            "Open Project Settings/Maps & Modes or the active GameMode settings to see default framework classes.",
+            "Create Blueprint Classes derived from GameModeBase/GameInstance when practising those responsibilities.",
+            "Use framework getter nodes only when the lifetime/ownership genuinely matches."
+          ],
+          "note": "Framework choice is primarily an ownership and lifetime decision, not a hunt for whichever Class is easiest to access."
+        },
+        "anatomy": [
+          [
+            "Pawn",
+            "Possessable body in the world."
+          ],
+          [
+            "Character",
+            "Pawn with common character movement/capsule features."
+          ],
+          [
+            "Controller",
+            "The controlling 'brain' that possesses a Pawn."
+          ],
+          [
+            "GameMode",
+            "Game rules and default gameplay Classes for the active world/mode."
+          ],
+          [
+            "GameInstance",
+            "Object lasting for the running application and across level changes."
+          ]
+        ],
+        "process": [
+          "Ask whose responsibility the data/behaviour is.",
+          "Ask how long it must live.",
+          "Choose the framework Class matching ownership/lifetime.",
+          "Access that Class deliberately rather than storing random globals.",
+          "Test a level transition or respawn if lifetime matters."
+        ],
+        "examples": [
+          {
+            "title": "Player health vs game rules",
+            "question": "Who owns this information?",
+            "condition": "Personal state vs game rule",
+            "true": "Character/health component owns Health; GameMode owns win/start/rule logic.",
+            "false": "Do not store player health in GameMode merely because it is easy to retrieve.",
+            "why": "Ownership keeps unrelated systems independent."
+          },
+          {
+            "title": "Selected theme across maps",
+            "question": "Must the value survive a level load?",
+            "condition": "Session-wide state",
+            "true": "GameInstance is a suitable place for a small session value.",
+            "false": "A variable on a level Actor will disappear with that level.",
+            "why": "Lifetime should match the requirement."
+          }
+        ],
+        "remember": [
+          "Pawn = body; Controller = controlling brain is a useful starting model.",
+          "GameMode is for rules, not a universal dumping ground.",
+          "GameInstance survives map changes during the running session, not application restarts.",
+          "SaveGame is required for persistence after closing the game."
+        ]
+      },
+      "guidedDetailed": [
+        {
+          "title": "Open the Third Person character and identify its parent Class",
+          "do": "Open the Third Person character and identify its parent Class.",
+          "why": "The template Character gives a real example of framework inheritance.",
+          "check": "You can identify the Character parent Class."
+        },
+        {
+          "title": "Inspect the project GameMode",
+          "do": "Inspect the project GameMode.",
+          "why": "GameMode inspection reveals what Class is actually being used.",
+          "check": "You can find the active/default GameMode."
+        },
+        {
+          "title": "Find which Pawn/Character the GameMode uses",
+          "do": "Find which Pawn/Character the GameMode uses.",
+          "why": "Finding the default Pawn connects rules to spawned player bodies.",
+          "check": "You can identify which Pawn/Character it chooses."
+        },
+        {
+          "title": "Create a simple custom GameMode",
+          "do": "Create a simple custom GameMode.",
+          "why": "A custom GameMode makes ownership visible.",
+          "check": "Your custom GameMode can be selected for a map/project."
+        },
+        {
+          "title": "Create a GameInstance Blueprint",
+          "do": "Create a GameInstance Blueprint.",
+          "why": "A GameInstance Blueprint introduces longer session lifetime.",
+          "check": "Your custom GameInstance is configured in project settings."
+        },
+        {
+          "title": "Store a test value in GameInstance and discuss why it survives a level change",
+          "do": "Store a test value in GameInstance and discuss why it survives a level change.",
+          "why": "A test value plus level change proves lifetime rather than relying on memory.",
+          "check": "The test value survives a map change but you understand it will not survive closing the app."
+        }
+      ],
+      "evidencePrompt": {
+        "show": [
+          "Active GameMode/default classes.",
+          "Your GameInstance Blueprint and its configured project setting.",
+          "A simple ownership diagram for Character, Controller, GameMode and GameInstance.",
+          "Proof of a value surviving a level change."
+        ],
+        "reflection": [
+          "Who owns player health in your project and why?",
+          "What belongs in GameMode?",
+          "What lifetime does GameInstance provide?",
+          "What would require SaveGame instead?"
+        ]
+      },
+      "visuals": [
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/communication.svg",
+          "caption": "Original classroom relationship diagram; use alongside the framework notes."
+        },
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/gold/framework-process.svg",
+          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence."
+        },
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/gold/framework-example.svg",
+          "caption": "Original classroom worked example: Player health vs game rules."
+        }
+      ]
     },
     {
       "id": "references-casting",
       "path": "framework",
       "order": 2,
-      "title": "References & Casting",
+      "title": "References & Casting: Know What Object You Have",
       "short": "Get hold of the object you actually want to talk to.",
       "difficulty": "Intermediate",
       "duration": "50 min",
@@ -1503,13 +2449,147 @@ window.UE5_COURSE_DATA = {
           "No Cast used as an object-finder"
         ],
         "polish": "Remove one unnecessary repeated Cast by storing a useful reference or using a more generic method."
-      }
+      },
+      "deepDive": {
+        "find": {
+          "title": "Where do I find/use References & Casting?",
+          "steps": [
+            "References commonly come from event outputs such as Other Actor/Hit Actor, Spawn Actor return values, stored variables or framework getter nodes.",
+            "Drag from an existing reference pin and search for Cast To <Class> when you genuinely need a specific type check.",
+            "Use the successful Cast output as the correctly typed reference.",
+            "Always understand what should happen if Cast Failed can occur."
+          ],
+          "note": "Casting checks a reference you already possess. It does not search the level for an object."
+        },
+        "anatomy": [
+          [
+            "Reference",
+            "Points to one specific object instance."
+          ],
+          [
+            "Source Reference",
+            "The object value fed into the Cast."
+          ],
+          [
+            "Cast To X",
+            "Runtime type check/conversion to a known Class."
+          ],
+          [
+            "As X",
+            "Typed reference available when the Cast succeeds."
+          ],
+          [
+            "Cast Failed",
+            "Execution path when the object is not the requested type."
+          ]
+        ],
+        "process": [
+          "Obtain a real object reference from a reliable source.",
+          "Ask whether you require behaviour/data unique to a specific Class.",
+          "Cast only if that specific type matters.",
+          "Use the successful typed reference.",
+          "Handle failure or choose an Interface if many unrelated Classes should respond."
+        ],
+        "examples": [
+          {
+            "title": "Overlap only cares about the player",
+            "question": "Is Other Actor the player Character Class?",
+            "condition": "Other Actor reference",
+            "true": "Cast to your Character and read player-specific state.",
+            "false": "Ignore/handle the failed path.",
+            "why": "The trigger has a genuine dependency on one specific Class."
+          },
+          {
+            "title": "Generic Interact system",
+            "question": "Could this target be a door, pickup or terminal?",
+            "condition": "Many unrelated Classes",
+            "true": "Prefer an Interface message rather than a chain of casts.",
+            "false": "A Cast is fine when only one specific Class is valid.",
+            "why": "Communication choice should reflect how many types need to participate."
+          }
+        ],
+        "remember": [
+          "Reference first, Cast second.",
+          "Cast is a type check, not Find Actor.",
+          "Long cast chains are often a design smell.",
+          "If you only need common behaviour, consider an Interface."
+        ]
+      },
+      "guidedDetailed": [
+        {
+          "title": "Use an overlap event to obtain Other Actor",
+          "do": "Use an overlap event to obtain Other Actor.",
+          "why": "Overlap gives a real reference without searching globally.",
+          "check": "Other Actor is available from the event."
+        },
+        {
+          "title": "Print the Other Actor name",
+          "do": "Print the Other Actor name.",
+          "why": "Printing its name proves what object the event supplied.",
+          "check": "The debug name changes depending on what overlaps."
+        },
+        {
+          "title": "Cast Other Actor to the player Character Class",
+          "do": "Cast Other Actor to the player Character Class.",
+          "why": "The Cast demonstrates checking for a specific player Class.",
+          "check": "Player overlap follows Cast success."
+        },
+        {
+          "title": "Use the successful Cast result to read one player variable",
+          "do": "Use the successful Cast result to read one player variable.",
+          "why": "Reading one variable proves why the typed result is useful.",
+          "check": "A player-specific variable can be accessed through As <Character>."
+        },
+        {
+          "title": "Test with a non-player Actor and observe Cast Failed",
+          "do": "Test with a non-player Actor and observe Cast Failed.",
+          "why": "Testing a non-player proves Cast Failed is real.",
+          "check": "A non-player reaches Cast Failed or is safely ignored."
+        },
+        {
+          "title": "Discuss whether an Interface would be better for a more generic interaction",
+          "do": "Discuss whether an Interface would be better for a more generic interaction.",
+          "why": "Comparing with Interfaces prevents students treating Cast as the only communication tool.",
+          "check": "You can explain when an Interface would reduce dependency."
+        }
+      ],
+      "evidencePrompt": {
+        "show": [
+          "The source of the reference feeding the Cast.",
+          "Successful Cast path using a player-specific value.",
+          "A deliberate Cast Failed test.",
+          "A short comparison of Cast vs Interface for your interaction system."
+        ],
+        "reflection": [
+          "Where did your reference come from?",
+          "What exactly did the Cast check?",
+          "What happens when the reference is the wrong Class?",
+          "Why might repeated Cast chains make a system harder to extend?"
+        ]
+      },
+      "visuals": [
+        {
+          "type": "book",
+          "src": "assets/book/casting-example.webp",
+          "caption": "Reference figure from the supplied book: Casting in Blueprints."
+        },
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/gold/references-casting-process.svg",
+          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence."
+        },
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/gold/references-casting-example.svg",
+          "caption": "Original classroom worked example: Overlap only cares about the player."
+        }
+      ]
     },
     {
       "id": "interfaces-dispatchers",
       "path": "framework",
       "order": 3,
-      "title": "Interfaces & Event Dispatchers",
+      "title": "Interfaces & Event Dispatchers: Communicate Cleanly",
       "short": "Build communication that scales beyond one tightly-coupled pair of Blueprints.",
       "difficulty": "Intermediate",
       "duration": "60 min",
@@ -1642,13 +2722,151 @@ window.UE5_COURSE_DATA = {
           "Each target owns its own reaction"
         ],
         "polish": "Add an Event Dispatcher so one system event can notify multiple independent listeners."
-      }
+      },
+      "deepDive": {
+        "find": {
+          "title": "Where do I find/use Interfaces & Event Dispatchers?",
+          "steps": [
+            "Create a Blueprint Interface from the Content Drawer and add function/message signatures in it.",
+            "In an implementing Blueprint, add the Interface under Class Settings → Implemented Interfaces.",
+            "Call an Interface message using a target reference that may implement it.",
+            "Create an Event Dispatcher inside a Blueprint via My Blueprint, then Bind/Assign/Call it from the appropriate owners/listeners."
+          ],
+          "note": "Interfaces and Dispatchers solve different communication shapes: Interface = caller sends a common message to a target; Dispatcher = broadcaster announces something to listeners."
+        },
+        "anatomy": [
+          [
+            "Blueprint Interface",
+            "Defines a common message contract without implementation."
+          ],
+          [
+            "Implementation",
+            "Each participating Class decides what that message means for itself."
+          ],
+          [
+            "Interface Message",
+            "Caller sends the message without needing the exact concrete Class."
+          ],
+          [
+            "Event Dispatcher",
+            "Broadcaster exposes an event other objects can subscribe to."
+          ],
+          [
+            "Bind/Assign",
+            "Connects a listener's reaction to the Dispatcher."
+          ],
+          [
+            "Call/Broadcast",
+            "The owner fires the Dispatcher and bound listeners can react."
+          ]
+        ],
+        "process": [
+          "Identify whether you need one-to-target messaging or one-to-many notification.",
+          "For common target behaviour, define an Interface message.",
+          "Implement that message separately in each Class.",
+          "For broadcasts, create a Dispatcher on the event owner.",
+          "Bind listeners at a sensible setup point and broadcast when the event occurs."
+        ],
+        "examples": [
+          {
+            "title": "Universal Interact",
+            "question": "How can one player interact with unrelated objects?",
+            "condition": "Targets share behaviour, not Class",
+            "true": "Door, pickup and terminal all implement BPI_Interact differently.",
+            "false": "Avoid Cast To Door → Cast To Pickup → Cast To Terminal.",
+            "why": "The caller depends on the Interact contract, not every target Class."
+          },
+          {
+            "title": "Facility alarm",
+            "question": "How should many systems react to one alarm?",
+            "condition": "One event, many listeners",
+            "true": "Alarm manager broadcasts; lights, doors and AI bind their own reactions.",
+            "false": "Do not make the alarm directly control every listener's internal details.",
+            "why": "A Dispatcher supports one-to-many notification cleanly."
+          }
+        ],
+        "remember": [
+          "Interface = common language; Dispatcher = announcement.",
+          "An Interface does not store shared implementation.",
+          "A Dispatcher needs listeners to bind before broadcasts matter.",
+          "Loose coupling makes new object types easier to add."
+        ]
+      },
+      "guidedDetailed": [
+        {
+          "title": "Create an Interact Blueprint Interface",
+          "do": "Create an Interact Blueprint Interface.",
+          "why": "Creating the Interface establishes the shared contract.",
+          "check": "The Blueprint Interface asset exists."
+        },
+        {
+          "title": "Add an Interact message",
+          "do": "Add an Interact message.",
+          "why": "One Interact message keeps the first version focused.",
+          "check": "Interact is defined with only necessary parameters."
+        },
+        {
+          "title": "Implement it in two different Actors",
+          "do": "Implement it in two different Actors.",
+          "why": "Two unrelated Actors prove the same message can mean different things.",
+          "check": "Two different Actor Classes implement Interact."
+        },
+        {
+          "title": "Call the Interface message from a player interaction test",
+          "do": "Call the Interface message from a player interaction test.",
+          "why": "Calling from the player proves the caller does not need concrete target knowledge.",
+          "check": "The same player call produces different target behaviour."
+        },
+        {
+          "title": "Create a simple Event Dispatcher in one Blueprint",
+          "do": "Create a simple Event Dispatcher in one Blueprint.",
+          "why": "A Dispatcher introduces one-to-many communication.",
+          "check": "A Dispatcher exists on the object that owns the event."
+        },
+        {
+          "title": "Bind another Blueprint to it and prove the broadcast fires",
+          "do": "Bind another Blueprint to it and prove the broadcast fires.",
+          "why": "Binding and broadcasting proves the event owner does not directly run listener internals.",
+          "check": "At least one external listener reacts only after it has been bound."
+        }
+      ],
+      "evidencePrompt": {
+        "show": [
+          "Blueprint Interface definition.",
+          "Two different Implement Event Interact graphs.",
+          "One generic caller sending the Interface message.",
+          "Dispatcher declaration/binding plus two listeners if possible."
+        ],
+        "reflection": [
+          "Why is an Interface better than several Casts here?",
+          "What does each implementing Actor own?",
+          "Who owns the Dispatcher event?",
+          "When would a Dispatcher be better than an Interface call?"
+        ]
+      },
+      "visuals": [
+        {
+          "type": "book",
+          "src": "assets/book/dispatcher-details.webp",
+          "caption": "Reference figure from the supplied book: Event Dispatcher setup/details."
+        },
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/gold/interfaces-dispatchers-process.svg",
+          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence."
+        },
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/gold/interfaces-dispatchers-example.svg",
+          "caption": "Original classroom worked example: Universal Interact."
+        }
+      ]
     },
     {
       "id": "collision",
       "path": "gameplay",
       "order": 1,
-      "title": "Collision & Overlaps",
+      "title": "Collision & Overlaps: Detect the World Reliably",
       "short": "Detect entering, leaving, touching and blocking in a controlled way.",
       "difficulty": "Beginner",
       "duration": "45 min",
@@ -1782,13 +3000,147 @@ window.UE5_COURSE_DATA = {
           "Trigger has a gameplay purpose"
         ],
         "polish": "Create a one-shot checkpoint or narrative trigger that cannot accidentally repeat."
-      }
+      },
+      "deepDive": {
+        "find": {
+          "title": "Where do I find/use Collision & Overlaps?",
+          "steps": [
+            "Select an Actor/Component and inspect Collision settings in Details.",
+            "Use primitive Collision Components such as Box, Sphere or Capsule for deliberate gameplay volumes.",
+            "Enable Generate Overlap Events when overlap events are required.",
+            "Use Collision Presets/responses to decide whether channels Block, Overlap or Ignore."
+          ],
+          "note": "Both sides' collision configuration matters. Perfect Blueprint event logic cannot fire if the shapes/channels never produce the required overlap/hit."
+        },
+        "anatomy": [
+          [
+            "Collision Shape",
+            "The geometry Unreal tests, which can differ from the visible mesh."
+          ],
+          [
+            "Object Type",
+            "How the object identifies itself to collision channels."
+          ],
+          [
+            "Response",
+            "Block, Overlap or Ignore for a channel."
+          ],
+          [
+            "Generate Overlap Events",
+            "Allows overlap events when the response pairing supports them."
+          ],
+          [
+            "Other Actor",
+            "Reference supplied by overlap events to the Actor that entered/left."
+          ]
+        ],
+        "process": [
+          "Choose what spatial relationship you need to detect.",
+          "Give the gameplay object an appropriate collision shape.",
+          "Configure object/channel responses deliberately.",
+          "Enable the required events.",
+          "Debug the collision first, then build gameplay consequences."
+        ],
+        "examples": [
+          {
+            "title": "Checkpoint volume",
+            "question": "Should it stop the player or detect passage?",
+            "condition": "Player crossing a trigger",
+            "true": "Use Overlap on a Box volume and activate checkpoint logic.",
+            "false": "Blocking the player would fight the intended behaviour.",
+            "why": "Collision response matches the gameplay purpose."
+          },
+          {
+            "title": "Solid wall",
+            "question": "Should the player pass through?",
+            "condition": "Physical barrier",
+            "true": "Block the player/pawn channel.",
+            "false": "Overlap alone would allow movement through.",
+            "why": "Block is for physical prevention; Overlap is for detection."
+          }
+        ],
+        "remember": [
+          "Block, Overlap and Ignore answer different gameplay needs.",
+          "Collision shape and visible mesh are separate concerns.",
+          "Check channel responses before blaming Blueprint code.",
+          "Filter Other Actor so the correct thing triggers the event."
+        ]
+      },
+      "guidedDetailed": [
+        {
+          "title": "Create BP_TriggerPractice with Box Collision",
+          "do": "Create BP_TriggerPractice with Box Collision.",
+          "why": "A dedicated trigger Actor keeps detection clear.",
+          "check": "The Box is large enough to enter visibly."
+        },
+        {
+          "title": "Resize it so the player can walk through",
+          "do": "Resize it so the player can walk through.",
+          "why": "Large Box Collision makes the test easy to enter/leave.",
+          "check": "The player can move through the trigger if intended."
+        },
+        {
+          "title": "Print on Begin Overlap",
+          "do": "Print on Begin Overlap.",
+          "why": "Begin Overlap proves entry detection.",
+          "check": "Begin Overlap prints once when entering."
+        },
+        {
+          "title": "Print on End Overlap",
+          "do": "Print on End Overlap.",
+          "why": "End Overlap proves the state can change when leaving.",
+          "check": "End Overlap prints when leaving."
+        },
+        {
+          "title": "Inspect Other Actor",
+          "do": "Inspect Other Actor.",
+          "why": "Other Actor teaches filtering/reference use.",
+          "check": "Other Actor identifies the player rather than an unrelated object."
+        },
+        {
+          "title": "Change collision responses and compare behaviour",
+          "do": "Change collision responses and compare behaviour.",
+          "why": "Changing responses demonstrates that events depend on collision configuration.",
+          "check": "Changing Block/Overlap/Ignore produces the predicted change."
+        }
+      ],
+      "evidencePrompt": {
+        "show": [
+          "Collision Component and its size in the Blueprint.",
+          "Collision Preset/responses in Details.",
+          "Begin/End Overlap logic with Other Actor filtering.",
+          "In-game proof that the intended object triggers it."
+        ],
+        "reflection": [
+          "Why did you choose Overlap rather than Block?",
+          "Which channel/object type matters in your setup?",
+          "What collision setting stopped your event from firing, if any?",
+          "How did you ensure the correct Actor triggered the mechanic?"
+        ]
+      },
+      "visuals": [
+        {
+          "type": "book",
+          "src": "assets/book/collision-responses.webp",
+          "caption": "Reference figure from the supplied book: Collision Responses table."
+        },
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/gold/collision-process.svg",
+          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence."
+        },
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/gold/collision-example.svg",
+          "caption": "Original classroom worked example: Checkpoint volume."
+        }
+      ]
     },
     {
       "id": "traces",
       "path": "gameplay",
       "order": 2,
-      "title": "Line Traces & Interaction Detection",
+      "title": "Line Traces: Detect What the Player Targets",
       "short": "Ask what is in front of the player.",
       "difficulty": "Intermediate",
       "duration": "55 min",
@@ -1922,13 +3274,151 @@ window.UE5_COURSE_DATA = {
           "Hit Actor is identified"
         ],
         "polish": "Show temporary feedback only while a valid interactable is being targeted."
-      }
+      },
+      "deepDive": {
+        "find": {
+          "title": "Where do I find/use Line Traces & Interaction Detection?",
+          "steps": [
+            "In a Blueprint graph, search for Line Trace By Channel.",
+            "Get the camera/world Start location and a forward direction.",
+            "Calculate End = Start + ForwardVector × Distance.",
+            "Enable Draw Debug Type while developing, then inspect the returned Hit Result."
+          ],
+          "note": "A trace asks a question about space. It does not automatically interact, damage or open anything; your logic decides what to do with the Hit Result."
+        },
+        "anatomy": [
+          [
+            "Start",
+            "World position where the query begins."
+          ],
+          [
+            "End",
+            "World position where it stops."
+          ],
+          [
+            "Trace Channel",
+            "Collision channel used to decide what can be hit."
+          ],
+          [
+            "Return Value",
+            "Boolean indicating whether a blocking hit occurred."
+          ],
+          [
+            "Hit Result",
+            "Structured data containing Hit Actor, Component, Impact Point, Normal and more."
+          ],
+          [
+            "Debug Draw",
+            "Temporary visual line showing range/direction during testing."
+          ]
+        ],
+        "process": [
+          "Choose the origin and maximum range.",
+          "Calculate a directionally correct End point.",
+          "Run the trace on a deliberate channel.",
+          "Check whether it hit.",
+          "Break/inspect Hit Result and decide whether the target is valid before acting."
+        ],
+        "examples": [
+          {
+            "title": "Look-to-interact",
+            "question": "What is the player looking at within range?",
+            "condition": "Camera trace hits valid interactable",
+            "true": "Show prompt/send Interact message.",
+            "false": "Hide prompt/do nothing.",
+            "why": "Directional query fits an intentional player target."
+          },
+          {
+            "title": "Hitscan weapon",
+            "question": "What did the shot intersect first?",
+            "condition": "Trace gets blocking hit",
+            "true": "Use Hit Result for target/impact feedback.",
+            "false": "Spawn miss/tracer feedback if desired.",
+            "why": "No permanent trigger volume is needed for an instantaneous query."
+          }
+        ],
+        "remember": [
+          "A trace is an invisible query, not the interaction itself.",
+          "Always visualise traces while debugging.",
+          "Range is controlled by your End calculation.",
+          "Collision channels determine what counts as a hit."
+        ]
+      },
+      "guidedDetailed": [
+        {
+          "title": "Use the player camera location as Start",
+          "do": "Use the player camera location as Start.",
+          "why": "Camera location gives the correct player viewpoint.",
+          "check": "Start follows the camera."
+        },
+        {
+          "title": "Calculate End = Start + Forward × Distance",
+          "do": "Calculate End = Start + Forward × Distance.",
+          "why": "Forward × Distance turns direction into a finite range.",
+          "check": "End points forward and is the intended distance away."
+        },
+        {
+          "title": "Run Line Trace by Channel",
+          "do": "Run Line Trace by Channel.",
+          "why": "Line Trace by Channel performs the world query.",
+          "check": "The trace appears visually when debug draw is enabled."
+        },
+        {
+          "title": "Enable debug drawing",
+          "do": "Enable debug drawing.",
+          "why": "Debug drawing makes maths visible.",
+          "check": "Return Value changes when a blocking object enters/leaves the path."
+        },
+        {
+          "title": "Break Hit Result and print Hit Actor",
+          "do": "Break Hit Result and print Hit Actor.",
+          "why": "Breaking Hit Result reveals what was actually hit.",
+          "check": "Hit Actor prints the expected object."
+        },
+        {
+          "title": "Test different collision responses and distances",
+          "do": "Test different collision responses and distances.",
+          "why": "Changing responses/range proves traces depend on both geometry and collision configuration.",
+          "check": "Objects outside range or ignored by the channel do not count."
+        }
+      ],
+      "evidencePrompt": {
+        "show": [
+          "The Start/End calculation.",
+          "A debug trace visible in game.",
+          "Break Hit Result showing Hit Actor/Impact Point.",
+          "Valid and invalid interaction targets producing different results."
+        ],
+        "reflection": [
+          "How did you calculate End?",
+          "What does the trace Return Value mean?",
+          "Which Hit Result field did your mechanic need?",
+          "How did collision channels affect what the trace detected?"
+        ]
+      },
+      "visuals": [
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/trace.svg",
+          "caption": "Original classroom diagram: camera-based line trace and Hit Result."
+        },
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/gold/traces-process.svg",
+          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence."
+        },
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/gold/traces-example.svg",
+          "caption": "Original classroom worked example: Look-to-interact."
+        }
+      ]
     },
     {
       "id": "timelines",
       "path": "gameplay",
       "order": 3,
-      "title": "Timelines & Smooth Doors",
+      "title": "Timelines & Lerp: Smooth Doors and Moving Systems",
       "short": "Animate values over time instead of teleporting gameplay objects.",
       "difficulty": "Intermediate",
       "duration": "55 min",
@@ -2062,13 +3552,151 @@ window.UE5_COURSE_DATA = {
           "Locked/blocked state can prevent movement"
         ],
         "polish": "Expose distance/angle and duration so one Class can produce several different barriers."
-      }
+      },
+      "deepDive": {
+        "find": {
+          "title": "Where do I find/use Timelines & Smooth Doors?",
+          "steps": [
+            "Inside an Actor Blueprint Event Graph, right-click and add a Timeline.",
+            "Double-click the Timeline node to edit tracks and keyframes.",
+            "Add a Float track for a simple 0→1 progression.",
+            "Use Update to apply the changing value and Play/Reverse to control direction."
+          ],
+          "note": "The Timeline should usually output a value; another node such as Lerp uses that value to calculate the actual transform/property."
+        },
+        "anatomy": [
+          [
+            "Play",
+            "Starts moving forward from the current/start time."
+          ],
+          [
+            "Reverse",
+            "Runs the Timeline backwards."
+          ],
+          [
+            "Update",
+            "Executes as the Timeline value changes."
+          ],
+          [
+            "Finished",
+            "Fires when playback reaches the end."
+          ],
+          [
+            "Float Track",
+            "Outputs an authored value over time."
+          ],
+          [
+            "Lerp Alpha",
+            "Often receives a 0→1 Timeline value to interpolate between A and B."
+          ]
+        ],
+        "process": [
+          "Store the start and target states.",
+          "Author a 0→1 track over a sensible duration.",
+          "Feed the track into a Lerp.",
+          "Apply the Lerp result on Update.",
+          "Use Play/Reverse from interaction/state logic and test interruption/reversal."
+        ],
+        "examples": [
+          {
+            "title": "Sliding security door",
+            "question": "How far through the open animation are we?",
+            "condition": "Timeline Alpha 0→1",
+            "true": "Lerp ClosedLocation to OpenLocation and apply it on Update.",
+            "false": "Instantly setting the final location removes motion/polish.",
+            "why": "Timeline controls time; Lerp calculates the in-between transform."
+          },
+          {
+            "title": "Warning light fade",
+            "question": "How strong should the light be at this moment?",
+            "condition": "Timeline Float",
+            "true": "Use output to interpolate intensity or another parameter.",
+            "false": "Do not create a manual chain of Delays for smooth values.",
+            "why": "Timelines author continuous changes cleanly."
+          }
+        ],
+        "remember": [
+          "Timeline = changing value over time; Lerp = value between A and B.",
+          "Store start/end states deliberately.",
+          "Use Update for the changing property, not repeated delayed Set nodes.",
+          "Play and Reverse make one Timeline reusable for open/close."
+        ]
+      },
+      "guidedDetailed": [
+        {
+          "title": "Create BP_SlidingDoor",
+          "do": "Create BP_SlidingDoor.",
+          "why": "A dedicated door Actor gives the Timeline clear ownership.",
+          "check": "The door Actor has clear moving/static Components."
+        },
+        {
+          "title": "Store ClosedLocation and OpenLocation",
+          "do": "Store ClosedLocation and OpenLocation.",
+          "why": "Closed/Open transforms define known endpoints.",
+          "check": "Closed and Open states are sensible."
+        },
+        {
+          "title": "Add a Timeline with 0→1 Float track",
+          "do": "Add a Timeline with 0→1 Float track.",
+          "why": "A 0→1 Float track is easy to reason about.",
+          "check": "The Timeline duration and keys are visible."
+        },
+        {
+          "title": "Use the Float as a Lerp Alpha",
+          "do": "Use the Float as a Lerp Alpha.",
+          "why": "Lerp turns Alpha into a position between endpoints.",
+          "check": "At Alpha 0/1 the Lerp reaches the expected endpoints."
+        },
+        {
+          "title": "Set the door location on Update",
+          "do": "Set the door location on Update.",
+          "why": "Update applies every intermediate position.",
+          "check": "Door moves smoothly during Update."
+        },
+        {
+          "title": "Test Play and Reverse before connecting interaction",
+          "do": "Test Play and Reverse before connecting interaction.",
+          "why": "Play/Reverse testing proves the animation works before adding interaction complexity.",
+          "check": "Play and Reverse return the door predictably without teleporting."
+        }
+      ],
+      "evidencePrompt": {
+        "show": [
+          "Timeline editor with the Float track visible.",
+          "Lerp wired from closed/open values and Timeline Alpha.",
+          "Play/Reverse logic.",
+          "In-game door/barrier at closed and open states."
+        ],
+        "reflection": [
+          "What does the Timeline output represent?",
+          "What does the Lerp do that the Timeline does not?",
+          "Why did you choose the duration/curve?",
+          "How does your system reverse or close again?"
+        ]
+      },
+      "visuals": [
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/branch-flow.svg",
+          "caption": "Use the decision diagram alongside the Timeline task: decide first, animate second."
+        },
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/gold/timelines-process.svg",
+          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence."
+        },
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/gold/timelines-example.svg",
+          "caption": "Original classroom worked example: Sliding security door."
+        }
+      ]
     },
     {
       "id": "ui",
       "path": "gameplay",
       "order": 4,
-      "title": "UMG & Gameplay UI",
+      "title": "UMG & Gameplay UI: Show State Without Owning It",
       "short": "Display health, counters and objectives without turning the Widget into the game logic.",
       "difficulty": "Intermediate",
       "duration": "60 min",
@@ -2201,13 +3829,151 @@ window.UE5_COURSE_DATA = {
           "Core game state does not live only in Widget"
         ],
         "polish": "Use hierarchy, spacing and animation to make changing information readable at gameplay speed."
-      }
+      },
+      "deepDive": {
+        "find": {
+          "title": "Where do I find/use UMG & Gameplay UI?",
+          "steps": [
+            "Create a Widget Blueprint from the Content Drawer/User Interface menu.",
+            "Use the Designer tab to place and anchor UI elements.",
+            "Use the Widget Blueprint Graph for display/update logic.",
+            "Create the Widget from gameplay code and Add to Viewport for a player HUD."
+          ],
+          "note": "The Widget should usually display gameplay state, not become the only place that state exists."
+        },
+        "anatomy": [
+          [
+            "Widget Blueprint",
+            "Reusable UI Class."
+          ],
+          [
+            "Designer",
+            "Visual layout of panels, text, images, progress bars and anchors."
+          ],
+          [
+            "Graph",
+            "Logic for reading/updating displayed values."
+          ],
+          [
+            "Anchor",
+            "Controls how UI is positioned relative to screen size."
+          ],
+          [
+            "Create Widget",
+            "Creates an instance at runtime."
+          ],
+          [
+            "Add to Viewport",
+            "Displays that Widget for the player."
+          ]
+        ],
+        "process": [
+          "Decide what gameplay information the player actually needs.",
+          "Build a clear visual hierarchy in Designer.",
+          "Create/show the Widget from a suitable gameplay owner.",
+          "Pass/read gameplay state into the Widget.",
+          "Update only when needed and test at different screen sizes."
+        ],
+        "examples": [
+          {
+            "title": "Health HUD",
+            "question": "Who owns Health?",
+            "condition": "Character owns state, Widget displays it",
+            "true": "Health changes in gameplay; HUD converts it to text/bar percentage.",
+            "false": "Do not store the only authoritative Health value inside the Widget.",
+            "why": "UI stays replaceable and gameplay remains valid if UI changes."
+          },
+          {
+            "title": "Interact prompt",
+            "question": "Should the prompt be visible right now?",
+            "condition": "Player targets a valid interactable",
+            "true": "Show prompt with relevant text.",
+            "false": "Hide it when no valid target exists.",
+            "why": "UI communicates current interaction state without owning detection."
+          }
+        ],
+        "remember": [
+          "Gameplay owns rules/state; UI communicates them.",
+          "Anchor deliberately for different resolutions.",
+          "Avoid expensive always-running bindings when an event-driven update is clearer.",
+          "Debug values before polishing fonts/animation."
+        ]
+      },
+      "guidedDetailed": [
+        {
+          "title": "Create a simple HUD Widget",
+          "do": "Create a simple HUD Widget.",
+          "why": "A simple HUD focuses on essential information.",
+          "check": "The Widget Blueprint exists and has a readable layout."
+        },
+        {
+          "title": "Add a health bar or text",
+          "do": "Add a health bar or text.",
+          "why": "One obvious element proves Designer layout.",
+          "check": "A health/text element is visible in Designer."
+        },
+        {
+          "title": "Create the Widget at gameplay start",
+          "do": "Create the Widget at gameplay start.",
+          "why": "Create/Add to Viewport proves runtime ownership.",
+          "check": "The Widget appears exactly once when gameplay starts."
+        },
+        {
+          "title": "Add it to the Viewport",
+          "do": "Add it to the Viewport.",
+          "why": "Reading a real gameplay value connects UI to systems.",
+          "check": "The displayed value matches real player state."
+        },
+        {
+          "title": "Connect the displayed value to player Health",
+          "do": "Connect the displayed value to player Health.",
+          "why": "Changing Health proves the display is live.",
+          "check": "Changing Health changes the UI."
+        },
+        {
+          "title": "Change Health in-game and verify the UI updates",
+          "do": "Change Health in-game and verify the UI updates.",
+          "why": "Testing updates catches a common mistake: UI showing stale/default data.",
+          "check": "Resizing/testing resolution does not throw the UI into the wrong position."
+        }
+      ],
+      "evidencePrompt": {
+        "show": [
+          "Widget Designer with anchors/layout.",
+          "Create Widget → Add to Viewport logic.",
+          "Gameplay state flowing into the display.",
+          "In-game HUD before/after the value changes."
+        ],
+        "reflection": [
+          "Where does the real gameplay value live?",
+          "Why should the Widget not own the core game rule?",
+          "How did you ensure the UI updates?",
+          "What did you do to make the layout readable at gameplay speed?"
+        ]
+      },
+      "visuals": [
+        {
+          "type": "book",
+          "src": "assets/book/ui-variables.webp",
+          "caption": "Reference figure from the supplied book: UI-related gameplay variables."
+        },
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/gold/ui-process.svg",
+          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence."
+        },
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/gold/ui-example.svg",
+          "caption": "Original classroom worked example: Health HUD."
+        }
+      ]
     },
     {
       "id": "savegame",
       "path": "gameplay",
       "order": 5,
-      "title": "SaveGame & Persistent Progress",
+      "title": "SaveGame: Persistent Progress Done Safely",
       "short": "Store data that needs to survive beyond the current play session.",
       "difficulty": "Intermediate",
       "duration": "55 min",
@@ -2336,13 +4102,146 @@ window.UE5_COURSE_DATA = {
           "Loaded state visibly changes game progress"
         ],
         "polish": "Save the latest activated checkpoint and one additional progression value."
-      }
+      },
+      "deepDive": {
+        "find": {
+          "title": "Where do I find/use SaveGame & Persistent Progress?",
+          "steps": [
+            "Create a Blueprint Class derived from SaveGame.",
+            "Add only data that genuinely needs disk persistence.",
+            "Use Create Save Game Object, fill its variables, then Save Game to Slot.",
+            "Before loading, use Does Save Game Exist or handle the missing-slot case; then Load Game from Slot and use your SaveGame Class."
+          ],
+          "note": "GameInstance and SaveGame solve different lifetimes: GameInstance lasts through level changes in one run; SaveGame writes selected data to persistent storage."
+        },
+        "anatomy": [
+          [
+            "SaveGame Class",
+            "Defines the data structure to serialize."
+          ],
+          [
+            "Save Object",
+            "Runtime instance containing values to write/read."
+          ],
+          [
+            "Slot Name",
+            "Identifier used to store and retrieve a save."
+          ],
+          [
+            "Save Game to Slot",
+            "Writes data to persistent storage."
+          ],
+          [
+            "Load Game from Slot",
+            "Reads stored data back."
+          ],
+          [
+            "Does Save Game Exist",
+            "Lets you handle a first run/no-save path safely."
+          ]
+        ],
+        "process": [
+          "Decide exactly what must persist after closing the game.",
+          "Copy that state into a SaveGame object.",
+          "Write it to a named slot.",
+          "On load, check whether the slot exists.",
+          "Read the SaveGame data and deliberately apply it back to gameplay."
+        ],
+        "examples": [
+          {
+            "title": "Checkpoint continue",
+            "question": "What must survive restarting the game?",
+            "condition": "Checkpoint ID + progression state",
+            "true": "Store them in SaveGame and restore the correct checkpoint.",
+            "false": "Do not rely on a Character/level variable.",
+            "why": "World Actors disappear when the application closes."
+          },
+          {
+            "title": "Session-only selection",
+            "question": "Does it need to exist tomorrow?",
+            "condition": "Only across map travel this run",
+            "true": "GameInstance may be enough.",
+            "false": "Using SaveGame for every temporary runtime value adds unnecessary complexity.",
+            "why": "Choose storage by lifetime."
+          }
+        ],
+        "remember": [
+          "SaveGame persists to disk; GameInstance does not automatically.",
+          "Save meaningful data, not entire world object references.",
+          "Always handle 'no save exists yet'.",
+          "Loading data is separate from applying that data back into the game."
+        ]
+      },
+      "guidedDetailed": [
+        {
+          "title": "Create BP_SaveData from SaveGame",
+          "do": "Create BP_SaveData from SaveGame.",
+          "why": "A dedicated SaveGame Class defines a clean serializable structure.",
+          "check": "BP_SaveData inherits from SaveGame."
+        },
+        {
+          "title": "Add one test value such as HighestRound",
+          "do": "Add one test value such as HighestRound.",
+          "why": "One simple value keeps the first save test measurable.",
+          "check": "The test value has a clear type/name."
+        },
+        {
+          "title": "Create a save object",
+          "do": "Create a save object.",
+          "why": "Creating a save object provides somewhere to set data.",
+          "check": "The created object is your SaveGame Class."
+        },
+        {
+          "title": "Set the value and Save Game to Slot",
+          "do": "Set the value and Save Game to Slot.",
+          "why": "Save Game to Slot proves writing.",
+          "check": "A slot is written successfully."
+        },
+        {
+          "title": "Load from the same slot",
+          "do": "Load from the same slot.",
+          "why": "Load from the same slot proves retrieval.",
+          "check": "Loading returns the value you saved."
+        },
+        {
+          "title": "Print the loaded value and handle the case where no save exists",
+          "do": "Print the loaded value and handle the case where no save exists.",
+          "why": "Handling no-save prevents first-run errors and teaches robust flow.",
+          "check": "A fresh slot follows the no-save path safely."
+        }
+      ],
+      "evidencePrompt": {
+        "show": [
+          "SaveGame Class variables.",
+          "Create/fill/Save Game to Slot graph.",
+          "Does Save Game Exist or equivalent safe load flow.",
+          "Visible gameplay proof that loaded data changes progression."
+        ],
+        "reflection": [
+          "Why does this value belong in SaveGame?",
+          "What is your slot name strategy?",
+          "What happens on a first run with no save?",
+          "How do loaded values get applied back into gameplay?"
+        ]
+      },
+      "visuals": [
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/gold/savegame-process.svg",
+          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence."
+        },
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/gold/savegame-example.svg",
+          "caption": "Original classroom worked example: Checkpoint continue."
+        }
+      ]
     },
     {
       "id": "data",
       "path": "advanced",
       "order": 1,
-      "title": "Arrays, Maps, Enums, Structs & Data Tables",
+      "title": "Data Structures & Data Tables: Stop Hard-Coding Content",
       "short": "Stop creating Health1, Health2, Health3 and organise data properly.",
       "difficulty": "Intermediate",
       "duration": "65 min",
@@ -2494,7 +4393,145 @@ window.UE5_COURSE_DATA = {
           "Blueprint behaviour consumes the data"
         ],
         "polish": "Move the definitions into a Data Table where that genuinely makes authoring easier."
-      }
+      },
+      "deepDive": {
+        "find": {
+          "title": "Where do I find/use Arrays, Maps, Enums, Structs & Data Tables?",
+          "steps": [
+            "Create Arrays/Sets/Maps by changing a variable's Container Type in Details.",
+            "Create an Enumeration asset from the Content Drawer for named finite choices.",
+            "Create a Structure asset for a record with several related fields.",
+            "Create a Data Table and choose a Struct row type when many definitions share the same shape."
+          ],
+          "note": "Do not choose a data structure because it sounds advanced. Choose it because its shape matches the information."
+        },
+        "anatomy": [
+          [
+            "Array",
+            "Ordered list; duplicates allowed."
+          ],
+          [
+            "Set",
+            "Collection of unique values."
+          ],
+          [
+            "Map",
+            "Key → value lookup."
+          ],
+          [
+            "Enum",
+            "Finite named choices/states."
+          ],
+          [
+            "Struct",
+            "One record grouping related fields."
+          ],
+          [
+            "Data Table",
+            "Many rows using the same Struct schema."
+          ]
+        ],
+        "process": [
+          "Describe the shape of the information in plain English.",
+          "Choose collection/state/record structure that matches it.",
+          "Create one small example.",
+          "Read/add/remove/iterate or look up data correctly.",
+          "Move repeated definitions into data assets when authoring benefits."
+        ],
+        "examples": [
+          {
+            "title": "Inventory definitions",
+            "question": "Do many items share Name/Icon/Value/Type fields?",
+            "condition": "Repeated records",
+            "true": "Use Item Struct; Array for owned entries; Data Table for definitions if appropriate.",
+            "false": "Avoid ItemName1, ItemName2, ItemName3 variables.",
+            "why": "The structure can scale without graph duplication."
+          },
+          {
+            "title": "Objective state",
+            "question": "Is the state one of a fixed named set?",
+            "condition": "Inactive / Active / Complete / Failed",
+            "true": "Use an Enum rather than magic integers/strings.",
+            "false": "Do not encode states as unexplained 0,1,2,3 values.",
+            "why": "Named choices make logic self-documenting."
+          }
+        ],
+        "remember": [
+          "Array = list; Map = lookup; Enum = named finite choice; Struct = record; Data Table = many records.",
+          "Avoid numbered-variable patterns.",
+          "Data design should make adding content easier without editing core logic.",
+          "Prefer readable named states over magic numbers/strings."
+        ]
+      },
+      "guidedDetailed": [
+        {
+          "title": "Create an Array of names or Actor references",
+          "do": "Create an Array of names or Actor references.",
+          "why": "An Array provides the simplest repeatable collection.",
+          "check": "The Array contains multiple correctly typed elements."
+        },
+        {
+          "title": "Add, remove and iterate over items",
+          "do": "Add, remove and iterate over items.",
+          "why": "Add/remove/iterate proves the collection is dynamic.",
+          "check": "Add/remove/loop operations behave predictably."
+        },
+        {
+          "title": "Create an Enum for game state",
+          "do": "Create an Enum for game state.",
+          "why": "An Enum demonstrates readable named state.",
+          "check": "The Enum has meaningful named entries."
+        },
+        {
+          "title": "Create a Struct for a simple item",
+          "do": "Create a Struct for a simple item.",
+          "why": "A Struct groups fields that belong to one conceptual item.",
+          "check": "The Struct groups related fields only."
+        },
+        {
+          "title": "Create multiple Struct values",
+          "do": "Create multiple Struct values.",
+          "why": "Multiple Struct values prove consistent record shape.",
+          "check": "Two records use the same Struct shape with different values."
+        },
+        {
+          "title": "Discuss when many items should move into a Data Table",
+          "do": "Discuss when many items should move into a Data Table.",
+          "why": "Discussing Data Tables teaches when definitions should move out of graph variables.",
+          "check": "You can explain whether a Data Table would genuinely improve authoring."
+        }
+      ],
+      "evidencePrompt": {
+        "show": [
+          "One container variable with its type visible.",
+          "Your Enum entries.",
+          "Your Struct fields and two example records.",
+          "Blueprint logic consuming structured data rather than hard-coded Item1/Item2 values."
+        ],
+        "reflection": [
+          "Why did you choose this data structure?",
+          "What would become awkward with numbered variables?",
+          "Which values belong together in your Struct?",
+          "When would a Data Table improve your project rather than complicate it?"
+        ]
+      },
+      "visuals": [
+        {
+          "type": "book",
+          "src": "assets/book/containers.webp",
+          "caption": "Reference figure from the supplied book: container variable types."
+        },
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/gold/data-process.svg",
+          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence."
+        },
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/gold/data-example.svg",
+          "caption": "Original classroom worked example: Inventory definitions."
+        }
+      ]
     },
     {
       "id": "ai",
@@ -2629,7 +4666,140 @@ window.UE5_COURSE_DATA = {
           "Blackboard/Behaviour Tree state is understandable"
         ],
         "polish": "Add Investigate or Return-to-Patrol so losing the player produces a believable transition."
-      }
+      },
+      "deepDive": {
+        "find": {
+          "title": "Where do I find/use AI: NavMesh, Blackboard & Behaviour Trees?",
+          "steps": [
+            "Place a Nav Mesh Bounds Volume around walkable AI space and press P to visualise navigation.",
+            "Create/inspect an AIController Class and assign it to the AI Pawn/Character as appropriate.",
+            "Create a Blackboard for AI knowledge/state.",
+            "Create a Behaviour Tree using that Blackboard and run it from the AI Controller/setup."
+          ],
+          "note": "Debug one layer at a time: navigation first, possession/controller second, Blackboard state third, Behaviour Tree logic last."
+        },
+        "anatomy": [
+          [
+            "NavMesh",
+            "Marks areas AI navigation can traverse."
+          ],
+          [
+            "AI Pawn/Character",
+            "Physical body moving in the world."
+          ],
+          [
+            "AIController",
+            "Owns decision/control logic for the AI body."
+          ],
+          [
+            "Blackboard",
+            "Stores AI knowledge such as TargetActor or PatrolLocation."
+          ],
+          [
+            "Behaviour Tree",
+            "Chooses/tasks behaviour based on Blackboard state."
+          ],
+          [
+            "Task/Decorator",
+            "Task does work; Decorator gates whether a branch is allowed."
+          ]
+        ],
+        "process": [
+          "Prove the environment is navigable.",
+          "Prove the AI has the correct Controller.",
+          "Create a Blackboard key representing useful knowledge.",
+          "Build the smallest Behaviour Tree state such as patrol/move.",
+          "Change Blackboard state and prove the Tree switches behaviour."
+        ],
+        "examples": [
+          {
+            "title": "Patrol → Chase",
+            "question": "Does the AI currently have a valid target?",
+            "condition": "Blackboard TargetActor set",
+            "true": "Chase/move toward target branch.",
+            "false": "Patrol branch chooses/moves among patrol points.",
+            "why": "Knowledge is separated from behaviour selection."
+          },
+          {
+            "title": "Investigate last location",
+            "question": "Was the player seen recently but not currently visible?",
+            "condition": "LastKnownLocation valid, TargetActor absent",
+            "true": "Move to/investigate the stored location.",
+            "false": "Return to patrol.",
+            "why": "A third state produces believable transitions without one huge script."
+          }
+        ],
+        "remember": [
+          "Green NavMesh first: AI cannot path where no navigation exists.",
+          "Blackboard stores facts; Behaviour Tree decides what to do with them.",
+          "Controller = AI controlling logic; Pawn/Character = body.",
+          "Debug state transitions rather than adding more Tasks blindly."
+        ]
+      },
+      "guidedDetailed": [
+        {
+          "title": "Place a NavMesh Bounds Volume and visualise navigation",
+          "do": "Place a NavMesh Bounds Volume and visualise navigation.",
+          "why": "NavMesh is a prerequisite for movement tasks.",
+          "check": "Walkable ground is green in NavMesh visualisation."
+        },
+        {
+          "title": "Create an AI Character/Controller",
+          "do": "Create an AI Character/Controller.",
+          "why": "A dedicated AI body/controller establishes correct ownership.",
+          "check": "The AI is controlled by the intended AIController."
+        },
+        {
+          "title": "Create Blackboard keys for target/patrol state",
+          "do": "Create Blackboard keys for target/patrol state.",
+          "why": "Blackboard keys make state observable.",
+          "check": "Blackboard shows understandable keys."
+        },
+        {
+          "title": "Create a simple Behaviour Tree",
+          "do": "Create a simple Behaviour Tree.",
+          "why": "A minimal Tree prevents hidden complexity.",
+          "check": "Behaviour Tree runs and highlights active execution in debug."
+        },
+        {
+          "title": "Make AI move to a patrol point",
+          "do": "Make AI move to a patrol point.",
+          "why": "Patrol proves basic navigation/task flow.",
+          "check": "AI reaches patrol targets."
+        },
+        {
+          "title": "Add a condition that allows a chase state",
+          "do": "Add a condition that allows a chase state.",
+          "why": "A chase condition proves data-driven state change.",
+          "check": "Setting/acquiring a target changes the active behaviour to chase."
+        }
+      ],
+      "evidencePrompt": {
+        "show": [
+          "NavMesh visualisation.",
+          "Blackboard values while the AI is running.",
+          "Behaviour Tree debug highlighting Patrol and Chase at different times.",
+          "In-game AI successfully switching state."
+        ],
+        "reflection": [
+          "What does the Blackboard know?",
+          "What causes the Behaviour Tree to switch branches?",
+          "How did you prove navigation worked before debugging the Tree?",
+          "Which Class owns movement body vs decision logic?"
+        ]
+      },
+      "visuals": [
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/gold/ai-process.svg",
+          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence."
+        },
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/gold/ai-example.svg",
+          "caption": "Original classroom worked example: Patrol → Chase."
+        }
+      ]
     },
     {
       "id": "animation",
@@ -2768,13 +4938,151 @@ window.UE5_COURSE_DATA = {
           "No gameplay rule hidden only inside AnimGraph"
         ],
         "polish": "Improve one transition or Blend Space so state changes read more smoothly."
-      }
+      },
+      "deepDive": {
+        "find": {
+          "title": "Where do I find/use Animation Blueprints & State Machines?",
+          "steps": [
+            "Create/open an Animation Blueprint assigned to a Skeletal Mesh.",
+            "Use the EventGraph to gather gameplay/movement data.",
+            "Use the AnimGraph to generate the final pose.",
+            "Open a State Machine/Blend Space to inspect locomotion states and transition rules."
+          ],
+          "note": "Keep gameplay rules in gameplay systems; the Animation Blueprint should consume facts such as Speed/IsInAir to decide presentation."
+        },
+        "anatomy": [
+          [
+            "EventGraph",
+            "Collects/updates animation-driving data."
+          ],
+          [
+            "AnimGraph",
+            "Produces the final pose."
+          ],
+          [
+            "State Machine",
+            "Organises discrete animation states and transitions."
+          ],
+          [
+            "Transition Rule",
+            "Boolean condition deciding whether a state change can occur."
+          ],
+          [
+            "Blend Space",
+            "Blends animations across values such as speed/direction."
+          ],
+          [
+            "Speed/IsInAir",
+            "Typical facts gathered from the owning Pawn/Character."
+          ]
+        ],
+        "process": [
+          "Get a reliable reference to the owning Pawn/Character.",
+          "Calculate simple facts such as Speed and IsInAir.",
+          "Feed those values into locomotion/blend logic.",
+          "Use transition rules to enter/leave states.",
+          "Play and inspect transitions for popping, stuck states or incorrect thresholds."
+        ],
+        "examples": [
+          {
+            "title": "Idle ↔ movement",
+            "question": "How fast is the character moving?",
+            "condition": "Speed > small threshold",
+            "true": "Use locomotion/walk/run blend.",
+            "false": "Use Idle state.",
+            "why": "Animation responds to movement data without owning movement itself."
+          },
+          {
+            "title": "Jump state",
+            "question": "Is the Character Movement Component currently falling?",
+            "condition": "IsInAir",
+            "true": "Enter jump/fall animation state.",
+            "false": "Return to grounded locomotion when false and transition rules allow.",
+            "why": "The AnimBP reads a gameplay fact and presents it visually."
+          }
+        ],
+        "remember": [
+          "EventGraph gathers facts; AnimGraph builds pose.",
+          "Animation should reflect gameplay, not secretly own gameplay rules.",
+          "Transition rules should be readable in plain English.",
+          "Blend Spaces are useful for continuous values; State Machines for distinct states."
+        ]
+      },
+      "guidedDetailed": [
+        {
+          "title": "Create/inspect an Animation Blueprint",
+          "do": "Create/inspect an Animation Blueprint.",
+          "why": "Opening a real AnimBP grounds the terminology.",
+          "check": "The correct AnimBP is assigned to the Skeletal Mesh."
+        },
+        {
+          "title": "Identify EventGraph and AnimGraph",
+          "do": "Identify EventGraph and AnimGraph.",
+          "why": "Separating EventGraph/AnimGraph prevents role confusion.",
+          "check": "EventGraph and AnimGraph roles are identifiable."
+        },
+        {
+          "title": "Create Speed from character velocity",
+          "do": "Create Speed from character velocity.",
+          "why": "Speed is an easy continuous movement fact.",
+          "check": "Speed changes when the character moves."
+        },
+        {
+          "title": "Feed locomotion through a Blend Space or existing setup",
+          "do": "Feed locomotion through a Blend Space or existing setup.",
+          "why": "A Blend Space demonstrates data-driven pose blending.",
+          "check": "Locomotion responds to Speed."
+        },
+        {
+          "title": "Inspect a State Machine",
+          "do": "Inspect a State Machine.",
+          "why": "State Machine inspection exposes discrete states.",
+          "check": "You can locate a State Machine and active state."
+        },
+        {
+          "title": "Explain one transition rule in plain English",
+          "do": "Explain one transition rule in plain English.",
+          "why": "Explaining a transition in English proves understanding rather than memorising nodes.",
+          "check": "One transition rule can be stated clearly as a gameplay fact."
+        }
+      ],
+      "evidencePrompt": {
+        "show": [
+          "EventGraph calculating animation variables.",
+          "AnimGraph/State Machine layout.",
+          "A transition rule with readable conditions.",
+          "In-game proof of at least two visually distinct states."
+        ],
+        "reflection": [
+          "Which gameplay facts drive your animation?",
+          "What is the difference between EventGraph and AnimGraph?",
+          "What condition changes your main state?",
+          "How did you stop animation logic from becoming gameplay logic?"
+        ]
+      },
+      "visuals": [
+        {
+          "type": "book",
+          "src": "assets/book/animation-blueprint.webp",
+          "caption": "Reference figure from the supplied book: creating an Animation Blueprint."
+        },
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/gold/animation-process.svg",
+          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence."
+        },
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/gold/animation-example.svg",
+          "caption": "Original classroom worked example: Idle ↔ movement."
+        }
+      ]
     },
     {
       "id": "practice",
       "path": "practice",
       "order": 1,
-      "title": "Blueprint Responsibility",
+      "title": "Blueprint Responsibility: Put Behaviour Where It Belongs",
       "short": "Put behaviour where it belongs so changes happen in one place.",
       "difficulty": "Intermediate",
       "duration": "45 min",
@@ -2907,13 +5215,151 @@ window.UE5_COURSE_DATA = {
           "Reason for new ownership documented"
         ],
         "polish": "Remove one piece of reusable game logic from the Level Blueprint."
-      }
+      },
+      "deepDive": {
+        "find": {
+          "title": "Where do I find/use Blueprint Responsibility?",
+          "steps": [
+            "There is no single 'responsibility' node; inspect which Blueprint owns each variable and behaviour.",
+            "Use Find References and graph navigation to locate where state is changed.",
+            "Inspect Level Blueprint, GameMode and reusable Actor Classes for misplaced logic.",
+            "Refactor by moving behaviour to the object/system that owns the affected state and expose a clear request Function/Event/Interface."
+          ],
+          "note": "This lesson is architecture: the tool is the question 'whose state is this?' followed by refactoring, not a new node to memorise."
+        },
+        "anatomy": [
+          [
+            "State Owner",
+            "Object responsible for storing a piece of data."
+          ],
+          [
+            "Behaviour Owner",
+            "Object responsible for changing/acting on its own state."
+          ],
+          [
+            "Requester",
+            "External object asking the owner to perform behaviour."
+          ],
+          [
+            "Level Blueprint",
+            "Best kept for genuinely level-specific orchestration."
+          ],
+          [
+            "GameMode",
+            "Owns game rules, not arbitrary Actor internals."
+          ],
+          [
+            "Public Function/Event",
+            "Clean request surface instead of direct internal manipulation."
+          ]
+        ],
+        "process": [
+          "Choose one mechanic crossing multiple Blueprints.",
+          "List the state each Blueprint owns.",
+          "Find logic that directly manipulates somebody else's internals.",
+          "Move behaviour to the correct owner.",
+          "Replace external manipulation with a request and retest every caller."
+        ],
+        "examples": [
+          {
+            "title": "Player death",
+            "question": "Who owns the player's death state and respawn behaviour?",
+            "condition": "Player/health system",
+            "true": "Hazard calls player Die/ApplyDamage; player handles animation/UI/respawn.",
+            "false": "Do not duplicate the player's death sequence inside every hazard.",
+            "why": "One owner means one place to change death behaviour."
+          },
+          {
+            "title": "Door locking",
+            "question": "Who should decide how a door enters Locked state?",
+            "condition": "Door owns its internal lock/open state",
+            "true": "Other systems request Lock/Unlock through a clean API.",
+            "false": "Avoid external Blueprints reaching in to manipulate several internal door variables/components.",
+            "why": "Door implementation can change without rewriting every caller."
+          }
+        ],
+        "remember": [
+          "Ask 'whose state is this?' before choosing where logic lives.",
+          "Other systems request behaviour; owners implement it.",
+          "Duplication often signals wrong ownership.",
+          "Level Blueprint should not become the dumping ground for reusable gameplay."
+        ]
+      },
+      "guidedDetailed": [
+        {
+          "title": "Inspect a bad example where several hazards each implement player death",
+          "do": "Inspect a bad example where several hazards each implement player death.",
+          "why": "A deliberately bad example makes ownership problems visible.",
+          "check": "You can point to the duplicated/wrongly owned logic."
+        },
+        {
+          "title": "Identify what belongs to the player",
+          "do": "Identify what belongs to the player.",
+          "why": "Naming the true owner focuses the refactor.",
+          "check": "The player/system owner is justified in plain English."
+        },
+        {
+          "title": "Move death behaviour into one player Event/Function",
+          "do": "Move death behaviour into one player Event/Function.",
+          "why": "One central death behaviour removes duplication.",
+          "check": "One central Event/Function now handles the behaviour."
+        },
+        {
+          "title": "Change hazards so they request that behaviour",
+          "do": "Change hazards so they request that behaviour.",
+          "why": "Changing hazards into requesters reduces their dependencies.",
+          "check": "All hazards/requesters call the owner rather than copy internals."
+        },
+        {
+          "title": "Change death behaviour once and verify all hazards follow it",
+          "do": "Change death behaviour once and verify all hazards follow it.",
+          "why": "Changing death once proves the ownership improvement.",
+          "check": "Changing the owner behaviour updates every caller."
+        },
+        {
+          "title": "Identify one genuinely level-specific use for Level Blueprint",
+          "do": "Identify one genuinely level-specific use for Level Blueprint.",
+          "why": "A genuine level-specific example prevents the false lesson that Level Blueprint is always forbidden.",
+          "check": "You can identify one level-specific use that should remain in Level Blueprint."
+        }
+      ],
+      "evidencePrompt": {
+        "show": [
+          "Before screenshot of duplicated/misplaced logic.",
+          "After screenshot showing the new owner/request call.",
+          "At least two callers using the central behaviour.",
+          "A short ownership diagram or comment explaining the decision."
+        ],
+        "reflection": [
+          "What state was owned by the wrong Blueprint?",
+          "Why is the new owner better?",
+          "What dependency/duplication did you remove?",
+          "What would break less often after this refactor?"
+        ]
+      },
+      "visuals": [
+        {
+          "type": "book",
+          "src": "assets/book/responsibility.webp",
+          "caption": "Reference figure from the supplied book: an example of moving player-death responsibility into the player Blueprint."
+        },
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/gold/practice-process.svg",
+          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence."
+        },
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/gold/practice-example.svg",
+          "caption": "Original classroom worked example: Player death."
+        }
+      ]
     },
     {
       "id": "complexity",
       "path": "practice",
       "order": 2,
-      "title": "Stop Blueprint Spaghetti",
+      "title": "Stop Blueprint Spaghetti: Refactor for Humans",
       "short": "Use abstraction, comments, categories and names so another human can read your work.",
       "difficulty": "Intermediate",
       "duration": "45 min",
@@ -3047,7 +5493,151 @@ window.UE5_COURSE_DATA = {
           "Game plays from beginning to conclusion"
         ],
         "polish": "Record a short developer walkthrough explaining one system and why it is organised that way."
-      }
+      },
+      "deepDive": {
+        "find": {
+          "title": "Where do I find/use Stop Blueprint Spaghetti?",
+          "steps": [
+            "Use Functions, Macros and Collapse Nodes from graph context menus/My Blueprint when abstraction is justified.",
+            "Use comment boxes to label intent.",
+            "Rename variables/functions/components in My Blueprint/Components.",
+            "Use Categories and Tooltips in Details for designer-facing variables."
+          ],
+          "note": "Making a graph physically smaller is not automatically making it clearer. Abstraction should reveal intent, not hide a mess behind vague names."
+        },
+        "anatomy": [
+          [
+            "Function",
+            "Best for a named reusable job with inputs/outputs."
+          ],
+          [
+            "Macro",
+            "Reusable graph expansion useful for some execution-flow patterns; use deliberately."
+          ],
+          [
+            "Collapsed Graph",
+            "Groups local graph detail without necessarily creating a reusable API."
+          ],
+          [
+            "Comment",
+            "Explains intent/section at a glance."
+          ],
+          [
+            "Category",
+            "Groups exposed variables/functions meaningfully."
+          ],
+          [
+            "Tooltip",
+            "Documents what a designer-facing value controls."
+          ]
+        ],
+        "process": [
+          "Zoom out and identify what the graph is trying to say.",
+          "Mark repeated/single-purpose node groups.",
+          "Extract meaningful jobs into clearly named Functions where appropriate.",
+          "Rename ambiguous variables and comment top-level intent.",
+          "Retest after every refactor so readability improves without changing behaviour."
+        ],
+        "examples": [
+          {
+            "title": "Interact input spaghetti",
+            "question": "Can the top graph explain its intent in a few operations?",
+            "condition": "FindInteractable → CanInteract → PerformInteraction",
+            "true": "Move detailed calculations/checks into named Functions.",
+            "false": "Leave fifty anonymous nodes under InputAction Interact.",
+            "why": "Readers can understand intent before inspecting implementation."
+          },
+          {
+            "title": "Designer settings",
+            "question": "Can someone safely tune this Blueprint without opening its graph?",
+            "condition": "Exposed variables grouped/documented",
+            "true": "Use Interaction, Audio and Movement categories plus useful Tooltips.",
+            "false": "Expose Value1, Speed2 and Temp with no context.",
+            "why": "The Details panel becomes a usable interface rather than a puzzle."
+          }
+        ],
+        "remember": [
+          "Readable top-level graphs communicate intent.",
+          "Name abstractions after jobs, not vague 'Stuff'/'Logic'.",
+          "Refactor in small tested steps.",
+          "Comments, Categories and Tooltips are part of professional Blueprint communication."
+        ]
+      },
+      "guidedDetailed": [
+        {
+          "title": "Open a deliberately messy Event Graph",
+          "do": "Open a deliberately messy Event Graph.",
+          "why": "A messy graph gives you something real to improve.",
+          "check": "You can identify at least three conceptual jobs in the messy graph."
+        },
+        {
+          "title": "Identify groups that perform one job",
+          "do": "Identify groups that perform one job.",
+          "why": "Grouping nodes by one job reveals abstraction candidates.",
+          "check": "One reusable/single-purpose group is extracted."
+        },
+        {
+          "title": "Convert a reusable group into a Function",
+          "do": "Convert a reusable group into a Function.",
+          "why": "A Function turns implementation detail into a readable call.",
+          "check": "The Function name explains its purpose."
+        },
+        {
+          "title": "Comment remaining top-level blocks",
+          "do": "Comment remaining top-level blocks.",
+          "why": "Comments preserve top-level structure.",
+          "check": "Remaining top-level blocks are commented by intent."
+        },
+        {
+          "title": "Rename unclear variables",
+          "do": "Rename unclear variables.",
+          "why": "Good names reduce the need to trace wires just to understand data.",
+          "check": "Ambiguous variables have meaningful names."
+        },
+        {
+          "title": "Add Categories and Tooltips",
+          "do": "Add Categories and Tooltips.",
+          "why": "Categories/Tooltips improve the interface for future you or teammates.",
+          "check": "Exposed settings are grouped/documented."
+        },
+        {
+          "title": "Zoom out and judge whether the graph still communicates its structure",
+          "do": "Zoom out and judge whether the graph still communicates its structure.",
+          "why": "Zooming out tests whether architecture is visible at a glance.",
+          "check": "The graph is easier to explain when zoomed out and gameplay still works."
+        }
+      ],
+      "evidencePrompt": {
+        "show": [
+          "Before and after screenshots of one refactored graph.",
+          "At least one well-named Function with inputs/outputs.",
+          "Comments/Categories/Tooltips visible.",
+          "A zoomed-out final graph whose main flow is understandable."
+        ],
+        "reflection": [
+          "What was the hardest part of the graph to understand before?",
+          "Why did you choose a Function/Macro/collapse for your refactor?",
+          "What name/comment most improved readability?",
+          "How did you prove the refactor did not change behaviour?"
+        ]
+      },
+      "visuals": [
+        {
+          "type": "book",
+          "src": "assets/book/responsibility.webp",
+          "caption": "Book reference for the best-practice section; the lesson also applies the book's abstraction/readability guidance."
+        },
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/gold/complexity-process.svg",
+          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence."
+        },
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/gold/complexity-example.svg",
+          "caption": "Original classroom worked example: Interact input spaghetti."
+        }
+      ]
     }
   ],
   "glossary": [

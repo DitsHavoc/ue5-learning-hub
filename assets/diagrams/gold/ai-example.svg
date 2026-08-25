@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 520">
+<defs><marker id="a" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#677f97"/></marker></defs>
+<rect width="1200" height="520" rx="30" fill="#0b1119"/>
+<g font-family="Arial, sans-serif">
+<text x="55" y="58" fill="#edf3fb" font-size="28" font-weight="700">AI: NavMesh, Blackboard &amp; Behaviour Trees — worked example</text>
+<text x="55" y="89" fill="#8195ac" font-size="16">Patrol → Chase</text>
+<rect x="55" y="155" width="335" height="210" rx="16" fill="#121e2b" stroke="#4a6380" stroke-width="2"/>
+<text x="80" y="190" fill="#7fbff4" font-size="12" font-weight="700">QUESTION / CONTEXT</text>
+<text x="80" y="225" fill="#eef5fb" font-size="20" font-weight="700" text-anchor="start">Does the AI currently have a valid</text>
+<text x="80" y="252" fill="#eef5fb" font-size="20" font-weight="700" text-anchor="start">target?</text>
+<text x="80" y="320" fill="#9a7ec4" font-size="11" font-weight="700">KEY STATE / IDEA</text>
+<text x="80" y="345" fill="#d9c7ef" font-size="15" font-weight="700" text-anchor="start">Blackboard TargetActor set</text>
+<path d="M390 260 L465 260" stroke="#677f97" stroke-width="4" marker-end="url(#a)"/>
+<rect x="485" y="120" width="660" height="135" rx="16" fill="#11261d" stroke="#65d596" stroke-width="3"/>
+<text x="515" y="154" fill="#71dfa4" font-size="12" font-weight="700">GOOD APPROACH</text>
+<text x="515" y="188" fill="#effff5" font-size="17" font-weight="700" text-anchor="start">Chase/move toward target branch.</text>
+<rect x="485" y="282" width="660" height="135" rx="16" fill="#28171b" stroke="#f07e89" stroke-width="3"/>
+<text x="515" y="316" fill="#ff929d" font-size="12" font-weight="700">AVOID / WRONG FIT</text>
+<text x="515" y="350" fill="#fff0f2" font-size="17" font-weight="700" text-anchor="start">Patrol branch chooses/moves among patrol points.</text>
+<rect x="55" y="445" width="1090" height="42" rx="10" fill="#111b27" stroke="#26384c"/>
+<text x="77" y="471" fill="#b9c8d8" font-size="15"><tspan fill="#ffffff" font-weight="700">Why:</tspan> Knowledge is separated from behaviour selection.</text>
+</g></svg>

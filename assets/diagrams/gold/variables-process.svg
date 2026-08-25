@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 520">
+<defs><marker id="a" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#536a82"/></marker></defs>
+<rect width="1200" height="520" rx="30" fill="#0b1119"/>
+<g font-family="Arial, sans-serif">
+<text x="55" y="62" fill="#edf3fb" font-size="28" font-weight="700">Variables &amp; Data Types — process</text>
+<text x="55" y="92" fill="#7f93aa" font-size="16">Follow the system in order. Test each stage before adding the next.</text>
+<path d="M255.4 280.0 L272.4 280.0" stroke="#536a82" stroke-width="4" fill="none" marker-end="url(#a)"/>
+<rect x="55.0" y="175" width="200.4" height="210" rx="15" fill="#111c28" stroke="#2c4258" stroke-width="2"/>
+<circle cx="89.0" cy="210" r="18" fill="#18314a" stroke="#3b6385"/>
+<text x="89.0" y="216" fill="#7dc2fb" font-size="15" font-weight="700" text-anchor="middle">1</text>
+<text x="73.0" y="258" fill="#d8e3ee" font-size="15" font-weight="700" text-anchor="start">Decide what state the</text>
+<text x="73.0" y="279" fill="#d8e3ee" font-size="15" font-weight="700" text-anchor="start">game needs to remember.</text>
+<path d="M477.79999999999995 280.0 L494.8 280.0" stroke="#536a82" stroke-width="4" fill="none" marker-end="url(#a)"/>
+<rect x="277.4" y="175" width="200.4" height="210" rx="15" fill="#111c28" stroke="#2c4258" stroke-width="2"/>
+<circle cx="311.4" cy="210" r="18" fill="#18314a" stroke="#3b6385"/>
+<text x="311.4" y="216" fill="#7dc2fb" font-size="15" font-weight="700" text-anchor="middle">2</text>
+<text x="295.4" y="258" fill="#d8e3ee" font-size="15" font-weight="700" text-anchor="start">Choose the smallest clear</text>
+<text x="295.4" y="279" fill="#d8e3ee" font-size="15" font-weight="700" text-anchor="start">data type.</text>
+<path d="M700.2 280.0 L717.2 280.0" stroke="#536a82" stroke-width="4" fill="none" marker-end="url(#a)"/>
+<rect x="499.8" y="175" width="200.4" height="210" rx="15" fill="#111c28" stroke="#2c4258" stroke-width="2"/>
+<circle cx="533.8" cy="210" r="18" fill="#18314a" stroke="#3b6385"/>
+<text x="533.8" y="216" fill="#7dc2fb" font-size="15" font-weight="700" text-anchor="middle">3</text>
+<text x="517.8" y="258" fill="#d8e3ee" font-size="15" font-weight="700" text-anchor="start">Give it a meaningful</text>
+<text x="517.8" y="279" fill="#d8e3ee" font-size="15" font-weight="700" text-anchor="start">name/default.</text>
+<path d="M922.6 280.0 L939.6 280.0" stroke="#536a82" stroke-width="4" fill="none" marker-end="url(#a)"/>
+<rect x="722.2" y="175" width="200.4" height="210" rx="15" fill="#111c28" stroke="#2c4258" stroke-width="2"/>
+<circle cx="756.2" cy="210" r="18" fill="#18314a" stroke="#3b6385"/>
+<text x="756.2" y="216" fill="#7dc2fb" font-size="15" font-weight="700" text-anchor="middle">4</text>
+<text x="740.2" y="258" fill="#d8e3ee" font-size="15" font-weight="700" text-anchor="start">Get the value when logic</text>
+<text x="740.2" y="279" fill="#d8e3ee" font-size="15" font-weight="700" text-anchor="start">needs to read it.</text>
+<rect x="944.6" y="175" width="200.4" height="210" rx="15" fill="#111c28" stroke="#2c4258" stroke-width="2"/>
+<circle cx="978.6" cy="210" r="18" fill="#18314a" stroke="#3b6385"/>
+<text x="978.6" y="216" fill="#7dc2fb" font-size="15" font-weight="700" text-anchor="middle">5</text>
+<text x="962.6" y="258" fill="#d8e3ee" font-size="15" font-weight="700" text-anchor="start">Set it only when gameplay</text>
+<text x="962.6" y="279" fill="#d8e3ee" font-size="15" font-weight="700" text-anchor="start">intentionally changes the</text>
+<text x="962.6" y="300" fill="#d8e3ee" font-size="15" font-weight="700" text-anchor="start">state.</text>
+</g></svg>
