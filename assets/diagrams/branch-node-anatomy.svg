@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 560">
+<defs>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#9fb1c7"/></marker>
+</defs>
+<rect width="1100" height="560" rx="30" fill="#0b1119"/>
+<g font-family="Arial, sans-serif">
+  <text x="55" y="58" fill="#e8eef7" font-size="28" font-weight="700">Branch node anatomy</text>
+  <text x="55" y="88" fill="#7f93aa" font-size="16">Read the pins before you wire the graph.</text>
+
+  <rect x="365" y="135" width="360" height="260" rx="16" fill="#182231" stroke="#9368d3" stroke-width="4"/>
+  <rect x="365" y="135" width="360" height="58" rx="16" fill="#6949a1"/>
+  <rect x="365" y="178" width="360" height="17" fill="#6949a1"/>
+  <text x="392" y="173" fill="#fff" font-size="24" font-weight="700">Branch</text>
+
+  <circle cx="385" cy="238" r="10" fill="#f2f3f5"/>
+  <text x="408" y="244" fill="#dbe5f0" font-size="18">Execution in</text>
+
+  <circle cx="385" cy="306" r="10" fill="#b45cc8"/>
+  <text x="408" y="312" fill="#dbe5f0" font-size="18">Condition</text>
+  <rect x="535" y="292" width="54" height="28" rx="5" fill="#101721" stroke="#46576d"/>
+  <text x="548" y="311" fill="#95a9be" font-size="14">False</text>
+
+  <text x="623" y="250" fill="#70dea3" font-size="17" font-weight="700">TRUE</text>
+  <circle cx="704" cy="244" r="10" fill="#f2f3f5"/>
+  <text x="617" y="337" fill="#ff8995" font-size="17" font-weight="700">FALSE</text>
+  <circle cx="704" cy="331" r="10" fill="#f2f3f5"/>
+
+  <path d="M185 205 C250 205 285 230 365 238" fill="none" stroke="#9fb1c7" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="55" y="188" fill="#fff" font-size="18" font-weight="700">Execution input</text>
+  <text x="55" y="215" fill="#8397ad" font-size="15">The previous action enters here.</text>
+
+  <path d="M190 343 C260 343 290 316 365 306" fill="none" stroke="#b45cc8" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="55" y="326" fill="#fff" font-size="18" font-weight="700">Condition</text>
+  <text x="55" y="353" fill="#8397ad" font-size="15">Must resolve to True or False.</text>
+
+  <path d="M725 244 C810 235 842 205 900 190" fill="none" stroke="#70dea3" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="915" y="181" fill="#fff" font-size="18" font-weight="700">True path</text>
+  <text x="915" y="208" fill="#8397ad" font-size="15">Runs only when the</text>
+  <text x="915" y="229" fill="#8397ad" font-size="15">condition is true.</text>
+
+  <path d="M725 331 C810 338 842 370 900 385" fill="none" stroke="#ff8995" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="915" y="376" fill="#fff" font-size="18" font-weight="700">False path</text>
+  <text x="915" y="403" fill="#8397ad" font-size="15">Runs only when the</text>
+  <text x="915" y="424" fill="#8397ad" font-size="15">condition is false.</text>
+
+  <rect x="55" y="474" width="990" height="48" rx="11" fill="#111b27" stroke="#26384c"/>
+  <text x="78" y="505" fill="#b9c8d8" font-size="16"><tspan font-weight="700" fill="#ffffff">Remember:</tspan> the Branch does not store a value. It checks the condition at the moment execution reaches it.</text>
+</g>
+</svg>

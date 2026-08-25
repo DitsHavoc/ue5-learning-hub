@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 560">
+<defs><marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#dbe5ef"/></marker></defs>
+<rect width="1180" height="560" rx="30" fill="#0b1119"/>
+<g font-family="Arial, sans-serif">
+  <text x="52" y="58" fill="#edf3fb" font-size="28" font-weight="700">Example: security door access check</text>
+  <text x="52" y="88" fill="#8095ac" font-size="16">The question is simple: does the player have the access card?</text>
+
+  <rect x="55" y="205" width="195" height="115" rx="14" fill="#182331" stroke="#d7dce3" stroke-width="3"/>
+  <rect x="55" y="205" width="195" height="40" rx="14" fill="#555d68"/><rect x="55" y="232" width="195" height="13" fill="#555d68"/>
+  <text x="78" y="233" fill="#fff" font-size="18" font-weight="700">Interact</text>
+  <text x="78" y="284" fill="#c2cedb" font-size="16">Player presses E</text>
+
+  <rect x="330" y="155" width="250" height="210" rx="14" fill="#182331" stroke="#9368d3" stroke-width="3"/>
+  <rect x="330" y="155" width="250" height="46" rx="14" fill="#6949a1"/><rect x="330" y="188" width="250" height="13" fill="#6949a1"/>
+  <text x="354" y="185" fill="#fff" font-size="20" font-weight="700">Branch</text>
+  <text x="354" y="255" fill="#c7d3df" font-size="16">Condition</text>
+  <text x="354" y="286" fill="#e9c9f0" font-size="19" font-weight="700">HasAccessCard?</text>
+  <text x="492" y="235" fill="#71dfa4" font-size="14" font-weight="700">TRUE</text>
+  <text x="488" y="339" fill="#ff8995" font-size="14" font-weight="700">FALSE</text>
+
+  <path d="M250 263 C285 263 295 263 330 263" stroke="#dbe5ef" stroke-width="5" fill="none" marker-end="url(#arr)"/>
+
+  <path d="M580 229 C650 229 660 170 720 170" stroke="#71dfa4" stroke-width="5" fill="none" marker-end="url(#arr)"/>
+  <rect x="735" y="117" width="380" height="112" rx="14" fill="#13271e" stroke="#71dfa4" stroke-width="3"/>
+  <text x="762" y="154" fill="#80e6ae" font-size="14" font-weight="700">TRUE</text>
+  <text x="762" y="187" fill="#ecfff3" font-size="21" font-weight="700">Open Door</text>
+  <text x="920" y="187" fill="#a8b9aa" font-size="15">+ success sound / green light</text>
+
+  <path d="M580 336 C650 336 660 396 720 396" stroke="#ff8995" stroke-width="5" fill="none" marker-end="url(#arr)"/>
+  <rect x="735" y="343" width="380" height="112" rx="14" fill="#2a171b" stroke="#ff8995" stroke-width="3"/>
+  <text x="762" y="380" fill="#ff9da6" font-size="14" font-weight="700">FALSE</text>
+  <text x="762" y="413" fill="#fff0f2" font-size="21" font-weight="700">Keep Door Closed</text>
+  <text x="965" y="413" fill="#bca6a9" font-size="15">“Access denied”</text>
+
+  <rect x="55" y="485" width="1060" height="43" rx="10" fill="#111b27" stroke="#26384c"/>
+  <text x="78" y="512" fill="#b8c7d7" font-size="15"><tspan fill="#fff" font-weight="700">Test both paths:</tspan> first with HasAccessCard = false, then change the state and prove the True route works too.</text>
+</g></svg>

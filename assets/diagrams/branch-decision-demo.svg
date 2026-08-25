@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 420">
+<style>
+  .truePath{stroke:#71dfa4;stroke-width:7;fill:none;stroke-dasharray:18 12;animation:truePulse 4s infinite}
+  .falsePath{stroke:#ff8995;stroke-width:7;fill:none;stroke-dasharray:18 12;animation:falsePulse 4s infinite}
+  .trueBox{animation:trueBox 4s infinite}.falseBox{animation:falseBox 4s infinite}
+  @keyframes truePulse{0%,44%{opacity:1;stroke-dashoffset:0}50%,100%{opacity:.18;stroke-dashoffset:-40}}
+  @keyframes falsePulse{0%,49%{opacity:.18;stroke-dashoffset:0}55%,94%{opacity:1;stroke-dashoffset:-40}100%{opacity:.18}}
+  @keyframes trueBox{0%,44%{opacity:1}50%,100%{opacity:.42}}
+  @keyframes falseBox{0%,49%{opacity:.42}55%,94%{opacity:1}100%{opacity:.42}}
+</style>
+<rect width="1100" height="420" rx="28" fill="#0b1119"/>
+<g font-family="Arial, sans-serif">
+  <text x="48" y="54" fill="#edf3fb" font-size="26" font-weight="700">Execution chooses one route</text>
+  <text x="48" y="82" fill="#7d92aa" font-size="15">The highlighted path alternates to show the two possible outcomes.</text>
+
+  <rect x="105" y="145" width="290" height="165" rx="15" fill="#182331" stroke="#9368d3" stroke-width="3"/>
+  <rect x="105" y="145" width="290" height="44" rx="15" fill="#6949a1"/><rect x="105" y="177" width="290" height="12" fill="#6949a1"/>
+  <text x="130" y="175" fill="#fff" font-size="20" font-weight="700">Branch</text>
+  <text x="130" y="236" fill="#c5d2df" font-size="15">Condition</text>
+  <text x="130" y="269" fill="#e7c9ef" font-size="20" font-weight="700">HasKey?</text>
+
+  <path class="truePath" d="M395 205 C500 205 505 142 615 142"/>
+  <path class="falsePath" d="M395 278 C500 278 505 340 615 340"/>
+
+  <g class="trueBox"><rect x="635" y="100" width="340" height="93" rx="14" fill="#13271e" stroke="#71dfa4" stroke-width="3"/>
+  <text x="664" y="135" fill="#71dfa4" font-size="13" font-weight="700">TRUE</text><text x="664" y="166" fill="#effff5" font-size="21" font-weight="700">Open the door</text></g>
+
+  <g class="falseBox"><rect x="635" y="297" width="340" height="93" rx="14" fill="#2a171b" stroke="#ff8995" stroke-width="3"/>
+  <text x="664" y="332" fill="#ff8995" font-size="13" font-weight="700">FALSE</text><text x="664" y="363" fill="#fff1f3" font-size="21" font-weight="700">Show “Locked”</text></g>
+</g></svg>

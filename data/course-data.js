@@ -1,5 +1,5 @@
 window.UE5_COURSE_DATA = {
-  "version": "3.3.0",
+  "version": "3.4.0",
   "buildDate": "25 Aug 2026",
   "paths": [
     {
@@ -753,34 +753,39 @@ window.UE5_COURSE_DATA = {
       "id": "branches",
       "path": "blueprints",
       "order": 3,
-      "title": "Operators, Comparisons & Branches",
-      "short": "Make decisions instead of running the same behaviour every time.",
+      "title": "Branches: Decisions & Conditions",
+      "short": "Make your Blueprint choose what happens next using true/false logic.",
       "difficulty": "Beginner",
-      "duration": "40 min",
+      "duration": "45 min",
       "xp": 160,
-      "aim": "Build true/false conditions and use a Branch to choose execution.",
+      "aim": "Understand how a Branch evaluates a true/false condition and use it to control a real gameplay decision.",
       "goals": [
-        "Use comparisons",
-        "Use a Branch",
-        "Predict True and False paths",
-        "Combine multiple conditions"
+        "Explain what a Branch does in plain English",
+        "Create a Boolean condition and connect it correctly",
+        "Predict the True and False execution paths",
+        "Use comparisons such as Health > 0 as a condition",
+        "Apply Branch logic to a real gameplay system"
       ],
       "concepts": [
         [
+          "Boolean",
+          "A value with only two states: True or False."
+        ],
+        [
           "Comparison",
-          "An operator such as >, < or == that returns a Boolean."
+          "A check such as Health > 0 or Ammo == 0 that produces a Boolean result."
         ],
         [
           "Branch",
-          "Chooses True or False execution based on a condition."
+          "A Blueprint decision node that sends execution down either the True or False path."
         ],
         [
           "Logical AND",
-          "True only when both conditions are true."
+          "Returns True only when every connected condition is True."
         ],
         [
           "Logical OR",
-          "True when at least one condition is true."
+          "Returns True when at least one connected condition is True."
         ]
       ],
       "guided": [
@@ -793,7 +798,7 @@ window.UE5_COURSE_DATA = {
       ],
       "quiz": [
         [
-          "A Branch condition must become…",
+          "What type of value must a Branch Condition evaluate to?",
           [
             "Boolean",
             "Vector",
@@ -801,10 +806,10 @@ window.UE5_COURSE_DATA = {
             "Actor Class"
           ],
           0,
-          "Branches evaluate true/false conditions."
+          "A Branch has only True and False outcomes, so the Condition must evaluate to a Boolean."
         ],
         [
-          "Health > 0 returns…",
+          "What does Health > 0 produce?",
           [
             "String",
             "Boolean",
@@ -812,80 +817,272 @@ window.UE5_COURSE_DATA = {
             "Transform"
           ],
           1,
-          "Comparisons return Booleans."
+          "A comparison such as >, < or == produces True or False."
+        ],
+        [
+          "If HasKey is False, which Branch output runs?",
+          [
+            "True",
+            "False",
+            "Both",
+            "Neither"
+          ],
+          1,
+          "Only the False execution output runs when the Condition evaluates to False."
+        ],
+        [
+          "Which is the strongest test of a Branch?",
+          [
+            "Only test the success path",
+            "Only test the failure path",
+            "Test both True and False deliberately",
+            "Add more nodes before testing"
+          ],
+          2,
+          "A decision system is not proven until you have deliberately tested both outcomes."
         ]
       ],
       "stretch": {
-        "title": "Two Conditions",
-        "task": "Require two pieces of state before an action is allowed.",
+        "title": "Access granted / denied",
+        "task": "Create a keycard check that gives different feedback for success and failure.",
         "requirements": [
-          "Two conditions",
-          "Both conditions matter",
-          "Failure feedback",
-          "Test all combinations"
+          "Boolean state named clearly",
+          "One Branch with readable True and False paths",
+          "Access granted feedback",
+          "Access denied feedback",
+          "Both paths tested"
         ]
       },
       "challenge": {
-        "title": "Locked Door Logic",
-        "task": "Build the decision logic for a door that needs a key.",
+        "title": "Two-condition security door",
+        "task": "Make a door succeed only when the player has the keycard AND facility power is restored.",
         "requirements": [
-          "Locked state",
-          "HasKey state",
-          "Different success/failure feedback",
-          "No finished door tutorial"
+          "HasAccessCard state",
+          "PowerOn state",
+          "Both conditions must matter",
+          "Useful failure feedback",
+          "Graph remains readable"
         ],
         "hints": [
-          "Make the decision work with Print String before adding animation."
+          "Prove each Boolean independently before combining them.",
+          "Look for a logical operator that is only True when both inputs are True.",
+          "Test all four combinations: FF, FT, TF and TT."
         ]
       },
       "experience": {
         "game": "Resident Evil 4",
-        "focus": "Conditional interactions",
-        "play": "Find locked objects, gated routes or interactions with requirements.",
-        "watch": "Watch exploration gameplay involving keys and locked doors.",
+        "focus": "Conditional interactions and gated progression",
+        "play": "Find a locked object, gated route or interaction that requires an item or state change. Pay attention to what the game allows before and after the requirement is satisfied.",
+        "watch": "Watch exploration gameplay involving keys, locked doors or progression gates. Pause when the player fails an interaction and again when it later succeeds.",
         "observe": [
-          "What prevents the interaction?",
-          "What feedback explains failure?",
-          "What state changes once the condition is satisfied?"
+          "What condition is the game probably checking?",
+          "What is the True outcome?",
+          "What is the False outcome?",
+          "How does the player understand why the interaction failed?",
+          "What state changes so the same interaction succeeds later?"
         ],
-        "search": "Resident Evil 4 remake keys locked doors"
+        "search": "Resident Evil 4 remake locked doors keys gameplay"
       },
       "homework": {
-        "title": "Decision Map",
-        "task": "Find three game mechanics that require a decision and draw TRUE/FALSE outcomes.",
-        "evidence": "Three small flow diagrams.",
-        "stretch": "Add a second condition to one."
+        "title": "Find Branch logic in games",
+        "task": "Find two game situations that can be described as a true/false decision. For each, write the question being checked, the True outcome and the False outcome.",
+        "evidence": "Two short examples. A screenshot is optional; the important evidence is your explanation of the condition and both outcomes.",
+        "stretch": "Draw a simple flow diagram for one example, then add a second condition that would make the rule more complex."
       },
       "common": [
-        "Test both True and False deliberately.",
-        "If the wrong path fires, inspect the condition value.",
-        "Do not add a Branch if there is no real decision."
+        "No meaningful value is connected to Condition.",
+        "The Boolean exists but is never changed anywhere in the game.",
+        "Only the True path was tested, so the failure path is broken unnoticed.",
+        "The logic is backwards: success is accidentally wired to False.",
+        "The Branch has become the start of a huge unreadable chain instead of calling a clearer function.",
+        "The student expects the Branch to remember state; it does not."
       ],
-      "goodPractice": "Readable conditions beat clever-but-obscure node chains.",
+      "goodPractice": "Name the state as a question you can answer clearly: HasKey, IsDead, CanInteract, PowerOn. Keep each outcome readable, test both paths, and use Print String or breakpoints to inspect the value feeding Condition when debugging.",
       "visual": {
         "type": "diagram",
         "src": "assets/diagrams/branch-flow.svg",
         "caption": "Original classroom diagram: a Branch choosing between open and locked behaviour."
       },
-      "bookRef": "Chapter 2: Relational/logical operators and flow",
+      "bookRef": "Blueprints Visual Scripting for Unreal Engine 5, Chapter 2: relational/logical operators and flow control",
       "explanation": {
-        "what": "A Branch lets Blueprint execution make a decision. It reads a Boolean condition and sends execution down either the True or False path. Comparisons such as Health > 0 are one common way of producing that Boolean.",
-        "why": "Games are full of rules and restrictions. A door should only open if the player has the key; a weapon should only fire if ammunition is available; an enemy might chase only when it has a valid target.",
-        "mental": "Think of a Branch as a question with only two answers. The important part is not the Branch node itself but the quality of the question you feed into it.",
-        "example": "HasKey AND IsDoorLocked could be used to decide whether to unlock a door. Health <= 0 could decide whether to trigger death behaviour.",
-        "use": "Use a Branch when behaviour genuinely differs based on a condition. If both outputs immediately do almost the same thing, the logic may be better expressed another way."
+        "what": "A Branch is Unreal Engine's visual equivalent of an if statement. Execution reaches the node, the Condition is checked, and only one output runs: True or False.",
+        "why": "Games constantly make decisions. Doors check access, weapons check ammunition, enemies check whether they have a target, and player systems check health, stamina or state before allowing an action.",
+        "mental": "Think of a Branch as a question with exactly two answers. The Branch itself is simple; the important skill is deciding what question the game should ask and where that state comes from.",
+        "example": "A security door can check HasAccessCard. True opens the door; False keeps it closed and displays Access denied. A comparison such as Health > 0 can feed the Condition directly because the comparison already produces True or False.",
+        "use": "Use a Branch when behaviour genuinely changes based on a condition. Do not add one just because you can: if there is no meaningful decision, a Branch only adds clutter."
       },
       "projectTask": {
-        "name": "Access Rules",
-        "mission": "Use state to control progression.",
-        "build": "Create a route that only opens when a condition is satisfied: security card, restored power, completed objective or another theme-appropriate requirement.",
+        "name": "Security Access Check",
+        "mission": "Use a Branch to control whether the player can progress through a secured route.",
+        "build": "Choose a requirement that fits your theme: access card, restored power, completed objective, activated rune or another stored state. When the player interacts, check that state with a Branch. True should unlock progression; False should keep the route blocked and explain why.",
         "proof": [
-          "True and False paths both tested",
-          "Clear failure feedback",
-          "Condition uses stored state",
-          "Progression changes after requirement is met"
+          "The Condition comes from meaningful stored state or a comparison",
+          "True and False paths are both deliberately tested",
+          "The success path changes progression",
+          "The failure path gives clear player feedback",
+          "The graph is named and organised clearly"
         ],
-        "polish": "Require two conditions for one higher-security route."
+        "polish": "Add a second requirement using AND, then give the player different audiovisual feedback for success and failure."
+      },
+      "deepDive": {
+        "find": {
+          "title": "Where do I find a Branch?",
+          "steps": [
+            "Open the Event Graph or another Blueprint graph.",
+            "Right-click empty graph space.",
+            "Search for Branch and place the node.",
+            "You can also drag from a Boolean pin and search for Branch."
+          ],
+          "note": "If Context Sensitive is enabled, dragging from a Boolean pin is often the quickest route because Unreal already knows you need something that accepts True/False data."
+        },
+        "anatomy": [
+          [
+            "Execution input",
+            "The white execution wire from the previous action enters here."
+          ],
+          [
+            "Condition",
+            "The purple Boolean input. It must evaluate to True or False."
+          ],
+          [
+            "True",
+            "This white execution output runs only when the Condition is True."
+          ],
+          [
+            "False",
+            "This white execution output runs only when the Condition is False."
+          ]
+        ],
+        "process": [
+          "Execution reaches the Branch.",
+          "The Condition is evaluated at that moment.",
+          "If the result is True, execution leaves through True.",
+          "If the result is False, execution leaves through False.",
+          "The Branch does not remember the answer after that execution has passed."
+        ],
+        "examples": [
+          {
+            "title": "Locked security door",
+            "question": "Does the player have the access card?",
+            "condition": "HasAccessCard",
+            "true": "Open the door and show success feedback.",
+            "false": "Keep the door closed and show Access denied.",
+            "why": "A clear yes/no gameplay rule with visibly different outcomes."
+          },
+          {
+            "title": "Player alive check",
+            "question": "Is the player's health above zero?",
+            "condition": "Health > 0",
+            "true": "Continue normal player behaviour.",
+            "false": "Trigger the death behaviour.",
+            "why": "This demonstrates that a Branch can use the result of a comparison; the Condition does not have to be a named Boolean variable."
+          }
+        ],
+        "remember": [
+          "A Branch does not store data.",
+          "The Condition is checked when execution reaches the node.",
+          "Test both True and False deliberately.",
+          "If a Branch behaves incorrectly, inspect the value feeding Condition before rebuilding the graph."
+        ]
+      },
+      "guidedDetailed": [
+        {
+          "title": "Create a safe test Blueprint",
+          "do": "Create an Actor Blueprint called BP_BranchDemo and place an instance in the level.",
+          "why": "A small isolated test makes it easier to understand the decision before combining it with a full door system.",
+          "check": "The Blueprint exists in the Content Browser and an instance is in the level."
+        },
+        {
+          "title": "Create the state",
+          "do": "Create a Boolean variable named HasKey. Leave its default value False.",
+          "why": "HasKey represents game state: the player either has the key or does not.",
+          "check": "The variable type is Boolean and its default checkbox is unticked."
+        },
+        {
+          "title": "Create an event to test",
+          "do": "For this isolated practice, use an input/event you already know or Event BeginPlay. Connect it towards a new Branch node.",
+          "why": "A Branch only does something when execution reaches it.",
+          "check": "A white execution wire reaches the Branch."
+        },
+        {
+          "title": "Read the state",
+          "do": "Drag HasKey into the graph as Get and connect it to the Branch Condition.",
+          "why": "Get reads the current stored value without changing it.",
+          "check": "The purple Boolean wire connects HasKey to Condition."
+        },
+        {
+          "title": "Build the True path",
+          "do": "From True, add Print String with the message Door opens.",
+          "why": "This gives immediate visible feedback when the condition succeeds.",
+          "check": "True is connected to Door opens."
+        },
+        {
+          "title": "Build the False path",
+          "do": "From False, add Print String with the message Door is locked.",
+          "why": "A failed interaction still needs useful player feedback.",
+          "check": "False is connected to Door is locked."
+        },
+        {
+          "title": "Predict before testing",
+          "do": "Before pressing Play, write down which message you expect while HasKey is False.",
+          "why": "Prediction proves you are reasoning about the graph instead of only copying nodes.",
+          "check": "Your prediction is Door is locked."
+        },
+        {
+          "title": "Test the False path",
+          "do": "Compile, Play and trigger the event.",
+          "why": "You are deliberately proving one side of the decision.",
+          "check": "Door is locked appears. If it does not, inspect the execution wire and HasKey value."
+        },
+        {
+          "title": "Test the True path",
+          "do": "Stop, set HasKey to True, compile and test again.",
+          "why": "A Branch is not tested properly until both outcomes have been proven.",
+          "check": "Door opens appears."
+        },
+        {
+          "title": "Replace stored state with a comparison",
+          "do": "Create an Integer or Float called Health, set it above zero, compare Health > 0 and feed that result into the Branch Condition.",
+          "why": "Comparisons already produce a Boolean, so they can drive a Branch directly.",
+          "check": "Changing Health between a positive value and 0 changes the execution route."
+        },
+        {
+          "title": "Try a combined condition",
+          "do": "Create HasPower and combine HasKey AND HasPower before the Branch.",
+          "why": "Many real game rules require more than one piece of state.",
+          "check": "The success route only runs when both values are True."
+        }
+      ],
+      "visuals": [
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/branch-node-anatomy.svg",
+          "caption": "Original classroom diagram: the four parts of a Branch node and what each pin means."
+        },
+        {
+          "type": "diagram",
+          "src": "assets/diagrams/branch-locked-door-example.svg",
+          "caption": "Original classroom example: HasAccessCard chooses between opening the door and showing Access denied."
+        },
+        {
+          "type": "motion",
+          "src": "assets/diagrams/branch-decision-demo.svg",
+          "caption": "Animated SVG: execution alternates between the True and False paths to reinforce that only one route runs each time."
+        }
+      ],
+      "evidencePrompt": {
+        "show": [
+          "A screenshot showing the Branch and the value feeding Condition",
+          "Evidence that the False path works",
+          "Evidence that the True path works",
+          "The mechanic running inside your main game rather than only BP_BranchDemo"
+        ],
+        "reflection": [
+          "What condition did your Branch check?",
+          "What happened on the True path?",
+          "What happened on the False path?",
+          "What went wrong during testing, and how did you diagnose it?"
+        ]
       }
     },
     {

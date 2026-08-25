@@ -183,8 +183,57 @@ function lessonRow(l,index){
   </a>`;
 }
 function visual(l){
-  if(!l.visual) return `<div class="callout">This lesson is text-first for now; the main visual is the system you build in Unreal.</div>`;
-  return `<figure class="visual"><img src="${esc(l.visual.src)}" alt="${esc(l.title)} learning visual" loading="lazy"><figcaption>${esc(l.visual.caption||'')}</figcaption></figure>`;
+  const visuals=l.visuals?.length?l.visuals:(l.visual?[l.visual]:[]);
+  if(!visuals.length)return `<div class="callout">This lesson is text-first for now; the main visual is the system you build in Unreal.</div>`;
+  return `<div class="lesson-visual-grid ${visuals.length===1?'single':''}">${visuals.map((v,i)=>`<figure class="visual ${v.type==='motion'?'motion-visual':''}">
+    <div class="visual-kicker">${v.type==='motion'?'MOTION DEMO':'VISUAL '+String(i+1).padStart(2,'0')}</div>
+    <img src="${esc(v.src)}" alt="${esc(l.title)} visual ${i+1}" loading="${i?'lazy':'eager'}">
+    <figcaption>${esc(v.caption||'')}</figcaption>
+  </figure>`).join('')}</div>`;
+}
+
+function deepDive(l){
+  const d=l.deepDive;if(!d)return '';
+  return `<div class="deep-dive">
+    ${d.find?`<div class="tool-locate">
+      <div><span class="deep-label">WHERE DO I FIND IT?</span><h3>${esc(d.find.title)}</h3></div>
+      <ol>${d.find.steps.map(x=>`<li>${esc(x)}</li>`).join('')}</ol>
+      ${d.find.note?`<div class="callout"><b>Shortcut thinking:</b> ${esc(d.find.note)}</div>`:''}
+    </div>`:''}
+
+    ${d.anatomy?.length?`<div class="deep-section"><span class="deep-label">READ THE NODE</span><h3>What each part actually does</h3>
+      <div class="anatomy-grid">${d.anatomy.map((x,i)=>`<div class="anatomy-item"><span>${String(i+1).padStart(2,'0')}</span><div><strong>${esc(x[0])}</strong><p>${esc(x[1])}</p></div></div>`).join('')}</div>
+    </div>`:''}
+
+    ${d.process?.length?`<div class="deep-section"><span class="deep-label">WHAT HAPPENS AT RUNTIME?</span><h3>Follow the execution</h3>
+      <div class="runtime-flow">${d.process.map((x,i)=>`<div class="runtime-step"><b>${i+1}</b><span>${esc(x)}</span></div>`).join('')}</div>
+    </div>`:''}
+
+    ${d.examples?.length?`<div class="deep-section"><span class="deep-label">CLEAR EXAMPLES</span><h3>See the same idea in real game logic</h3>
+      <div class="example-grid">${d.examples.map(x=>`<article class="logic-example">
+        <h4>${esc(x.title)}</h4>
+        <p class="logic-question">${esc(x.question)}</p>
+        <div class="logic-condition"><small>CONDITION</small><strong>${esc(x.condition)}</strong></div>
+        <div class="logic-outcomes"><div class="logic-true"><small>TRUE</small><p>${esc(x.true)}</p></div><div class="logic-false"><small>FALSE</small><p>${esc(x.false)}</p></div></div>
+        <p class="logic-why"><b>Why this works:</b> ${esc(x.why)}</p>
+      </article>`).join('')}</div>
+    </div>`:''}
+
+    ${d.remember?.length?`<div class="remember-box"><span class="deep-label">REMEMBER THIS</span>${d.remember.map(x=>`<div class="remember-line">✓ ${esc(x)}</div>`).join('')}</div>`:''}
+  </div>`;
+}
+
+function guidedBuild(l){
+  if(!l.guidedDetailed?.length)return `<ol class="steps">${l.guided.map(s=>`<li>${esc(s)}</li>`).join('')}</ol>`;
+  return `<div class="guided-detailed">${l.guidedDetailed.map((s,i)=>`<article class="guided-step">
+    <div class="guided-step-num">${String(i+1).padStart(2,'0')}</div>
+    <div class="guided-step-main">
+      <h3>${esc(s.title)}</h3>
+      <div class="guided-do"><span>DO THIS</span><p>${esc(s.do)}</p></div>
+      <div class="guided-reason"><span>WHY</span><p>${esc(s.why)}</p></div>
+      <div class="guided-check"><span>CHECK</span><p>${esc(s.check)}</p></div>
+    </div>
+  </article>`).join('')}</div>`;
 }
 function requirements(xs){
   return `<div class="requirements">${xs.map(x=>`<div class="requirement">${esc(x)}</div>`).join('')}</div>`;
@@ -306,6 +355,10 @@ function evidenceSection(l){
   return `<section class="content-card" id="evidence">
     <span class="eyebrow">10 • Evidence</span><h2>Prove you built it</h2>
     <p class="muted">Show the mechanic working in your actual game and briefly explain what you built, what changed, and what you learned.</p>
+    ${l.evidencePrompt?`<div class="evidence-brief">
+      <div><span class="deep-label">SHOW</span>${l.evidencePrompt.show.map(x=>`<p>✓ ${esc(x)}</p>`).join('')}</div>
+      <div><span class="deep-label">REFLECT</span>${l.evidencePrompt.reflection.map(x=>`<p>• ${esc(x)}</p>`).join('')}</div>
+    </div>`:''}
     <div id="evidencePanel" data-lesson="${l.id}"><div class="muted">Loading your evidence…</div></div>
   </section>`;
 }
@@ -352,11 +405,12 @@ function lessonPage(id){
         <div class="explain-box example"><span>GAME / BLUEPRINT EXAMPLE</span><p>${esc(l.explanation.example)}</p></div>
         <div class="explain-box use"><span>WHEN YOU'D USE IT</span><p>${esc(l.explanation.use)}</p></div>
       </div>` : ''}
+      ${deepDive(l)}
       <h3 class="concept-title">Key terms</h3>
       <div class="goal-grid">${l.concepts.map(c=>`<div class="concept"><strong>${esc(c[0])}</strong><br>${esc(c[1])}</div>`).join('')}</div>${visual(l)}
     </section>
 
-    <section class="content-card guided-section" id="guided"><span class="eyebrow">03 • Guided build</span><h2>Follow it once</h2><p>Predict the result before pressing Play. Understand the system rather than racing the steps.</p><ol class="steps">${l.guided.map(s=>`<li>${esc(s)}</li>`).join('')}</ol></section>
+    <section class="content-card guided-section" id="guided"><span class="eyebrow">03 • Guided build</span><h2>Follow it once</h2><p>Predict the result before pressing Play. Understand the system rather than racing the steps.</p>${guidedBuild(l)}</section>
     <section class="content-card guided-hidden-note"><span class="eyebrow">Independent mode</span><h2>Guided steps hidden</h2><p>Use the aim, explanation and challenges as your brief. Switch back only when the walkthrough is genuinely needed.</p></section>
 
     <section class="content-card" id="check"><span class="eyebrow">04 • Quick check</span><h2>Do you understand the idea?</h2>${quizHtml(l)}</section>

@@ -1,43 +1,39 @@
-# UE5 Learning Hub v3.3.0
+# UE5 Learning Hub v3.4.0
 
-V3.3 adds the most important classroom-management features without changing the core Learn → Prove → Build model.
+## V3.4 — Gold-standard lesson pilot
 
-## New in V3.3
+This release upgrades **Branches: Decisions & Conditions** into the first full gold-standard teaching lesson.
 
-- **Evidence submissions** on every lesson/game mechanic
-- screenshot / WebP / JPG / PDF uploads (private Supabase Storage, max 10 MB)
-- optional external evidence/build/video link
-- student reflection
-- teacher **Approve** / **Needs changes** workflow
-- teacher written feedback
-- submitted evidence locks while waiting for review
-- approved evidence remains part of the student's progress record
-- **My Progress** dashboard
-- evidence tracker across all 20 mechanics
-- achievements for meaningful milestones
-- in-app notifications for feedback and request-board status changes
-- **class groups** managed by teachers
-- teacher overview now compares lessons, game mechanics and approved evidence
-- Microsoft SSO is still intentionally disabled pending college approval
+The new reusable lesson layer adds:
 
-## Current backend
+- a prescriptive **Where do I find it?** section
+- labelled node anatomy
+- explicit runtime flow
+- multiple concrete game/Blueprint examples
+- a Remember This summary
+- detailed guided steps with **Do this / Why / Check**
+- multiple lesson visuals
+- animated SVG teaching support
+- richer quiz and challenge content
+- custom evidence requirements and reflection prompts
+- stronger Signal Lost / main-project integration
 
-Supabase project is live in `eu-west-2`.
+Three original classroom visuals are included for Branches:
 
-Security advisor was clean immediately after the V3.3 migration.
+- `branch-node-anatomy.svg`
+- `branch-locked-door-example.svg`
+- `branch-decision-demo.svg`
 
-## Important distinction
+The aim of V3.4 is to test the teaching format on one core lesson before rolling the same standard across Variables, Functions, Interfaces, Traces and Timelines.
 
-A student can still mark a lesson/game mechanic complete locally.
+## Backend
 
-**Evidence approval is the stronger teacher-facing measure of demonstrated practical work.**
+No database migration is required for V3.4.
 
-## Hosting
+The existing V3.3 Supabase backend remains compatible.
 
-The frontend remains static and hosting-neutral. See `SELF-HOSTING.md`.
+Microsoft SSO remains intentionally disabled pending college approval.
 
-## Version badge
+## Visible version
 
-`UE5 HUB v3.3.0 • BACKEND READY`
-
-until Microsoft SSO is approved and enabled.
+`UE5 HUB v3.4.0 • BACKEND READY`

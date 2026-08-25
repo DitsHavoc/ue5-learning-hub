@@ -1,4 +1,4 @@
-# Hosting options — UE5 Learning Hub v3.3.0
+# Hosting options — UE5 Learning Hub v3.4.0
 
 The Learning Hub frontend is plain static HTML/CSS/JavaScript. It is not tied to Render.
 
@@ -33,7 +33,7 @@ Supabase itself can be self-hosted separately, but that means the organisation b
 
 For a college rollout, hosting the frontend internally while retaining managed Supabase is the much simpler middle ground unless IT specifically requires all student progress data on college infrastructure.
 
-## Current V3.3 state
+## Current V3.4 state
 
 - Supabase project: created
 - region: eu-west-2
