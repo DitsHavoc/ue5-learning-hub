@@ -88,7 +88,15 @@ function lessonPage(id){
  <div class="lesson-layout ${lessonMode==='independent'?'independent':''}">
  <article>
  <section class="content-card" id="aims"><span class="eyebrow">01 • Goal</span><h2>What you should be able to do</h2><div class="goal-grid">${l.goals.map(g=>`<div class="goal">${esc(g)}</div>`).join('')}</div></section>
- <section class="content-card" id="learn"><span class="eyebrow">02 • Learn</span><h2>Core ideas</h2><div class="goal-grid">${l.concepts.map(c=>`<div class="concept"><strong>${esc(c[0])}</strong><br>${esc(c[1])}</div>`).join('')}</div>${visual(l)}</section>
+ <section class="content-card learn-card" id="learn"><span class="eyebrow">02 • Learn</span><h2>Understand the idea first</h2>
+ ${l.explanation ? `<div class="explain-lead"><h3>What is it?</h3><p>${esc(l.explanation.what)}</p></div>
+ <div class="explain-grid">
+   <div class="explain-box why"><span>WHY IT MATTERS</span><p>${esc(l.explanation.why)}</p></div>
+   <div class="explain-box mental"><span>HOW TO THINK ABOUT IT</span><p>${esc(l.explanation.mental)}</p></div>
+   <div class="explain-box example"><span>GAME / BLUEPRINT EXAMPLE</span><p>${esc(l.explanation.example)}</p></div>
+   <div class="explain-box use"><span>WHEN YOU'D USE IT</span><p>${esc(l.explanation.use)}</p></div>
+ </div>` : ''}
+ <h3 class="concept-title">Key terms</h3><div class="goal-grid">${l.concepts.map(c=>`<div class="concept"><strong>${esc(c[0])}</strong><br>${esc(c[1])}</div>`).join('')}</div>${visual(l)}</section>
  <section class="content-card guided-section" id="guided"><span class="eyebrow">03 • Guided build</span><h2>Follow it once</h2><p>Predict the result before pressing Play. The point is understanding the system, not racing the steps.</p><ol class="steps">${l.guided.map(s=>`<li>${esc(s)}</li>`).join('')}</ol></section>
  <section class="content-card guided-hidden-note"><span class="eyebrow">Independent mode</span><h2>Guided steps hidden</h2><p>Use the learning aim, concepts and challenges as your brief. Switch back to Guided if you genuinely need the walkthrough.</p></section>
  <section class="content-card" id="check"><span class="eyebrow">04 • Quick check</span><h2>Do you understand the idea?</h2>${quizHtml(l)}</section>

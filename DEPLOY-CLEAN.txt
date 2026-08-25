@@ -1,4 +1,4 @@
-UE5 LEARNING HUB v2.0.0 — CLEAN DEPLOY
+UE5 LEARNING HUB v2.1.0 — CLEAN DEPLOY
 
 IMPORTANT
 =========
@@ -18,7 +18,7 @@ This is a complete rebuild. Do not merge it with the old V1 files.
 
    DO NOT delete the hidden .git folder.
 
-3. Extract ue5-learning-hub-v2.0.0-CLEAN-REBUILD.zip.
+3. Extract ue5-learning-hub-v2.1.0-CLEAN-REBUILD.zip.
 
 4. Copy the CONTENTS of the ZIP into the repository root.
 
@@ -55,10 +55,10 @@ Look at the BOTTOM-RIGHT corner.
 
 It must say:
 
-   UE5 HUB v2.0.0
+   UE5 HUB v2.1.0
 
 If it says anything else, the new build is NOT what Render is serving.
 Do not change any code at that point; check the Render repository/branch/root settings.
 
-The right-hand lesson navigation in v2.0.0 uses JavaScript scroll buttons,
+The right-hand lesson navigation in v2.1.0 uses JavaScript scroll buttons,
 not hash links, so it cannot collide with the #/lesson/... router.

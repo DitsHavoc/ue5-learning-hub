@@ -1,5 +1,5 @@
 window.UE5_COURSE_DATA = {
-  "version": "2.0.0",
+  "version": "2.1.0",
   "buildDate": "25 Aug 2026",
   "paths": [
     {
@@ -159,7 +159,14 @@ window.UE5_COURSE_DATA = {
         "src": "assets/book/editor-overview.webp",
         "caption": "Reference figure from the supplied UE5 Blueprint book: Level Editor overview."
       },
-      "bookRef": "Chapter 1: Exploring the Blueprint Editor"
+      "bookRef": "Chapter 1: Exploring the Blueprint Editor",
+      "explanation": {
+        "what": "The Unreal Editor is not one window doing one job. It is a collection of panels that each answer a different question: what is in this level, what assets exist in the project, what is selected, and what properties can be changed. Learning which panel answers which question is the first real Unreal skill.",
+        "why": "Students who are unsure where things live waste huge amounts of time clicking randomly. Once the Editor becomes predictable, every later task becomes easier because you know where to look before you start changing anything.",
+        "mental": "Think of the Editor like a workshop. The Content Drawer is the stock room, the Outliner is the list of things currently on the workbench, the Viewport is the workbench itself, and Details is the control panel for the thing you have selected.",
+        "example": "If a lamp is already placed in the level but you want to change its brightness, you would normally select the lamp Actor in the Outliner or Viewport and edit its properties in Details. If you want to find the original lamp Blueprint or mesh asset, you would look in the Content Drawer instead.",
+        "use": "You use these panels constantly: placing assets, checking transforms, finding Actors, editing Components, organising levels and locating Blueprints. A good Unreal user moves between these panels deliberately rather than hunting."
+      }
     },
     {
       "id": "actors-components",
@@ -279,7 +286,14 @@ window.UE5_COURSE_DATA = {
         "src": "assets/book/blueprint-editor.webp",
         "caption": "Reference figure from the supplied book: Blueprint Editor layout."
       },
-      "bookRef": "Chapter 1: Components and the Blueprint Editor"
+      "bookRef": "Chapter 1: Components and the Blueprint Editor",
+      "explanation": {
+        "what": "An Actor is an object that can exist in a level. Components are the pieces that make that Actor useful. A door Actor might contain a door mesh, a collision box, an audio Component and perhaps a light, while still being one reusable object.",
+        "why": "This is important because Unreal encourages you to build game objects from smaller reusable pieces rather than putting every behaviour directly into one giant graph. Understanding Actors and Components makes later Blueprint design much cleaner.",
+        "mental": "Think of an Actor as the whole machine and Components as the parts bolted onto it. The Actor is the object the game recognises; Components provide visuals, collision, sound, movement and other capabilities.",
+        "example": "A checkpoint Actor could contain a Static Mesh for the model, a Box Collision Component to detect the player, a Point Light for feedback and an Audio Component for the activation sound.",
+        "use": "Use Components whenever an object needs additional capabilities. If several game objects need the same reusable capability, a dedicated Actor Component can eventually become a useful solution."
+      }
     },
     {
       "id": "blueprint-classes",
@@ -399,7 +413,14 @@ window.UE5_COURSE_DATA = {
         "src": "assets/book/blueprint-editor.webp",
         "caption": "Reference figure from the supplied book: the Blueprint Class Editor and its main panels."
       },
-      "bookRef": "Chapter 1: Creating a Blueprint Class"
+      "bookRef": "Chapter 1: Creating a Blueprint Class",
+      "explanation": {
+        "what": "A Blueprint Class is a reusable definition for a type of object. When you drag that Blueprint into the level, you create an instance of the Class. The Class stores the shared design; each instance can still have its own position and, where appropriate, its own editable values.",
+        "why": "Without Classes, students often duplicate assets or build one-off logic in a level. Reusable Classes mean one improvement can update every instance, making projects faster to build and far easier to maintain.",
+        "mental": "Think of the Class as the recipe and an instance as one cake made from that recipe. You can make many cakes from the same recipe, and some details can be changed per cake without writing a new recipe.",
+        "example": "One BP_Door Class could be used twenty times in a level. Each instance could have a different opening distance, colour or locked state while sharing the same core opening behaviour.",
+        "use": "Use Blueprint Classes for reusable gameplay objects: pickups, doors, switches, enemies, hazards, moving platforms, checkpoints and interactive props."
+      }
     },
     {
       "id": "events",
@@ -519,7 +540,14 @@ window.UE5_COURSE_DATA = {
         "src": "assets/diagrams/execution-flow.svg",
         "caption": "Original classroom diagram: event and execution flow."
       },
-      "bookRef": "Chapter 2: Events, actions and execution path"
+      "bookRef": "Chapter 2: Events, actions and execution path",
+      "explanation": {
+        "what": "Events are entry points into Blueprint logic. They represent something happening: the game starting, a player pressing a button, an Actor overlapping a trigger or an object being hit. Execution then follows the white wires from that event into the actions that should happen next.",
+        "why": "A Blueprint can contain perfectly valid nodes and still do nothing if execution never reaches them. Understanding events and execution order is the foundation of debugging because it lets you ask 'did this event fire?' and 'where did the execution stop?'",
+        "mental": "Think of an Event as the starting gun. The data might already exist, but nothing runs until an execution path is triggered.",
+        "example": "Event BeginPlay could set the player's starting health and then update the HUD. An overlap event could activate a checkpoint, while an input event could attempt an interaction.",
+        "use": "Use Events whenever gameplay needs to react to something happening. Avoid treating Event Tick as a default solution; per-frame execution is only appropriate when the system genuinely needs continuous updates."
+      }
     },
     {
       "id": "variables",
@@ -652,7 +680,14 @@ window.UE5_COURSE_DATA = {
         "src": "assets/book/variables-panel.webp",
         "caption": "Reference figure from the supplied book: variables in My Blueprint."
       },
-      "bookRef": "Chapter 2: Storing values in variables"
+      "bookRef": "Chapter 2: Storing values in variables",
+      "explanation": {
+        "what": "Variables are named pieces of data that a Blueprint can remember. They can represent numbers, true/false states, text, positions, Classes or references to specific objects. Reading a variable is a Get; changing its stored value is a Set.",
+        "why": "Almost every game mechanic depends on state. Health, ammunition, whether a door is locked, the current objective and which Actor the player is interacting with all require information to be stored somewhere.",
+        "mental": "Think of a variable as a labelled box. The label tells you what the information means, the type controls what kind of value can go inside, and the current value is what the game remembers at that moment.",
+        "example": "A door might store IsLocked as a Boolean and OpenAngle as a Float. A player might store Health as a Float, Ammo as an Integer and CurrentWeapon as an object reference.",
+        "use": "Use variables for information that needs to persist between execution steps. Choose the smallest clear type that describes the data and give exposed variables useful names, Categories and Tooltips."
+      }
     },
     {
       "id": "branches",
@@ -772,7 +807,14 @@ window.UE5_COURSE_DATA = {
         "src": "assets/diagrams/branch-flow.svg",
         "caption": "Original classroom diagram: a Branch choosing between open and locked behaviour."
       },
-      "bookRef": "Chapter 2: Relational/logical operators and flow"
+      "bookRef": "Chapter 2: Relational/logical operators and flow",
+      "explanation": {
+        "what": "A Branch lets Blueprint execution make a decision. It reads a Boolean condition and sends execution down either the True or False path. Comparisons such as Health > 0 are one common way of producing that Boolean.",
+        "why": "Games are full of rules and restrictions. A door should only open if the player has the key; a weapon should only fire if ammunition is available; an enemy might chase only when it has a valid target.",
+        "mental": "Think of a Branch as a question with only two answers. The important part is not the Branch node itself but the quality of the question you feed into it.",
+        "example": "HasKey AND IsDoorLocked could be used to decide whether to unlock a door. Health <= 0 could decide whether to trigger death behaviour.",
+        "use": "Use a Branch when behaviour genuinely differs based on a condition. If both outputs immediately do almost the same thing, the logic may be better expressed another way."
+      }
     },
     {
       "id": "functions",
@@ -892,7 +934,14 @@ window.UE5_COURSE_DATA = {
         "src": "assets/book/function-example.webp",
         "caption": "Reference figure from the supplied book: a simple Function example."
       },
-      "bookRef": "Chapter 2: Macros versus functions versus events"
+      "bookRef": "Chapter 2: Macros versus functions versus events",
+      "explanation": {
+        "what": "A Function is a named block of reusable logic. It can accept inputs, perform work and return outputs. Functions help turn a large graph into smaller pieces that describe intent instead of exposing every low-level step at once.",
+        "why": "Repeated node chains create maintenance problems. If damage calculation is copied into five places and the formula changes, every copy must be found and updated. One Function creates a single source of truth.",
+        "mental": "Think of a Function like a machine with labelled sockets. You feed values in, the machine performs one clear job, and it can return a result.",
+        "example": "CalculateDamage could accept BaseDamage and Multiplier and return FinalDamage. CanAffordItem could accept Cost and CurrentCurrency and return a Boolean.",
+        "use": "Use Functions for logic that performs one recognisable job, particularly when it is reused. Inputs are usually better than hard-coded values when the behaviour should work in different situations."
+      }
     },
     {
       "id": "framework",
@@ -1016,7 +1065,14 @@ window.UE5_COURSE_DATA = {
         "src": "assets/diagrams/communication.svg",
         "caption": "Original classroom relationship diagram; use alongside the framework notes."
       },
-      "bookRef": "Chapter 3: OOP and the Gameplay Framework"
+      "bookRef": "Chapter 3: OOP and the Gameplay Framework",
+      "explanation": {
+        "what": "Unreal's Gameplay Framework provides Classes with different responsibilities and lifetimes. A Pawn is a possessable body, a Character is a Pawn with common character movement features, a Controller represents controlling logic, GameMode defines game rules, and GameInstance survives level changes during the running game.",
+        "why": "Putting logic in the wrong framework Class can make a project difficult to expand. The correct choice depends on what owns the behaviour and how long the data needs to exist.",
+        "mental": "Think about two questions: 'whose responsibility is this?' and 'how long should it live?'. Those questions usually narrow down the correct framework Class more effectively than memorising node names.",
+        "example": "Player health might live on the Character or a health Component. Match rules belong in GameMode. A selected character or session setting that must survive a level transition could live in GameInstance.",
+        "use": "Use the Gameplay Framework when the problem relates to player bodies, controllers, game rules, global match state or data that must survive level loading."
+      }
     },
     {
       "id": "references-casting",
@@ -1135,7 +1191,14 @@ window.UE5_COURSE_DATA = {
         "src": "assets/book/casting-example.webp",
         "caption": "Reference figure from the supplied book: Casting in Blueprints."
       },
-      "bookRef": "Chapter 4: Casting in Blueprints"
+      "bookRef": "Chapter 4: Casting in Blueprints",
+      "explanation": {
+        "what": "A reference points to a specific object instance. Casting does not find that object; it checks whether a reference you already have can safely be treated as a particular Class type.",
+        "why": "Students often use Cast nodes as if they are object-search tools. That leads to fragile graphs and confusion. First obtain the reference, then decide whether you actually need to verify its type.",
+        "mental": "Think of a reference as having someone's phone number. Casting is asking 'is the person at this number actually the type of person I expect?' It does not magically discover the number for you.",
+        "example": "An overlap event gives you Other Actor. You can Cast that reference to your player Character if the trigger only cares about that specific Class. If many unrelated objects should respond to the same interaction message, an Interface may be cleaner.",
+        "use": "Use Casting when behaviour genuinely depends on a specific Class. Avoid long chains of Casts to many different Classes for generic interactions."
+      }
     },
     {
       "id": "interfaces-dispatchers",
@@ -1255,7 +1318,14 @@ window.UE5_COURSE_DATA = {
         "src": "assets/book/dispatcher-details.webp",
         "caption": "Reference figure from the supplied book: Event Dispatcher setup/details."
       },
-      "bookRef": "Chapter 4: Direct communication, Casting and Event Dispatchers"
+      "bookRef": "Chapter 4: Direct communication, Casting and Event Dispatchers",
+      "explanation": {
+        "what": "Blueprint Interfaces and Event Dispatchers are two ways to reduce tight dependencies. An Interface lets different Classes promise that they can respond to the same message. A Dispatcher lets one object broadcast that something happened while listeners decide how they react.",
+        "why": "As projects grow, direct references and Casts everywhere become difficult to maintain. More flexible communication lets systems interact without requiring every Blueprint to understand every other Blueprint's internal details.",
+        "mental": "An Interface is like a common language: different objects can all understand 'Interact'. A Dispatcher is like an announcement system: the broadcaster announces 'AlarmTriggered' and any registered listener can react.",
+        "example": "Doors, pickups and terminals could all implement an Interact Interface differently. An alarm Blueprint could broadcast AlarmTriggered, allowing lights, doors and enemies to respond independently.",
+        "use": "Use Interfaces when different Classes need the same callable behaviour. Use Dispatchers when one event may need to notify one or more listeners without directly controlling them."
+      }
     },
     {
       "id": "collision",
@@ -1376,7 +1446,14 @@ window.UE5_COURSE_DATA = {
         "src": "assets/book/collision-responses.webp",
         "caption": "Reference figure from the supplied book: Collision Responses table."
       },
-      "bookRef": "Chapter 14 / collision response examples"
+      "bookRef": "Chapter 14 / collision response examples",
+      "explanation": {
+        "what": "Collision determines how objects respond when their shapes meet. Unreal collision can Block, Overlap or Ignore depending on the object and channel. Overlap events are especially useful when you need detection without physically stopping movement.",
+        "why": "Many gameplay systems begin with detection: checkpoints, pickups, damage zones, doors and area triggers. If collision settings are wrong, the Blueprint logic can be perfect and still never fire.",
+        "mental": "Separate 'can these shapes detect each other?' from 'what should the game do when they do?'. Collision solves the first problem; Blueprint logic solves the second.",
+        "example": "A checkpoint may use a large Box Collision Component set to overlap the player. The overlap event then activates the checkpoint while the mesh itself can use different collision settings.",
+        "use": "Use collision volumes for spatial detection and physical responses. Debug collision configuration before building complicated logic on top of it."
+      }
     },
     {
       "id": "traces",
@@ -1497,7 +1574,14 @@ window.UE5_COURSE_DATA = {
         "src": "assets/diagrams/trace.svg",
         "caption": "Original classroom diagram: camera-based line trace and Hit Result."
       },
-      "bookRef": "Chapter 14: Introduction to traces and trace functions"
+      "bookRef": "Chapter 14: Introduction to traces and trace functions",
+      "explanation": {
+        "what": "A Line Trace is a collision query sent through the world from a Start point to an End point. If it hits something, Unreal returns a Hit Result containing information such as the Actor, Component and impact location.",
+        "why": "Traces are ideal for questions such as 'what is the player looking at?', 'did this hitscan weapon hit anything?' or 'is there clear line of sight?'. They let gameplay query the world without requiring a permanent trigger volume.",
+        "mental": "Think of a trace as an invisible laser used for asking a question. The trace itself does not automatically interact; it only reports what it found.",
+        "example": "A first-person interaction trace might begin at the camera and end at CameraLocation + ForwardVector × 300. If the Hit Actor supports interaction, the player can then send an Interact message.",
+        "use": "Use traces for directional detection, hitscan weapons, line-of-sight checks and targeted interaction. Draw debug traces while developing so range and direction are visible."
+      }
     },
     {
       "id": "timelines",
@@ -1618,7 +1702,14 @@ window.UE5_COURSE_DATA = {
         "src": "assets/diagrams/branch-flow.svg",
         "caption": "Use the decision diagram alongside the Timeline task: decide first, animate second."
       },
-      "bookRef": "Chapter 6: Timelines / movement examples"
+      "bookRef": "Chapter 6: Timelines / movement examples",
+      "explanation": {
+        "what": "A Timeline outputs changing values over a duration. Those values are commonly used with Lerp nodes to smoothly move, rotate or otherwise change something from a start state to an end state.",
+        "why": "Instantly teleporting a door from closed to open is technically functional but rarely feels good. Timelines give designers control over duration and curve shape without requiring manual per-frame maths.",
+        "mental": "Think of a Timeline as a tiny animation graph for numbers. A value of 0 can mean 'fully closed' and 1 can mean 'fully open', with every value between representing part of the journey.",
+        "example": "A Timeline Float track moving from 0 to 1 can drive a Lerp between ClosedLocation and OpenLocation. Playing opens the door; reversing closes it.",
+        "use": "Use Timelines for short authored changes such as doors, lifts, fades, lights and moving platforms when you need smooth predictable motion."
+      }
     },
     {
       "id": "ui",
@@ -1738,7 +1829,14 @@ window.UE5_COURSE_DATA = {
         "src": "assets/book/ui-variables.webp",
         "caption": "Reference figure from the supplied book: UI-related gameplay variables."
       },
-      "bookRef": "Chapter 7: Creating Screen UI Elements"
+      "bookRef": "Chapter 7: Creating Screen UI Elements",
+      "explanation": {
+        "what": "UMG is Unreal's system for building user interface. A Widget should usually display information owned by gameplay systems rather than becoming the place where the game rules themselves are stored.",
+        "why": "Separating UI from gameplay state prevents the project becoming tangled. Health should still exist even if the health bar is hidden, replaced or redesigned.",
+        "mental": "Think of the HUD as a dashboard in a car. The speedometer displays speed, but it does not create the car's speed. The gameplay system owns the value; the UI communicates it.",
+        "example": "The Character owns Health. The HUD reads that value and converts it into a progress bar percentage. When damage changes Health, the Widget updates what the player sees.",
+        "use": "Use Widgets for HUDs, menus, prompts, inventories and feedback. Keep core rules in gameplay Blueprints or systems so the UI remains replaceable."
+      }
     },
     {
       "id": "savegame",
@@ -1854,7 +1952,14 @@ window.UE5_COURSE_DATA = {
       ],
       "goodPractice": "Choose storage based on how long the data must live.",
       "visual": null,
-      "bookRef": "Chapter 11: SaveGame class, saving and loading"
+      "bookRef": "Chapter 11: SaveGame class, saving and loading",
+      "explanation": {
+        "what": "SaveGame is used for data that must survive after the game closes. GameInstance is different: it can survive level changes during one running session, but it is not automatically written to disk.",
+        "why": "Understanding data lifetime prevents bugs. Temporary combat state, cross-level session data and long-term player progress should not all be stored in the same place.",
+        "mental": "Think of level variables as notes on a whiteboard, GameInstance as notes you carry between rooms, and SaveGame as writing important information into a notebook you can reopen tomorrow.",
+        "example": "CurrentHealth may reset when a level restarts, SelectedCharacter might persist in GameInstance while moving between maps, and HighestUnlockedLevel could be stored in SaveGame.",
+        "use": "Use SaveGame for settings, progression, checkpoints and other information that should still exist after restarting the application."
+      }
     },
     {
       "id": "data",
@@ -1993,7 +2098,14 @@ window.UE5_COURSE_DATA = {
         "src": "assets/book/containers.webp",
         "caption": "Reference figure from the supplied book: container variable types."
       },
-      "bookRef": "Chapter 13: Data Structures and Flow Control"
+      "bookRef": "Chapter 13: Data Structures and Flow Control",
+      "explanation": {
+        "what": "Data structures let you organise many related values without creating endless numbered variables. Arrays store ordered collections, Sets store unique values, Maps connect keys to values, Enums define named choices, Structs group fields and Data Tables store many rows using the same Struct.",
+        "why": "As games become larger, good data organisation becomes more important than individual nodes. Clean data reduces duplicated Blueprints and makes systems easier to expand.",
+        "mental": "Choose the structure based on the shape of the information. A list suggests an Array, a named finite state suggests an Enum, and a collection of records sharing the same fields suggests a Struct or Data Table.",
+        "example": "An Item Struct could contain Name, Icon, Value and ItemType. An inventory could be an Array of those Structs. A Data Table could hold hundreds of item definitions without creating hundreds of separate variables.",
+        "use": "Use data structures when the same kind of information repeats. Avoid solving collection problems with Item1, Item2, Item3-style variables."
+      }
     },
     {
       "id": "ai",
@@ -2109,7 +2221,14 @@ window.UE5_COURSE_DATA = {
       ],
       "goodPractice": "Model what the AI knows and what decision it should make next.",
       "visual": null,
-      "bookRef": "Chapters 9–10: AI navigation, Blackboard and Behaviour Trees"
+      "bookRef": "Chapters 9–10: AI navigation, Blackboard and Behaviour Trees",
+      "explanation": {
+        "what": "Unreal AI is usually built from several cooperating systems. NavMesh describes where an AI can travel, an AI Controller controls the Pawn, Blackboard stores useful AI state, and a Behaviour Tree organises decisions and tasks.",
+        "why": "Keeping navigation, knowledge and decision-making separate makes AI easier to debug. If an enemy will not move, the problem might be navigation rather than the Behaviour Tree.",
+        "mental": "Think of the Blackboard as what the AI currently knows, the Behaviour Tree as how it decides what to do with that knowledge, and NavMesh as where it is physically allowed to go.",
+        "example": "An enemy Blackboard could store TargetActor and LastKnownLocation. The Behaviour Tree could patrol when no target exists, investigate a location when suspicious and chase when TargetActor is valid.",
+        "use": "Use these systems for enemies or NPCs that need navigation and state-driven behaviour rather than one long scripted sequence."
+      }
     },
     {
       "id": "animation",
@@ -2229,7 +2348,14 @@ window.UE5_COURSE_DATA = {
         "src": "assets/book/animation-blueprint.webp",
         "caption": "Reference figure from the supplied book: creating an Animation Blueprint."
       },
-      "bookRef": "Chapter 17: Animation Blueprints"
+      "bookRef": "Chapter 17: Animation Blueprints",
+      "explanation": {
+        "what": "Animation Blueprints control the final pose of a Skeletal Mesh. Their EventGraph commonly gathers gameplay/movement data, while the AnimGraph uses that data to blend animations and evaluate State Machines.",
+        "why": "Animation needs to respond to gameplay without duplicating gameplay rules. Keeping movement data gathering separate from pose generation makes animation systems much easier to understand.",
+        "mental": "Think of the EventGraph as collecting facts such as Speed or IsInAir. The AnimGraph then asks 'given those facts, what pose should the character be in?'",
+        "example": "Speed can drive an Idle/Walk/Run Blend Space, while IsInAir can control the transition from locomotion into a jump state.",
+        "use": "Use Animation Blueprints for character locomotion, state transitions, blends and animation-driven presentation while keeping core gameplay logic in the Character or other gameplay systems."
+      }
     },
     {
       "id": "practice",
@@ -2349,7 +2475,14 @@ window.UE5_COURSE_DATA = {
         "src": "assets/book/responsibility.webp",
         "caption": "Reference figure from the supplied book: an example of moving player-death responsibility into the player Blueprint."
       },
-      "bookRef": "Chapter 15: Blueprint responsibilities"
+      "bookRef": "Chapter 15: Blueprint responsibilities",
+      "explanation": {
+        "what": "Blueprint responsibility is about deciding which object owns a piece of state and which object should control the behaviour that changes it. A Blueprint should generally be responsible for its own internal state instead of unrelated Actors directly manipulating its internals.",
+        "why": "Poor ownership creates duplicated logic and makes changes dangerous. If every enemy contains its own copy of how the player dies, changing death behaviour means finding every copy and hoping none are missed.",
+        "mental": "Ask 'whose state is this?' If it is the player's health or death state, the player system should normally own how that state changes. Other objects can request the behaviour without owning its implementation.",
+        "example": "A hazard can tell the player to Die. The player then handles animation, UI, respawn or other death behaviour. The hazard does not need to know how any of that works.",
+        "use": "Use responsibility thinking whenever two Blueprints communicate. It is especially important when deciding what belongs in reusable Classes, GameMode or the Level Blueprint."
+      }
     },
     {
       "id": "complexity",
@@ -2470,7 +2603,14 @@ window.UE5_COURSE_DATA = {
         "src": "assets/book/responsibility.webp",
         "caption": "Book reference for the best-practice section; the lesson also applies the book's abstraction/readability guidance."
       },
-      "bookRef": "Chapter 15: Managing Blueprint complexities"
+      "bookRef": "Chapter 15: Managing Blueprint complexities",
+      "explanation": {
+        "what": "Blueprint complexity is managed by making intent visible and low-level detail easier to navigate. Functions, Macros, collapsed graphs, comments, good variable names, Categories and Tooltips all help, but they should be used deliberately rather than simply hiding nodes.",
+        "why": "A Blueprint that works today can still become impossible to maintain later. Readability matters because you, a teammate or a student may need to understand the graph months after it was created.",
+        "mental": "The top level of a good Blueprint should read almost like a plan: Check Input → Validate Target → Apply Damage → Update Feedback. Detailed implementation can then live inside clearly named Functions.",
+        "example": "Instead of fifty nodes under InputAction Interact, the top graph might call FindInteractable, CanInteract and PerformInteraction. Each name explains intent before you inspect the details.",
+        "use": "Use abstraction when it reduces cognitive load, not simply to make the graph physically smaller. Comment major logic blocks and make exposed variables understandable to designers."
+      }
     }
   ],
   "glossary": [

@@ -75,3 +75,15 @@ footer{border-top:1px solid var(--line);padding:15px 38px;color:#65768b;font-siz
 .icon-button{border:0;background:transparent;color:#fff;font-size:20px}.mobile-only{display:none}
 @media(max-width:1080px){.path-grid{grid-template-columns:repeat(2,1fr)}.lesson-layout{grid-template-columns:1fr}.lesson-nav{position:static;display:flex;flex-wrap:wrap;gap:4px}.lesson-nav button.section-button{width:auto}.lesson-nav hr{display:none}.lesson-nav .button{width:auto}.lesson-meta{grid-template-columns:repeat(3,1fr);border:0;border-top:1px solid var(--line);padding:16px 0 0}.lesson-hero{grid-template-columns:1fr}}
 @media(max-width:760px){.sidebar{transform:translateX(-100%);transition:.2s;width:min(88vw,300px)}.sidebar.open{transform:none;box-shadow:25px 0 70px rgba(0,0,0,.55)}.page{margin-left:0}.mobile-only{display:block}.topbar{padding:0 14px}.top-status{display:none}main{padding:24px 15px 65px}.hero{grid-template-columns:1fr}.hero-copy{padding:29px 24px}.hero-art{display:none}.stat-grid,.path-grid,.board-grid,.glossary-grid{grid-template-columns:1fr}.lesson-hero{padding:23px}.goal-grid,.analysis-grid{grid-template-columns:1fr}footer{padding:14px 15px;flex-direction:column;gap:8px}.version-badge{right:8px;bottom:8px}.lesson-row{grid-template-columns:34px minmax(0,1fr)}.lesson-xp{grid-column:2}}
+
+
+.learn-card > h2{margin-bottom:14px}
+.explain-lead{border:1px solid #2c4158;background:linear-gradient(135deg,#111d29,#102336);border-radius:12px;padding:17px 18px;margin-bottom:9px}
+.explain-lead h3{font-size:14px;color:#fff;margin:0 0 6px}.explain-lead p{margin:0;font-size:13px;line-height:1.72;color:#c1ccd8}
+.explain-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 18px}
+.explain-box{border:1px solid #26394d;background:#0f1822;border-radius:10px;padding:13px}
+.explain-box span{display:block;font-size:8px;letter-spacing:.13em;font-weight:900;margin-bottom:6px}
+.explain-box p{margin:0;font-size:11.5px;line-height:1.62;color:#adbac9}
+.explain-box.why span{color:#55d58b}.explain-box.mental span{color:#a884ff}.explain-box.example span{color:#ffd565}.explain-box.use span{color:#50ddcf}
+.concept-title{font-size:13px;margin:16px 0 9px;color:#dbe5ef}
+@media(max-width:760px){.explain-grid{grid-template-columns:1fr}}
