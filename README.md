@@ -1,59 +1,43 @@
-# UE5 Learning Hub v2.1.0
+# UE5 Learning Hub v3.3.0
 
-Fresh rebuild for a static Render/GitHub deployment.
+V3.3 adds the most important classroom-management features without changing the core Learn → Prove → Build model.
 
-## Visible version check
+## New in V3.3
 
-A fixed badge in the bottom-right of every page reads:
+- **Evidence submissions** on every lesson/game mechanic
+- screenshot / WebP / JPG / PDF uploads (private Supabase Storage, max 10 MB)
+- optional external evidence/build/video link
+- student reflection
+- teacher **Approve** / **Needs changes** workflow
+- teacher written feedback
+- submitted evidence locks while waiting for review
+- approved evidence remains part of the student's progress record
+- **My Progress** dashboard
+- evidence tracker across all 20 mechanics
+- achievements for meaningful milestones
+- in-app notifications for feedback and request-board status changes
+- **class groups** managed by teachers
+- teacher overview now compares lessons, game mechanics and approved evidence
+- Microsoft SSO is still intentionally disabled pending college approval
 
-`UE5 HUB v2.1.0`
+## Current backend
 
-If the live site does not show that exact version, Render is serving an older deploy.
+Supabase project is live in `eu-west-2`.
 
-## Files that must be at the repository root
+Security advisor was clean immediately after the V3.3 migration.
 
-- `index.html`
-- `styles.css`
-- `app.js`
-- `data/course-data.js`
-- `assets/book/*`
-- `assets/diagrams/*`
+## Important distinction
 
-Do not place the project inside an extra nested folder in the repository.
+A student can still mark a lesson/game mechanic complete locally.
 
-## Render
+**Evidence approval is the stronger teacher-facing measure of demonstrated practical work.**
 
-Static Site:
-- Build command: leave blank
-- Publish directory: `.`
-- Branch: `main`
+## Hosting
 
-## Features
+The frontend remains static and hosting-neutral. See `SELF-HOSTING.md`.
 
-- 18 lessons across 6 learning paths
-- guided / independent lesson mode
-- learning aims and success goals
-- embedded learning visuals
-- quick quizzes
-- stretch tasks
-- challenge tasks with progressive hints
-- play-it / watch-it analysis activities
-- homework with copy-for-Teams
-- Challenge Board
-- Homework Board
-- random Revision mode
-- searchable glossary
-- global search
-- XP and local progress
-- progress migration from the earliest V1 localStorage key
-- responsive layout
-- no npm, backend, build pipeline or service worker
+## Version badge
 
-## Content basis
+`UE5 HUB v3.3.0 • BACKEND READY`
 
-The course structure and technical concepts are grounded in the supplied book *Blueprints Visual Scripting for Unreal Engine 5, Third Edition*, with original classroom wording, tasks and diagrams. A small curated set of figures from the supplied PDF is included as lesson reference imagery.
-
-
-## v2.1 learning-content upgrade
-
-The Learn section now contains expanded original explanations for every seeded lesson: what the concept is, why it matters, a mental model, a practical game/Blueprint example, and when to use it before the key-term cards and practical work.
+until Microsoft SSO is approved and enabled.

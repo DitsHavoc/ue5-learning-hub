@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Unreal Engine 5 learning hub for Games Development students.">
+  <meta name="description" content="Unreal Engine 5 learning and game-project hub for Games Development students.">
   <meta name="theme-color" content="#071019">
   <title>UE5 Learning Hub</title>
-  <link rel="stylesheet" href="styles.css?v=2.1.0">
+  <link rel="stylesheet" href="styles.css?v=3.3.0">
 </head>
 <body>
   <div id="bootError" class="boot-error" hidden>
     <strong>UE5 Learning Hub could not start.</strong>
-    <span>Refresh the page. If this remains visible, check that data/course-data.js and app.js are uploaded.</span>
+    <span>Refresh the page. If this remains visible, check the uploaded data and JavaScript files.</span>
   </div>
 
   <div class="app-shell">
@@ -23,6 +23,9 @@
 
       <nav class="nav" id="mainNav">
         <a href="#/" data-route="home">⌂ <span>Dashboard</span></a>
+        <a href="#/my-game" data-route="my-game" class="project-nav">◈ <span>My Game</span><small>Signal Lost</small></a>
+        <a href="#/progress" data-route="progress" class="project-nav">◎ <span>My Progress</span><small>Evidence & feedback</small></a>
+        <a href="#/requests" data-route="requests" class="project-nav">✦ <span>Requests Board</span><small>Shape the site</small></a>
         <div class="nav-heading">Learning paths</div>
         <a href="#/path/foundations" data-route="foundations">◫ <span>Unreal Foundations</span></a><a href="#/path/blueprints" data-route="blueprints">◇ <span>Blueprint Core</span></a><a href="#/path/framework" data-route="framework">↔ <span>Framework & Communication</span></a><a href="#/path/gameplay" data-route="gameplay">⚙ <span>Gameplay Systems</span></a><a href="#/path/advanced" data-route="advanced">⌘ <span>Data, AI & Animation</span></a><a href="#/path/practice" data-route="practice">✓ <span>Professional Practice</span></a>
         <div class="nav-heading">Independent study</div>
@@ -30,6 +33,7 @@
         <a href="#/homework" data-route="homework">⌂ <span>Homework</span></a>
         <a href="#/revision" data-route="revision">↻ <span>Revision</span></a>
         <a href="#/glossary" data-route="glossary">? <span>Glossary</span></a>
+        <a href="#/teacher" data-route="teacher" id="teacherNav" hidden>▣ <span>Teacher</span></a>
       </nav>
 
       <div class="side-progress">
@@ -44,7 +48,7 @@
         <button class="icon-button mobile-only" id="menuButton" aria-label="Open menu">☰</button>
         <div class="global-search">
           <span>⌕</span>
-          <input id="globalSearch" type="search" placeholder="Search lessons, concepts, nodes…">
+          <input id="globalSearch" type="search" placeholder="Search lessons, mechanics, nodes…">
           <kbd>/</kbd>
           <div class="search-panel" id="searchPanel" hidden></div>
         </div>
@@ -52,12 +56,16 @@
           <span><b id="topDone">0</b> complete</span>
           <span><b id="topXp">0</b> XP</span>
         </div>
+        <button class="notification-button" id="notificationButton" data-action="open-progress" title="Notifications">🔔 <b id="notificationCount" hidden>0</b></button>
+        <button class="account-button" id="accountButton" data-action="open-auth">
+          <span class="account-dot"></span><span id="accountText">LOCAL MODE</span>
+        </button>
       </header>
 
       <main id="app" tabindex="-1"></main>
 
       <footer>
-        <span>Built for classroom learning • progress is stored on this browser</span>
+        <span>Learn UE5 by building one game • student ideas keep the hub evolving</span>
         <button id="resetProgress" class="link-button">Reset local progress</button>
       </footer>
     </div>
@@ -65,12 +73,25 @@
 
   <div class="version-badge" title="Build version">
     <span class="version-dot"></span>
-    UE5 HUB <b>v2.1.0</b>
+    UE5 HUB <b>v3.3.0</b> <span id="modeBadge">• LOCAL</span>
+  </div>
+
+  <div class="modal-backdrop" id="authModal" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+      <button class="modal-close" data-action="close-auth" aria-label="Close">×</button>
+      <span class="eyebrow">Student accounts</span>
+      <h2 id="authTitle">Save progress everywhere</h2>
+      <div id="authBody"></div>
+    </section>
   </div>
 
   <div class="toast" id="toast" aria-live="polite"></div>
 
-  <script src="data/course-data.js?v=2.1.0"></script>
-  <script src="app.js?v=2.1.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="data/course-data.js?v=3.3.0"></script>
+  <script src="data/project-data.js?v=3.3.0"></script>
+  <script src="data/supabase-config.js?v=3.3.0"></script>
+  <script src="backend.js?v=3.3.0"></script>
+  <script src="app.js?v=3.3.0"></script>
 </body>
 </html>

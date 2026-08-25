@@ -1,5 +1,5 @@
 window.UE5_COURSE_DATA = {
-  "version": "2.1.0",
+  "version": "3.3.0",
   "buildDate": "25 Aug 2026",
   "paths": [
     {
@@ -166,6 +166,18 @@ window.UE5_COURSE_DATA = {
         "mental": "Think of the Editor like a workshop. The Content Drawer is the stock room, the Outliner is the list of things currently on the workbench, the Viewport is the workbench itself, and Details is the control panel for the thing you have selected.",
         "example": "If a lamp is already placed in the level but you want to change its brightness, you would normally select the lamp Actor in the Outliner or Viewport and edit its properties in Details. If you want to find the original lamp Blueprint or mesh asset, you would look in the Content Drawer instead.",
         "use": "You use these panels constantly: placing assets, checking transforms, finding Actors, editing Components, organising levels and locating Blueprints. A good Unreal user moves between these panels deliberately rather than hunting."
+      },
+      "projectTask": {
+        "name": "Greybox Sector A",
+        "mission": "Create the first playable section of your game.",
+        "build": "Greybox an entrance area, one locked route and one destination room. Organise the Outliner and project folders as if another developer will inherit the project tomorrow.",
+        "proof": [
+          "Playable route through at least 3 spaces",
+          "Named Actors and Outliner folders",
+          "Project folders for Blueprints, Maps, Materials and Meshes",
+          "Screenshot of organised level"
+        ],
+        "polish": "Use lighting or simple material colour to make the intended route readable."
       }
     },
     {
@@ -293,6 +305,18 @@ window.UE5_COURSE_DATA = {
         "mental": "Think of an Actor as the whole machine and Components as the parts bolted onto it. The Actor is the object the game recognises; Components provide visuals, collision, sound, movement and other capabilities.",
         "example": "A checkpoint Actor could contain a Static Mesh for the model, a Box Collision Component to detect the player, a Point Light for feedback and an Audio Component for the activation sound.",
         "use": "Use Components whenever an object needs additional capabilities. If several game objects need the same reusable capability, a dedicated Actor Component can eventually become a useful solution."
+      },
+      "projectTask": {
+        "name": "Interactive Prop Shell",
+        "mission": "Build the first reusable game object from Components.",
+        "build": "Create a facility prop such as a security terminal, checkpoint beacon, power relay or warning light using a clear Component hierarchy.",
+        "proof": [
+          "One reusable Actor Blueprint",
+          "At least 4 purposeful Components",
+          "Collision Component included",
+          "Placed in the main game map"
+        ],
+        "polish": "Add sound or lighting feedback without adding complex gameplay logic yet."
       }
     },
     {
@@ -420,6 +444,18 @@ window.UE5_COURSE_DATA = {
         "mental": "Think of the Class as the recipe and an instance as one cake made from that recipe. You can make many cakes from the same recipe, and some details can be changed per cake without writing a new recipe.",
         "example": "One BP_Door Class could be used twenty times in a level. Each instance could have a different opening distance, colour or locked state while sharing the same core opening behaviour.",
         "use": "Use Blueprint Classes for reusable gameplay objects: pickups, doors, switches, enemies, hazards, moving platforms, checkpoints and interactive props."
+      },
+      "projectTask": {
+        "name": "Reusable World Kit",
+        "mission": "Prove that your project is built from reusable Classes, not one-off copies.",
+        "build": "Create one Blueprint Class that appears at least three times in the game with useful per-instance differences.",
+        "proof": [
+          "3+ instances of one Class",
+          "At least 1 Instance Editable variable",
+          "Tooltip on exposed variable",
+          "Changing the Class updates all instances"
+        ],
+        "polish": "Expose two designer-friendly settings that change presentation without changing the core Blueprint."
       }
     },
     {
@@ -547,6 +583,18 @@ window.UE5_COURSE_DATA = {
         "mental": "Think of an Event as the starting gun. The data might already exist, but nothing runs until an execution path is triggered.",
         "example": "Event BeginPlay could set the player's starting health and then update the HUD. An overlap event could activate a checkpoint, while an input event could attempt an interaction.",
         "use": "Use Events whenever gameplay needs to react to something happening. Avoid treating Event Tick as a default solution; per-frame execution is only appropriate when the system genuinely needs continuous updates."
+      },
+      "projectTask": {
+        "name": "Facility Comes Online",
+        "mission": "Give the game a clear event-driven start.",
+        "build": "On BeginPlay, initialise at least one piece of game state and show temporary debug feedback proving the execution order.",
+        "proof": [
+          "BeginPlay starts the chain",
+          "At least 3 ordered actions",
+          "Debug output proves order",
+          "No unnecessary Event Tick"
+        ],
+        "polish": "Replace one debug message with visible world feedback."
       }
     },
     {
@@ -687,6 +735,18 @@ window.UE5_COURSE_DATA = {
         "mental": "Think of a variable as a labelled box. The label tells you what the information means, the type controls what kind of value can go inside, and the current value is what the game remembers at that moment.",
         "example": "A door might store IsLocked as a Boolean and OpenAngle as a Float. A player might store Health as a Float, Ammo as an Integer and CurrentWeapon as an object reference.",
         "use": "Use variables for information that needs to persist between execution steps. Choose the smallest clear type that describes the data and give exposed variables useful names, Categories and Tooltips."
+      },
+      "projectTask": {
+        "name": "Player & Facility State",
+        "mission": "Create the memory your game needs.",
+        "build": "Add meaningful state such as Health, HasSecurityCard, PowerRestored and CurrentObjective. Put each value on the Blueprint/system that should own it.",
+        "proof": [
+          "At least 4 meaningful variables",
+          "Correct data types",
+          "Useful defaults",
+          "Exposed variables use Tooltips"
+        ],
+        "polish": "Group related designer-facing variables into Categories."
       }
     },
     {
@@ -814,6 +874,18 @@ window.UE5_COURSE_DATA = {
         "mental": "Think of a Branch as a question with only two answers. The important part is not the Branch node itself but the quality of the question you feed into it.",
         "example": "HasKey AND IsDoorLocked could be used to decide whether to unlock a door. Health <= 0 could decide whether to trigger death behaviour.",
         "use": "Use a Branch when behaviour genuinely differs based on a condition. If both outputs immediately do almost the same thing, the logic may be better expressed another way."
+      },
+      "projectTask": {
+        "name": "Access Rules",
+        "mission": "Use state to control progression.",
+        "build": "Create a route that only opens when a condition is satisfied: security card, restored power, completed objective or another theme-appropriate requirement.",
+        "proof": [
+          "True and False paths both tested",
+          "Clear failure feedback",
+          "Condition uses stored state",
+          "Progression changes after requirement is met"
+        ],
+        "polish": "Require two conditions for one higher-security route."
       }
     },
     {
@@ -941,6 +1013,18 @@ window.UE5_COURSE_DATA = {
         "mental": "Think of a Function like a machine with labelled sockets. You feed values in, the machine performs one clear job, and it can return a result.",
         "example": "CalculateDamage could accept BaseDamage and Multiplier and return FinalDamage. CanAffordItem could accept Cost and CurrentCurrency and return a Boolean.",
         "use": "Use Functions for logic that performs one recognisable job, particularly when it is reused. Inputs are usually better than hard-coded values when the behaviour should work in different situations."
+      },
+      "projectTask": {
+        "name": "Refactor a Game Rule",
+        "mission": "Turn repeated project logic into a named reusable Function.",
+        "build": "Identify a piece of logic now repeated or becoming complex and extract it into a Function with useful inputs/outputs.",
+        "proof": [
+          "Function performs one clear job",
+          "Useful inputs/outputs",
+          "At least 2 calls or a strong reuse justification",
+          "Behaviour unchanged after refactor"
+        ],
+        "polish": "Create a validation Function such as CanInteract, CanOpenDoor or CanTakeDamage."
       }
     },
     {
@@ -1072,6 +1156,18 @@ window.UE5_COURSE_DATA = {
         "mental": "Think about two questions: 'whose responsibility is this?' and 'how long should it live?'. Those questions usually narrow down the correct framework Class more effectively than memorising node names.",
         "example": "Player health might live on the Character or a health Component. Match rules belong in GameMode. A selected character or session setting that must survive a level transition could live in GameInstance.",
         "use": "Use the Gameplay Framework when the problem relates to player bodies, controllers, game rules, global match state or data that must survive level loading."
+      },
+      "projectTask": {
+        "name": "Put the Game in the Right Classes",
+        "mission": "Decide where the project's core responsibilities live.",
+        "build": "Review player state, game rules and cross-level/session data. Move at least one responsibility out of an unsuitable Blueprint.",
+        "proof": [
+          "Character/Pawn responsibility identified",
+          "GameMode rule identified",
+          "GameInstance only used where lifetime fits",
+          "One ownership decision documented"
+        ],
+        "polish": "Draw a simple class/responsibility diagram for the project."
       }
     },
     {
@@ -1198,6 +1294,18 @@ window.UE5_COURSE_DATA = {
         "mental": "Think of a reference as having someone's phone number. Casting is asking 'is the person at this number actually the type of person I expect?' It does not magically discover the number for you.",
         "example": "An overlap event gives you Other Actor. You can Cast that reference to your player Character if the trigger only cares about that specific Class. If many unrelated objects should respond to the same interaction message, an Interface may be cleaner.",
         "use": "Use Casting when behaviour genuinely depends on a specific Class. Avoid long chains of Casts to many different Classes for generic interactions."
+      },
+      "projectTask": {
+        "name": "Talk to the Player",
+        "mission": "Make one world object safely communicate with the player.",
+        "build": "Obtain a real player reference from an event/query, prove what object it points to and use a Cast only where a specific player Class is genuinely required.",
+        "proof": [
+          "Reference source is clear",
+          "Successful path tested",
+          "Failed path understood",
+          "No Cast used as an object-finder"
+        ],
+        "polish": "Remove one unnecessary repeated Cast by storing a useful reference or using a more generic method."
       }
     },
     {
@@ -1325,6 +1433,18 @@ window.UE5_COURSE_DATA = {
         "mental": "An Interface is like a common language: different objects can all understand 'Interact'. A Dispatcher is like an announcement system: the broadcaster announces 'AlarmTriggered' and any registered listener can react.",
         "example": "Doors, pickups and terminals could all implement an Interact Interface differently. An alarm Blueprint could broadcast AlarmTriggered, allowing lights, doors and enemies to respond independently.",
         "use": "Use Interfaces when different Classes need the same callable behaviour. Use Dispatchers when one event may need to notify one or more listeners without directly controlling them."
+      },
+      "projectTask": {
+        "name": "Universal Interact",
+        "mission": "Create the interaction language for the whole game.",
+        "build": "Create an Interact Blueprint Interface and implement it differently in at least two unrelated Actor Classes such as a door, pickup, terminal or switch.",
+        "proof": [
+          "One Blueprint Interface",
+          "Two different implementations",
+          "Player caller does not need separate Casts",
+          "Each target owns its own reaction"
+        ],
+        "polish": "Add an Event Dispatcher so one system event can notify multiple independent listeners."
       }
     },
     {
@@ -1453,6 +1573,18 @@ window.UE5_COURSE_DATA = {
         "mental": "Separate 'can these shapes detect each other?' from 'what should the game do when they do?'. Collision solves the first problem; Blueprint logic solves the second.",
         "example": "A checkpoint may use a large Box Collision Component set to overlap the player. The overlap event then activates the checkpoint while the mesh itself can use different collision settings.",
         "use": "Use collision volumes for spatial detection and physical responses. Debug collision configuration before building complicated logic on top of it."
+      },
+      "projectTask": {
+        "name": "Pickups & Trigger Zones",
+        "mission": "Make spaces and objects detect the player reliably.",
+        "build": "Add at least one pickup/trigger volume to the main game and use Begin/End Overlap or one-shot detection appropriately.",
+        "proof": [
+          "Collision settings intentionally configured",
+          "Correct Actor triggers it",
+          "Debugged Begin/End behaviour",
+          "Trigger has a gameplay purpose"
+        ],
+        "polish": "Create a one-shot checkpoint or narrative trigger that cannot accidentally repeat."
       }
     },
     {
@@ -1581,6 +1713,18 @@ window.UE5_COURSE_DATA = {
         "mental": "Think of a trace as an invisible laser used for asking a question. The trace itself does not automatically interact; it only reports what it found.",
         "example": "A first-person interaction trace might begin at the camera and end at CameraLocation + ForwardVector × 300. If the Hit Actor supports interaction, the player can then send an Interact message.",
         "use": "Use traces for directional detection, hitscan weapons, line-of-sight checks and targeted interaction. Draw debug traces while developing so range and direction are visible."
+      },
+      "projectTask": {
+        "name": "Look-to-Interact Detection",
+        "mission": "Let the player detect what they are looking at.",
+        "build": "Trace from the player camera to a sensible interaction distance, inspect the Hit Result and identify valid interactable targets.",
+        "proof": [
+          "Trace Start and End are correct",
+          "Debug line used during testing",
+          "Maximum range enforced",
+          "Hit Actor is identified"
+        ],
+        "polish": "Show temporary feedback only while a valid interactable is being targeted."
       }
     },
     {
@@ -1709,6 +1853,18 @@ window.UE5_COURSE_DATA = {
         "mental": "Think of a Timeline as a tiny animation graph for numbers. A value of 0 can mean 'fully closed' and 1 can mean 'fully open', with every value between representing part of the journey.",
         "example": "A Timeline Float track moving from 0 to 1 can drive a Lerp between ClosedLocation and OpenLocation. Playing opens the door; reversing closes it.",
         "use": "Use Timelines for short authored changes such as doors, lifts, fades, lights and moving platforms when you need smooth predictable motion."
+      },
+      "projectTask": {
+        "name": "Reusable Door / Barrier",
+        "mission": "Turn the interaction system into visible world progression.",
+        "build": "Create a smooth door, lift, shutter or barrier using a Timeline and Lerp. Combine it with the access rules and interaction system already built.",
+        "proof": [
+          "Smooth reversible motion",
+          "Reusable Blueprint Class",
+          "Works with Interact system",
+          "Locked/blocked state can prevent movement"
+        ],
+        "polish": "Expose distance/angle and duration so one Class can produce several different barriers."
       }
     },
     {
@@ -1836,6 +1992,18 @@ window.UE5_COURSE_DATA = {
         "mental": "Think of the HUD as a dashboard in a car. The speedometer displays speed, but it does not create the car's speed. The gameplay system owns the value; the UI communicates it.",
         "example": "The Character owns Health. The HUD reads that value and converts it into a progress bar percentage. When damage changes Health, the Widget updates what the player sees.",
         "use": "Use Widgets for HUDs, menus, prompts, inventories and feedback. Keep core rules in gameplay Blueprints or systems so the UI remains replaceable."
+      },
+      "projectTask": {
+        "name": "Player HUD & Objective",
+        "mission": "Tell the player what matters without exposing debug text.",
+        "build": "Create a HUD showing at least player state and the current objective/interact prompt. Gameplay owns the values; the Widget displays them.",
+        "proof": [
+          "HUD appears reliably",
+          "At least 2 gameplay values displayed",
+          "UI updates when state changes",
+          "Core game state does not live only in Widget"
+        ],
+        "polish": "Use hierarchy, spacing and animation to make changing information readable at gameplay speed."
       }
     },
     {
@@ -1959,6 +2127,18 @@ window.UE5_COURSE_DATA = {
         "mental": "Think of level variables as notes on a whiteboard, GameInstance as notes you carry between rooms, and SaveGame as writing important information into a notebook you can reopen tomorrow.",
         "example": "CurrentHealth may reset when a level restarts, SelectedCharacter might persist in GameInstance while moving between maps, and HighestUnlockedLevel could be stored in SaveGame.",
         "use": "Use SaveGame for settings, progression, checkpoints and other information that should still exist after restarting the application."
+      },
+      "projectTask": {
+        "name": "Checkpoint & Continue",
+        "mission": "Let progress survive beyond one run.",
+        "build": "Save one meaningful progression value and restore it safely. Use the system to support a checkpoint, unlocked sector or equivalent project state.",
+        "proof": [
+          "SaveGame Class exists",
+          "Save slot is written",
+          "Missing save is handled",
+          "Loaded state visibly changes game progress"
+        ],
+        "polish": "Save the latest activated checkpoint and one additional progression value."
       }
     },
     {
@@ -2105,6 +2285,18 @@ window.UE5_COURSE_DATA = {
         "mental": "Choose the structure based on the shape of the information. A list suggests an Array, a named finite state suggests an Enum, and a collection of records sharing the same fields suggests a Struct or Data Table.",
         "example": "An Item Struct could contain Name, Icon, Value and ItemType. An inventory could be an Array of those Structs. A Data Table could hold hundreds of item definitions without creating hundreds of separate variables.",
         "use": "Use data structures when the same kind of information repeats. Avoid solving collection problems with Item1, Item2, Item3-style variables."
+      },
+      "projectTask": {
+        "name": "Data-Driven Content",
+        "mission": "Make the game easier to expand without more duplicated Blueprints.",
+        "build": "Convert one repeating content type into structured data: objectives, pickups, key items, enemy definitions or messages.",
+        "proof": [
+          "Struct or other suitable structure",
+          "Collection holds multiple entries",
+          "No Item1/Item2/Item3 pattern",
+          "Blueprint behaviour consumes the data"
+        ],
+        "polish": "Move the definitions into a Data Table where that genuinely makes authoring easier."
       }
     },
     {
@@ -2228,6 +2420,18 @@ window.UE5_COURSE_DATA = {
         "mental": "Think of the Blackboard as what the AI currently knows, the Behaviour Tree as how it decides what to do with that knowledge, and NavMesh as where it is physically allowed to go.",
         "example": "An enemy Blackboard could store TargetActor and LastKnownLocation. The Behaviour Tree could patrol when no target exists, investigate a location when suspicious and chase when TargetActor is valid.",
         "use": "Use these systems for enemies or NPCs that need navigation and state-driven behaviour rather than one long scripted sequence."
+      },
+      "projectTask": {
+        "name": "The Threat",
+        "mission": "Add an AI presence that changes player behaviour.",
+        "build": "Create a threat that can navigate and has at least Patrol and Chase states, with a clear trigger for changing behaviour.",
+        "proof": [
+          "NavMesh works",
+          "AI can patrol",
+          "AI can enter chase state",
+          "Blackboard/Behaviour Tree state is understandable"
+        ],
+        "polish": "Add Investigate or Return-to-Patrol so losing the player produces a believable transition."
       }
     },
     {
@@ -2355,6 +2559,18 @@ window.UE5_COURSE_DATA = {
         "mental": "Think of the EventGraph as collecting facts such as Speed or IsInAir. The AnimGraph then asks 'given those facts, what pose should the character be in?'",
         "example": "Speed can drive an Idle/Walk/Run Blend Space, while IsInAir can control the transition from locomotion into a jump state.",
         "use": "Use Animation Blueprints for character locomotion, state transitions, blends and animation-driven presentation while keeping core gameplay logic in the Character or other gameplay systems."
+      },
+      "projectTask": {
+        "name": "Threat Readability",
+        "mission": "Make AI state visible through animation.",
+        "build": "Use an Animation Blueprint/State Machine so the threat visibly communicates idle/patrol, movement and at least one additional state.",
+        "proof": [
+          "Animation Blueprint drives pose",
+          "Movement data feeds animation",
+          "State transition works",
+          "No gameplay rule hidden only inside AnimGraph"
+        ],
+        "polish": "Improve one transition or Blend Space so state changes read more smoothly."
       }
     },
     {
@@ -2482,6 +2698,18 @@ window.UE5_COURSE_DATA = {
         "mental": "Ask 'whose state is this?' If it is the player's health or death state, the player system should normally own how that state changes. Other objects can request the behaviour without owning its implementation.",
         "example": "A hazard can tell the player to Die. The player then handles animation, UI, respawn or other death behaviour. The hazard does not need to know how any of that works.",
         "use": "Use responsibility thinking whenever two Blueprints communicate. It is especially important when deciding what belongs in reusable Classes, GameMode or the Level Blueprint."
+      },
+      "projectTask": {
+        "name": "Ownership Pass",
+        "mission": "Remove logic that lives in the wrong Blueprint.",
+        "build": "Audit one mechanic involving multiple Actors. Refactor so each Blueprint owns its internal state and other systems request behaviour rather than directly controlling internals.",
+        "proof": [
+          "One ownership problem identified",
+          "Duplication reduced",
+          "Behaviour still works",
+          "Reason for new ownership documented"
+        ],
+        "polish": "Remove one piece of reusable game logic from the Level Blueprint."
       }
     },
     {
@@ -2610,6 +2838,18 @@ window.UE5_COURSE_DATA = {
         "mental": "The top level of a good Blueprint should read almost like a plan: Check Input → Validate Target → Apply Damage → Update Feedback. Detailed implementation can then live inside clearly named Functions.",
         "example": "Instead of fifty nodes under InputAction Interact, the top graph might call FindInteractable, CanInteract and PerformInteraction. Each name explains intent before you inspect the details.",
         "use": "Use abstraction when it reduces cognitive load, not simply to make the graph physically smaller. Comment major logic blocks and make exposed variables understandable to designers."
+      },
+      "projectTask": {
+        "name": "Final Blueprint Code Review",
+        "mission": "Prepare the project for another developer to open.",
+        "build": "Review the main Blueprints for names, Functions, comments, Categories, Tooltips, duplication and graph readability. Then produce a final playable build.",
+        "proof": [
+          "At least 5 justified refactors",
+          "Major graphs readable when zoomed out",
+          "Exposed variables documented",
+          "Game plays from beginning to conclusion"
+        ],
+        "polish": "Record a short developer walkthrough explaining one system and why it is organised that way."
       }
     }
   ],
