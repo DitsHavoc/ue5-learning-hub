@@ -1,117 +1,110 @@
-# UE5 Learning Hub v3.15.0 — Learning, Projects & Revision
+# UE5 Learning Hub v3.16.0 — Learning First, Projects When Needed
 
-V3.15 is the learning-first workspace release: multi-project/group project logbooks, scored revision quizzes, feature-request conversations, readability improvements and the existing security/co-teaching foundation.
+V3.16 keeps the Hub deliberately focused: **UE5 learning is the main product**. Projects sits underneath it as a lightweight development logbook and feedback workspace for assignments, game jams, personal work and group projects. It is not intended to replace the college LMS or formal assessment submission system.
 
-## Co-teaching
+## V3.16 project model
 
-A class has one permanent **owner** plus zero or more **co-teachers**.
+### Teacher project templates
+Teachers create a simple project template for a class containing:
+- title and brief
+- individual / group / student-choice working mode
+- optional unit/assessment label
+- simple milestones with a title and short description
+- Draft or Published visibility
 
-- Owner and co-teachers can view the shared class, students, progress, evidence and private lesson comments.
-- Owner and co-teachers can rename/archive the class, manage the join code, and manage students.
-- Only the owner can add/remove other co-teachers.
-- A co-teacher can leave the teaching team.
-- Only the owner can permanently delete the class.
-- Existing classes are automatically backfilled with their existing teacher as owner.
+Published templates appear to class members under **Available Projects**. Students deliberately choose **Start Individual** or **Start Group** when the template allows it. A group starter becomes Project Lead and receives a join code for teammates.
 
-## Privacy model
+Templates do not grade students, set formal deadlines or collect final assessment submissions.
 
-Teacher access is **class scoped**. A Teacher role no longer grants site-wide access to every student's work.
+### Student projects
+Students can also create their own solo or group projects. A project contains:
+- team roster and optional role labels
+- milestones
+- chronological development log
+- multiple screenshots per entry, each with its own caption
+- contextual teacher/team comments beneath the exact log entry
+- **My Contributions**, showing only the signed-in student's authored entries and screenshots
 
-A teacher can read a student profile/progress/project/evidence/comment only when the student belongs to a class that teacher owns or co-teaches.
+Development-log prompts are optional but encouraged:
+1. What I did
+2. Why I did it
+3. Problems / changes
+4. Next steps
 
-## Security hardening
+Students may edit their own old entries and delete them after a confirmation warning. Original creation time remains visible and edited entries are marked as edited.
 
-- Authenticated users have no UPDATE privilege on `profiles.role`; students cannot promote themselves to Teacher through a crafted API call.
-- Class ownership is immutable through normal class updates.
-- Class membership only accepts Student profiles.
-- Submitted/Approved evidence is immutable to students at both database-record and Storage-object layers.
-- Needs Changes unlocks the student's evidence again.
-- Teachers may review evidence but cannot rewrite the student's reflection/link/content fields.
-- Student evidence upload metadata is capped to the same MIME types / 10 MB limits as Storage.
-- Maximum six uploaded files per submission is also enforced in the database.
-- Evidence timestamps and reviewer identity are server-controlled.
-- Storage remains private and teacher signed-file access is class scoped.
+### Group accountability
+Shared project does **not** mean shared authorship.
+- every log entry has an immutable author and creation time
+- teammates cannot edit another student's log entries
+- screenshots retain their uploader
+- normal teammates can mark milestones complete/incomplete but cannot rewrite milestone structure
+- Project Lead and assigned teachers can create/edit milestone structure
+- teammates and assigned teachers can reply to individual development-log entries
+- project discussion is private to the project team and assigned class teachers
 
-## Live validation performed
+For class-linked projects, join codes only accept students who belong to that class. A student cannot join a second project copy from the same teacher template.
 
-- Existing four classes preserved and owner assignments backfilled.
-- Unassigned teacher sees zero unrelated student profiles.
-- Temporary co-teacher test saw exactly the assigned class and not another class.
-- Co-teacher successfully edited a shared class but could not delete it.
-- Authenticated role can update `profiles.display_name` but cannot update `profiles.role`.
-- Attempted forged teacher feedback on student evidence was stripped server-side.
-- Supabase security advisor reports no RLS/function warning from this hardening pass.
+### Complete / reopen
+The Project Lead can mark a project **Complete**. Completed projects become read-only at the database-policy layer. The Project Lead can later **Reopen** the project and editing resumes.
 
-The remaining Supabase security warning is the project-level **Leaked Password Protection Disabled** Auth setting.
+## Revision quizzes
+Revision is now a proper scored quiz builder:
+- choose **10 / 20 / 30** questions
+- Random Mixed quiz from the whole course
+- Focused quiz from one lesson, an entire learning path or any combination of lessons
+- single-answer and multi-select questions supported
+- score at the end
+- answer review with correct answer, feedback and link back to the lesson
+- recent scores stored on the current browser
 
-## Migrations
+If a focused topic contains fewer questions than the chosen quiz length, the Hub uses all available questions and tells the student.
 
-Already applied to the current live Supabase project:
+## Learning content and visuals retained
+V3.16 retains the existing gold-standard lesson flow, practical exercises, current UE screenshots, curated Epic UE5.8 documentation visuals, click-to-enlarge lightbox, selected official Epic motion-media embeds, glossary, homework, challenges, evidence workflow and optional Signal Lost practice spine.
 
-- `20260825_11_co_teaching_scoped_access_and_evidence_hardening.sql`
-- `20260825_12_add_remaining_foreign_key_indexes.sql`
-- `20260825_13_tighten_class_and_evidence_integrity.sql`
+The hidden Konami Code Easter egg remains: **Up Up Down Down Left Right Left Right B A**.
 
-Do not rerun them on the existing live project.
+## Readability
+The final readability floor now prioritises classroom reading over compact dashboard styling:
+- instructional paragraphs at 16 px with increased line height
+- larger form labels and controls
+- larger navigation text and metadata
+- fewer tiny all-caps labels
+- mobile controls remain at least 16 px where appropriate
+
+## Feature Requests
+Teachers can reply directly to feature requests. Replies appear beneath the request and notify the student who submitted it.
+
+## Database changes
+The current live Supabase project already has the V3.16 migration applied. Do **not** rerun production migrations there.
+
+For another installation, the relevant incremental project migrations are:
+- `20260825_14_projects_group_logbooks_request_replies.sql`
+- `20260825_15_fix_project_member_updated_at.sql`
+- `20260825_16_grant_project_rls_helpers.sql`
+- `20260825_17_allow_project_owner_returning.sql`
+- `20260825_18_wrap_project_rpcs_with_invokers.sql`
+- `20260825_19_optimize_project_profile_rls_and_indexes.sql`
+- `20260825_20_project_templates_structured_logs_completion.sql`
+
+See `DATABASE-MIGRATIONS.md` and `SECURITY-HARDENING.md` for details.
+
+## Validation completed for V3.16
+A rollback-only authenticated-role database test verified:
+- teacher can create/publish a class template
+- student can start a published group template
+- template milestones copy into the student's project
+- a teammate can join by code
+- teammate can mark milestone complete/incomplete
+- teammate cannot rewrite milestone structure
+- teammate cannot edit another student's authored log
+- teammate can add their own log and reply to another entry
+- Project Lead can complete and reopen the project
+- Complete blocks project mutation; Reopen restores it
+- assigned teacher can edit milestone structure and comment
+- a student outside the linked class cannot use the group join code
+
+Supabase's security advisor reports no new V3.16 RLS/function warning. The remaining project-level warning is **Leaked Password Protection Disabled** in Auth settings.
 
 Microsoft SSO remains optional and disabled.
-
-
-## V3.15 — Visual Accuracy Pass
-
-- Integrated five current classroom UE screenshots:
-  - Editor
-  - Events / execution
-  - Branches
-  - Functions
-  - Data Table
-- Current classroom captures appear before concept diagrams.
-- Old UE5.0 book screenshots were removed as primary visuals where a current owned screenshot is now available.
-- Every lesson now includes one or more **Official Unreal Engine 5.8 reference** links.
-- SaveGame uses Epic's current Save/Load documentation as its accuracy reference; no forced local screenshot is required.
-- Selected official Epic documentation images are integrated as teaching references, with source links and the site disclaimer; classroom-owned screenshots remain preferred where available.
-- Existing concept diagrams remain clearly labelled as concept diagrams, not exact Unreal UI.
-
-The visual layer itself needs no database migration; Projects and request replies require migrations 14–17.
-
-
-## V3.15 visual flow pass
-- moved key lesson images much higher in the Learn section so they sit near the explanation text
-- added secondary close-up screenshots for Editor, Events, Branches, Functions and Data Tables
-- preserved official UE5.8 links and concept diagrams underneath the real screenshots
-
-
-## V3.15 practical exercise pass
-Every lesson now has three original practical checkpoints embedded in the Learn flow: TRY IT NOW, TEST IT IN PLAY, and MAKE IT YOURS. These emulate the supplied book's explain/build/test rhythm without copying its exercises. The existing full Guided Build remains as the consolidation walkthrough.
-
-
-## V3.15 — Epic UE5.8 visual integration + lightbox
-
-- Curated current screenshots from Epic's official Unreal Engine 5.8 documentation are placed beside the text they explain.
-- Existing current classroom screenshots remain the primary examples where available.
-- Generated concept diagrams remain, but are separated and labelled as explanatory diagrams rather than Unreal UI.
-- All lesson imagery is clickable/tappable and opens in a large lightbox. Escape, close button and backdrop click close the viewer.
-- Every Epic documentation image carries a source link.
-- A global Epic Fan Content Policy disclaimer is present in the footer.
-- Remote Epic images fail gracefully to a source link if Epic changes an image URL.
-- Cache-busting script versions were updated to v3.15.0 to reduce stale Render/browser deployments.
-
-
-## V3.15 motion media pass
-- adds 12 selected official Epic UE5.8 video clips across 10 lessons
-- videos are click-to-load to protect performance and bandwidth
-- every clip retains a direct link to the source Epic lesson
-- existing animated concept SVGs remain in place where they explain a node/system better than a long video
-- no database migration required
-
-
-## V3.15 learning-first workspace overhaul
-- Learning paths and revision now sit above project administration in the navigation/dashboard.
-- Projects is a new multi-project cloud workspace for solo and group assignment work.
-- Group projects use join codes; development-log authorship is immutable and remains individual.
-- Project milestones, screenshots/PDFs, team comments, personal contribution views and copyable assessment summaries are included.
-- Revision is now a scored multiple-choice quiz system with random and topic modes.
-- Feature requests support teacher replies and student notifications.
-- Readability pass increases small text, labels, buttons, captions and card copy throughout the UI.
-- Hidden Konami Code Easter egg: Up Up Down Down Left Right Left Right B A.
-- Requires migrations 14–17 on an existing database.

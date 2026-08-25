@@ -335,7 +335,93 @@ const api = {
     if(error)throw error;return true;
   },
 
-  // v3.15 multi-project / group-project workspace
+  // v3.16 project templates + lightweight development logbooks
+  async getTeachingClasses(){
+    if(!client||!this.user||this.profile?.role!=='teacher')return [];
+    const {data,error}=await client.from('classes').select('id,name,academic_year,archived').eq('archived',false).order('name');
+    if(error)throw error;return data||[];
+  },
+  async getProjectTemplates(){
+    if(!client||!this.user)return [];
+    const {data:templates,error}=await client.from('project_templates').select('*').order('updated_at',{ascending:false});
+    if(error)throw error;
+    const rows=templates||[];if(!rows.length)return [];
+    const ids=rows.map(x=>x.id),classIds=[...new Set(rows.map(x=>x.class_id).filter(Boolean))];
+    const [{data:milestones,error:mErr},{data:classes,error:cErr}]=await Promise.all([
+      client.from('project_template_milestones').select('*').in('template_id',ids).order('sort_order').order('created_at'),
+      classIds.length?client.from('classes').select('id,name,academic_year').in('id',classIds):Promise.resolve({data:[],error:null})
+    ]);
+    if(mErr)throw mErr;if(cErr)throw cErr;
+    const classMap=Object.fromEntries((classes||[]).map(x=>[x.id,x]));
+    return rows.map(t=>({...t,class:classMap[t.class_id]||null,milestones:(milestones||[]).filter(m=>m.template_id===t.id)}));
+  },
+  async getProjectTemplate(templateId){
+    if(!client||!this.user)throw new Error('Sign in first.');
+    const {data:template,error}=await client.from('project_templates').select('*').eq('id',templateId).single();
+    if(error)throw error;
+    const [{data:milestones,error:mErr},{data:classInfo,error:cErr}]=await Promise.all([
+      client.from('project_template_milestones').select('*').eq('template_id',templateId).order('sort_order').order('created_at'),
+      client.from('classes').select('id,name,academic_year').eq('id',template.class_id).maybeSingle()
+    ]);
+    if(mErr)throw mErr;if(cErr)throw cErr;
+    return {template:{...template,class:classInfo||null},milestones:milestones||[]};
+  },
+  async createProjectTemplate(values){
+    if(!client||!this.user||this.profile?.role!=='teacher')throw new Error('Teacher access required.');
+    const row={
+      class_id:values.classId||null,
+      created_by:this.user.id,
+      title:String(values.title||'').trim().slice(0,160),
+      project_kind:String(values.projectKind||'assignment'),
+      assessment_unit:String(values.assessmentUnit||'').trim().slice(0,160),
+      brief:String(values.brief||'').trim().slice(0,6000),
+      work_mode:['individual','group','either'].includes(values.workMode)?values.workMode:'either',
+      status:'draft'
+    };
+    if(!row.class_id)throw new Error('Choose the class this project belongs to.');
+    if(!row.title)throw new Error('Give the project template a title.');
+    const {data,error}=await client.from('project_templates').insert(row).select().single();
+    if(error)throw error;return data;
+  },
+  async updateProjectTemplate(templateId,values){
+    if(!client||!this.user||this.profile?.role!=='teacher')throw new Error('Teacher access required.');
+    const changes={updated_at:new Date().toISOString()};
+    if(values.title!==undefined)changes.title=String(values.title||'').trim().slice(0,160);
+    if(values.brief!==undefined)changes.brief=String(values.brief||'').trim().slice(0,6000);
+    if(values.assessment_unit!==undefined)changes.assessment_unit=String(values.assessment_unit||'').trim().slice(0,160);
+    if(values.project_kind!==undefined)changes.project_kind=String(values.project_kind||'assignment');
+    if(values.work_mode!==undefined&&['individual','group','either'].includes(values.work_mode))changes.work_mode=values.work_mode;
+    if(values.status!==undefined&&['draft','published','archived'].includes(values.status))changes.status=values.status;
+    const {data,error}=await client.from('project_templates').update(changes).eq('id',templateId).select().single();
+    if(error)throw error;return data;
+  },
+  async deleteProjectTemplate(templateId){
+    if(!client||!this.user||this.profile?.role!=='teacher')throw new Error('Teacher access required.');
+    const {error}=await client.from('project_templates').delete().eq('id',templateId);
+    if(error)throw error;return true;
+  },
+  async createTemplateMilestone(templateId,{title,description=''}){
+    if(!client||!this.user||this.profile?.role!=='teacher')throw new Error('Teacher access required.');
+    const {data,error}=await client.from('project_template_milestones').insert({template_id:templateId,title:String(title||'').trim().slice(0,160),description:String(description||'').trim().slice(0,2000),created_by:this.user.id}).select().single();
+    if(error)throw error;return data;
+  },
+  async updateTemplateMilestone(milestoneId,{title,description=''}){
+    if(!client||!this.user||this.profile?.role!=='teacher')throw new Error('Teacher access required.');
+    const {data,error}=await client.from('project_template_milestones').update({title:String(title||'').trim().slice(0,160),description:String(description||'').trim().slice(0,2000),updated_at:new Date().toISOString()}).eq('id',milestoneId).select().single();
+    if(error)throw error;return data;
+  },
+  async deleteTemplateMilestone(milestoneId){
+    if(!client||!this.user||this.profile?.role!=='teacher')throw new Error('Teacher access required.');
+    const {error}=await client.from('project_template_milestones').delete().eq('id',milestoneId);
+    if(error)throw error;return true;
+  },
+  async startProjectFromTemplate(templateId,projectType){
+    if(!client||!this.user)throw new Error('Sign in first.');
+    const {data,error}=await client.rpc('start_project_from_template',{p_template_id:templateId,p_project_type:projectType});
+    if(error)throw error;const row=Array.isArray(data)?data[0]:data;if(!row)throw new Error('Could not start this project.');return row;
+  },
+
+  // v3.16 multi-project / group-project workspace
   async getProjects(){
     if(!client||!this.user)return [];
     const {data:projects,error}=await client.from('projects').select('*').order('updated_at',{ascending:false});
@@ -398,6 +484,7 @@ const api = {
   },
   async createProject(values){
     if(!client||!this.user)throw new Error('Sign in to create a project.');
+    if(this.profile?.role==='teacher')throw new Error('Teachers create project templates; student accounts create working projects.');
     const row={
       owner_id:this.user.id,
       title:String(values.title||'').trim().slice(0,120),
@@ -406,7 +493,6 @@ const api = {
       description:String(values.description||'').trim().slice(0,4000),
       class_id:values.classId||null,
       assessment_unit:String(values.assessmentUnit||'').trim().slice(0,160),
-      due_date:values.dueDate||null,
       status:'active'
     };
     if(!row.title)throw new Error('Give the project a title.');
@@ -423,6 +509,12 @@ const api = {
     if(values.due_date!==undefined)changes.due_date=values.due_date||null;
     if(values.class_id!==undefined)changes.class_id=values.class_id||null;
     const {data,error}=await client.from('projects').update(changes).eq('id',projectId).select().single();
+    if(error)throw error;return data;
+  },
+  async setProjectStatus(projectId,status){
+    if(!client||!this.user)throw new Error('Sign in first.');
+    if(!['active','complete'].includes(status))throw new Error('Invalid project status.');
+    const {data,error}=await client.from('projects').update({status,updated_at:new Date().toISOString()}).eq('id',projectId).select().single();
     if(error)throw error;return data;
   },
   async deleteProject(projectId){
@@ -457,14 +549,20 @@ const api = {
     const {error}=await client.from('project_members').delete().eq('project_id',projectId).eq('user_id',userId);
     if(error)throw error;return true;
   },
-  async createProjectMilestone(projectId,{title,description='',dueDate=null}){
+  async createProjectMilestone(projectId,{title,description=''}){
     if(!client||!this.user)throw new Error('Sign in first.');
-    const {data,error}=await client.from('project_milestones').insert({project_id:projectId,title:String(title||'').trim().slice(0,160),description:String(description||'').trim().slice(0,2000),due_date:dueDate||null,created_by:this.user.id}).select().single();
+    const {data,error}=await client.from('project_milestones').insert({project_id:projectId,title:String(title||'').trim().slice(0,160),description:String(description||'').trim().slice(0,2000),created_by:this.user.id}).select().single();
+    if(error)throw error;return data;
+  },
+  async updateProjectMilestone(milestoneId,{title,description=''}){
+    if(!client||!this.user)throw new Error('Sign in first.');
+    const {data,error}=await client.from('project_milestones').update({title:String(title||'').trim().slice(0,160),description:String(description||'').trim().slice(0,2000),updated_at:new Date().toISOString()}).eq('id',milestoneId).select().single();
     if(error)throw error;return data;
   },
   async setProjectMilestoneStatus(milestoneId,status){
     if(!client||!this.user)throw new Error('Sign in first.');
-    const {data,error}=await client.from('project_milestones').update({status,updated_at:new Date().toISOString()}).eq('id',milestoneId).select().single();
+    const clean=status==='complete'?'complete':'not_started';
+    const {data,error}=await client.from('project_milestones').update({status:clean,updated_at:new Date().toISOString()}).eq('id',milestoneId).select().single();
     if(error)throw error;return data;
   },
   async deleteProjectMilestone(milestoneId){
@@ -472,9 +570,16 @@ const api = {
     const {error}=await client.from('project_milestones').delete().eq('id',milestoneId);
     if(error)throw error;return true;
   },
-  async createProjectUpdate(projectId,{entryType='progress',title='',body,contribution='',milestoneId=null}){
+  async createProjectUpdate(projectId,{title='',whatDid='',why='',problems='',nextSteps='',milestoneId=null}){
     if(!client||!this.user)throw new Error('Sign in first.');
-    const {data,error}=await client.from('project_updates').insert({project_id:projectId,author_id:this.user.id,milestone_id:milestoneId||null,entry_type:entryType,title:String(title||'').trim().slice(0,180),body:String(body||'').trim().slice(0,5000),contribution:String(contribution||'').trim().slice(0,3000)}).select().single();
+    const row={project_id:projectId,author_id:this.user.id,milestone_id:milestoneId||null,entry_type:'progress',title:String(title||'').trim().slice(0,180),body:'',contribution:'',what_did:String(whatDid||'').trim().slice(0,4000),why:String(why||'').trim().slice(0,3000),problems:String(problems||'').trim().slice(0,3000),next_steps:String(nextSteps||'').trim().slice(0,3000)};
+    const {data,error}=await client.from('project_updates').insert(row).select().single();
+    if(error)throw error;return data;
+  },
+  async updateProjectUpdate(updateId,{title='',whatDid='',why='',problems='',nextSteps='',milestoneId=null}){
+    if(!client||!this.user)throw new Error('Sign in first.');
+    const changes={title:String(title||'').trim().slice(0,180),milestone_id:milestoneId||null,what_did:String(whatDid||'').trim().slice(0,4000),why:String(why||'').trim().slice(0,3000),problems:String(problems||'').trim().slice(0,3000),next_steps:String(nextSteps||'').trim().slice(0,3000),updated_at:new Date().toISOString()};
+    const {data,error}=await client.from('project_updates').update(changes).eq('id',updateId).select().single();
     if(error)throw error;return data;
   },
   async deleteProjectUpdate(projectId,updateId){
@@ -485,24 +590,30 @@ const api = {
     const {error}=await client.from('project_updates').delete().eq('id',updateId);
     if(error)throw error;return true;
   },
-  async uploadProjectFiles(projectId,updateId,files){
-    if(!client||!this.user)throw new Error('Sign in to upload project evidence.');
+  async uploadProjectFiles(projectId,updateId,files,captions=[]){
+    if(!client||!this.user)throw new Error('Sign in to upload project screenshots.');
     const list=Array.from(files||[]).filter(f=>f&&f.size);
-    if(list.length>6)throw new Error('Upload up to 6 files per development-log entry.');
-    const allowed=['image/png','image/jpeg','image/webp','application/pdf'];
+    if(list.length>6)throw new Error('Upload up to 6 screenshots per development-log entry.');
+    const allowed=['image/png','image/jpeg','image/webp'];
     const uploaded=[];
-    for(const file of list){
+    for(let i=0;i<list.length;i++){
+      const file=list[i];
       if(file.size>10485760)throw new Error(`${file.name} is larger than 10 MB.`);
-      if(!allowed.includes(file.type))throw new Error('Use PNG, JPG, WebP or PDF project files.');
-      const safe=(file.name||'project-file').replace(/[^a-zA-Z0-9._-]+/g,'-').slice(-100);
-      const path=`${projectId}/${this.user.id}/${updateId}/${Date.now()}-${safe}`;
+      if(!allowed.includes(file.type))throw new Error('Project logs accept PNG, JPG or WebP screenshots only.');
+      const safe=(file.name||'project-image').replace(/[^a-zA-Z0-9._-]+/g,'-').slice(-100);
+      const path=`${projectId}/${this.user.id}/${updateId}/${Date.now()}-${i}-${safe}`;
       const {error:uploadError}=await client.storage.from('project-media').upload(path,file,{upsert:false,contentType:file.type});
       if(uploadError)throw uploadError;
-      const {data:record,error:recordError}=await client.from('project_media').insert({project_id:projectId,update_id:updateId,uploader_id:this.user.id,storage_path:path,original_name:file.name||safe,mime_type:file.type||'',size_bytes:file.size||0}).select().single();
+      const {data:record,error:recordError}=await client.from('project_media').insert({project_id:projectId,update_id:updateId,uploader_id:this.user.id,storage_path:path,original_name:file.name||safe,mime_type:file.type||'',size_bytes:file.size||0,caption:String(captions[i]||'').trim().slice(0,500)}).select().single();
       if(recordError){await client.storage.from('project-media').remove([path]);throw recordError;}
       uploaded.push(record);
     }
     return uploaded;
+  },
+  async updateProjectMediaCaption(mediaId,caption){
+    if(!client||!this.user)throw new Error('Sign in first.');
+    const {data,error}=await client.from('project_media').update({caption:String(caption||'').trim().slice(0,500)}).eq('id',mediaId).select().single();
+    if(error)throw error;return data;
   },
   async openProjectFile(path){
     if(!client||!this.user)throw new Error('Sign in to view project files.');

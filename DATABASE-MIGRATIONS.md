@@ -1,69 +1,68 @@
 # Database migration history
 
-The live Supabase project is updated incrementally. Existing student data is not rebuilt or wiped when new features are added.
+The live Supabase project is upgraded incrementally. Production data is not rebuilt or wiped when features are added.
 
-Current applied migration history:
+## Current production sequence
 
-1. `initial_course_platform_schema`
-2. `restrict_helper_function_execution`
-3. `create_private_teacher_helper`
-4. `use_private_teacher_helper`
-5. `remove_public_teacher_helper`
-6. `optimize_rls_and_foreign_keys`
-7. `add_evidence_classes_notifications`
-8. `lock_submitted_evidence_for_review`
-9. `consolidate_v33_rls_policies`
+The project currently contains these migration generations:
 
-## V3.3 feature migrations included here
+1. initial course platform schema and helper hardening
+2. evidence, classes and notifications
+3. independent email auth, class codes and teacher bootstrap
+4. multi-teacher invites
+5. co-teaching, class-scoped access and evidence hardening
+6. V3.15 multi-project/group logbooks and feature-request replies
+7. V3.16 teacher project templates, structured logs, image captions and completion locking
+
+The package's `migrations/` directory contains the incremental SQL used after the initial schema.
+
+## V3.16
+
+File:
+`migrations/20260825_20_project_templates_structured_logs_completion.sql`
+
+Adds:
+- `project_templates`
+- `project_template_milestones`
+- `projects.template_id`
+- structured log fields: `what_did`, `why`, `problems`, `next_steps`
+- screenshot captions on `project_media`
+- screenshot-only project storage MIME policy
+- `start_project_from_template(...)`
+- class-safe group joining
+- one-project-copy-per-template safeguards
+- Project Lead / teacher milestone structure permissions
+- normal teammate milestone completion permission
+- active-project-only log/media/comment mutation
+- Complete → read-only and Project Lead Reopen behaviour
+
+This migration is already applied to the current live Supabase project. Do not rerun it there.
+
+## V3.15 project migrations
+
+- `20260825_14_projects_group_logbooks_request_replies.sql`
+- `20260825_15_fix_project_member_updated_at.sql`
+- `20260825_16_grant_project_rls_helpers.sql`
+- `20260825_17_allow_project_owner_returning.sql`
+- `20260825_18_wrap_project_rpcs_with_invokers.sql`
+- `20260825_19_optimize_project_profile_rls_and_indexes.sql`
+
+These create the shared project/member/log/media/comment model, preserve individual authorship, provide request replies, harden project RPCs and consolidate teammate profile visibility.
+
+## Earlier migrations
 
 - `20260825_01_add_evidence_classes_notifications.sql`
 - `20260825_02_lock_submitted_evidence.sql`
 - `20260825_03_consolidate_v33_rls.sql`
+- `20260825_04_independent_email_auth_class_codes.sql`
+- `20260825_05_harden_class_code_rpc.sql`
+- `20260825_06_allow_anon_class_code_wrapper.sql`
+- `20260825_07_teacher_bootstrap.sql`
+- `20260825_08_fix_class_policy_recursion.sql`
+- `20260825_09_multi_teacher_invites.sql`
+- `20260825_10_harden_multi_teacher_invites.sql`
+- `20260825_11_co_teaching_scoped_access_and_evidence_hardening.sql`
+- `20260825_12_add_remaining_foreign_key_indexes.sql`
+- `20260825_13_tighten_class_and_evidence_integrity.sql`
 
-For future releases, add another numbered migration rather than editing or deleting old production data.
-
-The full `SUPABASE-SCHEMA.sql` remains useful for a brand-new installation. The `migrations/` folder shows the incremental upgrade route for an existing installation.
-
-
-## V3.6 — independent_email_auth_class_codes
-
-File:
-`migrations/20260825_04_independent_email_auth_class_codes.sql`
-
-Adds:
-- `classes.join_code`
-- `classes.join_enabled`
-- unique class-code index
-- `validate_class_join_code(text)` for pre-registration code checks
-- `join_class_by_code(text)` for authenticated self-join
-
-This is additive. Do not wipe or rebuild the production database.
-
-## V3.6.3 — fix_class_policy_recursion
-
-File:
-`migrations/20260825_08_fix_class_policy_recursion.sql`
-
-Fixes the circular RLS dependency between `classes` and `class_members` using private `SECURITY DEFINER` helpers:
-- `private.is_class_member(uuid)`
-- `private.owns_class(uuid)`
-
-Already applied to the current Supabase project.
-
-## V3.7 — multi_teacher_invites
-
-File:
-`migrations/20260825_09_multi_teacher_invites.sql`
-
-Adds `teacher_invites` plus RPCs to generate, validate, claim and revoke single-use teacher invites. Full invite codes are hashed before storage.
-
-Already applied to the current Supabase project.
-
-## V3.7 — harden_multi_teacher_invites
-
-File:
-`migrations/20260825_10_harden_multi_teacher_invites.sql`
-
-Moves privileged teacher-invite logic into the private schema and exposes only SECURITY INVOKER public wrappers.
-
-Already applied to the current Supabase project.
+For a new installation, apply the base schema first and then the incremental migrations in numeric order. For an existing installation, only apply migrations that have not already been recorded in that project's migration history.
