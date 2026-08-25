@@ -178,18 +178,24 @@ function lessonRow(l,index){
     <span class="lesson-xp">+${l.xp} XP</span>
   </a>`;
 }
-function visual(l){
-  const visuals=l.visuals?.length?l.visuals:(l.visual?[l.visual]:[]);
-  if(!visuals.length)return `<div class="callout">This lesson is text-first for now; the main visual is the system you build in Unreal.</div>`;
-  const isReal=v=>v.authenticUI===true||['book','ue5','screenshot','ue5-reference'].includes(v.type);
-  const ordered=[...visuals].sort((a,b)=>Number(isReal(b))-Number(isReal(a)));
-  const hasReal=ordered.some(isReal);
-  return `<div class="visual-auth-note ${hasReal?'has-real':'concept-only'}"><b>${hasReal?'Real Unreal reference first':'Concept visuals only'}</b><span>${hasReal?'Screenshots are shown before explanatory diagrams. Older reference screenshots may differ slightly from the current UE5 interface.':'The diagrams below explain the idea; they are not screenshots of Unreal Engine and should not be used to identify exact buttons or node appearance.'}</span></div>
-  <div class="lesson-visual-grid ${ordered.length===1?'single':''}">${ordered.map((v,i)=>{
-    const real=isReal(v);
-    const label=real?'UNREAL ENGINE REFERENCE':(v.type==='motion'?'CONCEPT MOTION — NOT UE UI':'CONCEPT DIAGRAM — NOT UE UI');
-    return `<figure class="visual ${real?'real-ue-visual':'concept-visual'} ${v.type==='motion'?'motion-visual':''}"><div class="visual-kicker">${label}</div><img src="${esc(v.src)}" alt="${esc(l.title)} ${real?'Unreal Engine reference screenshot':'concept diagram'} ${i+1}" loading="${i?'lazy':'eager'}"><figcaption>${esc(v.caption||'')}${v.versionNote?` <span class="visual-version-note">${esc(v.versionNote)}</span>`:''}</figcaption></figure>`;
-  }).join('')}</div>`;
+function zoomableImage({src,alt,caption='',sourceUrl='',sourceTitle='',kind='local',eager=false}){
+  const source=sourceUrl?`<a class="image-source-link" href="${esc(sourceUrl)}" target="_blank" rel="noopener">Source: ${esc(sourceTitle||'Epic Games — Unreal Engine Documentation')} ↗</a>`:'';
+  return `<figure class="visual-flow-card ${kind}"><button class="visual-zoom" type="button" data-action="open-image" data-src="${esc(src)}" data-caption="${esc(caption)}" data-source="${esc(sourceUrl)}" aria-label="Open image larger"><span class="zoom-hint">⌕ Click to enlarge</span><img class="${kind==='epic'?'epic-doc-image':''}" src="${esc(src)}" alt="${esc(alt)}" loading="${eager?'eager':'lazy'}"></button><figcaption>${esc(caption)}${source}</figcaption><div class="remote-image-fallback"><strong>Official image unavailable.</strong><a href="${esc(sourceUrl)}" target="_blank" rel="noopener">Open the Epic documentation instead ↗</a></div></figure>`;
+}
+function currentVisuals(l){
+  const xs=(l.visuals||[]).filter(v=>v.authenticUI===true||['ue5','screenshot','ue5-reference'].includes(v.type));
+  if(!xs.length)return '';
+  return `<div class="inline-visual-story current"><div class="visual-story-head"><span class="deep-label">REAL UNREAL EXAMPLE</span><h3>What it looks like in a real project</h3></div><div class="visual-story-grid">${xs.map((v,i)=>zoomableImage({src:v.src,alt:`${l.title} real Unreal example ${i+1}`,caption:v.caption||'',kind:'current',eager:i===0})).join('')}</div></div>`;
+}
+function conceptVisuals(l){
+  const xs=(l.visuals||[]).filter(v=>!(v.authenticUI===true||['ue5','screenshot','ue5-reference','book'].includes(v.type)));
+  if(!xs.length)return '';
+  return `<div class="inline-visual-story concepts"><div class="visual-story-head"><span class="deep-label">SIMPLIFY THE IDEA</span><h3>Concept diagrams</h3><p>These explain the thinking. They are not screenshots of Unreal Engine.</p></div><div class="visual-story-grid">${xs.map((v,i)=>zoomableImage({src:v.src,alt:`${l.title} concept diagram ${i+1}`,caption:v.caption||'',kind:'concept'})).join('')}</div></div>`;
+}
+function docVisuals(l,slot){
+  const xs=(l.docVisuals||[]).filter(v=>(v.slot||'concept')===slot);
+  if(!xs.length)return '';
+  return `<div class="inline-visual-story epic"><div class="visual-story-head"><span class="deep-label">OFFICIAL UE5.8 SCREENSHOT${xs.length>1?'S':''}</span><h3>See the real Unreal interface</h3><p>Official Epic documentation imagery placed beside the concept it explains.</p></div><div class="visual-story-grid">${xs.map((v,i)=>zoomableImage({src:v.src,alt:`${l.title} official Unreal Engine screenshot ${i+1}`,caption:v.caption||'',sourceUrl:v.sourceUrl||'',sourceTitle:v.sourceTitle||'',kind:'epic',eager:false})).join('')}</div></div>`;
 }
 
 function officialReferences(l){
@@ -216,11 +222,6 @@ function inlineExercise(l,index){
   return `<section class="inline-exercise ${x.kind}"><div class="inline-exercise-head"><span class="inline-exercise-icon">${icon}</span><div><span class="deep-label">${label}</span><h3>${esc(x.title)}</h3></div></div><p class="inline-exercise-task">${esc(x.task)}</p><ol>${x.steps.map(s=>`<li>${esc(s)}</li>`).join('')}</ol><div class="inline-exercise-check"><b>Success check:</b> ${esc(x.check)}</div></section>`;
 }
 
-function learnMediaBlock(l){
-  const media = `${visual(l)}${officialReferences(l)}`;
-  if(!media.trim())return '';
-  return `<div class="learn-media-block"><div class="learn-media-head"><span class="deep-label">SEE IT IN UNREAL</span><h3>Visual reference near the explanation</h3><p>Look at the real Unreal image first, then use the concept diagram underneath to simplify what the system is doing.</p></div>${media}</div>`;
-}
 function deepDive(l){
   const d=l.deepDive;if(!d)return '';
   return `<div class="deep-dive">
@@ -427,19 +428,25 @@ function lessonPage(id){
 
     <section class="content-card learn-card" id="learn"><span class="eyebrow">02 • Learn</span><h2>Understand the idea first</h2>
       ${l.explanation ? `<div class="explain-lead"><h3>What is it?</h3><p>${esc(l.explanation.what)}</p></div>
+      ${currentVisuals(l)}
+      ${docVisuals(l,'intro')}
       <div class="explain-grid">
         <div class="explain-box why"><span>WHY IT MATTERS</span><p>${esc(l.explanation.why)}</p></div>
         <div class="explain-box mental"><span>HOW TO THINK ABOUT IT</span><p>${esc(l.explanation.mental)}</p></div>
         <div class="explain-box example"><span>GAME / BLUEPRINT EXAMPLE</span><p>${esc(l.explanation.example)}</p></div>
         <div class="explain-box use"><span>WHEN YOU'D USE IT</span><p>${esc(l.explanation.use)}</p></div>
       </div>` : ''}
-      ${learnMediaBlock(l)}
+      ${docVisuals(l,'concept')}
       ${inlineExercise(l,0)}
+      ${docVisuals(l,'practice')}
       ${deepDive(l)}
+      ${conceptVisuals(l)}
+      ${docVisuals(l,'deeper')}
       ${inlineExercise(l,1)}
       <h3 class="concept-title">Key terms</h3>
       <div class="goal-grid">${l.concepts.map(c=>`<div class="concept"><strong>${esc(c[0])}</strong><br>${esc(c[1])}</div>`).join('')}</div>
       ${inlineExercise(l,2)}
+      ${officialReferences(l)}
     </section>
 
     <section class="content-card guided-section" id="guided"><span class="eyebrow">03 • Full guided build</span><h2>Put the pieces together</h2><p>The short exercises above make you stop and prove each idea. This walkthrough now combines the lesson into one complete working build.</p>${guidedBuild(l)}</section>
@@ -1166,10 +1173,30 @@ function setAuthBusy(form,busy,label='Working…'){
   }
 }
 
+
+function openImageLightbox(button){
+  const modal=$('#imageLightbox'),img=$('#lightboxImage'),cap=$('#lightboxCaption'),source=$('#lightboxSource');
+  if(!modal||!img)return;
+  img.src=button.dataset.src||button.querySelector('img')?.src||'';
+  img.alt=button.querySelector('img')?.alt||'Expanded lesson image';
+  cap.textContent=button.dataset.caption||'';
+  const url=button.dataset.source||'';
+  if(url){source.href=url;source.hidden=false}else{source.hidden=true;source.removeAttribute('href')}
+  modal.hidden=false;
+  document.body.classList.add('lightbox-open');
+  $('#closeImageLightbox')?.focus();
+}
+function closeImageLightbox(){
+  const modal=$('#imageLightbox');if(!modal||modal.hidden)return;
+  modal.hidden=true;document.body.classList.remove('lightbox-open');
+  const img=$('#lightboxImage');if(img)img.removeAttribute('src');
+}
 document.addEventListener('click',async e=>{
   const b=e.target.closest('[data-action]');if(!b)return;
   const a=b.dataset.action;
-  if(a==='scroll'){document.getElementById(b.dataset.target)?.scrollIntoView({behavior:'smooth',block:'start'});}
+  if(a==='open-image'){openImageLightbox(b);}
+  else if(a==='close-image'){closeImageLightbox();}
+  else if(a==='scroll'){document.getElementById(b.dataset.target)?.scrollIntoView({behavior:'smooth',block:'start'});}
   else if(a==='complete') await setLessonComplete(b.dataset.lesson);
   else if(a==='quiz'){
     const l=lesson(b.dataset.lesson),qi=+b.dataset.q,oi=+b.dataset.o,q=l.quiz[qi],wrap=b.closest('.quiz');
@@ -1525,7 +1552,7 @@ function setupSearch(){
   document.addEventListener('click',e=>{if(!e.target.closest('.global-search'))panel.hidden=true});
   document.addEventListener('keydown',e=>{
     if(e.key==='/'&&document.activeElement!==input){e.preventDefault();input.focus()}
-    if(e.key==='Escape'){input.blur();panel.hidden=true;closeAuth()}
+    if(e.key==='Escape'){input.blur();panel.hidden=true;closeAuth();closeImageLightbox()}
   });
 }
 
@@ -1538,6 +1565,11 @@ $('#resetProgress').addEventListener('click',()=>{
   }
 });
 $('#authModal').addEventListener('click',e=>{if(e.target===$('#authModal'))closeAuth()});
+document.addEventListener('error',e=>{
+  const img=e.target;
+  if(img?.classList?.contains('epic-doc-image'))img.closest('.visual-flow-card')?.classList.add('image-failed');
+},true);
+$('#imageLightbox')?.addEventListener('click',e=>{if(e.target===$('#imageLightbox'))closeImageLightbox()});
 window.addEventListener('hashchange',route);
 
 BACKEND.onChange(async ()=>{

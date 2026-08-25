@@ -1,4 +1,4 @@
-# Hosting options — UE5 Learning Hub v3.12.0
+# Hosting options — UE5 Learning Hub v3.13.0
 
 The Learning Hub frontend is plain static HTML/CSS/JavaScript. It is not tied to Render.
 

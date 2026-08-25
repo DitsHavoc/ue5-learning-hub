@@ -1,5 +1,5 @@
 window.UE5_COURSE_DATA = {
-  "version": "3.12.0",
+  "version": "3.13.0",
   "buildDate": "25 Aug 2026",
   "paths": [
     {
@@ -368,7 +368,8 @@ window.UE5_COURSE_DATA = {
           ],
           "check": "Your scene and project structure are clearer than when you started."
         }
-      ]
+      ],
+      "docVisuals": []
     },
     {
       "id": "actors-components",
@@ -700,6 +701,32 @@ window.UE5_COURSE_DATA = {
           ],
           "check": "The extra Component has a clear gameplay or presentation purpose."
         }
+      ],
+      "docVisuals": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/6da79f18-bdc3-4588-9d20-e9f624bd1686/components_pane.png",
+          "caption": "The real Components window inside the Blueprint Editor. Components form the hierarchy that builds an Actor from smaller pieces.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/components-window-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "intro",
+          "type": "epic-doc"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/67a54191-1b18-4e82-abb2-4f8ff258ee55/add_new_component_list.png",
+          "caption": "Epic’s Add Component menu. Students should recognise this list when adding cameras, meshes, collision shapes and reusable behaviour.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/components-window-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "practice",
+          "type": "epic-doc"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/b6089ad5-c41f-4916-b269-c07e885d5c27/transform_details.png",
+          "caption": "A Component’s Transform properties in Details. Child Components inherit transform changes from their parent, so hierarchy matters.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/components-window-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "deeper",
+          "type": "epic-doc"
+        }
       ]
     },
     {
@@ -1020,6 +1047,16 @@ window.UE5_COURSE_DATA = {
             "Give the third instance a deliberate variation."
           ],
           "check": "One Class now supports multiple useful variations."
+        }
+      ],
+      "docVisuals": [
+        {
+          "src": "https://dev.epicgames.com/community/api/documentation/image/bd914bd2-52e6-4926-844b-ed56b093a736?height=335&resizing_type=fill&width=1920",
+          "caption": "Epic’s current Blueprint Class reference. A Blueprint Class defines a reusable type; instances placed in the world inherit that class behaviour.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-class-assets-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "intro",
+          "type": "epic-doc"
         }
       ]
     },
@@ -1356,7 +1393,8 @@ window.UE5_COURSE_DATA = {
           ],
           "check": "You can state exactly what causes each execution path to begin."
         }
-      ]
+      ],
+      "docVisuals": []
     },
     {
       "id": "variables",
@@ -1693,6 +1731,40 @@ window.UE5_COURSE_DATA = {
             "Test both instances."
           ],
           "check": "The same Blueprint produces different results without duplicated logic."
+        }
+      ],
+      "docVisuals": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/d891edb3-17af-428d-b3ce-53ed05ffc12d/myblueprintpane.png",
+          "caption": "Variables listed in the real My Blueprint panel. This is where students create, name and organise gameplay state.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-variables-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "intro",
+          "type": "epic-doc"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/1a1c94bb-ee27-48da-a1fa-0e58d6e2aaaf/blueprint_details_variable_callout.png",
+          "caption": "Variable properties in Details. Instance Editable, Tooltip and Category are part of writing Blueprints that other designers can actually use.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-variables-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "concept",
+          "type": "epic-doc"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/b434ff6d-758e-4d90-8948-858f44451ad4/getvariable.png",
+          "caption": "A real Get variable node. Get reads the current stored value without changing it.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-variables-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "practice",
+          "type": "epic-doc"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/7aae90b4-6b4c-41a5-a6de-c04da58f511e/setvariable.png",
+          "caption": "A real Set variable node. Set changes stored state and therefore needs execution flow.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-variables-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "practice",
+          "type": "epic-doc"
         }
       ]
     },
@@ -2092,6 +2164,16 @@ window.UE5_COURSE_DATA = {
           ],
           "check": "You can explain the complete condition in one sentence."
         }
+      ],
+      "docVisuals": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/f71f4d3e-8707-4d18-b398-fca822b66bdd/branch_example.png",
+          "caption": "Epic’s official Branch example: one Boolean condition decides which execution path runs. Compare this with the real project Branch above.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/flow-control-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "deeper",
+          "type": "epic-doc"
+        }
       ]
     },
     {
@@ -2428,6 +2510,40 @@ window.UE5_COURSE_DATA = {
           ],
           "check": "One edit updates every use of the Function."
         }
+      ],
+      "docVisuals": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/cd54af36-d3ee-4cc5-8283-f3ddd2d79f65/name_function_blueprint.png",
+          "caption": "Creating and naming a Function in My Blueprint. Functions are reusable graphs with a single entry point.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/functions-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "concept",
+          "type": "epic-doc"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/285c04b9-ff68-41c8-b4b3-d38c7ff3aeb3/function_details.png",
+          "caption": "Function Details showing parameters and function settings. Inputs and outputs turn a chunk of logic into a clean reusable API.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/functions-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "practice",
+          "type": "epic-doc"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/99df6452-fb8c-4b49-8b87-c43e7dfa8b14/input_output_macro.png",
+          "caption": "A Macro graph begins with input and output tunnel nodes. Unlike a Function, a Macro can expose multiple execution outputs.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/macros-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "deeper",
+          "type": "epic-doc"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/d67b5586-d878-440f-8869-61a16858d389/score_comparison_example_macro.png",
+          "caption": "Epic’s Macro example containing decision logic. Use this to compare what a Macro looks like internally with a Function graph.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/macros-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "deeper",
+          "type": "epic-doc"
+        }
       ]
     },
     {
@@ -2752,6 +2868,24 @@ window.UE5_COURSE_DATA = {
           ],
           "check": "The new location makes the system easier to reason about."
         }
+      ],
+      "docVisuals": [
+        {
+          "src": "https://dev.epicgames.com/community/api/documentation/image/ddca6cd5-4c8a-4299-b615-7c55831f5cd3?height=335&resizing_type=fill&width=1920",
+          "caption": "Epic’s Game Mode / Game State reference. These classes are part of the Gameplay Framework, but they have different responsibilities and lifetimes.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/game-mode-and-game-state-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "intro",
+          "type": "epic-doc"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/82de9ad7-aa25-4e39-9fef-164ab79afe03/world-settings-search.gif",
+          "caption": "The real World Settings panel. GameMode Override is one place students can choose which Game Mode controls a level.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/world-settings-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "practice",
+          "type": "epic-doc"
+        }
       ]
     },
     {
@@ -3071,6 +3205,24 @@ window.UE5_COURSE_DATA = {
             "Keep an Is Valid/failure route where needed."
           ],
           "check": "The graph communicates intent more clearly and avoids needless repeated work."
+        }
+      ],
+      "docVisuals": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/fe5fe968-0fb7-4e45-83fc-b76afca4a15b/3_2.png",
+          "caption": "Adding a Cast node from an Actor reference. A cast does not magically find an object; it checks whether the reference you already have is the requested class.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-communications-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "intro",
+          "type": "epic-doc"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/ba194533-c6f3-4eff-874a-8b5d58d3d57c/3_3.png",
+          "caption": "After a successful Cast, class-specific variables and functions become available through the typed output reference.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-communications-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "practice",
+          "type": "epic-doc"
         }
       ]
     },
@@ -3404,6 +3556,48 @@ window.UE5_COURSE_DATA = {
           ],
           "check": "The sender does not directly control every listener."
         }
+      ],
+      "docVisuals": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/ca176849-4f39-4e50-bd83-e01672bddf2d/interfaceeditor.png",
+          "caption": "The Blueprint Interface editor. An Interface defines function signatures but does not contain the implementation itself.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-interface-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "intro",
+          "type": "epic-doc"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/578f36aa-c423-4505-812b-088750a72e69/floatinput-graph.png",
+          "caption": "An Interface function signature with typed parameters. Different Blueprints can implement this same contract in different ways.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-interface-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "concept",
+          "type": "epic-doc"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/f147b495-ce9c-4e17-9ce6-faa4a06d8d0f/event3.png",
+          "caption": "Calling an Event Dispatcher from Blueprint logic. The sender announces that something happened without needing to know every listener.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-communications-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "practice",
+          "type": "epic-doc"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/7ff64b05-8f8f-46d2-a574-a0646b951fff/event7.png",
+          "caption": "Assigning / binding to a Dispatcher creates the listening side of the relationship.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-communications-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "deeper",
+          "type": "epic-doc"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/7e12bfb2-7b3e-43bc-ad16-28b87c6b522d/interface6.png",
+          "caption": "Calling an Interface Message from a graph. The receiver only responds if it implements that Interface.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-communications-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "deeper",
+          "type": "epic-doc"
+        }
       ]
     },
     {
@@ -3725,6 +3919,32 @@ window.UE5_COURSE_DATA = {
             "Choose what should be ignored."
           ],
           "check": "Its collision setup matches the gameplay intention rather than a default preset by accident."
+        }
+      ],
+      "docVisuals": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/1c7f22c6-c2ca-4d30-9a56-eefeb61f1219/col_setup.png",
+          "caption": "Epic’s collision setup example showing two objects with different Object Types. Collision behaviour comes from both objects’ responses.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/collision-in-unreal-engine---overview",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "intro",
+          "type": "epic-doc"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/10c10808-3c0e-4637-bfee-e931a8b5e308/col_collidenoevent_sphere.png",
+          "caption": "Sphere collision response settings. Block, Overlap and Ignore determine physical interaction and whether events can happen.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/collision-in-unreal-engine---overview",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "concept",
+          "type": "epic-doc"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/3cd0f624-d01c-4ab3-bf8d-9ed784c11252/col_collidenoevent_box.png",
+          "caption": "The other object’s collision responses matter too. Students should always inspect both sides when debugging collision.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/collision-in-unreal-engine---overview",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "practice",
+          "type": "epic-doc"
         }
       ]
     },
@@ -4058,6 +4278,32 @@ window.UE5_COURSE_DATA = {
           ],
           "check": "The trace now supports an actual gameplay decision."
         }
+      ],
+      "docVisuals": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/243f760d-f655-4247-8c43-a8b6ea39de69/guide-how-to-2b-2.png",
+          "caption": "Adding the real Line Trace By Channel node to a Blueprint graph.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/using-a-single-line-trace-raycast-by-channel-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "intro",
+          "type": "epic-doc"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/f64e0a22-515e-41bb-af3a-c93361c5631f/guide-how-to-2b-6.png",
+          "caption": "Building the trace End point from camera location, forward direction and distance. This is the vector maths behind “what am I looking at?”",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/using-a-single-line-trace-raycast-by-channel-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "concept",
+          "type": "epic-doc"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/bd67ce85-1155-4bfd-9da7-6a7f4c9126d8/guide-how-to-2b-11.png",
+          "caption": "The trace running in Play with debug drawing enabled. Debug visualization is one of the fastest ways to diagnose a broken trace.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/using-a-single-line-trace-raycast-by-channel-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "practice",
+          "type": "epic-doc"
+        }
       ]
     },
     {
@@ -4376,6 +4622,32 @@ window.UE5_COURSE_DATA = {
             "Compare the game feel."
           ],
           "check": "You can explain how the Timeline shape affects the player experience."
+        }
+      ],
+      "docVisuals": [
+        {
+          "src": "https://dev.epicgames.com/community/api/documentation/image/6e44536d-af86-4aae-a863-afec370143db?resizing_type=fit",
+          "caption": "The current Timeline Editor. A Timeline turns keyframed data over time into Blueprint output values and events.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/editing-timelines-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "intro",
+          "type": "epic-doc"
+        },
+        {
+          "src": "https://dev.epicgames.com/community/api/documentation/image/02c05d7d-44db-4251-9485-16e852833735?resizing_type=fit",
+          "caption": "A Float Track inside a Timeline. Keys define values at specific times and the curve controls interpolation between them.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/editing-timelines-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "concept",
+          "type": "epic-doc"
+        },
+        {
+          "src": "https://dev.epicgames.com/community/api/documentation/image/9a0884b6-e598-411d-a20e-1044d0d76bc3?resizing_type=fit",
+          "caption": "Timeline track data becomes output pins on the Timeline node, ready to drive a Lerp, transform, material value or other system.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/editing-timelines-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "practice",
+          "type": "epic-doc"
         }
       ]
     },
@@ -4702,6 +4974,32 @@ window.UE5_COURSE_DATA = {
           ],
           "check": "The UI layout behaves sensibly at more than one resolution/aspect."
         }
+      ],
+      "docVisuals": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/bf146350-4103-4b5a-a33d-23b00ca8bc63/01-01_createwidgetblueprint.png",
+          "caption": "Creating a real Widget Blueprint from the Content Browser. UMG UI lives in Widget Blueprint assets.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-ui-designer-quick-start-guide-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "intro",
+          "type": "epic-doc"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/aff4595d-c2d0-4d43-a13c-d4093da8339b/01-16_createhudwidget.png",
+          "caption": "Create Widget in a gameplay Blueprint. This creates the widget object; it does not display it by itself.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-ui-designer-quick-start-guide-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "concept",
+          "type": "epic-doc"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/79856c5e-fe2e-4653-9092-081396b85652/01-18_beginplay.png",
+          "caption": "Add to Viewport completes the basic HUD flow so the created widget becomes visible to the player.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-ui-designer-quick-start-guide-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "practice",
+          "type": "epic-doc"
+        }
       ]
     },
     {
@@ -5022,6 +5320,16 @@ window.UE5_COURSE_DATA = {
             "Reload and apply it safely."
           ],
           "check": "Two related pieces of progress survive a fresh load."
+        }
+      ],
+      "docVisuals": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/8bb47f43-ba2f-49b6-b7b8-8c94f70de19a/createcasting.png",
+          "caption": "A current Epic communication example that includes creating a SaveGame object and casting to a custom SaveGame type. The important idea is that saved data lives in a dedicated object, not magically in the level.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-communications-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "intro",
+          "type": "epic-doc"
         }
       ]
     },
@@ -5375,6 +5683,32 @@ window.UE5_COURSE_DATA = {
           ],
           "check": "New content works through data authoring alone."
         }
+      ],
+      "docVisuals": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/ef3aa90f-09ab-426b-bf26-2dc419447b89/importas.png",
+          "caption": "Epic’s Data Table import choices. Unreal can import structured data as Data Tables and several curve asset types.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/data-driven-gameplay-elements-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "concept",
+          "type": "epic-doc"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/8197a9d4-1212-445f-aedb-19379fb043d9/datarowtype.png",
+          "caption": "Choosing the Data Table Row Type tells Unreal which Struct defines the columns and data types for every row.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/data-driven-gameplay-elements-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "practice",
+          "type": "epic-doc"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/7d4513c2-a311-451d-9d6d-5d85edcef6b3/datatableobject.png",
+          "caption": "The resulting Data Table asset in the Content Browser. Double-clicking it opens the editable table view.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/data-driven-gameplay-elements-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "deeper",
+          "type": "epic-doc"
+        }
       ]
     },
     {
@@ -5703,6 +6037,32 @@ window.UE5_COURSE_DATA = {
           ],
           "check": "The AI switches behaviours predictably and returns to a valid fallback."
         }
+      ],
+      "docVisuals": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/2816f24c-2b8d-45f2-be92-e9ca9b7b4993/behavior-tree-overview-anatomy-blackboard.png",
+          "caption": "A Blackboard assigned to a Behavior Tree. Blackboard Keys hold the facts the AI uses to make decisions.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/behavior-tree-in-unreal-engine---overview",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "intro",
+          "type": "epic-doc"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/60343779-1e7d-4a7b-a608-438ef8d6c451/behavior-tree-order-of-operation.png",
+          "caption": "A real Behavior Tree showing execution order. Unreal evaluates branches left-to-right and top-to-bottom.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/behavior-tree-in-unreal-engine---overview",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "concept",
+          "type": "epic-doc"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/7e563702-fd1b-4778-a4de-8484d55c0086/behavior-tree-overview-anatomy-decorator.png",
+          "caption": "Decorator conditions on a Behavior Tree branch. Decorators decide whether a branch is allowed to execute.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/behavior-tree-in-unreal-engine---overview",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "deeper",
+          "type": "epic-doc"
+        }
       ]
     },
     {
@@ -6028,6 +6388,48 @@ window.UE5_COURSE_DATA = {
           ],
           "check": "You can connect transition logic to visible animation behaviour."
         }
+      ],
+      "docVisuals": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/6368083b-2787-4801-bf9f-2a60bc1e6952/create1.png",
+          "caption": "Creating an Animation Blueprint and choosing its Skeleton. Animation Blueprints are specialised Blueprints for controlling skeletal animation.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/animation-blueprints-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "intro",
+          "type": "epic-doc"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/a7db83be-d012-4836-820b-154ba35fd181/assign1.png",
+          "caption": "Assigning an Animation Blueprint to a Skeletal Mesh through Animation Mode and Anim Class.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/animation-blueprints-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "concept",
+          "type": "epic-doc"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/ddbd59bf-8e71-405b-8b5d-a7bbc3284178/create1.png",
+          "caption": "Creating a State Machine inside the Anim Graph. State Machines organise locomotion and other animation states.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/state-machines-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "practice",
+          "type": "epic-doc"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/6941aa29-6a13-492e-91c9-5fe1f4fea3aa/create3.png",
+          "caption": "The State Machine entry point leading into the initial state.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/state-machines-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "deeper",
+          "type": "epic-doc"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/85ec3324-7fcd-4767-8d6a-e075928e5301/state2.png",
+          "caption": "Adding and connecting animation States. Transition Rules decide when the character is allowed to move between them.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/state-machines-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "deeper",
+          "type": "epic-doc"
+        }
       ]
     },
     {
@@ -6352,6 +6754,16 @@ window.UE5_COURSE_DATA = {
             "Remove one unnecessary dependency or wire crossing if possible."
           ],
           "check": "A classmate could understand the responsibility faster than before."
+        }
+      ],
+      "docVisuals": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/d90cd840-2711-4cfd-807e-39ef1ac58ef8/variableslocal.png",
+          "caption": "Epic’s example of Local Variables inside a Function. Scope is part of Blueprint responsibility: keep data as local as the problem allows.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-best-practices-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "concept",
+          "type": "epic-doc"
         }
       ]
     },
@@ -6691,6 +7103,16 @@ window.UE5_COURSE_DATA = {
             "Straighten execution flow and reduce unnecessary crossings."
           ],
           "check": "The graph tells a clearer story from left to right."
+        }
+      ],
+      "docVisuals": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/d90cd840-2711-4cfd-807e-39ef1ac58ef8/variableslocal.png",
+          "caption": "Local variables are one small example of reducing graph clutter by limiting scope. Refactoring is often a collection of choices like this rather than one magic node.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-best-practices-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "slot": "deeper",
+          "type": "epic-doc"
         }
       ]
     }

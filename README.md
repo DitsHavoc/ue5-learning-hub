@@ -1,6 +1,6 @@
-# UE5 Learning Hub v3.12.0 — Hardened Co-Teaching
+# UE5 Learning Hub v3.13.0 — Hardened Co-Teaching
 
-V3.12 is a reliability/security release rather than a feature-sprawl release.
+V3.13 is a reliability/security release rather than a feature-sprawl release.
 
 ## Co-teaching
 
@@ -57,7 +57,7 @@ Do not rerun them on the existing live project.
 Microsoft SSO remains optional and disabled.
 
 
-## V3.12 — Visual Accuracy Pass
+## V3.13 — Visual Accuracy Pass
 
 - Integrated five current classroom UE screenshots:
   - Editor
@@ -72,14 +72,26 @@ Microsoft SSO remains optional and disabled.
 - Epic documentation artwork is **not copied into the package**. Students open the current official documentation in a new tab.
 - Existing concept diagrams remain clearly labelled as concept diagrams, not exact Unreal UI.
 
-No database migration is required for V3.12.
+No database migration is required for V3.13.
 
 
-## V3.12 visual flow pass
+## V3.13 visual flow pass
 - moved key lesson images much higher in the Learn section so they sit near the explanation text
 - added secondary close-up screenshots for Editor, Events, Branches, Functions and Data Tables
 - preserved official UE5.8 links and concept diagrams underneath the real screenshots
 
 
-## V3.12 practical exercise pass
+## V3.13 practical exercise pass
 Every lesson now has three original practical checkpoints embedded in the Learn flow: TRY IT NOW, TEST IT IN PLAY, and MAKE IT YOURS. These emulate the supplied book's explain/build/test rhythm without copying its exercises. The existing full Guided Build remains as the consolidation walkthrough.
+
+
+## V3.13 — Epic UE5.8 visual integration + lightbox
+
+- Curated current screenshots from Epic's official Unreal Engine 5.8 documentation are placed beside the text they explain.
+- Existing current classroom screenshots remain the primary examples where available.
+- Generated concept diagrams remain, but are separated and labelled as explanatory diagrams rather than Unreal UI.
+- All lesson imagery is clickable/tappable and opens in a large lightbox. Escape, close button and backdrop click close the viewer.
+- Every Epic documentation image carries a source link.
+- A global Epic Fan Content Policy disclaimer is present in the footer.
+- Remote Epic images fail gracefully to a source link if Epic changes an image URL.
+- Cache-busting script versions were updated to v3.13.0 to reduce stale Render/browser deployments.
