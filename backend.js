@@ -31,13 +31,13 @@ const api = {
         await this.loadProfile();
         await this.migrateLocalProgress();
         await this.completePendingTeacherBootstrap();
-        await this.completePendingTeacherBootstrap();
-      await this.completePendingClassJoin();
+        await this.completePendingClassJoin();
       }
       this.emit();
     });
     if(this.user) {
       await this.migrateLocalProgress();
+      await this.completePendingTeacherBootstrap();
       await this.completePendingClassJoin();
     }
     this.emit();
@@ -53,6 +53,10 @@ const api = {
 
   normalizeClassCode(value){
     return String(value||'').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,16);
+  },
+  normalizeTeacherCode(value){
+    // Teacher bootstrap codes are deliberately longer than student class codes.
+    return String(value||'').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,40);
   },
   async validateClassCode(code){
     if(!client)throw new Error('Cloud backend is not configured yet.');
@@ -91,7 +95,7 @@ const api = {
   },
   async validateTeacherBootstrap(code){
     if(!client)throw new Error('Cloud backend is not configured yet.');
-    const clean=this.normalizeClassCode(code);
+    const clean=this.normalizeTeacherCode(code);
     if(!clean)throw new Error('Enter the one-time teacher setup code.');
     const {data,error}=await client.rpc('validate_teacher_bootstrap',{p_code:clean});
     if(error)throw error;
@@ -100,7 +104,7 @@ const api = {
   },
   async signUpTeacher({displayName,email,password,teacherCode}){
     if(!client||!emailAuthEnabled)throw new Error('Learning Hub accounts are not enabled.');
-    const clean=this.normalizeClassCode(teacherCode);
+    const clean=this.normalizeTeacherCode(teacherCode);
     await this.validateTeacherBootstrap(clean);
     localStorage.setItem(PENDING_TEACHER_KEY,clean);
     const redirectTo=`${window.location.origin}${window.location.pathname}`;

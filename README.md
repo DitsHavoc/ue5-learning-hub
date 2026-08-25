@@ -1,4 +1,4 @@
-# UE5 Learning Hub v3.6.1
+# UE5 Learning Hub v3.6.2 — Teacher Login Hotfix
 
 ## V3.6 — Independent Login
 
@@ -46,4 +46,16 @@ Email confirmation and password recovery depend on Supabase Auth email delivery.
 For a real cohort, configure a suitable SMTP provider in Supabase rather than relying on the small built-in testing allowance.
 
 ## Visible version
-`UE5 HUB v3.6.1 • GUEST + CLOUD` when not signed in.
+`UE5 HUB v3.6.2 • GUEST + CLOUD` when not signed in.
+
+## V3.6.2 hotfix
+
+Fixes first-teacher account creation:
+- teacher setup codes are no longer truncated to the shorter student class-code length
+- teacher form errors are displayed inside the modal
+- the form explicitly validates name, email, setup code and both password fields
+- the submit button visibly shows `Checking setup code…`
+- pending teacher bootstrap completion is no longer called twice
+- an existing confirmed session can complete a pending teacher bootstrap on page load
+
+No database migration is required for this hotfix.

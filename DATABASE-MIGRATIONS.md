@@ -38,26 +38,3 @@ Adds:
 - `join_class_by_code(text)` for authenticated self-join
 
 This is additive. Do not wipe or rebuild the production database.
-
-
-## V3.6 security hardening — harden_class_code_rpc
-
-File:
-`migrations/20260825_05_harden_class_code_rpc.sql`
-
-Moves privileged class-code logic into the non-exposed `private` schema and leaves `SECURITY INVOKER` wrappers in `public`. This keeps the site RPC-compatible without leaving exposed SECURITY DEFINER functions.
-
-
-## V3.6 — allow_anon_class_code_wrapper
-
-File:
-`migrations/20260825_06_allow_anon_class_code_wrapper.sql`
-
-Grants the anonymous role schema usage needed by the safe public validation wrapper. The private schema itself is not exposed through the site API.
-
-
-## V3.6 — teacher_bootstrap
-
-File: `migrations/20260825_07_teacher_bootstrap.sql`
-
-Adds a one-time, server-side hashed bootstrap token so the first teacher can self-create an account without Microsoft SSO or a pre-existing class code.

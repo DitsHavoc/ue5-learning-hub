@@ -1,4 +1,4 @@
-// UE5 Learning Hub v3.6.1
+// UE5 Learning Hub v3.6.2
 // Supabase backend is connected using a PUBLIC publishable key.
 // Independent Learning Hub email/password accounts are enabled.
 // Microsoft / Entra remains optional and OFF pending college approval.

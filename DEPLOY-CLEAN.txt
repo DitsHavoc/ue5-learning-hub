@@ -1,4 +1,4 @@
-UE5 LEARNING HUB v3.6.1
+UE5 LEARNING HUB v3.6.2
 
 FRONTEND DEPLOY:
 Replace the existing site contents with the CONTENTS of this ZIP.
@@ -29,7 +29,7 @@ Publish directory .
 
 SUCCESS CHECK:
 Bottom-right should show:
-UE5 HUB v3.6.1 • BACKEND READY
+UE5 HUB v3.6.2 • BACKEND READY
 
 BACKEND READY means:
 • Supabase database is connected

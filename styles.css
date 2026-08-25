@@ -197,3 +197,9 @@ footer{border-top:1px solid var(--line);padding:15px 38px;color:#65768b;font-siz
 @media(max-width:600px){.auth-two{grid-template-columns:1fr}.class-code-panel{display:block}.class-code-actions{justify-content:flex-start;margin-top:8px}}
 
 .teacher-setup-link{margin-top:10px;color:#d0a7ff!important}.teacher-setup-link:hover{color:#e4c9ff!important}
+
+/* v3.6.2 — auth feedback must remain visible inside the modal */
+.auth-inline-status{border:1px solid rgba(255,122,136,.4);background:rgba(255,91,108,.08);color:#ffc2c9;border-radius:9px;padding:9px 11px;margin:10px 0;font-size:9px;line-height:1.5}
+.auth-inline-status.working{border-color:rgba(100,180,247,.38);background:rgba(67,153,225,.08);color:#abd8ff}
+.auth-inline-status.success{border-color:rgba(86,215,144,.38);background:rgba(86,215,144,.08);color:#aff0cc}
+.auth-form button[disabled]{opacity:.62;cursor:wait}

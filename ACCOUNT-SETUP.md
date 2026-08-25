@@ -33,8 +33,3 @@ For a class rollout, configure custom SMTP so confirmations/recovery emails do n
 
 Microsoft SSO is still available architecturally but `microsoftEnabled` remains `false`.
 Native Learning Hub accounts do not require Microsoft Entra or Microsoft Graph.
-
-
-## First teacher bootstrap
-
-Before any class codes exist, the first teacher uses the one-time **Teacher setup** route in the account modal. The setup code is not stored in the public frontend. Once successfully claimed, the database marks it used and refuses any further teacher bootstrap claims.

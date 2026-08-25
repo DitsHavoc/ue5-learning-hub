@@ -1015,12 +1015,13 @@ function renderAuth(){
   if(authView==='teacher-setup'){
     body.innerHTML=`<button class="auth-back" data-action="auth-view" data-view="signin">← Back</button>
       <span class="auth-section-label">ONE-TIME TEACHER SETUP</span><h3>Create the first teacher account</h3>
-      <p class="auth-message">This route uses a one-time setup code. After it is claimed, it cannot create another teacher.</p>
-      <form class="auth-form" data-action-form="auth-teacher-signup">
-        <label>Your name<input name="displayName" maxlength="100" autocomplete="name" required></label>
-        <label>Email<input name="email" type="email" autocomplete="email" required></label>
-        <label>Teacher setup code<input name="teacherCode" maxlength="30" autocomplete="off" required></label>
-        <div class="auth-two"><label>Password<input name="password" type="password" minlength="8" required></label><label>Confirm<input name="confirm" type="password" minlength="8" required></label></div>
+      <p class="auth-message">Fill in <b>all five fields</b>. The setup code grants the first account Teacher access; it is not a password by itself. After the Teacher role is claimed, the code cannot be reused.</p>
+      <div id="authInlineStatus" class="auth-inline-status" hidden></div>
+      <form class="auth-form" data-action-form="auth-teacher-signup" novalidate>
+        <label>Your name<input name="displayName" maxlength="100" autocomplete="name" placeholder="Name shown in the Hub"></label>
+        <label>Email<input name="email" type="email" autocomplete="email" placeholder="Email you can access"></label>
+        <label>Teacher setup code<input name="teacherCode" maxlength="45" autocomplete="off" spellcheck="false" placeholder="TEACH-…"></label>
+        <div class="auth-two"><label>Password<input name="password" type="password" minlength="8" autocomplete="new-password" placeholder="At least 8 characters"></label><label>Confirm<input name="confirm" type="password" minlength="8" autocomplete="new-password" placeholder="Repeat password"></label></div>
         <button class="button primary" type="submit">Create teacher account</button>
       </form>`;
     return;
@@ -1040,6 +1041,26 @@ function openAuth(){
   $('#authModal').hidden=false;renderAuth();
 }
 function closeAuth(){$('#authModal').hidden=true}
+function authStatus(message,type='error'){
+  const box=$('#authInlineStatus');
+  if(!box)return;
+  box.hidden=!message;
+  box.className=`auth-inline-status ${type}`;
+  box.textContent=message||'';
+}
+function setAuthBusy(form,busy,label='Working…'){
+  if(!form)return;
+  const btn=form.querySelector('button[type="submit"]');
+  if(!btn)return;
+  if(busy){
+    btn.dataset.originalLabel=btn.textContent;
+    btn.textContent=label;
+    btn.disabled=true;
+  }else{
+    btn.textContent=btn.dataset.originalLabel||btn.textContent;
+    btn.disabled=false;
+  }
+}
 
 document.addEventListener('click',async e=>{
   const b=e.target.closest('[data-action]');if(!b)return;
@@ -1182,14 +1203,35 @@ document.addEventListener('submit',async e=>{
   }
   if(e.target.dataset.actionForm==='auth-teacher-signup'){
     e.preventDefault();
-    const fd=new FormData(e.target),password=String(fd.get('password')||''),confirmPassword=String(fd.get('confirm')||'');
-    if(password.length<8){toast('Use a password of at least 8 characters.');return}
-    if(password!==confirmPassword){toast('The two passwords do not match.');return}
+    const form=e.target,fd=new FormData(form);
+    const displayName=String(fd.get('displayName')||'').trim();
+    const email=String(fd.get('email')||'').trim();
+    const teacherCode=String(fd.get('teacherCode')||'').trim();
+    const password=String(fd.get('password')||'');
+    const confirmPassword=String(fd.get('confirm')||'');
+
+    authStatus('');
+    if(displayName.length<2){authStatus('Enter your name as well as the setup code.');form.elements.displayName?.focus();return}
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){authStatus('Enter an email address you can access.');form.elements.email?.focus();return}
+    if(!teacherCode){authStatus('Enter the one-time teacher setup code.');form.elements.teacherCode?.focus();return}
+    if(password.length<8){authStatus('Choose a password of at least 8 characters.');form.elements.password?.focus();return}
+    if(password!==confirmPassword){authStatus('The two passwords do not match.');form.elements.confirm?.focus();return}
+
+    setAuthBusy(form,true,'Checking setup code…');
+    authStatus('Checking the setup code with the Learning Hub…','working');
     try{
-      const result=await BACKEND.signUpTeacher({displayName:fd.get('displayName'),email:fd.get('email'),password,teacherCode:fd.get('teacherCode')});
-      if(result.needsConfirmation){authView='signin';renderAuth();$('#authBody')?.insertAdjacentHTML('afterbegin','<div class="auth-success"><b>Teacher account created.</b> Confirm the email, then sign in. The one-time teacher role will be claimed automatically.</div>');}
-      else{closeAuth();toast('Teacher account created.');}
-    }catch(err){toast(err.message)}
+      const result=await BACKEND.signUpTeacher({displayName,email,password,teacherCode});
+      if(result.needsConfirmation){
+        authView='signin';renderAuth();
+        $('#authBody')?.insertAdjacentHTML('afterbegin','<div class="auth-success"><b>Teacher account created.</b> Check your email and confirm the account, then sign in. Teacher access will be claimed automatically.</div>');
+      }else{
+        authStatus('Teacher account created successfully.','success');
+        setTimeout(()=>{closeAuth();toast('Teacher account created — Teacher access active.');},450);
+      }
+    }catch(err){
+      authStatus(err?.message||'Teacher account creation failed. Please try again.');
+      setAuthBusy(form,false);
+    }
   }
   if(e.target.dataset.actionForm==='auth-reset'){
     e.preventDefault();
