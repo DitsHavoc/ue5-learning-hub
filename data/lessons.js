@@ -97,7 +97,13 @@ window.UE5_DATA = {
         "Can't find an asset? Check which folder is selected in the Content Drawer and use search.",
         "Changed the wrong thing? Make sure the intended Actor is selected before editing Details."
       ],
-      goodPractice:"Name things as soon as their purpose becomes clear. 'Cube_74' tells the next developer nothing."
+            goodPractice:"Name things as soon as their purpose becomes clear. 'Cube_74' tells the next developer nothing.",
+      media: {
+        type: "image",
+        src: "assets/book-temp/ue5-interface-page-26.png",
+        alt: "Temporary textbook reference image showing the Unreal Engine Level Editor and its key panels.",
+        caption: "Temporary textbook reference: Level Editor overview from the uploaded UE5 Blueprint book, used here as a placement visual while we build our own replacement screenshots."
+      }
     },
 
     {
@@ -162,7 +168,13 @@ window.UE5_DATA = {
         stretch:"Mark which Component you would make the Root and explain why."
       },
       common:["If a Component moves strangely, inspect the hierarchy.","If you cannot see a Component in the level, check visibility and transform.","Compile after structural Blueprint changes."],
-      goodPractice:"Give Components names that describe their role: DoorMesh, InteractionBox, AlarmLight—not StaticMesh2."
+            goodPractice:"Give Components names that describe their role: DoorMesh, InteractionBox, AlarmLight—not StaticMesh2.",
+      media: {
+        type: "image",
+        src: "assets/book-temp/actors-components-page-33.png",
+        alt: "Temporary textbook reference image showing the Components panel and My Blueprint panel.",
+        caption: "Temporary textbook reference: Components and My Blueprint panel visual used as a lesson placeholder."
+      }
     },
 
     {
@@ -227,7 +239,13 @@ window.UE5_DATA = {
         stretch:"Pick one and suggest three Instance Editable variables."
       },
       common:["If placed copies do not update, make sure you edited the Class rather than only one instance.","If the Compile button shows an error, read the message before adding more nodes.","Avoid putting reusable object behaviour in the Level Blueprint."],
-      goodPractice:"Reusable object behaviour belongs with the object wherever possible. Level Blueprint logic should be reserved for genuinely level-specific events."
+            goodPractice:"Reusable object behaviour belongs with the object wherever possible. Level Blueprint logic should be reserved for genuinely level-specific events.",
+      media: {
+        type: "image",
+        src: "assets/book-temp/blueprint-classes-page-31.png",
+        alt: "Temporary textbook reference image showing Blueprint Editor panels.",
+        caption: "Temporary textbook reference: Blueprint Editor panel overview for the Blueprint Classes lesson."
+      }
     },
 
     {
@@ -292,7 +310,13 @@ window.UE5_DATA = {
         stretch:"For one example, list the data the event might need to provide."
       },
       common:["Nodes without an execution path do not run just because they are visible.","Use Print String to prove whether an event is firing.","Avoid Event Tick unless the behaviour genuinely needs to update every frame."],
-      goodPractice:"When debugging, follow the white execution wire from the Event forwards. Prove where execution stops before randomly changing nodes."
+            goodPractice:"When debugging, follow the white execution wire from the Event forwards. Prove where execution stops before randomly changing nodes.",
+      media: {
+        type: "image",
+        src: "assets/book-temp/events-execution-page-36.png",
+        alt: "Temporary textbook reference image showing an Event Graph example.",
+        caption: "Temporary textbook reference: Event Graph example used while we prepare custom classroom screenshots."
+      }
     },
 
     {
@@ -358,7 +382,13 @@ window.UE5_DATA = {
         stretch:"Mark which values belong to the player, an individual Actor or the overall game."
       },
       common:["A Boolean is a state, not a number.","Use names that reveal purpose rather than Variable1.","If you expose variables to designers, add Tooltips and organise them clearly."],
-      goodPractice:"Use meaningful variable names and categories. Instance Editable variables should explain their purpose with Tooltips."
+            goodPractice:"Use meaningful variable names and categories. Instance Editable variables should explain their purpose with Tooltips.",
+      media: {
+        type: "image",
+        src: "assets/book-temp/variables-page-58.png",
+        alt: "Temporary textbook reference image from the functions/variables section of the book.",
+        caption: "Temporary textbook reference: calculate-power example page, temporarily supporting discussion around variables and values."
+      }
     },
 
     {
@@ -488,7 +518,13 @@ window.UE5_DATA = {
         stretch:"Explain which one should own a local variable and why."
       },
       common:["A Function should do a recognisable job, not hide a random pile of nodes.","Use inputs instead of hard-coding values that should vary.","Use local variables for temporary Function-only values."],
-      goodPractice:"If you can name a block of logic clearly and may need it again, a Function is often a better home than duplicated Event Graph nodes."
+            goodPractice:"If you can name a block of logic clearly and may need it again, a Function is often a better home than duplicated Event Graph nodes.",
+      media: {
+        type: "image",
+        src: "assets/book-temp/functions-page-58.png",
+        alt: "Temporary textbook reference image showing a simple function example.",
+        caption: "Temporary textbook reference: simple function example page used in the Functions lesson."
+      }
     },
 
     {
@@ -748,7 +784,13 @@ window.UE5_DATA = {
         stretch:"Identify one tempting but poor place to put the logic and explain why."
       },
       common:["Working code can still be badly organised.","Avoid making every object directly control every other object's internal state.","Level Blueprint is useful, but not a dumping ground for the whole game."],
-      goodPractice:"A Blueprint should be as independent as practical and responsible for its own internal state."
+            goodPractice:"A Blueprint should be as independent as practical and responsible for its own internal state.",
+      media: {
+        type: "image",
+        src: "assets/book-temp/blueprint-responsibility-page-391.png",
+        alt: "Temporary textbook reference image from the Blueprint responsibilities section.",
+        caption: "Temporary textbook reference: Blueprint responsibilities section from the uploaded book."
+      }
     },
 
     {
@@ -814,7 +856,13 @@ window.UE5_DATA = {
         stretch:"Make the improvements and submit a before/after comparison."
       },
       common:["Commenting every single node is not the same as making logic clear.","Do not hide random unrelated nodes inside a Function just to make the graph smaller.","Meaningful names are a form of documentation."],
-      goodPractice:"A giant Event Graph should not be a badge of honour. Hide detail behind clear names and keep exposed variables understandable."
+            goodPractice:"A giant Event Graph should not be a badge of honour. Hide detail behind clear names and keep exposed variables understandable.",
+      media: {
+        type: "image",
+        src: "assets/book-temp/managing-complexity-page-395.png",
+        alt: "Temporary textbook reference image from the Blueprint complexity section.",
+        caption: "Temporary textbook reference: complexity-management section used while we design our own final visual assets."
+      }
     }
   ],
 

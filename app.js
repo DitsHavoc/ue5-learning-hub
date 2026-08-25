@@ -206,6 +206,22 @@
       </div>`;
   }
 
+
+  function renderMedia(lesson) {
+    if (lesson.media && lesson.media.type === "image") {
+      return `
+        <figure class="lesson-media">
+          <img src="${esc(lesson.media.src)}" alt="${esc(lesson.media.alt || lesson.title)}" loading="lazy">
+          <figcaption>${esc(lesson.media.caption || "")}</figcaption>
+        </figure>`;
+    }
+
+    return `
+      <div class="media-placeholder">
+        <div><strong>📷 Lesson media slot</strong><small>Drop a screenshot, GIF or short teacher video here later. V1 deliberately keeps media separate from lesson logic so we can replace it without rebuilding the site.</small></div>
+      </div>`;
+  }
+
   function taskCard(type, label, data, lesson) {
     if (!data) return "";
     const reqs = data.requirements ? `<div class="requirements">${data.requirements.map(r=>`<div class="requirement">${esc(r)}</div>`).join("")}</div>` : "";
@@ -278,9 +294,7 @@
             <h2>Core ideas</h2>
             <p>Get the idea first. The node names matter less than understanding what problem each tool solves.</p>
             ${conceptCards(lesson)}
-            <div class="media-placeholder">
-              <div><strong>📷 Lesson media slot</strong><small>Drop a screenshot, GIF or short teacher video here later. V1 deliberately keeps media separate from lesson logic so we can replace it without rebuilding the site.</small></div>
-            </div>
+            ${renderMedia(lesson)}
           </section>
 
           <section class="content-card" id="guided">

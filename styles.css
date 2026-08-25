@@ -445,6 +445,27 @@ p { line-height:1.65; }
 .quiz-feedback{display:none;margin-top:9px;color:var(--muted);font-size:11px}
 .quiz-feedback.visible{display:block}
 
+
+.lesson-media {
+  margin: 16px 0 0;
+  border:1px solid #314158;
+  background:#0f1620;
+  border-radius:13px;
+  overflow:hidden;
+}
+.lesson-media img{
+  display:block;
+  width:100%;
+  height:auto;
+}
+.lesson-media figcaption{
+  padding:10px 12px;
+  border-top:1px solid #314158;
+  color:#96a5b8;
+  font-size:11px;
+  line-height:1.5;
+}
+
 .media-placeholder {
   min-height:220px;border:1px dashed #314158;border-radius:13px;
   background:
