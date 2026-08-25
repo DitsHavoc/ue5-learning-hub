@@ -473,6 +473,20 @@
   }
 
   function bindDynamic() {
+    // Lesson section navigation must NOT change the hash route.
+    // The app itself uses #/ routes, so normal #aims style links would
+    // otherwise be interpreted as a new page by the router.
+    document.querySelectorAll(".lesson-nav a[href^='#']").forEach(link => {
+      link.addEventListener("click", (event) => {
+        event.preventDefault();
+        const targetId = link.getAttribute("href").slice(1);
+        const target = document.getElementById(targetId);
+        if (target) {
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      });
+    });
+
     document.querySelectorAll("[data-complete]").forEach(btn=>{
       btn.addEventListener("click", () => {
         const id = btn.dataset.complete;
