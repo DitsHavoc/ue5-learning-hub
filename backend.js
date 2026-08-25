@@ -7,6 +7,7 @@ const microsoftEnabled = configured && cfg.microsoftEnabled === true;
 const emailAuthEnabled = configured && cfg.emailAuthEnabled !== false;
 const PENDING_CLASS_KEY = 'ue5hub:v3:pending-class-code';
 const PENDING_TEACHER_KEY = 'ue5hub:v3:pending-teacher-code';
+const PENDING_TEACHER_INVITE_KEY = 'ue5hub:v3:pending-teacher-invite';
 const client = configured ? window.supabase.createClient(cfg.url, cfg.publishableKey) : null;
 
 const api = {
@@ -31,6 +32,7 @@ const api = {
         await this.loadProfile();
         await this.migrateLocalProgress();
         await this.completePendingTeacherBootstrap();
+        await this.completePendingTeacherInvite();
         await this.completePendingClassJoin();
       }
       this.emit();
@@ -38,6 +40,7 @@ const api = {
     if(this.user) {
       await this.migrateLocalProgress();
       await this.completePendingTeacherBootstrap();
+      await this.completePendingTeacherInvite();
       await this.completePendingClassJoin();
     }
     this.emit();
@@ -127,6 +130,95 @@ const api = {
       await this.loadProfile();
       return data===true;
     }catch(err){console.warn('Teacher bootstrap',err.message);return false;}
+  },
+  normalizeTeacherInviteCode(value){
+    return String(value||'').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,40);
+  },
+  async validateTeacherInvite(code){
+    if(!client)throw new Error('Cloud backend is not configured yet.');
+    const clean=this.normalizeTeacherInviteCode(code);
+    if(!clean)throw new Error('Enter the teacher invite code.');
+    const {data,error}=await client.rpc('validate_teacher_invite',{p_code:clean});
+    if(error)throw error;
+    const row=Array.isArray(data)?data[0]:data;
+    if(!row)throw new Error('Teacher invite is invalid, expired, revoked or already used.');
+    return row;
+  },
+  async signUpInvitedTeacher({displayName,email,password,inviteCode}){
+    if(!client||!emailAuthEnabled)throw new Error('Learning Hub accounts are not enabled.');
+    const clean=this.normalizeTeacherInviteCode(inviteCode);
+    const invite=await this.validateTeacherInvite(clean);
+    localStorage.setItem(PENDING_TEACHER_INVITE_KEY,clean);
+    const redirectTo=`${window.location.origin}${window.location.pathname}`;
+    const {data,error}=await client.auth.signUp({
+      email:String(email||'').trim(),
+      password:String(password||''),
+      options:{
+        emailRedirectTo:redirectTo,
+        data:{display_name:String(displayName||'').trim(),account_kind:'teacher_invite'}
+      }
+    });
+    if(error){
+      localStorage.removeItem(PENDING_TEACHER_INVITE_KEY);
+      throw error;
+    }
+    if(data?.session){
+      this.user=data.user||data.session.user;
+      await this.loadProfile();
+      await this.completePendingTeacherInvite();
+    }
+    return {data,invite,needsConfirmation:!data?.session};
+  },
+  async claimTeacherInvite(code){
+    if(!client||!this.user)throw new Error('Sign in before claiming a teacher invite.');
+    const clean=this.normalizeTeacherInviteCode(code);
+    if(!clean)throw new Error('Enter the teacher invite code.');
+    const {data,error}=await client.rpc('claim_teacher_invite',{p_code:clean});
+    if(error)throw error;
+    if(data!==true)throw new Error('Teacher invite could not be claimed.');
+    await this.loadProfile();
+    this.emit();
+    return true;
+  },
+  async completePendingTeacherInvite(){
+    if(!client||!this.user)return false;
+    const pending=localStorage.getItem(PENDING_TEACHER_INVITE_KEY);
+    if(!pending)return false;
+    try{
+      const ok=await this.claimTeacherInvite(pending);
+      localStorage.removeItem(PENDING_TEACHER_INVITE_KEY);
+      return ok;
+    }catch(err){
+      console.warn('Teacher invite',err.message);
+      return false;
+    }
+  },
+  async createTeacherInvite(label='',days=7){
+    if(!client||!this.user||this.profile?.role!=='teacher')throw new Error('Teacher access required.');
+    const {data,error}=await client.rpc('create_teacher_invite',{
+      p_label:String(label||'').trim().slice(0,120),
+      p_days:Math.max(1,Math.min(Number(days)||7,30))
+    });
+    if(error)throw error;
+    const row=Array.isArray(data)?data[0]:data;
+    if(!row)throw new Error('Teacher invite could not be created.');
+    return row;
+  },
+  async getTeacherInvites(){
+    if(!client||!this.user||this.profile?.role!=='teacher')return [];
+    const {data,error}=await client.from('teacher_invites')
+      .select('id,code_hint,label,created_by,expires_at,used_by,used_at,revoked_at,created_at')
+      .eq('created_by',this.user.id)
+      .order('created_at',{ascending:false});
+    if(error)throw error;
+    return data||[];
+  },
+  async revokeTeacherInvite(inviteId){
+    if(!client||!this.user||this.profile?.role!=='teacher')throw new Error('Teacher access required.');
+    const {data,error}=await client.rpc('revoke_teacher_invite',{p_invite_id:inviteId});
+    if(error)throw error;
+    if(data!==true)throw new Error('Invite could not be revoked. It may already be used or revoked.');
+    return true;
   },
   async signInEmail({email,password}){
     if(!client||!emailAuthEnabled)throw new Error('Learning Hub accounts are not enabled.');
@@ -418,7 +510,7 @@ const api = {
     }));
   },
   async submitRequest({category,title,body}){
-    if(!client||!this.user)throw new Error('Sign in with your college Microsoft account first.');
+    if(!client||!this.user)throw new Error('Sign in to a Learning Hub account first.');
     const {error}=await client.from('student_requests').insert({
       author_id:this.user.id,category,title,body
     });
@@ -458,18 +550,20 @@ const api = {
   },
   async teacherOverview(){
     if(!client||!this.user||this.profile?.role!=='teacher')return null;
-    const [{data:profiles},{data:progress},{data:projects},{data:comments},{data:requests},{data:submissions},{data:classes}] = await Promise.all([
+    const [{data:profiles},{data:teachers},{data:progress},{data:projects},{data:comments},{data:requests},{data:submissions},{data:classes},{data:teacherInvites}] = await Promise.all([
       client.from('profiles').select('id,display_name,role,created_at').eq('role','student').order('display_name'),
+      client.from('profiles').select('id,display_name,role,created_at').eq('role','teacher').order('display_name'),
       client.from('lesson_progress').select('*').eq('completed',true),
       client.from('project_progress').select('*'),
       client.from('lesson_comments').select('*').order('created_at',{ascending:false}),
       client.from('student_requests').select('id,author_id,category,title,body,status,created_at,request_votes(user_id)').order('created_at',{ascending:false}),
       client.from('evidence_submissions').select('*,submission_files(*)').order('updated_at',{ascending:false}),
-      client.from('classes').select('*,class_members(user_id)').eq('teacher_id',this.user.id).order('created_at',{ascending:false})
+      client.from('classes').select('*,class_members(user_id)').eq('teacher_id',this.user.id).order('created_at',{ascending:false}),
+      client.from('teacher_invites').select('id,code_hint,label,created_by,expires_at,used_by,used_at,revoked_at,created_at').eq('created_by',this.user.id).order('created_at',{ascending:false})
     ]);
     return {
-      profiles:profiles||[],progress:progress||[],projects:projects||[],comments:comments||[],
-      requests:requests||[],submissions:submissions||[],classes:classes||[]
+      profiles:profiles||[],teachers:teachers||[],progress:progress||[],projects:projects||[],comments:comments||[],
+      requests:requests||[],submissions:submissions||[],classes:classes||[],teacherInvites:teacherInvites||[]
     };
   }
 };

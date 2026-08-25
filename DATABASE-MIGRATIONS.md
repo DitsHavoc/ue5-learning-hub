@@ -38,3 +38,32 @@ Adds:
 - `join_class_by_code(text)` for authenticated self-join
 
 This is additive. Do not wipe or rebuild the production database.
+
+## V3.6.3 — fix_class_policy_recursion
+
+File:
+`migrations/20260825_08_fix_class_policy_recursion.sql`
+
+Fixes the circular RLS dependency between `classes` and `class_members` using private `SECURITY DEFINER` helpers:
+- `private.is_class_member(uuid)`
+- `private.owns_class(uuid)`
+
+Already applied to the current Supabase project.
+
+## V3.7 — multi_teacher_invites
+
+File:
+`migrations/20260825_09_multi_teacher_invites.sql`
+
+Adds `teacher_invites` plus RPCs to generate, validate, claim and revoke single-use teacher invites. Full invite codes are hashed before storage.
+
+Already applied to the current Supabase project.
+
+## V3.7 — harden_multi_teacher_invites
+
+File:
+`migrations/20260825_10_harden_multi_teacher_invites.sql`
+
+Moves privileged teacher-invite logic into the private schema and exposes only SECURITY INVOKER public wrappers.
+
+Already applied to the current Supabase project.

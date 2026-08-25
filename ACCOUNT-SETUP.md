@@ -33,3 +33,9 @@ For a class rollout, configure custom SMTP so confirmations/recovery emails do n
 
 Microsoft SSO is still available architecturally but `microsoftEnabled` remains `false`.
 Native Learning Hub accounts do not require Microsoft Entra or Microsoft Graph.
+
+## Additional teachers
+
+Do not reuse the first-teacher bootstrap code.
+
+An existing Teacher opens **Teacher Dashboard → Teacher team** and generates a unique teacher invite. The colleague chooses **Create account → I have a teacher invite**. Invites are one-use, expiring and revocable.

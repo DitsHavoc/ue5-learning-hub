@@ -1,61 +1,54 @@
-# UE5 Learning Hub v3.6.2 — Teacher Login Hotfix
+# UE5 Learning Hub v3.7.0 — Multi-Teacher
 
-## V3.6 — Independent Login
+## V3.7 — Teacher Team
 
-V3.6 removes Microsoft approval as a dependency for student cloud accounts.
+Existing teachers can now invite additional staff without sharing the original bootstrap code.
 
-### Students
-A one-time first-teacher bootstrap route is also included so the platform can be set up without Microsoft or manual database account creation.
+### Teacher flow
+1. Open Teacher Dashboard.
+2. In **Teacher team**, enter an optional colleague/role label.
+3. Choose an expiry (1–30 days).
+4. Generate a unique teacher invite.
+5. Copy the full code immediately.
+6. The invite can be revoked until it is used.
 
-Students can now:
-- continue as a full **Guest** with browser-local progress
-- create a **Learning Hub email/password account**
-- enter a teacher-issued **class code** during registration
-- sign in on another device and sync learning/project progress
-- submit evidence and receive feedback
-- use Requests, notifications and class-backed features
-- reset a forgotten password by email
-- join another class later using a class code
+The database stores only a hash of the full invite code. After generation the dashboard retains only the last six-character hint/status; the full code is not recoverable from the database.
 
-### Teachers
-Each class now has:
-- a unique join code
-- copy-code control
-- pause/enable joins
-- regenerate-code control
-- existing manual Add Student controls remain available
+### Invited colleague flow
+**Create account → I have a teacher invite**
 
-### Microsoft
-Microsoft Entra SSO remains in the codebase but is **optional and disabled**.
-If college approval arrives later, it can be enabled alongside Learning Hub accounts.
+They enter:
+- name
+- email
+- unique teacher invite
+- password
 
-### Database
-V3.6 includes four small additive migrations:
+If email confirmation is enabled, the invite is stored locally and automatically claimed after the colleague confirms the email and signs in.
 
-- `20260825_04_independent_email_auth_class_codes.sql`
-- `20260825_05_harden_class_code_rpc.sql`
-- `20260825_06_allow_anon_class_code_wrapper.sql`
-- `20260825_07_teacher_bootstrap.sql`
+A signed-in normal account can also enter a Teacher invite from its account panel to promote that account.
 
-They are already applied to the current Supabase project. The split keeps the live migration history accurate and leaves the final RPC design with zero Supabase security-advisor lints.
+### Security
+Teacher invites are:
+- generated with random bytes
+- stored hashed
+- unique
+- one-use
+- expiring
+- revocable
+- created only by authenticated Teacher accounts
 
-The older V3.5 frontend remains compatible while a V3.6 deployment is being rolled out.
+The original first-teacher bootstrap remains only for a brand-new installation. It is not the mechanism for additional teachers.
 
-### Important production email note
-Email confirmation and password recovery depend on Supabase Auth email delivery.
-For a real cohort, configure a suitable SMTP provider in Supabase rather than relying on the small built-in testing allowance.
+## Database
+Migrations:
+- `migrations/20260825_09_multi_teacher_invites.sql`
+- `migrations/20260825_10_harden_multi_teacher_invites.sql`
 
-## Visible version
-`UE5 HUB v3.6.2 • GUEST + CLOUD` when not signed in.
+Both migrations have already been applied to the current live Supabase project.
 
-## V3.6.2 hotfix
+The public teacher-invite RPCs are SECURITY INVOKER wrappers; privileged implementations live in the private schema.
 
-Fixes first-teacher account creation:
-- teacher setup codes are no longer truncated to the shorter student class-code length
-- teacher form errors are displayed inside the modal
-- the form explicitly validates name, email, setup code and both password fields
-- the submit button visibly shows `Checking setup code…`
-- pending teacher bootstrap completion is no longer called twice
-- an existing confirmed session can complete a pending teacher bootstrap on page load
+Microsoft SSO remains optional and disabled.
 
-No database migration is required for this hotfix.
+
+Supabase security advisor after V3.7: no new teacher-invite/RLS security lints. The only remaining warning is the optional Auth leaked-password-protection setting.

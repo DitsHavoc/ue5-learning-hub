@@ -772,6 +772,34 @@ async function renderTeacher(){
     </div>
 
     <section class="section">
+      <div class="section-head"><div><h2>Teacher team</h2><p>Invite colleagues without sharing a permanent master code. Each invite is unique, expires and can only be used once.</p></div><span class="sync-chip">${o.teachers?.length||1} teacher${(o.teachers?.length||1)===1?'':'s'}</span></div>
+      <div class="teacher-split">
+        <form class="project-panel form-grid" data-action-form="create-teacher-invite">
+          <span class="eyebrow">Invite a teacher</span>
+          <label>Who is it for? <span class="muted">(optional)</span><input name="label" maxlength="120" placeholder="e.g. Leah / Games teacher"></label>
+          <label>Expires after
+            <select name="days"><option value="1">1 day</option><option value="3">3 days</option><option value="7" selected>7 days</option><option value="14">14 days</option><option value="30">30 days</option></select>
+          </label>
+          <button class="button small primary" type="submit">Generate teacher invite</button>
+          <div id="teacherInviteResult"></div>
+        </form>
+        <div class="teacher-team-panel">
+          <div class="teacher-list">${(o.teachers||[]).map(t=>`<div class="teacher-person"><span class="teacher-person-icon">T</span><div><strong>${esc(t.display_name)}</strong><small>${t.id===BACKEND.user.id?'You • Teacher':'Teacher'}</small></div></div>`).join('')||'<div class="muted">Teacher account active.</div>'}</div>
+          <div class="teacher-invite-list">
+            ${(o.teacherInvites||[]).length?(o.teacherInvites||[]).map(inv=>{
+              const expired=new Date(inv.expires_at)<=new Date();
+              const state=inv.used_at?'Used':inv.revoked_at?'Revoked':expired?'Expired':'Active';
+              return `<div class="teacher-invite-row ${state.toLowerCase()}">
+                <div><strong>${esc(inv.label||'Teacher invite')}</strong><small>Code ending ${esc(inv.code_hint)} • ${state} • expires ${new Date(inv.expires_at).toLocaleDateString()}</small></div>
+                ${state==='Active'?`<button class="button tiny ghost" data-action="revoke-teacher-invite" data-invite="${inv.id}">Revoke</button>`:''}
+              </div>`;
+            }).join(''):'<div class="muted">No teacher invites created yet.</div>'}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
       <div class="section-head"><div><h2>Classes</h2><p>Create teaching groups and assign signed-in students.</p></div></div>
       <div class="teacher-split">
         <form class="project-panel form-grid" data-action-form="create-class">
@@ -969,7 +997,11 @@ function renderAuth(){
       <label>Display name<div class="inline-auth-field"><input name="displayName" maxlength="100" value="${esc(BACKEND.profile?.display_name||'')}" required><button class="button small" type="submit">Update</button></div></label>
     </form>
     ${BACKEND.profile?.role!=='teacher'?`<form class="auth-form compact" data-action-form="join-class">
-      <label>Class code<div class="inline-auth-field"><input name="classCode" maxlength="20" autocomplete="off" placeholder="Teacher class code" required><button class="button small" type="submit">Join</button></div></label>
+      <label>Class code<div class="inline-auth-field"><input name="classCode" maxlength="20" autocomplete="off" placeholder="Student class code" required><button class="button small" type="submit">Join</button></div></label>
+    </form>
+    <form class="auth-form compact teacher-claim-form" data-action-form="claim-teacher-invite">
+      <label>Teacher invite<div class="inline-auth-field"><input name="inviteCode" maxlength="45" autocomplete="off" placeholder="TEACH-…" required><button class="button small" type="submit">Claim teacher access</button></div></label>
+      <small>Only use this if another Learning Hub teacher has invited you.</small>
     </form>`:''}
     <div class="button-row"><button class="button ghost" data-action="signout">Sign out</button></div>`;
     return;
@@ -1008,10 +1040,30 @@ function renderAuth(){
         <button class="button primary" type="submit">Create account</button>
       </form>
       <p class="auth-message"><b>Guest mode remains available:</b> close this window and the whole learning course still works. An account is only needed for cloud sync, classes, evidence, feedback, requests and notifications.</p>
-      <button class="link-button teacher-setup-link" data-action="auth-view" data-view="teacher-setup">Teacher setting the Hub up for the first time?</button>`;
+      <div class="teacher-account-links">
+        <button class="link-button" data-action="auth-view" data-view="teacher-invite">I have a teacher invite</button>
+        <button class="link-button teacher-setup-link" data-action="auth-view" data-view="teacher-setup">First installation only: create the first teacher</button>
+      </div>`;
     return;
   }
 
+  if(authView==='teacher-invite'){
+    body.innerHTML=`<button class="auth-back" data-action="auth-view" data-view="signup">← Back</button>
+      <span class="auth-section-label">TEACHER INVITE</span><h3>Create a teacher account</h3>
+      <p class="auth-message">Use the unique invite code another Learning Hub teacher generated for you. No student class code is required.</p>
+      <div id="authInlineStatus" class="auth-inline-status" hidden></div>
+      <form class="auth-form" data-action-form="auth-invited-teacher" novalidate>
+        <label>Your name<input name="displayName" maxlength="100" autocomplete="name" placeholder="Name shown in the Hub"></label>
+        <label>Email<input name="email" type="email" autocomplete="email" placeholder="Email you can access"></label>
+        <label>Teacher invite code<input name="inviteCode" maxlength="45" autocomplete="off" spellcheck="false" placeholder="TEACH-…"></label>
+        <div class="auth-two">
+          <label>Password<input name="password" type="password" minlength="8" autocomplete="new-password" placeholder="At least 8 characters"></label>
+          <label>Confirm<input name="confirm" type="password" minlength="8" autocomplete="new-password" placeholder="Repeat password"></label>
+        </div>
+        <button class="button primary" type="submit">Create teacher account</button>
+      </form>`;
+    return;
+  }
   if(authView==='teacher-setup'){
     body.innerHTML=`<button class="auth-back" data-action="auth-view" data-view="signin">← Back</button>
       <span class="auth-section-label">ONE-TIME TEACHER SETUP</span><h3>Create the first teacher account</h3>
@@ -1089,6 +1141,14 @@ document.addEventListener('click',async e=>{
   else if(a==='auth-view'){authView=b.dataset.view||'signin';renderAuth();}
   else if(a==='copy-class-code'){
     try{await navigator.clipboard.writeText(b.dataset.code||'');toast('Class code copied.')}catch(err){toast('Copy failed — select the code manually.')}
+  }
+  else if(a==='copy-teacher-code'){
+    try{await navigator.clipboard.writeText(b.dataset.code||'');toast('Teacher invite copied.')}catch(err){toast('Copy failed — select the code manually.')}
+  }
+  else if(a==='revoke-teacher-invite'){
+    if(confirm('Revoke this teacher invite? It will stop working immediately.')){
+      try{await BACKEND.revokeTeacherInvite(b.dataset.invite);await renderTeacher();toast('Teacher invite revoked.')}catch(err){toast(err.message)}
+    }
   }
   else if(a==='toggle-class-join'){
     try{await BACKEND.setClassJoinEnabled(b.dataset.class,b.dataset.enabled!=='1');await renderTeacher();toast(b.dataset.enabled==='1'?'Class code paused.':'Class code enabled.')}catch(err){toast(err.message)}
@@ -1265,6 +1325,57 @@ document.addEventListener('submit',async e=>{
       if($('#authModal')&&!$('#authModal').hidden)renderAuth();
       if(location.hash==='#/progress')await renderProgressCloud();
     }catch(err){toast(err.message)}
+  }
+  if(e.target.dataset.actionForm==='auth-invited-teacher'){
+    e.preventDefault();
+    const form=e.target,fd=new FormData(form);
+    const displayName=String(fd.get('displayName')||'').trim();
+    const email=String(fd.get('email')||'').trim();
+    const inviteCode=String(fd.get('inviteCode')||'').trim();
+    const password=String(fd.get('password')||''),confirmPassword=String(fd.get('confirm')||'');
+    authStatus('');
+    if(displayName.length<2){authStatus('Enter your name.');form.elements.displayName?.focus();return}
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){authStatus('Enter an email address you can access.');form.elements.email?.focus();return}
+    if(!inviteCode){authStatus('Enter the teacher invite code.');form.elements.inviteCode?.focus();return}
+    if(password.length<8){authStatus('Choose a password of at least 8 characters.');form.elements.password?.focus();return}
+    if(password!==confirmPassword){authStatus('The two passwords do not match.');form.elements.confirm?.focus();return}
+    setAuthBusy(form,true,'Checking teacher invite…');
+    authStatus('Checking your teacher invite…','working');
+    try{
+      const result=await BACKEND.signUpInvitedTeacher({displayName,email,password,inviteCode});
+      if(result.needsConfirmation){
+        authView='signin';renderAuth();
+        $('#authBody')?.insertAdjacentHTML('afterbegin','<div class="auth-success"><b>Teacher account created.</b> Confirm your email, then sign in. The invite will be claimed automatically.</div>');
+      }else{
+        closeAuth();toast('Teacher account created — Teacher access active.');
+      }
+    }catch(err){authStatus(err?.message||'Teacher account creation failed.');setAuthBusy(form,false)}
+  }
+  if(e.target.dataset.actionForm==='claim-teacher-invite'){
+    e.preventDefault();
+    const fd=new FormData(e.target);
+    try{
+      await BACKEND.claimTeacherInvite(fd.get('inviteCode'));
+      closeAuth();toast('Teacher access active.');
+      location.hash='#/teacher';
+    }catch(err){toast(err.message)}
+  }
+  if(e.target.dataset.actionForm==='create-teacher-invite'){
+    e.preventDefault();
+    const form=e.target,fd=new FormData(form);
+    const resultBox=$('#teacherInviteResult');
+    try{
+      const inv=await BACKEND.createTeacherInvite(fd.get('label'),fd.get('days'));
+      const code=inv.invite_code||'';
+      resultBox.innerHTML=`<div class="teacher-invite-created">
+        <small>ONE-TIME TEACHER CODE — COPY IT NOW</small>
+        <code>${esc(code)}</code>
+        <p>This full code is only shown now. It expires ${new Date(inv.expires_at).toLocaleString()} and can be used once.</p>
+        <button class="button small" type="button" data-action="copy-teacher-code" data-code="${esc(code)}">Copy teacher code</button>
+      </div>`;
+      form.elements.label.value='';
+      toast('Teacher invite generated.');
+    }catch(err){if(resultBox)resultBox.innerHTML=`<div class="auth-inline-status">${esc(err.message)}</div>`}
   }
   if(e.target.dataset.actionForm==='create-class'){
     e.preventDefault();
