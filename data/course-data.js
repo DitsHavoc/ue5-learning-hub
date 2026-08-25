@@ -1,5 +1,5 @@
 window.UE5_COURSE_DATA = {
-  "version": "3.5.0",
+  "version": "3.9.0",
   "buildDate": "25 Aug 2026",
   "paths": [
     {
@@ -300,17 +300,21 @@ window.UE5_COURSE_DATA = {
         {
           "type": "book",
           "src": "assets/book/editor-overview.webp",
-          "caption": "Reference figure from the supplied UE5 Blueprint book: Level Editor overview."
+          "caption": "Reference figure from the supplied UE5 Blueprint book: Level Editor overview.",
+          "authenticUI": true,
+          "versionNote": "Supplied book reference (UE5.0-era). Current Unreal may look slightly different."
         },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/editor-process.svg",
-          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence."
+          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence.",
+          "authenticUI": false
         },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/editor-example.svg",
-          "caption": "Original classroom worked example: Change a lamp already in the level."
+          "caption": "Original classroom worked example: Change a lamp already in the level.",
+          "authenticUI": false
         }
       ]
     },
@@ -577,17 +581,21 @@ window.UE5_COURSE_DATA = {
         {
           "type": "book",
           "src": "assets/book/blueprint-editor.webp",
-          "caption": "Reference figure from the supplied book: Blueprint Editor layout."
+          "caption": "Reference figure from the supplied book: Blueprint Editor layout.",
+          "authenticUI": true,
+          "versionNote": "Supplied book reference (UE5.0-era). Current Unreal may look slightly different."
         },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/actors-components-process.svg",
-          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence."
+          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence.",
+          "authenticUI": false
         },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/actors-components-example.svg",
-          "caption": "Original classroom worked example: Checkpoint beacon."
+          "caption": "Original classroom worked example: Checkpoint beacon.",
+          "authenticUI": false
         }
       ]
     },
@@ -850,17 +858,21 @@ window.UE5_COURSE_DATA = {
         {
           "type": "book",
           "src": "assets/book/blueprint-editor.webp",
-          "caption": "Reference figure from the supplied book: the Blueprint Class Editor and its main panels."
+          "caption": "Reference figure from the supplied book: the Blueprint Class Editor and its main panels.",
+          "authenticUI": true,
+          "versionNote": "Supplied book reference (UE5.0-era). Current Unreal may look slightly different."
         },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/blueprint-classes-process.svg",
-          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence."
+          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence.",
+          "authenticUI": false
         },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/blueprint-classes-example.svg",
-          "caption": "Original classroom worked example: Reusable door family."
+          "caption": "Original classroom worked example: Reusable door family.",
+          "authenticUI": false
         }
       ]
     },
@@ -1123,17 +1135,20 @@ window.UE5_COURSE_DATA = {
         {
           "type": "diagram",
           "src": "assets/diagrams/execution-flow.svg",
-          "caption": "Original classroom diagram: event and execution flow."
+          "caption": "Original classroom diagram: event and execution flow.",
+          "authenticUI": false
         },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/events-process.svg",
-          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence."
+          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence.",
+          "authenticUI": false
         },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/events-example.svg",
-          "caption": "Original classroom worked example: Facility powers up."
+          "caption": "Original classroom worked example: Facility powers up.",
+          "authenticUI": false
         }
       ]
     },
@@ -1413,17 +1428,21 @@ window.UE5_COURSE_DATA = {
         {
           "type": "book",
           "src": "assets/book/variables-panel.webp",
-          "caption": "Reference figure from the supplied book: variables in My Blueprint."
+          "caption": "Reference figure from the supplied book: variables in My Blueprint.",
+          "authenticUI": true,
+          "versionNote": "Supplied book reference (UE5.0-era). Current Unreal may look slightly different."
         },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/variables-process.svg",
-          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence."
+          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence.",
+          "authenticUI": false
         },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/variables-example.svg",
-          "caption": "Original classroom worked example: Door configuration."
+          "caption": "Original classroom worked example: Door configuration.",
+          "authenticUI": false
         }
       ]
     },
@@ -1735,17 +1754,20 @@ window.UE5_COURSE_DATA = {
         {
           "type": "diagram",
           "src": "assets/diagrams/branch-node-anatomy.svg",
-          "caption": "Original classroom diagram: the four parts of a Branch node and what each pin means."
+          "caption": "Original classroom diagram: the four parts of a Branch node and what each pin means.",
+          "authenticUI": false
         },
         {
           "type": "diagram",
           "src": "assets/diagrams/branch-locked-door-example.svg",
-          "caption": "Original classroom example: HasAccessCard chooses between opening the door and showing Access denied."
+          "caption": "Original classroom example: HasAccessCard chooses between opening the door and showing Access denied.",
+          "authenticUI": false
         },
         {
           "type": "motion",
           "src": "assets/diagrams/branch-decision-demo.svg",
-          "caption": "Animated SVG: execution alternates between the True and False paths to reinforce that only one route runs each time."
+          "caption": "Animated SVG: execution alternates between the True and False paths to reinforce that only one route runs each time.",
+          "authenticUI": false
         }
       ],
       "evidencePrompt": {
@@ -2022,17 +2044,21 @@ window.UE5_COURSE_DATA = {
         {
           "type": "book",
           "src": "assets/book/function-example.webp",
-          "caption": "Reference figure from the supplied book: a simple Function example."
+          "caption": "Reference figure from the supplied book: a simple Function example.",
+          "authenticUI": true,
+          "versionNote": "Supplied book reference (UE5.0-era). Current Unreal may look slightly different."
         },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/functions-process.svg",
-          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence."
+          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence.",
+          "authenticUI": false
         },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/functions-example.svg",
-          "caption": "Original classroom worked example: CalculateDamage."
+          "caption": "Original classroom worked example: CalculateDamage.",
+          "authenticUI": false
         }
       ]
     },
@@ -2299,17 +2325,20 @@ window.UE5_COURSE_DATA = {
         {
           "type": "diagram",
           "src": "assets/diagrams/communication.svg",
-          "caption": "Original classroom relationship diagram; use alongside the framework notes."
+          "caption": "Original classroom relationship diagram; use alongside the framework notes.",
+          "authenticUI": false
         },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/framework-process.svg",
-          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence."
+          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence.",
+          "authenticUI": false
         },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/framework-example.svg",
-          "caption": "Original classroom worked example: Player health vs game rules."
+          "caption": "Original classroom worked example: Player health vs game rules.",
+          "authenticUI": false
         }
       ]
     },
@@ -2571,17 +2600,21 @@ window.UE5_COURSE_DATA = {
         {
           "type": "book",
           "src": "assets/book/casting-example.webp",
-          "caption": "Reference figure from the supplied book: Casting in Blueprints."
+          "caption": "Reference figure from the supplied book: Casting in Blueprints.",
+          "authenticUI": true,
+          "versionNote": "Supplied book reference (UE5.0-era). Current Unreal may look slightly different."
         },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/references-casting-process.svg",
-          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence."
+          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence.",
+          "authenticUI": false
         },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/references-casting-example.svg",
-          "caption": "Original classroom worked example: Overlap only cares about the player."
+          "caption": "Original classroom worked example: Overlap only cares about the player.",
+          "authenticUI": false
         }
       ]
     },
@@ -2848,17 +2881,21 @@ window.UE5_COURSE_DATA = {
         {
           "type": "book",
           "src": "assets/book/dispatcher-details.webp",
-          "caption": "Reference figure from the supplied book: Event Dispatcher setup/details."
+          "caption": "Reference figure from the supplied book: Event Dispatcher setup/details.",
+          "authenticUI": true,
+          "versionNote": "Supplied book reference (UE5.0-era). Current Unreal may look slightly different."
         },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/interfaces-dispatchers-process.svg",
-          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence."
+          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence.",
+          "authenticUI": false
         },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/interfaces-dispatchers-example.svg",
-          "caption": "Original classroom worked example: Universal Interact."
+          "caption": "Original classroom worked example: Universal Interact.",
+          "authenticUI": false
         }
       ]
     },
@@ -3122,17 +3159,21 @@ window.UE5_COURSE_DATA = {
         {
           "type": "book",
           "src": "assets/book/collision-responses.webp",
-          "caption": "Reference figure from the supplied book: Collision Responses table."
+          "caption": "Reference figure from the supplied book: Collision Responses table.",
+          "authenticUI": true,
+          "versionNote": "Supplied book reference (UE5.0-era). Current Unreal may look slightly different."
         },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/collision-process.svg",
-          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence."
+          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence.",
+          "authenticUI": false
         },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/collision-example.svg",
-          "caption": "Original classroom worked example: Checkpoint volume."
+          "caption": "Original classroom worked example: Checkpoint volume.",
+          "authenticUI": false
         }
       ]
     },
@@ -3400,17 +3441,20 @@ window.UE5_COURSE_DATA = {
         {
           "type": "diagram",
           "src": "assets/diagrams/trace.svg",
-          "caption": "Original classroom diagram: camera-based line trace and Hit Result."
+          "caption": "Original classroom diagram: camera-based line trace and Hit Result.",
+          "authenticUI": false
         },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/traces-process.svg",
-          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence."
+          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence.",
+          "authenticUI": false
         },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/traces-example.svg",
-          "caption": "Original classroom worked example: Look-to-interact."
+          "caption": "Original classroom worked example: Look-to-interact.",
+          "authenticUI": false
         }
       ]
     },
@@ -3677,18 +3721,15 @@ window.UE5_COURSE_DATA = {
       "visuals": [
         {
           "type": "diagram",
-          "src": "assets/diagrams/branch-flow.svg",
-          "caption": "Use the decision diagram alongside the Timeline task: decide first, animate second."
-        },
-        {
-          "type": "diagram",
           "src": "assets/diagrams/gold/timelines-process.svg",
-          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence."
+          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence.",
+          "authenticUI": false
         },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/timelines-example.svg",
-          "caption": "Original classroom worked example: Sliding security door."
+          "caption": "Original classroom worked example: Sliding security door.",
+          "authenticUI": false
         }
       ]
     },
@@ -3955,17 +3996,21 @@ window.UE5_COURSE_DATA = {
         {
           "type": "book",
           "src": "assets/book/ui-variables.webp",
-          "caption": "Reference figure from the supplied book: UI-related gameplay variables."
+          "caption": "Reference figure from the supplied book: UI-related gameplay variables.",
+          "authenticUI": true,
+          "versionNote": "Supplied book reference (UE5.0-era). Current Unreal may look slightly different."
         },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/ui-process.svg",
-          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence."
+          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence.",
+          "authenticUI": false
         },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/ui-example.svg",
-          "caption": "Original classroom worked example: Health HUD."
+          "caption": "Original classroom worked example: Health HUD.",
+          "authenticUI": false
         }
       ]
     },
@@ -4228,12 +4273,14 @@ window.UE5_COURSE_DATA = {
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/savegame-process.svg",
-          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence."
+          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence.",
+          "authenticUI": false
         },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/savegame-example.svg",
-          "caption": "Original classroom worked example: Checkpoint continue."
+          "caption": "Original classroom worked example: Checkpoint continue.",
+          "authenticUI": false
         }
       ]
     },
@@ -4519,17 +4566,21 @@ window.UE5_COURSE_DATA = {
         {
           "type": "book",
           "src": "assets/book/containers.webp",
-          "caption": "Reference figure from the supplied book: container variable types."
+          "caption": "Reference figure from the supplied book: container variable types.",
+          "authenticUI": true,
+          "versionNote": "Supplied book reference (UE5.0-era). Current Unreal may look slightly different."
         },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/data-process.svg",
-          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence."
+          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence.",
+          "authenticUI": false
         },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/data-example.svg",
-          "caption": "Original classroom worked example: Inventory definitions."
+          "caption": "Original classroom worked example: Inventory definitions.",
+          "authenticUI": false
         }
       ]
     },
@@ -4792,12 +4843,14 @@ window.UE5_COURSE_DATA = {
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/ai-process.svg",
-          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence."
+          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence.",
+          "authenticUI": false
         },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/ai-example.svg",
-          "caption": "Original classroom worked example: Patrol → Chase."
+          "caption": "Original classroom worked example: Patrol → Chase.",
+          "authenticUI": false
         }
       ]
     },
@@ -5064,17 +5117,21 @@ window.UE5_COURSE_DATA = {
         {
           "type": "book",
           "src": "assets/book/animation-blueprint.webp",
-          "caption": "Reference figure from the supplied book: creating an Animation Blueprint."
+          "caption": "Reference figure from the supplied book: creating an Animation Blueprint.",
+          "authenticUI": true,
+          "versionNote": "Supplied book reference (UE5.0-era). Current Unreal may look slightly different."
         },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/animation-process.svg",
-          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence."
+          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence.",
+          "authenticUI": false
         },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/animation-example.svg",
-          "caption": "Original classroom worked example: Idle ↔ movement."
+          "caption": "Original classroom worked example: Idle ↔ movement.",
+          "authenticUI": false
         }
       ]
     },
@@ -5341,17 +5398,21 @@ window.UE5_COURSE_DATA = {
         {
           "type": "book",
           "src": "assets/book/responsibility.webp",
-          "caption": "Reference figure from the supplied book: an example of moving player-death responsibility into the player Blueprint."
+          "caption": "Reference figure from the supplied book: an example of moving player-death responsibility into the player Blueprint.",
+          "authenticUI": true,
+          "versionNote": "Supplied book reference (UE5.0-era). Current Unreal may look slightly different."
         },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/practice-process.svg",
-          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence."
+          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence.",
+          "authenticUI": false
         },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/practice-example.svg",
-          "caption": "Original classroom worked example: Player death."
+          "caption": "Original classroom worked example: Player death.",
+          "authenticUI": false
         }
       ]
     },
@@ -5625,17 +5686,21 @@ window.UE5_COURSE_DATA = {
         {
           "type": "book",
           "src": "assets/book/responsibility.webp",
-          "caption": "Book reference for the best-practice section; the lesson also applies the book's abstraction/readability guidance."
+          "caption": "Book reference for the best-practice section; the lesson also applies the book's abstraction/readability guidance.",
+          "authenticUI": true,
+          "versionNote": "Supplied book reference (UE5.0-era). Current Unreal may look slightly different."
         },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/complexity-process.svg",
-          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence."
+          "caption": "Original classroom diagram: the lesson workflow broken into a clear sequence.",
+          "authenticUI": false
         },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/complexity-example.svg",
-          "caption": "Original classroom worked example: Interact input spaghetti."
+          "caption": "Original classroom worked example: Interact input spaghetti.",
+          "authenticUI": false
         }
       ]
     }

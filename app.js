@@ -181,11 +181,15 @@ function lessonRow(l,index){
 function visual(l){
   const visuals=l.visuals?.length?l.visuals:(l.visual?[l.visual]:[]);
   if(!visuals.length)return `<div class="callout">This lesson is text-first for now; the main visual is the system you build in Unreal.</div>`;
-  return `<div class="lesson-visual-grid ${visuals.length===1?'single':''}">${visuals.map((v,i)=>`<figure class="visual ${v.type==='motion'?'motion-visual':''}">
-    <div class="visual-kicker">${v.type==='motion'?'MOTION DEMO':'VISUAL '+String(i+1).padStart(2,'0')}</div>
-    <img src="${esc(v.src)}" alt="${esc(l.title)} visual ${i+1}" loading="${i?'lazy':'eager'}">
-    <figcaption>${esc(v.caption||'')}</figcaption>
-  </figure>`).join('')}</div>`;
+  const isReal=v=>v.authenticUI===true||['book','ue5','screenshot','ue5-reference'].includes(v.type);
+  const ordered=[...visuals].sort((a,b)=>Number(isReal(b))-Number(isReal(a)));
+  const hasReal=ordered.some(isReal);
+  return `<div class="visual-auth-note ${hasReal?'has-real':'concept-only'}"><b>${hasReal?'Real Unreal reference first':'Concept visuals only'}</b><span>${hasReal?'Screenshots are shown before explanatory diagrams. Older reference screenshots may differ slightly from the current UE5 interface.':'The diagrams below explain the idea; they are not screenshots of Unreal Engine and should not be used to identify exact buttons or node appearance.'}</span></div>
+  <div class="lesson-visual-grid ${ordered.length===1?'single':''}">${ordered.map((v,i)=>{
+    const real=isReal(v);
+    const label=real?'UNREAL ENGINE REFERENCE':(v.type==='motion'?'CONCEPT MOTION — NOT UE UI':'CONCEPT DIAGRAM — NOT UE UI');
+    return `<figure class="visual ${real?'real-ue-visual':'concept-visual'} ${v.type==='motion'?'motion-visual':''}"><div class="visual-kicker">${label}</div><img src="${esc(v.src)}" alt="${esc(l.title)} ${real?'Unreal Engine reference screenshot':'concept diagram'} ${i+1}" loading="${i?'lazy':'eager'}"><figcaption>${esc(v.caption||'')}${v.versionNote?` <span class="visual-version-note">${esc(v.versionNote)}</span>`:''}</figcaption></figure>`;
+  }).join('')}</div>`;
 }
 
 function deepDive(l){
@@ -531,7 +535,7 @@ function evidenceForm(l,s){
   return `<form class="evidence-form" data-action-form="evidence" data-lesson="${l.id}">
     <label><span>Short reflection</span><textarea name="reflection" maxlength="4000" required placeholder="What did you build? What problem did you solve? What did you change after testing?">${esc(s?.reflection||'')}</textarea></label>
     <label><span>Evidence link <small>optional</small></span><input name="evidenceUrl" type="url" maxlength="1000" value="${esc(s?.evidence_url||'')}" placeholder="Unlisted video, OneDrive/SharePoint link later, build link…"></label>
-    <label><span>Upload screenshot or PDF <small>optional • max 10 MB</small></span><input name="file" type="file" accept="image/png,image/jpeg,image/webp,application/pdf"></label>
+    <label><span>Upload screenshots / PDF <small>optional • up to 6 files • max 10 MB each</small></span><input name="file" type="file" multiple accept="image/png,image/jpeg,image/webp,application/pdf"><small class="evidence-upload-help">PNG, JPG, WebP or PDF. For gameplay video, paste an external video/Stream/OneDrive link above rather than uploading the video file.</small></label>
     <div class="button-row">
       <button class="button small ghost" type="submit" data-intent="draft">Save draft</button>
       <button class="button small primary" type="submit" data-intent="submit">Submit for review</button>
@@ -745,6 +749,18 @@ function teacherPage(){
 }
 function notFound(){return `<div class="empty"><h2>That page fell out of the level.</h2><p>Return to the dashboard.</p><a class="button" href="#/">Dashboard</a></div>`}
 
+function humanFileSize(bytes){
+  const n=Number(bytes)||0;if(n<1024)return `${n} B`;if(n<1048576)return `${(n/1024).toFixed(1)} KB`;return `${(n/1048576).toFixed(1)} MB`;
+}
+function evidenceFileCard(f){
+  const image=String(f.mime_type||'').startsWith('image/');
+  return `<div class="teacher-evidence-file ${image?'image':'document'}">${image?`<button class="evidence-thumb" data-action="open-evidence-file" data-path="${esc(f.storage_path)}" aria-label="Open ${esc(f.original_name)}"><span class="evidence-thumb-loading" data-evidence-preview data-path="${esc(f.storage_path)}">Loading preview…</span></button>`:`<button class="evidence-doc-icon" data-action="open-evidence-file" data-path="${esc(f.storage_path)}">PDF</button>`}<div class="teacher-evidence-meta"><strong>${esc(f.original_name)}</strong><small>${esc(f.mime_type||'file')} • ${humanFileSize(f.size_bytes)}</small><button class="link-button" data-action="open-evidence-file" data-path="${esc(f.storage_path)}">Open file</button></div></div>`;
+}
+async function hydrateEvidencePreviews(){
+  const nodes=$$('[data-evidence-preview]');
+  await Promise.all(nodes.map(async node=>{try{const url=await BACKEND.openEvidenceFile(node.dataset.path);if(!url)return;const img=document.createElement('img');img.src=url;img.alt='Student evidence preview';img.loading='lazy';node.replaceChildren(img);}catch(err){node.textContent='Preview unavailable — open file';}}));
+}
+
 async function renderTeacher(){
   const box=$('#teacherContent');if(!box)return;
   try{
@@ -755,14 +771,17 @@ async function renderTeacher(){
     const commentsBy=id=>o.comments.filter(x=>x.student_id===id).length;
     const approvedBy=id=>o.submissions.filter(x=>x.user_id===id&&x.status==='approved').length;
     const names=Object.fromEntries(o.profiles.map(p=>[p.id,p.display_name]));
+    const teacherNames=Object.fromEntries((o.teachers||[]).map(p=>[p.id,p.display_name]));
     const recent=o.comments.slice(0,12);
     const pending=o.submissions.filter(s=>s.status==='submitted');
     const reviewed=o.submissions.filter(s=>s.status==='approved'||s.status==='changes_required').slice(0,12);
     const approved=o.submissions.filter(s=>s.status==='approved').length;
+    const activeClasses=o.classes.filter(c=>!c.archived);
+    const archivedClasses=o.classes.filter(c=>c.archived);
 
     box.innerHTML=`<div class="teacher-grid">
       <div class="teacher-stat"><small>Students</small><strong>${o.profiles.length}</strong></div>
-      <div class="teacher-stat"><small>Classes</small><strong>${o.classes.length}</strong></div>
+      <div class="teacher-stat"><small>Active classes</small><strong>${activeClasses.length}</strong><span>${archivedClasses.length} archived</span></div>
       <div class="teacher-stat"><small>Evidence waiting</small><strong>${pending.length}</strong></div>
       <div class="teacher-stat"><small>Evidence approved</small><strong>${approved}</strong></div>
       <div class="teacher-stat"><small>Lesson completions</small><strong>${o.progress.length}</strong></div>
@@ -770,6 +789,8 @@ async function renderTeacher(){
       <div class="teacher-stat"><small>Comments / questions</small><strong>${o.comments.length}</strong></div>
       <div class="teacher-stat"><small>Student requests</small><strong>${o.requests.length}</strong></div>
     </div>
+
+    <div class="teacher-security-banner"><b>CLASS-SCOPED PRIVACY ACTIVE</b><span>You only see student progress, evidence and comments from classes you own or co-teach. Permanent class deletion remains owner-only.</span></div>
 
     <section class="section">
       <div class="section-head"><div><h2>Teacher team</h2><p>Invite colleagues without sharing a permanent master code. Each invite is unique, expires and can only be used once.</p></div><span class="sync-chip">${o.teachers?.length||1} teacher${(o.teachers?.length||1)===1?'':'s'}</span></div>
@@ -800,7 +821,7 @@ async function renderTeacher(){
     </section>
 
     <section class="section">
-      <div class="section-head"><div><h2>Classes</h2><p>Create teaching groups and assign signed-in students.</p></div></div>
+      <div class="section-head"><div><h2>Classes</h2><p>Classes you own or co-teach. Assigned teachers share student/progress/evidence access; only the class owner can add/remove co-teachers or permanently delete the class.</p></div><span class="sync-chip">${activeClasses.length} active</span></div>
       <div class="teacher-split">
         <form class="project-panel form-grid" data-action-form="create-class">
           <span class="eyebrow">New class</span>
@@ -809,26 +830,26 @@ async function renderTeacher(){
           <button class="button small primary" type="submit">Create class</button>
         </form>
         <div class="class-manager">
-          ${o.classes.length?o.classes.map(c=>{
+          ${activeClasses.length?activeClasses.map(c=>{
             const memberIds=(c.class_members||[]).map(m=>m.user_id);
             const available=o.profiles.filter(p=>!memberIds.includes(p.id));
-            return `<div class="class-card">
-              <div class="class-card-head"><div><strong>${esc(c.name)}</strong><small>${esc(c.academic_year||'')}</small></div><span>${memberIds.length} student${memberIds.length===1?'':'s'}</span></div>
-              <div class="class-code-panel ${c.join_enabled?'enabled':'paused'}">
-                <div><small>STUDENT JOIN CODE</small><code>${esc(c.join_code||'—')}</code><span>${c.join_enabled?'Accepting joins':'Paused'}</span></div>
-                <div class="class-code-actions">
-                  <button class="button small ghost" data-action="copy-class-code" data-code="${esc(c.join_code||'')}">Copy</button>
-                  <button class="button small ghost" data-action="toggle-class-join" data-class="${c.id}" data-enabled="${c.join_enabled?'1':'0'}">${c.join_enabled?'Pause':'Enable'}</button>
-                  <button class="button small ghost" data-action="regenerate-class-code" data-class="${c.id}">New code</button>
-                </div>
-              </div>
-              <div class="class-members">${memberIds.length?memberIds.map(id=>`<div class="class-member"><span>${esc(names[id]||'Student')}</span><button data-action="remove-class-member" data-class="${c.id}" data-student="${id}" title="Remove">×</button></div>`).join(''):'<div class="muted">No students assigned yet.</div>'}</div>
-              ${available.length?`<form class="class-add" data-action-form="add-class-member" data-class="${c.id}">
-                <select name="student" required><option value="">Add student…</option>${available.map(s=>`<option value="${s.id}">${esc(s.display_name)}</option>`).join('')}</select>
-                <button class="button small" type="submit">Add</button>
-              </form>`:'<div class="muted">All signed-in students are already in this class.</div>'}
+            const teacherIds=(c.class_teachers||[]).map(t=>t.teacher_id);
+            const availableTeachers=(o.teachers||[]).filter(t=>!teacherIds.includes(t.id));
+            const isOwner=c.teacher_id===BACKEND.user.id;
+            return `<div class="class-card ${isOwner?'owned':'co-taught'}">
+              <div class="class-card-head"><div><strong>${esc(c.name)}</strong><small>${esc(c.academic_year||'No academic year set')} • ${isOwner?'You own this class':'You co-teach this class'}</small></div><span>${memberIds.length} student${memberIds.length===1?'':'s'}</span></div>
+
+              <div class="class-teaching-team"><div class="class-team-head"><small>TEACHING TEAM</small><span>${teacherIds.length} teacher${teacherIds.length===1?'':'s'}</span></div><div class="class-teacher-chips">${teacherIds.map(id=>`<div class="class-teacher-chip ${id===c.teacher_id?'owner':''}"><span>${esc(teacherNames[id]||'Teacher')}</span><small>${id===c.teacher_id?'Owner':id===BACKEND.user.id?'You • Co-teacher':'Co-teacher'}</small>${isOwner&&id!==c.teacher_id?`<button data-action="remove-class-teacher" data-class="${c.id}" data-teacher="${id}" data-name="${esc(teacherNames[id]||'Teacher')}" title="Remove co-teacher">×</button>`:''}</div>`).join('')}</div>
+              ${isOwner&&availableTeachers.length?`<form class="class-add-teacher" data-action-form="add-class-teacher" data-class="${c.id}"><select name="teacher" required><option value="">Add co-teacher…</option>${availableTeachers.map(t=>`<option value="${t.id}">${esc(t.display_name)}</option>`).join('')}</select><button class="button small" type="submit">Add teacher</button></form>`:''}</div>
+
+              <details class="class-edit-panel"><summary>Edit class details</summary><form class="class-edit-form" data-action-form="edit-class" data-class="${c.id}"><label>Class name<input name="name" maxlength="100" value="${esc(c.name)}" required></label><label>Academic year<input name="academicYear" maxlength="40" value="${esc(c.academic_year||'')}"></label><button class="button small primary" type="submit">Save changes</button></form></details>
+              <div class="class-code-panel ${c.join_enabled?'enabled':'paused'}"><div><small>STUDENT JOIN CODE</small><code>${esc(c.join_code||'—')}</code><span>${c.join_enabled?'Accepting joins':'Paused'}</span></div><div class="class-code-actions"><button class="button small ghost" data-action="copy-class-code" data-code="${esc(c.join_code||'')}">Copy</button><button class="button small ghost" data-action="toggle-class-join" data-class="${c.id}" data-enabled="${c.join_enabled?'1':'0'}">${c.join_enabled?'Pause':'Enable'}</button><button class="button small ghost" data-action="regenerate-class-code" data-class="${c.id}">New code</button></div></div>
+              <div class="class-members">${memberIds.length?memberIds.map(id=>`<div class="class-member"><span>${esc(names[id]||'Student')}</span><button data-action="remove-class-member" data-class="${c.id}" data-student="${id}" title="Remove">×</button></div>`).join(''):'<div class="muted">No students in this class yet. Give students the join code above.</div>'}</div>
+              ${available.length?`<form class="class-add" data-action-form="add-class-member" data-class="${c.id}"><select name="student" required><option value="">Add student already visible to you…</option>${available.map(s=>`<option value="${s.id}">${esc(s.display_name)}</option>`).join('')}</select><button class="button small" type="submit">Add</button></form>`:'<div class="muted">New students should normally join with the class code. Manual add only lists students already visible through one of your classes.</div>'}
+              <div class="class-danger-row"><button class="button small ghost" data-action="archive-class" data-class="${c.id}" data-name="${esc(c.name)}">Archive class</button>${isOwner?`<button class="button small danger" data-action="delete-class" data-class="${c.id}" data-name="${esc(c.name)}">Delete permanently</button>`:`<button class="button small ghost" data-action="leave-class-teacher" data-class="${c.id}" data-name="${esc(c.name)}">Leave teaching team</button>`}</div>
             </div>`;
-          }).join(''):'<div class="offline-note">No classes yet. Create your first teaching group here.</div>'}
+          }).join(''):'<div class="offline-note">No active classes yet. Create your first teaching group here.</div>'}
+          ${archivedClasses.length?`<details class="archived-classes"><summary>${archivedClasses.length} archived class${archivedClasses.length===1?'':'es'}</summary><div class="archived-class-list">${archivedClasses.map(c=>{const isOwner=c.teacher_id===BACKEND.user.id;return `<div class="class-card archived"><div class="class-card-head"><div><strong>${esc(c.name)}</strong><small>${esc(c.academic_year||'')} • ${isOwner?'Owner':'Co-teacher'}</small></div><span>Archived</span></div><p class="muted">Students, progress and evidence remain in the Hub; this class no longer accepts joins.</p><div class="class-danger-row"><button class="button small ghost" data-action="unarchive-class" data-class="${c.id}" data-name="${esc(c.name)}">Restore class</button>${isOwner?`<button class="button small danger" data-action="delete-class" data-class="${c.id}" data-name="${esc(c.name)}">Delete permanently</button>`:`<button class="button small ghost" data-action="leave-class-teacher" data-class="${c.id}" data-name="${esc(c.name)}">Leave teaching team</button>`}</div></div>`}).join('')}</div></details>`:''}
         </div>
       </div>
     </section>
@@ -840,10 +861,7 @@ async function renderTeacher(){
         return `<article class="submission-card pending">
           <div class="submission-head"><div><span class="eyebrow">${esc(names[s.user_id]||'Student')} • ${esc(l?.title||s.lesson_id)}</span><h3>${esc(l?.projectTask?.name||s.mechanic_id)}</h3></div><span class="request-status submitted">Waiting</span></div>
           <div class="reflection-box"><strong>Student reflection</strong><p>${esc(s.reflection||'No reflection supplied.')}</p></div>
-          <div class="evidence-actions">
-            ${link?`<a class="button small ghost" target="_blank" rel="noopener" href="${esc(link)}">↗ Evidence link</a>`:''}
-            ${files.map(f=>`<button class="button small ghost" data-action="open-evidence-file" data-path="${esc(f.storage_path)}">📎 ${esc(f.original_name)}</button>`).join('')}
-          </div>
+          <div class="teacher-evidence-received"><div class="teacher-evidence-received-head"><strong>Evidence received</strong><span>${files.length} uploaded file${files.length===1?'':'s'}${link?' + link':''}</span></div>${files.length?`<div class="teacher-evidence-files">${files.map(evidenceFileCard).join('')}</div>`:'<div class="muted">No uploaded file — review the external evidence link/reflection.</div>'}${link?`<a class="button small ghost" target="_blank" rel="noopener" href="${esc(link)}">↗ Open external evidence / video link</a>`:''}</div>
           <form class="review-form" data-action-form="review-evidence" data-submission="${s.id}">
             <textarea name="feedback" maxlength="4000" placeholder="Short useful feedback. What is working? What should they improve?"></textarea>
             <div class="button-row">
@@ -873,6 +891,7 @@ async function renderTeacher(){
       return `<div class="board-card"><span class="eyebrow">${esc(names[c.student_id]||'Student')} • ${esc(l?.title||c.lesson_id)}</span><p>${esc(c.body)}</p>
       <form class="comment-form" data-action-form="teacher-reply" data-lesson="${esc(c.lesson_id)}" data-student="${esc(c.student_id)}"><textarea name="body" maxlength="2000" placeholder="Teacher reply…" required></textarea><button class="button small primary" type="submit">Reply</button></form></div>`;
     }).join(''):'<div class="empty">No student comments yet.</div>'}</div></section>`;
+    await hydrateEvidencePreviews();
   }catch(e){box.innerHTML=`<div class="offline-note">${esc(e.message)}</div>`}
 }
 
@@ -1150,6 +1169,16 @@ document.addEventListener('click',async e=>{
       try{await BACKEND.revokeTeacherInvite(b.dataset.invite);await renderTeacher();toast('Teacher invite revoked.')}catch(err){toast(err.message)}
     }
   }
+  else if(a==='remove-class-teacher'){
+    if(confirm(`Remove ${b.dataset.name||'this teacher'} from this class? They will immediately lose access to its students and evidence.`)){
+      try{await BACKEND.removeClassTeacher(b.dataset.class,b.dataset.teacher);await renderTeacher();toast('Co-teacher removed.')}catch(err){toast(err.message)}
+    }
+  }
+  else if(a==='leave-class-teacher'){
+    if(confirm(`Leave the teaching team for "${b.dataset.name||'this class'}"? You will lose access to its students and evidence.`)){
+      try{await BACKEND.removeClassTeacher(b.dataset.class,BACKEND.user.id);await renderTeacher();toast('You left the teaching team.')}catch(err){toast(err.message)}
+    }
+  }
   else if(a==='toggle-class-join'){
     try{await BACKEND.setClassJoinEnabled(b.dataset.class,b.dataset.enabled!=='1');await renderTeacher();toast(b.dataset.enabled==='1'?'Class code paused.':'Class code enabled.')}catch(err){toast(err.message)}
   }
@@ -1157,6 +1186,21 @@ document.addEventListener('click',async e=>{
     if(confirm('Generate a new code? The old class code will stop working immediately.')){
       try{await BACKEND.regenerateClassCode(b.dataset.class);await renderTeacher();toast('New class code generated.')}catch(err){toast(err.message)}
     }
+  }
+  else if(a==='archive-class'){
+    if(confirm(`Archive "${b.dataset.name}"? Students keep their work and the class can be restored later.`)){
+      try{await BACKEND.setClassArchived(b.dataset.class,true);await renderTeacher();toast('Class archived.')}catch(err){toast(err.message)}
+    }
+  }
+  else if(a==='unarchive-class'){
+    try{await BACKEND.setClassArchived(b.dataset.class,false);await renderTeacher();toast('Class restored.')}catch(err){toast(err.message)}
+  }
+  else if(a==='delete-class'){
+    const name=b.dataset.name||'this class';
+    const typed=prompt(`PERMANENTLY DELETE "${name}"?\n\nThis removes the class and membership links, but does NOT delete student accounts, progress or evidence.\n\nType the class name exactly to confirm:`, '');
+    if(typed===null)return;
+    if(typed!==name){toast('Class was not deleted — the name did not match.');return}
+    try{await BACKEND.deleteClass(b.dataset.class);await renderTeacher();toast('Class permanently deleted.')}catch(err){toast(err.message)}
   }
   else if(a==='microsoft-login'){
     try{await BACKEND.signInMicrosoft()}catch(err){toast(err.message)}
@@ -1216,14 +1260,15 @@ document.addEventListener('submit',async e=>{
     const l=lesson(e.target.dataset.lesson),fd=new FormData(e.target);
     const reflection=String(fd.get('reflection')||'').trim();
     const evidenceUrl=String(fd.get('evidenceUrl')||'').trim();
-    const file=fd.get('file');
+    const files=Array.from(e.target.elements.file?.files||[]);
     const intent=e.submitter?.dataset.intent||'draft';
     if(!reflection){toast('Add a short reflection first.');return}
+    if(files.length>6){toast('Upload up to 6 evidence files at a time.');return}
     try{
       let saved=await BACKEND.saveSubmission({
         lessonId:l.id,mechanicId:l.id,reflection,evidenceUrl,status:'draft'
       });
-      if(file && file.size)await BACKEND.uploadEvidenceFile(saved.id,file);
+      if(files.length)await BACKEND.uploadEvidenceFiles(saved.id,files);
       if(intent==='submit'){
         saved=await BACKEND.saveSubmission({
           lessonId:l.id,mechanicId:l.id,reflection,evidenceUrl,status:'submitted'
@@ -1376,6 +1421,15 @@ document.addEventListener('submit',async e=>{
       form.elements.label.value='';
       toast('Teacher invite generated.');
     }catch(err){if(resultBox)resultBox.innerHTML=`<div class="auth-inline-status">${esc(err.message)}</div>`}
+  }
+  if(e.target.dataset.actionForm==='add-class-teacher'){
+    e.preventDefault();
+    const fd=new FormData(e.target);
+    try{await BACKEND.addClassTeacher(e.target.dataset.class,fd.get('teacher'));toast('Co-teacher added.');await renderTeacher()}catch(err){toast(err.message)}
+  }
+  if(e.target.dataset.actionForm==='edit-class'){
+    e.preventDefault();const fd=new FormData(e.target);
+    try{await BACKEND.updateClass({classId:e.target.dataset.class,name:fd.get('name'),academicYear:fd.get('academicYear')});await renderTeacher();toast('Class details updated.')}catch(err){toast(err.message)}
   }
   if(e.target.dataset.actionForm==='create-class'){
     e.preventDefault();

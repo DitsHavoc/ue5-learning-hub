@@ -1,54 +1,57 @@
-# UE5 Learning Hub v3.7.0 — Multi-Teacher
+# UE5 Learning Hub v3.9.0 — Hardened Co-Teaching
 
-## V3.7 — Teacher Team
+V3.9 is a reliability/security release rather than a feature-sprawl release.
 
-Existing teachers can now invite additional staff without sharing the original bootstrap code.
+## Co-teaching
 
-### Teacher flow
-1. Open Teacher Dashboard.
-2. In **Teacher team**, enter an optional colleague/role label.
-3. Choose an expiry (1–30 days).
-4. Generate a unique teacher invite.
-5. Copy the full code immediately.
-6. The invite can be revoked until it is used.
+A class has one permanent **owner** plus zero or more **co-teachers**.
 
-The database stores only a hash of the full invite code. After generation the dashboard retains only the last six-character hint/status; the full code is not recoverable from the database.
+- Owner and co-teachers can view the shared class, students, progress, evidence and private lesson comments.
+- Owner and co-teachers can rename/archive the class, manage the join code, and manage students.
+- Only the owner can add/remove other co-teachers.
+- A co-teacher can leave the teaching team.
+- Only the owner can permanently delete the class.
+- Existing classes are automatically backfilled with their existing teacher as owner.
 
-### Invited colleague flow
-**Create account → I have a teacher invite**
+## Privacy model
 
-They enter:
-- name
-- email
-- unique teacher invite
-- password
+Teacher access is **class scoped**. A Teacher role no longer grants site-wide access to every student's work.
 
-If email confirmation is enabled, the invite is stored locally and automatically claimed after the colleague confirms the email and signs in.
+A teacher can read a student profile/progress/project/evidence/comment only when the student belongs to a class that teacher owns or co-teaches.
 
-A signed-in normal account can also enter a Teacher invite from its account panel to promote that account.
+## Security hardening
 
-### Security
-Teacher invites are:
-- generated with random bytes
-- stored hashed
-- unique
-- one-use
-- expiring
-- revocable
-- created only by authenticated Teacher accounts
+- Authenticated users have no UPDATE privilege on `profiles.role`; students cannot promote themselves to Teacher through a crafted API call.
+- Class ownership is immutable through normal class updates.
+- Class membership only accepts Student profiles.
+- Submitted/Approved evidence is immutable to students at both database-record and Storage-object layers.
+- Needs Changes unlocks the student's evidence again.
+- Teachers may review evidence but cannot rewrite the student's reflection/link/content fields.
+- Student evidence upload metadata is capped to the same MIME types / 10 MB limits as Storage.
+- Maximum six uploaded files per submission is also enforced in the database.
+- Evidence timestamps and reviewer identity are server-controlled.
+- Storage remains private and teacher signed-file access is class scoped.
 
-The original first-teacher bootstrap remains only for a brand-new installation. It is not the mechanism for additional teachers.
+## Live validation performed
 
-## Database
-Migrations:
-- `migrations/20260825_09_multi_teacher_invites.sql`
-- `migrations/20260825_10_harden_multi_teacher_invites.sql`
+- Existing four classes preserved and owner assignments backfilled.
+- Unassigned teacher sees zero unrelated student profiles.
+- Temporary co-teacher test saw exactly the assigned class and not another class.
+- Co-teacher successfully edited a shared class but could not delete it.
+- Authenticated role can update `profiles.display_name` but cannot update `profiles.role`.
+- Attempted forged teacher feedback on student evidence was stripped server-side.
+- Supabase security advisor reports no RLS/function warning from this hardening pass.
 
-Both migrations have already been applied to the current live Supabase project.
+The remaining Supabase security warning is the project-level **Leaked Password Protection Disabled** Auth setting.
 
-The public teacher-invite RPCs are SECURITY INVOKER wrappers; privileged implementations live in the private schema.
+## Migrations
+
+Already applied to the current live Supabase project:
+
+- `20260825_11_co_teaching_scoped_access_and_evidence_hardening.sql`
+- `20260825_12_add_remaining_foreign_key_indexes.sql`
+- `20260825_13_tighten_class_and_evidence_integrity.sql`
+
+Do not rerun them on the existing live project.
 
 Microsoft SSO remains optional and disabled.
-
-
-Supabase security advisor after V3.7: no new teacher-invite/RLS security lints. The only remaining warning is the optional Auth leaked-password-protection setting.

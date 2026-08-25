@@ -351,10 +351,10 @@ const api = {
     if(!client||!this.user)return [];
     const {data,error}=await client
       .from('class_members')
-      .select('joined_at,class:classes(id,name,academic_year,teacher_id)')
+      .select('joined_at,class:classes(id,name,academic_year,teacher_id,archived)')
       .eq('user_id',this.user.id);
     if(error){console.warn('Classes',error.message);return []}
-    return (data||[]).map(x=>x.class).filter(Boolean);
+    return (data||[]).map(x=>x.class).filter(c=>c && !c.archived);
   },
   async getMySubmissions(){
     if(!client||!this.user)return [];
@@ -421,6 +421,13 @@ const api = {
     }
     return path;
   },
+  async uploadEvidenceFiles(submissionId,files){
+    const list=Array.from(files||[]).filter(f=>f&&f.size);
+    if(list.length>6)throw new Error('Upload up to 6 evidence files at a time.');
+    const uploaded=[];
+    for(const file of list)uploaded.push(await this.uploadEvidenceFile(submissionId,file));
+    return uploaded;
+  },
   async openEvidenceFile(path){
     if(!client||!this.user)throw new Error('Sign in to view evidence.');
     const {data,error}=await client.storage.from('student-evidence').createSignedUrl(path,300);
@@ -450,6 +457,28 @@ const api = {
     }).select().single();
     if(error)throw error;return data;
   },
+  async updateClass({classId,name,academicYear}){
+    if(!client||!this.user||this.profile?.role!=='teacher')throw new Error('Teacher access required.');
+    const cleanName=String(name||'').trim().slice(0,100);
+    const cleanYear=String(academicYear||'').trim().slice(0,40);
+    if(cleanName.length<2)throw new Error('Class name must be at least 2 characters.');
+    const {data,error}=await client.from('classes')
+      .update({name:cleanName,academic_year:cleanYear})
+      .eq('id',classId).select().single();
+    if(error)throw error;return data;
+  },
+  async setClassArchived(classId,archived){
+    if(!client||!this.user||this.profile?.role!=='teacher')throw new Error('Teacher access required.');
+    const changes=archived?{archived:true,join_enabled:false}:{archived:false};
+    const {data,error}=await client.from('classes').update(changes)
+      .eq('id',classId).select().single();
+    if(error)throw error;return data;
+  },
+  async deleteClass(classId){
+    if(!client||!this.user||this.profile?.role!=='teacher')throw new Error('Teacher access required.');
+    const {error}=await client.from('classes').delete().eq('id',classId).eq('teacher_id',this.user.id);
+    if(error)throw error;return true;
+  },
   async setClassJoinEnabled(classId,enabled){
     if(!client||!this.user||this.profile?.role!=='teacher')throw new Error('Teacher access required.');
     const {data,error}=await client.from('classes').update({join_enabled:Boolean(enabled)}).eq('id',classId).select().single();
@@ -472,6 +501,19 @@ const api = {
   async removeClassMember(classId,userId){
     if(!client||!this.user||this.profile?.role!=='teacher')throw new Error('Teacher access required.');
     const {error}=await client.from('class_members').delete().eq('class_id',classId).eq('user_id',userId);
+    if(error)throw error;return true;
+  },
+  async addClassTeacher(classId,teacherId){
+    if(!client||!this.user||this.profile?.role!=='teacher')throw new Error('Teacher access required.');
+    if(!teacherId)throw new Error('Choose a teacher first.');
+    const {error}=await client.from('class_teachers').insert({
+      class_id:classId,teacher_id:teacherId,added_by:this.user.id
+    });
+    if(error)throw error;return true;
+  },
+  async removeClassTeacher(classId,teacherId){
+    if(!client||!this.user||this.profile?.role!=='teacher')throw new Error('Teacher access required.');
+    const {error}=await client.from('class_teachers').delete().eq('class_id',classId).eq('teacher_id',teacherId);
     if(error)throw error;return true;
   },
   async reviewSubmission({submissionId,status,feedback}){
@@ -558,7 +600,7 @@ const api = {
       client.from('lesson_comments').select('*').order('created_at',{ascending:false}),
       client.from('student_requests').select('id,author_id,category,title,body,status,created_at,request_votes(user_id)').order('created_at',{ascending:false}),
       client.from('evidence_submissions').select('*,submission_files(*)').order('updated_at',{ascending:false}),
-      client.from('classes').select('*,class_members(user_id)').eq('teacher_id',this.user.id).order('created_at',{ascending:false}),
+      client.from('classes').select('*,class_members(user_id),class_teachers(teacher_id,added_by,created_at)').order('created_at',{ascending:false}),
       client.from('teacher_invites').select('id,code_hint,label,created_by,expires_at,used_by,used_at,revoked_at,created_at').eq('created_by',this.user.id).order('created_at',{ascending:false})
     ]);
     return {
