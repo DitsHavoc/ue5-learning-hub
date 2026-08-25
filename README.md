@@ -1,6 +1,6 @@
-# UE5 Learning Hub v3.14.0 — Hardened Co-Teaching
+# UE5 Learning Hub v3.15.0 — Learning, Projects & Revision
 
-V3.14 is a reliability/security release rather than a feature-sprawl release.
+V3.15 is the learning-first workspace release: multi-project/group project logbooks, scored revision quizzes, feature-request conversations, readability improvements and the existing security/co-teaching foundation.
 
 ## Co-teaching
 
@@ -57,7 +57,7 @@ Do not rerun them on the existing live project.
 Microsoft SSO remains optional and disabled.
 
 
-## V3.14 — Visual Accuracy Pass
+## V3.15 — Visual Accuracy Pass
 
 - Integrated five current classroom UE screenshots:
   - Editor
@@ -69,23 +69,23 @@ Microsoft SSO remains optional and disabled.
 - Old UE5.0 book screenshots were removed as primary visuals where a current owned screenshot is now available.
 - Every lesson now includes one or more **Official Unreal Engine 5.8 reference** links.
 - SaveGame uses Epic's current Save/Load documentation as its accuracy reference; no forced local screenshot is required.
-- Epic documentation artwork is **not copied into the package**. Students open the current official documentation in a new tab.
+- Selected official Epic documentation images are integrated as teaching references, with source links and the site disclaimer; classroom-owned screenshots remain preferred where available.
 - Existing concept diagrams remain clearly labelled as concept diagrams, not exact Unreal UI.
 
-No database migration is required for V3.14.
+The visual layer itself needs no database migration; Projects and request replies require migrations 14–17.
 
 
-## V3.14 visual flow pass
+## V3.15 visual flow pass
 - moved key lesson images much higher in the Learn section so they sit near the explanation text
 - added secondary close-up screenshots for Editor, Events, Branches, Functions and Data Tables
 - preserved official UE5.8 links and concept diagrams underneath the real screenshots
 
 
-## V3.14 practical exercise pass
+## V3.15 practical exercise pass
 Every lesson now has three original practical checkpoints embedded in the Learn flow: TRY IT NOW, TEST IT IN PLAY, and MAKE IT YOURS. These emulate the supplied book's explain/build/test rhythm without copying its exercises. The existing full Guided Build remains as the consolidation walkthrough.
 
 
-## V3.14 — Epic UE5.8 visual integration + lightbox
+## V3.15 — Epic UE5.8 visual integration + lightbox
 
 - Curated current screenshots from Epic's official Unreal Engine 5.8 documentation are placed beside the text they explain.
 - Existing current classroom screenshots remain the primary examples where available.
@@ -94,12 +94,24 @@ Every lesson now has three original practical checkpoints embedded in the Learn 
 - Every Epic documentation image carries a source link.
 - A global Epic Fan Content Policy disclaimer is present in the footer.
 - Remote Epic images fail gracefully to a source link if Epic changes an image URL.
-- Cache-busting script versions were updated to v3.14.0 to reduce stale Render/browser deployments.
+- Cache-busting script versions were updated to v3.15.0 to reduce stale Render/browser deployments.
 
 
-## V3.14 motion media pass
+## V3.15 motion media pass
 - adds 12 selected official Epic UE5.8 video clips across 10 lessons
 - videos are click-to-load to protect performance and bandwidth
 - every clip retains a direct link to the source Epic lesson
 - existing animated concept SVGs remain in place where they explain a node/system better than a long video
 - no database migration required
+
+
+## V3.15 learning-first workspace overhaul
+- Learning paths and revision now sit above project administration in the navigation/dashboard.
+- Projects is a new multi-project cloud workspace for solo and group assignment work.
+- Group projects use join codes; development-log authorship is immutable and remains individual.
+- Project milestones, screenshots/PDFs, team comments, personal contribution views and copyable assessment summaries are included.
+- Revision is now a scored multiple-choice quiz system with random and topic modes.
+- Feature requests support teacher replies and student notifications.
+- Readability pass increases small text, labels, buttons, captions and card copy throughout the UI.
+- Hidden Konami Code Easter egg: Up Up Down Down Left Right Left Right B A.
+- Requires migrations 14–17 on an existing database.

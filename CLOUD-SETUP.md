@@ -10,7 +10,7 @@ The Supabase backend has already been created and the database/security schema h
 
 Once college approval is received, complete the Entra/provider steps below and then change `microsoftEnabled` to `true` in `data/supabase-config.js`.
 
-# Microsoft SSO + Supabase setup — UE5 Learning Hub v3.14.0
+# Microsoft SSO + Supabase setup — UE5 Learning Hub v3.15.0
 
 The site works in **LOCAL** mode before this is connected. Once configured, the main account button becomes the college Microsoft sign-in and enables cloud progress, private lesson feedback, the teacher dashboard and the Requests Board.
 

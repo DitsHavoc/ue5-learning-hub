@@ -15,11 +15,13 @@ if (!DATA || !PROJECT || !BACKEND) {
 const STORE = 'ue5hub:v2:progress';
 const PROJECT_STORE = 'ue5hub:v3:project';
 const LEGACY = 'ue5LearningHubProgressV1';
+const REVISION_STORE = 'ue5hub:v315:revision-results';
 
 let state = loadState();
 let projectState = loadProjectState();
 let lessonMode = 'guided';
 let authView = 'signin';
+let revisionSession = null;
 
 function $(s,root=document){return root.querySelector(s)}
 function $$(s,root=document){return [...root.querySelectorAll(s)]}
@@ -292,36 +294,36 @@ function projectTaskCard(l){
   const x=l.projectTask;
   if(!x)return '';
   return `<div class="game-task">
-    <span class="task-label">◈ BUILD IT INTO YOUR GAME</span>
+    <span class="task-label">◈ OPTIONAL PRACTICE BUILD</span>
     <h3>${esc(x.name)}</h3>
     <p><b>Mission:</b> ${esc(x.mission)}</p>
     <p>${esc(x.build)}</p>
     <div class="project-proof"><strong>Definition of done</strong>${requirements(x.proof)}</div>
     <div class="callout good"><b>Optional polish:</b> ${esc(x.polish)}</div>
     <div class="project-status-bar">
-      <small>This status feeds your <b>My Game</b> milestone tracker.</small>
+      <small>This tracks the optional <b>Signal Lost practice</b>. Assignment and group work belongs in <b>Projects</b>.</small>
       ${statusControls(l.id)}
     </div>
   </div>`;
 }
 
 function dashboard(){
-  const i=level(),n=nextLesson(),np=pathProgress(n.path),pp=projectProgress();
-  const nextProject=DATA.lessons.find(l=>projectStatus(l.id)!=='complete')||DATA.lessons[0];
-  return `<section class="hero">
+  const i=level(),n=nextLesson(),np=pathProgress(n.path);
+  const pathsComplete=DATA.paths.filter(p=>pathProgress(p.id).pct===100).length;
+  return `<section class="hero learning-first-hero">
     <div class="hero-copy">
-      <span class="eyebrow">Learn • Build • Analyse • Apply</span>
-      <h1>Learn Unreal by<br>building a game.</h1>
-      <p>Every lesson teaches a transferable UE5 idea, then adds a mechanic to one growing game project. Theory becomes a playable system instead of a disconnected tutorial.</p>
+      <span class="eyebrow">Learn • Practise • Test • Apply</span>
+      <h1>Learn Unreal.<br>Build better games.</h1>
+      <p>The Learning Hub is first and foremost a UE5 course. Learn the idea, see it in Unreal, practise it immediately, then prove you can apply it independently.</p>
       <div class="hero-actions">
         <a class="button primary" href="#/lesson/${n.id}">▶ Continue learning</a>
-        <a class="button ghost" href="#/my-game">◈ Open My Game</a>
-        <a class="button ghost" href="#/progress">◎ My Progress</a>
+        <a class="button ghost" href="#/revision">↻ Start revision quiz</a>
+        <a class="button ghost" href="#/projects">▣ Projects</a>
       </div>
     </div>
     <div class="hero-art" aria-hidden="true">
-      <div class="bp-node one"><div class="bp-head">Learn Skill</div><div class="bp-body">Understand WHY → prove HOW</div></div>
-      <div class="bp-node two"><div class="bp-head">Add to Game</div><div class="bp-body">Mechanic complete<br>Project grows</div></div>
+      <div class="bp-node one"><div class="bp-head">Learn Skill</div><div class="bp-body">Understand WHY<br>See it in Unreal</div></div>
+      <div class="bp-node two"><div class="bp-head">Practise Skill</div><div class="bp-body">Build → Test → Change</div></div>
     </div>
   </section>
 
@@ -329,24 +331,11 @@ function dashboard(){
     <div class="stat"><small>Current level</small><strong>${i.n}</strong></div>
     <div class="stat"><small>Total XP</small><strong>${i.xp}</strong></div>
     <div class="stat"><small>Lessons complete</small><strong>${state.completed.length}/${DATA.lessons.length}</strong></div>
-    <div class="stat"><small>Game mechanics complete</small><strong>${pp.complete}/${pp.total}</strong></div>
+    <div class="stat"><small>Learning paths complete</small><strong>${pathsComplete}/${DATA.paths.length}</strong></div>
   </div>
 
   <section class="section">
-    <div class="section-head"><div><h2>Your game project</h2><p>Signal Lost is the technical spine. Theme it your way.</p></div><span class="sync-chip ${BACKEND.user?'cloud':''}">${BACKEND.user?'☁ synced':'● local browser'}</span></div>
-    <div class="dashboard-project">
-      <div>
-        <span class="eyebrow">${esc(projectState.project_title)} • ${esc(projectState.theme)}</span>
-        <h3>${pp.pct}% of the mechanical spine complete</h3>
-        <p>Next project mechanic: <b>${esc(nextProject.projectTask?.name||nextProject.title)}</b></p>
-        <div class="progress"><span style="width:${pp.pct}%"></span></div>
-      </div>
-      <a class="button primary" href="#/my-game">Open project →</a>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="section-head"><div><h2>Continue learning</h2><p>Resume your current skill.</p></div></div>
+    <div class="section-head"><div><h2>Continue learning</h2><p>Pick up the next skill before worrying about project admin.</p></div></div>
     <a class="continue-card" href="#/lesson/${n.id}">
       <div class="continue-icon">${path(n.path).icon}</div>
       <div class="continue-main">
@@ -358,8 +347,17 @@ function dashboard(){
     </a>
   </section>
 
-  <section class="section"><div class="section-head"><div><h2>Learning paths</h2><p>Follow them in order or jump to a skill your game needs.</p></div></div>
+  <section class="section"><div class="section-head"><div><h2>Learning paths</h2><p>Follow them in order or jump to the exact UE5 skill you need.</p></div></div>
     <div class="path-grid">${DATA.paths.map(p=>{const x=pathProgress(p.id);return `<a class="path-card" href="#/path/${p.id}"><div class="path-icon">${p.icon}</div><h3>${esc(p.title)}</h3><p>${esc(p.description)}</p><div class="path-meta"><span>${x.done}/${x.total} lessons</span><span>${x.pct}%</span></div><div class="progress"><span style="width:${x.pct}%"></span></div></a>`}).join('')}</div>
+  </section>
+
+  <section class="section secondary-workspace-section">
+    <div class="section-head"><div><h2>Projects & assessment</h2><p>Use this workspace when a lesson turns into real assignment, game-jam or team work.</p></div></div>
+    <div class="workspace-cards">
+      <a class="workspace-card" href="#/projects"><span>▣</span><div><strong>Projects</strong><p>Multiple solo or group projects, development logs, screenshots, milestones and individual contribution.</p></div></a>
+      <a class="workspace-card" href="#/progress"><span>◎</span><div><strong>Evidence & progress</strong><p>Course evidence, teacher feedback and approved practical work.</p></div></a>
+      <a class="workspace-card" href="#/requests"><span>✦</span><div><strong>Feature requests</strong><p>Suggest improvements, vote, and see teacher replies.</p></div></a>
+    </div>
   </section>`;
 }
 function pathPage(id){
@@ -403,7 +401,7 @@ function commentSection(l){
     if(BACKEND.mode==='cloud'){
       return `<section class="content-card" id="comments"><span class="eyebrow">11 • Ask / reflect</span><h2>Teacher feedback</h2><div class="offline-note">Sign in with your Learning Hub account to leave a private question or reflection attached to this lesson.</div><button class="button small" data-action="open-auth" style="margin-top:9px">Sign in / create account</button></section>`;
     }
-    return `<section class="content-card" id="comments"><span class="eyebrow">11 • Ask / reflect</span><h2>Teacher feedback</h2><div class="offline-note"><b>Local mode:</b> account-backed comments are ready in the V3 code but need the Supabase project connected. Lessons, XP and My Game still work locally.</div></section>`;
+    return `<section class="content-card" id="comments"><span class="eyebrow">11 • Ask / reflect</span><h2>Teacher feedback</h2><div class="offline-note"><b>Local mode:</b> account-backed comments are ready in the V3 code but need the Supabase project connected. Lessons, XP and Signal Lost practice still work locally.</div></section>`;
   }
   return `<section class="content-card" id="comments"><span class="eyebrow">11 • Ask / reflect</span><h2>Question, reflection & teacher feedback</h2>
     <p class="muted">Keep this about the learning: what worked, what you changed, or where you are stuck.</p>
@@ -425,7 +423,7 @@ function lessonPage(id){
       <div class="tags"><span class="tag ${tagClass(l.difficulty)}">${l.difficulty}</span><span class="tag">${l.duration}</span><span class="tag">+${l.xp} XP</span>${done?'<span class="tag beginner">Completed ✓</span>':''}${projectStatus(id)==='complete'?'<span class="tag beginner">Game mechanic ✓</span>':''}</div>
       <div class="mode-toggle"><button data-action="mode" data-mode="guided" class="${lessonMode==='guided'?'active':''}">Guided</button><button data-action="mode" data-mode="independent" class="${lessonMode==='independent'?'active':''}">Independent</button></div>
     </div>
-    <div class="lesson-meta"><div class="meta-line"><small>Learning aim</small><strong>${esc(l.aim)}</strong></div><div class="meta-line"><small>Lesson model</small><strong>Learn → Prove → Add to game</strong></div><div class="meta-line"><small>Project mechanic</small><strong>${esc(l.projectTask?.name||'Project practice')}</strong></div></div>
+    <div class="lesson-meta"><div class="meta-line"><small>Learning aim</small><strong>${esc(l.aim)}</strong></div><div class="meta-line"><small>Lesson model</small><strong>Learn → Practise → Prove</strong></div><div class="meta-line"><small>Practice mechanic</small><strong>${esc(l.projectTask?.name||'Practice build')}</strong></div></div>
   </section>
 
   <div class="lesson-layout ${lessonMode==='independent'?'independent':''}">
@@ -480,7 +478,7 @@ function lessonPage(id){
 
     <section class="content-card" id="debug"><span class="eyebrow">08 • Debug & improve</span><h2>Common problems</h2><ul>${l.common.map(x=>`<li>${esc(x)}</li>`).join('')}</ul><div class="callout good"><b>Good practice:</b> ${esc(l.goodPractice)}</div></section>
 
-    <section class="content-card" id="game"><span class="eyebrow">09 • Main game project</span><h2>Cement it by building it for real</h2><p>This is not another throwaway exercise. Add the mechanic to your main game so it has to work with systems you built earlier.</p>${projectTaskCard(l)}</section>
+    <section class="content-card" id="game"><span class="eyebrow">09 • Practice build</span><h2>Apply it in a playable system</h2><p>Use Signal Lost as the shared practice spine, or adapt the same mechanic to a sandbox. Your assessed and group projects are logged separately in Projects.</p>${projectTaskCard(l)}</section>
 
     ${evidenceSection(l)}
     ${commentSection(l)}
@@ -495,7 +493,7 @@ function lessonPage(id){
     <button class="section-button" data-action="scroll" data-target="experience">06 Play / watch</button>
     <button class="section-button" data-action="scroll" data-target="homework">07 Homework</button>
     <button class="section-button" data-action="scroll" data-target="debug">08 Debug & improve</button>
-    <button class="section-button" data-action="scroll" data-target="game">09 Build your game</button>
+    <button class="section-button" data-action="scroll" data-target="game">09 Practice build</button>
     <button class="section-button" data-action="scroll" data-target="evidence">10 Evidence</button>
     <button class="section-button" data-action="scroll" data-target="comments">11 Ask / reflect</button>
     <hr>
@@ -559,6 +557,106 @@ function myGame(){
 
 
 
+
+function projectKindLabel(kind){return ({assignment:'Assignment',group_project:'Group project',game_jam:'Game jam',practice:'Practice',personal:'Personal',client:'Client project',other:'Other'})[kind]||'Project'}
+function projectStatusLabelValue(status){return ({active:'Active',complete:'Complete',archived:'Archived'})[status]||status}
+function projectEntryLabel(type){return ({progress:'Progress update',testing:'Testing',problem:'Problem / fix',decision:'Design decision',reflection:'Reflection',contribution:'My contribution'})[type]||type}
+function milestoneStatusLabel(status){return ({not_started:'Not started',in_progress:'In progress',complete:'Complete'})[status]||status}
+
+function projectsPage(){
+  if(!BACKEND.user){
+    return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Projects</div><span class="eyebrow">Projects & assessment</span><h1>▣ Projects</h1><p class="muted">Development logbooks for assignments, game jams and group projects.</p></div><div class="project-login-gate"><h2>Learning stays open. Project work is private.</h2><p>Sign in to create multiple projects, collaborate with a team, upload screenshots/PDFs and build an assessment-ready record of your own contribution.</p><button class="button primary" data-action="open-auth">Sign in / create account</button></div>`;
+  }
+  const teacher=BACKEND.profile?.role==='teacher';
+  return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Projects</div><span class="eyebrow">Projects • development log • assessment evidence</span><h1>▣ Projects</h1><p class="muted">${teacher?'View group/assignment projects linked to the classes you teach.':'Create as many solo or group projects as you need. The project is shared; authorship of each development-log entry remains individual.'}</p></div>
+  ${teacher?'':`<div class="project-create-grid">
+    <section class="project-panel"><span class="eyebrow">Create</span><h2>New project</h2><form class="form-grid" data-action-form="create-project">
+      <label>Project title<input name="title" maxlength="120" required placeholder="e.g. Unit 321 — Abandoned Station"></label>
+      <div class="form-two"><label>Project type<select name="projectType"><option value="solo">Solo</option><option value="group">Group</option></select></label><label>Type of work<select name="projectKind"><option value="assignment">Assignment</option><option value="group_project">Group project</option><option value="game_jam">Game jam</option><option value="practice">Practice</option><option value="personal">Personal</option><option value="client">Client project</option><option value="other">Other</option></select></label></div>
+      <div class="form-two"><label>Class <small>optional</small><select name="classId" id="projectClassSelect"><option value="">No class linked</option></select></label><label>Assessment / unit <small>optional</small><input name="assessmentUnit" maxlength="160" placeholder="e.g. Unit 321"></label></div>
+      <label>Due date <small>optional</small><input name="dueDate" type="date"></label>
+      <label>Brief description<textarea name="description" maxlength="4000" placeholder="What are you making and what are you responsible for?"></textarea></label>
+      <button class="button primary" type="submit">Create project</button>
+    </form></section>
+    <section class="project-panel"><span class="eyebrow">Join a team</span><h2>Group project code</h2><p>A project lead can share a private join code. Joining gives you access to the shared milestones and development log, but your posts remain attributed to you.</p><form class="form-grid" data-action-form="join-project"><label>Project code<input name="projectCode" maxlength="20" required placeholder="GRP-XXXXXXXX"></label><button class="button" type="submit">Join group project</button></form><div class="callout good"><b>Assessment-safe collaboration:</b> nobody can rewrite another student's development-log authorship.</div></section>
+  </div>`}
+  <section class="section"><div class="section-head"><div><h2>${teacher?'Class projects':'Your projects'}</h2><p>Open a project to add logs, screenshots, milestones, comments and assessment evidence.</p></div></div><div id="projectsList"><div class="empty">Loading projects…</div></div></section>`;
+}
+
+async function renderProjects(){
+  const box=$('#projectsList');if(!box||!BACKEND.user)return;
+  try{
+    const [rows,classes]=await Promise.all([BACKEND.getProjects(),BACKEND.profile?.role==='student'?BACKEND.getMyClasses():Promise.resolve([])]);
+    const select=$('#projectClassSelect');
+    if(select)select.innerHTML='<option value="">No class linked</option>'+classes.map(c=>`<option value="${esc(c.id)}">${esc(c.name)}${c.academic_year?` • ${esc(c.academic_year)}`:''}</option>`).join('');
+    if(!rows.length){box.innerHTML=`<div class="empty"><h3>No projects yet.</h3><p>${BACKEND.profile?.role==='teacher'?'Projects linked to your classes will appear here.':'Create an assignment, game-jam, practice or group project above.'}</p></div>`;return}
+    box.innerHTML=`<div class="multi-project-grid">${rows.map(p=>{
+      const mine=p.members.find(m=>m.user_id===BACKEND.user.id);
+      const memberNames=p.members.slice(0,3).map(m=>esc(m.profile?.display_name||'Student')).join(', ');
+      return `<article class="multi-project-card ${esc(p.status)}"><div class="project-card-top"><span class="project-type-pill ${p.project_type}">${p.project_type==='group'?'GROUP':'SOLO'}</span><span class="request-status ${p.status==='complete'?'shipped':p.status==='archived'?'declined':'building'}">${esc(projectStatusLabelValue(p.status))}</span></div><h3>${esc(p.title)}</h3><p>${esc(p.description||'No project description yet.')}</p><div class="project-card-meta"><span>${esc(projectKindLabel(p.project_kind))}</span>${p.class?`<span>${esc(p.class.name)}</span>`:''}${p.due_date?`<span>Due ${new Date(p.due_date+'T12:00:00').toLocaleDateString()}</span>`:''}</div><div class="project-team-summary"><b>${p.members.length}</b> member${p.members.length===1?'':'s'}${memberNames?` • ${memberNames}`:''}${mine?.role_label?` • You: ${esc(mine.role_label)}`:''}</div><a class="button primary small" href="#/projects/${p.id}">Open project →</a></article>`;
+    }).join('')}</div>`;
+  }catch(err){box.innerHTML=`<div class="offline-note">${esc(err.message)}</div>`}
+}
+
+function projectDetailPage(id){
+  if(!BACKEND.user)return projectsPage();
+  return `<div class="breadcrumb"><a href="#/">Dashboard</a> / <a href="#/projects">Projects</a> / Project</div><div id="projectDetail" data-project="${esc(id)}"><div class="empty">Loading project…</div></div>`;
+}
+
+function projectMediaHtml(media){
+  if(!media?.length)return '';
+  return `<div class="project-media-grid">${media.map(f=>{
+    const image=String(f.mime_type||'').startsWith('image/');
+    return image?`<button class="project-media-thumb" data-action="open-project-file" data-path="${esc(f.storage_path)}" title="${esc(f.original_name)}"><span data-project-preview data-path="${esc(f.storage_path)}">Loading image…</span><small>${esc(f.original_name)}</small></button>`:`<button class="project-file-pill" data-action="open-project-file" data-path="${esc(f.storage_path)}">📎 ${esc(f.original_name)} <small>${humanFileSize(f.size_bytes)}</small></button>`;
+  }).join('')}</div>`;
+}
+
+function projectUpdateHtml(u,project,bundle){
+  const mine=u.author_id===BACKEND.user?.id;
+  const milestone=bundle.milestones.find(m=>m.id===u.milestone_id);
+  return `<article class="project-log-entry ${mine?'mine':''}"><div class="project-log-head"><div><span class="entry-type">${esc(projectEntryLabel(u.entry_type))}</span><strong>${esc(u.author?.display_name||'Student')}</strong>${u.title?`<h3>${esc(u.title)}</h3>`:''}</div><time>${new Date(u.created_at).toLocaleString()}</time></div>${milestone?`<div class="log-milestone">Milestone: ${esc(milestone.title)}</div>`:''}<p class="project-log-body">${esc(u.body)}</p>${u.contribution?`<div class="contribution-box"><b>My contribution</b><p>${esc(u.contribution)}</p></div>`:''}${projectMediaHtml(u.media)}<div class="project-comments">${u.comments.map(c=>`<div class="project-comment"><b>${esc(c.author?.display_name||'User')}</b><span>${new Date(c.created_at).toLocaleString()}</span><p>${esc(c.body)}</p></div>`).join('')}${(bundle.members.some(m=>m.user_id===BACKEND.user?.id)||BACKEND.profile?.role==='teacher')?`<form class="project-comment-form" data-action-form="project-comment" data-project="${project.id}" data-update="${u.id}"><input name="body" maxlength="3000" required placeholder="Comment on this update…"><button class="button tiny" type="submit">Reply</button></form>`:''}</div>${mine?`<button class="link-button danger-link" data-action="delete-project-update" data-project="${project.id}" data-update="${u.id}">Delete my log entry</button>`:''}</article>`;
+}
+
+async function renderProjectDetail(id){
+  const box=$('#projectDetail');if(!box||!BACKEND.user)return;
+  try{
+    const b=await BACKEND.getProject(id),p=b.project;
+    const me=b.members.find(m=>m.user_id===BACKEND.user.id),owner=p.owner_id===BACKEND.user.id,teacher=BACKEND.profile?.role==='teacher';
+    const myUpdates=b.updates.filter(u=>u.author_id===BACKEND.user.id);
+    const myMedia=myUpdates.reduce((n,u)=>n+(u.media?.length||0),0);
+    const completed=b.milestones.filter(m=>m.status==='complete').length;
+    const progress=b.milestones.length?Math.round(completed/b.milestones.length*100):0;
+    box.innerHTML=`<section class="project-detail-hero"><div><span class="eyebrow">${esc(projectKindLabel(p.project_kind))} • ${p.project_type==='group'?'Group':'Solo'} project</span><h1>${esc(p.title)}</h1><p>${esc(p.description||'No project description yet.')}</p><div class="project-card-meta">${p.class?`<span>Class: ${esc(p.class.name)}</span>`:''}${p.assessment_unit?`<span>${esc(p.assessment_unit)}</span>`:''}${p.due_date?`<span>Due ${new Date(p.due_date+'T12:00:00').toLocaleDateString()}</span>`:''}<span>${esc(projectStatusLabelValue(p.status))}</span></div></div><div class="project-detail-stat"><strong>${progress}%</strong><small>${completed}/${b.milestones.length} milestones complete</small><div class="progress"><span style="width:${progress}%"></span></div></div></section>
+
+    <div class="project-detail-grid">
+      <section class="project-panel"><span class="eyebrow">Team</span><h2>${p.project_type==='group'?'Shared project':'Project owner'}</h2><div class="project-member-list">${b.members.map(m=>`<div class="project-member"><div class="project-member-avatar">${esc((m.profile?.display_name||'?').slice(0,1).toUpperCase())}</div><div><strong>${esc(m.profile?.display_name||'Student')}</strong><small>${m.role==='owner'?'Project Lead':esc(m.role_label||'Team member')}</small></div>${owner&&m.role!=='owner'?`<button class="link-button danger-link" data-action="remove-project-member" data-project="${p.id}" data-user="${m.user_id}">Remove</button>`:''}</div>`).join('')}</div>${me?`<form class="inline-role-form" data-action-form="project-role" data-project="${p.id}"><label>My role in this project<input name="roleLabel" maxlength="100" value="${esc(me.role_label||'')}" placeholder="e.g. Level Designer"></label><button class="button small" type="submit">Save role</button></form>`:''}${p.project_type==='group'&&owner?`<div class="project-code-box"><small>GROUP JOIN CODE</small><code>${esc(p.join_code||'')}</code><div class="button-row"><button class="button small" data-action="copy-project-code" data-code="${esc(p.join_code||'')}">Copy code</button><button class="button small ghost" data-action="regenerate-project-code" data-project="${p.id}">New code</button></div></div>`:''}${me&&me.role!=='owner'?`<button class="button small danger" data-action="leave-project" data-project="${p.id}" data-user="${BACKEND.user.id}">Leave project</button>`:''}</section>
+
+      <section class="project-panel"><span class="eyebrow">Milestones</span><h2>Project progress</h2>${b.milestones.length?`<div class="project-milestone-list">${b.milestones.map(m=>`<div class="project-milestone ${m.status}"><div><strong>${esc(m.title)}</strong><p>${esc(m.description||'')}</p>${m.due_date?`<small>Due ${new Date(m.due_date+'T12:00:00').toLocaleDateString()}</small>`:''}</div><div class="milestone-actions"><span>${esc(milestoneStatusLabel(m.status))}</span>${owner?`<button class="status-btn ${m.status==='not_started'?'active':''}" data-action="milestone-status" data-milestone="${m.id}" data-status="not_started" data-project="${p.id}">○</button><button class="status-btn ${m.status==='in_progress'?'active':''}" data-action="milestone-status" data-milestone="${m.id}" data-status="in_progress" data-project="${p.id}">◐</button><button class="status-btn ${m.status==='complete'?'active':''}" data-action="milestone-status" data-milestone="${m.id}" data-status="complete" data-project="${p.id}">✓</button><button class="link-button danger-link" data-action="delete-milestone" data-milestone="${m.id}" data-project="${p.id}">×</button>`:''}</div></div>`).join('')}</div>`:'<div class="muted">No milestones yet.</div>'}${owner?`<form class="form-grid compact-form" data-action-form="project-milestone" data-project="${p.id}"><label>New milestone<input name="title" maxlength="160" required placeholder="e.g. Greybox complete"></label><label>What does done look like?<textarea name="description" maxlength="2000"></textarea></label><label>Due <small>optional</small><input type="date" name="dueDate"></label><button class="button small" type="submit">Add milestone</button></form>`:''}</section>
+    </div>
+
+    ${me?`<section class="section project-log-create"><div class="section-head"><div><h2>Add development log entry</h2><p>Record what happened while it is fresh. Screenshots and reflection now save hours when assessment is due.</p></div></div><form class="project-update-form" data-action-form="project-update" data-project="${p.id}"><div class="form-two"><label>Entry type<select name="entryType"><option value="progress">Progress update</option><option value="testing">Testing</option><option value="problem">Problem / fix</option><option value="decision">Design decision</option><option value="reflection">Reflection</option><option value="contribution">My contribution</option></select></label><label>Milestone <small>optional</small><select name="milestoneId"><option value="">Not linked to a milestone</option>${b.milestones.map(m=>`<option value="${m.id}">${esc(m.title)}</option>`).join('')}</select></label></div><label>Short heading <small>optional</small><input name="title" maxlength="180" placeholder="e.g. Rebuilt the corridor greybox"></label><label>What did you do / learn / change?<textarea name="body" maxlength="5000" required placeholder="Describe the work, problem, test or decision…"></textarea></label><label>What did YOU personally contribute? <small>especially important in group work</small><textarea name="contribution" maxlength="3000" placeholder="Be specific about your own work."></textarea></label><label>Screenshots / PDF <small>up to 6 • 10 MB each</small><input type="file" name="files" multiple accept="image/png,image/jpeg,image/webp,application/pdf"></label><button class="button primary" type="submit">Add to development log</button></form></section>`:''}
+
+    <section class="section"><div class="section-head"><div><h2>Team development log</h2><p>Shared chronology of the project. Every entry keeps its original author and timestamp.</p></div></div><div class="project-log-list">${b.updates.length?b.updates.map(u=>projectUpdateHtml(u,p,b)).join(''):'<div class="empty">No development-log entries yet.</div>'}</div></section>
+
+    ${me?`<section class="section"><div class="section-head"><div><h2>My contribution</h2><p>Your assessment-friendly view of only the work attributed to you.</p></div><button class="button" data-action="copy-assessment-summary" data-project="${p.id}">Copy assessment summary</button></div><div class="contribution-summary"><div><small>My log entries</small><strong>${myUpdates.length}</strong></div><div><small>My uploaded files</small><strong>${myMedia}</strong></div><div><small>Role</small><strong>${esc(me.role_label|| (me.role==='owner'?'Project Lead':'Team member'))}</strong></div></div><div class="my-contribution-list">${myUpdates.length?myUpdates.map(u=>`<div class="assessment-entry"><time>${new Date(u.created_at).toLocaleDateString()}</time><strong>${esc(u.title||projectEntryLabel(u.entry_type))}</strong><p>${esc(u.contribution||u.body)}</p></div>`).join(''):'<div class="muted">Your own entries will appear here.</div>'}</div></section>`:''}
+
+    ${owner?`<section class="section"><details class="project-settings"><summary>Project settings</summary><form class="form-grid" data-action-form="project-settings" data-project="${p.id}"><label>Title<input name="title" maxlength="120" value="${esc(p.title)}" required></label><label>Description<textarea name="description" maxlength="4000">${esc(p.description||'')}</textarea></label><div class="form-two"><label>Status<select name="status"><option value="active" ${p.status==='active'?'selected':''}>Active</option><option value="complete" ${p.status==='complete'?'selected':''}>Complete</option><option value="archived" ${p.status==='archived'?'selected':''}>Archived</option></select></label><label>Due date<input type="date" name="dueDate" value="${esc(p.due_date||'')}"></label></div><button class="button" type="submit">Save project settings</button><button class="button danger" type="button" data-action="delete-project" data-project="${p.id}" data-name="${esc(p.title)}">Permanently delete project</button></form></details></section>`:''}`;
+    await hydrateProjectMedia();
+  }catch(err){box.innerHTML=`<div class="offline-note">${esc(err.message)}</div>`}
+}
+
+async function hydrateProjectMedia(){
+  await Promise.all($$('[data-project-preview]').map(async node=>{try{const url=await BACKEND.openProjectFile(node.dataset.path);if(!url)return;const img=document.createElement('img');img.src=url;img.alt='Project screenshot';img.loading='lazy';node.replaceChildren(img);}catch(e){node.textContent='Preview unavailable';}}));
+}
+
+function assessmentSummaryText(bundle){
+  const p=bundle.project,me=bundle.members.find(m=>m.user_id===BACKEND.user?.id);
+  const mine=bundle.updates.filter(u=>u.author_id===BACKEND.user?.id).slice().reverse();
+  const lines=[`PROJECT: ${p.title}`,`TYPE: ${projectKindLabel(p.project_kind)}${p.project_type==='group'?' (Group)':' (Solo)'}`,`MY ROLE: ${me?.role_label|| (me?.role==='owner'?'Project Lead':'Team member')}`,p.assessment_unit?`ASSESSMENT / UNIT: ${p.assessment_unit}`:'', '', 'MY DEVELOPMENT EVIDENCE:'];
+  mine.forEach((u,i)=>{lines.push(`\n${i+1}. ${new Date(u.created_at).toLocaleDateString()} — ${u.title||projectEntryLabel(u.entry_type)}`,`What happened: ${u.body}`,`My contribution: ${u.contribution||'See development note.'}`,`Files: ${(u.media||[]).map(f=>f.original_name).join(', ')||'None'}`)});
+  return lines.filter(x=>x!==null).join('\n');
+}
+
 async function loadEvidence(id){
   const box=$('#evidencePanel');if(!box||!BACKEND.user)return;
   const l=lesson(id),s=await BACKEND.getSubmission(id);
@@ -598,11 +696,11 @@ function achievementData(approvedCount=0,requestCount=0){
   return [
     ['first-step','First Steps','Complete your first lesson.',done>=1,'◉'],
     ['blueprint-core','Blueprint Builder','Complete Variables, Branches and Functions.',['variables','branches','functions'].every(x=>ids.has(x)),'◇'],
-    ['game-builder','Systems Builder','Complete 10 mechanics in My Game.',game>=10,'⚙'],
+    ['game-builder','Practice Systems Builder','Complete 10 mechanics in Signal Lost practice.',game>=10,'⚙'],
     ['halfway','Halfway There','Complete 10 lessons.',done>=10,'½'],
     ['evidence','Proof, Not Promises','Get 3 pieces of evidence approved.',approvedCount>=3,'✓'],
     ['community','Community Voice','Submit an idea to the Requests Board.',requestCount>=1,'✦'],
-    ['final-game','Final Build','Complete all 20 game mechanics.',game>=Object.keys(PROJECT.mechanics).length,'◈'],
+    ['final-game','Practice Build Complete','Complete all 20 practice mechanics.',game>=Object.keys(PROJECT.mechanics).length,'◈'],
     ['course','UE5 Pathfinder','Complete every lesson.',done>=DATA.lessons.length,'★']
   ];
 }
@@ -616,12 +714,12 @@ function progressPage(){
   </div>
   <div class="stat-grid">
     <div class="stat"><small>Lessons</small><strong>${state.completed.length}/${DATA.lessons.length}</strong></div>
-    <div class="stat"><small>Game mechanics</small><strong>${pp.complete}/${pp.total}</strong></div>
+    <div class="stat"><small>Practice mechanics</small><strong>${pp.complete}/${pp.total}</strong></div>
     <div class="stat"><small>XP</small><strong>${i.xp}</strong></div>
     <div class="stat"><small>Cloud evidence</small><strong id="progressEvidenceStat">${BACKEND.user?'…':'Locked'}</strong></div>
   </div>
   <section class="section"><div class="section-head"><div><h2>Achievements</h2><p>Small milestones for meaningful course progress.</p></div></div><div class="achievement-grid" id="achievementGrid">${renderAchievements(0,0)}</div></section>
-  <section class="section"><div class="section-head"><div><h2>Evidence tracker</h2><p>See what has been submitted, approved or sent back for improvement.</p></div></div><div id="progressEvidence">${BACKEND.user?'<div class="empty">Loading evidence…</div>':'<div class="offline-note">Evidence tracking unlocks when you sign in. Lesson completion and My Game status still work locally as a guest.</div>'}</div></section>
+  <section class="section"><div class="section-head"><div><h2>Evidence tracker</h2><p>See what has been submitted, approved or sent back for improvement.</p></div></div><div id="progressEvidence">${BACKEND.user?'<div class="empty">Loading evidence…</div>':'<div class="offline-note">Evidence tracking unlocks when you sign in. Lesson completion and optional Signal Lost practice status still work locally as a guest.</div>'}</div></section>
   <section class="section"><div class="section-head"><div><h2>My class</h2><p>Your teaching group once account sign-in is enabled.</p></div></div><div id="progressClasses">${BACKEND.user?'<div class="empty">Loading classes…</div>':'<div class="offline-note">Create or sign in to a Learning Hub account, then join using the class code from your teacher.</div>'}</div></section>
   <section class="section" id="notifications"><div class="section-head"><div><h2>Notifications</h2><p>Teacher feedback and roadmap updates.</p></div></div><div id="progressNotifications">${BACKEND.user?'<div class="empty">Loading notifications…</div>':'<div class="offline-note">Notifications unlock when you sign in to a Learning Hub account.</div>'}</div></section>`;
 }
@@ -706,7 +804,7 @@ function requestBoard(){
       <h2>${BACKEND.mode==='cloud'?'Sign in to shape the Learning Hub':'Cloud account features are unavailable in this copy'}</h2>
       <p class="muted">${BACKEND.mode==='cloud'
         ?'Requests are account-backed so votes remain one-per-student and ideas can be tracked across devices. Create a Learning Hub account with your class code or sign in.'
-        :'Lessons, XP and My Game still work locally, but shared requests need the Supabase backend.'}</p>
+        :'Lessons, XP and Signal Lost practice still work locally, but shared requests need the Supabase backend.'}</p>
       ${BACKEND.mode==='cloud'?'<button class="button primary" data-action="open-auth">Sign in / create account</button>':'<div class="offline-note">Guest learning remains fully available on this browser.</div>'}
     </div></section>`;
   }
@@ -728,7 +826,7 @@ function requestBoard(){
           <option value="other">Other</option>
         </select></label>
         <label>Short title<input name="title" minlength="3" maxlength="120" required placeholder="e.g. Tutorial for an inventory system"></label>
-        <label>Tell us what you want and why<textarea name="body" minlength="3" maxlength="2000" required placeholder="What would make the site or your game project better?"></textarea></label>
+        <label>Tell us what you want and why<textarea name="body" minlength="3" maxlength="2000" required placeholder="What would make the learning, project workspace or site better?"></textarea></label>
         <button class="button primary" type="submit">Submit request</button>
       </form>
     </section>
@@ -741,7 +839,7 @@ function requestBoard(){
         <span class="request-status building">Building</span><b>→</b>
         <span class="request-status shipped">Shipped</span>
       </div>
-      <div class="callout good"><b>Keep it useful:</b> requests should improve learning, the game project, tutorials or the site itself.</div>
+      <div class="callout good"><b>Keep it useful:</b> requests should improve learning, projects, tutorials or the site itself.</div>
     </section>
   </div>
   <section class="section">
@@ -769,10 +867,11 @@ async function renderRequests(){
           <button class="vote-button ${r.my_vote?'active':''}" data-action="request-vote" data-request="${r.id}" data-voted="${r.my_vote?'1':'0'}">▲ <b>${r.votes}</b> vote${r.votes===1?'':'s'}</button>
           <span>${new Date(r.created_at).toLocaleDateString()}</span>
         </div>
+        ${r.replies?.length?`<div class="request-replies"><strong>Teacher replies</strong>${r.replies.map(x=>`<div class="request-reply"><div><b>${esc(x.author?.display_name||'Teacher')}</b><span>${new Date(x.created_at).toLocaleString()}</span></div><p>${esc(x.body)}</p></div>`).join('')}</div>`:''}
         ${BACKEND.profile?.role==='teacher'?`<div class="teacher-request-controls">
           ${['new','planned','building','shipped','declined'].map(s=>`<button class="status-btn ${r.status===s?'active':''}" data-action="request-status" data-request="${r.id}" data-status="${s}">${esc(requestStatusLabel(s))}</button>`).join('')}
           <button class="status-btn danger" data-action="request-delete" data-request="${r.id}">Delete</button>
-        </div>`:''}
+        </div><form class="request-reply-form" data-action-form="request-reply" data-request="${r.id}"><textarea name="body" maxlength="3000" required placeholder="Reply to this request…"></textarea><button class="button small primary" type="submit">Reply as teacher</button></form>`:''}
       </article>`).join('')}</div>`;
   }catch(err){box.innerHTML=`<div class="offline-note">${esc(err.message)}</div>`}
 }
@@ -786,10 +885,32 @@ function homeworkBoard(){
 function glossary(){
   return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Glossary</div><span class="eyebrow">${DATA.glossary.length} starter terms</span><h1>? UE5 Glossary</h1><p class="muted">Short definitions for terms students meet while building.</p></div><input id="glossarySearch" type="search" placeholder="Filter glossary…" style="width:min(430px,100%);background:#0b121b;border:1px solid var(--line);color:#fff;border-radius:9px;padding:10px;margin-bottom:12px"><div class="glossary-grid" id="glossaryGrid">${DATA.glossary.map(([t,d])=>`<div class="glossary-item" data-search="${esc((t+' '+d).toLowerCase())}"><strong>${esc(t)}</strong><p>${esc(d)}</p></div>`).join('')}</div>`;
 }
+function revisionQuestionBank(topic='all'){
+  return DATA.lessons.filter(l=>topic==='all'||l.path===topic).flatMap(l=>l.quiz.map((q,qi)=>({lessonId:l.id,lessonTitle:l.title,pathId:l.path,question:q[0],options:q[1],correct:Array.isArray(q[2])?q[2]:[q[2]],feedback:q[3],key:`${l.id}-${qi}`})));
+}
+function shuffled(list){const a=[...list];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function loadRevisionResults(){try{return JSON.parse(localStorage.getItem(REVISION_STORE)||'[]')}catch(e){return []}}
+function saveRevisionResult(result){const rows=[result,...loadRevisionResults()].slice(0,12);localStorage.setItem(REVISION_STORE,JSON.stringify(rows))}
+function startRevisionQuiz(topic='all',count=10){
+  const bank=shuffled(revisionQuestionBank(topic));
+  revisionSession={topic,questions:bank.slice(0,Math.max(1,Math.min(Number(count)||10,bank.length))),index:0,answers:[],finished:false};
+  route();
+}
+function revisionScore(session){
+  let correct=0;session.answers.forEach((ans,i)=>{const expected=session.questions[i].correct.slice().sort().join(','),got=[...ans].sort().join(',');if(expected===got)correct++});
+  return {correct,total:session.questions.length,pct:session.questions.length?Math.round(correct/session.questions.length*100):0};
+}
 function revision(){
-  const cards=DATA.lessons.flatMap(l=>l.quiz.map(q=>({lesson:l,q:q[0],answer:q[1][q[2]],feedback:q[3]})));
-  const card=cards[Math.floor(Math.random()*cards.length)];
-  return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Revision</div><span class="eyebrow">Random retrieval practice</span><h1>↻ Revision</h1><p class="muted">A quick question pulled from the learning content.</p></div><div class="revision-card"><span class="eyebrow">${esc(card.lesson.title)}</span><h2 style="margin-top:8px">${esc(card.q)}</h2><div class="button-row"><button class="button primary" data-action="reveal-revision">Reveal answer</button><button class="button ghost" data-action="new-revision">New question</button></div><div class="revision-answer" id="revisionAnswer"><div class="callout good"><b>Answer:</b> ${esc(card.answer)}</div><p class="muted">${esc(card.feedback)}</p><a class="button small" href="#/lesson/${card.lesson.id}">Open related lesson</a></div></div>`;
+  if(revisionSession?.finished){
+    const score=revisionScore(revisionSession);
+    return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Revision</div><span class="eyebrow">Quiz complete</span><h1>↻ ${score.pct}%</h1><p class="muted">${score.correct} correct out of ${score.total}. Review every answer below, then run another random or topic quiz.</p></div><div class="revision-result-hero"><div class="revision-score-ring"><strong>${score.pct}%</strong><span>${score.correct}/${score.total}</span></div><div><h2>${score.pct>=80?'Strong work.':score.pct>=60?'Getting there.':'Use the misses to choose what to revise next.'}</h2><div class="button-row"><button class="button primary" data-action="revision-restart">Choose another quiz</button><button class="button ghost" data-action="revision-repeat">Repeat same topic</button></div></div></div><section class="section"><div class="section-head"><div><h2>Answer review</h2><p>Correct answer, your answer and the explanation.</p></div></div><div class="revision-review-list">${revisionSession.questions.map((q,i)=>{const selected=revisionSession.answers[i]||[],ok=q.correct.slice().sort().join(',')===[...selected].sort().join(',');return `<article class="revision-review ${ok?'correct':'wrong'}"><span>${ok?'✓ Correct':'× Review'}</span><h3>${esc(q.question)}</h3><p><b>Your answer:</b> ${esc(selected.map(x=>q.options[x]).join(', ')||'No answer')}</p><p><b>Correct answer:</b> ${esc(q.correct.map(x=>q.options[x]).join(', '))}</p><div class="callout ${ok?'good':''}">${esc(q.feedback)}</div><a class="link-button" href="#/lesson/${q.lessonId}">Open ${esc(q.lessonTitle)} →</a></article>`}).join('')}</div></section>`;
+  }
+  if(revisionSession){
+    const q=revisionSession.questions[revisionSession.index],n=revisionSession.index+1,multiple=q.correct.length>1;
+    return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Revision</div><span class="eyebrow">${revisionSession.topic==='all'?'Random mixed quiz':esc(path(revisionSession.topic)?.title||'Topic quiz')}</span><h1>Question ${n} of ${revisionSession.questions.length}</h1><div class="revision-progress"><span style="width:${Math.round((revisionSession.index/revisionSession.questions.length)*100)}%"></span></div></div><section class="revision-quiz-card"><span class="eyebrow">${esc(path(q.pathId)?.title||'UE5')}</span><h2>${esc(q.question)}</h2><p class="muted">${multiple?'Select every answer that applies.':'Choose one answer.'}</p><form data-action-form="revision-answer" class="revision-answer-form">${q.options.map((o,i)=>`<label class="revision-choice"><input type="${multiple?'checkbox':'radio'}" name="answer" value="${i}" ${multiple?'':'required'}><span>${esc(o)}</span></label>`).join('')}<div class="button-row"><button class="button primary" type="submit">${n===revisionSession.questions.length?'Finish quiz':'Next question →'}</button><button class="button ghost" type="button" data-action="revision-abandon">Quit quiz</button></div></form></section>`;
+  }
+  const results=loadRevisionResults(),available=Object.fromEntries(DATA.paths.map(p=>[p.id,revisionQuestionBank(p.id).length]));
+  return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Revision</div><span class="eyebrow">Scored retrieval practice</span><h1>↻ Revision Quizzes</h1><p class="muted">Choose a mixed random quiz or focus on one learning path. Every quiz uses multiple-choice answers and gives you a score at the end.</p></div><div class="revision-start-grid"><section class="project-panel revision-random"><span class="eyebrow">Random quiz</span><h2>Mix everything</h2><p>Questions are shuffled across the full course each time.</p><form data-action-form="revision-start"><input type="hidden" name="topic" value="all"><label>Number of questions<select name="count"><option value="5">5 — quick check</option><option value="10" selected>10 — standard</option><option value="15">15 — deeper</option><option value="20">20 — challenge</option></select></label><button class="button primary" type="submit">Start random quiz →</button></form></section><section class="project-panel"><span class="eyebrow">By topic</span><h2>Target a learning path</h2><div class="revision-topic-grid">${DATA.paths.map(p=>`<button class="revision-topic-card" data-action="revision-topic" data-topic="${p.id}"><span>${p.icon}</span><strong>${esc(p.title)}</strong><small>${available[p.id]} questions available</small></button>`).join('')}</div></section></div>${results.length?`<section class="section"><div class="section-head"><div><h2>Recent scores</h2><p>Stored on this browser for quick progress checks.</p></div></div><div class="recent-quiz-results">${results.slice(0,6).map(r=>`<div><strong>${r.pct}%</strong><span>${esc(r.topicLabel)} • ${r.correct}/${r.total}</span><small>${new Date(r.at).toLocaleString()}</small></div>`).join('')}</div></section>`:''}`;
 }
 function teacherPage(){
   if(!BACKEND.user || BACKEND.profile?.role!=='teacher'){
@@ -835,7 +956,7 @@ async function renderTeacher(){
       <div class="teacher-stat"><small>Evidence waiting</small><strong>${pending.length}</strong></div>
       <div class="teacher-stat"><small>Evidence approved</small><strong>${approved}</strong></div>
       <div class="teacher-stat"><small>Lesson completions</small><strong>${o.progress.length}</strong></div>
-      <div class="teacher-stat"><small>Game mechanics complete</small><strong>${o.projects.filter(x=>x.status==='complete').length}</strong></div>
+      <div class="teacher-stat"><small>Practice mechanics complete</small><strong>${o.projects.filter(x=>x.status==='complete').length}</strong></div>
       <div class="teacher-stat"><small>Comments / questions</small><strong>${o.comments.length}</strong></div>
       <div class="teacher-stat"><small>Student requests</small><strong>${o.requests.length}</strong></div>
     </div>
@@ -961,7 +1082,9 @@ function route(){
   if(!parts.length){app.innerHTML=dashboard();activate('home')}
   else if(parts[0]==='path'){app.innerHTML=pathPage(parts[1]);activate(parts[1])}
   else if(parts[0]==='lesson'){app.innerHTML=lessonPage(parts[1]);const l=lesson(parts[1]);if(l)activate(l.path)}
-  else if(parts[0]==='my-game'){app.innerHTML=myGame();activate('my-game')}
+  else if(parts[0]==='my-game'){location.replace('#/projects');return}
+  else if(parts[0]==='projects'&&parts[1]){app.innerHTML=projectDetailPage(parts[1]);activate('projects')}
+  else if(parts[0]==='projects'){app.innerHTML=projectsPage();activate('projects')}
   else if(parts[0]==='progress'){app.innerHTML=progressPage();activate('progress')}
   else if(parts[0]==='requests'){app.innerHTML=requestBoard();activate('requests')}
   else if(parts[0]==='challenges'){app.innerHTML=challengeBoard();activate('challenges')}
@@ -980,6 +1103,8 @@ function route(){
 
   if(parts[0]==='lesson'&&BACKEND.user){loadComments(parts[1]);loadEvidence(parts[1]);}
   if(parts[0]==='progress'&&BACKEND.user) renderProgressCloud();
+  if(parts[0]==='projects'&&!parts[1]&&BACKEND.user) renderProjects();
+  if(parts[0]==='projects'&&parts[1]&&BACKEND.user) renderProjectDetail(parts[1]);
   if(parts[0]==='requests'&&BACKEND.user) renderRequests();
   if(parts[0]==='teacher') renderTeacher();
 }
@@ -1059,7 +1184,7 @@ function renderAuth(){
       <div><b>${esc(BACKEND.profile?.display_name||BACKEND.user.email?.split('@')[0]||'Learning Hub account')}</b><span>${esc(BACKEND.user.email||'')}</span></div>
     </div>
     <div class="cloud-callout">
-      Your lesson progress, game project, evidence, feedback, classes, notifications and requests sync to this Learning Hub account.
+      Your lesson progress, projects, development logs, evidence, feedback, classes, notifications and requests sync to this Learning Hub account.
       ${BACKEND.profile?.role==='teacher'?'<br><br><b>Teacher role active.</b>':''}
     </div>
     <form class="auth-form compact" data-action-form="profile-name">
@@ -1076,7 +1201,7 @@ function renderAuth(){
     return;
   }
   if(BACKEND.mode!=='cloud'){
-    body.innerHTML=`<div class="cloud-callout"><b>Guest mode is active.</b><br><br>This copy has no cloud backend configured. Lessons, XP and My Game still save locally on this browser.</div>`;
+    body.innerHTML=`<div class="cloud-callout"><b>Guest mode is active.</b><br><br>This copy has no cloud backend configured. Lessons, XP and Signal Lost practice still save locally on this browser.</div>`;
     return;
   }
   if(!BACKEND.emailAuthEnabled){
@@ -1108,7 +1233,7 @@ function renderAuth(){
         </div>
         <button class="button primary" type="submit">Create account</button>
       </form>
-      <p class="auth-message"><b>Guest mode remains available:</b> close this window and the whole learning course still works. An account is only needed for cloud sync, classes, evidence, feedback, requests and notifications.</p>
+      <p class="auth-message"><b>Guest mode remains available:</b> close this window and the whole learning course still works. An account is needed for cloud sync, Projects/group collaboration, classes, evidence, feedback, requests and notifications.</p>
       <div class="teacher-account-links">
         <button class="link-button" data-action="auth-view" data-view="teacher-invite">I have a teacher invite</button>
         <button class="link-button teacher-setup-link" data-action="auth-view" data-view="teacher-setup">First installation only: create the first teacher</button>
@@ -1305,6 +1430,20 @@ document.addEventListener('click',async e=>{
       try{await BACKEND.deleteRequest(b.dataset.request);await renderRequests();toast('Request deleted.')}catch(err){toast(err.message)}
     }
   }
+  else if(a==='revision-topic'){startRevisionQuiz(b.dataset.topic,10)}
+  else if(a==='revision-restart'){revisionSession=null;route()}
+  else if(a==='revision-repeat'){const topic=revisionSession?.topic||'all';revisionSession=null;startRevisionQuiz(topic,10)}
+  else if(a==='revision-abandon'){revisionSession=null;route()}
+  else if(a==='copy-project-code'){try{await navigator.clipboard.writeText(b.dataset.code||'');toast('Project code copied.')}catch(e){toast('Copy failed.')}}
+  else if(a==='regenerate-project-code'){if(confirm('Generate a new group code? The old code will stop working.')){try{await BACKEND.regenerateProjectCode(b.dataset.project);await renderProjectDetail(b.dataset.project);toast('New project code generated.')}catch(err){toast(err.message)}}}
+  else if(a==='remove-project-member'){if(confirm('Remove this student from the project? Their existing authored log entries stay in the project record.')){try{await BACKEND.removeProjectMember(b.dataset.project,b.dataset.user);await renderProjectDetail(b.dataset.project);toast('Team member removed.')}catch(err){toast(err.message)}}}
+  else if(a==='leave-project'){if(confirm('Leave this group project? Your existing authored development-log entries stay attributed to you.')){try{await BACKEND.removeProjectMember(b.dataset.project,b.dataset.user);location.hash='#/projects';toast('You left the project.')}catch(err){toast(err.message)}}}
+  else if(a==='milestone-status'){try{await BACKEND.setProjectMilestoneStatus(b.dataset.milestone,b.dataset.status);await renderProjectDetail(b.dataset.project)}catch(err){toast(err.message)}}
+  else if(a==='delete-milestone'){if(confirm('Delete this milestone? Development-log entries will remain.')){try{await BACKEND.deleteProjectMilestone(b.dataset.milestone);await renderProjectDetail(b.dataset.project)}catch(err){toast(err.message)}}}
+  else if(a==='delete-project-update'){if(confirm('Delete your development-log entry and its uploaded files?')){try{await BACKEND.deleteProjectUpdate(b.dataset.project,b.dataset.update);await renderProjectDetail(b.dataset.project);toast('Log entry deleted.')}catch(err){toast(err.message)}}}
+  else if(a==='open-project-file'){try{const url=await BACKEND.openProjectFile(b.dataset.path);if(url)window.open(url,'_blank','noopener')}catch(err){toast(err.message)}}
+  else if(a==='copy-assessment-summary'){try{const bundle=await BACKEND.getProject(b.dataset.project);await navigator.clipboard.writeText(assessmentSummaryText(bundle));toast('Assessment summary copied.')}catch(err){toast(err.message)}}
+  else if(a==='delete-project'){const name=b.dataset.name||'this project';const typed=prompt(`PERMANENTLY DELETE "${name}"?\n\nThis deletes the shared project, milestones, logs and project media. Type the project name exactly to confirm:`, '');if(typed===name){try{await BACKEND.deleteProject(b.dataset.project);location.hash='#/projects';toast('Project deleted.')}catch(err){toast(err.message)}}else if(typed!==null)toast('Project was not deleted — the name did not match.')}
   else if(a==='open-progress'){location.hash='#/progress'}
   else if(a==='open-evidence-file'){
     try{
@@ -1326,6 +1465,44 @@ document.addEventListener('click',async e=>{
 });
 
 document.addEventListener('submit',async e=>{
+  if(e.target.dataset.actionForm==='revision-start'){
+    e.preventDefault();const fd=new FormData(e.target);startRevisionQuiz(String(fd.get('topic')||'all'),Number(fd.get('count')||10));return;
+  }
+  if(e.target.dataset.actionForm==='revision-answer'){
+    e.preventDefault();if(!revisionSession)return;
+    const selected=Array.from(new FormData(e.target).getAll('answer')).map(Number);
+    if(!selected.length){toast('Choose an answer first.');return}
+    revisionSession.answers.push(selected);revisionSession.index++;
+    if(revisionSession.index>=revisionSession.questions.length){revisionSession.finished=true;const score=revisionScore(revisionSession);saveRevisionResult({at:new Date().toISOString(),topic:revisionSession.topic,topicLabel:revisionSession.topic==='all'?'Random mixed':path(revisionSession.topic)?.title||'Topic',...score});}
+    route();return;
+  }
+  if(e.target.dataset.actionForm==='create-project'){
+    e.preventDefault();const fd=new FormData(e.target);
+    try{const row=await BACKEND.createProject({title:fd.get('title'),projectType:fd.get('projectType'),projectKind:fd.get('projectKind'),classId:fd.get('classId'),assessmentUnit:fd.get('assessmentUnit'),dueDate:fd.get('dueDate'),description:fd.get('description')});location.hash=`#/projects/${row.id}`;toast('Project created.');}catch(err){toast(err.message)}return;
+  }
+  if(e.target.dataset.actionForm==='join-project'){
+    e.preventDefault();const fd=new FormData(e.target);
+    try{const row=await BACKEND.joinProject(fd.get('projectCode'));location.hash=`#/projects/${row.project_id}`;toast(`Joined ${row.project_title}.`)}catch(err){toast(err.message)}return;
+  }
+  if(e.target.dataset.actionForm==='project-role'){
+    e.preventDefault();const fd=new FormData(e.target);try{await BACKEND.updateProjectRole(e.target.dataset.project,fd.get('roleLabel'));await renderProjectDetail(e.target.dataset.project);toast('Project role updated.')}catch(err){toast(err.message)}return;
+  }
+  if(e.target.dataset.actionForm==='project-milestone'){
+    e.preventDefault();const fd=new FormData(e.target);try{await BACKEND.createProjectMilestone(e.target.dataset.project,{title:fd.get('title'),description:fd.get('description'),dueDate:fd.get('dueDate')});await renderProjectDetail(e.target.dataset.project);toast('Milestone added.')}catch(err){toast(err.message)}return;
+  }
+  if(e.target.dataset.actionForm==='project-update'){
+    e.preventDefault();const fd=new FormData(e.target),files=Array.from(e.target.elements.files?.files||[]);if(files.length>6){toast('Upload up to 6 files per log entry.');return}
+    try{const row=await BACKEND.createProjectUpdate(e.target.dataset.project,{entryType:fd.get('entryType'),title:fd.get('title'),body:fd.get('body'),contribution:fd.get('contribution'),milestoneId:fd.get('milestoneId')});if(files.length)await BACKEND.uploadProjectFiles(e.target.dataset.project,row.id,files);await renderProjectDetail(e.target.dataset.project);toast('Development log updated.')}catch(err){toast(err.message)}return;
+  }
+  if(e.target.dataset.actionForm==='project-comment'){
+    e.preventDefault();const fd=new FormData(e.target);try{await BACKEND.postProjectComment(e.target.dataset.project,e.target.dataset.update,fd.get('body'));await renderProjectDetail(e.target.dataset.project)}catch(err){toast(err.message)}return;
+  }
+  if(e.target.dataset.actionForm==='project-settings'){
+    e.preventDefault();const fd=new FormData(e.target);try{await BACKEND.updateProject(e.target.dataset.project,{title:fd.get('title'),description:fd.get('description'),status:fd.get('status'),due_date:fd.get('dueDate')});await renderProjectDetail(e.target.dataset.project);toast('Project settings saved.')}catch(err){toast(err.message)}return;
+  }
+  if(e.target.dataset.actionForm==='request-reply'){
+    e.preventDefault();const fd=new FormData(e.target);try{await BACKEND.replyToRequest(e.target.dataset.request,fd.get('body'));await renderRequests();toast('Reply sent to student.')}catch(err){toast(err.message)}return;
+  }
   if(e.target.dataset.actionForm==='request'){
     e.preventDefault();
     const fd=new FormData(e.target);
@@ -1558,6 +1735,21 @@ document.addEventListener('submit',async e=>{
   }
 });
 
+
+function showKonamiEgg(){
+  const egg=$('#konamiEgg');if(!egg)return;egg.hidden=false;document.body.classList.add('konami-open');
+  clearTimeout(showKonamiEgg.timer);showKonamiEgg.timer=setTimeout(()=>{egg.hidden=true;document.body.classList.remove('konami-open')},6500);
+}
+function setupKonamiCode(){
+  const code=['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];let pos=0;
+  document.addEventListener('keydown',e=>{
+    if(e.target?.matches?.('input,textarea,select,[contenteditable="true"]'))return;
+    const key=e.key.length===1?e.key.toLowerCase():e.key;
+    if(key===code[pos]){pos++;if(pos===code.length){pos=0;showKonamiEgg();}}else pos=key===code[0]?1:0;
+  });
+  $('#konamiEgg')?.addEventListener('click',()=>{$('#konamiEgg').hidden=true;document.body.classList.remove('konami-open')});
+}
+
 function setupSearch(){
   const input=$('#globalSearch'),panel=$('#searchPanel');
   input.addEventListener('input',()=>{
@@ -1609,6 +1801,7 @@ BACKEND.onChange(async ()=>{
 
 (async function boot(){
   setupSearch();
+  setupKonamiCode();
   updateChrome();
   route();
   await BACKEND.init();

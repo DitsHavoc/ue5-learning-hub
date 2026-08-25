@@ -334,6 +334,186 @@ const api = {
     const {error}=await client.from('student_projects').upsert({user_id:this.user.id,...values,updated_at:new Date().toISOString()},{onConflict:'user_id'});
     if(error)throw error;return true;
   },
+
+  // v3.15 multi-project / group-project workspace
+  async getProjects(){
+    if(!client||!this.user)return [];
+    const {data:projects,error}=await client.from('projects').select('*').order('updated_at',{ascending:false});
+    if(error)throw error;
+    const rows=projects||[];
+    if(!rows.length)return [];
+    const ids=rows.map(x=>x.id);
+    const classIds=[...new Set(rows.map(x=>x.class_id).filter(Boolean))];
+    const [{data:members,error:mErr},{data:classes,error:cErr}]=await Promise.all([
+      client.from('project_members').select('*').in('project_id',ids),
+      classIds.length?client.from('classes').select('id,name,academic_year').in('id',classIds):Promise.resolve({data:[],error:null})
+    ]);
+    if(mErr)throw mErr;if(cErr)throw cErr;
+    const userIds=[...new Set((members||[]).map(x=>x.user_id))];
+    let profiles=[];
+    if(userIds.length){
+      const {data,error:pErr}=await client.from('profiles').select('id,display_name,role').in('id',userIds);
+      if(pErr)throw pErr;profiles=data||[];
+    }
+    const names=Object.fromEntries(profiles.map(x=>[x.id,x]));
+    const classMap=Object.fromEntries((classes||[]).map(x=>[x.id,x]));
+    return rows.map(project=>({
+      ...project,
+      members:(members||[]).filter(m=>m.project_id===project.id).map(m=>({...m,profile:names[m.user_id]||null})),
+      class:project.class_id?classMap[project.class_id]||null:null
+    }));
+  },
+  async getProject(projectId){
+    if(!client||!this.user)throw new Error('Sign in to view projects.');
+    const {data:project,error}=await client.from('projects').select('*').eq('id',projectId).single();
+    if(error)throw error;
+    const [{data:members,error:mErr},{data:milestones,error:msErr},{data:updates,error:uErr},{data:media,error:medErr},{data:comments,error:cErr}]=await Promise.all([
+      client.from('project_members').select('*').eq('project_id',projectId).order('joined_at'),
+      client.from('project_milestones').select('*').eq('project_id',projectId).order('sort_order').order('created_at'),
+      client.from('project_updates').select('*').eq('project_id',projectId).order('created_at',{ascending:false}),
+      client.from('project_media').select('*').eq('project_id',projectId).order('created_at'),
+      client.from('project_comments').select('*').eq('project_id',projectId).order('created_at')
+    ]);
+    if(mErr)throw mErr;if(msErr)throw msErr;if(uErr)throw uErr;if(medErr)throw medErr;if(cErr)throw cErr;
+    const userIds=[...new Set([...(members||[]).map(x=>x.user_id),...(updates||[]).map(x=>x.author_id),...(comments||[]).map(x=>x.author_id)])];
+    let profiles=[];
+    if(userIds.length){
+      const {data,error:pErr}=await client.from('profiles').select('id,display_name,role').in('id',userIds);
+      if(pErr)throw pErr;profiles=data||[];
+    }
+    let classInfo=null;
+    if(project.class_id){
+      const {data}=await client.from('classes').select('id,name,academic_year').eq('id',project.class_id).maybeSingle();
+      classInfo=data||null;
+    }
+    const profileMap=Object.fromEntries(profiles.map(x=>[x.id,x]));
+    return {
+      project:{...project,class:classInfo},
+      members:(members||[]).map(x=>({...x,profile:profileMap[x.user_id]||null})),
+      milestones:milestones||[],
+      updates:(updates||[]).map(x=>({...x,author:profileMap[x.author_id]||null,media:(media||[]).filter(m=>m.update_id===x.id),comments:(comments||[]).filter(c=>c.update_id===x.id).map(c=>({...c,author:profileMap[c.author_id]||null}))})),
+      unlinkedMedia:(media||[]).filter(x=>!x.update_id),
+      comments:(comments||[]).filter(x=>!x.update_id).map(c=>({...c,author:profileMap[c.author_id]||null}))
+    };
+  },
+  async createProject(values){
+    if(!client||!this.user)throw new Error('Sign in to create a project.');
+    const row={
+      owner_id:this.user.id,
+      title:String(values.title||'').trim().slice(0,120),
+      project_type:values.projectType==='group'?'group':'solo',
+      project_kind:String(values.projectKind||'assignment'),
+      description:String(values.description||'').trim().slice(0,4000),
+      class_id:values.classId||null,
+      assessment_unit:String(values.assessmentUnit||'').trim().slice(0,160),
+      due_date:values.dueDate||null,
+      status:'active'
+    };
+    if(!row.title)throw new Error('Give the project a title.');
+    const {data,error}=await client.from('projects').insert(row).select().single();
+    if(error)throw error;return data;
+  },
+  async updateProject(projectId,values){
+    if(!client||!this.user)throw new Error('Sign in first.');
+    const changes={updated_at:new Date().toISOString()};
+    for(const [key,max] of [['title',120],['description',4000],['assessment_unit',160]]){
+      if(values[key]!==undefined)changes[key]=String(values[key]||'').trim().slice(0,max);
+    }
+    if(values.status!==undefined)changes.status=values.status;
+    if(values.due_date!==undefined)changes.due_date=values.due_date||null;
+    if(values.class_id!==undefined)changes.class_id=values.class_id||null;
+    const {data,error}=await client.from('projects').update(changes).eq('id',projectId).select().single();
+    if(error)throw error;return data;
+  },
+  async deleteProject(projectId){
+    if(!client||!this.user)throw new Error('Sign in first.');
+    const {data:media}=await client.from('project_media').select('storage_path').eq('project_id',projectId);
+    const paths=(media||[]).map(x=>x.storage_path);
+    if(paths.length)await client.storage.from('project-media').remove(paths);
+    const {error}=await client.from('projects').delete().eq('id',projectId);
+    if(error)throw error;return true;
+  },
+  async joinProject(code){
+    if(!client||!this.user)throw new Error('Sign in before joining a group project.');
+    const clean=String(code||'').toUpperCase().trim().slice(0,20);
+    const {data,error}=await client.rpc('join_project_by_code',{p_code:clean});
+    if(error)throw error;
+    const row=Array.isArray(data)?data[0]:data;
+    if(!row)throw new Error('That project code could not be used.');
+    return row;
+  },
+  async regenerateProjectCode(projectId){
+    if(!client||!this.user)throw new Error('Sign in first.');
+    const {data,error}=await client.rpc('regenerate_project_join_code',{p_project_id:projectId});
+    if(error)throw error;return data;
+  },
+  async updateProjectRole(projectId,roleLabel){
+    if(!client||!this.user)throw new Error('Sign in first.');
+    const {error}=await client.from('project_members').update({role_label:String(roleLabel||'').trim().slice(0,100)}).eq('project_id',projectId).eq('user_id',this.user.id);
+    if(error)throw error;return true;
+  },
+  async removeProjectMember(projectId,userId){
+    if(!client||!this.user)throw new Error('Sign in first.');
+    const {error}=await client.from('project_members').delete().eq('project_id',projectId).eq('user_id',userId);
+    if(error)throw error;return true;
+  },
+  async createProjectMilestone(projectId,{title,description='',dueDate=null}){
+    if(!client||!this.user)throw new Error('Sign in first.');
+    const {data,error}=await client.from('project_milestones').insert({project_id:projectId,title:String(title||'').trim().slice(0,160),description:String(description||'').trim().slice(0,2000),due_date:dueDate||null,created_by:this.user.id}).select().single();
+    if(error)throw error;return data;
+  },
+  async setProjectMilestoneStatus(milestoneId,status){
+    if(!client||!this.user)throw new Error('Sign in first.');
+    const {data,error}=await client.from('project_milestones').update({status,updated_at:new Date().toISOString()}).eq('id',milestoneId).select().single();
+    if(error)throw error;return data;
+  },
+  async deleteProjectMilestone(milestoneId){
+    if(!client||!this.user)throw new Error('Sign in first.');
+    const {error}=await client.from('project_milestones').delete().eq('id',milestoneId);
+    if(error)throw error;return true;
+  },
+  async createProjectUpdate(projectId,{entryType='progress',title='',body,contribution='',milestoneId=null}){
+    if(!client||!this.user)throw new Error('Sign in first.');
+    const {data,error}=await client.from('project_updates').insert({project_id:projectId,author_id:this.user.id,milestone_id:milestoneId||null,entry_type:entryType,title:String(title||'').trim().slice(0,180),body:String(body||'').trim().slice(0,5000),contribution:String(contribution||'').trim().slice(0,3000)}).select().single();
+    if(error)throw error;return data;
+  },
+  async deleteProjectUpdate(projectId,updateId){
+    if(!client||!this.user)throw new Error('Sign in first.');
+    const {data:media}=await client.from('project_media').select('storage_path').eq('project_id',projectId).eq('update_id',updateId);
+    const paths=(media||[]).map(x=>x.storage_path);
+    if(paths.length)await client.storage.from('project-media').remove(paths);
+    const {error}=await client.from('project_updates').delete().eq('id',updateId);
+    if(error)throw error;return true;
+  },
+  async uploadProjectFiles(projectId,updateId,files){
+    if(!client||!this.user)throw new Error('Sign in to upload project evidence.');
+    const list=Array.from(files||[]).filter(f=>f&&f.size);
+    if(list.length>6)throw new Error('Upload up to 6 files per development-log entry.');
+    const allowed=['image/png','image/jpeg','image/webp','application/pdf'];
+    const uploaded=[];
+    for(const file of list){
+      if(file.size>10485760)throw new Error(`${file.name} is larger than 10 MB.`);
+      if(!allowed.includes(file.type))throw new Error('Use PNG, JPG, WebP or PDF project files.');
+      const safe=(file.name||'project-file').replace(/[^a-zA-Z0-9._-]+/g,'-').slice(-100);
+      const path=`${projectId}/${this.user.id}/${updateId}/${Date.now()}-${safe}`;
+      const {error:uploadError}=await client.storage.from('project-media').upload(path,file,{upsert:false,contentType:file.type});
+      if(uploadError)throw uploadError;
+      const {data:record,error:recordError}=await client.from('project_media').insert({project_id:projectId,update_id:updateId,uploader_id:this.user.id,storage_path:path,original_name:file.name||safe,mime_type:file.type||'',size_bytes:file.size||0}).select().single();
+      if(recordError){await client.storage.from('project-media').remove([path]);throw recordError;}
+      uploaded.push(record);
+    }
+    return uploaded;
+  },
+  async openProjectFile(path){
+    if(!client||!this.user)throw new Error('Sign in to view project files.');
+    const {data,error}=await client.storage.from('project-media').createSignedUrl(path,300);
+    if(error)throw error;return data?.signedUrl||null;
+  },
+  async postProjectComment(projectId,updateId,body){
+    if(!client||!this.user)throw new Error('Sign in first.');
+    const {data,error}=await client.from('project_comments').insert({project_id:projectId,update_id:updateId||null,author_id:this.user.id,body:String(body||'').trim().slice(0,3000)}).select().single();
+    if(error)throw error;return data;
+  },
   async getComments(lessonId){
     if(!client||!this.user)return [];
     let q=client.from('lesson_comments').select('*,author:profiles!lesson_comments_author_id_fkey(display_name,role)').eq('lesson_id',lessonId).order('created_at');
@@ -540,15 +720,24 @@ const api = {
   },
   async getRequests(){
     if(!client||!this.user)return [];
-    const {data,error}=await client
-      .from('student_requests')
-      .select('id,category,title,body,status,created_at,updated_at,author_id,request_votes(user_id)')
-      .order('created_at',{ascending:false});
+    const [{data,error},{data:replies,error:rErr}]=await Promise.all([
+      client.from('student_requests').select('id,category,title,body,status,created_at,updated_at,author_id,request_votes(user_id)').order('created_at',{ascending:false}),
+      client.from('request_replies').select('id,request_id,author_id,body,created_at,updated_at').order('created_at')
+    ]);
     if(error){console.warn('Requests',error.message);return []}
+    if(rErr){console.warn('Request replies',rErr.message);}
+    const authorIds=[...new Set((replies||[]).map(x=>x.author_id))];
+    let profiles=[];
+    if(authorIds.length){
+      const {data:pData}=await client.from('profiles').select('id,display_name,role').in('id',authorIds);
+      profiles=pData||[];
+    }
+    const names=Object.fromEntries(profiles.map(x=>[x.id,x]));
     return (data||[]).map(r=>({
       ...r,
       votes:(r.request_votes||[]).length,
-      my_vote:(r.request_votes||[]).some(v=>v.user_id===this.user.id)
+      my_vote:(r.request_votes||[]).some(v=>v.user_id===this.user.id),
+      replies:(replies||[]).filter(x=>x.request_id===r.id).map(x=>({...x,author:names[x.author_id]||null}))
     }));
   },
   async submitRequest({category,title,body}){
@@ -568,6 +757,19 @@ const api = {
       if(error)throw error;
     }
     return true;
+  },
+  async replyToRequest(requestId,body){
+    if(!client||!this.user||this.profile?.role!=='teacher')throw new Error('Teacher access required.');
+    const clean=String(body||'').trim().slice(0,3000);
+    if(!clean)throw new Error('Write a reply first.');
+    const {data:reply,error}=await client.from('request_replies').insert({request_id:requestId,author_id:this.user.id,body:clean}).select().single();
+    if(error)throw error;
+    const {data:req}=await client.from('student_requests').select('author_id,title').eq('id',requestId).maybeSingle();
+    if(req?.author_id){
+      const {error:nErr}=await client.from('notifications').insert({user_id:req.author_id,kind:'request_reply',title:`Teacher replied: ${req.title}`,body:clean,link:'#/requests'});
+      if(nErr)console.warn('Request reply notification',nErr.message);
+    }
+    return reply;
   },
   async setRequestStatus(requestId,status){
     if(!client||!this.user||this.profile?.role!=='teacher')throw new Error('Teacher access required.');
@@ -592,7 +794,7 @@ const api = {
   },
   async teacherOverview(){
     if(!client||!this.user||this.profile?.role!=='teacher')return null;
-    const [{data:profiles},{data:teachers},{data:progress},{data:projects},{data:comments},{data:requests},{data:submissions},{data:classes},{data:teacherInvites}] = await Promise.all([
+    const [{data:profiles},{data:teachers},{data:progress},{data:projects},{data:comments},{data:requests},{data:submissions},{data:classes},{data:teacherInvites},{data:collabProjects}] = await Promise.all([
       client.from('profiles').select('id,display_name,role,created_at').eq('role','student').order('display_name'),
       client.from('profiles').select('id,display_name,role,created_at').eq('role','teacher').order('display_name'),
       client.from('lesson_progress').select('*').eq('completed',true),
@@ -601,11 +803,12 @@ const api = {
       client.from('student_requests').select('id,author_id,category,title,body,status,created_at,request_votes(user_id)').order('created_at',{ascending:false}),
       client.from('evidence_submissions').select('*,submission_files(*)').order('updated_at',{ascending:false}),
       client.from('classes').select('*,class_members(user_id),class_teachers(teacher_id,added_by,created_at)').order('created_at',{ascending:false}),
-      client.from('teacher_invites').select('id,code_hint,label,created_by,expires_at,used_by,used_at,revoked_at,created_at').eq('created_by',this.user.id).order('created_at',{ascending:false})
+      client.from('teacher_invites').select('id,code_hint,label,created_by,expires_at,used_by,used_at,revoked_at,created_at').eq('created_by',this.user.id).order('created_at',{ascending:false}),
+      client.from('projects').select('id,owner_id,title,project_type,project_kind,class_id,status,updated_at').order('updated_at',{ascending:false})
     ]);
     return {
       profiles:profiles||[],teachers:teachers||[],progress:progress||[],projects:projects||[],comments:comments||[],
-      requests:requests||[],submissions:submissions||[],classes:classes||[],teacherInvites:teacherInvites||[]
+      requests:requests||[],submissions:submissions||[],classes:classes||[],teacherInvites:teacherInvites||[],collabProjects:collabProjects||[]
     };
   }
 };
