@@ -4,11 +4,16 @@
 const cfg = window.UE5_SUPABASE_CONFIG || {};
 const configured = Boolean(cfg.url && cfg.publishableKey && window.supabase?.createClient);
 const microsoftEnabled = configured && cfg.microsoftEnabled === true;
+const emailAuthEnabled = configured && cfg.emailAuthEnabled !== false;
+const PENDING_CLASS_KEY = 'ue5hub:v3:pending-class-code';
+const PENDING_TEACHER_KEY = 'ue5hub:v3:pending-teacher-code';
 const client = configured ? window.supabase.createClient(cfg.url, cfg.publishableKey) : null;
 
 const api = {
   mode: configured ? 'cloud' : 'local',
   microsoftEnabled,
+  emailAuthEnabled,
+  recoveryMode: false,
   client,
   user: null,
   profile: null,
@@ -18,16 +23,23 @@ const api = {
     const {data:{session}} = await client.auth.getSession();
     this.user = session?.user || null;
     if(this.user) await this.loadProfile();
-    client.auth.onAuthStateChange(async (_event,session)=>{
+    client.auth.onAuthStateChange(async (event,session)=>{
       this.user = session?.user || null;
       this.profile = null;
+      this.recoveryMode = event === 'PASSWORD_RECOVERY';
       if(this.user) {
         await this.loadProfile();
         await this.migrateLocalProgress();
+        await this.completePendingTeacherBootstrap();
+        await this.completePendingTeacherBootstrap();
+      await this.completePendingClassJoin();
       }
       this.emit();
     });
-    if(this.user) await this.migrateLocalProgress();
+    if(this.user) {
+      await this.migrateLocalProgress();
+      await this.completePendingClassJoin();
+    }
     this.emit();
   },
   onChange(fn){this.listeners.push(fn)},
@@ -37,6 +49,137 @@ const api = {
     const {data,error}=await client.from('profiles').select('*').eq('id',this.user.id).maybeSingle();
     if(error){console.warn('Profile load',error.message);return null}
     this.profile=data;return data;
+  },
+
+  normalizeClassCode(value){
+    return String(value||'').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,16);
+  },
+  async validateClassCode(code){
+    if(!client)throw new Error('Cloud backend is not configured yet.');
+    const clean=this.normalizeClassCode(code);
+    if(!clean)throw new Error('Enter the class code from your teacher.');
+    const {data,error}=await client.rpc('validate_class_join_code',{p_code:clean});
+    if(error)throw error;
+    const row=Array.isArray(data)?data[0]:data;
+    if(!row)throw new Error('That class code is invalid or is not accepting new students.');
+    return row;
+  },
+  async signUpEmail({displayName,email,password,classCode}){
+    if(!client||!emailAuthEnabled)throw new Error('Learning Hub accounts are not enabled.');
+    const cleanCode=this.normalizeClassCode(classCode);
+    const classInfo=await this.validateClassCode(cleanCode);
+    localStorage.setItem(PENDING_CLASS_KEY,cleanCode);
+    const redirectTo=`${window.location.origin}${window.location.pathname}`;
+    const {data,error}=await client.auth.signUp({
+      email:String(email||'').trim(),
+      password:String(password||''),
+      options:{
+        emailRedirectTo:redirectTo,
+        data:{display_name:String(displayName||'').trim(),class_code:cleanCode}
+      }
+    });
+    if(error){
+      localStorage.removeItem(PENDING_CLASS_KEY);
+      throw error;
+    }
+    if(data?.session){
+      this.user=data.user||data.session.user;
+      await this.loadProfile();
+      await this.completePendingClassJoin();
+    }
+    return {data,classInfo,needsConfirmation:!data?.session};
+  },
+  async validateTeacherBootstrap(code){
+    if(!client)throw new Error('Cloud backend is not configured yet.');
+    const clean=this.normalizeClassCode(code);
+    if(!clean)throw new Error('Enter the one-time teacher setup code.');
+    const {data,error}=await client.rpc('validate_teacher_bootstrap',{p_code:clean});
+    if(error)throw error;
+    if(data!==true)throw new Error('Teacher setup code is invalid, already used, or teacher setup is complete.');
+    return true;
+  },
+  async signUpTeacher({displayName,email,password,teacherCode}){
+    if(!client||!emailAuthEnabled)throw new Error('Learning Hub accounts are not enabled.');
+    const clean=this.normalizeClassCode(teacherCode);
+    await this.validateTeacherBootstrap(clean);
+    localStorage.setItem(PENDING_TEACHER_KEY,clean);
+    const redirectTo=`${window.location.origin}${window.location.pathname}`;
+    const {data,error}=await client.auth.signUp({
+      email:String(email||'').trim(),password:String(password||''),
+      options:{emailRedirectTo:redirectTo,data:{display_name:String(displayName||'').trim(),account_kind:'teacher_bootstrap'}}
+    });
+    if(error){localStorage.removeItem(PENDING_TEACHER_KEY);throw error;}
+    if(data?.session){this.user=data.user||data.session.user;await this.loadProfile();await this.completePendingTeacherBootstrap();}
+    return {data,needsConfirmation:!data?.session};
+  },
+  async completePendingTeacherBootstrap(){
+    if(!client||!this.user)return false;
+    const pending=localStorage.getItem(PENDING_TEACHER_KEY);
+    if(!pending)return false;
+    try{
+      const {data,error}=await client.rpc('claim_teacher_bootstrap',{p_code:pending});
+      if(error)throw error;
+      localStorage.removeItem(PENDING_TEACHER_KEY);
+      await this.loadProfile();
+      return data===true;
+    }catch(err){console.warn('Teacher bootstrap',err.message);return false;}
+  },
+  async signInEmail({email,password}){
+    if(!client||!emailAuthEnabled)throw new Error('Learning Hub accounts are not enabled.');
+    const {data,error}=await client.auth.signInWithPassword({
+      email:String(email||'').trim(),
+      password:String(password||'')
+    });
+    if(error)throw error;
+    return data;
+  },
+  async sendPasswordReset(email){
+    if(!client||!emailAuthEnabled)throw new Error('Learning Hub accounts are not enabled.');
+    const redirectTo=`${window.location.origin}${window.location.pathname}`;
+    const {data,error}=await client.auth.resetPasswordForEmail(String(email||'').trim(),{redirectTo});
+    if(error)throw error;
+    return data;
+  },
+  async updatePassword(password){
+    if(!client||!this.user)throw new Error('Open the password-reset link from your email first.');
+    const {data,error}=await client.auth.updateUser({password:String(password||'')});
+    if(error)throw error;
+    this.recoveryMode=false;
+    this.emit();
+    return data;
+  },
+  async updateDisplayName(displayName){
+    if(!client||!this.user)throw new Error('Sign in first.');
+    const clean=String(displayName||'').trim().slice(0,100);
+    if(clean.length<2)throw new Error('Use a display name of at least 2 characters.');
+    const {data,error}=await client.from('profiles').update({display_name:clean}).eq('id',this.user.id).select().single();
+    if(error)throw error;
+    this.profile=data;
+    this.emit();
+    return data;
+  },
+  async joinClassByCode(code){
+    if(!client||!this.user)throw new Error('Sign in before joining a class.');
+    const clean=this.normalizeClassCode(code);
+    if(!clean)throw new Error('Enter a class code.');
+    const {data,error}=await client.rpc('join_class_by_code',{p_code:clean});
+    if(error)throw error;
+    const row=Array.isArray(data)?data[0]:data;
+    if(!row)throw new Error('That class code is invalid or unavailable.');
+    return row;
+  },
+  async completePendingClassJoin(){
+    if(!client||!this.user)return null;
+    const pending=localStorage.getItem(PENDING_CLASS_KEY);
+    if(!pending)return null;
+    try{
+      const joined=await this.joinClassByCode(pending);
+      localStorage.removeItem(PENDING_CLASS_KEY);
+      return joined;
+    }catch(err){
+      console.warn('Pending class join',err.message);
+      return null;
+    }
   },
   async signInMicrosoft(){
     if(!client) throw new Error('Cloud backend is not configured yet.');
@@ -209,6 +352,20 @@ const api = {
     const {data,error}=await client.from('classes').insert({
       teacher_id:this.user.id,name,academic_year:academicYear||''
     }).select().single();
+    if(error)throw error;return data;
+  },
+  async setClassJoinEnabled(classId,enabled){
+    if(!client||!this.user||this.profile?.role!=='teacher')throw new Error('Teacher access required.');
+    const {data,error}=await client.from('classes').update({join_enabled:Boolean(enabled)}).eq('id',classId).select().single();
+    if(error)throw error;return data;
+  },
+  async regenerateClassCode(classId){
+    if(!client||!this.user||this.profile?.role!=='teacher')throw new Error('Teacher access required.');
+    const alphabet='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    const bytes=new Uint8Array(10);
+    crypto.getRandomValues(bytes);
+    const code=[...bytes].map(b=>alphabet[b%alphabet.length]).join('');
+    const {data,error}=await client.from('classes').update({join_code:code}).eq('id',classId).select().single();
     if(error)throw error;return data;
   },
   async addClassMember(classId,userId){

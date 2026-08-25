@@ -19,6 +19,7 @@ const LEGACY = 'ue5LearningHubProgressV1';
 let state = loadState();
 let projectState = loadProjectState();
 let lessonMode = 'guided';
+let authView = 'signin';
 
 function $(s,root=document){return root.querySelector(s)}
 function $$(s,root=document){return [...root.querySelectorAll(s)]}
@@ -132,14 +133,9 @@ function updateChrome(){
     mode.textContent=BACKEND.profile?.role==='teacher'?'• TEACHER CLOUD':'• CLOUD';
     teacher.hidden=BACKEND.profile?.role!=='teacher';
   }else{
-    if(BACKEND.mode==='cloud' && !BACKEND.microsoftEnabled){
-      txt.textContent='SSO PENDING';
-      mode.textContent='• BACKEND READY';
-      btn.classList.add('cloud');
-    }else{
-      txt.textContent=BACKEND.mode==='cloud'?'SIGN IN':'LOCAL MODE';
-      mode.textContent=BACKEND.mode==='cloud'?'• CLOUD READY':'• LOCAL';
-    }
+    txt.textContent=BACKEND.mode==='cloud'?'SIGN IN':'LOCAL MODE';
+    mode.textContent=BACKEND.mode==='cloud'?'• GUEST + CLOUD':'• LOCAL';
+    if(BACKEND.mode==='cloud')btn.classList.add('cloud');
     teacher.hidden=true;
   }
 }
@@ -347,9 +343,8 @@ function evidenceSection(l){
     return `<section class="content-card" id="evidence">
       <span class="eyebrow">10 • Evidence</span><h2>Prove you built it</h2>
       <p class="muted">A completion tick tells you that you visited the lesson. Evidence shows that the mechanic actually works in your game.</p>
-      <div class="offline-note">${BACKEND.microsoftEnabled
-        ?'Sign in with your college account to submit screenshots/PDF evidence, a build link and a short reflection for teacher review.'
-        :'Evidence submission is already built into the backend. It will unlock when college Microsoft SSO is approved. Your normal lesson/game progress still works locally.'}</div>
+      <div class="offline-note">Sign in with a free Learning Hub account to submit screenshots/PDF evidence, a build link and a short reflection for teacher review. Guest lesson and game progress still works locally on this browser.</div>
+      ${BACKEND.mode==='cloud'?'<button class="button small" data-action="open-auth" style="margin-top:9px">Sign in / create account</button>':''}
     </section>`;
   }
   return `<section class="content-card" id="evidence">
@@ -366,7 +361,7 @@ function evidenceSection(l){
 function commentSection(l){
   if(!BACKEND.user){
     if(BACKEND.mode==='cloud'){
-      return `<section class="content-card" id="comments"><span class="eyebrow">11 • Ask / reflect</span><h2>Teacher feedback</h2><div class="offline-note">${BACKEND.microsoftEnabled?'Sign in to leave a question or reflection attached to this lesson.':'Private student ↔ teacher comments are ready in the backend and will unlock when college SSO is approved.'}</div>${BACKEND.microsoftEnabled?'<button class="button small" data-action="open-auth" style="margin-top:9px">Sign in</button>':''}</section>`;
+      return `<section class="content-card" id="comments"><span class="eyebrow">11 • Ask / reflect</span><h2>Teacher feedback</h2><div class="offline-note">Sign in with your Learning Hub account to leave a private question or reflection attached to this lesson.</div><button class="button small" data-action="open-auth" style="margin-top:9px">Sign in / create account</button></section>`;
     }
     return `<section class="content-card" id="comments"><span class="eyebrow">11 • Ask / reflect</span><h2>Teacher feedback</h2><div class="offline-note"><b>Local mode:</b> account-backed comments are ready in the V3 code but need the Supabase project connected. Lessons, XP and My Game still work locally.</div></section>`;
   }
@@ -572,9 +567,9 @@ function progressPage(){
     <div class="stat"><small>Cloud evidence</small><strong id="progressEvidenceStat">${BACKEND.user?'…':'Locked'}</strong></div>
   </div>
   <section class="section"><div class="section-head"><div><h2>Achievements</h2><p>Small milestones for meaningful course progress.</p></div></div><div class="achievement-grid" id="achievementGrid">${renderAchievements(0,0)}</div></section>
-  <section class="section"><div class="section-head"><div><h2>Evidence tracker</h2><p>See what has been submitted, approved or sent back for improvement.</p></div></div><div id="progressEvidence">${BACKEND.user?'<div class="empty">Loading evidence…</div>':'<div class="offline-note">Evidence tracking unlocks with approved college SSO. Lesson completion and My Game status still work locally.</div>'}</div></section>
-  <section class="section"><div class="section-head"><div><h2>My class</h2><p>Your teaching group once account sign-in is enabled.</p></div></div><div id="progressClasses">${BACKEND.user?'<div class="empty">Loading classes…</div>':'<div class="offline-note">Class membership is account-backed and will appear here after SSO is enabled.</div>'}</div></section>
-  <section class="section" id="notifications"><div class="section-head"><div><h2>Notifications</h2><p>Teacher feedback and roadmap updates.</p></div></div><div id="progressNotifications">${BACKEND.user?'<div class="empty">Loading notifications…</div>':'<div class="offline-note">Notifications will unlock with your college account.</div>'}</div></section>`;
+  <section class="section"><div class="section-head"><div><h2>Evidence tracker</h2><p>See what has been submitted, approved or sent back for improvement.</p></div></div><div id="progressEvidence">${BACKEND.user?'<div class="empty">Loading evidence…</div>':'<div class="offline-note">Evidence tracking unlocks when you sign in. Lesson completion and My Game status still work locally as a guest.</div>'}</div></section>
+  <section class="section"><div class="section-head"><div><h2>My class</h2><p>Your teaching group once account sign-in is enabled.</p></div></div><div id="progressClasses">${BACKEND.user?'<div class="empty">Loading classes…</div>':'<div class="offline-note">Create or sign in to a Learning Hub account, then join using the class code from your teacher.</div>'}</div></section>
+  <section class="section" id="notifications"><div class="section-head"><div><h2>Notifications</h2><p>Teacher feedback and roadmap updates.</p></div></div><div id="progressNotifications">${BACKEND.user?'<div class="empty">Loading notifications…</div>':'<div class="offline-note">Notifications unlock when you sign in to a Learning Hub account.</div>'}</div></section>`;
 }
 function renderAchievements(approvedCount,requestCount){
   return achievementData(approvedCount,requestCount).map(a=>`<div class="achievement ${a[3]?'unlocked':'locked'}"><div class="achievement-icon">${a[4]}</div><div><strong>${esc(a[1])}</strong><p>${esc(a[2])}</p></div><span>${a[3]?'UNLOCKED':'LOCKED'}</span></div>`).join('');
@@ -606,9 +601,13 @@ async function renderProgressCloud(){
   }
 
   const classBox=$('#progressClasses');
-  if(classBox)classBox.innerHTML=classes.length
-    ?classes.map(c=>`<div class="class-chip"><strong>${esc(c.name)}</strong><span>${esc(c.academic_year||'')}</span></div>`).join('')
-    :'<div class="offline-note">You are not assigned to a class yet.</div>';
+  if(classBox)classBox.innerHTML=`
+    ${classes.length?classes.map(c=>`<div class="class-chip"><strong>${esc(c.name)}</strong><span>${esc(c.academic_year||'')}</span></div>`).join(''):'<div class="offline-note">You are not assigned to a class yet.</div>'}
+    ${BACKEND.profile?.role!=='teacher'?`<form class="join-class-inline" data-action-form="join-class">
+      <label>Join another class with a teacher code
+        <div><input name="classCode" autocomplete="off" maxlength="20" placeholder="e.g. ABCD1234EF" required><button class="button small" type="submit">Join class</button></div>
+      </label>
+    </form>`:''}`;
 
   const noteBox=$('#progressNotifications');
   if(noteBox)noteBox.innerHTML=notes.length?notes.map(n=>`<div class="notification-row ${n.read_at?'read':'unread'}">
@@ -650,13 +649,11 @@ function requestBoard(){
       <p>Ask for a tutorial. Suggest a mechanic. Request a feature. Report something annoying. The best ideas can move from student request to the live Learning Hub.</p>
     </section>
     <section class="section"><div class="content-card">
-      <h2>${BACKEND.mode==='cloud'&&!BACKEND.microsoftEnabled?'Backend ready — Microsoft approval pending':BACKEND.mode==='cloud'?'Sign in with your college Microsoft account':'Microsoft SSO is ready to connect'}</h2>
-      <p class="muted">${BACKEND.mode==='cloud'&&!BACKEND.microsoftEnabled
-        ?'The database and security rules are ready. Requests stay locked until the college Microsoft application is approved and enabled.'
-        :BACKEND.mode==='cloud'
-          ?'The Requests Board is visible only to signed-in college users. Sign in to submit ideas, vote and follow what is being built.'
-          :'The Requests Board code is installed, but it needs the Supabase + Microsoft Entra connection before students can share requests across devices.'}</p>
-      ${BACKEND.mode==='cloud'&&BACKEND.microsoftEnabled?'<button class="button primary" data-action="open-auth">Sign in with Microsoft</button>':'<div class="offline-note">Lessons, XP and My Game continue to save locally on this browser until SSO is approved.</div>'}
+      <h2>${BACKEND.mode==='cloud'?'Sign in to shape the Learning Hub':'Cloud account features are unavailable in this copy'}</h2>
+      <p class="muted">${BACKEND.mode==='cloud'
+        ?'Requests are account-backed so votes remain one-per-student and ideas can be tracked across devices. Create a Learning Hub account with your class code or sign in.'
+        :'Lessons, XP and My Game still work locally, but shared requests need the Supabase backend.'}</p>
+      ${BACKEND.mode==='cloud'?'<button class="button primary" data-action="open-auth">Sign in / create account</button>':'<div class="offline-note">Guest learning remains fully available on this browser.</div>'}
     </div></section>`;
   }
   return `<section class="project-hero">
@@ -698,6 +695,7 @@ function requestBoard(){
     <div id="requestList"><div class="empty">Loading requests…</div></div>
   </section>`;
 }
+
 async function renderRequests(){
   const box=$('#requestList');if(!box||!BACKEND.user)return;
   try{
@@ -788,6 +786,14 @@ async function renderTeacher(){
             const available=o.profiles.filter(p=>!memberIds.includes(p.id));
             return `<div class="class-card">
               <div class="class-card-head"><div><strong>${esc(c.name)}</strong><small>${esc(c.academic_year||'')}</small></div><span>${memberIds.length} student${memberIds.length===1?'':'s'}</span></div>
+              <div class="class-code-panel ${c.join_enabled?'enabled':'paused'}">
+                <div><small>STUDENT JOIN CODE</small><code>${esc(c.join_code||'—')}</code><span>${c.join_enabled?'Accepting joins':'Paused'}</span></div>
+                <div class="class-code-actions">
+                  <button class="button small ghost" data-action="copy-class-code" data-code="${esc(c.join_code||'')}">Copy</button>
+                  <button class="button small ghost" data-action="toggle-class-join" data-class="${c.id}" data-enabled="${c.join_enabled?'1':'0'}">${c.join_enabled?'Pause':'Enable'}</button>
+                  <button class="button small ghost" data-action="regenerate-class-code" data-class="${c.id}">New code</button>
+                </div>
+              </div>
               <div class="class-members">${memberIds.length?memberIds.map(id=>`<div class="class-member"><span>${esc(names[id]||'Student')}</span><button data-action="remove-class-member" data-class="${c.id}" data-student="${id}" title="Remove">×</button></div>`).join(''):'<div class="muted">No students assigned yet.</div>'}</div>
               ${available.length?`<form class="class-add" data-action-form="add-class-member" data-class="${c.id}">
                 <select name="student" required><option value="">Add student…</option>${available.map(s=>`<option value="${s.id}">${esc(s.display_name)}</option>`).join('')}</select>
@@ -932,39 +938,103 @@ async function saveProjectProfile(){
   route();
 }
 
+function authTabs(){
+  return `<div class="auth-tabs">
+    <button class="${authView==='signin'?'active':''}" data-action="auth-view" data-view="signin">Sign in</button>
+    <button class="${authView==='signup'?'active':''}" data-action="auth-view" data-view="signup">Create account</button>
+  </div>`;
+}
 function renderAuth(){
   const body=$('#authBody');if(!body)return;
+  const cfg=window.UE5_SUPABASE_CONFIG||{};
   if(BACKEND.user){
-    body.innerHTML=`<div class="cloud-callout">
-      <b>${esc(BACKEND.profile?.display_name||BACKEND.user.user_metadata?.full_name||BACKEND.user.email||'College account')}</b>
-      <br>${esc(BACKEND.user.email||'')}
-      <br><br>Your lesson progress, game project, evidence, feedback, classes, notifications and requests can sync to this Microsoft-authenticated account.
-      ${BACKEND.profile?.role==='teacher'?'<br><b>Teacher role active.</b>':''}
-    </div><div class="button-row"><button class="button" data-action="signout">Sign out</button></div>`;
+    if(BACKEND.recoveryMode){
+      body.innerHTML=`<div class="cloud-callout"><b>Choose a new password</b><br><br>This reset session is valid because you opened the recovery link sent to your email.</div>
+      <form class="auth-form" data-action-form="auth-new-password">
+        <label>New password<input name="password" type="password" minlength="8" autocomplete="new-password" required></label>
+        <label>Confirm password<input name="confirm" type="password" minlength="8" autocomplete="new-password" required></label>
+        <button class="button primary" type="submit">Save new password</button>
+      </form>`;
+      return;
+    }
+    body.innerHTML=`<div class="account-summary">
+      <span class="account-summary-icon">${BACKEND.profile?.role==='teacher'?'T':'U'}</span>
+      <div><b>${esc(BACKEND.profile?.display_name||BACKEND.user.email?.split('@')[0]||'Learning Hub account')}</b><span>${esc(BACKEND.user.email||'')}</span></div>
+    </div>
+    <div class="cloud-callout">
+      Your lesson progress, game project, evidence, feedback, classes, notifications and requests sync to this Learning Hub account.
+      ${BACKEND.profile?.role==='teacher'?'<br><br><b>Teacher role active.</b>':''}
+    </div>
+    <form class="auth-form compact" data-action-form="profile-name">
+      <label>Display name<div class="inline-auth-field"><input name="displayName" maxlength="100" value="${esc(BACKEND.profile?.display_name||'')}" required><button class="button small" type="submit">Update</button></div></label>
+    </form>
+    ${BACKEND.profile?.role!=='teacher'?`<form class="auth-form compact" data-action-form="join-class">
+      <label>Class code<div class="inline-auth-field"><input name="classCode" maxlength="20" autocomplete="off" placeholder="Teacher class code" required><button class="button small" type="submit">Join</button></div></label>
+    </form>`:''}
+    <div class="button-row"><button class="button ghost" data-action="signout">Sign out</button></div>`;
     return;
   }
   if(BACKEND.mode!=='cloud'){
-    body.innerHTML=`<div class="cloud-callout">
-      <b>Microsoft college sign-in is built into the Learning Hub.</b><br><br>
-      The backend is not configured in this copy, so the Learning Hub uses local browser progress.
-    </div>`;
+    body.innerHTML=`<div class="cloud-callout"><b>Guest mode is active.</b><br><br>This copy has no cloud backend configured. Lessons, XP and My Game still save locally on this browser.</div>`;
     return;
   }
-  if(!BACKEND.microsoftEnabled){
-    body.innerHTML=`<div class="cloud-callout">
-      <b>Backend connected. Microsoft SSO is deliberately paused.</b><br><br>
-      The Supabase database, progress tables, comments, requests board and security policies are ready, but college Microsoft authentication will not be enabled until approval is received.
-      <br><br>The site remains fully usable for lessons and local project tracking in the meantime.
-    </div>`;
+  if(!BACKEND.emailAuthEnabled){
+    body.innerHTML=`<div class="cloud-callout"><b>Learning Hub accounts are currently disabled.</b><br><br>Guest learning remains available.</div>`;
     return;
   }
-  const label=(window.UE5_SUPABASE_CONFIG||{}).loginLabel||'Sign in with Microsoft';
-  body.innerHTML=`<div class="microsoft-login">
-    <div class="ms-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-    <div><strong>Use your college account</strong><p>No separate Learning Hub password. Microsoft handles the sign-in and college MFA.</p></div>
-  </div>
-  <button class="button primary microsoft-button" data-action="microsoft-login">${esc(label)}</button>
-  <p class="auth-message">The Learning Hub asks Microsoft/Supabase for basic account identity for sign-in. It does not need access to your Outlook mailbox, OneDrive or Teams files.</p>`;
+
+  if(authView==='reset'){
+    body.innerHTML=`<button class="auth-back" data-action="auth-view" data-view="signin">← Back to sign in</button>
+      <span class="auth-section-label">PASSWORD RESET</span><h3>Reset your password</h3>
+      <p class="auth-message">Enter the email attached to your Learning Hub account. A reset link will be sent there.</p>
+      <form class="auth-form" data-action-form="auth-reset">
+        <label>Email<input name="email" type="email" autocomplete="email" required></label>
+        <button class="button primary" type="submit">Send reset link</button>
+      </form>`;
+    return;
+  }
+
+  if(authView==='signup'){
+    body.innerHTML=`${authTabs()}
+      <div class="auth-intro"><strong>Create your Learning Hub account</strong><p>Your teacher gives you a class code. Your account then carries progress, evidence and feedback between devices.</p></div>
+      <form class="auth-form" data-action-form="auth-signup">
+        <label>Your name<input name="displayName" maxlength="100" autocomplete="name" placeholder="Name shown to your teacher" required></label>
+        <label>Email<input name="email" type="email" autocomplete="email" placeholder="Use an email you can access" required></label>
+        <label>Class code<input name="classCode" maxlength="20" autocomplete="off" placeholder="From your teacher" required></label>
+        <div class="auth-two">
+          <label>Password<input name="password" type="password" minlength="8" autocomplete="new-password" required></label>
+          <label>Confirm<input name="confirm" type="password" minlength="8" autocomplete="new-password" required></label>
+        </div>
+        <button class="button primary" type="submit">Create account</button>
+      </form>
+      <p class="auth-message"><b>Guest mode remains available:</b> close this window and the whole learning course still works. An account is only needed for cloud sync, classes, evidence, feedback, requests and notifications.</p>
+      <button class="link-button teacher-setup-link" data-action="auth-view" data-view="teacher-setup">Teacher setting the Hub up for the first time?</button>`;
+    return;
+  }
+
+  if(authView==='teacher-setup'){
+    body.innerHTML=`<button class="auth-back" data-action="auth-view" data-view="signin">← Back</button>
+      <span class="auth-section-label">ONE-TIME TEACHER SETUP</span><h3>Create the first teacher account</h3>
+      <p class="auth-message">This route uses a one-time setup code. After it is claimed, it cannot create another teacher.</p>
+      <form class="auth-form" data-action-form="auth-teacher-signup">
+        <label>Your name<input name="displayName" maxlength="100" autocomplete="name" required></label>
+        <label>Email<input name="email" type="email" autocomplete="email" required></label>
+        <label>Teacher setup code<input name="teacherCode" maxlength="30" autocomplete="off" required></label>
+        <div class="auth-two"><label>Password<input name="password" type="password" minlength="8" required></label><label>Confirm<input name="confirm" type="password" minlength="8" required></label></div>
+        <button class="button primary" type="submit">Create teacher account</button>
+      </form>`;
+    return;
+  }
+
+  body.innerHTML=`${authTabs()}
+    <div class="auth-intro"><strong>Welcome back</strong><p>Sign in to sync your progress and continue your classroom work.</p></div>
+    <form class="auth-form" data-action-form="auth-signin">
+      <label>Email<input name="email" type="email" autocomplete="email" required></label>
+      <label>Password<input name="password" type="password" autocomplete="current-password" required></label>
+      <button class="button primary" type="submit">Sign in</button>
+    </form>
+    <div class="auth-footer-row"><button class="link-button" data-action="auth-view" data-view="reset">Forgot password?</button><button class="link-button" data-action="close-auth">Continue as guest</button></div>
+    ${BACKEND.microsoftEnabled?`<div class="auth-divider"><span>or</span></div><button class="button microsoft-button" data-action="microsoft-login">${esc(cfg.loginLabel||'Sign in with Microsoft')}</button>`:''}`;
 }
 function openAuth(){
   $('#authModal').hidden=false;renderAuth();
@@ -993,8 +1063,20 @@ document.addEventListener('click',async e=>{
   else if(a==='new-revision')route();
   else if(a==='project-status') await setMechanicStatus(b.dataset.mechanic,b.dataset.status);
   else if(a==='save-project-profile') await saveProjectProfile();
-  else if(a==='open-auth')openAuth();
+  else if(a==='open-auth'){authView='signin';openAuth();}
   else if(a==='close-auth')closeAuth();
+  else if(a==='auth-view'){authView=b.dataset.view||'signin';renderAuth();}
+  else if(a==='copy-class-code'){
+    try{await navigator.clipboard.writeText(b.dataset.code||'');toast('Class code copied.')}catch(err){toast('Copy failed — select the code manually.')}
+  }
+  else if(a==='toggle-class-join'){
+    try{await BACKEND.setClassJoinEnabled(b.dataset.class,b.dataset.enabled!=='1');await renderTeacher();toast(b.dataset.enabled==='1'?'Class code paused.':'Class code enabled.')}catch(err){toast(err.message)}
+  }
+  else if(a==='regenerate-class-code'){
+    if(confirm('Generate a new code? The old class code will stop working immediately.')){
+      try{await BACKEND.regenerateClassCode(b.dataset.class);await renderTeacher();toast('New class code generated.')}catch(err){toast(err.message)}
+    }
+  }
   else if(a==='microsoft-login'){
     try{await BACKEND.signInMicrosoft()}catch(err){toast(err.message)}
   }
@@ -1069,6 +1151,77 @@ document.addEventListener('submit',async e=>{
       }else toast('Evidence draft saved.');
       await loadEvidence(l.id);
       refreshNotificationCount();
+    }catch(err){toast(err.message)}
+  }
+  if(e.target.dataset.actionForm==='auth-signin'){
+    e.preventDefault();
+    const fd=new FormData(e.target);
+    try{
+      await BACKEND.signInEmail({email:fd.get('email'),password:fd.get('password')});
+      closeAuth();toast('Signed in — cloud progress is syncing.');
+    }catch(err){toast(err.message)}
+  }
+  if(e.target.dataset.actionForm==='auth-signup'){
+    e.preventDefault();
+    const fd=new FormData(e.target);
+    const password=String(fd.get('password')||''),confirmPassword=String(fd.get('confirm')||'');
+    if(password.length<8){toast('Use a password of at least 8 characters.');return}
+    if(password!==confirmPassword){toast('The two passwords do not match.');return}
+    try{
+      const result=await BACKEND.signUpEmail({
+        displayName:fd.get('displayName'),email:fd.get('email'),password,classCode:fd.get('classCode')
+      });
+      if(result.needsConfirmation){
+        authView='signin';renderAuth();
+        const body=$('#authBody');
+        body.insertAdjacentHTML('afterbegin',`<div class="auth-success"><b>Account created.</b> Check your email to confirm the account, then sign in. Your class code is saved and will be applied automatically.</div>`);
+      }else{
+        closeAuth();toast(`Account created — joined ${result.classInfo?.class_name||'your class'}.`);
+      }
+    }catch(err){toast(err.message)}
+  }
+  if(e.target.dataset.actionForm==='auth-teacher-signup'){
+    e.preventDefault();
+    const fd=new FormData(e.target),password=String(fd.get('password')||''),confirmPassword=String(fd.get('confirm')||'');
+    if(password.length<8){toast('Use a password of at least 8 characters.');return}
+    if(password!==confirmPassword){toast('The two passwords do not match.');return}
+    try{
+      const result=await BACKEND.signUpTeacher({displayName:fd.get('displayName'),email:fd.get('email'),password,teacherCode:fd.get('teacherCode')});
+      if(result.needsConfirmation){authView='signin';renderAuth();$('#authBody')?.insertAdjacentHTML('afterbegin','<div class="auth-success"><b>Teacher account created.</b> Confirm the email, then sign in. The one-time teacher role will be claimed automatically.</div>');}
+      else{closeAuth();toast('Teacher account created.');}
+    }catch(err){toast(err.message)}
+  }
+  if(e.target.dataset.actionForm==='auth-reset'){
+    e.preventDefault();
+    const fd=new FormData(e.target);
+    try{
+      await BACKEND.sendPasswordReset(fd.get('email'));
+      authView='signin';renderAuth();
+      const body=$('#authBody');
+      body.insertAdjacentHTML('afterbegin','<div class="auth-success"><b>Reset link sent.</b> Check that email account and open the link to choose a new password.</div>');
+    }catch(err){toast(err.message)}
+  }
+  if(e.target.dataset.actionForm==='auth-new-password'){
+    e.preventDefault();
+    const fd=new FormData(e.target);
+    const password=String(fd.get('password')||''),confirmPassword=String(fd.get('confirm')||'');
+    if(password.length<8){toast('Use a password of at least 8 characters.');return}
+    if(password!==confirmPassword){toast('The two passwords do not match.');return}
+    try{await BACKEND.updatePassword(password);closeAuth();toast('Password updated.')}catch(err){toast(err.message)}
+  }
+  if(e.target.dataset.actionForm==='profile-name'){
+    e.preventDefault();
+    const fd=new FormData(e.target);
+    try{await BACKEND.updateDisplayName(fd.get('displayName'));toast('Display name updated.');renderAuth();}catch(err){toast(err.message)}
+  }
+  if(e.target.dataset.actionForm==='join-class'){
+    e.preventDefault();
+    const fd=new FormData(e.target);
+    try{
+      const joined=await BACKEND.joinClassByCode(fd.get('classCode'));
+      e.target.reset();toast(`Joined ${joined.class_name}.`);
+      if($('#authModal')&&!$('#authModal').hidden)renderAuth();
+      if(location.hash==='#/progress')await renderProgressCloud();
     }catch(err){toast(err.message)}
   }
   if(e.target.dataset.actionForm==='create-class'){
@@ -1151,6 +1304,10 @@ BACKEND.onChange(async ()=>{
   updateChrome();
   if(BACKEND.user){await syncCloudProgress()}
   route();
+  if(BACKEND.recoveryMode){
+    authView='recovery';
+    openAuth();
+  }
 });
 
 (async function boot(){

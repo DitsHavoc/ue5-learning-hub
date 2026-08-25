@@ -468,3 +468,288 @@ drop policy if exists "teachers create notifications" on public.notifications;
 drop policy if exists "users create own system notifications" on public.notifications;
 create policy "notifications inserted by teacher or owner" on public.notifications for insert to authenticated
 with check ((select private.is_teacher()) or user_id=(select auth.uid()));
+
+
+-- ============================================================
+-- V3.6 independent login + class-code registration
+-- ============================================================
+
+-- UE5 Learning Hub v3.6
+-- Independent email/password authentication + class-code joining.
+-- Safe additive migration for the existing V3.3+ schema.
+
+alter table public.classes
+  add column if not exists join_code text,
+  add column if not exists join_enabled boolean not null default true;
+
+update public.classes
+set join_code = upper(substr(replace(gen_random_uuid()::text,'-',''),1,10))
+where join_code is null or btrim(join_code) = '';
+
+alter table public.classes
+  alter column join_code set default upper(substr(replace(gen_random_uuid()::text,'-',''),1,10)),
+  alter column join_code set not null;
+
+do $$
+begin
+  if not exists (
+    select 1 from pg_constraint
+    where conname='classes_join_code_format_check'
+      and conrelid='public.classes'::regclass
+  ) then
+    alter table public.classes
+      add constraint classes_join_code_format_check
+      check (join_code ~ '^[A-Z0-9]{8,16}$');
+  end if;
+end $$;
+
+create unique index if not exists classes_join_code_upper_unique_idx
+  on public.classes (upper(join_code));
+
+create or replace function public.validate_class_join_code(p_code text)
+returns table(class_name text, academic_year text)
+language sql
+stable
+security definer
+set search_path = pg_catalog, public
+as $$
+  select c.name, c.academic_year
+  from public.classes c
+  where c.join_enabled = true
+    and c.archived = false
+    and upper(c.join_code) = upper(regexp_replace(coalesce(p_code,''),'[^A-Za-z0-9]','','g'))
+  limit 1
+$$;
+
+revoke all on function public.validate_class_join_code(text) from public;
+grant execute on function public.validate_class_join_code(text) to anon, authenticated;
+
+create or replace function public.join_class_by_code(p_code text)
+returns table(class_id uuid, class_name text, academic_year text)
+language plpgsql
+security definer
+set search_path = pg_catalog, public
+as $$
+declare
+  v_user uuid := auth.uid();
+  v_class public.classes%rowtype;
+  v_rows integer := 0;
+begin
+  if v_user is null then
+    raise exception 'Sign in before joining a class.';
+  end if;
+
+  select *
+  into v_class
+  from public.classes c
+  where c.join_enabled = true
+    and c.archived = false
+    and upper(c.join_code) = upper(regexp_replace(coalesce(p_code,''),'[^A-Za-z0-9]','','g'))
+  limit 1;
+
+  if v_class.id is null then
+    raise exception 'That class code is invalid or no longer accepting joins.';
+  end if;
+
+  insert into public.class_members(class_id,user_id)
+  values(v_class.id,v_user)
+  on conflict(class_id,user_id) do nothing;
+
+  get diagnostics v_rows = row_count;
+
+  if v_rows > 0 then
+    insert into public.notifications(user_id,kind,title,body,link)
+    values(
+      v_user,
+      'class',
+      'Joined ' || v_class.name,
+      case when coalesce(v_class.academic_year,'') <> ''
+        then 'You joined ' || v_class.name || ' (' || v_class.academic_year || ').'
+        else 'You joined ' || v_class.name || '.'
+      end,
+      '#/progress'
+    );
+  end if;
+
+  return query
+    select v_class.id, v_class.name, v_class.academic_year;
+end;
+$$;
+
+revoke all on function public.join_class_by_code(text) from public;
+revoke all on function public.join_class_by_code(text) from anon;
+grant execute on function public.join_class_by_code(text) to authenticated;
+
+
+-- UE5 Learning Hub v3.6 security hardening
+-- Keep privileged class-code implementation out of the exposed public schema.
+
+create or replace function private.validate_class_join_code(p_code text)
+returns table(class_name text, academic_year text)
+language sql
+stable
+security definer
+set search_path = pg_catalog, public
+as $$
+  select c.name, c.academic_year
+  from public.classes c
+  where c.join_enabled = true
+    and c.archived = false
+    and upper(c.join_code) = upper(regexp_replace(coalesce(p_code,''),'[^A-Za-z0-9]','','g'))
+  limit 1
+$$;
+
+revoke all on function private.validate_class_join_code(text) from public;
+grant execute on function private.validate_class_join_code(text) to anon, authenticated;
+
+create or replace function public.validate_class_join_code(p_code text)
+returns table(class_name text, academic_year text)
+language sql
+stable
+security invoker
+set search_path = pg_catalog, private
+as $$
+  select * from private.validate_class_join_code(p_code)
+$$;
+
+revoke all on function public.validate_class_join_code(text) from public;
+grant execute on function public.validate_class_join_code(text) to anon, authenticated;
+
+create or replace function private.join_class_by_code(p_code text)
+returns table(class_id uuid, class_name text, academic_year text)
+language plpgsql
+security definer
+set search_path = pg_catalog, public
+as $$
+declare
+  v_user uuid := auth.uid();
+  v_class public.classes%rowtype;
+  v_rows integer := 0;
+begin
+  if v_user is null then
+    raise exception 'Sign in before joining a class.';
+  end if;
+
+  select *
+  into v_class
+  from public.classes c
+  where c.join_enabled = true
+    and c.archived = false
+    and upper(c.join_code) = upper(regexp_replace(coalesce(p_code,''),'[^A-Za-z0-9]','','g'))
+  limit 1;
+
+  if v_class.id is null then
+    raise exception 'That class code is invalid or no longer accepting joins.';
+  end if;
+
+  insert into public.class_members(class_id,user_id)
+  values(v_class.id,v_user)
+  on conflict(class_id,user_id) do nothing;
+
+  get diagnostics v_rows = row_count;
+
+  if v_rows > 0 then
+    insert into public.notifications(user_id,kind,title,body,link)
+    values(
+      v_user,
+      'class',
+      'Joined ' || v_class.name,
+      case when coalesce(v_class.academic_year,'') <> ''
+        then 'You joined ' || v_class.name || ' (' || v_class.academic_year || ').'
+        else 'You joined ' || v_class.name || '.'
+      end,
+      '#/progress'
+    );
+  end if;
+
+  return query select v_class.id, v_class.name, v_class.academic_year;
+end;
+$$;
+
+revoke all on function private.join_class_by_code(text) from public;
+revoke all on function private.join_class_by_code(text) from anon;
+grant execute on function private.join_class_by_code(text) to authenticated;
+
+create or replace function public.join_class_by_code(p_code text)
+returns table(class_id uuid, class_name text, academic_year text)
+language sql
+security invoker
+set search_path = pg_catalog, private
+as $$
+  select * from private.join_class_by_code(p_code)
+$$;
+
+revoke all on function public.join_class_by_code(text) from public;
+revoke all on function public.join_class_by_code(text) from anon;
+grant execute on function public.join_class_by_code(text) to authenticated;
+
+
+-- V3.6: allow the public SECURITY INVOKER validation wrapper to call its private implementation.
+-- The private schema is not exposed through PostgREST; only the explicitly granted function is executable.
+grant usage on schema private to anon;
+
+
+-- V3.6 one-time teacher bootstrap
+create table if not exists private.teacher_bootstrap (
+  id smallint primary key default 1 check (id=1),
+  token_hash text not null,
+  used_at timestamptz,
+  used_by uuid references public.profiles(id) on delete set null
+);
+
+insert into private.teacher_bootstrap(id,token_hash)
+values (1,'ff477e5858456a0dbb0257e7f5ddfaa4d2b98fad111f1b8c7b28df6894b2d62b')
+on conflict(id) do nothing;
+
+revoke all on private.teacher_bootstrap from public, anon, authenticated;
+
+create or replace function private.validate_teacher_bootstrap(p_code text)
+returns boolean
+language sql stable security definer
+set search_path=pg_catalog, public, private, extensions
+as $$
+  select exists(
+    select 1 from private.teacher_bootstrap b
+    where b.id=1 and b.used_at is null
+      and b.token_hash=encode(extensions.digest(upper(regexp_replace(coalesce(p_code,''),'[^A-Za-z0-9]','','g')),'sha256'),'hex')
+      and not exists(select 1 from public.profiles p where p.role='teacher')
+  )
+$$;
+revoke all on function private.validate_teacher_bootstrap(text) from public;
+grant execute on function private.validate_teacher_bootstrap(text) to anon, authenticated;
+
+create or replace function public.validate_teacher_bootstrap(p_code text)
+returns boolean language sql stable security invoker
+set search_path=pg_catalog, private
+as $$ select private.validate_teacher_bootstrap(p_code) $$;
+revoke all on function public.validate_teacher_bootstrap(text) from public;
+grant execute on function public.validate_teacher_bootstrap(text) to anon, authenticated;
+
+create or replace function private.claim_teacher_bootstrap(p_code text)
+returns boolean
+language plpgsql security definer
+set search_path=pg_catalog, public, private, extensions
+as $$
+declare v_user uuid:=auth.uid(); v_ok boolean:=false;
+begin
+  if v_user is null then raise exception 'Sign in before claiming teacher setup.'; end if;
+  select exists(
+    select 1 from private.teacher_bootstrap b
+    where b.id=1 and b.used_at is null
+      and b.token_hash=encode(extensions.digest(upper(regexp_replace(coalesce(p_code,''),'[^A-Za-z0-9]','','g')),'sha256'),'hex')
+      and not exists(select 1 from public.profiles p where p.role='teacher')
+  ) into v_ok;
+  if not v_ok then raise exception 'Teacher setup code is invalid, already used, or a teacher already exists.'; end if;
+  update public.profiles set role='teacher' where id=v_user;
+  update private.teacher_bootstrap set used_at=now(),used_by=v_user where id=1 and used_at is null;
+  return true;
+end $$;
+revoke all on function private.claim_teacher_bootstrap(text) from public, anon;
+grant execute on function private.claim_teacher_bootstrap(text) to authenticated;
+
+create or replace function public.claim_teacher_bootstrap(p_code text)
+returns boolean language sql security invoker
+set search_path=pg_catalog, private
+as $$ select private.claim_teacher_bootstrap(p_code) $$;
+revoke all on function public.claim_teacher_bootstrap(text) from public, anon;
+grant execute on function public.claim_teacher_bootstrap(text) to authenticated;
