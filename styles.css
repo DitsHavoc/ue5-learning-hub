@@ -650,3 +650,15 @@ button:disabled{opacity:.48;cursor:not-allowed;transform:none!important}
   .modal{max-height:calc(100vh - 24px);padding:22px}
   .avatar-studio-grid{grid-template-columns:1fr}
 }
+
+/* v3.26.2 account avatar alignment hotfix */
+.account-summary-rich .hub-avatar{
+  display:grid!important;
+  place-items:center!important;
+  color:#fff!important;
+  margin-top:0!important;
+  line-height:1!important;
+  text-align:center!important;
+  flex:0 0 auto;
+}
+.account-summary-rich .hub-avatar.large{font-size:28px!important}

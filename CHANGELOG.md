@@ -1,5 +1,10 @@
 # Changelog
 
+## v3.26.2 — Account Avatar Alignment Hotfix — 26 Aug 2026
+- Fixed top account avatar symbol centring.
+- No database migration required.
+
+
 ## v3.26.1 — UI Hotfix — 26 Aug 2026
 
 - Fixed sidebar click interception caused by the visible-site logo replacement.
