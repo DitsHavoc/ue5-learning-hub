@@ -636,6 +636,12 @@ function modelReferenceCards(refs){
   if(!refs?.length)return '';
   return `<div class="model-reference-grid">${refs.map(r=>`<a class="model-reference-card" href="${esc(r.url)}" target="_blank" rel="noopener"><span>OFFICIAL / CURRENT REFERENCE</span><strong>${esc(r.title)}</strong><p>${esc(r.note||'Open the current reference.')}</p><b>Open reference ↗</b></a>`).join('')}</div>`;
 }
+function modelBookReferences(l){
+  const figs=l.bookFigures||[],notes=l.bookTakeaways||[];
+  if(!figs.length&&!notes.length)return '';
+  const book=MODEL.referenceBook||{title:'3ds Max course reference'};
+  return `<section class="model-book-reference"><div class="model-book-reference-head"><div><span class="deep-label">SELECTED REFERENCE • NOT A CLICK GUIDE</span><h2>Look at what the geometry is doing</h2><p>These selected figures support the modelling principle. For exact current buttons and panels, use the current Autodesk references later in the lesson.</p></div><span class="model-book-source">${esc(book.title)}</span></div>${figs.length?`<div class="model-book-grid">${figs.map((v,i)=>zoomableImage({src:v.src,alt:`${l.title} supporting reference figure ${i+1}`,caption:`${v.caption} • Source: ${book.title}, page ${v.page}.`,kind:'local',eager:false})).join('')}</div>`:''}${notes.length?`<div class="model-book-takeaways">${notes.map(x=>`<div><span>✓</span><p>${esc(x)}</p></div>`).join('')}</div>`:''}</section>`;
+}
 function modelLessonCard(l){
   const done=modelLessonDone(l.id);
   return `<a class="model-lesson-card ${done?'done':''}" href="#/modeling/lesson/${l.id}"><div class="model-lesson-number">${String(l.order).padStart(2,'0')}</div><div><span class="eyebrow">${done?'✓ COMPLETE • ':''}${esc(l.duration)} • +100 XP</span><h3>${l.icon} ${esc(l.title)}</h3><p>${esc(l.intro)}</p><div class="model-skill-row"><span class="new-skill">NEW: ${esc(l.newSkill)}</span>${l.priorSkills.slice(0,3).map(x=>`<span>${esc(x)}</span>`).join('')}</div></div><span class="designer-open">${done?'Revisit':'Start'} →</span></a>`;
@@ -670,6 +676,7 @@ function modelingLessonPage(id){
   ${modelInterfaceImages(l)}
   ${l.visual?modelDiagram(l.visual,`${l.title} concept map`):''}
   <article class="model-lesson-detail"><section class="content-card"><span class="eyebrow">01 • UNDERSTAND</span><h2>What we are learning</h2><p>${esc(l.intro)}</p></section>
+  ${modelBookReferences(l)}
   <section class="content-card"><span class="eyebrow">02 • BUILD SLOWLY</span><h2>One controlled change at a time</h2><div class="model-step-list">${l.steps.map(renderModelStep).join('')}</div></section>
   <section class="content-card model-practice-card"><span class="eyebrow">03 • USE IT</span><h2>${esc(l.practice.title)}</h2><p>${esc(l.practice.task)}</p><div class="model-check-grid">${l.practice.check.map(x=>`<div>✓ ${esc(x)}</div>`).join('')}</div></section>
   <section class="model-two-col"><div class="content-card"><span class="eyebrow">04 • COMMON WAYS TO BREAK IT</span><h2>Watch for these</h2><ul>${l.common.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><div class="content-card"><span class="eyebrow">05 • CURRENT REFERENCES</span><h2>If your screen differs</h2><p>Use current vendor documentation rather than forcing an old screenshot to match.</p>${modelReferenceCards(l.officialRefs)}</div></section>

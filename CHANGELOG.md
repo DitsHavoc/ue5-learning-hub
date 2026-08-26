@@ -1,5 +1,21 @@
 # Changelog
 
+## v3.27.0 — 3ds Max Book Reference Quality Pass — 26 Aug 2026
+
+### Added
+- Five carefully selected local reference figures extracted from the supplied *Essential Guide to 3ds Max for All Levels*.
+- Book-backed teaching notes in the Workspace, Edge Control, Modifier Stack, Topology, UV and Material Handoff lessons.
+- A dedicated visual treatment that labels book figures as concept/reference material rather than current UI click guides.
+- `3DS-MAX-BOOK-VISUAL-PASS.md` documenting what was used, what was deliberately rejected, and why.
+
+### Changed
+- Removed the redundant third-party interface hotlink from Lesson 1; the local book overview now handles broad orientation while current Autodesk Help remains authoritative for exact UI.
+- Modelling philosophy now explicitly separates stable modelling principles from version-sensitive interface guidance.
+- Cache/version references updated to v3.27.0.
+
+### Database
+- No migration required.
+
 ## v3.26.2 — Account Avatar Alignment Hotfix — 26 Aug 2026
 - Fixed top account avatar symbol centring.
 - No database migration required.

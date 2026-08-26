@@ -1,7 +1,7 @@
 window.UE5_MODELING_DATA = {
-  "version": "3.26.0",
+  "version": "3.27.0",
   "updated": "26 Aug 2026",
-  "philosophy": "Slow, methodical, visual and cumulative. Build correctly before building quickly.",
+  "philosophy": "Slow, methodical, visual and cumulative. Build correctly before building quickly; use reference figures to judge form and topology, but current vendor documentation for current UI.",
   "lessons": [
     {
       "id": "max-orientation",
@@ -107,14 +107,17 @@ window.UE5_MODELING_DATA = {
         }
       ],
       "visual": "assets/modeling/diagrams/interface-map.svg",
-      "interfaceImages": [
+      "bookFigures": [
         {
-          "src": "https://static.wixstatic.com/media/fd8ea2_4066070155e6471bb6e40a9f6784f48e~mv2.png/v1/fill/w_980,h_628,al_c,q_90,enc_avif,quality_auto/fd8ea2_4066070155e6471bb6e40a9f6784f48e~mv2.png",
-          "caption": "3ds Max 2024 interface reference. Use it only to orient yourself; your current Max layout can differ.",
-          "sourceUrl": "https://www.margaritanikita.com/post/3ds-max-interface-overview",
-          "sourceTitle": "3ds Max Interface Overview (Margarita Nikita)",
-          "version": "2024"
+          "src": "assets/modeling/book/interface-overview-p12.webp",
+          "page": 12,
+          "caption": "Broad 3ds Max interface overview. Use it to recognise the major regions of the workspace, not as an exact current-version click map.",
+          "teaches": "Interface regions and orientation"
         }
+      ],
+      "bookTakeaways": [
+        "Learn the names and jobs of the main interface regions before trying to memorise every icon.",
+        "The book supports a broad interface map; the current Autodesk Help links remain the source of truth for the college install."
       ]
     },
     {
@@ -538,7 +541,19 @@ window.UE5_MODELING_DATA = {
           "note": "Official Autodesk introduction to poly tools and modifier workflows."
         }
       ],
-      "visual": "assets/modeling/diagrams/topology-check.svg"
+      "visual": "assets/modeling/diagrams/topology-check.svg",
+      "bookFigures": [
+        {
+          "src": "assets/modeling/book/topology-rounded-prop-p31.webp",
+          "page": 31,
+          "caption": "Wireframe and shaded views of the same rounded hard-surface form. Notice how edge placement follows and supports the shape rather than filling every surface with equal density.",
+          "teaches": "Edge flow, support geometry and reading wireframe against the final surface"
+        }
+      ],
+      "bookTakeaways": [
+        "Edges should have a job: hold silhouette, control a transition, support shading or create a useful modelling selection path.",
+        "Compare wireframe and shaded views together; a clean-looking shaded surface can hide poor or wasteful topology."
+      ]
     },
     {
       "id": "max-chamfer-smoothing",
@@ -750,7 +765,19 @@ window.UE5_MODELING_DATA = {
           "note": "Official Autodesk example of using Edit Poly in the modifier stack rather than converting immediately."
         }
       ],
-      "visual": "assets/modeling/diagrams/modifier-stack.svg"
+      "visual": "assets/modeling/diagrams/modifier-stack.svg",
+      "bookFigures": [
+        {
+          "src": "assets/modeling/book/subdivision-progression-p35.webp",
+          "page": 35,
+          "caption": "Subdivision progression from a simple base form through increasing subdivision. The figure makes the cost of extra iterations visible as well as the smoother result.",
+          "teaches": "Base mesh, subdivision levels and why more geometry is not automatically better"
+        }
+      ],
+      "bookTakeaways": [
+        "Subdivision keeps the general form while increasing mesh density; each extra level should be justified by the result you need.",
+        "The course deliberately keeps the editable base and modifier stack available instead of collapsing early."
+      ]
     },
     {
       "id": "max-topology-clinic",
@@ -863,7 +890,19 @@ window.UE5_MODELING_DATA = {
           "note": "Current tool reference; use it when a UI control differs from a screenshot."
         }
       ],
-      "visual": "assets/modeling/diagrams/topology-check.svg"
+      "visual": "assets/modeling/diagrams/topology-check.svg",
+      "bookFigures": [
+        {
+          "src": "assets/modeling/book/topology-car-wireframe-p31.webp",
+          "page": 31,
+          "caption": "A more complex wireframe example. Density changes around features and curved areas because the geometry is serving form and detail, not because every part needs the same polygon count.",
+          "teaches": "Purposeful density and topology inspection"
+        }
+      ],
+      "bookTakeaways": [
+        "The book’s retopology guidance emphasises clean edge flow and keeping the new mesh faithful to the original form while optimising it.",
+        "Treat this as an inspection example, not a target polygon count. A student crate should be dramatically simpler than a vehicle."
+      ]
     },
     {
       "id": "max-modular-kit",
@@ -1092,7 +1131,19 @@ window.UE5_MODELING_DATA = {
           "note": "Current Autodesk support article on unfolding geometry with Unwrap UVW."
         }
       ],
-      "visual": "assets/modeling/diagrams/uv-check.svg"
+      "visual": "assets/modeling/diagrams/uv-check.svg",
+      "bookFigures": [
+        {
+          "src": "assets/modeling/book/uv-checker-p61.webp",
+          "page": 61,
+          "caption": "Checker-pattern UV test. Even squares make distortion easy to spot before texturing begins.",
+          "teaches": "UV distortion checking before painting"
+        }
+      ],
+      "bookTakeaways": [
+        "Use a checker before texturing: stretched or uneven squares reveal UV distortion immediately.",
+        "The book also reinforces logical UV placement and even texel density; our lesson adds the hard stop that the checker must pass before Substance Painter."
+      ]
     },
     {
       "id": "max-materials-substance",
@@ -1192,7 +1243,11 @@ window.UE5_MODELING_DATA = {
           "note": "Official Autodesk learning catalogue includes current materials, UV and pipeline tutorials."
         }
       ],
-      "visual": "assets/modeling/diagrams/pipeline.svg"
+      "visual": "assets/modeling/diagrams/pipeline.svg",
+      "bookTakeaways": [
+        "The book recommends descriptive asset names, logical folders and keeping linked textures/materials organised together.",
+        "That supports the handoff rule here: clean geometry, clean UVs, clear names, then export a copy while preserving the Max master."
+      ]
     },
     {
       "id": "max-ue5-export",
@@ -2026,5 +2081,10 @@ window.UE5_MODELING_DATA = {
       "need": "Current import dialog and imported mesh verification.",
       "replace": "Use beside Lesson 12."
     }
-  ]
+  ],
+  "referenceBook": {
+    "title": "Essential Guide to 3ds Max for All Levels",
+    "author": "Adeolu O / Computer Guru Institute",
+    "note": "Selected figures and principles are used as supporting teaching references. Current Autodesk documentation remains the authority for current interface and version-specific controls."
+  }
 };

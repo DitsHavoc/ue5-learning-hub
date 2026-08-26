@@ -29,3 +29,7 @@ Each screenshot must answer one of these questions:
 - **Is mine built correctly?**
 
 If it answers none of them, it does not belong beside an instruction.
+
+## v3.27 book-reference note
+
+Selected book figures now cover broad interface orientation, topology/wireframe judgement, subdivision progression and UV checker concepts. **Do not remove the current-version capture requirements below.** Book figures explain stable principles; college-version screenshots must still show exact buttons, panels and current UI state.
