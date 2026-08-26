@@ -66,3 +66,8 @@ These create the shared project/member/log/media/comment model, preserve individ
 - `20260825_13_tighten_class_and_evidence_integrity.sql`
 
 For a new installation, apply the base schema first and then the incremental migrations in numeric order. For an existing installation, only apply migrations that have not already been recorded in that project's migration history.
+
+
+## V3.17
+
+No database migration is required. Quick Tutorial completion is stored as `lesson_progress.lesson_id = tutorial:<tutorial-id>` and Chapter Build completion as `chapter:<path-id>`. The existing `(user_id, lesson_id)` progress key and class-scoped teacher access continue to apply.

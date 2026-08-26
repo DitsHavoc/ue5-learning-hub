@@ -4,9 +4,23 @@
 
 const DATA = window.UE5_COURSE_DATA;
 const PROJECT = window.UE5_PROJECT_DATA;
+const TOOLS = window.UE5_TUTORIAL_DATA;
+const DESIGN = window.UE5_DESIGN_DATA;
 const BACKEND = window.UE5_BACKEND;
 
-if (!DATA || !PROJECT || !BACKEND) {
+// V3.18 Designer Studio extends the same Quick Tutorial recipe system so students can
+// search programming and design help from one place while still having a dedicated design curriculum.
+const designCategories = DESIGN.modules.map(m=>({id:`design-${m.id}`,title:m.title,icon:m.icon,description:m.description,designer:true}));
+const knownCats=new Set(TOOLS.categories.map(c=>c.id));
+designCategories.forEach(c=>{if(!knownCats.has(c.id))TOOLS.categories.push(c)});
+const knownTutorials=new Set(TOOLS.tutorials.map(t=>t.id));
+DESIGN.tutorials.forEach(t=>{if(!knownTutorials.has(t.id))TOOLS.tutorials.push(t)});
+// A Designer module can deliberately reuse an existing recipe (for example Silent Hill-style Fog).
+// Give reused recipes a Designer home without duplicating their content in the global library.
+DESIGN.modules.forEach(m=>m.tutorials.forEach(id=>{const t=TOOLS.tutorials.find(x=>x.id===id);if(t&&!t.designModule)t.designModule=m.id}));
+
+
+if (!DATA || !PROJECT || !TOOLS || !DESIGN || !BACKEND) {
   const e = document.querySelector('#bootError');
   if (e) e.hidden = false;
   return;
@@ -34,7 +48,7 @@ function safeUrl(value){
 }
 
 function loadState(){
-  const clean={completed:[],quiz:{},lastLesson:null};
+  const clean={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[]};
   try{
     const current=JSON.parse(localStorage.getItem(STORE)||'null');
     if(current) return {...clean,...current};
@@ -70,7 +84,7 @@ function lesson(id){return DATA.lessons.find(x=>x.id===id)}
 function path(id){return DATA.paths.find(x=>x.id===id)}
 function mechanic(id){return PROJECT.mechanics[id]}
 function completedLessons(){return DATA.lessons.filter(l=>state.completed.includes(l.id))}
-function totalXp(){return completedLessons().reduce((n,l)=>n+l.xp,0)}
+function totalXp(){return completedLessons().reduce((n,l)=>n+l.xp,0)+TOOLS.chapterBuilds.filter(b=>state.chapterBuildCompleted.includes(b.path)).reduce((n,b)=>n+(b.xp||0),0)+(state.designBuildCompleted||[]).length*300}
 function level(){
   const xp=totalXp(),n=Math.floor(xp/500)+1,into=xp%500;
   return {n,xp,into,left:500-into,pct:into/5};
@@ -119,7 +133,7 @@ function updateChrome(){
   $('#sideXp').textContent=`${i.xp} XP`;
   $('#sideBar').style.width=`${i.pct}%`;
   $('#sideNext').textContent=`${i.left} XP to Level ${i.n+1}`;
-  $('#topDone').textContent=state.completed.length;
+  $('#topDone').textContent=completedLessons().length;
   $('#topXp').textContent=i.xp;
 
   const btn=$('#accountButton');
@@ -146,7 +160,11 @@ async function syncCloudProgress(){
   try{
     const rows=await BACKEND.getLessonProgress();
     const cloudCompleted=rows.filter(r=>r.completed).map(r=>r.lesson_id);
-    state.completed=[...new Set([...state.completed,...cloudCompleted])];
+    const lessonIds=new Set(DATA.lessons.map(l=>l.id));
+    state.completed=[...new Set([...state.completed,...cloudCompleted.filter(id=>lessonIds.has(id))])];
+    state.tutorialCompleted=[...new Set([...(state.tutorialCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('tutorial:')).map(id=>id.slice(9))])];
+    state.chapterBuildCompleted=[...new Set([...(state.chapterBuildCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('chapter:')).map(id=>id.slice(8))])];
+    state.designBuildCompleted=[...new Set([...(state.designBuildCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('designbuild:')).map(id=>id.slice(12))])];
     saveState();
 
     const pRows=await BACKEND.getProjectProgress();
@@ -182,7 +200,8 @@ function lessonRow(l,index){
 }
 function zoomableImage({src,alt,caption='',sourceUrl='',sourceTitle='',kind='local',eager=false}){
   const source=sourceUrl?`<a class="image-source-link" href="${esc(sourceUrl)}" target="_blank" rel="noopener">Source: ${esc(sourceTitle||'Epic Games — Unreal Engine Documentation')} ↗</a>`:'';
-  return `<figure class="visual-flow-card ${kind}"><button class="visual-zoom" type="button" data-action="open-image" data-src="${esc(src)}" data-caption="${esc(caption)}" data-source="${esc(sourceUrl)}" aria-label="Open image larger"><span class="zoom-hint">⌕ Click to enlarge</span><img class="${kind==='epic'?'epic-doc-image':''}" src="${esc(src)}" alt="${esc(alt)}" loading="${eager?'eager':'lazy'}"></button><figcaption>${esc(caption)}${source}</figcaption><div class="remote-image-fallback"><strong>Official image unavailable.</strong><a href="${esc(sourceUrl)}" target="_blank" rel="noopener">Open the Epic documentation instead ↗</a></div></figure>`;
+  const remoteClass=sourceUrl?'remote-reference-image':'';
+  return `<figure class="visual-flow-card ${kind}"><button class="visual-zoom" type="button" data-action="open-image" data-src="${esc(src)}" data-caption="${esc(caption)}" data-source="${esc(sourceUrl)}" aria-label="Open image larger"><span class="zoom-hint">⌕ Click to enlarge</span><img class="${kind==='epic'?'epic-doc-image ':''}${remoteClass}" src="${esc(src)}" alt="${esc(alt)}" loading="${eager?'eager':'lazy'}"></button><figcaption>${esc(caption)}${source}</figcaption><div class="remote-image-fallback"><strong>Reference image unavailable.</strong>${sourceUrl?`<a href="${esc(sourceUrl)}" target="_blank" rel="noopener">Open the source page instead ↗</a>`:''}</div></figure>`;
 }
 function currentVisuals(l){
   const xs=(l.visuals||[]).filter(v=>v.authenticUI===true||['ue5','screenshot','ue5-reference'].includes(v.type));
@@ -307,8 +326,118 @@ function projectTaskCard(l){
   </div>`;
 }
 
+function tutorial(id){return TOOLS.tutorials.find(x=>x.id===id)}
+function tutorialCategory(id){return TOOLS.categories.find(x=>x.id===id)}
+function chapterBuild(pathId){return TOOLS.chapterBuilds.find(x=>x.path===pathId)}
+function tutorialDone(id){return state.tutorialCompleted.includes(id)}
+function chapterBuildDone(pathId){return state.chapterBuildCompleted.includes(pathId)}
+function pathComplete(pathId){return pathProgress(pathId).pct===100}
+function completedTutorialCount(){return TOOLS.tutorials.filter(t=>tutorialDone(t.id)).length}
+function unlockedChapterBuilds(){return TOOLS.chapterBuilds.filter(b=>pathComplete(b.path))}
+function pendingUnlockedBuild(){return TOOLS.chapterBuilds.find(b=>pathComplete(b.path)&&!chapterBuildDone(b.path))||null}
+function tutorialOfficialRef(t){
+  const l=lesson(t.referenceLesson),ref=l?.officialRefs?.[0];
+  return ref||null;
+}
+function tutorialReferenceVisuals(t){
+  const own=t.referenceImages||[];
+  if(own.length){
+    return `<div class="tutorial-reference-story"><div class="visual-story-head"><span class="deep-label">VISUAL TARGET / REAL REFERENCE</span><h2>See what you are aiming for</h2><p>Use the reference to understand the result, then build the mechanic in Unreal yourself.</p></div><div class="visual-story-grid">${own.map((v,i)=>zoomableImage({src:v.src,alt:`${t.title} reference ${i+1}`,caption:v.caption||'',sourceUrl:v.sourceUrl||'',sourceTitle:v.sourceTitle||'',kind:v.kind==='epic'?'epic':'reference',eager:i===0})).join('')}</div></div>`;
+  }
+  const l=lesson(t.referenceLesson);if(!l)return '';
+  const xs=[];
+  const current=(l.visuals||[]).find(v=>v.authenticUI===true||['ue5','screenshot','ue5-reference'].includes(v.type));
+  if(current)xs.push({src:current.src,caption:current.caption||`Related Unreal example from ${l.title}.`,kind:'current'});
+  else if(l.visual?.src)xs.push({src:l.visual.src,caption:l.visual.caption||`Related Unreal example from ${l.title}.`,kind:'current'});
+  const doc=(l.docVisuals||[])[0];
+  if(doc)xs.push({src:doc.src,caption:doc.caption||`Official Unreal Engine reference for ${l.title}.`,sourceUrl:doc.sourceUrl||'',sourceTitle:doc.sourceTitle||'',kind:'epic'});
+  if(!xs.length)return '';
+  return `<div class="tutorial-reference-story"><div class="visual-story-head"><span class="deep-label">RELATED UNREAL REFERENCE</span><h2>What this looks like in Unreal</h2></div><div class="visual-story-grid">${xs.slice(0,2).map((v,i)=>zoomableImage({src:v.src,alt:`${t.title} Unreal reference ${i+1}`,caption:v.caption,sourceUrl:v.sourceUrl||'',sourceTitle:v.sourceTitle||'',kind:v.kind,eager:i===0})).join('')}</div></div>`;
+}
+
+function designModule(id){return DESIGN.modules.find(m=>m.id===id)}
+function designBuildDone(id){return (state.designBuildCompleted||[]).includes(id)}
+function designTutorialCount(m){return m.tutorials.filter(id=>tutorialDone(id)).length}
+function designReferenceGrid(images,title){
+  if(!images?.length)return '';
+  return `<div class="designer-reference-strip"><div class="visual-story-head"><span class="deep-label">GAME / ENGINE REFERENCE</span><h2>${esc(title||'Study the visual language')}</h2><p>Do not copy the picture. Identify the design decision that makes it work, then reproduce that principle in your own scene.</p></div><div class="visual-story-grid">${images.map((v,i)=>zoomableImage({src:v.src,alt:`Designer reference ${i+1}`,caption:v.caption||'',sourceUrl:v.sourceUrl||'',sourceTitle:v.sourceTitle||'',kind:v.kind==='epic'?'epic':'reference',eager:i===0})).join('')}</div></div>`;
+}
+function designModuleCard(m){
+  const done=designTutorialCount(m),buildDone=designBuildDone(m.id);
+  return `<a class="designer-module-card ${buildDone?'done':''}" href="#/design/${m.id}"><div class="designer-module-icon">${m.icon}</div><div><span class="eyebrow">${done}/${m.tutorials.length} RECIPES TRIED${buildDone?' • STUDIO BUILD ✓':''}</span><h3>${esc(m.title)}</h3><p>${esc(m.description)}</p><div class="tutorial-tag-row">${m.principles.slice(0,3).map(x=>`<span>${esc(x)}</span>`).join('')}</div></div><span class="designer-open">Explore →</span></a>`;
+}
+function designResourceCard(r){
+  return `<a class="designer-resource-card" href="${esc(r.url)}" target="_blank" rel="noopener"><span class="designer-resource-icon">${esc(r.icon)}</span><div><span class="eyebrow">${esc(r.type)}</span><h3>${esc(r.title)}</h3><p>${esc(r.note)}</p></div><span>↗</span></a>`;
+}
+function designPage(){
+  const designIds=[...new Set(DESIGN.modules.flatMap(m=>m.tutorials))],tried=designIds.filter(tutorialDone).length,builds=(state.designBuildCompleted||[]).length;
+  const featured=['greybox-room','set-dress-room','basic-pbr-material','three-point-room','create-landscape','sequencer-first-shot','ambient-zone','scene-polish-pass','silent-hill-fog'].map(tutorial).filter(Boolean);
+  return `<div class="page-head designer-page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Designer Studio</div><span class="eyebrow">DESIGN • WORLD BUILDING • ART DIRECTION • AUDIO</span><h1>✦ Designer Studio</h1><p class="muted">Programming makes systems work. Design decides what the player sees, hears, understands and feels. Learn to build spaces that are readable, intentional and worth exploring.</p><div class="designer-stats"><div><strong>${DESIGN.modules.length}</strong><span>design disciplines</span></div><div><strong>${DESIGN.tutorials.length+1}</strong><span>design recipes</span></div><div><strong>${tried}</strong><span>recipes tried</span></div><div><strong>${builds}/${DESIGN.modules.length}</strong><span>studio builds</span></div></div></div>
+  <section class="designer-manifesto"><div><span class="deep-label">THE DESIGNER MINDSET</span><h2>Stop decorating. Start communicating.</h2><p>A strong environment answers questions before the player asks them: Where can I go? What matters? What happened here? What is dangerous? What should I feel? Every module below teaches Unreal tools through those design decisions.</p></div><div class="designer-rule-stack"><span>01 • Block out before polishing</span><span>02 • Build big shapes before tiny detail</span><span>03 • Make the route readable without arrows</span><span>04 • Use light and sound to control attention</span><span>05 • Test from the player's camera</span></div></section>
+  <section class="section"><div class="section-head"><div><span class="eyebrow">8 DISCIPLINES</span><h2>Choose your designer path</h2><p>You do not need to be an artist to learn these. The goal is better decisions, not prettier screenshots for their own sake.</p></div></div><div class="designer-module-grid">${DESIGN.modules.map(designModuleCard).join('')}</div></section>
+  <section class="section"><div class="section-head"><div><span class="eyebrow">START BUILDING NOW</span><h2>Designer Quick Tutorials</h2><p>Short recipes for the exact things students ask for while building an environment.</p></div><a class="button ghost" href="#/tutorials">Open all Quick Tutorials →</a></div><div class="quick-tutorial-grid featured">${featured.map(tutorialCard).join('')}</div></section>
+  ${designReferenceGrid([DESIGN.modules[0].referenceImages[0],DESIGN.modules[3].referenceImages[0],DESIGN.modules[4].referenceImages[0]],'Read games like a designer')}
+  <section class="section designer-resources"><div class="section-head"><div><span class="eyebrow">DON'T MODEL THE WHOLE WORLD FROM SCRATCH</span><h2>Free asset & sound resources</h2><p>Use free assets to practise design quickly. The learning is in selection, composition, lighting, material response and player experience — not spending three weeks modelling a chair.</p></div></div><div class="designer-resource-grid">${DESIGN.resources.map(designResourceCard).join('')}</div><div class="callout"><b>Licence habit:</b> “free” does not always mean “do anything”. Check the licence on the specific asset/sound, keep attribution notes where required and do not redistribute raw third-party files unless the licence allows it.</div></section>`;
+}
+function designModulePage(id){
+  const m=designModule(id);if(!m)return notFound();const b=m.build,done=designBuildDone(m.id),tried=designTutorialCount(m);
+  const ts=m.tutorials.map(tutorial).filter(Boolean);
+  return `<div class="breadcrumb"><a href="#/">Dashboard</a> / <a href="#/design">Designer Studio</a> / ${esc(m.title)}</div>
+  <section class="designer-module-hero"><div><span class="eyebrow">DESIGN DISCIPLINE • ${tried}/${ts.length} RECIPES TRIED</span><h1>${m.icon} ${esc(m.title)}</h1><p>${esc(m.intro)}</p></div><div class="designer-principles"><span class="deep-label">REMEMBER THESE</span>${m.principles.map((x,i)=>`<div><b>${String(i+1).padStart(2,'0')}</b><span>${esc(x)}</span></div>`).join('')}</div></section>
+  ${designReferenceGrid(m.referenceImages,`Study ${esc(m.title.toLowerCase())} in finished games and Unreal`)}
+  <section class="content-card designer-analysis"><span class="eyebrow">PLAY / WATCH / ANALYSE</span><h2>Read the scene before you build one</h2><div class="designer-analysis-grid"><div><b>WHERE DOES YOUR EYE GO FIRST?</b><p>Identify the focal point and the contrast creating it: shape, brightness, colour, movement, sound or empty space.</p></div><div><b>WHAT INFORMATION IS HIDDEN?</b><p>Look for walls, fog, corners, elevation and sound that control what the player can know before moving.</p></div><div><b>HOW IS THE PLAYER GUIDED?</b><p>Look for route width, landmarks, light pools, prop direction, terrain shape and repeated visual language.</p></div><div><b>WHAT WOULD YOU REMOVE?</b><p>Good design is selective. Find elements that are decorative but not helping readability, story or atmosphere.</p></div></div></section>
+  <section class="section"><div class="section-head"><div><span class="eyebrow">PRACTICAL RECIPES</span><h2>Build the skills</h2><p>Follow the first version exactly if needed. Then change something so it becomes yours.</p></div></div><div class="quick-tutorial-grid">${ts.map(tutorialCard).join('')}</div></section>
+  <section class="designer-studio-build ${done?'done':''}"><div class="designer-studio-title"><span class="eyebrow">STUDIO BUILD • ${esc(b.duration)} • +300 XP</span><h2>🎨 ${esc(b.title)}</h2><p>${esc(b.brief)}</p></div><div class="designer-build-phases">${b.phases.map((x,i)=>`<article><span>${String(i+1).padStart(2,'0')}</span><p>${esc(x)}</p></article>`).join('')}</div><div class="designer-evidence"><h3>Show that it works</h3>${requirements(b.evidence)}<button class="button ${done?'success':'primary'}" data-action="complete-design-build" data-design-module="${m.id}">${done?'✓ Studio Build complete':'Mark Studio Build complete • +300 XP'}</button></div></section>
+  <section class="content-card designer-critique"><span class="eyebrow">CRITIQUE BEFORE YOU LEAVE</span><h2>Five questions for your own work</h2><ol><li>What should the player notice first?</li><li>Can they understand the intended route without you talking?</li><li>What part feels generic or randomly placed?</li><li>What could be removed without losing anything?</li><li>What single change would improve the experience most?</li></ol></section>`;
+}
+function tutorialCard(t){
+  const c=tutorialCategory(t.category),done=tutorialDone(t.id);
+  return `<a class="quick-tutorial-card ${done?'done':''}" href="#/tutorial/${t.id}" data-tutorial-card data-search="${esc([t.title,t.summary,...t.uses,c?.title||''].join(' ').toLowerCase())}" data-category="${esc(t.category)}"><div class="tutorial-card-icon">${t.icon}</div><div><span class="eyebrow">${esc(c?.title||t.category)} • ${esc(t.duration)}</span><h3>${esc(t.title)}</h3><p>${esc(t.summary)}</p><div class="tutorial-tag-row">${t.uses.slice(0,4).map(x=>`<span>${esc(x)}</span>`).join('')}</div></div><span class="tutorial-card-status">${done?'✓ Done':'Open →'}</span></a>`;
+}
+function chapterBuildCard(b,{compact=false}={}){
+  const p=path(b.path),done=chapterBuildDone(b.path),unlocked=pathComplete(b.path)||done;
+  if(!unlocked)return `<article class="chapter-build-card locked ${compact?'compact':''}"><div class="chapter-build-icon">🔒</div><div><span class="eyebrow">${esc(p?.title||b.path)}</span><h3>${esc(b.title)}</h3><p>Complete this learning path to unlock the playable Chapter Build.</p></div><span class="chapter-build-state">${pathProgress(b.path).done}/${pathProgress(b.path).total}</span></article>`;
+  return `<a class="chapter-build-card unlocked ${done?'done':''} ${compact?'compact':''}" href="#/chapter-build/${b.path}"><div class="chapter-build-icon">${done?'✓':b.icon}</div><div><span class="eyebrow">CHAPTER BUILD UNLOCKED • ${esc(p?.title||b.path)}</span><h3>${esc(b.title)}</h3><p>${esc(b.summary)}</p><div class="tutorial-tag-row"><span>${esc(b.duration)}</span>${b.uses.slice(0,3).map(x=>`<span>${esc(x)}</span>`).join('')}</div></div><span class="chapter-build-state">${done?'Completed':'Build it →'}</span></a>`;
+}
+function tutorialLibrary(){
+  const featured=TOOLS.tutorials.filter(t=>t.featured),done=completedTutorialCount();
+  return `<div class="page-head tutorial-library-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Quick Tutorials</div><span class="eyebrow">${TOOLS.tutorials.length} short practical recipes</span><h1>🛠 Quick Tutorials</h1><p class="muted">Need one mechanic for a prototype or assignment? Find it, build it, test it, then change it. These are deliberately shorter than full lessons.</p></div>
+  <section class="tutorial-library-tools"><div class="tutorial-search-box"><span>⌕</span><input id="tutorialSearch" type="search" placeholder="Try: gun, door, fog, health, AI, HUD…"></div><div class="tutorial-filter-row"><button class="tutorial-filter active" data-tutorial-filter="all">All</button>${TOOLS.categories.map(c=>`<button class="tutorial-filter" data-tutorial-filter="${c.id}">${c.icon} ${esc(c.title)}</button>`).join('')}</div><div class="tutorial-library-count"><strong>${done}/${TOOLS.tutorials.length}</strong><span>tutorials tried</span></div></section>
+  <section class="section"><div class="section-head"><div><h2>Start with something useful</h2><p>Common mechanics students reach for constantly.</p></div></div><div class="quick-tutorial-grid featured">${featured.map(tutorialCard).join('')}</div></section>
+  <section class="section"><div class="section-head"><div><h2>All Quick Tutorials</h2><p id="tutorialResultCount">${TOOLS.tutorials.length} tutorials</p></div></div><div class="quick-tutorial-grid" id="tutorialGrid">${TOOLS.tutorials.map(tutorialCard).join('')}</div></section>
+  <section class="section chapter-build-library"><div class="section-head"><div><span class="eyebrow">BIGGER APPLICATION TASKS</span><h2>🎮 Chapter Builds</h2><p>Finish a learning path and a new guided mini-game/system unlocks. The tutorial can still be step-by-step — you must test it and prove it works.</p></div></div><div class="chapter-build-grid">${TOOLS.chapterBuilds.map(b=>chapterBuildCard(b)).join('')}</div></section>`;
+}
+function tutorialPage(id){
+  const t=tutorial(id);if(!t)return notFound();const c=tutorialCategory(t.category),done=tutorialDone(t.id),ref=tutorialOfficialRef(t),related=TOOLS.tutorials.filter(x=>x.id!==t.id&&(x.category===t.category||x.uses.some(u=>t.uses.includes(u)))).slice(0,4);
+  return `<div class="breadcrumb"><a href="#/">Dashboard</a> / <a href="#/tutorials">Quick Tutorials</a> / ${esc(t.title)}</div>
+  <section class="tutorial-hero"><div><span class="eyebrow">${c?.icon||'🛠'} ${esc(c?.title||t.category)} • ${esc(t.duration)} • ${esc(t.difficulty)}</span><h1>${t.icon} ${esc(t.title)}</h1><p>${esc(t.summary)}</p><div class="tutorial-tag-row large">${t.uses.map(x=>`<span>${esc(x)}</span>`).join('')}</div></div><div class="tutorial-complete-box"><strong>${done?'✓ Tried it':'Build → Test → Change'}</strong><p>${done?'You marked this tutorial as working. You can revisit it anytime.':'Follow the recipe, then make one small change of your own.'}</p><button class="button ${done?'success':'primary'}" data-action="complete-tutorial" data-tutorial="${t.id}">${done?'✓ Tutorial complete':'Mark tutorial complete'}</button></div></section>
+  <article class="tutorial-detail">
+    <section class="content-card tutorial-result"><span class="eyebrow">01 • What we are making</span><h2>A small working mechanic</h2><p>${esc(t.summary)}</p><div class="callout good"><b>Use this tutorial when:</b> you need this mechanic in a prototype, Chapter Build or assignment and want a short reliable route to a first working version.</div></section>
+    ${tutorialReferenceVisuals(t)}
+    <section class="content-card"><span class="eyebrow">02 • Build it</span><h2>Follow the steps — understand the reason</h2><div class="tutorial-step-list">${t.steps.map((s,i)=>`<article class="tutorial-step"><div class="tutorial-step-number">${String(i+1).padStart(2,'0')}</div><div><h3>${esc(s[0])}</h3><div class="guided-do"><span>DO THIS</span><p>${esc(s[1])}</p></div><div class="guided-reason"><span>WHY</span><p>${esc(s[2])}</p></div><div class="guided-check"><span>TEST / CHECK</span><p>${esc(s[3])}</p></div></div></article>`).join('')}</div></section>
+    <section class="tutorial-three-col"><div class="content-card"><span class="eyebrow">03 • Common mistakes</span><h2>If it doesn't work</h2><ul>${t.mistakes.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><div class="content-card"><span class="eyebrow">04 • Make it yours</span><h2>Change something</h2><ul>${t.makeItYours.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><div class="content-card"><span class="eyebrow">05 • Definition of done</span><h2>It works when…</h2>${requirements(t.worksWhen)}</div></section>
+    <section class="content-card tutorial-next"><div><span class="eyebrow">GO DEEPER</span><h2>Connect this recipe to the course</h2><p>Quick Tutorials solve the immediate mechanic. The full lesson explains the transferable idea behind it.</p></div><div class="tutorial-next-links">${t.designModule?`<a class="button" href="#/design/${t.designModule}">Open ${esc(designModule(t.designModule)?.title||'Designer Studio')} →</a>`:`<a class="button" href="#/lesson/${t.referenceLesson}">Open ${esc(lesson(t.referenceLesson)?.title||'related lesson')} →</a>`}${ref?`<a class="button ghost" href="${esc(ref.url)}" target="_blank" rel="noopener">Epic UE5.8 reference ↗</a>`:''}${t.source?.url?`<a class="button ghost" href="${esc(t.source.url)}" target="_blank" rel="noopener">${esc(t.source.title||'Reference source')} ↗</a>`:''}</div></section>
+    ${related.length?`<section class="section"><div class="section-head"><div><h2>Related Quick Tutorials</h2><p>Useful next mechanics.</p></div></div><div class="quick-tutorial-grid related">${related.map(tutorialCard).join('')}</div></section>`:''}
+  </article>`;
+}
+function chapterBuildPage(pathId){
+  const b=chapterBuild(pathId),p=path(pathId);if(!b||!p)return notFound();const x=pathProgress(pathId),done=chapterBuildDone(pathId),unlocked=x.pct===100||done;
+  if(!unlocked){const left=DATA.lessons.filter(l=>l.path===pathId&&!state.completed.includes(l.id));return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / <a href="#/path/${p.id}">${esc(p.title)}</a> / Chapter Build</div><span class="eyebrow">🔒 Complete the chapter first</span><h1>${b.icon} ${esc(b.title)}</h1><p class="muted">This mini-build unlocks when all ${x.total} lessons in ${esc(p.title)} are complete.</p></div><section class="content-card locked-build"><h2>${x.done}/${x.total} lessons complete</h2><div class="progress"><span style="width:${x.pct}%"></span></div><div class="lesson-list">${left.map((l,i)=>lessonRow(l,i)).join('')}</div></section>`}
+  return `<div class="breadcrumb"><a href="#/">Dashboard</a> / <a href="#/path/${p.id}">${esc(p.title)}</a> / Chapter Build</div><section class="chapter-build-hero"><div><span class="eyebrow">🎮 CHAPTER BUILD • UNLOCKED</span><h1>${b.icon} ${esc(b.title)}</h1><p>${esc(b.summary)}</p><div class="tutorial-tag-row large"><span>${esc(b.duration)}</span>${b.uses.map(x=>`<span>${esc(x)}</span>`).join('')}</div></div><div class="tutorial-complete-box"><strong>${done?'✓ Chapter Build completed':'Use what you learned'}</strong><p>${done?'You can reopen this guide whenever you want.':'Follow the guide, test every checkpoint and keep screenshots showing it working.'}</p><button class="button ${done?'success':'primary'}" data-action="complete-chapter-build" data-path="${b.path}">${done?'✓ Build completed':`Mark build complete • +${b.xp} XP`}</button></div></section>
+  <article class="chapter-build-detail"><section class="content-card"><span class="eyebrow">THE BRIEF</span><h2>What you are building</h2><p>${esc(b.brief)}</p></section>
+  <section class="content-card"><span class="eyebrow">USE THE RECIPE LIBRARY</span><h2>Helpful Quick Tutorials</h2><p>You can use these while building. The challenge is combining systems and proving they work together.</p><div class="chapter-tutorial-links">${b.relatedTutorials.map(id=>{const t=tutorial(id);return t?`<a href="#/tutorial/${t.id}"><span>${t.icon}</span><strong>${esc(t.title)}</strong><small>${esc(t.duration)}</small></a>`:''}).join('')}</div></section>
+  <section class="content-card"><span class="eyebrow">BUILD IT</span><h2>Work through the phases</h2><div class="chapter-phase-list">${b.phases.map((ph,i)=>`<article class="chapter-phase"><div class="chapter-phase-head"><span>${String(i+1).padStart(2,'0')}</span><h3>${esc(ph[0])}</h3></div><ol>${ph[1].map(x=>`<li>${esc(x)}</li>`).join('')}</ol></article>`).join('')}</div></section>
+  <section class="tutorial-three-col"><div class="content-card"><span class="eyebrow">TEST IT</span><h2>Definition of done</h2>${requirements(b.checkpoints)}</div><div class="content-card"><span class="eyebrow">MAKE IT YOURS</span><h2>Independent change</h2><ul>${b.makeItYours.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><div class="content-card"><span class="eyebrow">SHOW IT WORKING</span><h2>Evidence to capture</h2><ul>${b.evidence.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div></section>
+  <section class="content-card chapter-build-finish"><h2>Finished?</h2><p>Do one clean play-through from the beginning. If it only works when you manually fix variables in the editor halfway through, it is not finished yet.</p><button class="button ${done?'success':'primary'}" data-action="complete-chapter-build" data-path="${b.path}">${done?'✓ Chapter Build completed':`Mark Chapter Build complete • +${b.xp} XP`}</button></section></article>`;
+}
+function chapterUnlockCard(pathId){
+  const b=chapterBuild(pathId);if(!b||!pathComplete(pathId))return '';
+  return `<section class="chapter-unlock-reveal"><span class="unlock-burst">🎮 NEW TASK UNLOCKED</span>${chapterBuildCard(b,{compact:true})}</section>`;
+}
+
+
 function dashboard(){
-  const i=level(),n=nextLesson(),np=pathProgress(n.path);
+  const i=level(),n=nextLesson(),np=pathProgress(n.path),pb=pendingUnlockedBuild();
   const pathsComplete=DATA.paths.filter(p=>pathProgress(p.id).pct===100).length;
   return `<section class="hero learning-first-hero">
     <div class="hero-copy">
@@ -316,9 +445,9 @@ function dashboard(){
       <h1>Learn Unreal.<br>Build better games.</h1>
       <p>The Learning Hub is first and foremost a UE5 course. Learn the idea, see it in Unreal, practise it immediately, then prove you can apply it independently.</p>
       <div class="hero-actions">
-        <a class="button primary" href="#/lesson/${n.id}">▶ Continue learning</a>
-        <a class="button ghost" href="#/revision">↻ Start revision quiz</a>
-        <a class="button ghost" href="#/projects">▣ Projects</a>
+        <a class="button primary" href="${pb?`#/chapter-build/${pb.path}`:`#/lesson/${n.id}`}">${pb?`🎮 Build: ${esc(pb.title)}`:`▶ Continue learning`}</a>
+        <a class="button ghost" href="#/tutorials">🛠 Quick Tutorials</a>
+        <a class="button ghost" href="#/revision">↻ Revision Quiz</a>
       </div>
     </div>
     <div class="hero-art" aria-hidden="true">
@@ -330,7 +459,7 @@ function dashboard(){
   <div class="stat-grid">
     <div class="stat"><small>Current level</small><strong>${i.n}</strong></div>
     <div class="stat"><small>Total XP</small><strong>${i.xp}</strong></div>
-    <div class="stat"><small>Lessons complete</small><strong>${state.completed.length}/${DATA.lessons.length}</strong></div>
+    <div class="stat"><small>Lessons complete</small><strong>${completedLessons().length}/${DATA.lessons.length}</strong></div>
     <div class="stat"><small>Learning paths complete</small><strong>${pathsComplete}/${DATA.paths.length}</strong></div>
   </div>
 
@@ -351,6 +480,10 @@ function dashboard(){
     <div class="path-grid">${DATA.paths.map(p=>{const x=pathProgress(p.id);return `<a class="path-card" href="#/path/${p.id}"><div class="path-icon">${p.icon}</div><h3>${esc(p.title)}</h3><p>${esc(p.description)}</p><div class="path-meta"><span>${x.done}/${x.total} lessons</span><span>${x.pct}%</span></div><div class="progress"><span style="width:${x.pct}%"></span></div></a>`}).join('')}</div>
   </section>
 
+  ${pb?`<section class="section dashboard-unlock"><div class="section-head"><div><span class="eyebrow">YOU FINISHED A CHAPTER</span><h2>🎮 New Chapter Build unlocked</h2><p>Combine what you learned into something playable before moving on.</p></div></div>${chapterBuildCard(pb,{compact:true})}</section>`:''}
+
+  <section class="section learning-tools-section"><div class="section-head"><div><h2>Learning tools</h2><p>Short recipes when you need a mechanic, then quizzes and challenges to check what stuck.</p></div></div><div class="workspace-cards"><a class="workspace-card learning-tool" href="#/tutorials"><span>🛠</span><div><strong>${TOOLS.tutorials.length} Quick Tutorials</strong><p>Line trace gun, key + door, double jump, HUD, health, AI, Silent Hill-style fog and loads more.</p></div></a><a class="workspace-card learning-tool" href="#/revision"><span>↻</span><div><strong>Revision Quizzes</strong><p>Random, whole-path or mixed-topic quizzes with 10 / 20 / 30 questions.</p></div></a><a class="workspace-card learning-tool" href="#/challenges"><span>🔥</span><div><strong>Challenge Board</strong><p>Independent problems when following steps is no longer enough.</p></div></a></div></section>
+
   <section class="section secondary-workspace-section">
     <div class="section-head"><div><h2>Projects & assessment</h2><p>Use this workspace when a lesson turns into real assignment, game-jam or team work.</p></div></div>
     <div class="workspace-cards">
@@ -363,7 +496,7 @@ function dashboard(){
 function pathPage(id){
   const p=path(id);if(!p)return notFound();
   const ls=DATA.lessons.filter(l=>l.path===id).sort((a,b)=>a.order-b.order),x=pathProgress(id);
-  return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Learning path</div><span class="eyebrow">${x.done}/${x.total} complete • ${x.pct}%</span><h1>${p.icon} ${esc(p.title)}</h1><p class="muted">${esc(p.description)}</p><div class="progress"><span style="width:${x.pct}%"></span></div></div><div class="lesson-list">${ls.map(lessonRow).join('')}</div>`;
+  return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Learning path</div><span class="eyebrow">${x.done}/${x.total} complete • ${x.pct}%</span><h1>${p.icon} ${esc(p.title)}</h1><p class="muted">${esc(p.description)}</p><div class="progress"><span style="width:${x.pct}%"></span></div></div><div class="lesson-list">${ls.map(lessonRow).join('')}</div>${chapterUnlockCard(id)}`;
 }
 function quizHtml(l){
   return l.quiz.map((q,qi)=>`<div class="quiz" data-q="${qi}"><strong>${qi+1}. ${esc(q[0])}</strong><div class="quiz-options">${q[1].map((o,oi)=>`<button class="quiz-option" data-action="quiz" data-lesson="${l.id}" data-q="${qi}" data-o="${oi}">${esc(o)}</button>`).join('')}</div><div class="quiz-feedback">${esc(q[3])}</div></div>`).join('');
@@ -416,7 +549,7 @@ function commentSection(l){
 function lessonPage(id){
   const l=lesson(id);if(!l)return notFound();
   state.lastLesson=id;saveState();
-  const p=path(l.path),done=state.completed.includes(id);
+  const p=path(l.path),done=state.completed.includes(id),pathLessons=DATA.lessons.filter(x=>x.path===l.path),isLast=l.order===Math.max(...pathLessons.map(x=>x.order));
   return `<div class="breadcrumb"><a href="#/">Dashboard</a> / <a href="#/path/${p.id}">${esc(p.title)}</a> / ${esc(l.title)}</div>
   <section class="lesson-hero">
     <div><span class="eyebrow">${esc(p.title)} • Lesson ${l.order}</span><h1>${esc(l.title)}</h1><p>${esc(l.short)}</p>
@@ -482,6 +615,7 @@ function lessonPage(id){
 
     ${evidenceSection(l)}
     ${commentSection(l)}
+    ${isLast?chapterUnlockCard(l.path):''}
   </article>
 
   <aside class="lesson-nav">
@@ -751,13 +885,15 @@ function evidenceForm(l,s){
   </form>`;
 }
 function achievementData(approvedCount=0,requestCount=0){
-  const done=state.completed.length,game=projectProgress().complete;
+  const done=completedLessons().length,game=projectProgress().complete,tuts=completedTutorialCount(),builds=state.chapterBuildCompleted.length;
   const ids=new Set(state.completed);
   return [
     ['first-step','First Steps','Complete your first lesson.',done>=1,'◉'],
     ['blueprint-core','Blueprint Builder','Complete Variables, Branches and Functions.',['variables','branches','functions'].every(x=>ids.has(x)),'◇'],
     ['game-builder','Practice Systems Builder','Complete 10 mechanics in Signal Lost practice.',game>=10,'⚙'],
     ['halfway','Halfway There','Complete 10 lessons.',done>=10,'½'],
+    ['recipe','Recipe Tested','Complete 5 Quick Tutorials.',tuts>=5,'🛠'],
+    ['chapter-build','Chapter Builder','Complete your first unlocked Chapter Build.',builds>=1,'🎮'],
     ['evidence','Proof, Not Promises','Get 3 pieces of evidence approved.',approvedCount>=3,'✓'],
     ['community','Community Voice','Submit an idea to the Requests Board.',requestCount>=1,'✦'],
     ['final-game','Practice Build Complete','Complete all 20 practice mechanics.',game>=Object.keys(PROJECT.mechanics).length,'◈'],
@@ -773,7 +909,9 @@ function progressPage(){
     <p class="muted">Completion shows where you've been. Evidence and feedback show what you can actually do.</p>
   </div>
   <div class="stat-grid">
-    <div class="stat"><small>Lessons</small><strong>${state.completed.length}/${DATA.lessons.length}</strong></div>
+    <div class="stat"><small>Lessons</small><strong>${completedLessons().length}/${DATA.lessons.length}</strong></div>
+    <div class="stat"><small>Quick Tutorials</small><strong>${completedTutorialCount()}/${TOOLS.tutorials.length}</strong></div>
+    <div class="stat"><small>Chapter Builds</small><strong>${state.chapterBuildCompleted.length}/${TOOLS.chapterBuilds.length}</strong></div>
     <div class="stat"><small>Practice mechanics</small><strong>${pp.complete}/${pp.total}</strong></div>
     <div class="stat"><small>XP</small><strong>${i.xp}</strong></div>
     <div class="stat"><small>Cloud evidence</small><strong id="progressEvidenceStat">${BACKEND.user?'…':'Locked'}</strong></div>
@@ -1013,7 +1151,10 @@ async function renderTeacher(){
   try{
     const o=await BACKEND.teacherOverview();
     if(!o){box.innerHTML='<div class="empty">Teacher data unavailable.</div>';return}
-    const byStudent=id=>o.progress.filter(x=>x.user_id===id).length;
+    const lessonIds=new Set(DATA.lessons.map(l=>l.id));
+    const byStudent=id=>o.progress.filter(x=>x.user_id===id&&lessonIds.has(x.lesson_id)&&x.completed).length;
+    const tutorialBy=id=>o.progress.filter(x=>x.user_id===id&&String(x.lesson_id).startsWith('tutorial:')&&x.completed).length;
+    const chapterBy=id=>o.progress.filter(x=>x.user_id===id&&String(x.lesson_id).startsWith('chapter:')&&x.completed).length;
     const projBy=id=>o.projects.filter(x=>x.user_id===id&&x.status==='complete').length;
     const commentsBy=id=>o.comments.filter(x=>x.student_id===id).length;
     const approvedBy=id=>o.submissions.filter(x=>x.user_id===id&&x.status==='approved').length;
@@ -1031,7 +1172,9 @@ async function renderTeacher(){
       <div class="teacher-stat"><small>Active classes</small><strong>${activeClasses.length}</strong><span>${archivedClasses.length} archived</span></div>
       <div class="teacher-stat"><small>Evidence waiting</small><strong>${pending.length}</strong></div>
       <div class="teacher-stat"><small>Evidence approved</small><strong>${approved}</strong></div>
-      <div class="teacher-stat"><small>Lesson completions</small><strong>${o.progress.length}</strong></div>
+      <div class="teacher-stat"><small>Lesson completions</small><strong>${o.progress.filter(x=>lessonIds.has(x.lesson_id)&&x.completed).length}</strong></div>
+      <div class="teacher-stat"><small>Quick Tutorials tried</small><strong>${o.progress.filter(x=>String(x.lesson_id).startsWith('tutorial:')&&x.completed).length}</strong></div>
+      <div class="teacher-stat"><small>Chapter Builds complete</small><strong>${o.progress.filter(x=>String(x.lesson_id).startsWith('chapter:')&&x.completed).length}</strong></div>
       <div class="teacher-stat"><small>Practice mechanics complete</small><strong>${o.projects.filter(x=>x.status==='complete').length}</strong></div>
       <div class="teacher-stat"><small>Comments / questions</small><strong>${o.comments.length}</strong></div>
       <div class="teacher-stat"><small>Student requests</small><strong>${o.requests.length}</strong></div>
@@ -1122,8 +1265,8 @@ async function renderTeacher(){
 
     <section class="section">
       <div class="section-head"><div><h2>Student overview</h2><p>Completion is useful, but approved evidence is the stronger signal.</p></div></div>
-      <table class="teacher-table"><thead><tr><th>Student</th><th>Lessons</th><th>Game</th><th>Approved evidence</th><th>Comments</th></tr></thead><tbody>
-      ${o.profiles.map(p=>`<tr><td>${esc(p.display_name)}</td><td>${byStudent(p.id)}/${DATA.lessons.length}</td><td>${projBy(p.id)}/${Object.keys(PROJECT.mechanics).length}</td><td>${approvedBy(p.id)}/${DATA.lessons.length}</td><td>${commentsBy(p.id)}</td></tr>`).join('')}
+      <table class="teacher-table"><thead><tr><th>Student</th><th>Lessons</th><th>Tutorials</th><th>Chapter Builds</th><th>Practice</th><th>Approved evidence</th><th>Comments</th></tr></thead><tbody>
+      ${o.profiles.map(p=>`<tr><td>${esc(p.display_name)}</td><td>${byStudent(p.id)}/${DATA.lessons.length}</td><td>${tutorialBy(p.id)}/${TOOLS.tutorials.length}</td><td>${chapterBy(p.id)}/${TOOLS.chapterBuilds.length}</td><td>${projBy(p.id)}/${Object.keys(PROJECT.mechanics).length}</td><td>${approvedBy(p.id)}/${DATA.lessons.length}</td><td>${commentsBy(p.id)}</td></tr>`).join('')}
       </tbody></table>
     </section>
 
@@ -1166,6 +1309,11 @@ function route(){
   else if(parts[0]==='requests'){app.innerHTML=requestBoard();activate('requests')}
   else if(parts[0]==='challenges'){app.innerHTML=challengeBoard();activate('challenges')}
   else if(parts[0]==='homework'){app.innerHTML=homeworkBoard();activate('homework')}
+  else if(parts[0]==='design'&&parts[1]){app.innerHTML=designModulePage(parts[1]);activate('design')}
+  else if(parts[0]==='design'){app.innerHTML=designPage();activate('design')}
+  else if(parts[0]==='tutorials'){app.innerHTML=tutorialLibrary();activate('tutorials')}
+  else if(parts[0]==='tutorial'&&parts[1]){app.innerHTML=tutorialPage(parts[1]);activate('tutorials')}
+  else if(parts[0]==='chapter-build'&&parts[1]){app.innerHTML=chapterBuildPage(parts[1]);activate('tutorials')}
   else if(parts[0]==='revision'){app.innerHTML=revision();activate('revision')}
   else if(parts[0]==='glossary'){app.innerHTML=glossary();activate('glossary')}
   else if(parts[0]==='teacher'){app.innerHTML=teacherPage();activate('teacher')}
@@ -1200,6 +1348,14 @@ function bindRevisionBuilder(){
   form.querySelectorAll('[data-revision-path-toggle]').forEach(toggle=>toggle.addEventListener('change',()=>{lessons().filter(x=>x.dataset.path===toggle.dataset.revisionPathToggle).forEach(x=>x.checked=toggle.checked);update();}));
   lessons().forEach(x=>x.addEventListener('change',update));update();
 }
+function bindTutorialLibrary(){
+  const search=$('#tutorialSearch');if(!search)return;
+  let category='all';
+  const cards=()=>$$('[data-tutorial-card]','#tutorialGrid');
+  const apply=()=>{const q=search.value.toLowerCase().trim();let visible=0;cards().forEach(card=>{const okText=!q||card.dataset.search.includes(q),okCat=category==='all'||card.dataset.category===category;card.style.display=okText&&okCat?'':'none';if(okText&&okCat)visible++;});const out=$('#tutorialResultCount');if(out)out.textContent=`${visible} tutorial${visible===1?'':'s'}`;};
+  search.addEventListener('input',apply);
+  $$('.tutorial-filter').forEach(btn=>btn.addEventListener('click',()=>{$$('.tutorial-filter').forEach(x=>x.classList.remove('active'));btn.classList.add('active');category=btn.dataset.tutorialFilter||'all';apply();}));
+}
 function bindPageInputs(){
   const gs=$('#glossarySearch');
   if(gs)gs.addEventListener('input',()=>{
@@ -1207,6 +1363,7 @@ function bindPageInputs(){
     $$('.glossary-item').forEach(x=>x.style.display=x.dataset.search.includes(q)?'':'none');
   });
   bindRevisionBuilder();
+  bindTutorialLibrary();
 }
 async function copyHomework(id){
   const l=lesson(id);if(!l)return;
@@ -1221,8 +1378,27 @@ async function setLessonComplete(id){
   if(BACKEND.user){
     try{await BACKEND.setLessonComplete(id,!was)}catch(e){toast('Saved locally; cloud sync failed.')}
   }
-  toast(was?'Marked incomplete.':`Lesson complete! +${l.xp} XP`);
+  const unlocked=!was&&pathComplete(l.path)&&!chapterBuildDone(l.path);
+  toast(was?'Marked incomplete.':unlocked?'Chapter complete — 🎮 Chapter Build unlocked!':`Lesson complete! +${l.xp} XP`);
   route();
+}
+async function setTutorialComplete(id){
+  const t=tutorial(id);if(!t)return;const was=tutorialDone(id);
+  state.tutorialCompleted=was?state.tutorialCompleted.filter(x=>x!==id):[...new Set([...state.tutorialCompleted,id])];saveState();
+  if(BACKEND.user){try{await BACKEND.setLessonComplete(`tutorial:${id}`,!was)}catch(e){toast('Saved locally; cloud sync failed.')}}
+  toast(was?'Tutorial marked not complete.':'Tutorial complete ✓');route();
+}
+async function setChapterBuildComplete(pathId){
+  const b=chapterBuild(pathId),was=chapterBuildDone(pathId);if(!b||(!pathComplete(pathId)&&!was)){toast('Finish the learning path first.');return}
+  state.chapterBuildCompleted=was?state.chapterBuildCompleted.filter(x=>x!==pathId):[...new Set([...state.chapterBuildCompleted,pathId])];saveState();
+  if(BACKEND.user){try{await BACKEND.setLessonComplete(`chapter:${pathId}`,!was)}catch(e){toast('Saved locally; cloud sync failed.')}}
+  toast(was?'Chapter Build marked incomplete.':`Chapter Build complete! +${b.xp} XP`);route();
+}
+async function setDesignBuildComplete(id){
+  const m=designModule(id);if(!m)return;const was=designBuildDone(id);
+  state.designBuildCompleted=was?state.designBuildCompleted.filter(x=>x!==id):[...new Set([...state.designBuildCompleted,id])];saveState();
+  if(BACKEND.user){try{await BACKEND.setLessonComplete(`designbuild:${id}`,!was)}catch(e){toast('Saved locally; cloud sync failed.')}}
+  toast(was?'Studio Build marked incomplete.':'Studio Build complete • +300 XP');route();
 }
 async function setMechanicStatus(id,status){
   const old=projectState.mechanics[id]||{};
@@ -1438,6 +1614,9 @@ document.addEventListener('click',async e=>{
   else if(a==='close-image'){closeImageLightbox();}
   else if(a==='scroll'){document.getElementById(b.dataset.target)?.scrollIntoView({behavior:'smooth',block:'start'});}
   else if(a==='complete') await setLessonComplete(b.dataset.lesson);
+  else if(a==='complete-tutorial') await setTutorialComplete(b.dataset.tutorial);
+  else if(a==='complete-chapter-build') await setChapterBuildComplete(b.dataset.path);
+  else if(a==='complete-design-build') await setDesignBuildComplete(b.dataset.designModule);
   else if(a==='quiz'){
     const l=lesson(b.dataset.lesson),qi=+b.dataset.q,oi=+b.dataset.o,q=l.quiz[qi],wrap=b.closest('.quiz');
     $$('.quiz-option',wrap).forEach(x=>x.disabled=true);
@@ -1875,9 +2054,15 @@ function setupSearch(){
       l.title,l.short,l.aim,...l.goals,...l.concepts.flat(),
       l.projectTask?.name,l.projectTask?.mission,l.projectTask?.build
     ].join(' ').toLowerCase().includes(q)).slice(0,7);
+    const ts=TOOLS.tutorials.filter(t=>[t.title,t.summary,...t.uses,tutorialCategory(t.category)?.title||''].join(' ').toLowerCase().includes(q)).slice(0,6);
+    const ds=DESIGN.modules.filter(m=>[m.title,m.description,m.intro,...m.principles].join(' ').toLowerCase().includes(q)).slice(0,4);
+    const rs=DESIGN.resources.filter(r=>[r.title,r.note,r.type].join(' ').toLowerCase().includes(q)).slice(0,3);
     const gs=DATA.glossary.filter(x=>x.join(' ').toLowerCase().includes(q)).slice(0,4);
     panel.innerHTML=[
       ...ls.map(l=>`<a class="search-result" href="#/lesson/${l.id}"><strong>${esc(l.title)}</strong><small>Lesson • ${esc(l.projectTask?.name||path(l.path).title)}</small></a>`),
+      ...ds.map(m=>`<a class="search-result" href="#/design/${m.id}"><strong>${esc(m.icon)} ${esc(m.title)}</strong><small>Designer Studio • Discipline</small></a>`),
+      ...ts.map(t=>`<a class="search-result" href="#/tutorial/${t.id}"><strong>🛠 ${esc(t.title)}</strong><small>Quick Tutorial • ${esc(t.duration)} • ${esc(tutorialCategory(t.category)?.title||'UE5')}</small></a>`),
+      ...rs.map(r=>`<a class="search-result" href="#/design"><strong>${esc(r.icon||'🎁')} ${esc(r.title)}</strong><small>Free resource • ${esc(r.type)}</small></a>`),
       ...gs.map(g=>`<a class="search-result" href="#/glossary"><strong>${esc(g[0])}</strong><small>${esc(g[1])}</small></a>`)
     ].join('')||'<div class="search-result"><strong>No results</strong><small>Try a broader UE5 term.</small></div>';
     panel.hidden=false;
@@ -1892,7 +2077,7 @@ function setupSearch(){
 $('#menuButton').addEventListener('click',()=>$('#sidebar').classList.toggle('open'));
 $('#resetProgress').addEventListener('click',()=>{
   if(confirm('Reset all locally saved lesson progress, XP and game-project status on this browser?')){
-    state={completed:[],quiz:{},lastLesson:null};
+    state={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[]};
     projectState={project_title:'Signal Lost',theme:PROJECT.themes[0],pitch:'',mechanics:{}};
     saveState();saveProjectState();route();toast('Local progress reset.');
   }
@@ -1900,7 +2085,7 @@ $('#resetProgress').addEventListener('click',()=>{
 $('#authModal').addEventListener('click',e=>{if(e.target===$('#authModal'))closeAuth()});
 document.addEventListener('error',e=>{
   const img=e.target;
-  if(img?.classList?.contains('epic-doc-image'))img.closest('.visual-flow-card')?.classList.add('image-failed');
+  if(img?.classList?.contains('remote-reference-image'))img.closest('.visual-flow-card')?.classList.add('image-failed');
 },true);
 $('#imageLightbox')?.addEventListener('click',e=>{if(e.target===$('#imageLightbox'))closeImageLightbox()});
 window.addEventListener('hashchange',route);

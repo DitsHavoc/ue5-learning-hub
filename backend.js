@@ -296,8 +296,9 @@ const api = {
     if(!client||!this.user)return;
     let local=null;
     try{local=JSON.parse(localStorage.getItem('ue5hub:v2:progress')||'null')}catch(e){}
-    if(!local?.completed?.length)return;
-    const rows=local.completed.map(id=>({user_id:this.user.id,lesson_id:id,completed:true,completed_at:new Date().toISOString()}));
+    const ids=[...(local?.completed||[]),...(local?.tutorialCompleted||[]).map(id=>`tutorial:${id}`),...(local?.chapterBuildCompleted||[]).map(id=>`chapter:${id}`)];
+    if(!ids.length)return;
+    const rows=[...new Set(ids)].map(id=>({user_id:this.user.id,lesson_id:id,completed:true,completed_at:new Date().toISOString()}));
     const {error}=await client.from('lesson_progress').upsert(rows,{onConflict:'user_id,lesson_id'});
     if(error)console.warn('Progress migration',error.message);
   },

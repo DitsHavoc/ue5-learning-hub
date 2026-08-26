@@ -2,7 +2,7 @@
 
 These links are used inside the Learning Hub as the current Unreal Engine source of truth.
 
-**No Epic documentation images are copied into this package.** The Hub embeds current classroom-owned UE screenshots where available and links directly to Epic for current documentation/screenshots/workflows.
+**Official documentation imagery is used selectively as remote, source-linked classroom reference material.** Current classroom-owned UE screenshots remain preferred where available; Epic UE5.8 documentation is the current technical source of truth.
 
 ## 1. Unreal Editor: Find, Select & Control
 
@@ -91,3 +91,12 @@ These links are used inside the Learning Hub as the current Unreal Engine source
 
 - [Blueprint Best Practices](https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-best-practices-in-unreal-engine) — Epic guidance for maintainable Blueprint structure.
 - [Blueprint Debugging Example](https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-debugging-example-in-unreal-engine) — Current breakpoints, Watches, active wires and debugging workflow.
+
+
+## V3.17 Quick Tutorial references — atmosphere / fog
+
+- [Exponential Height Fog](https://dev.epicgames.com/documentation/en-us/unreal-engine/exponential-height-fog-in-unreal-engine) — base height fog and volumetric-fog settings used by the Silent Hill-style fog recipe.
+- [Volumetric Fog](https://dev.epicgames.com/documentation/en-us/unreal-engine/volumetric-fog-in-unreal-engine) — current volumetric-fog behaviour, lighting interaction and performance considerations.
+- [Local Fog Volumes](https://dev.epicgames.com/documentation/unreal-engine/local-fog-volumes-in-unreal-engine) — optional localised fog pockets.
+
+The **Make Silent Hill-style Fog** tutorial also uses two source-linked official *Silent Hill 2* screenshots from Konami as mood/visibility references. They are labelled as reference imagery, not Unreal Engine UI.

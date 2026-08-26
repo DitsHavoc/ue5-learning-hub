@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Unreal Engine 5 learning and game-project hub for Games Development students.">
+  <meta name="description" content="Unreal Engine 5 learning hub with lessons, quick mechanic tutorials, chapter builds, revision and project logbooks for Games Development students.">
   <meta name="theme-color" content="#071019">
   <title>UE5 Learning Hub</title>
-  <link rel="stylesheet" href="styles.css?v=3.16.0">
+  <link rel="stylesheet" href="styles.css?v=3.18.0">
 </head>
 <body>
   <div id="bootError" class="boot-error" hidden>
@@ -25,7 +25,10 @@
         <a href="#/" data-route="home">⌂ <span>Dashboard</span></a>
         <div class="nav-heading">Learning paths</div>
         <a href="#/path/foundations" data-route="foundations">◫ <span>Unreal Foundations</span></a><a href="#/path/blueprints" data-route="blueprints">◇ <span>Blueprint Core</span></a><a href="#/path/framework" data-route="framework">↔ <span>Framework & Communication</span></a><a href="#/path/gameplay" data-route="gameplay">⚙ <span>Gameplay Systems</span></a><a href="#/path/advanced" data-route="advanced">⌘ <span>Data, AI & Animation</span></a><a href="#/path/practice" data-route="practice">✓ <span>Professional Practice</span></a>
+        <div class="nav-heading">Design & world building</div>
+        <a href="#/design" data-route="design" class="design-nav">✦ <span>Designer Studio</span><small>Levels • art • lighting • audio</small></a>
         <div class="nav-heading">Practise & revise</div>
+        <a href="#/tutorials" data-route="tutorials">🛠 <span>Quick Tutorials</span><small>47 mechanic recipes</small></a>
         <a href="#/challenges" data-route="challenges">🔥 <span>Challenge Board</span></a>
         <a href="#/homework" data-route="homework">⌂ <span>Homework</span></a>
         <a href="#/revision" data-route="revision">↻ <span>Revision Quizzes</span></a>
@@ -50,7 +53,7 @@
         <button class="icon-button mobile-only" id="menuButton" aria-label="Open menu">☰</button>
         <div class="global-search">
           <span>⌕</span>
-          <input id="globalSearch" type="search" placeholder="Search lessons, mechanics, nodes…">
+          <input id="globalSearch" type="search" placeholder="Search lessons, tutorials, mechanics, nodes…">
           <kbd>/</kbd>
           <div class="search-panel" id="searchPanel" hidden></div>
         </div>
@@ -67,7 +70,7 @@
       <main id="app" tabindex="-1"></main>
 
       <footer>
-        <span>Learn UE5 first • use Projects when the learning becomes assignment, team or assessment work</span><small class="epic-disclaimer">Portions of the materials used are trademarks and/or copyrighted works of Epic Games, Inc. All rights reserved by Epic. This material is not official and is not endorsed by Epic.</small>
+        <span>Learn → practise → design worlds → use Quick Tutorials → complete Builds → use Projects for assignment/team work</span><small class="epic-disclaimer">Portions of the materials used are trademarks and/or copyrighted works of Epic Games, Inc. All rights reserved by Epic. This material is not official and is not endorsed by Epic.</small><small class="epic-disclaimer">Selected game screenshots are used as visual references for educational analysis and remain copyright of their respective owners. UE5 Learning Hub is unofficial and is not endorsed by the referenced game publishers.</small>
         <button id="resetProgress" class="link-button">Reset local progress</button>
       </footer>
     </div>
@@ -75,7 +78,7 @@
 
   <div class="version-badge" title="Build version">
     <span class="version-dot"></span>
-    UE5 HUB <b>v3.16.0</b> <span id="modeBadge">• LOCAL</span>
+    UE5 HUB <b>v3.18.0</b> <span id="modeBadge">• LOCAL</span>
   </div>
 
   <div class="modal-backdrop" id="authModal" hidden>
@@ -92,7 +95,7 @@
     <section class="image-lightbox-dialog" role="dialog" aria-modal="true" aria-label="Expanded lesson image">
       <button class="image-lightbox-close" id="closeImageLightbox" data-action="close-image" aria-label="Close image">×</button>
       <img id="lightboxImage" alt="Expanded lesson image">
-      <div class="image-lightbox-info"><p id="lightboxCaption"></p><a id="lightboxSource" target="_blank" rel="noopener" hidden>Open source on Epic documentation ↗</a></div>
+      <div class="image-lightbox-info"><p id="lightboxCaption"></p><a id="lightboxSource" target="_blank" rel="noopener" hidden>Open image source ↗</a></div>
     </section>
   </div>
 
@@ -104,10 +107,12 @@
   <div class="toast" id="toast" aria-live="polite"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="data/course-data.js?v=3.16.0"></script>
-  <script src="data/project-data.js?v=3.16.0"></script>
-  <script src="data/supabase-config.js?v=3.16.0"></script>
-  <script src="backend.js?v=3.16.0"></script>
-  <script src="app.js?v=3.16.0"></script>
+  <script src="data/course-data.js?v=3.18.0"></script>
+  <script src="data/tutorial-data.js?v=3.18.0"></script>
+  <script src="data/design-data.js?v=3.18.0"></script>
+  <script src="data/project-data.js?v=3.18.0"></script>
+  <script src="data/supabase-config.js?v=3.18.0"></script>
+  <script src="backend.js?v=3.18.0"></script>
+  <script src="app.js?v=3.18.0"></script>
 </body>
 </html>

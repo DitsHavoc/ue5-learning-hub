@@ -1,8 +1,62 @@
-# UE5 Learning Hub v3.16.0 — Learning First, Projects When Needed
+# UE5 Learning Hub v3.18.0 — Designer Studio
+
+## v3.18.0 — Designer Studio
+
+This release adds a full design/world-building wing alongside the Blueprint curriculum.
+
+- 8 designer disciplines: Level Design Foundations; Environment Art & Set Dressing; Materials & Surfaces; Lighting & Atmosphere; Landscape, Terrain & Foliage; Sequencer & Cutscenes; Audio & Sound Design; Polish, Optimisation & Presentation.
+- 31 new design Quick Tutorials, bringing the shared Quick Tutorial library to 78. The existing Silent Hill-style Fog recipe is also surfaced inside Lighting & Atmosphere, so Designer Studio exposes 32 design recipes.
+- 8 Studio Builds with evidence prompts and +300 XP completion tracking.
+- Game/engine reference analysis prompts focus on focal points, route readability, hidden information and visual/audio hierarchy.
+- Curated free-resource links for Fab, Poly Haven, Mixamo, Freesound and current Epic UE documentation, with licence reminders.
+- Designer modules and resources are included in global search.
+- No database migration is required. Studio Build completion reuses `lesson_progress` using `designbuild:<module-id>`.
+
+
+
+V3.17 is the major practical-learning pass. The 20 core lessons remain the teaching spine, but students now have a searchable **Quick Tutorials** recipe library for common UE5 mechanics and six unlockable **Chapter Builds** that combine chapter skills into small playable outcomes. Projects remains the lighter assignment/group-work layer beneath learning.
+
+## V3.17 learning expansion
+
+- **47 Quick Tutorials** across Movement, Interaction, Combat, Player Systems, UI, World Systems, AI, Data/Save and Polish.
+- **240 DO THIS / WHY / TEST checkpoints** across the tutorial library.
+- **6 Chapter Builds**, one after each learning path; the build unlocks when every lesson in that path is complete.
+- Tutorial and Chapter Build completion works locally and cloud-syncs through the existing `lesson_progress` table using `tutorial:<id>` and `chapter:<path>` IDs. No database migration is required.
+- Global search now finds tutorials as well as lessons/glossary terms.
+- The dashboard keeps learning first and surfaces an unlocked Chapter Build before project administration.
+- **Make Silent Hill-style Fog** includes official Silent Hill 2 reference screenshots from Konami plus current Unreal fog reference imagery from Epic, all clickable to enlarge and linked to their source pages.
+
+### Quick Tutorial teaching pattern
+
+Each recipe uses the same small classroom-friendly structure:
+
+**What we are making → visual reference where useful → DO THIS → WHY → TEST/CHECK → common mistakes → Make it yours → definition of done.**
+
+These tutorials are intended as short recipes students can keep open beside Unreal while prototyping or completing assignment work. They do not replace the deeper concept lessons.
+
+### Chapter Builds
+
+1. **Unreal Foundations — The Locked Room**
+2. **Blueprint Core — Power Failure**
+3. **Framework & Communication — Emergency Override**
+4. **Gameplay Systems — Escape the Facility**
+5. **Data, AI & Animation — Avoid the Security Drone**
+6. **Professional Practice — Blueprint Rescue: Fix This Game**
+
+
+## Validation completed for V3.17
+
+- JavaScript syntax checks pass for app/backend/course/project/tutorial/config data.
+- 47 unique tutorial IDs and 6 Chapter Builds validated.
+- 240 tutorial steps use complete DO THIS / WHY / TEST-CHECK fields.
+- all tutorial category, lesson-reference and Chapter Build related-tutorial links resolve.
+- 64 local asset references checked with zero missing files.
+- both production and local-test HTML load the V3.17 tutorial data and cache versions.
+- no Supabase migration is required for this learning-content release.
+
+## V3.16 project model (retained)
 
 V3.16 keeps the Hub deliberately focused: **UE5 learning is the main product**. Projects sits underneath it as a lightweight development logbook and feedback workspace for assignments, game jams, personal work and group projects. It is not intended to replace the college LMS or formal assessment submission system.
-
-## V3.16 project model
 
 ### Teacher project templates
 Teachers create a simple project template for a class containing:

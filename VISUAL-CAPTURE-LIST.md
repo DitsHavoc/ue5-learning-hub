@@ -1,4 +1,4 @@
-# V3.15 / V4 Visual Capture Status
+# V3.17 Visual Reference Status
 
 ## Current classroom captures integrated
 
@@ -18,4 +18,11 @@ If a clean classroom Blueprint SaveGame example becomes available later, add it 
 
 **Current classroom Unreal screenshot → official Epic UE5.8 reference → concept diagram where useful.**
 
-Epic documentation images are not copied into the package. Official documentation is linked directly.
+Official Epic documentation imagery may be displayed remotely with attribution/source links where it directly teaches the current UE5.8 interface. Classroom-owned captures remain preferred.
+
+
+## V3.17 tutorial references
+
+- ✅ Silent Hill-style Fog: two official Konami *Silent Hill 2* screenshots used as clearly labelled mood references.
+- ✅ Silent Hill-style Fog: Exponential Height Fog and Volumetric Fog UE5.8 documentation images used as current Unreal-side references.
+- ✅ All reference images use the existing click-to-enlarge lightbox and retain source links.

@@ -57,3 +57,29 @@ Branches retains its three bespoke diagrams from V3.4.
 ### Professional Practice
 - `practice` — Blueprint Responsibility: Put Behaviour Where It Belongs
 - `complexity` — Stop Blueprint Spaghetti: Refactor for Humans
+
+
+## V3.17 practical-learning layer
+
+The gold-standard lesson format now sits beside a separate **Quick Tutorials** recipe library and **Chapter Builds**. This avoids turning every concept lesson into an oversized mechanic tutorial while still giving students concrete step-by-step help when they need to build something.
+
+Quick Tutorials use: **What we are making → DO THIS → WHY → TEST/CHECK → Common mistakes → Make it yours → Definition of done**.
+
+Chapter Builds unlock after all lessons in a learning path are complete and ask students to combine several previously learned ideas into a small working prototype. Guided steps are allowed; students must test the result, make at least one independent change and capture evidence that it works.
+
+## v3.18 Designer Studio
+
+The Hub now includes a parallel design/world-building curriculum rather than treating design as decoration around Blueprint lessons.
+
+| Discipline | Core practical focus | Studio Build |
+|---|---|---|
+| Level Design Foundations | blockout, scale, focal points, route readability | The Three-Room Journey |
+| Environment Art & Set Dressing | prop logic, clusters, decals, modular kits | Abandoned Workroom |
+| Materials & Surfaces | PBR, instances, wet surfaces, emissive materials | Surface Library |
+| Lighting & Atmosphere | room lighting, horror lighting, post process, Silent Hill-style fog | One Room, Three Moods |
+| Landscape, Terrain & Foliage | landscape creation, sculpting, paint layers, foliage paths | The Valley Route |
+| Sequencer & Cutscenes | first sequence, camera cuts, reveal shots, gameplay triggers | 20-Second Reveal |
+| Audio & Sound Design | ambience, attenuation, variation, reverb | The Room You Hear First |
+| Polish, Optimisation & Presentation | polish passes, view modes, LOD/Nanite checks, portfolio shots | Final Environment Pass |
+
+Every discipline combines visual analysis, short practical recipes, an applied Studio Build and evidence/critique prompts. Game screenshots are used as educational references for design analysis; Unreal screenshots/documentation remain the technical reference.

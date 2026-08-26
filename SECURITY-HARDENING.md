@@ -1,4 +1,6 @@
-# V3.16 Security Hardening
+# V3.17 Security / Progress Note
+
+V3.17 adds learning content only. It creates no new public tables, storage buckets, roles or RLS policies. Quick Tutorial and Chapter Build completion reuse the existing class-scoped progress model.
 
 ## Core access model
 
