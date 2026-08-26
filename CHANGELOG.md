@@ -1,5 +1,6 @@
 # Changelog
 
+<<<<<<< HEAD
 ## v3.26.0 — Sculpt Playground — 26 Aug 2026
 
 - Added embedded SculptGL practice area with six scaffolded digital-clay exercises.
@@ -67,6 +68,8 @@
 ### Database
 - No migration required.
 
+=======
+>>>>>>> f7446c0db55b1cf4482b78e7c8a7d025ec0c7afc
 ## v3.22.0 — Gold Instruction Pass — 26 Aug 2026
 
 ### Added
@@ -91,3 +94,21 @@
 
 ### Database
 - No migration required.
+<<<<<<< HEAD
+=======
+
+## v3.21.0 — Instruction Quality — 26 Aug 2026
+
+- Reworked all 20 core programming guided builds into more prescriptive classroom walkthroughs.
+- Introduced support for `WHERE TO CLICK`, `YOU SHOULD SEE` and `IF STUCK` guidance.
+- Converted the first 17 high-use Quick Tutorials to the detailed format.
+- Reduced the landing hero heading.
+- Removed generic Quick Tutorial image fallback.
+
+## v3.20.0 — Landing + News & Industry — 26 Aug 2026
+
+- Rebuilt Home around Programming, Design, Projects and News & Industry.
+- Promoted Projects to a major site destination.
+- Added live News & Industry feeds, Read Later, upvotes and signed-in comments.
+- Added Supabase-backed news social tables/RPCs.
+>>>>>>> f7446c0db55b1cf4482b78e7c8a7d025ec0c7afc

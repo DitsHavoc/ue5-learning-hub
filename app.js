@@ -7,8 +7,11 @@ const PROJECT = window.UE5_PROJECT_DATA;
 const TOOLS = window.UE5_TUTORIAL_DATA;
 const DESIGN = window.UE5_DESIGN_DATA;
 const NEWS = window.UE5_NEWS_DATA;
+<<<<<<< HEAD
 const MODEL = window.UE5_MODELING_DATA;
 const SCULPT = window.UE5_SCULPT_DATA;
+=======
+>>>>>>> f7446c0db55b1cf4482b78e7c8a7d025ec0c7afc
 const BACKEND = window.UE5_BACKEND;
 
 // V3.19 deepens Designer Studio using the same Quick Tutorial recipe system so students can
@@ -23,7 +26,11 @@ DESIGN.tutorials.forEach(t=>{if(!knownTutorials.has(t.id))TOOLS.tutorials.push(t
 DESIGN.modules.forEach(m=>m.tutorials.forEach(id=>{const t=TOOLS.tutorials.find(x=>x.id===id);if(t&&!t.designModule)t.designModule=m.id}));
 
 
+<<<<<<< HEAD
 if (!DATA || !PROJECT || !TOOLS || !DESIGN || !NEWS || !MODEL || !SCULPT || !BACKEND) {
+=======
+if (!DATA || !PROJECT || !TOOLS || !DESIGN || !NEWS || !BACKEND) {
+>>>>>>> f7446c0db55b1cf4482b78e7c8a7d025ec0c7afc
   const e = document.querySelector('#bootError');
   if (e) e.hidden = false;
   return;
@@ -587,6 +594,7 @@ function chapterUnlockCard(pathId){
 
 
 
+<<<<<<< HEAD
 function sculptPractice(id){return SCULPT.practices.find(x=>x.id===id)}
 function sculptDone(id){return (state.sculptCompleted||[]).includes(id)}
 function sculptProgress(){const done=SCULPT.practices.filter(x=>sculptDone(x.id)).length;return {done,total:SCULPT.practices.length,pct:Math.round(done/SCULPT.practices.length*100)}}
@@ -691,10 +699,19 @@ function dashboard(){
   return `<section class="portal-hero portal-hero-clean">
     <div><span class="eyebrow">UE5 LEARNING HUB</span><h1>Choose a path.</h1><p>Learn systems. Design worlds. Build real projects. Keep an eye on the industry.</p></div>
     <img class="portal-brand-mark" src="assets/brand/site-mark.png" alt="" aria-hidden="true">
+=======
+function dashboard(){
+  const n=nextLesson(),np=pathProgress(n.path),i=level();
+  const completed=completedLessons().length;
+  return `<section class="portal-hero">
+    <div><span class="eyebrow">UE5 LEARNING HUB</span><h1>Choose a path.</h1><p>Choose where to start, then dive straight into guided learning, world design, practical projects or live industry news.</p></div>
+    <div class="portal-hero-mark" aria-hidden="true"><span>U</span><b>4</b></div>
+>>>>>>> f7446c0db55b1cf4482b78e7c8a7d025ec0c7afc
   </section>
 
   <section class="portal-path-grid" aria-label="Choose a Learning Hub area">
     <a class="portal-path-card programming" href="#/programming"><div class="portal-path-icon">⌘</div><span class="portal-kicker">SYSTEMS • BLUEPRINTS • LOGIC</span><h2>Programming</h2><p>Understand how Unreal works, build mechanics, solve problems and turn Blueprint graphs into reliable game systems.</p><div class="portal-chip-row"><span>20 core lessons</span><span>${TOOLS.tutorials.filter(t=>!t.designModule).length}+ recipes</span><span>Revision</span></div><strong>Enter Programming →</strong></a>
+<<<<<<< HEAD
     <a class="portal-path-card design" href="#/design"><div class="portal-path-icon">✦</div><span class="portal-kicker">LEVELS • ART • LIGHT • SOUND</span><h2>Design</h2><p>Build readable spaces, create atmosphere, guide players and learn why strong game worlds communicate rather than simply decorate.</p><div class="portal-chip-row"><span>${DESIGN.modules.length} disciplines</span><span>3D Modelling</span><span>Studio builds</span></div><strong>Enter Designer Studio →</strong></a>
     <a class="portal-path-card projects" href="#/projects"><div class="portal-path-icon">▣</div><span class="portal-kicker">MAKE • DOCUMENT • ITERATE</span><h2>Projects</h2><p>Take what you know into assignments, game jams and team projects with development logs, milestones, screenshots and feedback.</p><div class="portal-chip-row"><span>Solo</span><span>Group</span><span>Development logs</span></div><strong>Open Projects →</strong></a>
     <a class="portal-path-card news" href="#/news"><div class="portal-path-icon">◉</div><span class="portal-kicker">LIVE • INDUSTRY • WATCH & LISTEN</span><h2>News & Industry</h2><p>Follow games and development stories, trailers, podcasts and industry discussion. Save what matters and come back later.</p><div class="portal-chip-row"><span>Live feeds</span><span>Read later</span><span>Discussion</span></div><strong>See what is happening →</strong></a>
@@ -703,6 +720,16 @@ function dashboard(){
   <section class="portal-session-grid">
     ${continueMissionCard()}
     ${featuredStudentCard()}
+=======
+    <a class="portal-path-card design" href="#/design"><div class="portal-path-icon">✦</div><span class="portal-kicker">LEVELS • ART • LIGHT • SOUND</span><h2>Design</h2><p>Build readable spaces, create atmosphere, guide players and learn why strong game worlds communicate rather than simply decorate.</p><div class="portal-chip-row"><span>${DESIGN.modules.length} disciplines</span><span>${DESIGN.tutorials.length} recipes</span><span>Studio builds</span></div><strong>Enter Designer Studio →</strong></a>
+    <a class="portal-path-card projects" href="#/projects"><div class="portal-path-icon">▣</div><span class="portal-kicker">MAKE • DOCUMENT • ITERATE</span><h2>Projects</h2><p>Take what you know into assignments, game jams and team projects with development logs, milestones, screenshots and feedback.</p><div class="portal-chip-row"><span>Solo</span><span>Group</span><span>Development logs</span></div><strong>Open Projects →</strong></a>
+    <a class="portal-path-card news" href="#/news"><div class="portal-path-icon">◉</div><span class="portal-kicker">LIVE • INDUSTRY • WATCH & LISTEN</span><h2>News & Industry</h2><p>Follow live games and development stories, trailers, podcasts and industry discussion. Save stories, upvote them and talk about them.</p><div class="portal-chip-row"><span>Live feeds</span><span>Read later</span><span>Discussion</span></div><strong>See what is happening →</strong></a>
+  </section>
+
+  <section class="portal-resume">
+    <div class="portal-resume-copy"><span class="eyebrow">PICK UP WHERE YOU LEFT OFF</span><h2>${esc(n.title)}</h2><p>${esc(n.short)}</p><div class="path-meta"><span>${esc(path(n.path).title)} • ${n.duration}</span><span>${np.pct}% of path complete</span></div><div class="progress"><span style="width:${np.pct}%"></span></div></div>
+    <div class="portal-resume-actions"><div><strong>Level ${i.n}</strong><small>${i.xp} XP • ${completed}/${DATA.lessons.length} lessons complete</small></div><a class="button primary" href="#/lesson/${n.id}">▶ Continue learning</a></div>
+>>>>>>> f7446c0db55b1cf4482b78e7c8a7d025ec0c7afc
   </section>`;
 }
 
@@ -726,7 +753,11 @@ function programmingPage(){
   <section class="section learning-tools-section"><div class="section-head"><div><h2>Practise, solve and revise</h2><p>Use a short recipe when you need a mechanic, then test what you actually understand.</p></div></div><div class="workspace-cards"><a class="workspace-card learning-tool" href="#/tutorials"><span>🛠</span><div><strong>${TOOLS.tutorials.length} Quick Tutorials</strong><p>Short practical recipes for common mechanics, systems, effects and student requests.</p></div></a><a class="workspace-card learning-tool" href="#/revision"><span>↻</span><div><strong>Revision Quizzes</strong><p>Random, whole-path or mixed-topic quizzes with 10 / 20 / 30 questions.</p></div></a><a class="workspace-card learning-tool" href="#/challenges"><span>🔥</span><div><strong>Challenge Board</strong><p>Independent problems where the answer is no longer laid out node by node.</p></div></a></div></section>`;
 }
 
+<<<<<<< HEAD
 const NEWS_CACHE_STORE='ue5hub:v326:news-cache';
+=======
+const NEWS_CACHE_STORE='ue5hub:v322:news-cache';
+>>>>>>> f7446c0db55b1cf4482b78e7c8a7d025ec0c7afc
 let newsStories=[];
 let newsCategory='all';
 let newsSearch='';

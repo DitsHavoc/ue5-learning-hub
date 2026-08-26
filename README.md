@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # UE5 Learning Hub v3.26.0 — Sculpt Playground
 
 ## Current release — v3.26.0
@@ -5,6 +6,9 @@
 This release adds a full **3D Modelling Studio** built around slow, cumulative Autodesk 3ds Max teaching rather than a large collection of shallow tutorials. It introduces 12 scaffolded lessons, 8 Build X projects, 6 Fix This Model clinics, original modelling concept diagrams, current Autodesk/Epic reference links, search/navigation integration, local progress/XP and three new modelling badges. No database migration is required.
 
 See `RELEASE-NOTES-v3.26.0.md`, `RELEASE-NOTES-v3.25.0.md` and `3DS-MAX-CAPTURE-LIST.md` for the current Sculpt Playground addition and the underlying 3D Modelling Studio teaching design.
+=======
+# UE5 Learning Hub v3.22.0 — Pathway Landing + News & Industry
+>>>>>>> f7446c0db55b1cf4482b78e7c8a7d025ec0c7afc
 
 ## V3.20 — the Hub becomes a portal
 
@@ -220,6 +224,12 @@ Supabase's security advisor reports no new V3.16 RLS/function warning. The remai
 
 Microsoft SSO remains optional and disabled.
 
+<<<<<<< HEAD
 ## v3.24.0 — Gold Instruction Pass
 
 This release completes the prescriptive teaching pass: all 20 core guided lessons, all 47 Programming Quick Tutorials, all 47 Designer Studio recipes and all eight Studio Builds now support richer instruction. See `RELEASE-NOTES-v3.24.0.md` and `CHANGELOG.md`.
+=======
+## v3.22.0 — Gold Instruction Pass
+
+This release completes the prescriptive teaching pass: all 20 core guided lessons, all 47 Programming Quick Tutorials, all 47 Designer Studio recipes and all eight Studio Builds now support richer instruction. See `RELEASE-NOTES-v3.22.0.md` and `CHANGELOG.md`.
+>>>>>>> f7446c0db55b1cf4482b78e7c8a7d025ec0c7afc
