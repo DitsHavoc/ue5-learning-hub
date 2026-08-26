@@ -1,5 +1,5 @@
 window.UE5_DESIGN_DATA = {
-  "version": "3.19.0",
+  "version": "3.19.2",
   "buildDate": "26 Aug 2026",
   "modules": [
     {
@@ -29,6 +29,18 @@ window.UE5_DESIGN_DATA = {
           "sourceUrl": "https://playdead.com/games/inside/",
           "sourceTitle": "Playdead — INSIDE",
           "kind": "reference"
+        },
+        {
+          "src": "assets/book/best-practices/environmental-clues-dressing.webp",
+          "caption": "Book reference — A side-by-side set-dressing example showing how added props increase story clues and scene meaning.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
+        },
+        {
+          "src": "assets/book/best-practices/lighting-mood-comparison.webp",
+          "caption": "Book reference — The same scene under two lighting moods, showing how colour and contrast change player interpretation.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
         }
       ],
       "tutorials": [
@@ -58,7 +70,7 @@ window.UE5_DESIGN_DATA = {
           "A short playtest note showing what the tester misunderstood and what you changed."
         ]
       },
-      "bookReference": "Licensed college reference: Unreal Engine 5 Best Practices (2025), Chapter 4 — Designing Engaging Game Environments.",
+      "bookReference": "Licensed college reference: Unreal Engine 5 Best Practices (2025), Chapter 4 — Designing Engaging Game Environments. Selected figures/page crops are now embedded inline in this module under the college's licensed educational use.",
       "deepDives": [
         {
           "title": "Function before beauty",
@@ -119,6 +131,24 @@ window.UE5_DESIGN_DATA = {
           "sourceUrl": "https://playdead.com/games/inside/",
           "sourceTitle": "Playdead — INSIDE",
           "kind": "reference"
+        },
+        {
+          "src": "assets/book/best-practices/environmental-clues-dressing.webp",
+          "caption": "Book reference — A side-by-side set-dressing example showing how added props increase story clues and scene meaning.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
+        },
+        {
+          "src": "assets/book/best-practices/lighting-mood-comparison.webp",
+          "caption": "Book reference — The same scene under two lighting moods, showing how colour and contrast change player interpretation.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
+        },
+        {
+          "src": "assets/book/best-practices/lumen-layered-lighting.webp",
+          "caption": "Book reference — Layering traditional lights with Lumen to shape highlights and focal emphasis.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
         }
       ],
       "tutorials": [
@@ -149,7 +179,7 @@ window.UE5_DESIGN_DATA = {
           "Close-up of the story vignette with a one-sentence interpretation."
         ]
       },
-      "bookReference": "Licensed college reference: Unreal Engine 5 Best Practices (2025), Chapters 4 and 8 — environment design and environmental storytelling.",
+      "bookReference": "Licensed college reference: Unreal Engine 5 Best Practices (2025), Chapters 4 and 8 — environment design and environmental storytelling. Selected figures/page crops are now embedded inline in this module under the college's licensed educational use.",
       "deepDives": [
         {
           "title": "Build story vignettes, not prop soup",
@@ -210,6 +240,30 @@ window.UE5_DESIGN_DATA = {
           "sourceUrl": "https://www.remedygames.com/games/control",
           "sourceTitle": "Remedy Entertainment — CONTROL",
           "kind": "reference"
+        },
+        {
+          "src": "assets/book/best-practices/dynasculpt-before-after.webp",
+          "caption": "Book reference — Before-and-after sculpting example showing how a simple sphere becomes a more organic rock form.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
+        },
+        {
+          "src": "assets/book/best-practices/rain-material-graph.webp",
+          "caption": "Book reference — A rain material setup from the book, useful for talking about weather effects and layered atmosphere.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
+        },
+        {
+          "src": "assets/book/best-practices/shader-complexity-heatmap.webp",
+          "caption": "Book reference — Shader Complexity view mode highlighting expensive materials and areas needing optimisation.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
+        },
+        {
+          "src": "assets/book/best-practices/uv-auto-before-after.webp",
+          "caption": "Book reference — Auto-UV adjustment example showing how texel distribution changes as UV settings are refined.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
         }
       ],
       "tutorials": [
@@ -240,7 +294,7 @@ window.UE5_DESIGN_DATA = {
           "Screenshot of the material performance check and the change you made (or justified keeping)."
         ]
       },
-      "bookReference": "Licensed college reference: Unreal Engine 5 Best Practices (2025), Chapters 10–11 — profiling material cost and real-time rendering.",
+      "bookReference": "Licensed college reference: Unreal Engine 5 Best Practices (2025), Chapters 10–11 — profiling material cost and real-time rendering. Selected figures/page crops are now embedded inline in this module under the college's licensed educational use.",
       "deepDives": [
         {
           "title": "Surface response beats node count",
@@ -308,6 +362,30 @@ window.UE5_DESIGN_DATA = {
           "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/exponential-height-fog-in-unreal-engine",
           "sourceTitle": "Epic Games — Exponential Height Fog",
           "kind": "epic"
+        },
+        {
+          "src": "assets/book/best-practices/lumen-gi-comparison.webp",
+          "caption": "Book reference — Static lighting versus Lumen GI, plus a visual breakdown of bounce lighting and reflections.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
+        },
+        {
+          "src": "assets/book/best-practices/lumen-layered-lighting.webp",
+          "caption": "Book reference — Layering traditional lights with Lumen to shape highlights and focal emphasis.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
+        },
+        {
+          "src": "assets/book/best-practices/volumetric-fog-layers.webp",
+          "caption": "Book reference — Progressive fog layering showing how volumetric height fog changes depth, mood and atmosphere.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
+        },
+        {
+          "src": "assets/book/best-practices/outdoor-lighting-example.webp",
+          "caption": "Book reference — An outdoor/warehouse lighting example used to discuss contrast, readability and mood.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
         }
       ],
       "tutorials": [
@@ -338,7 +416,7 @@ window.UE5_DESIGN_DATA = {
           "Side-by-side quality comparison with one sentence about the trade-off."
         ]
       },
-      "bookReference": "Licensed college reference: Unreal Engine 5 Best Practices (2025), Chapters 1–2 — Lumen, atmosphere and visual storytelling.",
+      "bookReference": "Licensed college reference: Unreal Engine 5 Best Practices (2025), Chapters 1–2 — Lumen, atmosphere and visual storytelling. Selected figures/page crops are now embedded inline in this module under the college's licensed educational use.",
       "deepDives": [
         {
           "title": "Artistic intent is allowed",
@@ -399,6 +477,24 @@ window.UE5_DESIGN_DATA = {
           "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/landscape-quick-start-guide-in-unreal-engine",
           "sourceTitle": "Epic Games — Landscape Quick Start",
           "kind": "epic"
+        },
+        {
+          "src": "assets/book/best-practices/outdoor-lighting-example.webp",
+          "caption": "Book reference — An outdoor/warehouse lighting example used to discuss contrast, readability and mood.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
+        },
+        {
+          "src": "assets/book/best-practices/volumetric-fog-layers.webp",
+          "caption": "Book reference — Progressive fog layering showing how volumetric height fog changes depth, mood and atmosphere.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
+        },
+        {
+          "src": "assets/book/best-practices/rain-material-graph.webp",
+          "caption": "Book reference — A rain material setup from the book, useful for talking about weather effects and layered atmosphere.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
         }
       ],
       "tutorials": [
@@ -430,7 +526,7 @@ window.UE5_DESIGN_DATA = {
           "Screenshot showing the landmark and clear route from player height."
         ]
       },
-      "bookReference": "Licensed college reference: Unreal Engine 5 Best Practices (2025), Chapter 6 — responsive/adaptive worlds and procedural environment workflows.",
+      "bookReference": "Licensed college reference: Unreal Engine 5 Best Practices (2025), Chapter 6 — responsive/adaptive worlds and procedural environment workflows. Selected figures/page crops are now embedded inline in this module under the college's licensed educational use.",
       "deepDives": [
         {
           "title": "Terrain is gameplay geometry",
@@ -491,6 +587,24 @@ window.UE5_DESIGN_DATA = {
           "sourceUrl": "https://playdead.com/games/inside/",
           "sourceTitle": "Playdead — INSIDE",
           "kind": "reference"
+        },
+        {
+          "src": "assets/book/best-practices/sequencer-closeup-shot.webp",
+          "caption": "Book reference — A close-up cinematic shot used to discuss framing, emotional focus and shot intent.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
+        },
+        {
+          "src": "assets/book/best-practices/sequencer-key-features.webp",
+          "caption": "Book reference — Sequencer UI callouts showing camera cuts, curve editing and track visibility controls.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
+        },
+        {
+          "src": "assets/book/best-practices/sequencer-camera-timing.webp",
+          "caption": "Book reference — A Sequencer breakdown highlighting timing tracks and control-rig-driven animation.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
         }
       ],
       "tutorials": [
@@ -522,7 +636,7 @@ window.UE5_DESIGN_DATA = {
           "Sequencer screenshot showing clean track/shot organisation."
         ]
       },
-      "bookReference": "Licensed college reference: Unreal Engine 5 Best Practices (2025), Chapters 7 and 9 — cinematic sequences and adaptive cutscenes.",
+      "bookReference": "Licensed college reference: Unreal Engine 5 Best Practices (2025), Chapters 7 and 9 — cinematic sequences and adaptive cutscenes. Selected figures/page crops are now embedded inline in this module under the college's licensed educational use.",
       "deepDives": [
         {
           "title": "Every shot needs a job",
@@ -583,6 +697,18 @@ window.UE5_DESIGN_DATA = {
           "sourceUrl": "https://www.konami.com/games/eu/en/products/silenthill2r/",
           "sourceTitle": "KONAMI — SILENT HILL 2",
           "kind": "reference"
+        },
+        {
+          "src": "assets/book/best-practices/sequencer-audio-markers.webp",
+          "caption": "Book reference — Using markers in Sequencer to align timing, beats and audio-driven moments.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
+        },
+        {
+          "src": "assets/book/best-practices/sequencer-audio-tracks.webp",
+          "caption": "Book reference — Audio tracks placed directly in Sequencer, showing sound timed against cinematic beats.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
         }
       ],
       "tutorials": [
@@ -614,7 +740,7 @@ window.UE5_DESIGN_DATA = {
           "Short note explaining what the listener should infer from the off-screen cue."
         ]
       },
-      "bookReference": "Licensed college reference: Unreal Engine 5 Best Practices (2025), Chapters 7–8 — cinematic audio and environmental audio storytelling.",
+      "bookReference": "Licensed college reference: Unreal Engine 5 Best Practices (2025), Chapters 7–8 — cinematic audio and environmental audio storytelling. Selected figures/page crops are now embedded inline in this module under the college's licensed educational use.",
       "deepDives": [
         {
           "title": "Sound can reveal what the camera cannot",
@@ -675,6 +801,30 @@ window.UE5_DESIGN_DATA = {
           "sourceUrl": "https://www.kojimaproductions.jp/en/death-stranding-ps4",
           "sourceTitle": "KOJIMA PRODUCTIONS — DEATH STRANDING",
           "kind": "reference"
+        },
+        {
+          "src": "assets/book/best-practices/unreal-insights-spike.webp",
+          "caption": "Book reference — An Unreal Insights capture showing a performance spike and where to begin investigating it.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
+        },
+        {
+          "src": "assets/book/best-practices/shader-complexity-heatmap.webp",
+          "caption": "Book reference — Shader Complexity view mode highlighting expensive materials and areas needing optimisation.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
+        },
+        {
+          "src": "assets/book/best-practices/stat-gpu-world-optimisation.webp",
+          "caption": "Book reference — Stat GPU overlay demonstrating a real performance-reading workflow inside Unreal.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
+        },
+        {
+          "src": "assets/book/best-practices/content-browser-folders.webp",
+          "caption": "Book reference — A clean Content Browser folder structure: presentation quality also means a project another developer can navigate.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
         }
       ],
       "tutorials": [
@@ -706,7 +856,7 @@ window.UE5_DESIGN_DATA = {
           "Before/after measurement or project-hygiene evidence proving the change helped."
         ]
       },
-      "bookReference": "Licensed college reference: Unreal Engine 5 Best Practices (2025), Chapters 10–13 — profiling, rendering optimisation, asset management and troubleshooting.",
+      "bookReference": "Licensed college reference: Unreal Engine 5 Best Practices (2025), Chapters 10–13 — profiling, rendering optimisation, asset management and troubleshooting. Selected figures/page crops are now embedded inline in this module under the college's licensed educational use.",
       "deepDives": [
         {
           "title": "Profile → diagnose → change → re-profile",
@@ -1144,6 +1294,18 @@ window.UE5_DESIGN_DATA = {
           "sourceUrl": "https://www.remedygames.com/games/control",
           "sourceTitle": "Remedy Entertainment — CONTROL",
           "kind": "reference"
+        },
+        {
+          "src": "assets/book/best-practices/environmental-clues-dressing.webp",
+          "caption": "Book reference — A side-by-side set-dressing example showing how added props increase story clues and scene meaning.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
+        },
+        {
+          "src": "assets/book/best-practices/lighting-mood-comparison.webp",
+          "caption": "Book reference — The same scene under two lighting moods, showing how colour and contrast change player interpretation.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
         }
       ],
       "source": {
@@ -1419,6 +1581,12 @@ window.UE5_DESIGN_DATA = {
           "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/unreal-engine-material-editor-ui",
           "sourceTitle": "Epic Games — Material Editor UI",
           "kind": "epic"
+        },
+        {
+          "src": "assets/book/best-practices/uv-auto-before-after.webp",
+          "caption": "Book reference — UV changes visibly alter texture distribution; surface quality depends on clean mapping as well as the material graph.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
         }
       ],
       "source": {
@@ -3172,7 +3340,14 @@ window.UE5_DESIGN_DATA = {
       ],
       "icon": "⌂",
       "featured": true,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "assets/book/best-practices/environmental-clues-dressing.webp",
+          "caption": "Book reference — A side-by-side set-dressing example showing how added props increase story clues and scene meaning.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
+        }
+      ],
       "source": {
         "title": "Epic UE5.8 — Modeling Mode",
         "url": "https://dev.epicgames.com/documentation/unreal-engine/modeling-mode-in-unreal-engine?lang=en-US"
@@ -3308,7 +3483,14 @@ window.UE5_DESIGN_DATA = {
       ],
       "icon": "▥",
       "featured": true,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "assets/book/best-practices/shader-complexity-heatmap.webp",
+          "caption": "Book reference — Shader Complexity view mode highlighting expensive materials and areas needing optimisation.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
+        }
+      ],
       "source": {
         "title": "Epic UE5.8 — Real-time Rendering Optimisation",
         "url": "https://dev.epicgames.com/documentation/unreal-engine/guidelines-for-optimizing-rendering-for-real-time-in-unreal-engine"
@@ -3444,7 +3626,20 @@ window.UE5_DESIGN_DATA = {
       ],
       "icon": "◐",
       "featured": true,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "assets/book/best-practices/lumen-gi-comparison.webp",
+          "caption": "Book reference — Static lighting versus Lumen GI, plus a visual breakdown of bounce lighting and reflections.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
+        },
+        {
+          "src": "assets/book/best-practices/lighting-mood-comparison.webp",
+          "caption": "Book reference — The same scene under two lighting moods, showing how colour and contrast change player interpretation.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
+        }
+      ],
       "source": {
         "title": "Epic UE5.8 — Lumen Performance Guide",
         "url": "https://dev.epicgames.com/documentation/unreal-engine/lumen-performance-guide-for-unreal-engine"
@@ -3716,7 +3911,20 @@ window.UE5_DESIGN_DATA = {
       ],
       "icon": "◉",
       "featured": true,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "assets/book/best-practices/sequencer-closeup-shot.webp",
+          "caption": "Book reference — A close-up cinematic shot used to discuss framing, emotional focus and shot intent.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
+        },
+        {
+          "src": "assets/book/best-practices/sequencer-camera-timing.webp",
+          "caption": "Book reference — A Sequencer breakdown highlighting timing tracks and control-rig-driven animation.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
+        }
+      ],
       "source": {
         "title": "Epic UE5.8 — Cinematic Cameras",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/cinematic-cameras-in-unreal-engine"
@@ -3852,7 +4060,20 @@ window.UE5_DESIGN_DATA = {
       ],
       "icon": "◖",
       "featured": true,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "assets/book/best-practices/sequencer-audio-markers.webp",
+          "caption": "Book reference — Using markers in Sequencer to align timing, beats and audio-driven moments.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
+        },
+        {
+          "src": "assets/book/best-practices/sequencer-audio-tracks.webp",
+          "caption": "Book reference — Sequencer audio tracks reinforce that sound has timing, rhythm and narrative placement rather than being a final afterthought.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
+        }
+      ],
       "source": {
         "title": "Epic UE5.8 — Sound Attenuation",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/sound-attenuation-in-unreal-engine"
@@ -3988,7 +4209,26 @@ window.UE5_DESIGN_DATA = {
       ],
       "icon": "↻",
       "featured": true,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "assets/book/best-practices/unreal-insights-spike.webp",
+          "caption": "Book reference — An Unreal Insights capture showing a performance spike and where to begin investigating it.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
+        },
+        {
+          "src": "assets/book/best-practices/shader-complexity-heatmap.webp",
+          "caption": "Book reference — Shader Complexity view mode highlighting expensive materials and areas needing optimisation.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
+        },
+        {
+          "src": "assets/book/best-practices/stat-gpu-world-optimisation.webp",
+          "caption": "Book reference — Stat GPU overlay demonstrating a real performance-reading workflow inside Unreal.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
+        }
+      ],
       "source": {
         "title": "Epic UE5.8 — Real-time Rendering Optimisation",
         "url": "https://dev.epicgames.com/documentation/unreal-engine/guidelines-for-optimizing-rendering-for-real-time-in-unreal-engine"
@@ -4056,7 +4296,14 @@ window.UE5_DESIGN_DATA = {
       ],
       "icon": "⌘",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "assets/book/best-practices/content-browser-folders.webp",
+          "caption": "Book reference — A readable folder structure makes assets findable and reduces production friction.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
+        }
+      ],
       "source": {
         "title": "Epic UE5.8 — World Partition HLOD",
         "url": "https://dev.epicgames.com/documentation/unreal-engine/world-partition---hierarchical-level-of-detail-in-unreal-engine?lang=en-US"

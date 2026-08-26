@@ -1,26 +1,28 @@
-# UE5 Learning Hub v3.19.0 — Designer Studio Deep Dive
+# UE5 Learning Hub v3.19.2 — Designer Studio Deep Dive
 
-## v3.19.0 — design knowledge / production-quality pass
+## v3.19.2 — design knowledge / production-quality pass
 
 V3.19 keeps the eight Designer Studio disciplines introduced in V3.18 but makes them substantially deeper. The focus is no longer just “here are some design recipes”: each discipline now teaches transferable design thinking, professional workflow habits, module-specific critique questions and a current UE5.8 engine check before students move into practical tutorials.
 
-This pass is informed by the college-licensed **Unreal Engine 5 Best Practices** (Tyson Butler-Boschma, Packt, 2025). The Hub paraphrases concepts and rebuilds them into original classroom teaching material; book pages and figures are **not** redistributed. Because the book is based on UE5.4, engine-specific guidance is cross-checked against current Epic UE5.8 documentation.
+This pass is informed by the college-licensed **Unreal Engine 5 Best Practices** (Tyson Butler-Boschma, Packt, 2025). The Hub paraphrases concepts and rebuilds them into original classroom teaching material, while **selected figure/page crops are embedded inline for licensed educational use** where they materially improve the explanation. Because the book is based on UE5.4, engine-specific guidance is cross-checked against current Epic UE5.8 documentation.
 
-### What changed in V3.19
+### What changed in V3.19.2
 
 - **8 Designer disciplines**, each now includes **3 Design Thinking deep dives** with a short applied exercise: 24 new theory/application cards in total.
 - Every discipline now includes **Production Habits**, a **UE5.8 Reality Check**, a licensed-reference note and **five discipline-specific critique questions**.
 - **16 new Designer Quick Tutorials**, taking Designer Studio from 32 to **48 practical recipes** and the full shared Quick Tutorial library from 78 to **94**.
 - New topics include decision-point design, spatial pacing, five-prop story vignettes, hero assets, Shader Complexity/material cost, translucency/overdraw, a Lumen mood pass, time-of-day contrast, PCG-safe routes, weather readability, cinematic lens language, adaptive cutscenes, off-screen audio storytelling, procedural wind with MetaSound, evidence-based profiling and project hygiene.
 - Existing **8 Studio Builds** are upgraded with an extra professional review/test step and additional evidence requirement tied to the discipline.
-- The free resources area now also points to the college-licensed Packt reference as further reading without redistributing its content.
+- **18 selected book visuals** are now embedded locally and placed in dedicated “Licensed Book Visuals” sections so they reinforce the teaching without being mixed indiscriminately with game reference art or current Epic screenshots.
+- Key Quick Tutorials also receive book figures where a visual directly clarifies the technique, including fog, Lumen, set dressing, UVs/materials, Sequencer/audio and profiling.
+- Book figures are compressed to WebP for fast classroom loading and retain the existing click-to-enlarge viewer.
 - No database migration is required; all completion tracking continues to reuse the existing progress system.
 
 ### Design philosophy strengthened in this pass
 
 The Designer Studio now repeatedly reinforces a few professional ideas: functional layout before decoration; guidance without excessive hand-holding; environmental story through meaningful placement; modularity balanced by distinctive hero assets; artistic lighting with an explicit performance budget; procedural tools under authored design control; cinematics built as reusable sequences; audio as spatial/story information; and optimisation as **profile → diagnose → change → re-profile**, not a last-minute quality massacre.
 
-## Validation completed for V3.19
+## Validation completed for V3.19.2
 
 - JavaScript syntax checks pass for app/backend/course/tutorial/design/project/config data.
 - 20 core lessons retained.
@@ -28,7 +30,7 @@ The Designer Studio now repeatedly reinforces a few professional ideas: function
 - Designer Studio validates at 8 disciplines, 48 recipe references, 24 Design Thinking cards and 8 Studio Builds.
 - Every Designer discipline has 6 recipes, 3 deep-dive cards, production habits, 5 critique questions and a current-engine reference.
 - 64 local asset references checked with zero missing files.
-- production and local-test HTML cache/version references are all v3.19.0.
+- production and local-test HTML cache/version references are all v3.19.2.
 - CSS brace balance and ZIP source integrity checks pass.
 - no database migration is required.
 

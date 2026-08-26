@@ -1,6 +1,6 @@
 window.UE5_TUTORIAL_DATA = {
-  "version": "3.19.0",
-  "buildDate": "25 Aug 2026",
+  "version": "3.19.2",
+  "buildDate": "26 Aug 2026",
   "categories": [
     {
       "id": "movement",
@@ -3112,6 +3112,18 @@ window.UE5_TUTORIAL_DATA = {
           "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/exponential-height-fog-in-unreal-engine",
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
+        },
+        {
+          "src": "assets/book/best-practices/volumetric-fog-layers.webp",
+          "caption": "Book reference — Progressive fog layering showing how volumetric height fog changes depth, mood and atmosphere.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
+        },
+        {
+          "src": "assets/book/best-practices/rain-material-graph.webp",
+          "caption": "Book reference — A rain material setup from the book, useful for talking about weather effects and layered atmosphere.",
+          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
+          "kind": "book"
         }
       ],
       "source": {
