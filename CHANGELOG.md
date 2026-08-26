@@ -1,5 +1,14 @@
 # Changelog
 
+## v3.26.1 — UI Hotfix — 26 Aug 2026
+
+- Fixed sidebar click interception caused by the visible-site logo replacement.
+- Kept the purple supplied mark as favicon/browser identity only.
+- Added 3D Modelling Studio and Sculpt Playground directly to Home.
+- Widened and simplified the sidebar.
+- Re-aligned the Avatar Studio account popup.
+- No database migration required.
+
 ## v3.26.0 — Sculpt Playground — 26 Aug 2026
 
 - Added embedded SculptGL practice area with six scaffolded digital-clay exercises.

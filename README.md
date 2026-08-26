@@ -1,10 +1,10 @@
-# UE5 Learning Hub v3.26.0 — Sculpt Playground
+# UE5 Learning Hub v3.26.1 — UI Hotfix
 
-## Current release — v3.26.0
+## Current release — v3.26.1
 
 This release adds a full **3D Modelling Studio** built around slow, cumulative Autodesk 3ds Max teaching rather than a large collection of shallow tutorials. It introduces 12 scaffolded lessons, 8 Build X projects, 6 Fix This Model clinics, original modelling concept diagrams, current Autodesk/Epic reference links, search/navigation integration, local progress/XP and three new modelling badges. No database migration is required.
 
-See `RELEASE-NOTES-v3.26.0.md`, `RELEASE-NOTES-v3.25.0.md` and `3DS-MAX-CAPTURE-LIST.md` for the current Sculpt Playground addition and the underlying 3D Modelling Studio teaching design.
+See `RELEASE-NOTES-v3.26.1.md`, `RELEASE-NOTES-v3.26.0.md`, `RELEASE-NOTES-v3.25.0.md` and `3DS-MAX-CAPTURE-LIST.md` for the UI hotfix, Sculpt Playground and the underlying 3D Modelling Studio teaching design.
 
 ## V3.20 — the Hub becomes a portal
 

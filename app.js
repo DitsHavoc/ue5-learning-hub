@@ -689,13 +689,14 @@ function modelingFixPage(id){
 
 function dashboard(){
   return `<section class="portal-hero portal-hero-clean">
-    <div><span class="eyebrow">UE5 LEARNING HUB</span><h1>Choose a path.</h1><p>Learn systems. Design worlds. Build real projects. Keep an eye on the industry.</p></div>
-    <img class="portal-brand-mark" src="assets/brand/site-mark.png" alt="" aria-hidden="true">
+    <div><span class="eyebrow">UE5 LEARNING HUB</span><h1>Choose a path.</h1><p>Learn systems. Design worlds. Build assets. Make projects. Keep an eye on the industry.</p></div>
   </section>
 
   <section class="portal-path-grid" aria-label="Choose a Learning Hub area">
     <a class="portal-path-card programming" href="#/programming"><div class="portal-path-icon">⌘</div><span class="portal-kicker">SYSTEMS • BLUEPRINTS • LOGIC</span><h2>Programming</h2><p>Understand how Unreal works, build mechanics, solve problems and turn Blueprint graphs into reliable game systems.</p><div class="portal-chip-row"><span>20 core lessons</span><span>${TOOLS.tutorials.filter(t=>!t.designModule).length}+ recipes</span><span>Revision</span></div><strong>Enter Programming →</strong></a>
-    <a class="portal-path-card design" href="#/design"><div class="portal-path-icon">✦</div><span class="portal-kicker">LEVELS • ART • LIGHT • SOUND</span><h2>Design</h2><p>Build readable spaces, create atmosphere, guide players and learn why strong game worlds communicate rather than simply decorate.</p><div class="portal-chip-row"><span>${DESIGN.modules.length} disciplines</span><span>3D Modelling</span><span>Studio builds</span></div><strong>Enter Designer Studio →</strong></a>
+    <a class="portal-path-card design" href="#/design"><div class="portal-path-icon">✦</div><span class="portal-kicker">LEVELS • ART • LIGHT • SOUND</span><h2>Design</h2><p>Build readable spaces, create atmosphere, guide players and learn why strong game worlds communicate rather than simply decorate.</p><div class="portal-chip-row"><span>${DESIGN.modules.length} disciplines</span><span>Studio builds</span><span>Critique</span></div><strong>Enter Designer Studio →</strong></a>
+    <a class="portal-path-card modeling" href="#/modeling"><div class="portal-path-icon">⬡</div><span class="portal-kicker">3DS MAX • TOPOLOGY • UVS</span><h2>3D Modelling</h2><p>Learn 3ds Max slowly and correctly, build game-ready assets and understand what clean modelling actually looks like.</p><div class="portal-chip-row"><span>${MODEL.lessons.length} deep lessons</span><span>${MODEL.builds.length} Build X</span><span>${MODEL.fixes.length} repair clinics</span></div><strong>Open 3D Modelling Studio →</strong></a>
+    <a class="portal-path-card sculpt" href="#/sculpt"><div class="portal-path-icon">🗿</div><span class="portal-kicker">DIGITAL CLAY • FORM • SILHOUETTE</span><h2>Sculpt Playground</h2><p>Push and pull digital clay in SculptGL with six tiny guided exercises, then inspect what exists underneath the surface.</p><div class="portal-chip-row"><span>${SCULPT.practices.length} exercises</span><span>Browser sculpting</span><span>OBJ → Max</span></div><strong>Play with clay →</strong></a>
     <a class="portal-path-card projects" href="#/projects"><div class="portal-path-icon">▣</div><span class="portal-kicker">MAKE • DOCUMENT • ITERATE</span><h2>Projects</h2><p>Take what you know into assignments, game jams and team projects with development logs, milestones, screenshots and feedback.</p><div class="portal-chip-row"><span>Solo</span><span>Group</span><span>Development logs</span></div><strong>Open Projects →</strong></a>
     <a class="portal-path-card news" href="#/news"><div class="portal-path-icon">◉</div><span class="portal-kicker">LIVE • INDUSTRY • WATCH & LISTEN</span><h2>News & Industry</h2><p>Follow games and development stories, trailers, podcasts and industry discussion. Save what matters and come back later.</p><div class="portal-chip-row"><span>Live feeds</span><span>Read later</span><span>Discussion</span></div><strong>See what is happening →</strong></a>
   </section>
@@ -726,7 +727,7 @@ function programmingPage(){
   <section class="section learning-tools-section"><div class="section-head"><div><h2>Practise, solve and revise</h2><p>Use a short recipe when you need a mechanic, then test what you actually understand.</p></div></div><div class="workspace-cards"><a class="workspace-card learning-tool" href="#/tutorials"><span>🛠</span><div><strong>${TOOLS.tutorials.length} Quick Tutorials</strong><p>Short practical recipes for common mechanics, systems, effects and student requests.</p></div></a><a class="workspace-card learning-tool" href="#/revision"><span>↻</span><div><strong>Revision Quizzes</strong><p>Random, whole-path or mixed-topic quizzes with 10 / 20 / 30 questions.</p></div></a><a class="workspace-card learning-tool" href="#/challenges"><span>🔥</span><div><strong>Challenge Board</strong><p>Independent problems where the answer is no longer laid out node by node.</p></div></a></div></section>`;
 }
 
-const NEWS_CACHE_STORE='ue5hub:v326:news-cache';
+const NEWS_CACHE_STORE='ue5hub:v3261:news-cache';
 let newsStories=[];
 let newsCategory='all';
 let newsSearch='';
@@ -1883,7 +1884,7 @@ function renderAuth(){
       ${BACKEND.profile?.role==='teacher'?'<br><br><b>Teacher role active.</b>':''}
     </div>
     <div class="avatar-studio">
-      <div class="avatar-studio-head"><div><span class="eyebrow">FUN PROFILE STUFF</span><h3>Avatar Studio</h3></div><p class="muted">Choose a simple icon-and-colour identity for the Hub.</p></div>
+      <div class="avatar-studio-head"><span class="eyebrow">PROFILE CUSTOMISATION</span><h3>Avatar Studio</h3><p class="muted">Choose a simple icon and colour identity for the Hub.</p></div>
       <div class="avatar-preview-row">${avatarMarkup('xl',userDisplayName())}<div><strong>${esc(userDisplayName())}</strong><p>${esc(userRankTitle())}</p></div></div>
       <div class="avatar-studio-grid"><div><span class="deep-label">ICON</span><div class="avatar-choice-row">${AVATAR_GLYPHS.map(g=>`<button class="avatar-choice ${profilePrefs.glyph===g?'active':''}" type="button" data-action="avatar-glyph" data-glyph="${esc(g)}">${esc(g)}</button>`).join('')}</div></div><div><span class="deep-label">COLOUR</span><div class="avatar-choice-row">${Object.entries(AVATAR_THEMES).map(([id,t])=>`<button class="avatar-theme-choice ${profilePrefs.theme===id?'active':''}" type="button" title="${esc(t.name)}" data-action="avatar-theme" data-theme="${esc(id)}"><span style="background:${t.bg}"></span></button>`).join('')}</div></div></div>
       <div class="avatar-badges-inline"><div class="portal-player-badge-head"><strong>Badge cabinet</strong><a href="#/progress" onclick="document.querySelector('[data-action=close-auth]')?.click()">Open →</a></div>${profileBadgeStrip(4)}</div>
