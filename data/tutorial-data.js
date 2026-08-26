@@ -1,5 +1,5 @@
 window.UE5_TUTORIAL_DATA = {
-  "version": "3.19.2",
+  "version": "3.22.0",
   "buildDate": "26 Aug 2026",
   "categories": [
     {
@@ -73,36 +73,83 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "events",
       "steps": [
-        [
-          "Create the Input Action",
-          "In your Input folder create an Input Action named IA_Action. For a simple press, leave Value Type as Digital (Bool).",
-          "The Input Action represents the intention — Jump, Sprint, Interact — rather than a specific keyboard key.",
-          "The IA_Action asset exists and shows a Boolean value type."
-        ],
-        [
-          "Open the Mapping Context",
-          "Open the Input Mapping Context already used by your player, usually IMC_Default in a Third Person template.",
-          "The Mapping Context decides which physical controls trigger each action.",
-          "You can see the existing movement/look/jump mappings."
-        ],
-        [
-          "Add the mapping",
-          "Add IA_Action to the mapping context and choose a key such as E.",
-          "Now the input system knows that E should produce the IA_Action event.",
-          "IA_Action appears in the mapping list with E beside it."
-        ],
-        [
-          "Add the event",
-          "Open the player Character Blueprint, right-click the Event Graph and add the IA_Action event.",
-          "Gameplay code responds to the action, not to the keyboard key directly.",
-          "Pressing E while playing causes the event execution pin to pulse in Blueprint debugging."
-        ],
-        [
-          "Prove it fires",
-          "Connect Triggered or Started to Print String with a short test message. Compile and Play.",
-          "A tiny test isolates input setup before you build the real mechanic.",
-          "Your message appears exactly when you expect it to."
-        ]
+        {
+          "title": "Create the Input Action asset",
+          "where": "Content Drawer → Input folder → right-click → Input → Input Action",
+          "do": "Create an Input Action called IA_Action.",
+          "doList": [
+            "Open the asset after creating it.",
+            "For a simple button press, keep Value Type as Digital (Bool)."
+          ],
+          "why": "Input Actions represent a gameplay intention such as Interact or Dash, not a specific key.",
+          "see": "IA_Action exists and shows a Boolean value type.",
+          "check": "The asset saves without warnings.",
+          "visual": {
+            "src": "assets/ue5/current/editor-panels-closeup.webp",
+            "caption": "Create new input assets in your project folders.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Open the Mapping Context",
+          "where": "Input folder → IMC_Default or your project’s active Input Mapping Context",
+          "do": "Open the Mapping Context used by the player.",
+          "why": "The Mapping Context is where physical buttons are linked to the abstract Input Action.",
+          "see": "Existing mappings such as movement or jump are visible.",
+          "check": "You can identify where keyboard and gamepad bindings are listed.",
+          "visual": {
+            "src": "assets/ue5/current/editor-panels-closeup.webp",
+            "caption": "The Mapping Context stores the actual control bindings.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Add IA_Action to the mappings",
+          "where": "Inside the Mapping Context → Add mapping row",
+          "do": "Add IA_Action and bind it to a key such as E.",
+          "why": "Until the Mapping Context contains a binding, pressing the key will do nothing.",
+          "see": "IA_Action appears in the mapping list with E assigned.",
+          "check": "The binding is saved in the Mapping Context asset.",
+          "visual": {
+            "src": "assets/ue5/current/editor-panels-closeup.webp",
+            "caption": "Bind the Input Action to a specific key in the Mapping Context.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Add the event to the Character Blueprint",
+          "where": "Player Character Blueprint → Event Graph → right-click → search IA_Action",
+          "do": "Add the IA_Action event to the Character Blueprint.",
+          "why": "Gameplay logic should respond to the action event rather than hard-coded keyboard checks.",
+          "see": "An IA_Action event node appears in the graph.",
+          "check": "The event node has pins such as Started or Triggered.",
+          "visual": {
+            "src": "assets/ue5/current/events-execution-real.webp",
+            "caption": "Input actions become event nodes inside the Character graph.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Prove it fires",
+          "where": "Connect Started or Triggered → Print String",
+          "do": "Print a short message and press Play.",
+          "why": "A tiny proof test isolates input setup before you build the real mechanic.",
+          "see": "Pressing E prints the message at the correct moment.",
+          "check": "Changing the key in the Mapping Context changes the control without rewriting gameplay logic.",
+          "troubleshoot": [
+            "If nothing prints, confirm that the Character is the one being possessed and that the Mapping Context used by the player is the one you edited."
+          ],
+          "visual": {
+            "src": "assets/ue5/current/events-execution-closeup.webp",
+            "caption": "Use a quick Print String test before building the full mechanic.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
+        }
       ],
       "mistakes": [
         "Adding the action asset but forgetting to map it in the Mapping Context.",
@@ -119,7 +166,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "⌨",
       "featured": true,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "double-jump",
@@ -135,30 +183,76 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "actors-components",
       "steps": [
-        [
-          "Open your Character Blueprint",
-          "Open the Blueprint used by the player and select Class Defaults.",
-          "Jump count is already built into ACharacter, so use the engine feature before inventing a new system.",
-          "You are editing the playable Character class, not a random instance in the level."
-        ],
-        [
-          "Find Jump Max Count",
-          "Search the Details panel for Jump Max Count.",
-          "This controls how many jumps can occur before landing resets the count.",
-          "The default is normally 1."
-        ],
-        [
-          "Set it to 2",
-          "Change Jump Max Count to 2, Compile and Save.",
-          "Two allowed jumps means the original ground jump plus one extra jump in the air.",
-          "The value remains 2 after compiling."
-        ],
-        [
-          "Test it properly",
-          "Play, jump once, press Jump again while airborne, then try a third press.",
-          "Testing success and failure proves the rule is really working.",
-          "The second press jumps; the third does nothing until you land."
-        ]
+        {
+          "title": "Open the player Character Blueprint",
+          "where": "Content Drawer → ThirdPerson / player folder → Character Blueprint",
+          "do": "Open the Blueprint used by the player.",
+          "why": "Jump settings live on the Character Movement system inside the Character.",
+          "see": "The Character Blueprint opens with Character Movement available in Components.",
+          "check": "The blueprint name matches your playable character.",
+          "visual": {
+            "src": "assets/book/blueprint-editor.webp",
+            "caption": "Character settings are edited from the Character Blueprint.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Select Class Defaults",
+          "where": "Top toolbar / Blueprint editor → Class Defaults",
+          "do": "Switch to Class Defaults so you are editing default movement settings.",
+          "why": "Jump Max Count is a class-level setting rather than a runtime node chain.",
+          "see": "The Details panel now shows Character default properties.",
+          "check": "You are no longer looking at a specific component detail panel.",
+          "visual": {
+            "src": "assets/book/blueprint-editor.webp",
+            "caption": "Class Defaults expose the default settings for the Blueprint.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Set Jump Max Count to 2",
+          "where": "Details panel → search “Jump Max Count”",
+          "do": "Change Jump Max Count from 1 to 2.",
+          "why": "A value of 2 allows the initial jump plus one extra jump in the air.",
+          "see": "Jump Max Count now shows 2.",
+          "check": "Compile saves the change.",
+          "visual": {
+            "src": "assets/diagrams/gold/actors-components-example.svg",
+            "caption": "Even simple mechanics can come from correct built-in settings.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Compile and Play",
+          "where": "Top toolbar → Compile, then Play",
+          "do": "Run the game and press Jump twice while in the air.",
+          "why": "You must test that the Character Movement component is respecting the new setting.",
+          "see": "The character performs a second jump before landing.",
+          "check": "A third jump should not be allowed.",
+          "visual": {
+            "src": "assets/ue5/current/editor-main-window.webp",
+            "caption": "Test movement changes immediately in Play mode.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Explain why this is better than rewriting jump physics",
+          "where": "After testing",
+          "do": "State in your notes or out loud that you used the existing Character Movement system instead of building a new custom jump mechanic.",
+          "why": "Professional work often means using the engine feature that already solves the problem well.",
+          "see": "You can explain what setting changed the behaviour.",
+          "check": "You know where to change it back if needed.",
+          "visual": {
+            "src": "assets/book/responsibility.webp",
+            "caption": "A good solution is often the simplest engine-supported one.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        }
       ],
       "mistakes": [
         "Changing jump velocity when you only wanted an extra jump.",
@@ -176,7 +270,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "⇈",
       "featured": true,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "sprint",
@@ -192,36 +287,79 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "variables",
       "steps": [
-        [
-          "Create IA_Sprint",
-          "Create a Digital Input Action and map it to Left Shift in the player Mapping Context.",
-          "Sprint is an intention, so it should be represented by an Input Action.",
-          "IA_Sprint fires when Shift is pressed."
-        ],
-        [
-          "Get Character Movement",
-          "In the Character Blueprint, drag in the Character Movement component and get Max Walk Speed.",
-          "Movement speed belongs to Character Movement, not to the mesh or controller.",
-          "You can read the current Max Walk Speed value."
-        ],
-        [
-          "Sprint on press",
-          "From IA_Sprint Started, Set Max Walk Speed to a faster value such as 900.",
-          "Started runs once when the input begins.",
-          "Holding Shift makes the player noticeably faster."
-        ],
-        [
-          "Return on release",
-          "From IA_Sprint Completed, set Max Walk Speed back to the normal value such as 500 or 600.",
-          "A held action needs a reliable end state or the player can become permanently fast.",
-          "Releasing Shift immediately returns normal movement speed."
-        ],
-        [
-          "Promote speeds to variables",
-          "Create WalkSpeed and SprintSpeed variables and use those instead of magic numbers.",
-          "Named variables explain intent and make balancing easier.",
-          "Changing SprintSpeed changes sprint without hunting through nodes."
-        ]
+        {
+          "title": "Create or confirm an Input Action for sprint",
+          "where": "Input folder and Mapping Context",
+          "do": "Use an Input Action such as IA_Sprint and map it to Left Shift.",
+          "why": "Sprint should be an input action, not a raw key check inside gameplay logic.",
+          "see": "IA_Sprint exists and is mapped to a sprint key.",
+          "check": "The action binding is visible in the Mapping Context.",
+          "visual": {
+            "src": "assets/ue5/current/editor-panels-closeup.webp",
+            "caption": "Map sprint through the Enhanced Input system.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Open the player Character graph",
+          "where": "Character Blueprint → Event Graph",
+          "do": "Open the player Character Blueprint and find the Event Graph.",
+          "why": "Sprint changes the controlled character’s movement speed at runtime.",
+          "see": "The graph is ready for input event logic.",
+          "check": "Character Movement can be dragged in from the Components panel.",
+          "visual": {
+            "src": "assets/ue5/current/events-execution-real.webp",
+            "caption": "Sprint logic lives in the Character Blueprint.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Handle sprint start",
+          "where": "Right-click → search IA_Sprint → choose Started",
+          "do": "On IA_Sprint Started, drag in Character Movement and set Max Walk Speed to a higher value such as 900.",
+          "why": "The Started event is ideal for the moment the sprint key is pressed.",
+          "see": "The graph shows IA_Sprint Started → Set Max Walk Speed.",
+          "check": "Pressing sprint in Play makes the character move faster.",
+          "visual": {
+            "src": "assets/ue5/current/function-update-closeup.webp",
+            "caption": "Use a clear event chain to change movement properties.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Handle sprint end",
+          "where": "Same IA_Sprint event node → Completed or Canceled",
+          "do": "On Completed or Canceled, set Max Walk Speed back to the normal value such as 500.",
+          "why": "Hold-to-sprint needs a clear reset when the key is released.",
+          "see": "The character returns to normal speed when the key is released.",
+          "check": "Walking speed is consistent every time sprint ends.",
+          "visual": {
+            "src": "assets/ue5/current/events-execution-closeup.webp",
+            "caption": "Pair the start event with a matching reset.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Test and tune the values",
+          "where": "Play mode",
+          "do": "Run, hold sprint and release it several times, adjusting the normal and sprint speed if needed.",
+          "why": "Movement values should feel intentional rather than arbitrary.",
+          "see": "The speed change is noticeable but controllable.",
+          "check": "You can point to exactly which two values control the feel.",
+          "troubleshoot": [
+            "If speed never changes, confirm the player character being controlled is the same Blueprint you edited."
+          ],
+          "visual": {
+            "src": "assets/ue5/current/editor-main-window.webp",
+            "caption": "Testing movement repeatedly helps you tune the feel.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
+        }
       ],
       "mistakes": [
         "Only setting sprint speed and never resetting it.",
@@ -239,7 +377,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "»",
       "featured": false,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "dash",
@@ -256,36 +395,76 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "functions",
       "steps": [
-        [
-          "Create IA_Dash",
-          "Make a Digital Input Action mapped to a key such as Q or Left Alt.",
-          "Separate the action from the physical key.",
-          "The dash input fires in the Character."
-        ],
-        [
-          "Add CanDash",
-          "Create a Boolean CanDash, default True. Branch from the dash input using it.",
-          "A state variable gives the mechanic a clear rule: ready or cooling down.",
-          "When CanDash is False, the dash path stops."
-        ],
-        [
-          "Build dash velocity",
-          "Get Actor Forward Vector and multiply it by a DashStrength variable such as 1200.",
-          "The forward vector is a direction; multiplying gives it useful magnitude.",
-          "Debug/watch the vector and see its size change with DashStrength."
-        ],
-        [
-          "Launch the Character",
-          "Feed that vector into Launch Character. Turn XY Override on for a consistent dash and keep Z Override off so normal vertical movement is preserved.",
-          "Launch Character works with Character movement and is quick to prototype.",
-          "Pressing Dash moves the player sharply forward."
-        ],
-        [
-          "Start cooldown",
-          "Set CanDash False, then use Set Timer by Event or a short retrigger-safe timer to set it True after DashCooldown.",
-          "A timer is cleaner than blocking the graph with repeated Delay logic.",
-          "Repeated button mashing cannot dash until the cooldown finishes."
-        ]
+        {
+          "title": "Create or map the dash input action",
+          "where": "Input Action + Mapping Context",
+          "do": "Create IA_Dash or confirm an existing one is mapped to a key such as Left Alt.",
+          "why": "Dash should be triggered from Enhanced Input like any other mechanic.",
+          "see": "The dash action exists and is mapped.",
+          "check": "The Input Action can be found in the Character Blueprint search.",
+          "visual": {
+            "src": "assets/ue5/current/editor-panels-closeup.webp",
+            "caption": "Use an input action for dash rather than a raw key event.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Add the dash event to the Character graph",
+          "where": "Character Blueprint → Event Graph",
+          "do": "Add the IA_Dash Started event.",
+          "why": "Dash begins from a clean one-shot event when the player presses the key.",
+          "see": "The dash event node appears in the graph.",
+          "check": "It has a Started execution pin ready for logic.",
+          "visual": {
+            "src": "assets/ue5/current/events-execution-real.webp",
+            "caption": "The dash starts from an input event in the Character graph.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Get the forward direction and launch the Character",
+          "where": "From the Character → Get Actor Forward Vector and Launch Character",
+          "do": "Multiply the forward vector by a dash strength and feed it into Launch Character.",
+          "why": "Launching the character forward gives a fast readable prototype dash.",
+          "see": "The node chain points from input event to Launch Character.",
+          "check": "Pressing the dash key pushes the character forward quickly.",
+          "visual": {
+            "src": "assets/diagrams/gold/framework-example.svg",
+            "caption": "Some gameplay mechanics are just clear transforms or movement impulses.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Prevent endless repeated dashes if needed",
+          "where": "Branch or cooldown variable in the graph",
+          "do": "Add a simple cooldown Boolean or delay if you do not want instant repeated spamming.",
+          "why": "Most real dashes need some control so they feel deliberate.",
+          "see": "Repeated key presses are limited in the way you designed.",
+          "check": "You can explain what currently stops or allows repeated dashing.",
+          "visual": {
+            "src": "assets/ue5/current/branch-node-real.webp",
+            "caption": "A Branch can guard whether the dash is currently allowed.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Test direction, distance and feel",
+          "where": "Play mode",
+          "do": "Try dashing while standing still and while moving, then tune the dash strength.",
+          "why": "The dash only matters if it feels readable and useful in play.",
+          "see": "The dash distance is consistent and clearly forward.",
+          "check": "You know which value changes the dash distance.",
+          "visual": {
+            "src": "assets/ue5/current/editor-main-window.webp",
+            "caption": "Play-testing is where you tune the dash feel.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
+        }
       ],
       "mistakes": [
         "Using world X direction instead of the character/camera direction you intended.",
@@ -303,7 +482,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "⇢",
       "featured": false,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "crouch",
@@ -319,36 +499,76 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "actors-components",
       "steps": [
-        [
-          "Enable crouching",
-          "Select Character Movement and enable Can Crouch in Nav Movement / Movement Capabilities.",
-          "The Character Movement component already knows how to resize movement collision for crouch.",
-          "Can Crouch is enabled."
-        ],
-        [
-          "Create IA_Crouch",
-          "Map a Digital Input Action to C or Ctrl.",
-          "Keeps controls separate from gameplay logic.",
-          "The action fires while playing."
-        ],
-        [
-          "Crouch on Started",
-          "Call Crouch from IA_Crouch Started.",
-          "This asks the Character to enter its supported crouched state.",
-          "The capsule/character moves into crouched state."
-        ],
-        [
-          "UnCrouch on Completed",
-          "Call UnCrouch from IA_Crouch Completed.",
-          "Releasing the input returns the Character to normal if there is space.",
-          "The character stands again when released."
-        ],
-        [
-          "Tune height/speed",
-          "Adjust Crouched Half Height and Max Walk Speed Crouched on Character Movement.",
-          "Tuning the built-in values is safer than rebuilding collision.",
-          "Crouch has a visibly different height and speed."
-        ]
+        {
+          "title": "Enable crouching",
+          "where": "Character Blueprint → Components → Character Movement → Details → Nav Movement / Movement Capabilities",
+          "do": "Select Character Movement and enable Can Crouch in Nav Movement / Movement Capabilities.",
+          "why": "The Character Movement component already knows how to resize movement collision for crouch.",
+          "see": "Can Crouch is enabled.",
+          "check": "Before moving on, prove this step: Can Crouch is enabled.",
+          "troubleshoot": [
+            "If Crouch does nothing, confirm Can Crouch is enabled on Character Movement."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Create IA_Crouch",
+          "where": "Content Drawer → Input folder → create/open IA_Crouch and the active Input Mapping Context",
+          "do": "Map a Digital Input Action to C or Ctrl.",
+          "why": "Keeps controls separate from gameplay logic.",
+          "see": "The action fires while playing.",
+          "check": "Before moving on, prove this step: The action fires while playing.",
+          "troubleshoot": [
+            "If the action never fires, confirm IA_Crouch is in the Mapping Context actually added to the player."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Crouch on Started",
+          "where": "Character Blueprint → Event Graph → right-click → search IA_Crouch",
+          "do": "Call Crouch from IA_Crouch Started.",
+          "why": "This asks the Character to enter its supported crouched state.",
+          "see": "The capsule/character moves into crouched state.",
+          "check": "Before moving on, prove this step: The capsule/character moves into crouched state.",
+          "troubleshoot": [
+            "If it crouches repeatedly, use Started rather than Triggered for the one-time call."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/events-process.svg",
+            "caption": "The crouch input event is an execution entry point.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "UnCrouch on Completed",
+          "where": "IA_Crouch event → Completed output",
+          "do": "Call UnCrouch from IA_Crouch Completed.",
+          "why": "Releasing the input returns the Character to normal if there is space.",
+          "see": "The character stands again when released.",
+          "check": "Before moving on, prove this step: The character stands again when released.",
+          "troubleshoot": [
+            "If the character stays crouched, ensure Completed/Canceled reaches UnCrouch."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/events-process.svg",
+            "caption": "Release/Completed provides the matching exit from crouch.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Tune height/speed",
+          "where": "Character Movement component → Details → search Crouched Half Height and Max Walk Speed Crouched",
+          "do": "Adjust Crouched Half Height and Max Walk Speed Crouched on Character Movement.",
+          "why": "Tuning the built-in values is safer than rebuilding collision.",
+          "see": "Crouch has a visibly different height and speed.",
+          "check": "Before moving on, prove this step: Crouch has a visibly different height and speed.",
+          "troubleshoot": [
+            "If the camera clips, check crouched capsule height and camera setup together."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Scaling the Character mesh and leaving collision unchanged.",
@@ -366,7 +586,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "⌄",
       "featured": false,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "line-trace-interact",
@@ -383,42 +604,76 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "traces",
       "steps": [
-        [
-          "Choose a trace range",
-          "Create an InteractionRange Float, for example 350.",
-          "A named range makes the mechanic easy to tune and explain.",
-          "Changing the variable changes interaction distance."
-        ],
-        [
-          "Build Trace Start",
-          "Get the player camera World Location.",
-          "First-person/third-person interaction usually feels best when targeting follows the view.",
-          "Trace Start follows the camera."
-        ],
-        [
-          "Build Trace End",
-          "Get Camera Forward Vector × InteractionRange, then add it to Camera Location.",
-          "End = Start + Direction × Distance. This is the reusable trace formula.",
-          "The End vector sits in front of the camera."
-        ],
-        [
-          "Run Line Trace By Channel",
-          "Use Visibility initially and enable Draw Debug Type: For Duration while testing.",
-          "Debug lines make invisible targeting visible while you build.",
-          "A coloured line appears from camera to target."
-        ],
-        [
-          "Read the hit",
-          "Break Hit Result and use Hit Actor. Print its Display Name for now.",
-          "Before calling interaction logic, prove that you are detecting the correct object.",
-          "Looking at different Actors prints the expected names."
-        ],
-        [
-          "Replace Print with interaction",
-          "Once reliable, call a Blueprint Interface such as BPI_Interact on Hit Actor.",
-          "Interfaces let many different object classes respond without a chain of casts.",
-          "Doors, buttons and pickups can all respond to the same Interact message."
-        ]
+        {
+          "title": "Choose the trace origin",
+          "where": "Player camera or Character blueprint",
+          "do": "Use the camera or a point near it as the start of the interaction trace.",
+          "why": "Interaction should usually happen where the player is looking.",
+          "see": "You can identify the component that supplies the trace start.",
+          "check": "The chosen start makes sense for a first-person or third-person interaction system.",
+          "visual": {
+            "src": "assets/diagrams/trace.svg",
+            "caption": "Interaction traces usually start from the player camera.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Create the line trace",
+          "where": "Character Blueprint → Event Graph → Line Trace by Channel",
+          "do": "Build a trace from the camera forward a short distance such as 300–500 units.",
+          "why": "This asks the world “what is directly in front of the player?”",
+          "see": "The trace node is wired with Start and End values.",
+          "check": "The Blueprint compiles successfully.",
+          "visual": {
+            "src": "assets/diagrams/gold/traces-process.svg",
+            "caption": "Build a start and end point for the interaction trace.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Enable debug drawing",
+          "where": "Line Trace node → Draw Debug Type",
+          "do": "Set Draw Debug Type to For Duration while learning.",
+          "why": "The debug line helps you see whether the trace reaches the object you expected.",
+          "see": "A visible line appears when you test the interaction.",
+          "check": "The debug line points where the camera aims.",
+          "visual": {
+            "src": "assets/diagrams/gold/traces-example.svg",
+            "caption": "Debug lines make trace direction obvious.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Use the hit result to decide if something is interactable",
+          "where": "Break Hit Result → Hit Actor",
+          "do": "Print the hit Actor name or compare it against an interactable target.",
+          "why": "The trace only detects; you still need to decide whether the hit object should respond.",
+          "see": "Looking at an object prints or identifies the object hit.",
+          "check": "Looking into empty space does not pretend to hit something.",
+          "visual": {
+            "src": "assets/diagrams/trace.svg",
+            "caption": "Break the hit result to inspect what the player is looking at.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Connect the trace to an Interact input or prompt",
+          "where": "Input Action or prompt system",
+          "do": "Use the trace result to show a prompt or trigger an action when the player presses Interact.",
+          "why": "This turns the detection pattern into a real gameplay system.",
+          "see": "The prompt or interaction only works when the player is looking at the target.",
+          "check": "The mechanic clearly stops when the target is out of range or not in view.",
+          "visual": {
+            "src": "assets/diagrams/gold/traces-process.svg",
+            "caption": "The trace result becomes the condition for your interact system.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        }
       ],
       "mistakes": [
         "Tracing from the Character feet instead of the camera.",
@@ -437,7 +692,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "⌖",
       "featured": false,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "key-pickup",
@@ -454,36 +710,76 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "collision",
       "steps": [
-        [
-          "Create BP_Key",
-          "Create an Actor Blueprint with a Static Mesh and Sphere Collision.",
-          "A reusable Actor class lets you place multiple key instances later.",
-          "The key is visible and has an overlap volume."
-        ],
-        [
-          "Make the sphere overlap Pawn",
-          "Set collision so the sphere generates overlap events with the player Pawn.",
-          "The trigger should detect the player without physically blocking them.",
-          "Walking through the sphere fires Begin Overlap."
-        ],
-        [
-          "Store possession on the player",
-          "Create HasKey Boolean on the player Character, default False.",
-          "The player owns the inventory state; the pickup merely changes it.",
-          "HasKey begins False each play session."
-        ],
-        [
-          "Set the key state",
-          "On BP_Key Begin Overlap, identify the player and set HasKey True.",
-          "The overlap is the moment the game state changes.",
-          "Watch HasKey turn True in Blueprint debugging."
-        ],
-        [
-          "Remove the pickup",
-          "Play a sound/FX if desired, then Destroy Actor on the key.",
-          "A collected pickup should no longer remain available.",
-          "The key disappears and cannot be collected twice."
-        ]
+        {
+          "title": "Create the key Actor Blueprint",
+          "where": "Learning folder → Blueprint Class → Actor",
+          "do": "Create BP_KeyPickup with a visible mesh and collision component.",
+          "why": "Pickups are usually separate Actors placed around the level.",
+          "see": "A key Blueprint exists with a mesh and collision.",
+          "check": "One instance can be placed in the level.",
+          "visual": {
+            "src": "assets/book/blueprint-editor.webp",
+            "caption": "A simple pickup combines a mesh and collision component.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Add overlap detection",
+          "where": "BP_KeyPickup → collision component → Event Graph → OnComponentBeginOverlap",
+          "do": "Use the collision overlap event to detect the player touching the pickup.",
+          "why": "Overlap is the standard way to detect a pickup collection.",
+          "see": "Running into the key triggers the overlap event.",
+          "check": "The event only fires when the player enters the collision area.",
+          "visual": {
+            "src": "assets/diagrams/gold/collision-process.svg",
+            "caption": "Overlap events are ideal for pickups.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Store the “has key” state on the player",
+          "where": "Player Character Blueprint → create Boolean variable HasKey",
+          "do": "Add a Boolean variable called HasKey to the player Character.",
+          "why": "The player needs to remember that the key has been collected.",
+          "see": "HasKey exists and defaults to false.",
+          "check": "You can Get and Set HasKey in the Character graph.",
+          "visual": {
+            "src": "assets/book/variables-panel.webp",
+            "caption": "Store collection state in a clear Boolean variable.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Set HasKey when the player overlaps",
+          "where": "BP_KeyPickup overlap logic",
+          "do": "Cast or otherwise access the player Character and set HasKey to true, then destroy or hide the key pickup.",
+          "why": "Collecting the key should change player state and remove the pickup from the world.",
+          "see": "Picking up the key removes it and the player now has the key.",
+          "check": "The key cannot be collected twice.",
+          "visual": {
+            "src": "assets/book/casting-example.webp",
+            "caption": "The pickup needs a valid reference to the player so it can update the state.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Prove the state changed",
+          "where": "Temporary Print String or related door test",
+          "do": "Print HasKey after pickup or use the variable in a locked door later.",
+          "why": "A pickup is only meaningful if the game can use the new state.",
+          "see": "The print or later test confirms HasKey is true after collection.",
+          "check": "Starting the level again resets HasKey unless you also save it.",
+          "visual": {
+            "src": "assets/ue5/current/events-execution-closeup.webp",
+            "caption": "Use a quick proof test before connecting the full door system.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
+        }
       ],
       "mistakes": [
         "Storing HasKey on the key itself, then destroying the Actor that owns the value.",
@@ -501,7 +797,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "⌑",
       "featured": false,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "locked-door",
@@ -518,42 +815,76 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "branches",
       "steps": [
-        [
-          "Build/finish your key pickup",
-          "Use the Key Pickup tutorial or create a HasKey Boolean on the player.",
-          "The door needs a clear piece of game state to test.",
-          "HasKey changes from False to True when the key is collected."
-        ],
-        [
-          "Create BP_LockedDoor",
-          "Create an Actor Blueprint with frame/door meshes and an interaction trigger or interface.",
-          "The door should own door behaviour.",
-          "You can place multiple door instances from one class."
-        ],
-        [
-          "Get the player state",
-          "When Interact is called, obtain the player Character reference and read HasKey.",
-          "The door asks the player whether the access condition is met.",
-          "You can Print String the current HasKey value."
-        ],
-        [
-          "Branch on HasKey",
-          "Feed HasKey into a Branch. True opens; False gives locked feedback.",
-          "The Branch turns a game rule into explicit True/False execution.",
-          "Without key: locked message/sound. With key: open path runs."
-        ],
-        [
-          "Open the door",
-          "For the first version, rotate the door instantly or call your Timeline Door logic.",
-          "Make the rule work first; polish motion second.",
-          "The door opens only on the True path."
-        ],
-        [
-          "Decide whether the key is consumed",
-          "If it is a one-use key, set HasKey False after opening. If it is permanent access, leave it True.",
-          "This is a design rule, not a technical accident.",
-          "Behaviour matches the rule you chose."
-        ]
+        {
+          "title": "Create or place the door Blueprint",
+          "where": "Door Blueprint with visible mesh",
+          "do": "Use a simple door Actor or create one with a mesh and collision/interaction logic.",
+          "why": "You need a door object that can check whether the player is allowed through.",
+          "see": "The door exists as its own Blueprint or placed Actor.",
+          "check": "You can identify the event that should try to open it.",
+          "visual": {
+            "src": "assets/diagrams/branch-locked-door-example.svg",
+            "caption": "A locked door is a classic Branch decision example.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Make sure the player has a HasKey variable",
+          "where": "Player Character Blueprint",
+          "do": "Create or confirm a Boolean variable HasKey on the player.",
+          "why": "The door needs a clear yes/no condition to test.",
+          "see": "HasKey is available on the player Character.",
+          "check": "The variable starts false until the key is picked up.",
+          "visual": {
+            "src": "assets/book/variables-panel.webp",
+            "caption": "The key state is best represented as a simple Boolean.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Get a reference to the player and read HasKey",
+          "where": "Door Blueprint → overlap or interact event",
+          "do": "When the player tries the door, get the player Character reference and read HasKey.",
+          "why": "The door decision depends on the player’s collected state.",
+          "see": "The graph has a path from player reference to HasKey.",
+          "check": "The variable can be printed or branched from.",
+          "visual": {
+            "src": "assets/book/casting-example.webp",
+            "caption": "The door needs a valid reference to the player state.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Branch on HasKey",
+          "where": "Door graph → Branch",
+          "do": "Use a Branch so True opens the door and False shows a locked message or sound.",
+          "why": "Locked doors are literally a yes/no decision based on one piece of game state.",
+          "see": "Trying the door produces one of two clear outcomes.",
+          "check": "The door only opens after the key has been collected.",
+          "visual": {
+            "src": "assets/ue5/current/branch-node-real.webp",
+            "caption": "True and False outcomes make the locked door logic clear.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Test both cases deliberately",
+          "where": "Play mode",
+          "do": "Try the door before collecting the key and again after collecting it.",
+          "why": "You need to prove both the locked and unlocked behaviour.",
+          "see": "The first attempt is blocked, the second opens.",
+          "check": "You can explain exactly what variable changed between the two tests.",
+          "visual": {
+            "src": "assets/diagrams/branch-locked-door-example.svg",
+            "caption": "Test the locked path and the unlocked path on purpose.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        }
       ],
       "mistakes": [
         "Putting the Branch on BeginPlay so it only checks once.",
@@ -572,7 +903,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "▥",
       "featured": true,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "pressure-plate",
@@ -589,36 +921,86 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "collision",
       "steps": [
-        [
-          "Create BP_PressurePlate",
-          "Add a visible plate mesh and Box Collision above it.",
-          "Separating visible mesh and trigger collision makes the system easy to tune.",
-          "The box covers the standing area."
-        ],
-        [
-          "Detect Begin Overlap",
-          "On Component Begin Overlap, check the overlapping Actor is the intended Pawn/object.",
-          "Filters stop random debris activating the plate unless you want that design.",
-          "Player stepping on the plate fires once."
-        ],
-        [
-          "Activate the target",
-          "Store an Instance Editable reference to a target door/light and call its Activate/Open function.",
-          "Instance references let each placed plate control a different target.",
-          "Plate A can control Door A without hard-coded Get Actor of Class."
-        ],
-        [
-          "Detect End Overlap",
-          "On End Overlap, call Deactivate/Close if the design should be hold-to-open.",
-          "Begin and End create a complete state transition.",
-          "Leaving the plate reverses the effect."
-        ],
-        [
-          "Test edge cases",
-          "Walk on/off quickly and try standing partly on the plate.",
-          "Triggers must behave reliably under awkward player movement.",
-          "No rapid flicker or stuck-open state occurs."
-        ]
+        {
+          "title": "Create BP_PressurePlate",
+          "where": "Content Drawer → Blueprint Class → Actor → BP_PressurePlate → Components",
+          "do": "Add a visible plate mesh and Box Collision above it.",
+          "why": "Separating visible mesh and trigger collision makes the system easy to tune.",
+          "see": "The box covers the standing area.",
+          "check": "Before moving on, prove this step: The box covers the standing area.",
+          "troubleshoot": [
+            "If overlap never fires, enlarge the Box Collision and confirm Generate Overlap Events."
+          ],
+          "visual": {
+            "src": "assets/book/collision-responses.webp",
+            "caption": "A pressure plate depends on a deliberately sized collision trigger.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Detect Begin Overlap",
+          "where": "BP_PressurePlate → select Box Collision → Event Graph → OnComponentBeginOverlap",
+          "do": "On Component Begin Overlap, check the overlapping Actor is the intended Pawn/object.",
+          "why": "Filters stop random debris activating the plate unless you want that design.",
+          "see": "Player stepping on the plate fires once.",
+          "check": "Before moving on, prove this step: Player stepping on the plate fires once.",
+          "troubleshoot": [
+            "Print Other Actor once to prove what is entering the plate."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/collision-process.svg",
+            "caption": "Begin Overlap detects the object entering the trigger.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Activate the target",
+          "where": "BP_PressurePlate → Variables → create target reference → Details → Instance Editable",
+          "do": "Store an Instance Editable reference to a target door/light and call its Activate/Open function.",
+          "why": "Instance references let each placed plate control a different target.",
+          "see": "Plate A can control Door A without hard-coded Get Actor of Class.",
+          "check": "Before moving on, prove this step: Plate A can control Door A without hard-coded Get Actor of Class.",
+          "troubleshoot": [
+            "If Target is None, assign the reference on the placed plate instance in Details."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/references-casting-process.svg",
+            "caption": "The plate needs a valid reference or interface target to activate.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Detect End Overlap",
+          "where": "Box Collision → Event Graph → OnComponentEndOverlap",
+          "do": "On End Overlap, call Deactivate/Close if the design should be hold-to-open.",
+          "why": "Begin and End create a complete state transition.",
+          "see": "Leaving the plate reverses the effect.",
+          "check": "Before moving on, prove this step: Leaving the plate reverses the effect.",
+          "troubleshoot": [
+            "If the target never closes, verify End Overlap is wired and the design is hold-to-open."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/collision-process.svg",
+            "caption": "End Overlap can reverse a hold-to-open plate.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Test edge cases",
+          "where": "Play mode → approach the plate from several angles",
+          "do": "Walk on/off quickly and try standing partly on the plate.",
+          "why": "Triggers must behave reliably under awkward player movement.",
+          "see": "No rapid flicker or stuck-open state occurs.",
+          "check": "Before moving on, prove this step: No rapid flicker or stuck-open state occurs.",
+          "troubleshoot": [
+            "Test with one Actor first before supporting multiple simultaneous objects."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Using Get Actor of Class when multiple doors exist.",
@@ -636,7 +1018,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "▣",
       "featured": false,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "button-lever",
@@ -652,36 +1035,81 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "interfaces-dispatchers",
       "steps": [
-        [
-          "Create BP_Button",
-          "Give it a mesh and implement your BPI_Interact interface.",
-          "The button becomes compatible with the same interaction system as doors/pickups.",
-          "Calling Interact on the button reaches its interface event."
-        ],
-        [
-          "Create OnActivated",
-          "Add a Custom Event or function named ActivateTarget.",
-          "Naming the responsibility makes the graph easier to read.",
-          "You can call ActivateTarget from the interaction event."
-        ],
-        [
-          "Add Target Actor",
-          "Create an Actor reference variable and make it Instance Editable.",
-          "The level designer chooses what each button controls.",
-          "The variable appears in Details on placed instances."
-        ],
-        [
-          "Call the target",
-          "Use an interface such as BPI_Activatable on Target Actor rather than casting to one exact class.",
-          "The button should not care whether it controls a door, light or lift.",
-          "Different target classes respond without changing the button."
-        ],
-        [
-          "Add feedback",
-          "Change material, rotate the lever, play a sound or briefly animate it.",
-          "The player needs confirmation that the interaction happened.",
-          "The control visibly/audibly responds every activation."
-        ]
+        {
+          "title": "Create BP_Button",
+          "where": "Content Drawer → Blueprint Class → Actor → BP_Button → Class Settings → Implemented Interfaces",
+          "do": "Give it a mesh and implement your BPI_Interact interface.",
+          "why": "The button becomes compatible with the same interaction system as doors/pickups.",
+          "see": "Calling Interact on the button reaches its interface event.",
+          "check": "Before moving on, prove this step: Calling Interact on the button reaches its interface event.",
+          "troubleshoot": [
+            "If the interface event is missing, add the interface in Class Settings and Compile."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/interfaces-dispatchers-process.svg",
+            "caption": "An interaction interface lets different objects receive the same Interact message.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Create OnActivated",
+          "where": "BP_Button → Event Graph → right-click → Add Custom Event",
+          "do": "Add a Custom Event or function named ActivateTarget.",
+          "why": "Naming the responsibility makes the graph easier to read.",
+          "see": "You can call ActivateTarget from the interaction event.",
+          "check": "Before moving on, prove this step: You can call ActivateTarget from the interaction event.",
+          "troubleshoot": [
+            "Keep ActivateTarget as one clear job rather than hiding unrelated logic inside it."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Add Target Actor",
+          "where": "My Blueprint → Variables → + → Actor/Object Reference → Instance Editable",
+          "do": "Create an Actor reference variable and make it Instance Editable.",
+          "why": "The level designer chooses what each button controls.",
+          "see": "The variable appears in Details on placed instances.",
+          "check": "Before moving on, prove this step: The variable appears in Details on placed instances.",
+          "troubleshoot": [
+            "If the target field is missing on the placed Actor, Compile after enabling Instance Editable."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/references-casting-example.svg",
+            "caption": "An exposed reference lets each placed button point to its own target.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Call the target",
+          "where": "BP_Button → Event Graph → drag Target Actor into graph → interface message call",
+          "do": "Use an interface such as BPI_Activatable on Target Actor rather than casting to one exact class.",
+          "why": "The button should not care whether it controls a door, light or lift.",
+          "see": "Different target classes respond without changing the button.",
+          "check": "Before moving on, prove this step: Different target classes respond without changing the button.",
+          "troubleshoot": [
+            "If the interface call appears to do nothing, confirm the target class implements that interface."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/interfaces-dispatchers-process.svg",
+            "caption": "Use a message/interface when several target types should react cleanly.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Add feedback",
+          "where": "BP_Button → Components / Event Graph → material, transform or audio feedback",
+          "do": "Change material, rotate the lever, play a sound or briefly animate it.",
+          "why": "The player needs confirmation that the interaction happened.",
+          "see": "The control visibly/audibly responds every activation.",
+          "check": "Before moving on, prove this step: The control visibly/audibly responds every activation.",
+          "troubleshoot": [
+            "Add feedback only after activation already works."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Hard-coding one specific door inside the button Blueprint.",
@@ -699,7 +1127,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "●",
       "featured": false,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "collectable",
@@ -716,36 +1145,86 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "variables",
       "steps": [
-        [
-          "Create CollectablesFound",
-          "Add an Integer to the player or an appropriate persistent gameplay class, default 0.",
-          "An Integer models a count better than multiple Booleans.",
-          "The value starts at zero."
-        ],
-        [
-          "Create BP_Collectable",
-          "Add a mesh and overlap collision.",
-          "One reusable pickup class can create many placed instances.",
-          "Each instance overlaps the player."
-        ],
-        [
-          "Increment the count",
-          "On player overlap, Get CollectablesFound, add 1 and Set it back.",
-          "Read → modify → write is the basic variable update pattern.",
-          "Debug value becomes 1, 2, 3 as pickups are collected."
-        ],
-        [
-          "Remove the pickup",
-          "Play feedback then Destroy Actor.",
-          "Prevents counting the same pickup repeatedly.",
-          "Collected objects disappear."
-        ],
-        [
-          "Prepare for UI",
-          "Create a function/event that a HUD can use to refresh the displayed count.",
-          "Keeping game state separate from visual display makes the system easier to expand.",
-          "The HUD can read the count without owning it."
-        ]
+        {
+          "title": "Create CollectablesFound",
+          "where": "Player Character or chosen gameplay-state Blueprint → Variables",
+          "do": "Add an Integer to the player or an appropriate persistent gameplay class, default 0.",
+          "why": "An Integer models a count better than multiple Booleans.",
+          "see": "The value starts at zero.",
+          "check": "Before moving on, prove this step: The value starts at zero.",
+          "troubleshoot": [
+            "If the count resets unexpectedly, check whether its owner survives the situation you are testing."
+          ],
+          "visual": {
+            "src": "assets/book/variables-panel.webp",
+            "caption": "The collectable count is stored as a clear gameplay variable.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Create BP_Collectable",
+          "where": "Content Drawer → Blueprint Class → Actor → BP_Collectable → Components",
+          "do": "Add a mesh and overlap collision.",
+          "why": "One reusable pickup class can create many placed instances.",
+          "see": "Each instance overlaps the player.",
+          "check": "Before moving on, prove this step: Each instance overlaps the player.",
+          "troubleshoot": [
+            "If overlap does not fire, check collision size and overlap responses."
+          ],
+          "visual": {
+            "src": "assets/book/collision-responses.webp",
+            "caption": "A pickup needs a small overlap volume around its visible mesh.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Increment the count",
+          "where": "BP_Collectable → Box/Sphere Collision → OnComponentBeginOverlap",
+          "do": "On player overlap, Get CollectablesFound, add 1 and Set it back.",
+          "why": "Read → modify → write is the basic variable update pattern.",
+          "see": "Debug value becomes 1, 2, 3 as pickups are collected.",
+          "check": "Before moving on, prove this step: Debug value becomes 1, 2, 3 as pickups are collected.",
+          "troubleshoot": [
+            "Print the old and new count once if incrementing looks wrong."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/variables-process.svg",
+            "caption": "Read the count, add one, then store the new value.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Remove the pickup",
+          "where": "Same overlap event → after increment/feedback → Destroy Actor",
+          "do": "Play feedback then Destroy Actor.",
+          "why": "Prevents counting the same pickup repeatedly.",
+          "see": "Collected objects disappear.",
+          "check": "Before moving on, prove this step: Collected objects disappear.",
+          "troubleshoot": [
+            "Destroy only after feedback/state update has run."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Prepare for UI",
+          "where": "WBP_HUD or HUD update function/event",
+          "do": "Create a function/event that a HUD can use to refresh the displayed count.",
+          "why": "Keeping game state separate from visual display makes the system easier to expand.",
+          "see": "The HUD can read the count without owning it.",
+          "check": "Before moving on, prove this step: The HUD can read the count without owning it.",
+          "troubleshoot": [
+            "If HUD updates lag, call one explicit refresh when the count changes."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/ui-process.svg",
+            "caption": "The HUD should display the count rather than own it.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        }
       ],
       "mistakes": [
         "Using a Float for a whole-number count without reason.",
@@ -763,7 +1242,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "◆",
       "featured": false,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "flashlight",
@@ -779,36 +1259,76 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "actors-components",
       "steps": [
-        [
-          "Add a Spotlight",
-          "Add a Spot Light component to the Character or camera rig and position it forward.",
-          "A component is ideal for reusable functionality owned by the player.",
-          "The spotlight follows the player view."
-        ],
-        [
-          "Create IA_Flashlight",
-          "Map a Digital action to F.",
-          "Keeps input configuration separate.",
-          "F fires the flashlight action."
-        ],
-        [
-          "Create FlashlightOn",
-          "Add a Boolean matching the initial light visibility.",
-          "State makes toggle behaviour explicit.",
-          "The variable matches whether the light starts on/off."
-        ],
-        [
-          "Toggle state",
-          "On input Started, set FlashlightOn to NOT FlashlightOn.",
-          "Boolean inversion is the simplest toggle.",
-          "Each press alternates True/False."
-        ],
-        [
-          "Apply visibility",
-          "Set Visibility on the Spotlight using FlashlightOn.",
-          "The state now drives the actual component.",
-          "F consistently toggles light on/off."
-        ]
+        {
+          "title": "Add a Spotlight",
+          "where": "Player Character Blueprint → Components → Add → Spot Light",
+          "do": "Add a Spot Light component to the Character or camera rig and position it forward.",
+          "why": "A component is ideal for reusable functionality owned by the player.",
+          "see": "The spotlight follows the player view.",
+          "check": "Before moving on, prove this step: The spotlight follows the player view.",
+          "troubleshoot": [
+            "If the light is not visible, check intensity, cone angle and that it points forward."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Create IA_Flashlight",
+          "where": "Input folder → IA_Flashlight + active Input Mapping Context",
+          "do": "Map a Digital action to F.",
+          "why": "Keeps input configuration separate.",
+          "see": "F fires the flashlight action.",
+          "check": "Before moving on, prove this step: F fires the flashlight action.",
+          "troubleshoot": [
+            "If F does nothing, verify the correct Mapping Context."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Create FlashlightOn",
+          "where": "Player Character → Variables → Boolean FlashlightOn",
+          "do": "Add a Boolean matching the initial light visibility.",
+          "why": "State makes toggle behaviour explicit.",
+          "see": "The variable matches whether the light starts on/off.",
+          "check": "Before moving on, prove this step: The variable matches whether the light starts on/off.",
+          "troubleshoot": [
+            "Set the Boolean default to match the light’s starting Visible state."
+          ],
+          "visual": {
+            "src": "assets/book/variables-panel.webp",
+            "caption": "A Boolean cleanly stores whether the flashlight is on or off.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Toggle state",
+          "where": "Character Event Graph → IA_Flashlight Started",
+          "do": "On input Started, set FlashlightOn to NOT FlashlightOn.",
+          "why": "Boolean inversion is the simplest toggle.",
+          "see": "Each press alternates True/False.",
+          "check": "Before moving on, prove this step: Each press alternates True/False.",
+          "troubleshoot": [
+            "Use NOT Boolean so one press flips the state exactly once."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/events-process.svg",
+            "caption": "The input event toggles the flashlight state.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Apply visibility",
+          "where": "Character Event Graph → Spot Light reference → Set Visibility",
+          "do": "Set Visibility on the Spotlight using FlashlightOn.",
+          "why": "The state now drives the actual component.",
+          "see": "F consistently toggles light on/off.",
+          "check": "Before moving on, prove this step: F consistently toggles light on/off.",
+          "troubleshoot": [
+            "If Boolean changes but light does not, make sure Set Visibility targets the Spot Light component."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Toggling the mesh instead of the light component.",
@@ -826,7 +1346,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "◐",
       "featured": false,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "line-trace-gun",
@@ -844,48 +1365,76 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "traces",
       "steps": [
-        [
-          "Create IA_Fire",
-          "Create a Digital Input Action and map left mouse / gamepad trigger.",
-          "The fire action stays independent of the physical control.",
-          "Fire event appears in the player/weapon Blueprint."
-        ],
-        [
-          "Set weapon range",
-          "Create WeaponRange Float, e.g. 10000.",
-          "A named range gives you a designer-friendly tuning value.",
-          "Changing it changes trace length."
-        ],
-        [
-          "Calculate Start and End",
-          "Start = Camera World Location. End = Start + Camera Forward Vector × WeaponRange.",
-          "This is the standard hitscan trace formula.",
-          "Draw Debug shows a line exactly through the crosshair direction."
-        ],
-        [
-          "Trace by channel",
-          "Run Line Trace By Channel on Visibility or a dedicated Weapon channel. Ignore Self.",
-          "Ignoring the shooter prevents an immediate self-hit.",
-          "The trace hits world geometry/targets in front of the player."
-        ],
-        [
-          "Break Hit Result",
-          "Use Blocking Hit / Hit Actor / Impact Point.",
-          "The Hit Result is a packet of useful information about what and where you hit.",
-          "Print Hit Actor name and verify it matches the target."
-        ],
-        [
-          "Apply damage",
-          "If there is a valid hit Actor, call Apply Damage with a Damage variable.",
-          "Generic damage lets targets decide how they respond in Event AnyDamage.",
-          "A damageable target receives the expected amount."
-        ],
-        [
-          "Add impact feedback",
-          "Spawn a Niagara effect or decal at Impact Point and optionally play a sound.",
-          "Hitscan weapons feel broken without confirmation.",
-          "Every valid hit produces visible/audio feedback."
-        ]
+        {
+          "title": "Choose the trace start and range",
+          "where": "Player Character or weapon Blueprint",
+          "do": "Use the camera or muzzle as the Start and extend the End forward by a sensible shooting distance.",
+          "why": "Hitscan guns use traces instead of spawned projectiles.",
+          "see": "You know where the shot begins and how far it should travel.",
+          "check": "The graph has clear Start and End values.",
+          "visual": {
+            "src": "assets/diagrams/gold/traces-example.svg",
+            "caption": "A line trace gun is just a trace used as a shot.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Build the trace on fire input",
+          "where": "Fire input event → Line Trace by Channel",
+          "do": "Run a Line Trace by Channel when the fire input is pressed.",
+          "why": "Each trigger pull asks whether the shot hit something.",
+          "see": "The trace fires only when the input is pressed.",
+          "check": "The Blueprint compiles without disconnected pins.",
+          "visual": {
+            "src": "assets/diagrams/gold/traces-process.svg",
+            "caption": "The fire event starts the trace.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Draw debug and inspect the hit",
+          "where": "Trace node and Break Hit Result",
+          "do": "Turn on debug drawing and inspect the Hit Actor or Impact Point.",
+          "why": "This proves where the shot went and what it struck.",
+          "see": "A debug line appears and the hit data can be printed.",
+          "check": "A wall or enemy in front of the player can be identified.",
+          "visual": {
+            "src": "assets/diagrams/trace.svg",
+            "caption": "Break the hit result to learn what the shot touched.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Apply a response to the hit actor",
+          "where": "Hit Actor branch or interface/cast",
+          "do": "If the trace hits an enemy or damageable actor, call the response such as Apply Damage or reduce health.",
+          "why": "The gun mechanic is complete only when the hit changes the game state.",
+          "see": "Hitting a valid target causes a visible reaction.",
+          "check": "Shooting empty space does not cause damage logic.",
+          "visual": {
+            "src": "assets/diagrams/gold/traces-process.svg",
+            "caption": "Successful hit logic should run only on a valid target.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Add immediate feedback",
+          "where": "Same fire event",
+          "do": "Add a sound, impact effect or print message so the shot feels responsive while prototyping.",
+          "why": "Feedback helps you tell whether the input, trace and hit logic all worked.",
+          "see": "Firing produces an obvious response even before final polish.",
+          "check": "You can tell the difference between a hit and a miss.",
+          "visual": {
+            "src": "assets/ue5/current/events-execution-closeup.webp",
+            "caption": "Short feedback loops make shooting systems easier to debug.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
+        }
       ],
       "mistakes": [
         "End vector uses only Forward Vector, so the trace is just one unit long.",
@@ -906,7 +1455,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "⌁",
       "featured": true,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "projectile-gun",
@@ -923,36 +1473,81 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "blueprint-classes",
       "steps": [
-        [
-          "Create BP_Projectile",
-          "Create an Actor with Sphere Collision, visible mesh and Projectile Movement component.",
-          "The projectile is a reusable class with its own movement responsibility.",
-          "Placed temporarily in a test map, it moves when launched."
-        ],
-        [
-          "Configure movement",
-          "Set Initial Speed and Max Speed; enable Rotation Follows Velocity if appropriate.",
-          "Projectile Movement handles robust movement without manual Tick translation.",
-          "Projectile travels at the intended speed."
-        ],
-        [
-          "Create a muzzle transform",
-          "Add a Scene Component or socket where shots originate.",
-          "A named muzzle point is easier to adjust than hard-coded coordinates.",
-          "The component sits just ahead of the weapon."
-        ],
-        [
-          "Spawn on Fire",
-          "From Fire input, Spawn Actor From Class using BP_Projectile and the muzzle world transform.",
-          "Spawning creates the projectile only when needed.",
-          "Each shot creates one projectile at the muzzle."
-        ],
-        [
-          "Handle collision",
-          "On projectile hit/overlap, apply damage to Other Actor then destroy the projectile.",
-          "The projectile owns what happens when it reaches something.",
-          "Target takes damage and projectile does not pass through forever."
-        ]
+        {
+          "title": "Create BP_Projectile",
+          "where": "Content Drawer → Blueprint Class → Actor → BP_Projectile → Components",
+          "do": "Create an Actor with Sphere Collision, visible mesh and Projectile Movement component.",
+          "why": "The projectile is a reusable class with its own movement responsibility.",
+          "see": "Placed temporarily in a test map, it moves when launched.",
+          "check": "Before moving on, prove this step: Placed temporarily in a test map, it moves when launched.",
+          "troubleshoot": [
+            "If the projectile falls or behaves oddly, inspect Projectile Movement gravity and speeds."
+          ],
+          "visual": {
+            "src": "assets/book/collision-responses.webp",
+            "caption": "The projectile combines collision with a visible body.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Configure movement",
+          "where": "BP_Projectile → Projectile Movement component → Details",
+          "do": "Set Initial Speed and Max Speed; enable Rotation Follows Velocity if appropriate.",
+          "why": "Projectile Movement handles robust movement without manual Tick translation.",
+          "see": "Projectile travels at the intended speed.",
+          "check": "Before moving on, prove this step: Projectile travels at the intended speed.",
+          "troubleshoot": [
+            "Initial Speed and Max Speed should be intentional and positive."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Create a muzzle transform",
+          "where": "Weapon/Character Blueprint → Components → Add Scene Component or use a skeletal-mesh socket",
+          "do": "Add a Scene Component or socket where shots originate.",
+          "why": "A named muzzle point is easier to adjust than hard-coded coordinates.",
+          "see": "The component sits just ahead of the weapon.",
+          "check": "Before moving on, prove this step: The component sits just ahead of the weapon.",
+          "troubleshoot": [
+            "If shots spawn inside the player, move the muzzle forward."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Spawn on Fire",
+          "where": "Fire Input Action event → Spawn Actor From Class",
+          "do": "From Fire input, Spawn Actor From Class using BP_Projectile and the muzzle world transform.",
+          "why": "Spawning creates the projectile only when needed.",
+          "see": "Each shot creates one projectile at the muzzle.",
+          "check": "Before moving on, prove this step: Each shot creates one projectile at the muzzle.",
+          "troubleshoot": [
+            "If nothing spawns, print the Fire event and check the class/transform pins."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/events-process.svg",
+            "caption": "The fire event spawns a new projectile Actor.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Handle collision",
+          "where": "BP_Projectile → collision component → OnComponentHit / BeginOverlap",
+          "do": "On projectile hit/overlap, apply damage to Other Actor then destroy the projectile.",
+          "why": "The projectile owns what happens when it reaches something.",
+          "see": "Target takes damage and projectile does not pass through forever.",
+          "check": "Before moving on, prove this step: Target takes damage and projectile does not pass through forever.",
+          "troubleshoot": [
+            "If collision never fires, check collision presets on both projectile and target."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/collision-process.svg",
+            "caption": "Projectile collision is the point where hit logic begins.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        }
       ],
       "mistakes": [
         "Spawning inside the shooter collision.",
@@ -970,7 +1565,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "●",
       "featured": false,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "player-health",
@@ -987,36 +1583,76 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "variables",
       "steps": [
-        [
-          "Create MaxHealth and Health",
-          "Add Float variables; set MaxHealth 100 and Health 100.",
-          "Separating maximum and current health supports UI and upgrades later.",
-          "Both values start at 100."
-        ],
-        [
-          "Listen for AnyDamage",
-          "Add Event AnyDamage in the player Character.",
-          "Unreal damage events give many hazards/weapons one common route into health.",
-          "Apply Damage from another Actor fires this event."
-        ],
-        [
-          "Subtract damage",
-          "Set Health = Clamp(Health - Damage, 0, MaxHealth).",
-          "Clamping prevents negative health or accidental overheal.",
-          "Health decreases but never below 0."
-        ],
-        [
-          "Check for death",
-          "Branch on Health <= 0. True calls a Die custom event/function.",
-          "Death is a game rule derived from state.",
-          "Damage that reaches zero executes Die exactly as intended."
-        ],
-        [
-          "Add debug/UI hook",
-          "Print Health while testing, then call an Update HUD event or dispatcher.",
-          "Prove the model first; make it pretty second.",
-          "Health changes are visible during play."
-        ]
+        {
+          "title": "Create a Health variable on the player",
+          "where": "Player Character Blueprint → Variables",
+          "do": "Create a Float or Integer variable called Health, defaulting to a value such as 100.",
+          "why": "The player needs stored state before anything can damage them.",
+          "see": "Health exists on the Character.",
+          "check": "The variable is visible in My Blueprint.",
+          "visual": {
+            "src": "assets/book/variables-panel.webp",
+            "caption": "Health is simple state stored on the Character.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Make a damage event entry point",
+          "where": "Character graph or Any Damage event",
+          "do": "Use Event AnyDamage or a custom event that reduces Health.",
+          "why": "You need one clear place where incoming damage is handled.",
+          "see": "The graph contains a damage-handling event path.",
+          "check": "The event can access the current Health value.",
+          "visual": {
+            "src": "assets/diagrams/gold/events-process.svg",
+            "caption": "Damage handling begins from a clear event entry point.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Subtract damage from Health",
+          "where": "Damage event path → Set Health",
+          "do": "Reduce Health by the incoming damage amount and store the new value.",
+          "why": "This is the core logic of taking damage.",
+          "see": "Health becomes lower after the damage event runs.",
+          "check": "Printing Health shows the new reduced value.",
+          "visual": {
+            "src": "assets/diagrams/gold/variables-process.svg",
+            "caption": "Read the old value, calculate the new one, then store it.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Clamp or branch for zero health",
+          "where": "After setting Health",
+          "do": "Use a Branch or Clamp so the player can detect when Health reaches zero or below.",
+          "why": "A health system needs a clear death threshold.",
+          "see": "At zero health the graph switches to death or respawn logic.",
+          "check": "Health does not keep falling indefinitely if you do not want it to.",
+          "visual": {
+            "src": "assets/ue5/current/branch-node-real.webp",
+            "caption": "Branch on the new health value to decide whether the player is dead.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Test the full damage loop",
+          "where": "Play mode or temporary key test",
+          "do": "Trigger damage several times and watch the health value or UI.",
+          "why": "A health system must be tested across multiple hits, not just one.",
+          "see": "Health drops predictably and zero health triggers the next state.",
+          "check": "You can name exactly where to change the starting health or damage amount.",
+          "visual": {
+            "src": "assets/ue5/current/editor-main-window.webp",
+            "caption": "Test repeated damage so you can trust the system.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
+        }
       ],
       "mistakes": [
         "Subtracting from MaxHealth instead of Health.",
@@ -1035,7 +1671,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "♥",
       "featured": false,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "enemy-health",
@@ -1051,30 +1688,69 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "events",
       "steps": [
-        [
-          "Add Health variables",
-          "Create MaxHealth/Health on the enemy Blueprint.",
-          "Each enemy instance owns its own current combat state.",
-          "Two placed enemies can have independent Health."
-        ],
-        [
-          "Use Event AnyDamage",
-          "Subtract incoming Damage from Health.",
-          "Generic damage means the enemy works with line trace, projectile or hazards.",
-          "Both weapon types can damage the same enemy."
-        ],
-        [
-          "Check zero",
-          "Branch on Health <= 0 and call Die.",
-          "Keeps damage and death responsibilities readable.",
-          "Enemy does not die before its health is exhausted."
-        ],
-        [
-          "Build Die",
-          "Disable collision/AI, play animation/FX if available, then Destroy Actor after a short delay.",
-          "A single named death routine prevents duplicate death logic.",
-          "Enemy cannot continue attacking after death."
-        ]
+        {
+          "title": "Add Health variables",
+          "where": "Enemy Blueprint → Variables",
+          "do": "Create MaxHealth/Health on the enemy Blueprint.",
+          "why": "Each enemy instance owns its own current combat state.",
+          "see": "Two placed enemies can have independent Health.",
+          "check": "Before moving on, prove this step: Two placed enemies can have independent Health.",
+          "troubleshoot": [
+            "Make MaxHealth and starting Health consistent."
+          ],
+          "visual": {
+            "src": "assets/book/variables-panel.webp",
+            "caption": "Health and MaxHealth are explicit enemy state.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Use Event AnyDamage",
+          "where": "Enemy Blueprint → Event Graph → Event AnyDamage",
+          "do": "Subtract incoming Damage from Health.",
+          "why": "Generic damage means the enemy works with line trace, projectile or hazards.",
+          "see": "Both weapon types can damage the same enemy.",
+          "check": "Before moving on, prove this step: Both weapon types can damage the same enemy.",
+          "troubleshoot": [
+            "Print incoming Damage once if the value never changes."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/variables-process.svg",
+            "caption": "Damage subtracts from the stored health value.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Check zero",
+          "where": "After Health update → comparison Health <= 0 → Branch",
+          "do": "Branch on Health <= 0 and call Die.",
+          "why": "Keeps damage and death responsibilities readable.",
+          "see": "Enemy does not die before its health is exhausted.",
+          "check": "Before moving on, prove this step: Enemy does not die before its health is exhausted.",
+          "troubleshoot": [
+            "Test Health just above and below zero to prove the Branch."
+          ],
+          "visual": {
+            "src": "assets/ue5/current/branch-node-real.webp",
+            "caption": "Branch when the updated health reaches zero.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Build Die",
+          "where": "Enemy Blueprint → custom event/function Die",
+          "do": "Disable collision/AI, play animation/FX if available, then Destroy Actor after a short delay.",
+          "why": "A single named death routine prevents duplicate death logic.",
+          "see": "Enemy cannot continue attacking after death.",
+          "check": "Before moving on, prove this step: Enemy cannot continue attacking after death.",
+          "troubleshoot": [
+            "Do not Destroy immediately if you need time for a death animation or FX."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Destroying immediately before feedback can play.",
@@ -1092,7 +1768,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "☠",
       "featured": false,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "health-pickup",
@@ -1109,30 +1786,69 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "collision",
       "steps": [
-        [
-          "Create BP_HealthPickup",
-          "Add mesh + overlap collision and a HealAmount Float.",
-          "A configurable pickup class can support small and large health items.",
-          "HealAmount appears in Defaults."
-        ],
-        [
-          "Detect player overlap",
-          "Use Begin Overlap and confirm Other Actor is your player.",
-          "Only valid collectors should receive the effect.",
-          "Walking into the pickup detects the player."
-        ],
-        [
-          "Calculate new Health",
-          "NewHealth = Clamp(Health + HealAmount, 0, MaxHealth).",
-          "Clamping enforces the maximum health rule.",
-          "95 Health + 25 becomes 100, not 120."
-        ],
-        [
-          "Set and feedback",
-          "Set Health, play sound/FX, then destroy the pickup.",
-          "State change and feedback happen before cleanup.",
-          "Health rises once and the pickup disappears."
-        ]
+        {
+          "title": "Create BP_HealthPickup",
+          "where": "Content Drawer → Blueprint Class → Actor → BP_HealthPickup → Components / Variables",
+          "do": "Add mesh + overlap collision and a HealAmount Float.",
+          "why": "A configurable pickup class can support small and large health items.",
+          "see": "HealAmount appears in Defaults.",
+          "check": "Before moving on, prove this step: HealAmount appears in Defaults.",
+          "troubleshoot": [
+            "If the pickup cannot be collected, check overlap collision."
+          ],
+          "visual": {
+            "src": "assets/book/collision-responses.webp",
+            "caption": "The pickup uses an overlap volume around its mesh.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Detect player overlap",
+          "where": "BP_HealthPickup → collision → OnComponentBeginOverlap",
+          "do": "Use Begin Overlap and confirm Other Actor is your player.",
+          "why": "Only valid collectors should receive the effect.",
+          "see": "Walking into the pickup detects the player.",
+          "check": "Before moving on, prove this step: Walking into the pickup detects the player.",
+          "troubleshoot": [
+            "Verify Other Actor is the player before changing Health."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/collision-process.svg",
+            "caption": "Begin Overlap detects the player collecting the pickup.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Calculate new Health",
+          "where": "Overlap path → player Health/MaxHealth values → Clamp",
+          "do": "NewHealth = Clamp(Health + HealAmount, 0, MaxHealth).",
+          "why": "Clamping enforces the maximum health rule.",
+          "see": "95 Health + 25 becomes 100, not 120.",
+          "check": "Before moving on, prove this step: 95 Health + 25 becomes 100, not 120.",
+          "troubleshoot": [
+            "Clamp prevents healing above MaxHealth."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/variables-process.svg",
+            "caption": "Clamp the new health before storing it.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Set and feedback",
+          "where": "After Clamp → Set Health → feedback → Destroy Actor",
+          "do": "Set Health, play sound/FX, then destroy the pickup.",
+          "why": "State change and feedback happen before cleanup.",
+          "see": "Health rises once and the pickup disappears.",
+          "check": "Before moving on, prove this step: Health rises once and the pickup disappears.",
+          "troubleshoot": [
+            "Update the HUD after setting Health if your UI is event-driven."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Adding HealAmount to MaxHealth by mistake.",
@@ -1150,7 +1866,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "+",
       "featured": false,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "ammo-reload",
@@ -1167,42 +1884,98 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "branches",
       "steps": [
-        [
-          "Create ammo variables",
-          "Add MagazineSize 12, AmmoInMag 12 and ReserveAmmo 48 Integers.",
-          "Separate magazine and reserve gives the reload rule something meaningful to manage.",
-          "Values show sensible starting state."
-        ],
-        [
-          "Gate firing",
-          "Before Fire logic, Branch on AmmoInMag > 0.",
-          "The weapon rule should decide whether a shot is allowed before spawning/tracing.",
-          "At zero, no shot is fired."
-        ],
-        [
-          "Spend one round",
-          "After a successful fire action, decrement AmmoInMag by 1.",
-          "Every shot must update the same source of truth.",
-          "12 shots reduce magazine to zero."
-        ],
-        [
-          "Create IA_Reload",
-          "Map R and call a Reload function.",
-          "A function keeps the arithmetic out of the input graph.",
-          "R calls Reload once."
-        ],
-        [
-          "Calculate rounds needed",
-          "Needed = MagazineSize - AmmoInMag. ToLoad = Min(Needed, ReserveAmmo).",
-          "Min handles the case where reserve has fewer rounds than the magazine needs.",
-          "Reloading with only 3 reserve rounds loads exactly 3."
-        ],
-        [
-          "Transfer ammo",
-          "AmmoInMag += ToLoad; ReserveAmmo -= ToLoad.",
-          "Ammo moves between stores rather than appearing from nowhere.",
-          "Total ammo before and after reload is unchanged."
-        ]
+        {
+          "title": "Create ammo variables",
+          "where": "Weapon/Character Blueprint → Variables",
+          "do": "Add MagazineSize 12, AmmoInMag 12 and ReserveAmmo 48 Integers.",
+          "why": "Separate magazine and reserve gives the reload rule something meaningful to manage.",
+          "see": "Values show sensible starting state.",
+          "check": "Before moving on, prove this step: Values show sensible starting state.",
+          "troubleshoot": [
+            "Use Integers and keep the starting values internally consistent."
+          ],
+          "visual": {
+            "src": "assets/book/variables-panel.webp",
+            "caption": "Magazine and reserve ammo are separate pieces of state.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Gate firing",
+          "where": "Fire event → before firing nodes → comparison AmmoInMag > 0 → Branch",
+          "do": "Before Fire logic, Branch on AmmoInMag > 0.",
+          "why": "The weapon rule should decide whether a shot is allowed before spawning/tracing.",
+          "see": "At zero, no shot is fired.",
+          "check": "Before moving on, prove this step: At zero, no shot is fired.",
+          "troubleshoot": [
+            "If empty guns still fire, the Branch is probably after the fire logic instead of before it."
+          ],
+          "visual": {
+            "src": "assets/ue5/current/branch-node-real.webp",
+            "caption": "Gate the fire path on AmmoInMag > 0.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Spend one round",
+          "where": "True fire path → Set AmmoInMag",
+          "do": "After a successful fire action, decrement AmmoInMag by 1.",
+          "why": "Every shot must update the same source of truth.",
+          "see": "12 shots reduce magazine to zero.",
+          "check": "Before moving on, prove this step: 12 shots reduce magazine to zero.",
+          "troubleshoot": [
+            "Decrement once per successful shot, not every frame."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/variables-process.svg",
+            "caption": "A successful shot decrements the stored magazine value.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Create IA_Reload",
+          "where": "Input folder → IA_Reload + Mapping Context; Character/Weapon graph → Reload function",
+          "do": "Map R and call a Reload function.",
+          "why": "A function keeps the arithmetic out of the input graph.",
+          "see": "R calls Reload once.",
+          "check": "Before moving on, prove this step: R calls Reload once.",
+          "troubleshoot": [
+            "If reload input fails, test it first with Print String."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Calculate rounds needed",
+          "where": "Reload function → arithmetic nodes",
+          "do": "Needed = MagazineSize - AmmoInMag. ToLoad = Min(Needed, ReserveAmmo).",
+          "why": "Min handles the case where reserve has fewer rounds than the magazine needs.",
+          "see": "Reloading with only 3 reserve rounds loads exactly 3.",
+          "check": "Before moving on, prove this step: Reloading with only 3 reserve rounds loads exactly 3.",
+          "troubleshoot": [
+            "Print Needed and ToLoad if transfer maths is wrong."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Transfer ammo",
+          "where": "Reload function → Set AmmoInMag and Set ReserveAmmo",
+          "do": "AmmoInMag += ToLoad; ReserveAmmo -= ToLoad.",
+          "why": "Ammo moves between stores rather than appearing from nowhere.",
+          "see": "Total ammo before and after reload is unchanged.",
+          "check": "Before moving on, prove this step: Total ammo before and after reload is unchanged.",
+          "troubleshoot": [
+            "Test empty magazine, partial magazine, empty reserve and full magazine."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/variables-process.svg",
+            "caption": "Reload transfers a calculated amount from reserve to magazine.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        }
       ],
       "mistakes": [
         "Refilling magazine without subtracting reserve.",
@@ -1220,7 +1993,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "▥",
       "featured": false,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "melee-trace",
@@ -1236,36 +2010,86 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "traces",
       "steps": [
-        [
-          "Create attack input",
-          "Map IA_Attack and call a PerformAttack event/function.",
-          "Keeps input separate from attack implementation.",
-          "Attack function fires once per press."
-        ],
-        [
-          "Choose trace points",
-          "Start near the Character/chest or weapon; End a short distance forward.",
-          "Melee needs a local reach rather than gun range.",
-          "Debug trace appears in front of the player."
-        ],
-        [
-          "Sphere Trace By Channel",
-          "Use a radius that roughly matches the weapon swing volume and Ignore Self.",
-          "A sphere is more forgiving than a razor-thin line for close combat.",
-          "Targets within the swing volume are detected."
-        ],
-        [
-          "Apply damage to hit Actor",
-          "On valid hit, Apply Damage once.",
-          "Use the same generic damage pipeline as other weapons.",
-          "Enemy health drops by melee damage."
-        ],
-        [
-          "Prevent spam/multi-hit",
-          "Use CanAttack or an animation window so one swing cannot apply damage every frame.",
-          "Attack cadence is part of the game rule.",
-          "Holding/mashing cannot create accidental dozens of hits."
-        ]
+        {
+          "title": "Create attack input",
+          "where": "Input folder → IA_Attack + Mapping Context; Character graph → PerformAttack",
+          "do": "Map IA_Attack and call a PerformAttack event/function.",
+          "why": "Keeps input separate from attack implementation.",
+          "see": "Attack function fires once per press.",
+          "check": "Before moving on, prove this step: Attack function fires once per press.",
+          "troubleshoot": [
+            "If input repeats too quickly, use Started and a CanAttack gate."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Choose trace points",
+          "where": "Character/weapon graph → choose component/world locations for Start and End",
+          "do": "Start near the Character/chest or weapon; End a short distance forward.",
+          "why": "Melee needs a local reach rather than gun range.",
+          "see": "Debug trace appears in front of the player.",
+          "check": "Before moving on, prove this step: Debug trace appears in front of the player.",
+          "troubleshoot": [
+            "Use debug drawing so you can actually see the melee volume."
+          ],
+          "visual": {
+            "src": "assets/diagrams/trace.svg",
+            "caption": "A melee trace still needs a start and end position.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Sphere Trace By Channel",
+          "where": "PerformAttack → Sphere Trace By Channel",
+          "do": "Use a radius that roughly matches the weapon swing volume and Ignore Self.",
+          "why": "A sphere is more forgiving than a razor-thin line for close combat.",
+          "see": "Targets within the swing volume are detected.",
+          "check": "Before moving on, prove this step: Targets within the swing volume are detected.",
+          "troubleshoot": [
+            "Ignore Self so the attacker does not hit its own collision."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/traces-process.svg",
+            "caption": "A trace checks a short volume in front of the attacker.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Apply damage to hit Actor",
+          "where": "Trace Return Value / Hit Actor → Apply Damage",
+          "do": "On valid hit, Apply Damage once.",
+          "why": "Use the same generic damage pipeline as other weapons.",
+          "see": "Enemy health drops by melee damage.",
+          "check": "Before moving on, prove this step: Enemy health drops by melee damage.",
+          "troubleshoot": [
+            "Apply damage once per attack window, not from a trace running every frame."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/traces-example.svg",
+            "caption": "Use only a valid hit to apply the attack response.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Prevent spam/multi-hit",
+          "where": "Character/weapon variables → CanAttack or animation notify/window",
+          "do": "Use CanAttack or an animation window so one swing cannot apply damage every frame.",
+          "why": "Attack cadence is part of the game rule.",
+          "see": "Holding/mashing cannot create accidental dozens of hits.",
+          "check": "Before moving on, prove this step: Holding/mashing cannot create accidental dozens of hits.",
+          "troubleshoot": [
+            "Reset CanAttack only when the intended cooldown/animation window ends."
+          ],
+          "visual": {
+            "src": "assets/ue5/current/branch-node-real.webp",
+            "caption": "A CanAttack condition can prevent repeated attacks.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        }
       ],
       "mistakes": [
         "Running the trace on Tick instead of during an attack window.",
@@ -1283,7 +2107,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "╱",
       "featured": false,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "lives-respawn",
@@ -1300,42 +2125,76 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "framework",
       "steps": [
-        [
-          "Choose where Lives belongs",
-          "Choose by lifetime. If death reloads/opens the level, put Lives in GameInstance so the count survives that reload. If you respawn a Pawn without reloading, a session rule object such as GameMode/PlayerController can own it. Never make the widget the owner.",
-          "Variable ownership depends on lifetime.",
-          "The chosen class survives for exactly as long as your lives rule needs."
-        ],
-        [
-          "Create Lives",
-          "Add an Integer Lives with a starting value such as 3.",
-          "Whole lives are naturally represented by an Integer.",
-          "The run begins with 3."
-        ],
-        [
-          "Call LoseLife on death",
-          "When the player dies, decrement Lives once before respawning.",
-          "Centralising this prevents multiple hazards from applying multiple life losses.",
-          "One death changes 3 → 2, not 3 → 0."
-        ],
-        [
-          "Branch on Lives > 0",
-          "If True, respawn/restart at checkpoint. If False, show Game Over.",
-          "The Branch expresses the core game rule clearly.",
-          "Last life leads to game-over path instead of respawn."
-        ],
-        [
-          "Respawn",
-          "For a restart-level prototype, reload the level while keeping Lives in GameInstance. For checkpoint respawn, move/spawn the player at RespawnTransform and reset Health without reloading the whole map.",
-          "Choose the level of persistence your game needs.",
-          "Player returns in a playable state."
-        ],
-        [
-          "Update the HUD",
-          "Tell UI to refresh the displayed lives.",
-          "Visual display should reflect the rule state, not own it.",
-          "HUD value matches the actual Lives variable."
-        ]
+        {
+          "title": "Create Lives and RespawnPoint variables",
+          "where": "Player Character or GameMode variables",
+          "do": "Add an Integer Lives variable and decide how you will store the respawn location.",
+          "why": "Respawning needs both remaining lives and a place to return to.",
+          "see": "Lives exists and has a sensible starting value.",
+          "check": "You can identify where the respawn point comes from.",
+          "visual": {
+            "src": "assets/book/variables-panel.webp",
+            "caption": "Lives and respawn data are deliberate pieces of game state.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Detect player death or failure",
+          "where": "Damage/death event or hazard overlap",
+          "do": "Choose the event that counts as “the player died”.",
+          "why": "Lives should only change in response to a clear failure event.",
+          "see": "One event path handles death/failure.",
+          "check": "You can trigger it on purpose while testing.",
+          "visual": {
+            "src": "assets/diagrams/gold/events-process.svg",
+            "caption": "Respawn systems start from a clearly defined failure event.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Reduce Lives by one",
+          "where": "Death event path → Set Lives",
+          "do": "When the player dies, subtract 1 from Lives.",
+          "why": "Lives are a count of remaining chances.",
+          "see": "The Lives value visibly decreases after death.",
+          "check": "Two deaths reduce 3 lives to 1 in the expected way.",
+          "visual": {
+            "src": "assets/diagrams/gold/variables-process.svg",
+            "caption": "Update the stored lives value when the player fails.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Branch on whether lives remain",
+          "where": "After updating Lives → Branch",
+          "do": "If Lives > 0, respawn the player; otherwise trigger game over or a lose state.",
+          "why": "The respawn system has two possible outcomes: continue or finish.",
+          "see": "One path respawns, the other ends the run.",
+          "check": "You have tested at least one respawn and the final game-over case.",
+          "visual": {
+            "src": "assets/ue5/current/branch-node-real.webp",
+            "caption": "Lives remaining is the question that decides what happens next.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Move the player back to the respawn location",
+          "where": "Respawn branch",
+          "do": "Set the player location to the respawn point, or destroy and re-create them there depending on your setup.",
+          "why": "Respawn means restoring the player to a safe starting point.",
+          "see": "The player reappears at the chosen location.",
+          "check": "The player no longer respawns exactly where they died unless that is intended.",
+          "visual": {
+            "src": "assets/ue5/current/editor-main-window.webp",
+            "caption": "A good respawn returns the player to a safe known position.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
+        }
       ],
       "mistakes": [
         "Subtracting a life in both the hazard and the death function.",
@@ -1353,7 +2212,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "♥",
       "featured": true,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "checkpoint",
@@ -1370,36 +2230,76 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "framework",
       "steps": [
-        [
-          "Create RespawnTransform",
-          "Store a Transform in an appropriate rule/state class or on the player if respawning the same instance.",
-          "A Transform carries location, rotation and scale in one value.",
-          "A default starting respawn transform is valid."
-        ],
-        [
-          "Create BP_Checkpoint",
-          "Use a mesh/marker plus overlap collision.",
-          "Placed checkpoints are reusable level objects.",
-          "Player overlap fires."
-        ],
-        [
-          "Store checkpoint transform",
-          "On valid overlap, save a dedicated RespawnPoint Scene Component world transform or the checkpoint Actor transform.",
-          "A separate point lets art and spawn location differ.",
-          "Stored transform changes when a new checkpoint is reached."
-        ],
-        [
-          "Give activation feedback",
-          "Change light/material and play a sound.",
-          "Players need to know the game saved a new respawn point.",
-          "Checkpoint visibly becomes active."
-        ],
-        [
-          "Use it on death",
-          "When respawning, set/spawn the player at RespawnTransform and restore Health.",
-          "The death system reads the latest checkpoint state.",
-          "Death returns you to the most recent checkpoint."
-        ]
+        {
+          "title": "Create a checkpoint Actor",
+          "where": "Blueprint Class → Actor",
+          "do": "Create BP_Checkpoint with a visible marker and collision component.",
+          "why": "Checkpoint areas are usually separate reusable world Actors.",
+          "see": "The checkpoint can be placed in the level.",
+          "check": "The collision area is easy to see and adjust.",
+          "visual": {
+            "src": "assets/book/blueprint-editor.webp",
+            "caption": "Checkpoints are usually simple actors with a mesh and collision.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Detect overlap with the player",
+          "where": "Checkpoint collision → OnComponentBeginOverlap",
+          "do": "Use the overlap event to detect when the player reaches the checkpoint.",
+          "why": "Reaching the checkpoint should happen through a clear physical trigger.",
+          "see": "Entering the area fires the overlap event.",
+          "check": "Only the player should count as activating it.",
+          "visual": {
+            "src": "assets/diagrams/gold/collision-process.svg",
+            "caption": "Overlap is a natural way to activate a checkpoint.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Store the checkpoint location or identifier",
+          "where": "Player, GameMode or SaveGame-related variable",
+          "do": "Save the checkpoint location or a checkpoint name to the player or another appropriate owner.",
+          "why": "Respawn logic needs to know the latest safe return point.",
+          "see": "The latest checkpoint value updates when a new checkpoint is reached.",
+          "check": "Reaching a second checkpoint overwrites the first.",
+          "visual": {
+            "src": "assets/diagrams/gold/savegame-example.svg",
+            "caption": "Checkpoint systems store the latest valid respawn data.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Give the player feedback",
+          "where": "Same overlap event",
+          "do": "Show a message, sound or visual change so the player knows the checkpoint activated.",
+          "why": "Invisible checkpoint changes can feel unreliable.",
+          "see": "Activating the checkpoint produces clear feedback.",
+          "check": "The player can tell when a checkpoint became active.",
+          "visual": {
+            "src": "assets/ue5/current/events-execution-closeup.webp",
+            "caption": "Feedback helps confirm state changes immediately.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Test it through death and respawn",
+          "where": "Play mode",
+          "do": "Reach the checkpoint, then trigger death and make sure the respawn uses the new checkpoint.",
+          "why": "A checkpoint only matters if the respawn system actually uses it.",
+          "see": "The player returns to the latest checkpoint after death.",
+          "check": "You have proven the system works end-to-end.",
+          "visual": {
+            "src": "assets/ue5/current/editor-main-window.webp",
+            "caption": "Always test the checkpoint together with the respawn system.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
+        }
       ],
       "mistakes": [
         "Using the checkpoint mesh pivot as spawn point when it places the player inside geometry.",
@@ -1417,7 +2317,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "⚑",
       "featured": false,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "score-system",
@@ -1433,30 +2334,69 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "functions",
       "steps": [
-        [
-          "Choose score owner",
-          "Put Score in GameState/GameMode for a level/session rule or another suitable persistent class.",
-          "The score should outlive pickups/enemies that award it.",
-          "Destroying an enemy does not destroy the Score variable."
-        ],
-        [
-          "Create AddScore function",
-          "Input Points (Integer), then Score = Score + Points.",
-          "One function gives every scoring event the same route.",
-          "Calling AddScore(100) increases score by exactly 100."
-        ],
-        [
-          "Award points",
-          "On enemy death, collectable pickup or objective completion, call AddScore.",
-          "Scoring is triggered by meaningful game events.",
-          "Different events can award different values."
-        ],
-        [
-          "Refresh UI",
-          "Notify the HUD or let it read Score when needed.",
-          "The UI displays state but does not become the authoritative score owner.",
-          "Displayed score matches game state."
-        ]
+        {
+          "title": "Choose score owner",
+          "where": "Choose GameMode/GameState/other session-state Blueprint → Variables",
+          "do": "Put Score in GameState/GameMode for a level/session rule or another suitable persistent class.",
+          "why": "The score should outlive pickups/enemies that award it.",
+          "see": "Destroying an enemy does not destroy the Score variable.",
+          "check": "Before moving on, prove this step: Destroying an enemy does not destroy the Score variable.",
+          "troubleshoot": [
+            "Choose the score owner before wiring pickups/enemies to it."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/framework-process.svg",
+            "caption": "Choose an owner whose responsibility matches the score lifetime.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Create AddScore function",
+          "where": "Chosen score owner → Functions → + Function AddScore",
+          "do": "Input Points (Integer), then Score = Score + Points.",
+          "why": "One function gives every scoring event the same route.",
+          "see": "Calling AddScore(100) increases score by exactly 100.",
+          "check": "Before moving on, prove this step: Calling AddScore(100) increases score by exactly 100.",
+          "troubleshoot": [
+            "Make AddScore the one route for score changes so bugs have one place to inspect."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/functions-process.svg",
+            "caption": "Put score changes through one named AddScore function.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Award points",
+          "where": "Enemy death / collectable / objective event → call AddScore",
+          "do": "On enemy death, collectable pickup or objective completion, call AddScore.",
+          "why": "Scoring is triggered by meaningful game events.",
+          "see": "Different events can award different values.",
+          "check": "Before moving on, prove this step: Different events can award different values.",
+          "troubleshoot": [
+            "If the score does not change, prove the awarding event fires first."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Refresh UI",
+          "where": "HUD reference / WBP_HUD update function",
+          "do": "Notify the HUD or let it read Score when needed.",
+          "why": "The UI displays state but does not become the authoritative score owner.",
+          "see": "Displayed score matches game state.",
+          "check": "Before moving on, prove this step: Displayed score matches game state.",
+          "troubleshoot": [
+            "Keep the score in gameplay state; let UI only display it."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/ui-process.svg",
+            "caption": "UI displays score owned by gameplay state.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        }
       ],
       "mistakes": [
         "Keeping separate score variables on every enemy.",
@@ -1474,7 +2414,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "★",
       "featured": false,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "countdown-timer",
@@ -1491,36 +2432,81 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "events",
       "steps": [
-        [
-          "Create TimeRemaining",
-          "Use an Integer such as 60.",
-          "A whole-second display does not need frame-by-frame Float precision.",
-          "Time starts at the expected value."
-        ],
-        [
-          "Create TickCountdown event",
-          "Subtract 1 from TimeRemaining and update UI.",
-          "A named event makes the repeating unit of work clear.",
-          "Calling it manually reduces time by one."
-        ],
-        [
-          "Start a repeating Timer",
-          "On BeginPlay or game start, Set Timer by Event: 1.0 second, Looping True.",
-          "Timers run work at the frequency you actually need instead of every frame.",
-          "Time decreases roughly once each second."
-        ],
-        [
-          "Check for zero",
-          "After subtraction, Branch on TimeRemaining <= 0.",
-          "The countdown needs a clear terminal rule.",
-          "At zero, it stops instead of becoming negative."
-        ],
-        [
-          "Clear timer and finish",
-          "Clear the timer and trigger TimeUp / lose-state logic.",
-          "Stopping the timer prevents repeated terminal events.",
-          "Time stays at zero and TimeUp runs once."
-        ]
+        {
+          "title": "Create TimeRemaining",
+          "where": "GameMode/GameState or timer-owning Blueprint → Variables",
+          "do": "Use an Integer such as 60.",
+          "why": "A whole-second display does not need frame-by-frame Float precision.",
+          "see": "Time starts at the expected value.",
+          "check": "Before moving on, prove this step: Time starts at the expected value.",
+          "troubleshoot": [
+            "TimeRemaining should have a clear starting value."
+          ],
+          "visual": {
+            "src": "assets/book/variables-panel.webp",
+            "caption": "TimeRemaining is explicit game state.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Create TickCountdown event",
+          "where": "Same Blueprint → Add Custom Event TickCountdown",
+          "do": "Subtract 1 from TimeRemaining and update UI.",
+          "why": "A named event makes the repeating unit of work clear.",
+          "see": "Calling it manually reduces time by one.",
+          "check": "Before moving on, prove this step: Calling it manually reduces time by one.",
+          "troubleshoot": [
+            "Keep the tick event small: decrement, update UI, test zero."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/events-process.svg",
+            "caption": "The countdown event performs one clear timer tick.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Start a repeating Timer",
+          "where": "BeginPlay / StartGame event → Set Timer by Event",
+          "do": "On BeginPlay or game start, Set Timer by Event: 1.0 second, Looping True.",
+          "why": "Timers run work at the frequency you actually need instead of every frame.",
+          "see": "Time decreases roughly once each second.",
+          "check": "Before moving on, prove this step: Time decreases roughly once each second.",
+          "troubleshoot": [
+            "If it counts too fast, confirm the timer interval is 1.0 and it is not started multiple times."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Check for zero",
+          "where": "TickCountdown → comparison TimeRemaining <= 0 → Branch",
+          "do": "After subtraction, Branch on TimeRemaining <= 0.",
+          "why": "The countdown needs a clear terminal rule.",
+          "see": "At zero, it stops instead of becoming negative.",
+          "check": "Before moving on, prove this step: At zero, it stops instead of becoming negative.",
+          "troubleshoot": [
+            "Test at TimeRemaining 1 so you can see the zero transition."
+          ],
+          "visual": {
+            "src": "assets/ue5/current/branch-node-real.webp",
+            "caption": "Check whether the countdown has reached zero.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Clear timer and finish",
+          "where": "Zero branch → Clear and Invalidate Timer by Handle / finish event",
+          "do": "Clear the timer and trigger TimeUp / lose-state logic.",
+          "why": "Stopping the timer prevents repeated terminal events.",
+          "see": "Time stays at zero and TimeUp runs once.",
+          "check": "Before moving on, prove this step: Time stays at zero and TimeUp runs once.",
+          "troubleshoot": [
+            "Clear the timer so TimeUp cannot fire repeatedly."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Using Tick and subtracting 1 every frame.",
@@ -1538,7 +2524,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "◷",
       "featured": false,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "win-lose-state",
@@ -1555,36 +2542,86 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "framework",
       "steps": [
-        [
-          "Define the win rule",
-          "Example: CollectablesFound >= TotalCollectables or EnemiesRemaining == 0.",
-          "A game result should be a readable condition derived from state.",
-          "You can print whether the win condition is True/False."
-        ],
-        [
-          "Define the lose rule",
-          "Example: Lives <= 0 or TimeRemaining <= 0.",
-          "Win and lose should be explicit rules, not scattered side effects.",
-          "The lose condition reliably becomes True."
-        ],
-        [
-          "Create FinishGame function",
-          "Input bWon or an enum Result; stop gameplay and choose the correct UI.",
-          "Centralising the finish routine prevents two end screens competing.",
-          "Calling FinishGame produces one result."
-        ],
-        [
-          "Disable continuing input",
-          "Pause, disable movement/fire, or switch input mode depending on your design.",
-          "A finished game should not keep accepting normal gameplay actions.",
-          "Player cannot continue affecting the level after result."
-        ],
-        [
-          "Show result UI",
-          "Create/add Win or Lose widget and expose restart/menu buttons.",
-          "The state needs clear player feedback and next action.",
-          "Correct screen appears for each condition."
-        ]
+        {
+          "title": "Define the win rule",
+          "where": "Game-rule Blueprint → win-condition variables/comparison",
+          "do": "Example: CollectablesFound >= TotalCollectables or EnemiesRemaining == 0.",
+          "why": "A game result should be a readable condition derived from state.",
+          "see": "You can print whether the win condition is True/False.",
+          "check": "Before moving on, prove this step: You can print whether the win condition is True/False.",
+          "troubleshoot": [
+            "Write the rule as a clear Boolean question."
+          ],
+          "visual": {
+            "src": "assets/ue5/current/branch-node-real.webp",
+            "caption": "Win and lose rules are decisions based on game state.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Define the lose rule",
+          "where": "Game-rule Blueprint → lose-condition variables/comparison",
+          "do": "Example: Lives <= 0 or TimeRemaining <= 0.",
+          "why": "Win and lose should be explicit rules, not scattered side effects.",
+          "see": "The lose condition reliably becomes True.",
+          "check": "Before moving on, prove this step: The lose condition reliably becomes True.",
+          "troubleshoot": [
+            "Do the same for lose; avoid scattered defeat checks everywhere."
+          ],
+          "visual": {
+            "src": "assets/ue5/current/branch-node-real.webp",
+            "caption": "The lose rule should be just as explicit as the win rule.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Create FinishGame function",
+          "where": "Game-rule Blueprint → Functions → + FinishGame",
+          "do": "Input bWon or an enum Result; stop gameplay and choose the correct UI.",
+          "why": "Centralising the finish routine prevents two end screens competing.",
+          "see": "Calling FinishGame produces one result.",
+          "check": "Before moving on, prove this step: Calling FinishGame produces one result.",
+          "troubleshoot": [
+            "Call one FinishGame function so every ending follows the same cleanup."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/functions-process.svg",
+            "caption": "FinishGame centralises the end-of-game response.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Disable continuing input",
+          "where": "FinishGame → PlayerController / Character input controls",
+          "do": "Pause, disable movement/fire, or switch input mode depending on your design.",
+          "why": "A finished game should not keep accepting normal gameplay actions.",
+          "see": "Player cannot continue affecting the level after result.",
+          "check": "Before moving on, prove this step: Player cannot continue affecting the level after result.",
+          "troubleshoot": [
+            "If the player can still move/shoot, restore input only on restart/resume paths."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Show result UI",
+          "where": "FinishGame → Create Widget / Add to Viewport",
+          "do": "Create/add Win or Lose widget and expose restart/menu buttons.",
+          "why": "The state needs clear player feedback and next action.",
+          "see": "Correct screen appears for each condition.",
+          "check": "Before moving on, prove this step: Correct screen appears for each condition.",
+          "troubleshoot": [
+            "Create result UI once; avoid stacking duplicate widgets."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/ui-process.svg",
+            "caption": "The result widget communicates the final game state.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        }
       ],
       "mistakes": [
         "Checking the condition in many unrelated Blueprints.",
@@ -1602,7 +2639,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "🏁",
       "featured": false,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "spawn-destroy",
@@ -1619,36 +2657,76 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "blueprint-classes",
       "steps": [
-        [
-          "Choose the spawned class",
-          "Create or choose an Actor Blueprint such as BP_Pickup.",
-          "Runtime spawning needs a class definition to instantiate.",
-          "The class can also be placed manually for testing."
-        ],
-        [
-          "Create a spawn point",
-          "Add a Target Point/Scene Component and get its Transform.",
-          "Separating spawn location from logic makes placement easy.",
-          "Moving the point changes where things appear."
-        ],
-        [
-          "Spawn Actor From Class",
-          "Pass class + spawn transform; choose a sensible collision handling method.",
-          "The node creates a new instance while the game is running.",
-          "A new Actor appears at the point."
-        ],
-        [
-          "Store the return value if needed",
-          "Promote Return Value to a reference when you need to control that exact spawned instance later.",
-          "A reference identifies which instance you created.",
-          "You can change/destroy the spawned Actor through the reference."
-        ],
-        [
-          "Destroy safely",
-          "Call Destroy Actor on the intended instance, optionally after a timer/lifespan.",
-          "Runtime Actors should clean up when their job is done.",
-          "Only the intended instance disappears."
-        ]
+        {
+          "title": "Choose the spawned class",
+          "where": "Content Drawer → choose/create spawned Actor Blueprint",
+          "do": "Create or choose an Actor Blueprint such as BP_Pickup.",
+          "why": "Runtime spawning needs a class definition to instantiate.",
+          "see": "The class can also be placed manually for testing.",
+          "check": "Before moving on, prove this step: The class can also be placed manually for testing.",
+          "troubleshoot": [
+            "Confirm the class you are spawning is an Actor and compiles."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Create a spawn point",
+          "where": "Level/Spawner Blueprint → Add Target Point in level or Scene Component in Blueprint",
+          "do": "Add a Target Point/Scene Component and get its Transform.",
+          "why": "Separating spawn location from logic makes placement easy.",
+          "see": "Moving the point changes where things appear.",
+          "check": "Before moving on, prove this step: Moving the point changes where things appear.",
+          "troubleshoot": [
+            "Use a visible Target Point/Scene Component while testing."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Spawn Actor From Class",
+          "where": "Spawner Event Graph → Spawn Actor From Class",
+          "do": "Pass class + spawn transform; choose a sensible collision handling method.",
+          "why": "The node creates a new instance while the game is running.",
+          "see": "A new Actor appears at the point.",
+          "check": "Before moving on, prove this step: A new Actor appears at the point.",
+          "troubleshoot": [
+            "If spawning fails near walls, inspect Spawn Collision Handling Override."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/events-process.svg",
+            "caption": "An event can spawn a new Actor at a known transform.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Store the return value if needed",
+          "where": "Spawn Actor From Class → Return Value → Promote to Variable",
+          "do": "Promote Return Value to a reference when you need to control that exact spawned instance later.",
+          "why": "A reference identifies which instance you created.",
+          "see": "You can change/destroy the spawned Actor through the reference.",
+          "check": "Before moving on, prove this step: You can change/destroy the spawned Actor through the reference.",
+          "troubleshoot": [
+            "Only store the return value when you genuinely need that instance later."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/references-casting-example.svg",
+            "caption": "Store the returned instance when you need to control that exact Actor later.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Destroy safely",
+          "where": "Stored spawned reference / target Actor → Destroy Actor",
+          "do": "Call Destroy Actor on the intended instance, optionally after a timer/lifespan.",
+          "why": "Runtime Actors should clean up when their job is done.",
+          "see": "Only the intended instance disappears.",
+          "check": "Before moving on, prove this step: Only the intended instance disappears.",
+          "troubleshoot": [
+            "Destroy the stored/intended instance, not Self by accident."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Using Get Actor of Class later when Spawn already returned the exact reference.",
@@ -1666,7 +2744,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "＋",
       "featured": false,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "basic-hud",
@@ -1683,36 +2762,76 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "ui",
       "steps": [
-        [
-          "Create WBP_HUD",
-          "Create a Widget Blueprint and add a Text element labelled HUD TEST.",
-          "Start with an obvious proof that the widget is actually being displayed.",
-          "Designer preview shows the text."
-        ],
-        [
-          "Create the widget at runtime",
-          "From PlayerController/Character BeginPlay, Create Widget using WBP_HUD.",
-          "A Widget asset does nothing until an instance is created.",
-          "Create Widget returns a valid widget reference."
-        ],
-        [
-          "Add to Viewport",
-          "Call Add to Viewport on the returned widget.",
-          "This tells Unreal to render the widget for the player.",
-          "HUD TEST appears during Play."
-        ],
-        [
-          "Store HUD reference",
-          "Promote the Create Widget return value to HUDRef.",
-          "Gameplay can update the exact widget instance instead of repeatedly searching/creating.",
-          "HUDRef is valid after creation."
-        ],
-        [
-          "Replace test text",
-          "Build the real HUD layout and expose update functions/events.",
-          "Prove setup first; then add content.",
-          "The final HUD appears once, not duplicated."
-        ]
+        {
+          "title": "Create the HUD widget",
+          "where": "Content Drawer → User Interface → Widget Blueprint",
+          "do": "Create WBP_HUD and open it.",
+          "why": "A HUD begins as a Widget Blueprint.",
+          "see": "The Widget Designer opens.",
+          "check": "The asset exists in the intended folder.",
+          "visual": {
+            "src": "assets/diagrams/gold/ui-process.svg",
+            "caption": "A HUD is built inside a Widget Blueprint.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Add a simple text block",
+          "where": "Widget Designer → Palette → Text",
+          "do": "Drag a Text block onto the canvas and position it in a readable location.",
+          "why": "Starting with one visible element keeps the first HUD step easy to verify.",
+          "see": "The Text block is visible in the designer preview.",
+          "check": "The text is large enough to read.",
+          "visual": {
+            "src": "assets/book/ui-variables.webp",
+            "caption": "Widgets are made from UI elements such as Text blocks and progress bars.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Create the widget at BeginPlay",
+          "where": "Player Character or PlayerController → Event BeginPlay",
+          "do": "Use Create Widget with WBP_HUD and Add to Viewport.",
+          "why": "The widget must exist at runtime before it can appear.",
+          "see": "Pressing Play shows the HUD on screen.",
+          "check": "Only one HUD appears, not duplicates every frame.",
+          "visual": {
+            "src": "assets/diagrams/gold/ui-process.svg",
+            "caption": "Create the HUD once when play begins.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Store the widget reference if useful",
+          "where": "Create Widget return value → promote to variable",
+          "do": "Promote the created widget reference to a variable if you want to update it later.",
+          "why": "Keeping the reference makes later UI updates much easier.",
+          "see": "A widget reference variable exists in the graph.",
+          "check": "You can drag the variable in as a Get node later.",
+          "visual": {
+            "src": "assets/diagrams/gold/ui-process.svg",
+            "caption": "Store the widget reference when you will need to update it later.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Replace the placeholder text with something meaningful",
+          "where": "Widget Designer or runtime update",
+          "do": "Change the displayed text so it actually communicates useful information or a placeholder label such as “Health: 100”.",
+          "why": "The UI should already hint at its eventual purpose.",
+          "see": "The HUD text looks intentional rather than generic.",
+          "check": "Another person can guess what the HUD is for.",
+          "visual": {
+            "src": "assets/book/ui-variables.webp",
+            "caption": "UI should communicate meaning, not just occupy space.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        }
       ],
       "mistakes": [
         "Creating a widget every time score/health changes.",
@@ -1730,7 +2849,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "▤",
       "featured": true,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "health-bar",
@@ -1746,36 +2866,76 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "ui",
       "steps": [
-        [
-          "Add Progress Bar",
-          "Place a Progress Bar in WBP_HUD and name it PB_Health.",
-          "A Progress Bar expects a normalised Percent between 0 and 1.",
-          "PB_Health is accessible in the Graph."
-        ],
-        [
-          "Calculate percent",
-          "HealthPercent = Health / MaxHealth.",
-          "Dividing current by maximum converts 75/100 into 0.75.",
-          "Test values produce expected fractions."
-        ],
-        [
-          "Create UpdateHealth function",
-          "Give WBP_HUD inputs CurrentHealth and MaxHealth; Set Percent using the division.",
-          "An explicit update function avoids hidden binding work every frame.",
-          "Calling UpdateHealth(50,100) shows half full."
-        ],
-        [
-          "Call when health changes",
-          "After damage/heal changes Health, call HUDRef.UpdateHealth.",
-          "UI updates only when the value changes.",
-          "Damage visibly reduces the bar immediately."
-        ],
-        [
-          "Handle zero/max safely",
-          "Ensure MaxHealth is greater than zero and clamp percent 0–1.",
-          "Defensive maths avoids invalid UI states.",
-          "Bar never overfills or breaks."
-        ]
+        {
+          "title": "Add a Progress Bar to the widget",
+          "where": "WBP_HUD → Widget Designer → Palette → Progress Bar",
+          "do": "Drag a Progress Bar into your HUD widget.",
+          "why": "A Progress Bar is the standard quick visual for health.",
+          "see": "The Progress Bar is visible in the designer.",
+          "check": "It sits in a readable part of the screen.",
+          "visual": {
+            "src": "assets/book/ui-variables.webp",
+            "caption": "A Progress Bar is ideal for showing health percentage.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Make sure the player has Health and MaxHealth",
+          "where": "Player Character variables",
+          "do": "Use a current Health value and a MaxHealth value.",
+          "why": "The bar usually needs a percentage, which comes from current divided by maximum.",
+          "see": "Both variables exist on the player.",
+          "check": "MaxHealth is not zero.",
+          "visual": {
+            "src": "assets/book/variables-panel.webp",
+            "caption": "A health bar works best when you track both current and maximum values.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Create and add the widget to the screen",
+          "where": "Character / PlayerController BeginPlay",
+          "do": "Create WBP_HUD and Add to Viewport if you have not already.",
+          "why": "The bar must exist onscreen before it can update.",
+          "see": "The HUD appears during Play.",
+          "check": "The Progress Bar is visible in the running game.",
+          "visual": {
+            "src": "assets/diagrams/gold/ui-process.svg",
+            "caption": "Create the widget once before updating its elements.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Set the bar Percent from health values",
+          "where": "Widget update logic or Character-to-widget logic",
+          "do": "Set the Progress Bar Percent to Health / MaxHealth.",
+          "why": "Progress Bars expect a 0 to 1 value rather than raw health numbers.",
+          "see": "A full-health player shows a full bar.",
+          "check": "Reducing Health visibly shortens the bar.",
+          "visual": {
+            "src": "assets/diagrams/gold/ui-example.svg",
+            "caption": "Convert health to a 0–1 percentage before feeding the bar.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Test partial and zero health",
+          "where": "Play mode",
+          "do": "Damage the player and watch the health bar change at several values.",
+          "why": "A health bar should communicate state clearly across the full range.",
+          "see": "The bar shrinks as health falls and reaches empty at zero.",
+          "check": "You can tell whether the calculation is correct by the bar behaviour.",
+          "visual": {
+            "src": "assets/ue5/current/editor-main-window.webp",
+            "caption": "Always test UI at several gameplay states, not just full health.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
+        }
       ],
       "mistakes": [
         "Setting Percent to 75 instead of 0.75.",
@@ -1793,7 +2953,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "▰",
       "featured": true,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "score-lives-hud",
@@ -1809,36 +2970,86 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "ui",
       "steps": [
-        [
-          "Add text widgets",
-          "Create TXT_Score and TXT_Lives in WBP_HUD.",
-          "Named widgets are easier to update and debug.",
-          "Both appear in the HUD Designer."
-        ],
-        [
-          "Create UpdateScore",
-          "Input Score Integer, convert to Text and SetText on TXT_Score.",
-          "The function turns model data into presentation.",
-          "UpdateScore(250) displays 250."
-        ],
-        [
-          "Create UpdateLives",
-          "Input Lives Integer and set TXT_Lives.",
-          "Same event-driven pattern as score.",
-          "UpdateLives(3) displays 3."
-        ],
-        [
-          "Call from game rules",
-          "When AddScore or LoseLife changes state, call the matching HUD function.",
-          "Game rules remain the source of truth.",
-          "Displayed values always match the real variables."
-        ],
-        [
-          "Initialise after HUD creation",
-          "Immediately send current Score/Lives after the widget is created.",
-          "Otherwise the UI may show designer placeholder values until the first change.",
-          "Correct starting values appear from frame one."
-        ]
+        {
+          "title": "Add text widgets",
+          "where": "WBP_HUD → Designer → Palette → Text",
+          "do": "Create TXT_Score and TXT_Lives in WBP_HUD.",
+          "why": "Named widgets are easier to update and debug.",
+          "see": "Both appear in the HUD Designer.",
+          "check": "Before moving on, prove this step: Both appear in the HUD Designer.",
+          "troubleshoot": [
+            "Name widgets clearly so SetText targets are obvious."
+          ],
+          "visual": {
+            "src": "assets/book/ui-variables.webp",
+            "caption": "Text widgets are the visible layer for score and lives.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Create UpdateScore",
+          "where": "WBP_HUD → Functions → + UpdateScore",
+          "do": "Input Score Integer, convert to Text and SetText on TXT_Score.",
+          "why": "The function turns model data into presentation.",
+          "see": "UpdateScore(250) displays 250.",
+          "check": "Before moving on, prove this step: UpdateScore(250) displays 250.",
+          "troubleshoot": [
+            "Convert the Integer to Text cleanly before SetText."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/ui-process.svg",
+            "caption": "A widget function receives gameplay state and updates display.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Create UpdateLives",
+          "where": "WBP_HUD → Functions → + UpdateLives",
+          "do": "Input Lives Integer and set TXT_Lives.",
+          "why": "Same event-driven pattern as score.",
+          "see": "UpdateLives(3) displays 3.",
+          "check": "Before moving on, prove this step: UpdateLives(3) displays 3.",
+          "troubleshoot": [
+            "Repeat the same pattern for Lives."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/ui-process.svg",
+            "caption": "Use a separate update for lives or a clear combined refresh.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Call from game rules",
+          "where": "Game rule / score owner → stored HUD reference → call update function",
+          "do": "When AddScore or LoseLife changes state, call the matching HUD function.",
+          "why": "Game rules remain the source of truth.",
+          "see": "Displayed values always match the real variables.",
+          "check": "Before moving on, prove this step: Displayed values always match the real variables.",
+          "troubleshoot": [
+            "If UI does not update, verify you still have the correct HUD reference."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/framework-process.svg",
+            "caption": "The gameplay owner notifies the HUD when state changes.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Initialise after HUD creation",
+          "where": "HUD creation path → immediately call UpdateScore and UpdateLives",
+          "do": "Immediately send current Score/Lives after the widget is created.",
+          "why": "Otherwise the UI may show designer placeholder values until the first change.",
+          "see": "Correct starting values appear from frame one.",
+          "check": "Before moving on, prove this step: Correct starting values appear from frame one.",
+          "troubleshoot": [
+            "Initialise once immediately after creating the widget so it never starts stale."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Widget increments its own score independently.",
@@ -1856,7 +3067,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "123",
       "featured": false,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "crosshair",
@@ -1872,30 +3084,59 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "ui",
       "steps": [
-        [
-          "Add an Image/Text",
-          "In WBP_HUD add an Image with a crosshair texture or use a simple + text while prototyping.",
-          "A placeholder is enough to prove placement before making art.",
-          "Crosshair is visible in Designer."
-        ],
-        [
-          "Anchor to centre",
-          "Set Anchor to centre of the Canvas.",
-          "Anchors make layout relative to screen size.",
-          "The anchor icon sits at screen centre."
-        ],
-        [
-          "Set alignment 0.5 / 0.5",
-          "Set Alignment X/Y to 0.5 so the widget centres on its own pivot.",
-          "Without alignment, the top-left corner sits at centre instead.",
-          "Crosshair centre aligns exactly with viewport centre."
-        ],
-        [
-          "Test resolutions",
-          "Use Play/Standalone and resize the window.",
-          "UI that only works at one resolution is not finished.",
-          "Crosshair remains centred."
-        ]
+        {
+          "title": "Add an Image/Text",
+          "where": "WBP_HUD → Designer → Palette → Image or Text",
+          "do": "In WBP_HUD add an Image with a crosshair texture or use a simple + text while prototyping.",
+          "why": "A placeholder is enough to prove placement before making art.",
+          "see": "Crosshair is visible in Designer.",
+          "check": "Before moving on, prove this step: Crosshair is visible in Designer.",
+          "troubleshoot": [
+            "Use a temporary + first if you do not have a texture."
+          ],
+          "visual": {
+            "src": "assets/book/ui-variables.webp",
+            "caption": "The crosshair is a simple centred widget element.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Anchor to centre",
+          "where": "Select crosshair widget → Details → Anchors → Centre",
+          "do": "Set Anchor to centre of the Canvas.",
+          "why": "Anchors make layout relative to screen size.",
+          "see": "The anchor icon sits at screen centre.",
+          "check": "Before moving on, prove this step: The anchor icon sits at screen centre.",
+          "troubleshoot": [
+            "Centre anchor controls where the widget is attached."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Set alignment 0.5 / 0.5",
+          "where": "Select crosshair widget → Details → Alignment X/Y",
+          "do": "Set Alignment X/Y to 0.5 so the widget centres on its own pivot.",
+          "why": "Without alignment, the top-left corner sits at centre instead.",
+          "see": "Crosshair centre aligns exactly with viewport centre.",
+          "check": "Before moving on, prove this step: Crosshair centre aligns exactly with viewport centre.",
+          "troubleshoot": [
+            "Alignment 0.5/0.5 centres the widget on its own pivot."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Test resolutions",
+          "where": "Play → Standalone / resize game window",
+          "do": "Use Play/Standalone and resize the window.",
+          "why": "UI that only works at one resolution is not finished.",
+          "see": "Crosshair remains centred.",
+          "check": "Before moving on, prove this step: Crosshair remains centred.",
+          "troubleshoot": [
+            "Test more than one resolution so the crosshair does not drift."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Using pixel offsets from the top-left instead of anchors."
@@ -1911,7 +3152,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "+",
       "featured": false,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "interaction-prompt",
@@ -1927,36 +3169,86 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "traces",
       "steps": [
-        [
-          "Create the prompt",
-          "Add a small interaction panel/text to HUD and start it Hidden/Collapsed.",
-          "The HUD owns presentation, not detection.",
-          "Prompt is absent at game start."
-        ],
-        [
-          "Use your interaction trace",
-          "Reuse the Look at an Object to Interact trace.",
-          "Target detection should have one source of truth.",
-          "Trace reliably identifies target Actor."
-        ],
-        [
-          "Check interface support",
-          "Use Does Implement Interface on Hit Actor for BPI_Interact.",
-          "This checks capability without casting to every interactable type.",
-          "Doors/buttons/pickups return True; normal walls return False."
-        ],
-        [
-          "Show/hide prompt",
-          "When valid target exists, call HUD ShowInteractPrompt; otherwise HideInteractPrompt.",
-          "UI follows current targeting state.",
-          "Looking away immediately hides the prompt."
-        ],
-        [
-          "Optional custom text",
-          "Add GetInteractionText to the interface so objects can return “Open Door”, “Pick Up Key”, etc.",
-          "The interactable knows what action it represents.",
-          "Different objects display different prompts."
-        ]
+        {
+          "title": "Create the prompt",
+          "where": "WBP_HUD → Designer → add prompt panel/text → Details → Visibility",
+          "do": "Add a small interaction panel/text to HUD and start it Hidden/Collapsed.",
+          "why": "The HUD owns presentation, not detection.",
+          "see": "Prompt is absent at game start.",
+          "check": "Before moving on, prove this step: Prompt is absent at game start.",
+          "troubleshoot": [
+            "Start Hidden/Collapsed so the prompt only appears intentionally."
+          ],
+          "visual": {
+            "src": "assets/book/ui-variables.webp",
+            "caption": "The prompt is a HUD element that starts hidden.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Use your interaction trace",
+          "where": "Character Blueprint → existing interaction Line Trace",
+          "do": "Reuse the Look at an Object to Interact trace.",
+          "why": "Target detection should have one source of truth.",
+          "see": "Trace reliably identifies target Actor.",
+          "check": "Before moving on, prove this step: Trace reliably identifies target Actor.",
+          "troubleshoot": [
+            "Use the already-working trace rather than inventing a second detection system."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/traces-process.svg",
+            "caption": "Reuse the player interaction trace to identify what is being looked at.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Check interface support",
+          "where": "Trace Hit Actor → Does Implement Interface (BPI_Interact)",
+          "do": "Use Does Implement Interface on Hit Actor for BPI_Interact.",
+          "why": "This checks capability without casting to every interactable type.",
+          "see": "Doors/buttons/pickups return True; normal walls return False.",
+          "check": "Before moving on, prove this step: Doors/buttons/pickups return True; normal walls return False.",
+          "troubleshoot": [
+            "If Does Implement Interface is false, check the hit Actor class really implements BPI_Interact."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/interfaces-dispatchers-process.svg",
+            "caption": "Interface support is a clean test for interactable objects.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Show/hide prompt",
+          "where": "Valid/invalid trace paths → HUD Show/Hide function",
+          "do": "When valid target exists, call HUD ShowInteractPrompt; otherwise HideInteractPrompt.",
+          "why": "UI follows current targeting state.",
+          "see": "Looking away immediately hides the prompt.",
+          "check": "Before moving on, prove this step: Looking away immediately hides the prompt.",
+          "troubleshoot": [
+            "Always include a hide path when the trace misses or leaves the target."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/ui-process.svg",
+            "caption": "Show and hide the prompt based on the current trace result.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Optional custom text",
+          "where": "BPI_Interact → add GetInteractionText-style interface function if used",
+          "do": "Add GetInteractionText to the interface so objects can return “Open Door”, “Pick Up Key”, etc.",
+          "why": "The interactable knows what action it represents.",
+          "see": "Different objects display different prompts.",
+          "check": "Before moving on, prove this step: Different objects display different prompts.",
+          "troubleshoot": [
+            "Keep custom text short and action-oriented."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Prompt shown on every Actor hit by the trace.",
@@ -1974,7 +3266,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "E",
       "featured": false,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "objective-text",
@@ -1990,36 +3283,81 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "ui",
       "steps": [
-        [
-          "Create CurrentObjective",
-          "Store the objective text/name in a gameplay rule/state class, not only in the widget.",
-          "The objective is game state; the HUD is merely its display.",
-          "CurrentObjective exists even if HUD is recreated."
-        ],
-        [
-          "Add objective Text",
-          "Add TXT_Objective to WBP_HUD in a readable location.",
-          "A dedicated element keeps presentation consistent.",
-          "Designer shows placeholder objective."
-        ],
-        [
-          "Create SetObjectiveText",
-          "Input Text and SetText on TXT_Objective.",
-          "One UI function gives gameplay a clean update point.",
-          "Manual call changes displayed objective."
-        ],
-        [
-          "Update on game events",
-          "When key collected/door opened/checkpoint reached, change CurrentObjective and call HUD update.",
-          "Objectives should react to meaningful progress events, not Poll every frame.",
-          "Objective changes at the expected moments."
-        ],
-        [
-          "Initialise at start",
-          "Send CurrentObjective after HUD creation.",
-          "Prevents stale placeholder content.",
-          "Correct first objective is visible immediately."
-        ]
+        {
+          "title": "Create CurrentObjective",
+          "where": "GameMode/GameState or objective owner → Variables",
+          "do": "Store the objective text/name in a gameplay rule/state class, not only in the widget.",
+          "why": "The objective is game state; the HUD is merely its display.",
+          "see": "CurrentObjective exists even if HUD is recreated.",
+          "check": "Before moving on, prove this step: CurrentObjective exists even if HUD is recreated.",
+          "troubleshoot": [
+            "Keep CurrentObjective in gameplay state rather than only inside the widget."
+          ],
+          "visual": {
+            "src": "assets/book/variables-panel.webp",
+            "caption": "Store the current objective outside the widget.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Add objective Text",
+          "where": "WBP_HUD → Designer → add Text named TXT_Objective",
+          "do": "Add TXT_Objective to WBP_HUD in a readable location.",
+          "why": "A dedicated element keeps presentation consistent.",
+          "see": "Designer shows placeholder objective.",
+          "check": "Before moving on, prove this step: Designer shows placeholder objective.",
+          "troubleshoot": [
+            "Use one clearly named Text widget."
+          ],
+          "visual": {
+            "src": "assets/book/ui-variables.webp",
+            "caption": "The widget only displays the objective.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Create SetObjectiveText",
+          "where": "WBP_HUD → Functions → + SetObjectiveText",
+          "do": "Input Text and SetText on TXT_Objective.",
+          "why": "One UI function gives gameplay a clean update point.",
+          "see": "Manual call changes displayed objective.",
+          "check": "Before moving on, prove this step: Manual call changes displayed objective.",
+          "troubleshoot": [
+            "SetObjectiveText should do only the display update."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/ui-process.svg",
+            "caption": "A widget update function turns objective state into display text.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Update on game events",
+          "where": "Objective gameplay events → update CurrentObjective and HUD",
+          "do": "When key collected/door opened/checkpoint reached, change CurrentObjective and call HUD update.",
+          "why": "Objectives should react to meaningful progress events, not Poll every frame.",
+          "see": "Objective changes at the expected moments.",
+          "check": "Before moving on, prove this step: Objective changes at the expected moments.",
+          "troubleshoot": [
+            "Update state first, then tell the HUD."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Initialise at start",
+          "where": "HUD creation path → call SetObjectiveText",
+          "do": "Send CurrentObjective after HUD creation.",
+          "why": "Prevents stale placeholder content.",
+          "see": "Correct first objective is visible immediately.",
+          "check": "Before moving on, prove this step: Correct first objective is visible immediately.",
+          "troubleshoot": [
+            "Initialise after HUD creation so the first objective appears immediately."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Widget is the only place objective state exists.",
@@ -2037,7 +3375,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "☷",
       "featured": false,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "pause-menu",
@@ -2054,36 +3393,76 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "ui",
       "steps": [
-        [
-          "Create WBP_Pause",
-          "Add Resume and Quit/Restart buttons.",
-          "Keep pause UI separate from gameplay HUD.",
-          "Buttons exist in Designer."
-        ],
-        [
-          "Create IA_Pause",
-          "Map Escape/Start and ensure the action can still be processed while paused if required by your setup.",
-          "Pause needs an input route both into and out of the state.",
-          "Escape fires before pausing."
-        ],
-        [
-          "Create/show widget",
-          "On pause, create once or show WBP_Pause.",
-          "The player needs visible confirmation and controls.",
-          "Menu appears."
-        ],
-        [
-          "Pause + input mode",
-          "Set Game Paused True, show mouse cursor, Set Input Mode UI Only/Game and UI.",
-          "Pausing simulation alone does not automatically make UI usable.",
-          "Character stops and mouse can use buttons."
-        ],
-        [
-          "Resume",
-          "Hide/remove menu, Set Game Paused False, hide cursor, restore Input Mode Game Only.",
-          "You must reverse every state change you made.",
-          "Gameplay resumes with normal controls."
-        ]
+        {
+          "title": "Create WBP_Pause",
+          "where": "Content Drawer → User Interface → Widget Blueprint → WBP_Pause → Designer",
+          "do": "Add Resume and Quit/Restart buttons.",
+          "why": "Keep pause UI separate from gameplay HUD.",
+          "see": "Buttons exist in Designer.",
+          "check": "Before moving on, prove this step: Buttons exist in Designer.",
+          "troubleshoot": [
+            "Test the Resume button before styling the menu."
+          ],
+          "visual": {
+            "src": "assets/book/ui-variables.webp",
+            "caption": "Pause menus are ordinary Widget Blueprints with buttons.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Create IA_Pause",
+          "where": "Input folder → IA_Pause + active Mapping Context",
+          "do": "Map Escape/Start and ensure the action can still be processed while paused if required by your setup.",
+          "why": "Pause needs an input route both into and out of the state.",
+          "see": "Escape fires before pausing.",
+          "check": "Before moving on, prove this step: Escape fires before pausing.",
+          "troubleshoot": [
+            "If Escape stops working while paused, check whether the input/action is allowed while paused in your setup."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Create/show widget",
+          "where": "Character/PlayerController pause event → Create Widget / Set Visibility",
+          "do": "On pause, create once or show WBP_Pause.",
+          "why": "The player needs visible confirmation and controls.",
+          "see": "Menu appears.",
+          "check": "Before moving on, prove this step: Menu appears.",
+          "troubleshoot": [
+            "Create once or manage visibility so repeated pauses do not stack widgets."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/ui-process.svg",
+            "caption": "Create or reveal the pause widget only when needed.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Pause + input mode",
+          "where": "Pause event → Set Game Paused + PlayerController input mode/mouse cursor",
+          "do": "Set Game Paused True, show mouse cursor, Set Input Mode UI Only/Game and UI.",
+          "why": "Pausing simulation alone does not automatically make UI usable.",
+          "see": "Character stops and mouse can use buttons.",
+          "check": "Before moving on, prove this step: Character stops and mouse can use buttons.",
+          "troubleshoot": [
+            "If mouse/controller control feels wrong, check input mode and cursor together."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Resume",
+          "where": "Resume button OnClicked / pause toggle → unpause and restore input",
+          "do": "Hide/remove menu, Set Game Paused False, hide cursor, restore Input Mode Game Only.",
+          "why": "You must reverse every state change you made.",
+          "see": "Gameplay resumes with normal controls.",
+          "check": "Before moving on, prove this step: Gameplay resumes with normal controls.",
+          "troubleshoot": [
+            "Restore Game Only input and cursor state on resume."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Pausing but leaving mouse cursor hidden.",
@@ -2101,7 +3480,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "Ⅱ",
       "featured": false,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "timeline-door",
@@ -2118,36 +3498,76 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "timelines",
       "steps": [
-        [
-          "Create BP_Door",
-          "Use separate frame/root and Door mesh components so only the moving piece rotates.",
-          "Component hierarchy makes pivots/responsibility clearer.",
-          "Rotating Door mesh does not rotate frame."
-        ],
-        [
-          "Create OpenDoor Timeline",
-          "Add a Float track from 0 at time 0 to 1 at about 1 second.",
-          "A normalised 0–1 alpha is reusable with Lerp.",
-          "Timeline preview moves smoothly from 0 to 1."
-        ],
-        [
-          "Store closed/open rotations",
-          "Create ClosedRotation and OpenRotation, e.g. yaw +90 from closed.",
-          "Named endpoints keep motion configurable.",
-          "Open rotation represents desired final orientation."
-        ],
-        [
-          "Lerp on Update",
-          "On Timeline Update, Lerp (Rotator) Closed → Open using track value, then Set Relative Rotation on Door.",
-          "Lerp converts 0–1 progress into an actual rotation.",
-          "Door moves smoothly while Timeline plays."
-        ],
-        [
-          "Play/Reverse",
-          "Interact/Open calls Play; Close calls Reverse.",
-          "One timeline can animate in both directions.",
-          "Door opens and closes smoothly without duplicate logic."
-        ]
+        {
+          "title": "Create the door Blueprint",
+          "where": "Blueprint Class → Actor",
+          "do": "Use a door Blueprint with a moving mesh component.",
+          "why": "Timelines need a component to animate.",
+          "see": "The door Actor has a clear door mesh component.",
+          "check": "The mesh can be selected in the Blueprint.",
+          "visual": {
+            "src": "assets/diagrams/gold/timelines-example.svg",
+            "caption": "A Timeline door uses smooth interpolation rather than instant snapping.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Add a Timeline",
+          "where": "Door Event Graph → right-click → Add Timeline",
+          "do": "Create a Timeline such as TL_Door.",
+          "why": "The Timeline will drive the smooth opening value.",
+          "see": "The Timeline node appears in the graph.",
+          "check": "You can double-click it to edit the track.",
+          "visual": {
+            "src": "assets/diagrams/gold/timelines-process.svg",
+            "caption": "Timelines provide animated values over time.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Create a 0→1 float track",
+          "where": "Timeline editor → Add Float Track",
+          "do": "Create a float track that starts at 0 and ends at 1.",
+          "why": "This simple value is easy to use with a Lerp for rotation or location.",
+          "see": "The track rises from 0 to 1.",
+          "check": "The timeline length feels reasonable such as 1 second.",
+          "visual": {
+            "src": "assets/diagrams/gold/timelines-example.svg",
+            "caption": "A 0–1 float track is a common Timeline pattern.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Use Update to rotate or move the door mesh",
+          "where": "Timeline Update pin → Set Relative Rotation or Set Relative Location",
+          "do": "Apply the Timeline output to the door mesh so it opens smoothly.",
+          "why": "The track value only matters once it drives the transform of the door.",
+          "see": "The door animates smoothly instead of snapping.",
+          "check": "The closed and open positions are both correct.",
+          "visual": {
+            "src": "assets/diagrams/gold/timelines-process.svg",
+            "caption": "Use the Timeline output each update frame to animate the mesh.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Trigger Play and Reverse from interaction",
+          "where": "Interact or overlap event → Timeline Play / Reverse",
+          "do": "Open the door with Play and optionally close it again with Reverse.",
+          "why": "A working door usually needs a trigger to start and optionally reverse the movement.",
+          "see": "Interaction causes the door to open, and the reverse trigger closes it.",
+          "check": "Repeated tests do not make the door drift or break.",
+          "visual": {
+            "src": "assets/diagrams/gold/timelines-example.svg",
+            "caption": "Connect the smooth animation to a meaningful trigger.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
+        }
       ],
       "mistakes": [
         "Rotating the entire Actor around a bad pivot.",
@@ -2165,7 +3585,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "▥",
       "featured": true,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "moving-platform",
@@ -2182,36 +3603,81 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "timelines",
       "steps": [
-        [
-          "Create BP_MovingPlatform",
-          "Add a mesh as the moving root/component.",
-          "A reusable Actor lets designers place multiple platforms.",
-          "Platform can be placed normally."
-        ],
-        [
-          "Define Start/End",
-          "Store StartLocation on BeginPlay and expose MoveOffset Vector or an endpoint Scene Component.",
-          "Relative designer controls are easier than hard-coded world coordinates.",
-          "Different instances can move different distances/directions."
-        ],
-        [
-          "Create Timeline 0→1",
-          "Float alpha over MoveTime.",
-          "Normalised progress works naturally with Lerp.",
-          "Timeline outputs 0 then 1."
-        ],
-        [
-          "Lerp locations",
-          "Lerp Vector StartLocation → EndLocation and Set Actor Location on Update.",
-          "Lerp generates every position between endpoints.",
-          "Platform moves smoothly."
-        ],
-        [
-          "Loop/ping-pong",
-          "Track direction with a Boolean. On Finished: if moving forward, set the Boolean False and Reverse; if moving backward, set it True and Play. A looping curve is another option for a continuously oscillating platform.",
-          "Creates predictable back-and-forth motion.",
-          "Platform continuously travels between endpoints."
-        ]
+        {
+          "title": "Create BP_MovingPlatform",
+          "where": "Content Drawer → Blueprint Class → Actor → BP_MovingPlatform → Components",
+          "do": "Add a mesh as the moving root/component.",
+          "why": "A reusable Actor lets designers place multiple platforms.",
+          "see": "Platform can be placed normally.",
+          "check": "Before moving on, prove this step: Platform can be placed normally.",
+          "troubleshoot": [
+            "Make the moving mesh/root relationship simple before adding Timeline logic."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Define Start/End",
+          "where": "BP_MovingPlatform → BeginPlay / Variables / endpoint Scene Component",
+          "do": "Store StartLocation on BeginPlay and expose MoveOffset Vector or an endpoint Scene Component.",
+          "why": "Relative designer controls are easier than hard-coded world coordinates.",
+          "see": "Different instances can move different distances/directions.",
+          "check": "Before moving on, prove this step: Different instances can move different distances/directions.",
+          "troubleshoot": [
+            "Print Start/End once if the platform jumps to the wrong place."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Create Timeline 0→1",
+          "where": "Event Graph → right-click → Add Timeline",
+          "do": "Float alpha over MoveTime.",
+          "why": "Normalised progress works naturally with Lerp.",
+          "see": "Timeline outputs 0 then 1.",
+          "check": "Before moving on, prove this step: Timeline outputs 0 then 1.",
+          "troubleshoot": [
+            "Use a short 0→1 Timeline while learning."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/timelines-process.svg",
+            "caption": "A Timeline provides a smooth 0→1 value over time.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Lerp locations",
+          "where": "Timeline Update → Lerp (Vector) → Set Actor Location",
+          "do": "Lerp Vector StartLocation → EndLocation and Set Actor Location on Update.",
+          "why": "Lerp generates every position between endpoints.",
+          "see": "Platform moves smoothly.",
+          "check": "Before moving on, prove this step: Platform moves smoothly.",
+          "troubleshoot": [
+            "Set Actor Location from the Lerp result on Update."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/timelines-example.svg",
+            "caption": "Use the Timeline alpha to interpolate between start and end.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Loop/ping-pong",
+          "where": "Timeline Finished → direction Boolean → Play/Reverse",
+          "do": "Track direction with a Boolean. On Finished: if moving forward, set the Boolean False and Reverse; if moving backward, set it True and Play. A looping curve is another option for a continuously oscillating platform.",
+          "why": "Creates predictable back-and-forth motion.",
+          "see": "Platform continuously travels between endpoints.",
+          "check": "Before moving on, prove this step: Platform continuously travels between endpoints.",
+          "troubleshoot": [
+            "If ping-pong sticks, inspect the direction Boolean and Play/Reverse choice."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/timelines-process.svg",
+            "caption": "Play and Reverse create the ping-pong movement.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        }
       ],
       "mistakes": [
         "Adding to current location every Update, causing drift.",
@@ -2229,7 +3695,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "↔",
       "featured": false,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "damage-zone",
@@ -2245,36 +3712,86 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "collision",
       "steps": [
-        [
-          "Create BP_DamageZone",
-          "Add Box Collision and make it visible only for editor/debug if desired.",
-          "A reusable hazard volume can be resized per level instance.",
-          "Box is easy to place/scale."
-        ],
-        [
-          "Set overlap collision",
-          "Overlap Pawn and Generate Overlap Events.",
-          "Hazards usually detect rather than physically block.",
-          "Player entry fires Begin Overlap."
-        ],
-        [
-          "Choose damage rule",
-          "Expose DamageAmount; large value can behave as instant death or normal value can hurt.",
-          "One class can support lava, spikes and kill volumes.",
-          "Value appears in instance Details."
-        ],
-        [
-          "Apply Damage",
-          "On valid player overlap, Apply Damage to Other Actor.",
-          "The hazard uses the same generic player health pipeline as weapons.",
-          "Health drops / death triggers."
-        ],
-        [
-          "Optional repeated damage",
-          "For lingering hazards, start a repeating timer while inside and clear it on End Overlap.",
-          "Timers make damage-over-time intentional and controllable.",
-          "Damage stops when player leaves."
-        ]
+        {
+          "title": "Create BP_DamageZone",
+          "where": "Content Drawer → Blueprint Class → Actor → BP_DamageZone → Components",
+          "do": "Add Box Collision and make it visible only for editor/debug if desired.",
+          "why": "A reusable hazard volume can be resized per level instance.",
+          "see": "Box is easy to place/scale.",
+          "check": "Before moving on, prove this step: Box is easy to place/scale.",
+          "troubleshoot": [
+            "Keep the editor/debug volume visible enough to size it correctly."
+          ],
+          "visual": {
+            "src": "assets/book/collision-responses.webp",
+            "caption": "A damage zone is defined by its collision volume.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Set overlap collision",
+          "where": "Select Box Collision → Details → Collision",
+          "do": "Overlap Pawn and Generate Overlap Events.",
+          "why": "Hazards usually detect rather than physically block.",
+          "see": "Player entry fires Begin Overlap.",
+          "check": "Before moving on, prove this step: Player entry fires Begin Overlap.",
+          "troubleshoot": [
+            "Overlap Pawn and Generate Overlap Events are the important first checks."
+          ],
+          "visual": {
+            "src": "assets/book/collision-responses.webp",
+            "caption": "Use overlap rather than block when the player should enter the hazard.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Choose damage rule",
+          "where": "BP_DamageZone → Variables → DamageAmount",
+          "do": "Expose DamageAmount; large value can behave as instant death or normal value can hurt.",
+          "why": "One class can support lava, spikes and kill volumes.",
+          "see": "Value appears in instance Details.",
+          "check": "Before moving on, prove this step: Value appears in instance Details.",
+          "troubleshoot": [
+            "Use an exposed DamageAmount to tune instances without graph edits."
+          ],
+          "visual": {
+            "src": "assets/book/variables-panel.webp",
+            "caption": "Expose DamageAmount so each placed hazard can vary.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Apply Damage",
+          "where": "Box Collision → OnComponentBeginOverlap → Apply Damage",
+          "do": "On valid player overlap, Apply Damage to Other Actor.",
+          "why": "The hazard uses the same generic player health pipeline as weapons.",
+          "see": "Health drops / death triggers.",
+          "check": "Before moving on, prove this step: Health drops / death triggers.",
+          "troubleshoot": [
+            "If damage never arrives, prove the overlap event fires before debugging health."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/collision-process.svg",
+            "caption": "The overlap event starts the damage response.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Optional repeated damage",
+          "where": "Begin/End Overlap → start/clear repeating Timer if lingering damage is required",
+          "do": "For lingering hazards, start a repeating timer while inside and clear it on End Overlap.",
+          "why": "Timers make damage-over-time intentional and controllable.",
+          "see": "Damage stops when player leaves.",
+          "check": "Before moving on, prove this step: Damage stops when player leaves.",
+          "troubleshoot": [
+            "Clear repeating timers on End Overlap so damage does not continue after leaving."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Applying damage on Tick to everything in the level.",
@@ -2292,7 +3809,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "⚠",
       "featured": false,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "random-spawner",
@@ -2309,42 +3827,98 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "data",
       "steps": [
-        [
-          "Create SpawnClasses array",
-          "Make an Array of Actor Class references and add your pickup/enemy classes.",
-          "Data drives which classes are allowed without branching for each one.",
-          "Array contains at least two valid classes."
-        ],
-        [
-          "Create spawn points",
-          "Use Target Point Actors or child Scene Components and store references in an array.",
-          "Designer-controlled points prevent random spawns inside walls.",
-          "Points are visible/positionable in editor."
-        ],
-        [
-          "Pick random class",
-          "Random Integer in Range 0 → Length-1, then Get from SpawnClasses.",
-          "Array length determines safe index range.",
-          "Different tests return different classes."
-        ],
-        [
-          "Pick random point",
-          "Use the same pattern on spawn point array.",
-          "Separates what to spawn from where to spawn.",
-          "Random valid transform is produced."
-        ],
-        [
-          "Spawn",
-          "Spawn Actor From Class using chosen class + point transform.",
-          "Data selections become a runtime instance.",
-          "A valid Actor appears at one of the points."
-        ],
-        [
-          "Add limits",
-          "Track ActiveCount or use a timer interval so the system cannot flood the level.",
-          "Spawner rules matter for performance/game balance.",
-          "Active Actors remain within your chosen cap."
-        ]
+        {
+          "title": "Create SpawnClasses array",
+          "where": "Spawner Blueprint → Variables → Actor Class Reference Array",
+          "do": "Make an Array of Actor Class references and add your pickup/enemy classes.",
+          "why": "Data drives which classes are allowed without branching for each one.",
+          "see": "Array contains at least two valid classes.",
+          "check": "Before moving on, prove this step: Array contains at least two valid classes.",
+          "troubleshoot": [
+            "An empty SpawnClasses array will make the random index invalid."
+          ],
+          "visual": {
+            "src": "assets/book/containers.webp",
+            "caption": "Arrays are useful for groups of spawn classes and points.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Create spawn points",
+          "where": "Level Target Points or Spawner child Scene Components → array references",
+          "do": "Use Target Point Actors or child Scene Components and store references in an array.",
+          "why": "Designer-controlled points prevent random spawns inside walls.",
+          "see": "Points are visible/positionable in editor.",
+          "check": "Before moving on, prove this step: Points are visible/positionable in editor.",
+          "troubleshoot": [
+            "Make sure every spawn point reference is assigned."
+          ],
+          "visual": {
+            "src": "assets/book/containers.webp",
+            "caption": "Store multiple spawn locations in an array.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Pick random class",
+          "where": "Spawner graph → Random Integer in Range → SpawnClasses Get",
+          "do": "Random Integer in Range 0 → Length-1, then Get from SpawnClasses.",
+          "why": "Array length determines safe index range.",
+          "see": "Different tests return different classes.",
+          "check": "Before moving on, prove this step: Different tests return different classes.",
+          "troubleshoot": [
+            "Use Length-1 as the maximum valid index."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/data-process.svg",
+            "caption": "Choose one item from the class collection.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Pick random point",
+          "where": "Spawner graph → Random Integer in Range → SpawnPoints Get",
+          "do": "Use the same pattern on spawn point array.",
+          "why": "Separates what to spawn from where to spawn.",
+          "see": "Random valid transform is produced.",
+          "check": "Before moving on, prove this step: Random valid transform is produced.",
+          "troubleshoot": [
+            "Use Length-1 for the point array too."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/data-process.svg",
+            "caption": "Choose one item from the point collection.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Spawn",
+          "where": "Spawner graph → Spawn Actor From Class",
+          "do": "Spawn Actor From Class using chosen class + point transform.",
+          "why": "Data selections become a runtime instance.",
+          "see": "A valid Actor appears at one of the points.",
+          "check": "Before moving on, prove this step: A valid Actor appears at one of the points.",
+          "troubleshoot": [
+            "If nothing appears, print the chosen class and transform."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Add limits",
+          "where": "Spawner Variables / Timer logic → ActiveCount or interval limit",
+          "do": "Track ActiveCount or use a timer interval so the system cannot flood the level.",
+          "why": "Spawner rules matter for performance/game balance.",
+          "see": "Active Actors remain within your chosen cap.",
+          "check": "Before moving on, prove this step: Active Actors remain within your chosen cap.",
+          "troubleshoot": [
+            "Add limits before leaving a repeating spawner running unattended."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Random index uses Length instead of Length-1.",
@@ -2362,7 +3936,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "🎲",
       "featured": false,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "ai-patrol",
@@ -2379,42 +3954,76 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "ai",
       "steps": [
-        [
-          "Confirm NavMesh",
-          "Place Nav Mesh Bounds Volume around walkable space and press P to visualise navigation.",
-          "AI movement needs navigable space.",
-          "Walkable floor shows navigation overlay."
-        ],
-        [
-          "Use an AI Character",
-          "Create/choose Character with an AIController assigned.",
-          "Character + controller split body from decision-making.",
-          "Enemy is possessed by AI during Play."
-        ],
-        [
-          "Place patrol points",
-          "Add Target Points or a patrol-point Actor array.",
-          "Explicit patrol points give level designers control.",
-          "At least two reachable points exist."
-        ],
-        [
-          "Move to current point",
-          "Use AI Move To or a Behaviour Tree Move To task targeting a point.",
-          "Navigation finds a path instead of moving directly through walls.",
-          "Enemy walks to the selected point."
-        ],
-        [
-          "Advance point",
-          "On success, choose next point (index +1 wrapping to 0) and move again.",
-          "A tiny state machine turns one move into a patrol loop.",
-          "Enemy cycles through all points."
-        ],
-        [
-          "Watch failures",
-          "Test blocked/unreachable points and use debug output.",
-          "AI needs explicit handling of navigation failure.",
-          "Bad point fails visibly rather than silently freezing."
-        ]
+        {
+          "title": "Prepare a NavMesh",
+          "where": "Level → place NavMeshBoundsVolume and press P",
+          "do": "Make sure the patrol area is covered by the green NavMesh.",
+          "why": "Patrol AI cannot move if the level has no navigable space.",
+          "see": "Green navigation covers the patrol floor area.",
+          "check": "The patrol route lies on navigable ground.",
+          "visual": {
+            "src": "assets/diagrams/gold/ai-process.svg",
+            "caption": "AI movement begins with a valid NavMesh.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Place patrol points",
+          "where": "Level Editor → Place Actors → Target Point",
+          "do": "Place at least two Target Points and name them PatrolA and PatrolB.",
+          "why": "Patrol AI needs explicit destinations.",
+          "see": "The points are visible in the Outliner.",
+          "check": "The points are in sensible reachable positions.",
+          "visual": {
+            "src": "assets/diagrams/gold/ai-example.svg",
+            "caption": "Named target points make patrol routes readable.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Store the patrol targets",
+          "where": "AI Blueprint or Blackboard",
+          "do": "Give the AI a way to know which patrol point is current and which comes next.",
+          "why": "Patrol behaviour is a sequence of destinations, not random guessing.",
+          "see": "A variable or Blackboard key stores the target.",
+          "check": "You can inspect the target during testing.",
+          "visual": {
+            "src": "assets/diagrams/gold/ai-process.svg",
+            "caption": "AI needs stored state for the current target.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Move the AI to the target",
+          "where": "AI behaviour logic → Move To",
+          "do": "Call Move To for the current patrol point.",
+          "why": "Movement to a target is the core patrol behaviour.",
+          "see": "The AI walks to PatrolA or PatrolB during Play.",
+          "check": "It actually reaches the point rather than stopping immediately.",
+          "visual": {
+            "src": "assets/diagrams/gold/ai-process.svg",
+            "caption": "Patrol = choose destination, then Move To it.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Switch targets and retest",
+          "where": "After reaching a point",
+          "do": "When the AI reaches one point, update the target to the next point and repeat.",
+          "why": "The patrol loop only exists once the AI can change to another destination.",
+          "see": "The enemy walks back and forth between the points.",
+          "check": "You can explain the order of targets in the patrol loop.",
+          "visual": {
+            "src": "assets/diagrams/gold/ai-example.svg",
+            "caption": "A readable patrol is one you can predict and explain.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
+        }
       ],
       "mistakes": [
         "No NavMesh covers the floor.",
@@ -2432,7 +4041,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "↺",
       "featured": true,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "ai-chase",
@@ -2449,36 +4059,86 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "ai",
       "steps": [
-        [
-          "Get a player target",
-          "For a quick prototype, obtain player Pawn; for better AI, set it when perception detects the player.",
-          "AI needs a clear target reference rather than guessing every frame.",
-          "Target reference becomes valid."
-        ],
-        [
-          "Store target",
-          "Put TargetActor in Blackboard or an AIController variable.",
-          "Decision data lives where the AI logic can access it.",
-          "Debugger shows TargetActor set."
-        ],
-        [
-          "Move To target",
-          "Run Move To / AI Move To using TargetActor.",
-          "Navigation continually plans movement toward the target Actor.",
-          "Enemy follows around obstacles."
-        ],
-        [
-          "Choose chase condition",
-          "Use distance/perception Boolean to decide when TargetActor is set/cleared.",
-          "A chase needs a start and stop rule.",
-          "Enemy stops chasing after the condition is lost."
-        ],
-        [
-          "Return to patrol",
-          "When target clears, resume patrol logic.",
-          "AI states should transition rather than ending in a dead graph.",
-          "Enemy returns to normal behaviour after losing player."
-        ]
+        {
+          "title": "Get a player target",
+          "where": "AIController / enemy AI graph → Get Player Pawn or perception event",
+          "do": "For a quick prototype, obtain player Pawn; for better AI, set it when perception detects the player.",
+          "why": "AI needs a clear target reference rather than guessing every frame.",
+          "see": "Target reference becomes valid.",
+          "check": "Before moving on, prove this step: Target reference becomes valid.",
+          "troubleshoot": [
+            "Perception is better than Get Player Pawn for the final version, but a direct player target is fine for first proof."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/ai-process.svg",
+            "caption": "A chase begins when the AI has a valid player target.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Store target",
+          "where": "AIController or Blackboard → TargetActor",
+          "do": "Put TargetActor in Blackboard or an AIController variable.",
+          "why": "Decision data lives where the AI logic can access it.",
+          "see": "Debugger shows TargetActor set.",
+          "check": "Before moving on, prove this step: Debugger shows TargetActor set.",
+          "troubleshoot": [
+            "If TargetActor is None, Move To has nothing useful to chase."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/ai-process.svg",
+            "caption": "Store the current target in AI state or Blackboard.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Move To target",
+          "where": "AIController / Behaviour Tree → Move To / AI Move To",
+          "do": "Run Move To / AI Move To using TargetActor.",
+          "why": "Navigation continually plans movement toward the target Actor.",
+          "see": "Enemy follows around obstacles.",
+          "check": "Before moving on, prove this step: Enemy follows around obstacles.",
+          "troubleshoot": [
+            "If AI refuses to move, verify NavMesh first."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/ai-example.svg",
+            "caption": "Move To turns the stored target into movement.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Choose chase condition",
+          "where": "AI decision logic → distance/perception condition",
+          "do": "Use distance/perception Boolean to decide when TargetActor is set/cleared.",
+          "why": "A chase needs a start and stop rule.",
+          "see": "Enemy stops chasing after the condition is lost.",
+          "check": "Before moving on, prove this step: Enemy stops chasing after the condition is lost.",
+          "troubleshoot": [
+            "Clear the target when the chase condition is no longer true."
+          ],
+          "visual": {
+            "src": "assets/ue5/current/branch-node-real.webp",
+            "caption": "A condition decides whether the chase remains active.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Return to patrol",
+          "where": "Target clear/failure path → resume patrol task/state",
+          "do": "When target clears, resume patrol logic.",
+          "why": "AI states should transition rather than ending in a dead graph.",
+          "see": "Enemy returns to normal behaviour after losing player.",
+          "check": "Before moving on, prove this step: Enemy returns to normal behaviour after losing player.",
+          "troubleshoot": [
+            "Make patrol and chase states mutually understandable rather than both fighting for movement."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Calling Get Player Character every Tick in many enemies.",
@@ -2496,7 +4156,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "⇝",
       "featured": false,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "ai-perception",
@@ -2513,36 +4174,81 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "ai",
       "steps": [
-        [
-          "Add AI Perception",
-          "On your AIController add an AI Perception component.",
-          "Perception belongs with the controller making decisions.",
-          "Component is present on controller."
-        ],
-        [
-          "Configure Sight",
-          "Add AI Sight config; set Sight Radius, Lose Sight Radius and Peripheral Vision.",
-          "These parameters describe what the AI can sense.",
-          "Debug visualisation reflects the configured sense."
-        ],
-        [
-          "Handle Target Perception Updated",
-          "Use the event and inspect Actor + Stimulus Successfully Sensed.",
-          "The event tells you when perception state changes rather than polling.",
-          "Seeing player gives Successfully Sensed True."
-        ],
-        [
-          "Set/clear Blackboard Target",
-          "If sensed, set TargetActor; if lost, clear it or store last known location.",
-          "Perception data feeds Behaviour Tree decisions.",
-          "Blackboard target changes live in debugger."
-        ],
-        [
-          "Test line of sight",
-          "Hide behind walls, approach from outside FOV, then enter view.",
-          "Perception must react to occlusion and configuration, not just distance.",
-          "AI only detects under the conditions you designed."
-        ]
+        {
+          "title": "Add AI Perception",
+          "where": "AIController Blueprint → Components → Add → AI Perception",
+          "do": "On your AIController add an AI Perception component.",
+          "why": "Perception belongs with the controller making decisions.",
+          "see": "Component is present on controller.",
+          "check": "Before moving on, prove this step: Component is present on controller.",
+          "troubleshoot": [
+            "If the component is on the wrong class, the expected perception events may never fire."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/ai-process.svg",
+            "caption": "AI Perception supplies sensed targets to the decision system.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Configure Sight",
+          "where": "Select AI Perception → Details → Senses Config → AI Sight",
+          "do": "Add AI Sight config; set Sight Radius, Lose Sight Radius and Peripheral Vision.",
+          "why": "These parameters describe what the AI can sense.",
+          "see": "Debug visualisation reflects the configured sense.",
+          "check": "Before moving on, prove this step: Debug visualisation reflects the configured sense.",
+          "troubleshoot": [
+            "Make Lose Sight Radius slightly larger than Sight Radius for stable behaviour."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Handle Target Perception Updated",
+          "where": "AIController Event Graph → On Target Perception Updated",
+          "do": "Use the event and inspect Actor + Stimulus Successfully Sensed.",
+          "why": "The event tells you when perception state changes rather than polling.",
+          "see": "Seeing player gives Successfully Sensed True.",
+          "check": "Before moving on, prove this step: Seeing player gives Successfully Sensed True.",
+          "troubleshoot": [
+            "Inspect Successfully Sensed rather than assuming every update means “seen”."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/events-process.svg",
+            "caption": "Target Perception Updated is the event entry point.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Set/clear Blackboard Target",
+          "where": "Perception event → Blackboard TargetActor set/clear",
+          "do": "If sensed, set TargetActor; if lost, clear it or store last known location.",
+          "why": "Perception data feeds Behaviour Tree decisions.",
+          "see": "Blackboard target changes live in debugger.",
+          "check": "Before moving on, prove this step: Blackboard target changes live in debugger.",
+          "troubleshoot": [
+            "Clear or update Blackboard data when sight is lost."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/ai-process.svg",
+            "caption": "Perception results update the Blackboard target.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Test line of sight",
+          "where": "Play mode → test walls, FOV and sight radii",
+          "do": "Hide behind walls, approach from outside FOV, then enter view.",
+          "why": "Perception must react to occlusion and configuration, not just distance.",
+          "see": "AI only detects under the conditions you designed.",
+          "check": "Before moving on, prove this step: AI only detects under the conditions you designed.",
+          "troubleshoot": [
+            "Walls/FOV tests reveal configuration problems that straight-line tests hide."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Adding Perception to the Character while behaviour logic lives in AIController without clear routing.",
@@ -2560,7 +4266,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "◉",
       "featured": false,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "ai-attack-range",
@@ -2577,36 +4284,81 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "ai",
       "steps": [
-        [
-          "Create AttackRange",
-          "Add a Float such as 150–250 depending on character scale.",
-          "Named range makes the design tunable.",
-          "Range is visible in defaults."
-        ],
-        [
-          "Measure distance",
-          "Use Distance between enemy and TargetActor or a Behaviour Tree decorator/service.",
-          "Attack decision depends on spatial state.",
-          "Debug value decreases as enemy approaches."
-        ],
-        [
-          "Choose movement vs attack",
-          "If distance > AttackRange chase; otherwise stop/attack.",
-          "Two mutually clear states prevent jittery simultaneous move/attack.",
-          "Enemy stops at the intended distance."
-        ],
-        [
-          "Apply attack damage",
-          "During attack event/notify, Apply Damage to target.",
-          "Damage should happen at an intentional attack moment.",
-          "Player loses expected health."
-        ],
-        [
-          "Add cooldown",
-          "Use a timer/Cooldown decorator so the attack cannot happen every frame.",
-          "Attack rate is a game rule.",
-          "Enemy waits between attacks."
-        ]
+        {
+          "title": "Create AttackRange",
+          "where": "Enemy AI / Blackboard / Character variables → AttackRange",
+          "do": "Add a Float such as 150–250 depending on character scale.",
+          "why": "Named range makes the design tunable.",
+          "see": "Range is visible in defaults.",
+          "check": "Before moving on, prove this step: Range is visible in defaults.",
+          "troubleshoot": [
+            "Tune AttackRange from real character scale, not a random number."
+          ],
+          "visual": {
+            "src": "assets/book/variables-panel.webp",
+            "caption": "AttackRange is an explicit tuning value.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Measure distance",
+          "where": "AI logic → Get Distance To / Vector Distance",
+          "do": "Use Distance between enemy and TargetActor or a Behaviour Tree decorator/service.",
+          "why": "Attack decision depends on spatial state.",
+          "see": "Debug value decreases as enemy approaches.",
+          "check": "Before moving on, prove this step: Debug value decreases as enemy approaches.",
+          "troubleshoot": [
+            "If the target is invalid, distance tests are meaningless."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/ai-process.svg",
+            "caption": "Measure the current distance to the target.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Choose movement vs attack",
+          "where": "AI Branch or Behaviour Tree decorator → compare distance to AttackRange",
+          "do": "If distance > AttackRange chase; otherwise stop/attack.",
+          "why": "Two mutually clear states prevent jittery simultaneous move/attack.",
+          "see": "Enemy stops at the intended distance.",
+          "check": "Before moving on, prove this step: Enemy stops at the intended distance.",
+          "troubleshoot": [
+            "Stop movement before attacking if sliding looks wrong."
+          ],
+          "visual": {
+            "src": "assets/ue5/current/branch-node-real.webp",
+            "caption": "Choose chase or attack based on the range comparison.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Apply attack damage",
+          "where": "Attack event / animation notify → Apply Damage",
+          "do": "During attack event/notify, Apply Damage to target.",
+          "why": "Damage should happen at an intentional attack moment.",
+          "see": "Player loses expected health.",
+          "check": "Before moving on, prove this step: Player loses expected health.",
+          "troubleshoot": [
+            "Apply damage at the correct attack moment, ideally an animation notify/window."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Add cooldown",
+          "where": "AI timer / cooldown variable / Behaviour Tree Cooldown decorator",
+          "do": "Use a timer/Cooldown decorator so the attack cannot happen every frame.",
+          "why": "Attack rate is a game rule.",
+          "see": "Enemy waits between attacks.",
+          "check": "Before moving on, prove this step: Enemy waits between attacks.",
+          "troubleshoot": [
+            "Cooldowns should prevent per-frame damage while keeping combat responsive."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Applying damage every Tick while inside range.",
@@ -2624,7 +4376,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "⚔",
       "featured": false,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "save-checkpoint",
@@ -2641,36 +4394,76 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "savegame",
       "steps": [
-        [
-          "Create BP_SaveGame",
-          "Create a SaveGame Blueprint with RespawnTransform and any other persistent values.",
-          "SaveGame is a serialisable data container, not a gameplay Actor.",
-          "Variables exist on the SaveGame class."
-        ],
-        [
-          "Choose slot name",
-          "Use a consistent SlotName such as PlayerSave and UserIndex 0.",
-          "Loading must ask for the same slot you saved.",
-          "Slot values are centralised rather than repeated strings everywhere."
-        ],
-        [
-          "Save at checkpoint",
-          "Create SaveGame Object, cast/use your class, set RespawnTransform, then Save Game to Slot.",
-          "You copy current runtime state into the serialisable object before writing.",
-          "Save node returns success during test."
-        ],
-        [
-          "Load at startup",
-          "Does Save Game Exist → Load Game From Slot → read RespawnTransform.",
-          "Existence check handles first-ever run safely.",
-          "First run uses default start; later run finds save."
-        ],
-        [
-          "Apply loaded transform",
-          "After player spawn/initialisation, place the player at loaded checkpoint.",
-          "Loaded data only matters once reapplied to runtime state.",
-          "Quit/relaunch returns player to saved checkpoint."
-        ]
+        {
+          "title": "Decide what checkpoint data to save",
+          "where": "Before writing any nodes",
+          "do": "Choose the minimum checkpoint information you need, such as a checkpoint name or location.",
+          "why": "Save systems are better when you are specific about the data you persist.",
+          "see": "You have a clear list of saved checkpoint values.",
+          "check": "The list is short and intentional.",
+          "visual": {
+            "src": "assets/diagrams/gold/savegame-example.svg",
+            "caption": "A save should capture the specific checkpoint data you need.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Create a SaveGame class if you do not already have one",
+          "where": "Content Drawer → SaveGame Blueprint",
+          "do": "Use or create a SaveGame Blueprint with variables for the checkpoint data.",
+          "why": "Checkpoint saving still uses the normal Unreal SaveGame pattern.",
+          "see": "The save asset contains the checkpoint variables.",
+          "check": "The variables are of sensible types.",
+          "visual": {
+            "src": "assets/diagrams/gold/savegame-process.svg",
+            "caption": "SaveGame is the normal container for persisted checkpoint data.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Write the checkpoint data when a checkpoint activates",
+          "where": "Checkpoint overlap event → Create Save Game Object / Save Game to Slot",
+          "do": "When the player reaches a checkpoint, update the save object values and write them to a slot.",
+          "why": "The latest checkpoint should be captured the moment it becomes active.",
+          "see": "Activating the checkpoint triggers a save path.",
+          "check": "The save call returns success.",
+          "visual": {
+            "src": "assets/diagrams/gold/savegame-process.svg",
+            "caption": "Write the checkpoint data at the moment the checkpoint is reached.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Load the checkpoint data on BeginPlay or Continue",
+          "where": "Character/GameMode/GameInstance BeginPlay → Load Game From Slot",
+          "do": "Load the save slot, cast to your checkpoint save class and read the stored data.",
+          "why": "A saved checkpoint only matters if the game reads it back later.",
+          "see": "The load path gives you the saved checkpoint values.",
+          "check": "The loaded values match the most recent activated checkpoint.",
+          "visual": {
+            "src": "assets/diagrams/gold/savegame-example.svg",
+            "caption": "Load the saved checkpoint information before trying to respawn.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Use the loaded checkpoint for respawn",
+          "where": "Respawn logic",
+          "do": "Feed the loaded checkpoint data into your respawn system so the player returns to the saved point.",
+          "why": "This completes the full loop: activate checkpoint → save it → restore it next session.",
+          "see": "Closing and reopening the game still respawns the player at the saved checkpoint.",
+          "check": "You have tested the system across separate play sessions.",
+          "visual": {
+            "src": "assets/ue5/current/editor-main-window.webp",
+            "caption": "The real test is whether the checkpoint survives a full restart.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
+        }
       ],
       "mistakes": [
         "Creating a SaveGame object but never calling Save Game to Slot.",
@@ -2688,7 +4481,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "▣",
       "featured": true,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "struct-data-table",
@@ -2705,42 +4499,103 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "data",
       "steps": [
-        [
-          "Create a Struct",
-          "Make ST_ItemData with fields such as DisplayName, Value, Icon/Colour and Description.",
-          "A Struct groups related values into one meaningful record.",
-          "Struct fields describe one content item."
-        ],
-        [
-          "Create a Data Table",
-          "Create Data Table using ST_ItemData as Row Structure.",
-          "A Data Table stores many records with the same shape.",
-          "Table columns match the Struct."
-        ],
-        [
-          "Add rows",
-          "Create rows KeyRed, KeyBlue, HealthSmall etc and fill their data.",
-          "Rows let designers add content without duplicating gameplay graphs.",
-          "Each row has different values."
-        ],
-        [
-          "Choose RowName in Blueprint",
-          "Expose an ItemRowName Name variable on your pickup Actor.",
-          "Each placed instance can select which data record it represents.",
-          "Different instances choose different rows."
-        ],
-        [
-          "Get Data Table Row",
-          "On BeginPlay/interaction, Get Data Table Row using ItemRowName and Break ST_ItemData.",
-          "Gameplay reads configured content at runtime.",
-          "The Actor displays/uses values from the chosen row."
-        ],
-        [
-          "Handle Row Not Found",
-          "Use the failure output to print a useful warning during development.",
-          "Bad data should fail visibly, not silently.",
-          "Invalid row produces a clear debug message."
-        ]
+        {
+          "title": "Create a Struct",
+          "where": "Content Drawer → right-click → Blueprints → Structure",
+          "do": "Make ST_ItemData with fields such as DisplayName, Value, Icon/Colour and Description.",
+          "why": "A Struct groups related values into one meaningful record.",
+          "see": "Struct fields describe one content item.",
+          "check": "Before moving on, prove this step: Struct fields describe one content item.",
+          "troubleshoot": [
+            "Use field names that describe real content, not generic Value1/Value2."
+          ],
+          "visual": {
+            "src": "assets/book/containers.webp",
+            "caption": "A Struct defines the fields used by each row.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Create a Data Table",
+          "where": "Content Drawer → right-click → Miscellaneous → Data Table → choose ST_ItemData",
+          "do": "Create Data Table using ST_ItemData as Row Structure.",
+          "why": "A Data Table stores many records with the same shape.",
+          "see": "Table columns match the Struct.",
+          "check": "Before moving on, prove this step: Table columns match the Struct.",
+          "troubleshoot": [
+            "Choose the correct Struct when creating the Data Table."
+          ],
+          "visual": {
+            "src": "assets/ue5/current/datatable-real.webp",
+            "caption": "A real Unreal Data Table created from a row Structure.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Add rows",
+          "where": "Open Data Table → Add Row",
+          "do": "Create rows KeyRed, KeyBlue, HealthSmall etc and fill their data.",
+          "why": "Rows let designers add content without duplicating gameplay graphs.",
+          "see": "Each row has different values.",
+          "check": "Before moving on, prove this step: Each row has different values.",
+          "troubleshoot": [
+            "Readable RowNames are much easier to debug than Row_0/Row_1."
+          ],
+          "visual": {
+            "src": "assets/ue5/current/datatable-rows-closeup.webp",
+            "caption": "Rows are named and filled directly in the Data Table editor.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Choose RowName in Blueprint",
+          "where": "Pickup Blueprint → Variables → Name ItemRowName → Instance Editable",
+          "do": "Expose an ItemRowName Name variable on your pickup Actor.",
+          "why": "Each placed instance can select which data record it represents.",
+          "see": "Different instances choose different rows.",
+          "check": "Before moving on, prove this step: Different instances choose different rows.",
+          "troubleshoot": [
+            "Compile after exposing ItemRowName so instances can choose rows."
+          ],
+          "visual": {
+            "src": "assets/book/variables-panel.webp",
+            "caption": "Expose a RowName on the pickup so instances can select their data.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Get Data Table Row",
+          "where": "Pickup Event Graph → Get Data Table Row → Break ST_ItemData",
+          "do": "On BeginPlay/interaction, Get Data Table Row using ItemRowName and Break ST_ItemData.",
+          "why": "Gameplay reads configured content at runtime.",
+          "see": "The Actor displays/uses values from the chosen row.",
+          "check": "Before moving on, prove this step: The Actor displays/uses values from the chosen row.",
+          "troubleshoot": [
+            "If a row returns empty, print the RowName you actually passed in."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/data-process.svg",
+            "caption": "Get Data Table Row turns a RowName into structured content.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Handle Row Not Found",
+          "where": "Get Data Table Row → Row Not Found execution path",
+          "do": "Use the failure output to print a useful warning during development.",
+          "why": "Bad data should fail visibly, not silently.",
+          "see": "Invalid row produces a clear debug message.",
+          "check": "Before moving on, prove this step: Invalid row produces a clear debug message.",
+          "troubleshoot": [
+            "Use Row Not Found to produce a useful development warning."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Hard-coding a giant Branch for every item type.",
@@ -2758,7 +4613,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "▦",
       "featured": false,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "gameinstance-state",
@@ -2774,36 +4630,81 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "framework",
       "steps": [
-        [
-          "Create BP_GameInstance",
-          "Create a Blueprint class based on GameInstance.",
-          "GameInstance exists for the lifetime of the running game across map loads.",
-          "Asset is based on GameInstance."
-        ],
-        [
-          "Set it in Project Settings",
-          "Project Settings → Maps & Modes → Game Instance Class = BP_GameInstance.",
-          "Creating the class alone does not make the project use it.",
-          "Project points to your class."
-        ],
-        [
-          "Add persistent runtime variable",
-          "Add e.g. TotalScore or SelectedCharacter.",
-          "These values need to survive map transition, not necessarily application restart.",
-          "Value exists on GameInstance."
-        ],
-        [
-          "Get GameInstance when needed",
-          "Get Game Instance → Cast to BP_GameInstance (or use a cleaner abstraction later) and read/write the value.",
-          "Other gameplay classes access the session-level owner.",
-          "Value can be changed before map load."
-        ],
-        [
-          "Open another level and verify",
-          "Change map, then read the value again.",
-          "Tests the actual lifetime you chose.",
-          "Value remains after level load."
-        ]
+        {
+          "title": "Create BP_GameInstance",
+          "where": "Content Drawer → Blueprint Class → All Classes → GameInstance",
+          "do": "Create a Blueprint class based on GameInstance.",
+          "why": "GameInstance exists for the lifetime of the running game across map loads.",
+          "see": "Asset is based on GameInstance.",
+          "check": "Before moving on, prove this step: Asset is based on GameInstance.",
+          "troubleshoot": [
+            "Use GameInstance only for state that should survive map loads during the running game."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/framework-example.svg",
+            "caption": "GameInstance is the framework class intended to persist during map changes.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Set it in Project Settings",
+          "where": "Edit → Project Settings → Maps & Modes → Game Instance Class",
+          "do": "Project Settings → Maps & Modes → Game Instance Class = BP_GameInstance.",
+          "why": "Creating the class alone does not make the project use it.",
+          "see": "Project points to your class.",
+          "check": "Before moving on, prove this step: Project points to your class.",
+          "troubleshoot": [
+            "If your custom GameInstance is not selected in Project Settings, its variables will never be used."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Add persistent runtime variable",
+          "where": "BP_GameInstance → Variables",
+          "do": "Add e.g. TotalScore or SelectedCharacter.",
+          "why": "These values need to survive map transition, not necessarily application restart.",
+          "see": "Value exists on GameInstance.",
+          "check": "Before moving on, prove this step: Value exists on GameInstance.",
+          "troubleshoot": [
+            "Give persistent variables meaningful defaults."
+          ],
+          "visual": {
+            "src": "assets/book/variables-panel.webp",
+            "caption": "Persistent runtime values live as variables on the GameInstance.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Get GameInstance when needed",
+          "where": "Any Blueprint → Get Game Instance → Cast to BP_GameInstance",
+          "do": "Get Game Instance → Cast to BP_GameInstance (or use a cleaner abstraction later) and read/write the value.",
+          "why": "Other gameplay classes access the session-level owner.",
+          "see": "Value can be changed before map load.",
+          "check": "Before moving on, prove this step: Value can be changed before map load.",
+          "troubleshoot": [
+            "If the cast fails, verify the project is using BP_GameInstance."
+          ],
+          "visual": {
+            "src": "assets/book/casting-example.webp",
+            "caption": "Get Game Instance then access your specific GameInstance class.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Open another level and verify",
+          "where": "File/Open Level or gameplay level change → read the value again",
+          "do": "Change map, then read the value again.",
+          "why": "Tests the actual lifetime you chose.",
+          "see": "Value remains after level load.",
+          "check": "Before moving on, prove this step: Value remains after level load.",
+          "troubleshoot": [
+            "A level load is the real proof; test before and after changing maps."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Assuming GameInstance saves data after quitting the application. It does not; use SaveGame for that.",
@@ -2820,7 +4721,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "∞",
       "featured": false,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "sound-feedback",
@@ -2836,30 +4738,59 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "events",
       "steps": [
-        [
-          "Import/choose a sound",
-          "Use a suitable Sound Wave/Sound Cue/MetaSound asset.",
-          "Feedback starts with an asset that represents the action clearly.",
-          "Sound previews correctly in Content Browser."
-        ],
-        [
-          "Choose 2D or world sound",
-          "Use Play Sound 2D for UI/non-positional feedback; Play Sound at Location for world events.",
-          "Spatial behaviour should match what the sound represents.",
-          "World sound changes with distance/position if configured."
-        ],
-        [
-          "Trigger from the event",
-          "Call sound exactly when pickup/door/fire/interaction succeeds.",
-          "Audio should confirm the real gameplay event, not button press if the action failed.",
-          "Locked door and opened door can produce different feedback."
-        ],
-        [
-          "Avoid spam",
-          "Gate/cooldown repeated actions if the sound becomes a rapid machine-gun of clicks.",
-          "Audio repetition can reveal logic problems and annoy players.",
-          "Repeated interactions sound intentional."
-        ]
+        {
+          "title": "Import/choose a sound",
+          "where": "Content Drawer → import/select Sound Wave, Sound Cue or MetaSound Source",
+          "do": "Use a suitable Sound Wave/Sound Cue/MetaSound asset.",
+          "why": "Feedback starts with an asset that represents the action clearly.",
+          "see": "Sound previews correctly in Content Browser.",
+          "check": "Before moving on, prove this step: Sound previews correctly in Content Browser.",
+          "troubleshoot": [
+            "Keep source assets organised and check licences for external sounds."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Choose 2D or world sound",
+          "where": "Blueprint Event Graph → Play Sound 2D or Play Sound at Location",
+          "do": "Use Play Sound 2D for UI/non-positional feedback; Play Sound at Location for world events.",
+          "why": "Spatial behaviour should match what the sound represents.",
+          "see": "World sound changes with distance/position if configured.",
+          "check": "Before moving on, prove this step: World sound changes with distance/position if configured.",
+          "troubleshoot": [
+            "Use 2D for non-positional UI feedback and world sound when position matters."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Trigger from the event",
+          "where": "Pickup/door/fire/interact success execution path → sound node",
+          "do": "Call sound exactly when pickup/door/fire/interaction succeeds.",
+          "why": "Audio should confirm the real gameplay event, not button press if the action failed.",
+          "see": "Locked door and opened door can produce different feedback.",
+          "check": "Before moving on, prove this step: Locked door and opened door can produce different feedback.",
+          "troubleshoot": [
+            "Trigger the sound only when the action actually succeeds."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/events-process.svg",
+            "caption": "Play the sound on the exact success event, not on a vague nearby event.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Avoid spam",
+          "where": "Repeated-action logic → cooldown / Do Once / timer as appropriate",
+          "do": "Gate/cooldown repeated actions if the sound becomes a rapid machine-gun of clicks.",
+          "why": "Audio repetition can reveal logic problems and annoy players.",
+          "see": "Repeated interactions sound intentional.",
+          "check": "Before moving on, prove this step: Repeated interactions sound intentional.",
+          "troubleshoot": [
+            "Repeated actions often need cooldown/variation so feedback does not become noise."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Playing success sound before a Branch that may fail.",
@@ -2876,7 +4807,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "♪",
       "featured": false,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "niagara-impact",
@@ -2893,36 +4825,81 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "traces",
       "steps": [
-        [
-          "Choose Niagara system",
-          "Use/create a small impact burst.",
-          "The tutorial is about placement/triggering; start with an existing system if needed.",
-          "Niagara asset previews."
-        ],
-        [
-          "Use Hit Result",
-          "From your weapon trace, Break Hit Result and read Impact Point + Impact Normal.",
-          "The trace already knows where the surface was hit and which way it faces.",
-          "Debug values update per hit."
-        ],
-        [
-          "Spawn at Impact Point",
-          "Spawn System at Location using the impact position.",
-          "VFX appears where gameplay actually hit.",
-          "Burst appears on the target surface."
-        ],
-        [
-          "Orient to normal",
-          "Convert Impact Normal to a rotation if the effect needs to face away from the surface.",
-          "Orientation prevents sparks/decals pointing through walls.",
-          "Effects face consistently on floors and walls."
-        ],
-        [
-          "Only on valid hit",
-          "Run this only from Blocking Hit True.",
-          "No-hit shots should not spawn effects at zero/default coordinates.",
-          "Misses produce no world impact VFX."
-        ]
+        {
+          "title": "Choose Niagara system",
+          "where": "Content Drawer → select/create Niagara System",
+          "do": "Use/create a small impact burst.",
+          "why": "The tutorial is about placement/triggering; start with an existing system if needed.",
+          "see": "Niagara asset previews.",
+          "check": "Before moving on, prove this step: Niagara asset previews.",
+          "troubleshoot": [
+            "Start with a tiny known-working effect before building a complex Niagara system."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Use Hit Result",
+          "where": "Weapon trace → Break Hit Result",
+          "do": "From your weapon trace, Break Hit Result and read Impact Point + Impact Normal.",
+          "why": "The trace already knows where the surface was hit and which way it faces.",
+          "see": "Debug values update per hit.",
+          "check": "Before moving on, prove this step: Debug values update per hit.",
+          "troubleshoot": [
+            "Use Impact Point/Normal from the same trace that produced the hit."
+          ],
+          "visual": {
+            "src": "assets/diagrams/trace.svg",
+            "caption": "The Hit Result supplies the impact point and normal.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Spawn at Impact Point",
+          "where": "Blocking-hit path → Spawn System at Location",
+          "do": "Spawn System at Location using the impact position.",
+          "why": "VFX appears where gameplay actually hit.",
+          "see": "Burst appears on the target surface.",
+          "check": "Before moving on, prove this step: Burst appears on the target surface.",
+          "troubleshoot": [
+            "If the effect appears at the origin, inspect the transform pins."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/traces-example.svg",
+            "caption": "Spawn the effect only where the valid trace hit occurred.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Orient to normal",
+          "where": "Impact Normal → Make Rot from X/Z (as appropriate) → Spawn rotation",
+          "do": "Convert Impact Normal to a rotation if the effect needs to face away from the surface.",
+          "why": "Orientation prevents sparks/decals pointing through walls.",
+          "see": "Effects face consistently on floors and walls.",
+          "check": "Before moving on, prove this step: Effects face consistently on floors and walls.",
+          "troubleshoot": [
+            "Only orient to the normal when the effect actually needs surface direction."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Only on valid hit",
+          "where": "Line Trace Return Value / Blocking Hit branch",
+          "do": "Run this only from Blocking Hit True.",
+          "why": "No-hit shots should not spawn effects at zero/default coordinates.",
+          "see": "Misses produce no world impact VFX.",
+          "check": "Before moving on, prove this step: Misses produce no world impact VFX.",
+          "troubleshoot": [
+            "Do not spawn an impact effect on a miss."
+          ],
+          "visual": {
+            "src": "assets/ue5/current/branch-node-real.webp",
+            "caption": "Guard the effect with a successful/Blocking Hit condition.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        }
       ],
       "mistakes": [
         "Spawning at the weapon muzzle instead of impact.",
@@ -2940,7 +4917,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "✦",
       "featured": false,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "camera-shake",
@@ -2956,30 +4934,59 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "functions",
       "steps": [
-        [
-          "Create camera shake asset",
-          "Create a Camera Shake Base asset/class and configure a small pattern appropriate to your UE setup.",
-          "A reusable asset separates shake design from gameplay code.",
-          "Shake can be previewed/tuned."
-        ],
-        [
-          "Trigger at the event",
-          "From gun fire/dash/explosion event, start the camera shake through the player camera manager/controller.",
-          "Feedback happens at the moment the player causes/receives the action.",
-          "Action causes visible camera response."
-        ],
-        [
-          "Tune intensity",
-          "Keep normal actions subtle and reserve stronger shake for heavy events.",
-          "Too much camera movement harms readability and comfort.",
-          "The effect is noticeable without making aiming impossible."
-        ],
-        [
-          "Respect player comfort",
-          "Consider a settings multiplier or ability to disable strong shake.",
-          "Accessibility/comfort is part of professional polish.",
-          "Shake can be reduced/disabled if you add the setting."
-        ]
+        {
+          "title": "Create camera shake asset",
+          "where": "Content Drawer → right-click → Blueprint Class / Camera Shake Base asset as supported",
+          "do": "Create a Camera Shake Base asset/class and configure a small pattern appropriate to your UE setup.",
+          "why": "A reusable asset separates shake design from gameplay code.",
+          "see": "Shake can be previewed/tuned.",
+          "check": "Before moving on, prove this step: Shake can be previewed/tuned.",
+          "troubleshoot": [
+            "Keep the first shake subtle so it is easy to judge."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Trigger at the event",
+          "where": "Action event → Get Player Camera Manager / Start Camera Shake",
+          "do": "From gun fire/dash/explosion event, start the camera shake through the player camera manager/controller.",
+          "why": "Feedback happens at the moment the player causes/receives the action.",
+          "see": "Action causes visible camera response.",
+          "check": "Before moving on, prove this step: Action causes visible camera response.",
+          "troubleshoot": [
+            "Trigger it from the action event, not Tick."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/events-process.svg",
+            "caption": "Trigger the shake at the same event as the action that caused it.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
+        },
+        {
+          "title": "Tune intensity",
+          "where": "Camera Shake asset → pattern/intensity settings",
+          "do": "Keep normal actions subtle and reserve stronger shake for heavy events.",
+          "why": "Too much camera movement harms readability and comfort.",
+          "see": "The effect is noticeable without making aiming impossible.",
+          "check": "Before moving on, prove this step: The effect is noticeable without making aiming impossible.",
+          "troubleshoot": [
+            "Test several times; strong shake quickly becomes exhausting."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Respect player comfort",
+          "where": "Game settings / accessibility multiplier or disable option",
+          "do": "Consider a settings multiplier or ability to disable strong shake.",
+          "why": "Accessibility/comfort is part of professional polish.",
+          "see": "Shake can be reduced/disabled if you add the setting.",
+          "check": "Before moving on, prove this step: Shake can be reduced/disabled if you add the setting.",
+          "troubleshoot": [
+            "Player comfort settings should be considered for repeated/strong camera motion."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Using Tick to manually randomise camera rotation.",
@@ -2997,7 +5004,8 @@ window.UE5_TUTORIAL_DATA = {
       "icon": "≋",
       "featured": false,
       "referenceImages": [],
-      "source": null
+      "source": null,
+      "prescriptive": true
     },
     {
       "id": "silent-hill-fog",
@@ -3015,54 +5023,76 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "referenceLesson": "editor",
       "steps": [
-        [
-          "Study the reference",
-          "Look at the Silent Hill 2 reference images: nearby shapes remain readable, distant streets dissolve quickly, contrast is muted and the fog sits heavily around ground/architecture.",
-          "A visual target prevents random slider-moving. You are analysing principles, not trying to copy exact assets.",
-          "Write down three qualities you want: e.g. short visibility, cool-grey fog, readable silhouettes."
-        ],
-        [
-          "Add Exponential Height Fog",
-          "Place Actors → Visual Effects → Exponential Height Fog. Start with modest Fog Density and adjust Fog Height Falloff rather than immediately maxing density.",
-          "Exponential Height Fog naturally gives denser low areas and smoother distance falloff.",
-          "The scene loses distant clarity while nearby geometry remains readable."
-        ],
-        [
-          "Enable Volumetric Fog",
-          "In the fog Actor Details, enable Volumetric Fog. Start around default scattering and tune View Distance/Extinction carefully.",
-          "Volumetric Fog lets lights interact with the fog and produces depth/light shafts.",
-          "Moving around shows lighting volume in the fog rather than a flat screen overlay."
-        ],
-        [
-          "Control visibility intentionally",
-          "Adjust Fog Density and the relevant Start Distance / View Distance controls until the player sees enough to navigate but not enough to feel safe. In Volumetric Fog, also use Extinction Scale carefully to control how strongly the medium blocks light.",
-          "Horror fog is level-design control: it hides future information while preserving immediate playability.",
-          "You can identify nearby routes/doors but distant end-points disappear."
-        ],
-        [
-          "Tune colour and lighting",
-          "Use restrained cool/neutral fog colour, lower overly bright skylight/exposure and place motivated local lights to punch through selected areas.",
-          "Fog inherits atmosphere from lighting; bright clean lighting can destroy the horror look.",
-          "Lights create readable islands/silhouettes rather than washing the whole level evenly."
-        ],
-        [
-          "Add Post Process mood",
-          "Use a Post Process Volume (often Infinite Extent) for subtle exposure/contrast/saturation/colour grading. Avoid crushing blacks so badly the player cannot navigate.",
-          "Post-process should support the fog, not compensate for broken lighting.",
-          "The scene feels cohesive while gameplay objects remain legible."
-        ],
-        [
-          "Optional local fog/dust",
-          "Use Local Fog Volumes for spherical patches and/or a sparse Niagara dust/ash system close to camera. Local Fog Volumes are useful when you want local variation without making the entire world use denser volumetrics.",
-          "Variation stops the atmosphere feeling like one uniform global slider.",
-          "Some areas feel thicker/livelier without covering every room equally."
-        ],
-        [
-          "Performance test",
-          "Check scalability/performance on a typical student PC. Reduce volumetric view distance/complexity if necessary.",
-          "Volumetric fog is more expensive than simple height/local fog.",
-          "The scene remains playable at your target quality setting."
-        ]
+        {
+          "title": "Add Exponential Height Fog",
+          "where": "Level Editor → Add (+) → Visual Effects → Exponential Height Fog",
+          "do": "Place Exponential Height Fog in the level.",
+          "why": "This is the main fog actor for broad atmospheric control in Unreal.",
+          "see": "A fog actor appears in the Outliner and the level look changes immediately.",
+          "check": "You can select the fog actor and see its settings in Details.",
+          "visual": {
+            "src": "assets/book/best-practices/volumetric-fog-layers.webp",
+            "caption": "Layered fog is a key part of atmospheric visibility control.",
+            "kind": "book",
+            "sourceTitle": "book"
+          }
+        },
+        {
+          "title": "Enable volumetric fog and reduce visibility",
+          "where": "Select Exponential Height Fog → Details",
+          "do": "Enable Volumetric Fog, then adjust Fog Density and Extinction Scale to reduce how far the player can see.",
+          "why": "Silent Hill-style fog works because it limits information, not just because it is “white”.",
+          "see": "The distant background becomes obscured while nearer space remains readable.",
+          "check": "You can still navigate the scene without the whole screen becoming a flat grey wall.",
+          "visual": {
+            "src": "assets/book/best-practices/volumetric-fog-layers.webp",
+            "caption": "Volumetric fog and density settings control depth and visibility.",
+            "kind": "book",
+            "sourceTitle": "book"
+          }
+        },
+        {
+          "title": "Shape the mood with lighting",
+          "where": "Directional Light, Sky Light and local lights",
+          "do": "Lower or soften the main lighting and use local lights sparingly to create pockets of visibility.",
+          "why": "Fog and lighting work together. Bright flat lighting makes the fog feel weak and unthreatening.",
+          "see": "The scene feels moodier and more directional.",
+          "check": "Important routes or landmarks remain slightly more readable than the dead space around them.",
+          "visual": {
+            "src": "assets/book/best-practices/lighting-mood-comparison.webp",
+            "caption": "Different lighting moods drastically change how foggy spaces feel.",
+            "kind": "book",
+            "sourceTitle": "book"
+          }
+        },
+        {
+          "title": "Use post process to push atmosphere carefully",
+          "where": "Post Process Volume → global settings",
+          "do": "Optionally reduce saturation slightly, tweak contrast or temperature and avoid overdoing it.",
+          "why": "Post-process settings should support the fog mood, not hide bad scene setup.",
+          "see": "The scene feels more oppressive without becoming unreadable.",
+          "check": "You can still tell where the player can walk and what matters.",
+          "visual": {
+            "src": "assets/book/best-practices/outdoor-lighting-example.webp",
+            "caption": "Atmosphere works best when fog, lighting and post process support each other.",
+            "kind": "book",
+            "sourceTitle": "book"
+          }
+        },
+        {
+          "title": "Play-test the space for tension and readability",
+          "where": "Run through the level",
+          "do": "Walk the route as a player and ask what can be seen, when it appears, and whether the fog creates tension without making the scene annoying.",
+          "why": "Atmosphere is a design problem: the fog must control information on purpose.",
+          "see": "The player sees shapes emerge late and the route remains just readable enough.",
+          "check": "You can explain which information the fog hides and which information it still allows through.",
+          "visual": {
+            "src": "assets/book/best-practices/volumetric-fog-layers.webp",
+            "caption": "The fog should shape tension and information, not just fill the map.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        }
       ],
       "mistakes": [
         "Maxing Fog Density until everything is a flat grey wall.",
@@ -3129,7 +5159,8 @@ window.UE5_TUTORIAL_DATA = {
       "source": {
         "title": "Silent Hill 2 official reference imagery © Konami Digital Entertainment",
         "url": "https://www.konami.com/games/eu/en/products/silenthill2r/"
-      }
+      },
+      "prescriptive": true
     }
   ],
   "chapterBuilds": [

@@ -1,4 +1,4 @@
-# UE5 Learning Hub v3.5 — Gold-standard content map
+# UE5 Learning Hub v3.20 — Gold-standard content map
 
 All 20 lessons now use the richer teaching format piloted in Branches.
 
@@ -83,3 +83,15 @@ The Hub includes a parallel design/world-building curriculum rather than treatin
 | Polish, Optimisation & Presentation | polish, profiling loop, view modes, LOD/Nanite, project hygiene, presentation | Final Environment Pass |
 
 Every discipline combines transferable theory, visual analysis, production habits, short practical recipes, an applied Studio Build and evidence/critique prompts. The 2025 Packt book is a licensed college reference for principles and production thinking; current Epic UE5.8 documentation remains the technical source of truth for engine-specific behaviour.
+
+
+## v3.20 Portal structure and News & Industry
+
+The Hub root is now a four-path entry point rather than a dense course dashboard:
+
+1. **Programming** — core learning paths, Quick Tutorials, Chapter Builds, challenges and revision.
+2. **Design** — the eight-discipline Designer Studio.
+3. **Projects** — individual/group project work, milestones and development logs.
+4. **News & Industry** — live curated RSS stories with signed-in Read Later, votes and discussion.
+
+News is deliberately an industry-awareness layer, not a republished news site: the Hub shows source headlines/excerpts and sends the student to the original publisher for the full item.

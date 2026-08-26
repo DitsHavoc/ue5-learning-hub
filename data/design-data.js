@@ -1,5 +1,5 @@
 window.UE5_DESIGN_DATA = {
-  "version": "3.19.2",
+  "version": "3.22.0",
   "buildDate": "26 Aug 2026",
   "modules": [
     {
@@ -68,6 +68,62 @@ window.UE5_DESIGN_DATA = {
           "Three player-height screenshots showing route decisions.",
           "One before/after change from playtesting.",
           "A short playtest note showing what the tester misunderstood and what you changed."
+        ],
+        "phaseDetails": [
+          {
+            "title": "Phase 1",
+            "where": "Level Editor → Add (+) → Shapes / Content Drawer → build in Viewport → Play-test from player height",
+            "do": "Block out three rooms with different proportions.",
+            "check": "A silent player can navigate or read the spatial intention without explanation.",
+            "troubleshoot": [
+              "If you need to explain the route verbally, simplify the space or strengthen the spatial cue before adding decoration."
+            ]
+          },
+          {
+            "title": "Phase 2",
+            "where": "Level Editor → Add (+) → Shapes / Content Drawer → build in Viewport → Play-test from player height",
+            "do": "Create one obvious primary route and one optional route/reward.",
+            "check": "A silent player can navigate or read the spatial intention without explanation.",
+            "troubleshoot": [
+              "If you need to explain the route verbally, simplify the space or strengthen the spatial cue before adding decoration."
+            ]
+          },
+          {
+            "title": "Phase 3",
+            "where": "Level Editor → Add (+) → Shapes / Content Drawer → build in Viewport → Play-test from player height",
+            "do": "Place a landmark visible from at least two spaces.",
+            "check": "A silent player can navigate or read the spatial intention without explanation.",
+            "troubleshoot": [
+              "If you need to explain the route verbally, simplify the space or strengthen the spatial cue before adding decoration."
+            ]
+          },
+          {
+            "title": "Phase 4",
+            "where": "Level Editor → Add (+) → Shapes / Content Drawer → build in Viewport → Play-test from player height",
+            "do": "Use lighting or colour only after the route works in plain grey.",
+            "check": "A silent player can navigate or read the spatial intention without explanation.",
+            "troubleshoot": [
+              "If you need to explain the route verbally, simplify the space or strengthen the spatial cue before adding decoration."
+            ]
+          },
+          {
+            "title": "Phase 5",
+            "where": "Use the relevant Unreal editor panel for this phase, then test it immediately before continuing.",
+            "do": "Ask another student to play without guidance and record one change.",
+            "check": "A silent player can navigate or read the spatial intention without explanation.",
+            "troubleshoot": [
+              "If you need to explain the route verbally, simplify the space or strengthen the spatial cue before adding decoration."
+            ]
+          },
+          {
+            "title": "Phase 6",
+            "where": "Use the relevant Unreal editor panel for this phase, then test it immediately before continuing.",
+            "do": "Run a silent playtest: do not explain anything; record the first hesitation or wrong turn and revise it.",
+            "check": "A silent player can navigate or read the spatial intention without explanation.",
+            "troubleshoot": [
+              "If you need to explain the route verbally, simplify the space or strengthen the spatial cue before adding decoration."
+            ]
+          }
         ]
       },
       "bookReference": "Licensed college reference: Unreal Engine 5 Best Practices (2025), Chapter 4 — Designing Engaging Game Environments. Selected figures/page crops are now embedded inline in this module under the college's licensed educational use.",
@@ -177,6 +233,62 @@ window.UE5_DESIGN_DATA = {
           "Final wide shot plus two storytelling details.",
           "A sentence explaining what the player should infer.",
           "Close-up of the story vignette with a one-sentence interpretation."
+        ],
+        "phaseDetails": [
+          {
+            "title": "Phase 1",
+            "where": "Use the relevant Unreal editor panel for this phase, then test it immediately before continuing.",
+            "do": "Choose one short story: rushed evacuation, accident, break-in or long abandonment.",
+            "check": "The dressing supports movement, composition and story rather than random clutter.",
+            "troubleshoot": [
+              "If the scene becomes noisier, delete or regroup props before adding anything else."
+            ]
+          },
+          {
+            "title": "Phase 2",
+            "where": "Content Drawer → environment assets → drag into Viewport → organise in Outliner and Transform in Details",
+            "do": "Dress structural/big forms first, then furniture, then small props.",
+            "check": "The dressing supports movement, composition and story rather than random clutter.",
+            "troubleshoot": [
+              "If the scene becomes noisier, delete or regroup props before adding anything else."
+            ]
+          },
+          {
+            "title": "Phase 3",
+            "where": "Content Drawer → environment assets → drag into Viewport → organise in Outliner and Transform in Details",
+            "do": "Create 3 prop clusters with clear purpose rather than random scatter.",
+            "check": "The dressing supports movement, composition and story rather than random clutter.",
+            "troubleshoot": [
+              "If the scene becomes noisier, delete or regroup props before adding anything else."
+            ]
+          },
+          {
+            "title": "Phase 4",
+            "where": "Use the relevant Unreal editor panel for this phase, then test it immediately before continuing.",
+            "do": "Use decals/wear to reinforce use and age.",
+            "check": "The dressing supports movement, composition and story rather than random clutter.",
+            "troubleshoot": [
+              "If the scene becomes noisier, delete or regroup props before adding anything else."
+            ]
+          },
+          {
+            "title": "Phase 5",
+            "where": "Content Drawer → environment assets → drag into Viewport → organise in Outliner and Transform in Details",
+            "do": "Remove 20% of the props and keep only the ones helping composition/story.",
+            "check": "The dressing supports movement, composition and story rather than random clutter.",
+            "troubleshoot": [
+              "If the scene becomes noisier, delete or regroup props before adding anything else."
+            ]
+          },
+          {
+            "title": "Phase 6",
+            "where": "Content Drawer → environment assets → drag into Viewport → organise in Outliner and Transform in Details",
+            "do": "Create one deliberate story vignette and one unique hero detail that breaks modular repetition.",
+            "check": "The dressing supports movement, composition and story rather than random clutter.",
+            "troubleshoot": [
+              "If the scene becomes noisier, delete or regroup props before adding anything else."
+            ]
+          }
         ]
       },
       "bookReference": "Licensed college reference: Unreal Engine 5 Best Practices (2025), Chapters 4 and 8 — environment design and environmental storytelling. Selected figures/page crops are now embedded inline in this module under the college's licensed educational use.",
@@ -292,6 +404,62 @@ window.UE5_DESIGN_DATA = {
           "One in-level shot showing different surfaces.",
           "Short note explaining which parameter creates the biggest visual change.",
           "Screenshot of the material performance check and the change you made (or justified keeping)."
+        ],
+        "phaseDetails": [
+          {
+            "title": "Phase 1",
+            "where": "Content Drawer → Material / Material Instance → Material Editor or Instance Details → inspect in the same level view",
+            "do": "Create a clean base material with texture/colour parameters.",
+            "check": "The surface change is visible under the same lighting and the parent graph remains reusable.",
+            "troubleshoot": [
+              "If the material only works in one light angle, check roughness/normal response before adding more graph complexity."
+            ]
+          },
+          {
+            "title": "Phase 2",
+            "where": "Content Drawer → Material / Material Instance → Material Editor or Instance Details → inspect in the same level view",
+            "do": "Expose roughness/metallic/tint controls.",
+            "check": "The surface change is visible under the same lighting and the parent graph remains reusable.",
+            "troubleshoot": [
+              "If the material only works in one light angle, check roughness/normal response before adding more graph complexity."
+            ]
+          },
+          {
+            "title": "Phase 3",
+            "where": "Content Drawer → Material / Material Instance → Material Editor or Instance Details → inspect in the same level view",
+            "do": "Build four Material Instances without duplicating the parent graph.",
+            "check": "The surface change is visible under the same lighting and the parent graph remains reusable.",
+            "troubleshoot": [
+              "If the material only works in one light angle, check roughness/normal response before adding more graph complexity."
+            ]
+          },
+          {
+            "title": "Phase 4",
+            "where": "Use the relevant Unreal editor panel for this phase, then test it immediately before continuing.",
+            "do": "Add one controlled variation method such as grime mask or vertex colour.",
+            "check": "The surface change is visible under the same lighting and the parent graph remains reusable.",
+            "troubleshoot": [
+              "If the material only works in one light angle, check roughness/normal response before adding more graph complexity."
+            ]
+          },
+          {
+            "title": "Phase 5",
+            "where": "Level Editor → Lights / Post Process Volume / Exponential Height Fog → tune in Details from the locked comparison camera",
+            "do": "Test all four under the same neutral light, then under your scene lighting.",
+            "check": "The surface change is visible under the same lighting and the parent graph remains reusable.",
+            "troubleshoot": [
+              "If the material only works in one light angle, check roughness/normal response before adding more graph complexity."
+            ]
+          },
+          {
+            "title": "Phase 6",
+            "where": "Content Drawer → Material / Material Instance → Material Editor or Instance Details → inspect in the same level view",
+            "do": "Use Shader Complexity / Material Stats to inspect one material and make one evidence-based cost decision.",
+            "check": "The surface change is visible under the same lighting and the parent graph remains reusable.",
+            "troubleshoot": [
+              "If the material only works in one light angle, check roughness/normal response before adding more graph complexity."
+            ]
+          }
         ]
       },
       "bookReference": "Licensed college reference: Unreal Engine 5 Best Practices (2025), Chapters 10–11 — profiling material cost and real-time rendering. Selected figures/page crops are now embedded inline in this module under the college's licensed educational use.",
@@ -414,6 +582,71 @@ window.UE5_DESIGN_DATA = {
           "Lighting-only comparison with geometry unchanged.",
           "One sentence explaining how contrast/fog changed information.",
           "Side-by-side quality comparison with one sentence about the trade-off."
+        ],
+        "phaseDetails": [
+          {
+            "title": "Phase 1",
+            "where": "Level Editor → Lights / Post Process Volume / Exponential Height Fog → tune in Details from the locked comparison camera",
+            "do": "Lock camera/exposure so comparisons are fair.",
+            "check": "The mood changes while the route/focal point remains readable from the locked camera.",
+            "troubleshoot": [
+              "If auto-exposure changes the comparison, stabilise exposure before judging the mood pass."
+            ]
+          },
+          {
+            "title": "Phase 2",
+            "where": "Use the relevant Unreal editor panel for this phase, then test it immediately before continuing.",
+            "do": "Create a readable neutral baseline.",
+            "check": "The mood changes while the route/focal point remains readable from the locked camera.",
+            "troubleshoot": [
+              "If auto-exposure changes the comparison, stabilise exposure before judging the mood pass."
+            ]
+          },
+          {
+            "title": "Phase 3",
+            "where": "Level Editor → Lights / Post Process Volume / Exponential Height Fog → tune in Details from the locked comparison camera",
+            "do": "Make a Safe version using softer fill and warmer/clearer focal light.",
+            "check": "The mood changes while the route/focal point remains readable from the locked camera.",
+            "troubleshoot": [
+              "If auto-exposure changes the comparison, stabilise exposure before judging the mood pass."
+            ]
+          },
+          {
+            "title": "Phase 4",
+            "where": "Use the relevant Unreal editor panel for this phase, then test it immediately before continuing.",
+            "do": "Make a Threatening version using stronger contrast and controlled colour.",
+            "check": "The mood changes while the route/focal point remains readable from the locked camera.",
+            "troubleshoot": [
+              "If auto-exposure changes the comparison, stabilise exposure before judging the mood pass."
+            ]
+          },
+          {
+            "title": "Phase 5",
+            "where": "Level Editor → Lights / Post Process Volume / Exponential Height Fog → tune in Details from the locked comparison camera",
+            "do": "Make an Uncertain version using fog/occlusion and partial information.",
+            "check": "The mood changes while the route/focal point remains readable from the locked camera.",
+            "troubleshoot": [
+              "If auto-exposure changes the comparison, stabilise exposure before judging the mood pass."
+            ]
+          },
+          {
+            "title": "Phase 6",
+            "where": "Level Editor → Cinematics → Level Sequence → Sequencer / Cine Camera tracks",
+            "do": "Ask someone which mood each shot communicates before showing labels.",
+            "check": "The mood changes while the route/focal point remains readable from the locked camera.",
+            "troubleshoot": [
+              "If auto-exposure changes the comparison, stabilise exposure before judging the mood pass."
+            ]
+          },
+          {
+            "title": "Phase 7",
+            "where": "Use the relevant Unreal editor panel for this phase, then test it immediately before continuing.",
+            "do": "Compare at least two scalability/quality settings and protect the focal point/readability in both.",
+            "check": "The mood changes while the route/focal point remains readable from the locked camera.",
+            "troubleshoot": [
+              "If auto-exposure changes the comparison, stabilise exposure before judging the mood pass."
+            ]
+          }
         ]
       },
       "bookReference": "Licensed college reference: Unreal Engine 5 Best Practices (2025), Chapters 1–2 — Lumen, atmosphere and visual storytelling. Selected figures/page crops are now embedded inline in this module under the college's licensed educational use.",
@@ -524,6 +757,71 @@ window.UE5_DESIGN_DATA = {
           "Final route and landmark shots.",
           "One example where foliage was removed for readability.",
           "Screenshot showing the landmark and clear route from player height."
+        ],
+        "phaseDetails": [
+          {
+            "title": "Phase 1",
+            "where": "Level Editor → Add (+) → Shapes / Content Drawer → build in Viewport → Play-test from player height",
+            "do": "Draw the route on paper before sculpting.",
+            "check": "The player can traverse the intended route and still read the landmark/sightline.",
+            "troubleshoot": [
+              "If the route works only from the editor camera, test at player height and remove terrain/foliage snags."
+            ]
+          },
+          {
+            "title": "Phase 2",
+            "where": "Modes → Landscape / Foliage → edit in Viewport → Play-test the route",
+            "do": "Sculpt large valley/ridge shapes with broad brushes.",
+            "check": "The player can traverse the intended route and still read the landmark/sightline.",
+            "troubleshoot": [
+              "If the route works only from the editor camera, test at player height and remove terrain/foliage snags."
+            ]
+          },
+          {
+            "title": "Phase 3",
+            "where": "Use the relevant Unreal editor panel for this phase, then test it immediately before continuing.",
+            "do": "Ensure the player can traverse the intended path without snagging.",
+            "check": "The player can traverse the intended route and still read the landmark/sightline.",
+            "troubleshoot": [
+              "If the route works only from the editor camera, test at player height and remove terrain/foliage snags."
+            ]
+          },
+          {
+            "title": "Phase 4",
+            "where": "Modes → Landscape / Foliage → edit in Viewport → Play-test the route",
+            "do": "Paint at least three landscape layers based on slope/use.",
+            "check": "The player can traverse the intended route and still read the landmark/sightline.",
+            "troubleshoot": [
+              "If the route works only from the editor camera, test at player height and remove terrain/foliage snags."
+            ]
+          },
+          {
+            "title": "Phase 5",
+            "where": "Level Editor → Add (+) → Shapes / Content Drawer → build in Viewport → Play-test from player height",
+            "do": "Add foliage in clusters and preserve route edges/sightlines.",
+            "check": "The player can traverse the intended route and still read the landmark/sightline.",
+            "troubleshoot": [
+              "If the route works only from the editor camera, test at player height and remove terrain/foliage snags."
+            ]
+          },
+          {
+            "title": "Phase 6",
+            "where": "Level Editor → Add (+) → Shapes / Content Drawer → build in Viewport → Play-test from player height",
+            "do": "Place a landmark visible early and reveal it again later.",
+            "check": "The player can traverse the intended route and still read the landmark/sightline.",
+            "troubleshoot": [
+              "If the route works only from the editor camera, test at player height and remove terrain/foliage snags."
+            ]
+          },
+          {
+            "title": "Phase 7",
+            "where": "Level Editor → Add (+) → Shapes / Content Drawer → build in Viewport → Play-test from player height",
+            "do": "Add one authored landmark and protect the playable route from procedural/foliage clutter.",
+            "check": "The player can traverse the intended route and still read the landmark/sightline.",
+            "troubleshoot": [
+              "If the route works only from the editor camera, test at player height and remove terrain/foliage snags."
+            ]
+          }
         ]
       },
       "bookReference": "Licensed college reference: Unreal Engine 5 Best Practices (2025), Chapter 6 — responsive/adaptive worlds and procedural environment workflows. Selected figures/page crops are now embedded inline in this module under the college's licensed educational use.",
@@ -634,6 +932,71 @@ window.UE5_DESIGN_DATA = {
           "Final shot frame grabs.",
           "A note explaining why you cut where you did.",
           "Sequencer screenshot showing clean track/shot organisation."
+        ],
+        "phaseDetails": [
+          {
+            "title": "Phase 1",
+            "where": "Level Editor → Cinematics → Level Sequence → Sequencer / Cine Camera tracks",
+            "do": "Write the information each shot must communicate.",
+            "check": "The sequence communicates its intended information at normal playback speed and returns cleanly to gameplay.",
+            "troubleshoot": [
+              "If a shot works as a still but feels slow/confusing in playback, shorten/reframe before adding more shots."
+            ]
+          },
+          {
+            "title": "Phase 2",
+            "where": "Level Editor → Cinematics → Level Sequence → Sequencer / Cine Camera tracks",
+            "do": "Create a Level Sequence and 3–5 Cine Camera shots.",
+            "check": "The sequence communicates its intended information at normal playback speed and returns cleanly to gameplay.",
+            "troubleshoot": [
+              "If a shot works as a still but feels slow/confusing in playback, shorten/reframe before adding more shots."
+            ]
+          },
+          {
+            "title": "Phase 3",
+            "where": "Level Editor → Cinematics → Level Sequence → Sequencer / Cine Camera tracks",
+            "do": "Keep shot lengths varied; avoid five identical slow pans.",
+            "check": "The sequence communicates its intended information at normal playback speed and returns cleanly to gameplay.",
+            "troubleshoot": [
+              "If a shot works as a still but feels slow/confusing in playback, shorten/reframe before adding more shots."
+            ]
+          },
+          {
+            "title": "Phase 4",
+            "where": "Level Editor → Cinematics → Level Sequence → Sequencer / Cine Camera tracks",
+            "do": "Use one motivated camera move or rack/focus-style emphasis.",
+            "check": "The sequence communicates its intended information at normal playback speed and returns cleanly to gameplay.",
+            "troubleshoot": [
+              "If a shot works as a still but feels slow/confusing in playback, shorten/reframe before adding more shots."
+            ]
+          },
+          {
+            "title": "Phase 5",
+            "where": "Content Drawer → audio asset / attenuation / MetaSound → place source in level → test while moving",
+            "do": "Add one sound cue to support the reveal.",
+            "check": "The sequence communicates its intended information at normal playback speed and returns cleanly to gameplay.",
+            "troubleshoot": [
+              "If a shot works as a still but feels slow/confusing in playback, shorten/reframe before adding more shots."
+            ]
+          },
+          {
+            "title": "Phase 6",
+            "where": "Level Editor → Cinematics → Level Sequence → Sequencer / Cine Camera tracks",
+            "do": "Trigger the sequence and return cleanly to player control.",
+            "check": "The sequence communicates its intended information at normal playback speed and returns cleanly to gameplay.",
+            "troubleshoot": [
+              "If a shot works as a still but feels slow/confusing in playback, shorten/reframe before adding more shots."
+            ]
+          },
+          {
+            "title": "Phase 7",
+            "where": "Level Editor → Cinematics → Level Sequence → Sequencer / Cine Camera tracks",
+            "do": "Organise the sequence into clearly named shots/subsequences and sync one audio beat to a camera or action beat.",
+            "check": "The sequence communicates its intended information at normal playback speed and returns cleanly to gameplay.",
+            "troubleshoot": [
+              "If a shot works as a still but feels slow/confusing in playback, shorten/reframe before adding more shots."
+            ]
+          }
         ]
       },
       "bookReference": "Licensed college reference: Unreal Engine 5 Best Practices (2025), Chapters 7 and 9 — cinematic sequences and adaptive cutscenes. Selected figures/page crops are now embedded inline in this module under the college's licensed educational use.",
@@ -738,6 +1101,71 @@ window.UE5_DESIGN_DATA = {
           "Map shot showing source and player route.",
           "Short reflection: what information did sound give before sight?",
           "Short note explaining what the listener should infer from the off-screen cue."
+        ],
+        "phaseDetails": [
+          {
+            "title": "Phase 1",
+            "where": "Content Drawer → audio asset / attenuation / MetaSound → place source in level → test while moving",
+            "do": "Choose one off-screen sound source: machinery, radio, creature, storm or crowd.",
+            "check": "A moving listener can infer direction/space without the audio masking important gameplay cues.",
+            "troubleshoot": [
+              "If the source is hard to locate or loops obviously, test attenuation and variation while walking past it."
+            ]
+          },
+          {
+            "title": "Phase 2",
+            "where": "Content Drawer → audio asset / attenuation / MetaSound → place source in level → test while moving",
+            "do": "Create a quiet base ambience so the focal sound has contrast.",
+            "check": "A moving listener can infer direction/space without the audio masking important gameplay cues.",
+            "troubleshoot": [
+              "If the source is hard to locate or loops obviously, test attenuation and variation while walking past it."
+            ]
+          },
+          {
+            "title": "Phase 3",
+            "where": "Content Drawer → audio asset / attenuation / MetaSound → place source in level → test while moving",
+            "do": "Use attenuation so direction and distance change as the player moves.",
+            "check": "A moving listener can infer direction/space without the audio masking important gameplay cues.",
+            "troubleshoot": [
+              "If the source is hard to locate or loops obviously, test attenuation and variation while walking past it."
+            ]
+          },
+          {
+            "title": "Phase 4",
+            "where": "Use the relevant Unreal editor panel for this phase, then test it immediately before continuing.",
+            "do": "Add 2–3 subtle randomised details instead of one obvious repeating loop.",
+            "check": "A moving listener can infer direction/space without the audio masking important gameplay cues.",
+            "troubleshoot": [
+              "If the source is hard to locate or loops obviously, test attenuation and variation while walking past it."
+            ]
+          },
+          {
+            "title": "Phase 5",
+            "where": "Level Editor → Add (+) → Shapes / Content Drawer → build in Viewport → Play-test from player height",
+            "do": "Use reverb/space treatment if the room type needs it.",
+            "check": "A moving listener can infer direction/space without the audio masking important gameplay cues.",
+            "troubleshoot": [
+              "If the source is hard to locate or loops obviously, test attenuation and variation while walking past it."
+            ]
+          },
+          {
+            "title": "Phase 6",
+            "where": "Level Editor → Add (+) → Shapes / Content Drawer → build in Viewport → Play-test from player height",
+            "do": "Play with the screen turned away and check whether the route/source is still inferable.",
+            "check": "A moving listener can infer direction/space without the audio masking important gameplay cues.",
+            "troubleshoot": [
+              "If the source is hard to locate or loops obviously, test attenuation and variation while walking past it."
+            ]
+          },
+          {
+            "title": "Phase 7",
+            "where": "Return to the same saved gameplay camera → capture a matching BEFORE/AFTER frame",
+            "do": "Create one off-screen cue that communicates information before the player sees its source.",
+            "check": "A moving listener can infer direction/space without the audio masking important gameplay cues.",
+            "troubleshoot": [
+              "If the source is hard to locate or loops obviously, test attenuation and variation while walking past it."
+            ]
+          }
         ]
       },
       "bookReference": "Licensed college reference: Unreal Engine 5 Best Practices (2025), Chapters 7–8 — cinematic audio and environmental audio storytelling. Selected figures/page crops are now embedded inline in this module under the college's licensed educational use.",
@@ -854,6 +1282,71 @@ window.UE5_DESIGN_DATA = {
           "One performance/debug view screenshot.",
           "A short explanation of the change with the highest impact.",
           "Before/after measurement or project-hygiene evidence proving the change helped."
+        ],
+        "phaseDetails": [
+          {
+            "title": "Phase 1",
+            "where": "Level Editor → Cinematics → Level Sequence → Sequencer / Cine Camera tracks",
+            "do": "Capture a BEFORE shot and write the three biggest problems.",
+            "check": "The change is demonstrably better from the same camera or measurement, not just different.",
+            "troubleshoot": [
+              "If you cannot measure or clearly see the improvement, revert and choose a more targeted change."
+            ]
+          },
+          {
+            "title": "Phase 2",
+            "where": "Level Editor → Add (+) → Shapes / Content Drawer → build in Viewport → Play-test from player height",
+            "do": "Do a readability pass: route, focal point, collision, visual noise.",
+            "check": "The change is demonstrably better from the same camera or measurement, not just different.",
+            "troubleshoot": [
+              "If you cannot measure or clearly see the improvement, revert and choose a more targeted change."
+            ]
+          },
+          {
+            "title": "Phase 3",
+            "where": "Content Drawer → environment assets → drag into Viewport → organise in Outliner and Transform in Details",
+            "do": "Do a consistency pass: materials, light colour, scale and prop logic.",
+            "check": "The change is demonstrably better from the same camera or measurement, not just different.",
+            "troubleshoot": [
+              "If you cannot measure or clearly see the improvement, revert and choose a more targeted change."
+            ]
+          },
+          {
+            "title": "Phase 4",
+            "where": "Viewport → View Mode → Optimisation Viewmodes / relevant profiling tool → keep the same camera for before/after",
+            "do": "Use editor view modes/stat tools to identify one performance concern.",
+            "check": "The change is demonstrably better from the same camera or measurement, not just different.",
+            "troubleshoot": [
+              "If you cannot measure or clearly see the improvement, revert and choose a more targeted change."
+            ]
+          },
+          {
+            "title": "Phase 5",
+            "where": "Use the relevant Unreal editor panel for this phase, then test it immediately before continuing.",
+            "do": "Fix or simplify the concern rather than guessing.",
+            "check": "The change is demonstrably better from the same camera or measurement, not just different.",
+            "troubleshoot": [
+              "If you cannot measure or clearly see the improvement, revert and choose a more targeted change."
+            ]
+          },
+          {
+            "title": "Phase 6",
+            "where": "Level Editor → Cinematics → Level Sequence → Sequencer / Cine Camera tracks",
+            "do": "Capture matching AFTER shots and present the changes side-by-side.",
+            "check": "The change is demonstrably better from the same camera or measurement, not just different.",
+            "troubleshoot": [
+              "If you cannot measure or clearly see the improvement, revert and choose a more targeted change."
+            ]
+          },
+          {
+            "title": "Phase 7",
+            "where": "Return to the same saved gameplay camera → capture a matching BEFORE/AFTER frame",
+            "do": "Capture a baseline, make one targeted optimisation/cleanup change, then re-test under the same conditions.",
+            "check": "The change is demonstrably better from the same camera or measurement, not just different.",
+            "troubleshoot": [
+              "If you cannot measure or clearly see the improvement, revert and choose a more targeted change."
+            ]
+          }
         ]
       },
       "bookReference": "Licensed college reference: Unreal Engine 5 Best Practices (2025), Chapters 10–13 — profiling, rendering optimisation, asset management and troubleshooting. Selected figures/page crops are now embedded inline in this module under the college's licensed educational use.",
@@ -965,30 +1458,54 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Place the player first",
-          "Start from the Third Person template and keep the playable character visible while you build.",
-          "The character is your measuring stick; a room that looks good from editor camera may feel huge or cramped in play.",
-          "Press Play and check doors, ceiling height and movement space from player height."
-        ],
-        [
-          "Build with primitives",
-          "Use cubes for floor, walls, cover and door openings. Duplicate rather than modelling detail.",
-          "Blockout should be fast to change. Detail makes students emotionally attached to bad layouts.",
-          "You can reshape the room in seconds without replacing art."
-        ],
-        [
-          "Check movement width",
-          "Run, turn and jump through every opening you expect the player to use.",
-          "Playable metrics matter more than architectural realism in early design.",
-          "No doorway or route requires awkward camera wrestling."
-        ],
-        [
-          "Create one focal area",
-          "Use one larger opening, raised area or contrasting block to indicate where attention should go.",
-          "Spatial hierarchy works even before lighting and textures.",
-          "A new player can point to the most important part of the room."
-        ]
+        {
+          "title": "Place the player first",
+          "where": "Level Editor → Play → test from the real player camera; do not judge this step only from the editor fly camera",
+          "do": "Start from the Third Person template and keep the playable character visible while you build.",
+          "why": "The character is your measuring stick; a room that looks good from editor camera may feel huge or cramped in play.",
+          "see": null,
+          "check": "Press Play and check doors, ceiling height and movement space from player height.",
+          "troubleshoot": [
+            "If the decision is only visible from the editor camera, switch to Play and judge it from player height."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Build with primitives",
+          "where": "Level Editor → Add (+) → Shapes → Cube / primitives → duplicate and resize in the Viewport",
+          "do": "Use cubes for floor, walls, cover and door openings. Duplicate rather than modelling detail.",
+          "why": "Blockout should be fast to change. Detail makes students emotionally attached to bad layouts.",
+          "see": null,
+          "check": "You can reshape the room in seconds without replacing art.",
+          "troubleshoot": [
+            "If the decision is only visible from the editor camera, switch to Play and judge it from player height."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Check movement width",
+          "where": "Level Editor → Play → test from the real player camera; do not judge this step only from the editor fly camera",
+          "do": "Run, turn and jump through every opening you expect the player to use.",
+          "why": "Playable metrics matter more than architectural realism in early design.",
+          "see": null,
+          "check": "No doorway or route requires awkward camera wrestling.",
+          "troubleshoot": [
+            "If the decision is only visible from the editor camera, switch to Play and judge it from player height."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Create one focal area",
+          "where": "Level Editor → Viewport / Outliner → place or adjust the geometry/landmark named in the step → re-check from player height",
+          "do": "Use one larger opening, raised area or contrasting block to indicate where attention should go.",
+          "why": "Spatial hierarchy works even before lighting and textures.",
+          "see": null,
+          "check": "A new player can point to the most important part of the room.",
+          "troubleshoot": [
+            "If the decision is only visible from the editor camera, switch to Play and judge it from player height."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Building at editor-camera scale instead of player scale.",
@@ -1017,7 +1534,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic — Level Design examples",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/level-design-content-examples"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "player-scale",
@@ -1035,30 +1553,54 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Make metric blocks",
-          "Create simple labelled cubes for common widths/heights: door, corridor, waist cover and full cover.",
-          "Reusable metrics prevent every room from inventing a different human scale.",
-          "Placed blocks look consistent beside the character."
-        ],
-        [
-          "Walk the kit",
-          "Test each metric with the real character and camera.",
-          "Camera collision and shoulder width can make technically passable spaces feel bad.",
-          "Movement never clips or fights the camera."
-        ],
-        [
-          "Save as a blockout kit",
-          "Keep the metric actors in a small test level or folder for reuse.",
-          "Consistency speeds later design and stops guesswork.",
-          "You can drag a known-good door/corridor reference into any new level."
-        ],
-        [
-          "Break one rule deliberately",
-          "Create one oversized or undersized space for emotional effect.",
-          "Metrics are defaults, not prison bars; breaking scale should communicate something.",
-          "The altered scale feels intentional rather than accidental."
-        ]
+        {
+          "title": "Make metric blocks",
+          "where": "Level Editor → Add (+) → Shapes → Cube / primitives → duplicate and resize in the Viewport",
+          "do": "Create simple labelled cubes for common widths/heights: door, corridor, waist cover and full cover.",
+          "why": "Reusable metrics prevent every room from inventing a different human scale.",
+          "see": null,
+          "check": "Placed blocks look consistent beside the character.",
+          "troubleshoot": [
+            "If the decision is only visible from the editor camera, switch to Play and judge it from player height."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Walk the kit",
+          "where": "Level Editor → Play → test from the real player camera; do not judge this step only from the editor fly camera",
+          "do": "Test each metric with the real character and camera.",
+          "why": "Camera collision and shoulder width can make technically passable spaces feel bad.",
+          "see": null,
+          "check": "Movement never clips or fights the camera.",
+          "troubleshoot": [
+            "Keep the camera, route or test condition consistent so the comparison means something."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Save as a blockout kit",
+          "where": "Level Editor → Viewport / Outliner → place or adjust the geometry/landmark named in the step → re-check from player height",
+          "do": "Keep the metric actors in a small test level or folder for reuse.",
+          "why": "Consistency speeds later design and stops guesswork.",
+          "see": null,
+          "check": "You can drag a known-good door/corridor reference into any new level.",
+          "troubleshoot": [
+            "If the decision is only visible from the editor camera, switch to Play and judge it from player height."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Break one rule deliberately",
+          "where": "Level Editor → Viewport / Outliner → place or adjust the geometry/landmark named in the step → re-check from player height",
+          "do": "Create one oversized or undersized space for emotional effect.",
+          "why": "Metrics are defaults, not prison bars; breaking scale should communicate something.",
+          "see": null,
+          "check": "The altered scale feels intentional rather than accidental.",
+          "troubleshoot": [
+            "If the decision is only visible from the editor camera, switch to Play and judge it from player height."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Using real-world measurements without checking game camera needs.",
@@ -1079,7 +1621,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic — Designing Levels",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designing-levels-in-unreal-engine"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "focal-point",
@@ -1097,36 +1640,66 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Choose the target",
-          "Pick exactly one thing the player should notice first: exit, machine, tower, enemy route or landmark.",
-          "A focal point cannot be 'everything'.",
-          "You can name the single intended target."
-        ],
-        [
-          "Simplify around it",
-          "Reduce competing props/bright materials around the target.",
-          "Contrast only works if surrounding information is quieter.",
-          "The eye lands on the target more quickly."
-        ],
-        [
-          "Frame it",
-          "Use doorways, beams, walls or terrain edges to create lines that point toward the target.",
-          "Architecture can aim attention without UI.",
-          "From the main approach, surrounding geometry frames the target."
-        ],
-        [
-          "Add restrained contrast",
-          "Use a value, colour or light contrast to strengthen what geometry already communicates.",
-          "Lighting should reinforce layout, not rescue it.",
-          "Turning the light off still leaves some compositional guidance."
-        ],
-        [
-          "Blind test",
-          "Show the frame to another student for two seconds and ask what they noticed first.",
-          "Fast perception testing catches clutter immediately.",
-          "Most testers name the intended target."
-        ]
+        {
+          "title": "Choose the target",
+          "where": "Level Editor → Viewport / Outliner → place or adjust the geometry/landmark named in the step → re-check from player height",
+          "do": "Pick exactly one thing the player should notice first: exit, machine, tower, enemy route or landmark.",
+          "why": "A focal point cannot be 'everything'.",
+          "see": null,
+          "check": "You can name the single intended target.",
+          "troubleshoot": [
+            "If the decision is only visible from the editor camera, switch to Play and judge it from player height."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Simplify around it",
+          "where": "Level Editor → Viewport / Outliner → place or adjust the geometry/landmark named in the step → re-check from player height",
+          "do": "Reduce competing props/bright materials around the target.",
+          "why": "Contrast only works if surrounding information is quieter.",
+          "see": null,
+          "check": "The eye lands on the target more quickly.",
+          "troubleshoot": [
+            "If the decision is only visible from the editor camera, switch to Play and judge it from player height."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Frame it",
+          "where": "Level Editor → Viewport / Outliner → place or adjust the geometry/landmark named in the step → re-check from player height",
+          "do": "Use doorways, beams, walls or terrain edges to create lines that point toward the target.",
+          "why": "Architecture can aim attention without UI.",
+          "see": null,
+          "check": "From the main approach, surrounding geometry frames the target.",
+          "troubleshoot": [
+            "If the decision is only visible from the editor camera, switch to Play and judge it from player height."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Add restrained contrast",
+          "where": "Level Editor → Viewport / Outliner → place or adjust the geometry/landmark named in the step → re-check from player height",
+          "do": "Use a value, colour or light contrast to strengthen what geometry already communicates.",
+          "why": "Lighting should reinforce layout, not rescue it.",
+          "see": null,
+          "check": "Turning the light off still leaves some compositional guidance.",
+          "troubleshoot": [
+            "If the decision is only visible from the editor camera, switch to Play and judge it from player height."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Blind test",
+          "where": "Level Editor → Play → test from the real player camera; do not judge this step only from the editor fly camera",
+          "do": "Show the frame to another student for two seconds and ask what they noticed first.",
+          "why": "Fast perception testing catches clutter immediately.",
+          "see": null,
+          "check": "Most testers name the intended target.",
+          "troubleshoot": [
+            "Keep the camera, route or test condition consistent so the comparison means something."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Making every object emissive/bright.",
@@ -1155,7 +1728,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic — Level Design",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designing-levels-in-unreal-engine"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "route-readability",
@@ -1173,36 +1747,66 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Mark the decision point",
-          "Stand where the player must choose and take a screenshot.",
-          "Design decisions should be judged from the actual decision location.",
-          "You know exactly what information the player sees."
-        ],
-        [
-          "Strengthen the intended route",
-          "Open the silhouette, show more depth, use a light pool or continue a recognisable floor/prop pattern.",
-          "Humans follow continuity and visible opportunity.",
-          "The route looks traversable without text."
-        ],
-        [
-          "Quiet false routes",
-          "Darken, narrow, close or visually terminate routes that are not currently valid.",
-          "False affordances waste player attention.",
-          "Blocked areas read as blocked before collision is hit."
-        ],
-        [
-          "Add a landmark beyond the route",
-          "Show a distinctive object or shape that the player can move toward.",
-          "Landmarks give direction after the immediate doorway is passed.",
-          "The landmark disappears/reappears in useful places."
-        ],
-        [
-          "Watch, don't tell",
-          "Observe another player and do not explain the goal.",
-          "The only honest route test is one where the designer stays quiet.",
-          "The player chooses the intended route or reveals where communication failed."
-        ]
+        {
+          "title": "Mark the decision point",
+          "where": "Level Editor → move to the exact player decision point → Play or Pilot the camera → capture the view",
+          "do": "Stand where the player must choose and take a screenshot.",
+          "why": "Design decisions should be judged from the actual decision location.",
+          "see": null,
+          "check": "You know exactly what information the player sees.",
+          "troubleshoot": [
+            "If the decision is only visible from the editor camera, switch to Play and judge it from player height."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Strengthen the intended route",
+          "where": "Level Editor → Viewport / Outliner → place or adjust the geometry/landmark named in the step → re-check from player height",
+          "do": "Open the silhouette, show more depth, use a light pool or continue a recognisable floor/prop pattern.",
+          "why": "Humans follow continuity and visible opportunity.",
+          "see": null,
+          "check": "The route looks traversable without text.",
+          "troubleshoot": [
+            "If the decision is only visible from the editor camera, switch to Play and judge it from player height."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Quiet false routes",
+          "where": "Level Editor → Viewport / Outliner → place or adjust the geometry/landmark named in the step → re-check from player height",
+          "do": "Darken, narrow, close or visually terminate routes that are not currently valid.",
+          "why": "False affordances waste player attention.",
+          "see": null,
+          "check": "Blocked areas read as blocked before collision is hit.",
+          "troubleshoot": [
+            "If the decision is only visible from the editor camera, switch to Play and judge it from player height."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Add a landmark beyond the route",
+          "where": "Level Editor → Viewport / Outliner → place or adjust the geometry/landmark named in the step → re-check from player height",
+          "do": "Show a distinctive object or shape that the player can move toward.",
+          "why": "Landmarks give direction after the immediate doorway is passed.",
+          "see": null,
+          "check": "The landmark disappears/reappears in useful places.",
+          "troubleshoot": [
+            "If the decision is only visible from the editor camera, switch to Play and judge it from player height."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Watch, don't tell",
+          "where": "Level Editor → Play → test from the real player camera; do not judge this step only from the editor fly camera",
+          "do": "Observe another player and do not explain the goal.",
+          "why": "The only honest route test is one where the designer stays quiet.",
+          "see": null,
+          "check": "The player chooses the intended route or reveals where communication failed.",
+          "troubleshoot": [
+            "If the decision is only visible from the editor camera, switch to Play and judge it from player height."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Using invisible walls to solve a visually open route.",
@@ -1223,7 +1827,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic — Level Design",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designing-levels-in-unreal-engine"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "set-dress-room",
@@ -1241,36 +1846,86 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Protect the blockout",
-          "Duplicate/save the clean blockout before dressing.",
-          "You need a comparison and an escape route if dressing damages gameplay.",
-          "A clean version still exists."
-        ],
-        [
-          "Big forms first",
-          "Place furniture, shelving, machines or major structural pieces.",
-          "Large props define use and composition; tiny props cannot fix empty structure.",
-          "The room reads at thumbnail size."
-        ],
-        [
-          "Medium props second",
-          "Add chairs, boxes, lamps, tools or repeated functional groups.",
-          "Medium forms connect architecture to human use.",
-          "There are clear prop clusters rather than even scatter."
-        ],
-        [
-          "Small details last",
-          "Add a small number of papers, cables, cups, debris or personal details where story requires them.",
-          "Small props are punctuation, not the sentence.",
-          "Details reward close viewing without filling every surface."
-        ],
-        [
-          "Delete a pass",
-          "Remove anything blocking movement, silhouettes or the focal point.",
-          "Professional dressing includes subtraction.",
-          "The final room is clearer after deleting props."
-        ]
+        {
+          "title": "Protect the blockout",
+          "where": "File → Save Current Level As (or duplicate the blockout map) before the dressing pass",
+          "do": "Duplicate/save the clean blockout before dressing.",
+          "why": "You need a comparison and an escape route if dressing damages gameplay.",
+          "see": null,
+          "check": "A clean version still exists.",
+          "troubleshoot": [
+            "If dressing starts to block movement or the focal point, delete props before adding more."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Big forms first",
+          "where": "Content Drawer → find the required environment prop/mesh → drag into the Viewport → adjust Transform in Details / duplicate deliberately",
+          "do": "Place furniture, shelving, machines or major structural pieces.",
+          "why": "Large props define use and composition; tiny props cannot fix empty structure.",
+          "see": null,
+          "check": "The room reads at thumbnail size.",
+          "troubleshoot": [
+            "If dressing starts to block movement or the focal point, delete props before adding more."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/environmental-clues-dressing.webp",
+            "caption": "Professional example: environmental dressing works when props and marks communicate use, history and focal hierarchy.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Medium props second",
+          "where": "Content Drawer → find the required environment prop/mesh → drag into the Viewport → adjust Transform in Details / duplicate deliberately",
+          "do": "Add chairs, boxes, lamps, tools or repeated functional groups.",
+          "why": "Medium forms connect architecture to human use.",
+          "see": null,
+          "check": "There are clear prop clusters rather than even scatter.",
+          "troubleshoot": [
+            "If dressing starts to block movement or the focal point, delete props before adding more."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/environmental-clues-dressing.webp",
+            "caption": "Professional example: environmental dressing works when props and marks communicate use, history and focal hierarchy.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Small details last",
+          "where": "Content Drawer → find the required environment prop/mesh → drag into the Viewport → adjust Transform in Details / duplicate deliberately",
+          "do": "Add a small number of papers, cables, cups, debris or personal details where story requires them.",
+          "why": "Small props are punctuation, not the sentence.",
+          "see": null,
+          "check": "Details reward close viewing without filling every surface.",
+          "troubleshoot": [
+            "If dressing starts to block movement or the focal point, delete props before adding more."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/environmental-clues-dressing.webp",
+            "caption": "Professional example: environmental dressing works when props and marks communicate use, history and focal hierarchy.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Delete a pass",
+          "where": "Level Editor → Play → inspect the dressed space from normal movement routes before deciding what stays",
+          "do": "Remove anything blocking movement, silhouettes or the focal point.",
+          "why": "Professional dressing includes subtraction.",
+          "see": null,
+          "check": "The final room is clearer after deleting props.",
+          "troubleshoot": [
+            "If dressing starts to block movement or the focal point, delete props before adding more."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/environmental-clues-dressing.webp",
+            "caption": "Professional example: environmental dressing works when props and marks communicate use, history and focal hierarchy.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        }
       ],
       "mistakes": [
         "Randomly scattering hundreds of props.",
@@ -1311,7 +1966,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic — Building Virtual Worlds",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/building-virtual-worlds-in-unreal-engine"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "prop-clusters",
@@ -1329,30 +1985,64 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Choose an action",
-          "Decide what happened here: someone repaired equipment, ate lunch, packed boxes or fled.",
-          "Props become meaningful when they relate to behaviour.",
-          "You can describe the action in one sentence."
-        ],
-        [
-          "Place the anchor",
-          "Put the largest object first: desk, machine, crate stack or workbench.",
-          "Clusters need a visual anchor.",
-          "The grouping has one dominant mass."
-        ],
-        [
-          "Add supporting objects",
-          "Place only items that support the action and vary rotation/spacing naturally.",
-          "Related objects imply use and history.",
-          "Each prop has a reason to be there."
-        ],
-        [
-          "Leave breathing room",
-          "Keep empty space around the cluster.",
-          "Negative space helps the cluster read as one idea.",
-          "The group is readable from several metres away."
-        ]
+        {
+          "title": "Choose an action",
+          "where": "Content Drawer → find the required environment prop/mesh → drag into the Viewport → adjust Transform in Details / duplicate deliberately",
+          "do": "Decide what happened here: someone repaired equipment, ate lunch, packed boxes or fled.",
+          "why": "Props become meaningful when they relate to behaviour.",
+          "see": null,
+          "check": "You can describe the action in one sentence.",
+          "troubleshoot": [
+            "If dressing starts to block movement or the focal point, delete props before adding more."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Place the anchor",
+          "where": "Content Drawer → find the required environment prop/mesh → drag into the Viewport → adjust Transform in Details / duplicate deliberately",
+          "do": "Put the largest object first: desk, machine, crate stack or workbench.",
+          "why": "Clusters need a visual anchor.",
+          "see": null,
+          "check": "The grouping has one dominant mass.",
+          "troubleshoot": [
+            "If dressing starts to block movement or the focal point, delete props before adding more."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/environmental-clues-dressing.webp",
+            "caption": "Professional example: environmental dressing works when props and marks communicate use, history and focal hierarchy.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Add supporting objects",
+          "where": "Content Drawer → find the required environment prop/mesh → drag into the Viewport → adjust Transform in Details / duplicate deliberately",
+          "do": "Place only items that support the action and vary rotation/spacing naturally.",
+          "why": "Related objects imply use and history.",
+          "see": null,
+          "check": "Each prop has a reason to be there.",
+          "troubleshoot": [
+            "If dressing starts to block movement or the focal point, delete props before adding more."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/environmental-clues-dressing.webp",
+            "caption": "Professional example: environmental dressing works when props and marks communicate use, history and focal hierarchy.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Leave breathing room",
+          "where": "Content Drawer → find the required environment prop/mesh → drag into the Viewport → adjust Transform in Details / duplicate deliberately",
+          "do": "Keep empty space around the cluster.",
+          "why": "Negative space helps the cluster read as one idea.",
+          "see": null,
+          "check": "The group is readable from several metres away.",
+          "troubleshoot": [
+            "If dressing starts to block movement or the focal point, delete props before adding more."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Even spacing.",
@@ -1373,7 +2063,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic — Building Virtual Worlds",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/building-virtual-worlds-in-unreal-engine"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "decals-story",
@@ -1391,36 +2082,76 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Choose a reason",
-          "Pick a decal that has a cause: leak under pipe, dirt near doorway, warning sign, impact mark.",
-          "Wear tells history when cause and location agree.",
-          "You can explain why the decal exists."
-        ],
-        [
-          "Create/place the Decal Actor",
-          "Use a decal material or free decal asset and place a Decal Actor against the surface.",
-          "Decals add local variation without unique texture sets.",
-          "The decal projects only where intended."
-        ],
-        [
-          "Match scale/orientation",
-          "Resize the projection box and align it to the surface.",
-          "Wrong-scale dirt instantly breaks believability.",
-          "Edges and direction make physical sense."
-        ],
-        [
-          "Control repetition",
-          "Rotate, crop, tint or use a few variants rather than stamping the same mark everywhere.",
-          "Repeated identical damage exposes the asset library.",
-          "You cannot immediately spot a tiled stamp pattern."
-        ],
-        [
-          "Read at game distance",
-          "Walk away and judge whether the detail still contributes.",
-          "Not every decal needs to be visible close-up only.",
-          "Important signage/wear supports the scene at normal play distance."
-        ]
+        {
+          "title": "Choose a reason",
+          "where": "Content Drawer → find the required environment prop/mesh → drag into the Viewport → adjust Transform in Details / duplicate deliberately",
+          "do": "Pick a decal that has a cause: leak under pipe, dirt near doorway, warning sign, impact mark.",
+          "why": "Wear tells history when cause and location agree.",
+          "see": null,
+          "check": "You can explain why the decal exists.",
+          "troubleshoot": [
+            "If dressing starts to block movement or the focal point, delete props before adding more."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/environmental-clues-dressing.webp",
+            "caption": "Professional example: environmental dressing works when props and marks communicate use, history and focal hierarchy.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Create/place the Decal Actor",
+          "where": "Content Drawer → choose/create a decal material → Level Editor → Add (+) / Place Actors → Decal Actor → Details",
+          "do": "Use a decal material or free decal asset and place a Decal Actor against the surface.",
+          "why": "Decals add local variation without unique texture sets.",
+          "see": null,
+          "check": "The decal projects only where intended.",
+          "troubleshoot": [
+            "If dressing starts to block movement or the focal point, delete props before adding more."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Match scale/orientation",
+          "where": "Content Drawer → find the required environment prop/mesh → drag into the Viewport → adjust Transform in Details / duplicate deliberately",
+          "do": "Resize the projection box and align it to the surface.",
+          "why": "Wrong-scale dirt instantly breaks believability.",
+          "see": null,
+          "check": "Edges and direction make physical sense.",
+          "troubleshoot": [
+            "If dressing starts to block movement or the focal point, delete props before adding more."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Control repetition",
+          "where": "Content Drawer → find the required environment prop/mesh → drag into the Viewport → adjust Transform in Details / duplicate deliberately",
+          "do": "Rotate, crop, tint or use a few variants rather than stamping the same mark everywhere.",
+          "why": "Repeated identical damage exposes the asset library.",
+          "see": null,
+          "check": "You cannot immediately spot a tiled stamp pattern.",
+          "troubleshoot": [
+            "If dressing starts to block movement or the focal point, delete props before adding more."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Read at game distance",
+          "where": "Level Editor → Play → inspect the dressed space from normal movement routes before deciding what stays",
+          "do": "Walk away and judge whether the detail still contributes.",
+          "why": "Not every decal needs to be visible close-up only.",
+          "see": null,
+          "check": "Important signage/wear supports the scene at normal play distance.",
+          "troubleshoot": [
+            "If dressing starts to block movement or the focal point, delete props before adding more."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/environmental-clues-dressing.webp",
+            "caption": "Professional example: environmental dressing works when props and marks communicate use, history and focal hierarchy.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        }
       ],
       "mistakes": [
         "Blood/dirt everywhere with no story.",
@@ -1441,7 +2172,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic — Decal Materials",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/decal-materials-in-unreal-engine"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "modular-kit",
@@ -1459,36 +2191,66 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Inspect the kit",
-          "Identify wall, corner, floor, doorway and trim pieces before building.",
-          "Knowing the grammar prevents forcing pieces together badly.",
-          "You can name the core pieces."
-        ],
-        [
-          "Set grid snap",
-          "Choose a grid size that matches the kit dimensions.",
-          "Modular pieces only stay clean if placement shares a consistent unit.",
-          "Edges meet without tiny gaps."
-        ],
-        [
-          "Build one clean module",
-          "Make a short corridor/room using only core pieces.",
-          "Solve alignment before creating a whole level.",
-          "Corners and floors join correctly."
-        ],
-        [
-          "Create variation with dressing",
-          "Reuse the same architecture but change props, materials, decals and light.",
-          "Modularity saves modelling effort while art direction creates identity.",
-          "Two spaces feel different without unique walls everywhere."
-        ],
-        [
-          "Fix obvious repetition",
-          "Break long repeating seams with trims, pillars, recesses or purposeful variation.",
-          "Repetition is a design problem, not a reason to abandon modularity.",
-          "The kit stays reusable but the level avoids copy-paste rhythm."
-        ]
+        {
+          "title": "Inspect the kit",
+          "where": "Content Drawer → open the modular-kit folder → inspect wall/corner/floor/doorway/trim assets before placing anything",
+          "do": "Identify wall, corner, floor, doorway and trim pieces before building.",
+          "why": "Knowing the grammar prevents forcing pieces together badly.",
+          "see": null,
+          "check": "You can name the core pieces.",
+          "troubleshoot": [
+            "If dressing starts to block movement or the focal point, delete props before adding more."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Set grid snap",
+          "where": "Level Editor toolbar → Translation Grid Snap dropdown → choose a value that matches the modular kit",
+          "do": "Choose a grid size that matches the kit dimensions.",
+          "why": "Modular pieces only stay clean if placement shares a consistent unit.",
+          "see": null,
+          "check": "Edges meet without tiny gaps.",
+          "troubleshoot": [
+            "If dressing starts to block movement or the focal point, delete props before adding more."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Build one clean module",
+          "where": "Content Drawer → find the required environment prop/mesh → drag into the Viewport → adjust Transform in Details / duplicate deliberately",
+          "do": "Make a short corridor/room using only core pieces.",
+          "why": "Solve alignment before creating a whole level.",
+          "see": null,
+          "check": "Corners and floors join correctly.",
+          "troubleshoot": [
+            "If dressing starts to block movement or the focal point, delete props before adding more."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Create variation with dressing",
+          "where": "Content Drawer → find the required environment prop/mesh → drag into the Viewport → adjust Transform in Details / duplicate deliberately",
+          "do": "Reuse the same architecture but change props, materials, decals and light.",
+          "why": "Modularity saves modelling effort while art direction creates identity.",
+          "see": null,
+          "check": "Two spaces feel different without unique walls everywhere.",
+          "troubleshoot": [
+            "If dressing starts to block movement or the focal point, delete props before adding more."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Fix obvious repetition",
+          "where": "Content Drawer → find the required environment prop/mesh → drag into the Viewport → adjust Transform in Details / duplicate deliberately",
+          "do": "Break long repeating seams with trims, pillars, recesses or purposeful variation.",
+          "why": "Repetition is a design problem, not a reason to abandon modularity.",
+          "see": null,
+          "check": "The kit stays reusable but the level avoids copy-paste rhythm.",
+          "troubleshoot": [
+            "If dressing starts to block movement or the focal point, delete props before adding more."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Turning off snapping to fix every seam manually.",
@@ -1509,7 +2271,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic — Building Virtual Worlds",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/building-virtual-worlds-in-unreal-engine"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "basic-pbr-material",
@@ -1528,36 +2291,91 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Create M_Surface",
-          "Create a Material asset and open the Material Editor.",
-          "A clean named material gives you a controlled test surface.",
-          "The graph opens with the Main Material node."
-        ],
-        [
-          "Add colour/texture",
-          "Connect a colour or texture to Base Color.",
-          "Base Color describes the visible surface colour before lighting.",
-          "The preview changes without emissive glow."
-        ],
-        [
-          "Set roughness",
-          "Use a scalar around 0.2–0.9 and watch highlight width.",
-          "Roughness controls how sharp or broad reflections are.",
-          "Low values look glossier; high values look matte."
-        ],
-        [
-          "Set metallic correctly",
-          "Use 0 for non-metals and 1 for actual metal as a beginner rule.",
-          "Metallic is not a shininess slider.",
-          "Plastic/concrete stay at 0; steel can be 1."
-        ],
-        [
-          "Add normal detail",
-          "Connect a normal texture if available and inspect under moving light.",
-          "Normal detail changes how light reacts without adding geometry.",
-          "Surface detail appears in highlights while silhouette stays unchanged."
-        ]
+        {
+          "title": "Create M_Surface",
+          "where": "Content Drawer → open/create the Material → Material Editor graph → select nodes/parameters in Details",
+          "do": "Create a Material asset and open the Material Editor.",
+          "why": "A clean named material gives you a controlled test surface.",
+          "see": null,
+          "check": "The graph opens with the Main Material node.",
+          "troubleshoot": [
+            "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/rain-material-graph.webp",
+            "caption": "Professional example: a material graph should use purposeful controls to create the intended surface response.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Add colour/texture",
+          "where": "Content Drawer → open/create the Material → Material Editor graph → select nodes/parameters in Details",
+          "do": "Connect a colour or texture to Base Color.",
+          "why": "Base Color describes the visible surface colour before lighting.",
+          "see": null,
+          "check": "The preview changes without emissive glow.",
+          "troubleshoot": [
+            "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/rain-material-graph.webp",
+            "caption": "Professional example: a material graph should use purposeful controls to create the intended surface response.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Set roughness",
+          "where": "Content Drawer → open/create the Material → Material Editor graph → select nodes/parameters in Details",
+          "do": "Use a scalar around 0.2–0.9 and watch highlight width.",
+          "why": "Roughness controls how sharp or broad reflections are.",
+          "see": null,
+          "check": "Low values look glossier; high values look matte.",
+          "troubleshoot": [
+            "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/rain-material-graph.webp",
+            "caption": "Professional example: a material graph should use purposeful controls to create the intended surface response.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Set metallic correctly",
+          "where": "Content Drawer → open/create the Material → Material Editor graph → select nodes/parameters in Details",
+          "do": "Use 0 for non-metals and 1 for actual metal as a beginner rule.",
+          "why": "Metallic is not a shininess slider.",
+          "see": null,
+          "check": "Plastic/concrete stay at 0; steel can be 1.",
+          "troubleshoot": [
+            "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/rain-material-graph.webp",
+            "caption": "Professional example: a material graph should use purposeful controls to create the intended surface response.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Add normal detail",
+          "where": "Content Drawer → open/create the Material → Material Editor graph → select nodes/parameters in Details",
+          "do": "Connect a normal texture if available and inspect under moving light.",
+          "why": "Normal detail changes how light reacts without adding geometry.",
+          "see": null,
+          "check": "Surface detail appears in highlights while silhouette stays unchanged.",
+          "troubleshoot": [
+            "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/rain-material-graph.webp",
+            "caption": "Professional example: a material graph should use purposeful controls to create the intended surface response.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        }
       ],
       "mistakes": [
         "Using Metallic 0.5 to make plastic shiny.",
@@ -1592,7 +2410,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic — Materials",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/unreal-engine-materials"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "material-instance",
@@ -1610,36 +2429,86 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Parameterise colour",
-          "Convert the Base Color value to a Vector Parameter named Tint.",
-          "Parameters expose artist-friendly controls without editing the graph.",
-          "Tint appears in a Material Instance."
-        ],
-        [
-          "Parameterise roughness",
-          "Create a Scalar Parameter named Roughness with a sensible default.",
-          "Surface finish is a common variation control.",
-          "You can tune roughness in the instance."
-        ],
-        [
-          "Create MI_Surface_A",
-          "Right-click the parent material and create a Material Instance.",
-          "Instances inherit the compiled parent logic.",
-          "The instance opens with parameter overrides."
-        ],
-        [
-          "Make variations",
-          "Create 3 instances with different tint/roughness values.",
-          "One parent can provide a consistent material family.",
-          "Changes to the parent propagate to all instances."
-        ],
-        [
-          "Name by purpose",
-          "Use names such as MI_Wall_Green rather than MI_02_finalFINAL.",
-          "Asset naming is part of maintainability.",
-          "Another student can identify each instance without opening it."
-        ]
+        {
+          "title": "Parameterise colour",
+          "where": "Content Drawer → open/create the Material → Material Editor graph → select nodes/parameters in Details",
+          "do": "Convert the Base Color value to a Vector Parameter named Tint.",
+          "why": "Parameters expose artist-friendly controls without editing the graph.",
+          "see": null,
+          "check": "Tint appears in a Material Instance.",
+          "troubleshoot": [
+            "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/rain-material-graph.webp",
+            "caption": "Professional example: a material graph should use purposeful controls to create the intended surface response.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Parameterise roughness",
+          "where": "Content Drawer → open/create the Material → Material Editor graph → select nodes/parameters in Details",
+          "do": "Create a Scalar Parameter named Roughness with a sensible default.",
+          "why": "Surface finish is a common variation control.",
+          "see": null,
+          "check": "You can tune roughness in the instance.",
+          "troubleshoot": [
+            "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/rain-material-graph.webp",
+            "caption": "Professional example: a material graph should use purposeful controls to create the intended surface response.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Create MI_Surface_A",
+          "where": "Content Drawer → right-click the parent Material → Create Material Instance → open the Material Instance Details",
+          "do": "Right-click the parent material and create a Material Instance.",
+          "why": "Instances inherit the compiled parent logic.",
+          "see": null,
+          "check": "The instance opens with parameter overrides.",
+          "troubleshoot": [
+            "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/rain-material-graph.webp",
+            "caption": "Professional example: a material graph should use purposeful controls to create the intended surface response.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Make variations",
+          "where": "Content Drawer → right-click the parent Material → Create Material Instance → open the Material Instance Details",
+          "do": "Create 3 instances with different tint/roughness values.",
+          "why": "One parent can provide a consistent material family.",
+          "see": null,
+          "check": "Changes to the parent propagate to all instances.",
+          "troubleshoot": [
+            "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/rain-material-graph.webp",
+            "caption": "Professional example: a material graph should use purposeful controls to create the intended surface response.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Name by purpose",
+          "where": "Content Drawer → right-click the parent Material → Create Material Instance → open the Material Instance Details",
+          "do": "Use names such as MI_Wall_Green rather than MI_02_finalFINAL.",
+          "why": "Asset naming is part of maintainability.",
+          "see": null,
+          "check": "Another student can identify each instance without opening it.",
+          "troubleshoot": [
+            "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Duplicating the whole material for every colour.",
@@ -1660,7 +2529,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic — Material Instances",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/creating-and-using-material-instances-in-unreal-engine"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "wet-surface",
@@ -1678,36 +2548,86 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Duplicate as an instance",
-          "Start from an existing believable dry material and create a wet Material Instance where possible.",
-          "Wetness should be a variation of the same surface, not a totally unrelated shader.",
-          "Dry and wet versions share the parent."
-        ],
-        [
-          "Lower roughness",
-          "Reduce roughness enough to create broader visible reflections but avoid perfect mirror values.",
-          "Water smooths micro-surface response.",
-          "Highlights become stronger/sharper."
-        ],
-        [
-          "Darken slightly",
-          "Reduce/tint Base Color modestly rather than making it black.",
-          "Many porous surfaces appear darker when wet.",
-          "Surface still retains original material identity."
-        ],
-        [
-          "Keep variation",
-          "Use a mask/Lerp if only patches should be wet.",
-          "Patchy wetness feels more believable than a uniformly lacquered world.",
-          "Dry and wet regions blend cleanly."
-        ],
-        [
-          "Test under grazing light",
-          "Move a light/camera angle so reflections reveal the roughness change.",
-          "Wetness is primarily read through light response.",
-          "Wet areas are obvious from reflection behaviour, not just darker colour."
-        ]
+        {
+          "title": "Duplicate as an instance",
+          "where": "Content Drawer → right-click the parent Material → Create Material Instance → open the Material Instance Details",
+          "do": "Start from an existing believable dry material and create a wet Material Instance where possible.",
+          "why": "Wetness should be a variation of the same surface, not a totally unrelated shader.",
+          "see": null,
+          "check": "Dry and wet versions share the parent.",
+          "troubleshoot": [
+            "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Lower roughness",
+          "where": "Content Drawer → open/create the Material → Material Editor graph → select nodes/parameters in Details",
+          "do": "Reduce roughness enough to create broader visible reflections but avoid perfect mirror values.",
+          "why": "Water smooths micro-surface response.",
+          "see": null,
+          "check": "Highlights become stronger/sharper.",
+          "troubleshoot": [
+            "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/rain-material-graph.webp",
+            "caption": "Professional example: a material graph should use purposeful controls to create the intended surface response.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Darken slightly",
+          "where": "Content Drawer → open/create the Material → Material Editor graph → select nodes/parameters in Details",
+          "do": "Reduce/tint Base Color modestly rather than making it black.",
+          "why": "Many porous surfaces appear darker when wet.",
+          "see": null,
+          "check": "Surface still retains original material identity.",
+          "troubleshoot": [
+            "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/rain-material-graph.webp",
+            "caption": "Professional example: a material graph should use purposeful controls to create the intended surface response.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Keep variation",
+          "where": "Content Drawer → right-click the parent Material → Create Material Instance → open the Material Instance Details",
+          "do": "Use a mask/Lerp if only patches should be wet.",
+          "why": "Patchy wetness feels more believable than a uniformly lacquered world.",
+          "see": null,
+          "check": "Dry and wet regions blend cleanly.",
+          "troubleshoot": [
+            "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/rain-material-graph.webp",
+            "caption": "Professional example: a material graph should use purposeful controls to create the intended surface response.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Test under grazing light",
+          "where": "Level Editor → place the material on a test mesh → use a stable light/camera angle → Play or orbit the camera to inspect reflections",
+          "do": "Move a light/camera angle so reflections reveal the roughness change.",
+          "why": "Wetness is primarily read through light response.",
+          "see": null,
+          "check": "Wet areas are obvious from reflection behaviour, not just darker colour.",
+          "troubleshoot": [
+            "Keep the camera, route or test condition consistent so the comparison means something."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/rain-material-graph.webp",
+            "caption": "Professional example: a material graph should use purposeful controls to create the intended surface response.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        }
       ],
       "mistakes": [
         "Making wet concrete Metallic.",
@@ -1728,7 +2648,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic — Physically Based Materials",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/physically-based-materials-in-unreal-engine"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "emissive-screen",
@@ -1746,36 +2667,76 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Create a screen mask",
-          "Use a texture or simple colour mask for the parts that should emit.",
-          "A mask lets the frame stay non-emissive.",
-          "Only the screen/logo region is selected."
-        ],
-        [
-          "Multiply colour by intensity",
-          "Multiply an emissive colour by a Scalar Parameter such as EmissiveStrength.",
-          "Intensity needs tunable control.",
-          "The instance exposes brightness."
-        ],
-        [
-          "Connect Emissive Color",
-          "Feed the result to Emissive Color while keeping Base Color sensible.",
-          "Emissive adds self-illumination behaviour.",
-          "The screen stays visible in low light."
-        ],
-        [
-          "Tune bloom/exposure",
-          "Raise intensity gradually and inspect with your scene's exposure settings.",
-          "Blown-out bloom destroys UI/sign detail.",
-          "Glow is visible but the graphic remains readable."
-        ],
-        [
-          "Create instances",
-          "Make red/green/blue or ON/OFF variants from the same parent.",
-          "Instances make interactive signage easy to art-direct.",
-          "Variants share one graph."
-        ]
+        {
+          "title": "Create a screen mask",
+          "where": "Content Drawer → open/create the Material → Material Editor graph → select nodes/parameters in Details",
+          "do": "Use a texture or simple colour mask for the parts that should emit.",
+          "why": "A mask lets the frame stay non-emissive.",
+          "see": null,
+          "check": "Only the screen/logo region is selected.",
+          "troubleshoot": [
+            "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Multiply colour by intensity",
+          "where": "Content Drawer → open/create the Material → Material Editor graph → select nodes/parameters in Details",
+          "do": "Multiply an emissive colour by a Scalar Parameter such as EmissiveStrength.",
+          "why": "Intensity needs tunable control.",
+          "see": null,
+          "check": "The instance exposes brightness.",
+          "troubleshoot": [
+            "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/rain-material-graph.webp",
+            "caption": "Professional example: a material graph should use purposeful controls to create the intended surface response.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Connect Emissive Color",
+          "where": "Content Drawer → open/create the Material → Material Editor graph → select nodes/parameters in Details",
+          "do": "Feed the result to Emissive Color while keeping Base Color sensible.",
+          "why": "Emissive adds self-illumination behaviour.",
+          "see": null,
+          "check": "The screen stays visible in low light.",
+          "troubleshoot": [
+            "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/rain-material-graph.webp",
+            "caption": "Professional example: a material graph should use purposeful controls to create the intended surface response.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Tune bloom/exposure",
+          "where": "Content Drawer → open/create the Material → Material Editor graph → select nodes/parameters in Details",
+          "do": "Raise intensity gradually and inspect with your scene's exposure settings.",
+          "why": "Blown-out bloom destroys UI/sign detail.",
+          "see": null,
+          "check": "Glow is visible but the graphic remains readable.",
+          "troubleshoot": [
+            "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Create instances",
+          "where": "Content Drawer → right-click the parent Material → Create Material Instance → open the Material Instance Details",
+          "do": "Make red/green/blue or ON/OFF variants from the same parent.",
+          "why": "Instances make interactive signage easy to art-direct.",
+          "see": null,
+          "check": "Variants share one graph.",
+          "troubleshoot": [
+            "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Using huge emissive values to compensate for dark lighting.",
@@ -1796,7 +2757,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic — Emissive Materials",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/using-the-emissive-material-input-in-unreal-engine"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "three-point-room",
@@ -1815,36 +2777,86 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Lock exposure",
-          "Add/adjust a Post Process Volume and keep exposure stable while learning.",
-          "Auto exposure can hide whether your lighting actually works.",
-          "Brightness no longer pumps dramatically when you turn."
-        ],
-        [
-          "Choose the key",
-          "Place one main motivated light from a window, lamp or ceiling source.",
-          "A dominant light gives form and direction.",
-          "The room has a clear light direction."
-        ],
-        [
-          "Add gentle fill",
-          "Use skylight/bounce-like supporting light to prevent important areas crushing to black.",
-          "Fill protects readability without flattening contrast.",
-          "Shadow detail is visible but still darker than the key side."
-        ],
-        [
-          "Add one accent",
-          "Use a small light to separate a focal prop, doorway or silhouette.",
-          "Accent is for hierarchy, not general illumination.",
-          "The focal element stands out without every object glowing."
-        ],
-        [
-          "Toggle each light",
-          "Switch lights on/off and identify its job.",
-          "If you cannot describe a light's purpose, it may not be needed.",
-          "Each light contributes a distinct function."
-        ]
+        {
+          "title": "Lock exposure",
+          "where": "Level Editor → Post Process Volume → Details → Exposure → stabilise the comparison before adjusting lights",
+          "do": "Add/adjust a Post Process Volume and keep exposure stable while learning.",
+          "why": "Auto exposure can hide whether your lighting actually works.",
+          "see": null,
+          "check": "Brightness no longer pumps dramatically when you turn.",
+          "troubleshoot": [
+            "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Choose the key",
+          "where": "Level Editor → Add (+) → Lights → Point / Spot / Rect / Directional as required → select the light → Details",
+          "do": "Place one main motivated light from a window, lamp or ceiling source.",
+          "why": "A dominant light gives form and direction.",
+          "see": null,
+          "check": "The room has a clear light direction.",
+          "troubleshoot": [
+            "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/lighting-mood-comparison.webp",
+            "caption": "Professional example: compare lighting moods from the same viewpoint so contrast and readability are meaningful.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Add gentle fill",
+          "where": "Level Editor → Add (+) → Lights → Point / Spot / Rect / Directional as required → select the light → Details",
+          "do": "Use skylight/bounce-like supporting light to prevent important areas crushing to black.",
+          "why": "Fill protects readability without flattening contrast.",
+          "see": null,
+          "check": "Shadow detail is visible but still darker than the key side.",
+          "troubleshoot": [
+            "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/lighting-mood-comparison.webp",
+            "caption": "Professional example: compare lighting moods from the same viewpoint so contrast and readability are meaningful.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Add one accent",
+          "where": "Level Editor → Add (+) → Lights → Point / Spot / Rect / Directional as required → select the light → Details",
+          "do": "Use a small light to separate a focal prop, doorway or silhouette.",
+          "why": "Accent is for hierarchy, not general illumination.",
+          "see": null,
+          "check": "The focal element stands out without every object glowing.",
+          "troubleshoot": [
+            "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/lighting-mood-comparison.webp",
+            "caption": "Professional example: compare lighting moods from the same viewpoint so contrast and readability are meaningful.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Toggle each light",
+          "where": "Level Editor → use the same locked camera → toggle/compare lights or Play-test the route",
+          "do": "Switch lights on/off and identify its job.",
+          "why": "If you cannot describe a light's purpose, it may not be needed.",
+          "see": null,
+          "check": "Each light contributes a distinct function.",
+          "troubleshoot": [
+            "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/lighting-mood-comparison.webp",
+            "caption": "Professional example: compare lighting moods from the same viewpoint so contrast and readability are meaningful.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        }
       ],
       "mistakes": [
         "Placing many equal-strength point lights.",
@@ -1873,7 +2885,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic — Lighting the Environment",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/lighting-the-environment-in-unreal-engine"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "horror-lighting",
@@ -1892,36 +2905,81 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Keep the route readable",
-          "Start with enough neutral light to walk the corridor safely.",
-          "Horror fails when the player is fighting the screen rather than the threat.",
-          "You can navigate without memorising the route."
-        ],
-        [
-          "Remove information selectively",
-          "Darken side spaces/backgrounds while keeping floor edges and key doorframes readable.",
-          "Fear comes from uncertainty, not total black.",
-          "Near navigation remains visible while future information is reduced."
-        ],
-        [
-          "Motivate pools of light",
-          "Use ceiling lights, emergency lamps or practical fixtures rather than floating invisible brightness everywhere.",
-          "Believable sources make stylised lighting feel grounded.",
-          "Bright areas have visible reasons."
-        ],
-        [
-          "Create one contrast event",
-          "Add a brighter or coloured pool where you want anticipation.",
-          "Contrast creates a destination and a before/after rhythm.",
-          "The eye is pulled down the corridor."
-        ],
-        [
-          "Test with movement",
-          "Walk at normal speed and rotate the camera.",
-          "Static beauty shots can hide unreadable gameplay.",
-          "The mood survives actual play."
-        ]
+        {
+          "title": "Keep the route readable",
+          "where": "Level Editor → Add (+) → Lights → Point / Spot / Rect / Directional as required → select the light → Details",
+          "do": "Start with enough neutral light to walk the corridor safely.",
+          "why": "Horror fails when the player is fighting the screen rather than the threat.",
+          "see": null,
+          "check": "You can navigate without memorising the route.",
+          "troubleshoot": [
+            "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Remove information selectively",
+          "where": "Level Editor → Add (+) → Lights → Point / Spot / Rect / Directional as required → select the light → Details",
+          "do": "Darken side spaces/backgrounds while keeping floor edges and key doorframes readable.",
+          "why": "Fear comes from uncertainty, not total black.",
+          "see": null,
+          "check": "Near navigation remains visible while future information is reduced.",
+          "troubleshoot": [
+            "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/lighting-mood-comparison.webp",
+            "caption": "Professional example: compare lighting moods from the same viewpoint so contrast and readability are meaningful.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Motivate pools of light",
+          "where": "Level Editor → Add (+) → Lights → Point / Spot / Rect / Directional as required → select the light → Details",
+          "do": "Use ceiling lights, emergency lamps or practical fixtures rather than floating invisible brightness everywhere.",
+          "why": "Believable sources make stylised lighting feel grounded.",
+          "see": null,
+          "check": "Bright areas have visible reasons.",
+          "troubleshoot": [
+            "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/lighting-mood-comparison.webp",
+            "caption": "Professional example: compare lighting moods from the same viewpoint so contrast and readability are meaningful.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Create one contrast event",
+          "where": "Level Editor → Add (+) → Lights → Point / Spot / Rect / Directional as required → select the light → Details",
+          "do": "Add a brighter or coloured pool where you want anticipation.",
+          "why": "Contrast creates a destination and a before/after rhythm.",
+          "see": null,
+          "check": "The eye is pulled down the corridor.",
+          "troubleshoot": [
+            "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/lighting-mood-comparison.webp",
+            "caption": "Professional example: compare lighting moods from the same viewpoint so contrast and readability are meaningful.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Test with movement",
+          "where": "Level Editor → use the same locked camera → toggle/compare lights or Play-test the route",
+          "do": "Walk at normal speed and rotate the camera.",
+          "why": "Static beauty shots can hide unreadable gameplay.",
+          "see": null,
+          "check": "The mood survives actual play.",
+          "troubleshoot": [
+            "Keep the camera, route or test condition consistent so the comparison means something."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Crushing every black level.",
@@ -1950,7 +3008,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic — Lighting",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/lighting-the-environment-in-unreal-engine"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "post-process-mood",
@@ -1968,36 +3027,81 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Create global volume",
-          "Add a Post Process Volume and enable Infinite Extent (Unbound) for a global learning setup.",
-          "A global volume gives a predictable baseline.",
-          "The settings affect the whole test level."
-        ],
-        [
-          "Stabilise exposure",
-          "Set manual/controlled exposure appropriate to your project.",
-          "You need a stable image before judging colour and contrast.",
-          "Turning between bright/dark areas no longer wildly changes brightness."
-        ],
-        [
-          "Adjust colour gently",
-          "Change temperature/tint/contrast/saturation in small steps.",
-          "Colour grade should unify lighting, not recolour every object.",
-          "Materials still retain believable relationships."
-        ],
-        [
-          "Use effects sparingly",
-          "Add subtle vignette/bloom only if the image benefits.",
-          "Heavy post effects quickly look like filters rather than art direction.",
-          "The effect is noticeable when toggled off, not distracting when on."
-        ],
-        [
-          "Before/after toggle",
-          "Disable the volume and compare.",
-          "A useful post pass should improve hierarchy/mood without being the only reason the scene works.",
-          "Lighting is still functional without the grade."
-        ]
+        {
+          "title": "Create global volume",
+          "where": "Level Editor → Add (+) → Lights → Point / Spot / Rect / Directional as required → select the light → Details",
+          "do": "Add a Post Process Volume and enable Infinite Extent (Unbound) for a global learning setup.",
+          "why": "A global volume gives a predictable baseline.",
+          "see": null,
+          "check": "The settings affect the whole test level.",
+          "troubleshoot": [
+            "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/lighting-mood-comparison.webp",
+            "caption": "Professional example: compare lighting moods from the same viewpoint so contrast and readability are meaningful.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Stabilise exposure",
+          "where": "Level Editor → Post Process Volume → Details → Exposure → stabilise the comparison before adjusting lights",
+          "do": "Set manual/controlled exposure appropriate to your project.",
+          "why": "You need a stable image before judging colour and contrast.",
+          "see": null,
+          "check": "Turning between bright/dark areas no longer wildly changes brightness.",
+          "troubleshoot": [
+            "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Adjust colour gently",
+          "where": "Level Editor → Add (+) → Lights → Point / Spot / Rect / Directional as required → select the light → Details",
+          "do": "Change temperature/tint/contrast/saturation in small steps.",
+          "why": "Colour grade should unify lighting, not recolour every object.",
+          "see": null,
+          "check": "Materials still retain believable relationships.",
+          "troubleshoot": [
+            "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/lighting-mood-comparison.webp",
+            "caption": "Professional example: compare lighting moods from the same viewpoint so contrast and readability are meaningful.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Use effects sparingly",
+          "where": "Level Editor → Add (+) → Lights → Point / Spot / Rect / Directional as required → select the light → Details",
+          "do": "Add subtle vignette/bloom only if the image benefits.",
+          "why": "Heavy post effects quickly look like filters rather than art direction.",
+          "see": null,
+          "check": "The effect is noticeable when toggled off, not distracting when on.",
+          "troubleshoot": [
+            "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Before/after toggle",
+          "where": "Level Editor → use the same locked camera → toggle/compare lights or Play-test the route",
+          "do": "Disable the volume and compare.",
+          "why": "A useful post pass should improve hierarchy/mood without being the only reason the scene works.",
+          "see": null,
+          "check": "Lighting is still functional without the grade.",
+          "troubleshoot": [
+            "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/lighting-mood-comparison.webp",
+            "caption": "Professional example: compare lighting moods from the same viewpoint so contrast and readability are meaningful.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        }
       ],
       "mistakes": [
         "Using post process to fix badly lit geometry.",
@@ -2018,7 +3122,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic — Post Process",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/post-process-effects-in-unreal-engine"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "create-landscape",
@@ -2036,30 +3141,54 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Open Landscape Mode",
-          "Use the Modes dropdown and choose Landscape.",
-          "Landscape has its own editing workflow separate from normal Static Mesh placement.",
-          "Manage/Sculpt/Paint tabs are visible."
-        ],
-        [
-          "Choose a modest size",
-          "Create a small learning landscape rather than filling an enormous world.",
-          "Smaller terrain is faster to iterate and harder to get lost in.",
-          "The test landscape covers only the space you need."
-        ],
-        [
-          "Create and save",
-          "Create the Landscape and save the level before sculpting.",
-          "Terrain edits can become extensive; save a known baseline.",
-          "A Landscape Actor appears in the level."
-        ],
-        [
-          "Switch tools",
-          "Click Sculpt, then Paint and identify how each changes the same Landscape Actor.",
-          "Manage handles structure, Sculpt changes shape, Paint changes material layers.",
-          "You can explain the three roles without guessing."
-        ]
+        {
+          "title": "Open Landscape Mode",
+          "where": "Modes toolbar → Landscape → Manage / Sculpt → choose the tool and edit broad terrain forms in the Viewport",
+          "do": "Use the Modes dropdown and choose Landscape.",
+          "why": "Landscape has its own editing workflow separate from normal Static Mesh placement.",
+          "see": null,
+          "check": "Manage/Sculpt/Paint tabs are visible.",
+          "troubleshoot": [
+            "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Choose a modest size",
+          "where": "Modes toolbar → Landscape → Manage / Sculpt → choose the tool and edit broad terrain forms in the Viewport",
+          "do": "Create a small learning landscape rather than filling an enormous world.",
+          "why": "Smaller terrain is faster to iterate and harder to get lost in.",
+          "see": null,
+          "check": "The test landscape covers only the space you need.",
+          "troubleshoot": [
+            "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Create and save",
+          "where": "Modes toolbar → Landscape → Manage / Sculpt → choose the tool and edit broad terrain forms in the Viewport",
+          "do": "Create the Landscape and save the level before sculpting.",
+          "why": "Terrain edits can become extensive; save a known baseline.",
+          "see": null,
+          "check": "A Landscape Actor appears in the level.",
+          "troubleshoot": [
+            "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Switch tools",
+          "where": "Modes toolbar → Landscape → Manage / Sculpt → choose the tool and edit broad terrain forms in the Viewport",
+          "do": "Click Sculpt, then Paint and identify how each changes the same Landscape Actor.",
+          "why": "Manage handles structure, Sculpt changes shape, Paint changes material layers.",
+          "see": null,
+          "check": "You can explain the three roles without guessing.",
+          "troubleshoot": [
+            "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Creating a gigantic landscape for a tiny assignment.",
@@ -2088,7 +3217,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic — Landscape Quick Start",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/landscape-quick-start-guide-in-unreal-engine"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "sculpt-playable-terrain",
@@ -2106,36 +3236,66 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Mark the route",
-          "Place temporary cubes/splines or sketch where the player starts, travels and finishes.",
-          "Terrain should serve a route instead of becoming random mountains.",
-          "Start and destination are identifiable."
-        ],
-        [
-          "Use a huge brush",
-          "Sculpt large ridges/valleys with low strength.",
-          "Large forms create believable terrain hierarchy.",
-          "The silhouette reads from far away."
-        ],
-        [
-          "Flatten playable zones",
-          "Use Flatten/Smooth around paths, combat spaces and building footprints.",
-          "Gameplay needs predictable footing even in natural worlds.",
-          "Player movement is stable where gameplay occurs."
-        ],
-        [
-          "Add secondary variation",
-          "Only after big shapes work, add smaller erosion-like changes and break straight lines.",
-          "Detail should sit on top of strong landforms.",
-          "Terrain does not look like noisy melted clay."
-        ],
-        [
-          "Walk it",
-          "Play from the ground and check slope, visibility and route length.",
-          "Editor top view hides how exhausting/steep terrain feels.",
-          "The intended route is traversable and readable."
-        ]
+        {
+          "title": "Mark the route",
+          "where": "Level Editor → Play → traverse the intended route at player height and remove terrain/foliage snags",
+          "do": "Place temporary cubes/splines or sketch where the player starts, travels and finishes.",
+          "why": "Terrain should serve a route instead of becoming random mountains.",
+          "see": null,
+          "check": "Start and destination are identifiable.",
+          "troubleshoot": [
+            "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Use a huge brush",
+          "where": "Modes toolbar → Landscape → Manage / Sculpt → choose the tool and edit broad terrain forms in the Viewport",
+          "do": "Sculpt large ridges/valleys with low strength.",
+          "why": "Large forms create believable terrain hierarchy.",
+          "see": null,
+          "check": "The silhouette reads from far away.",
+          "troubleshoot": [
+            "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Flatten playable zones",
+          "where": "Modes toolbar → Landscape → Manage / Sculpt → choose the tool and edit broad terrain forms in the Viewport",
+          "do": "Use Flatten/Smooth around paths, combat spaces and building footprints.",
+          "why": "Gameplay needs predictable footing even in natural worlds.",
+          "see": null,
+          "check": "Player movement is stable where gameplay occurs.",
+          "troubleshoot": [
+            "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Add secondary variation",
+          "where": "Modes toolbar → Landscape → Manage / Sculpt → choose the tool and edit broad terrain forms in the Viewport",
+          "do": "Only after big shapes work, add smaller erosion-like changes and break straight lines.",
+          "why": "Detail should sit on top of strong landforms.",
+          "see": null,
+          "check": "Terrain does not look like noisy melted clay.",
+          "troubleshoot": [
+            "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Walk it",
+          "where": "Modes toolbar → Landscape → Manage / Sculpt → choose the tool and edit broad terrain forms in the Viewport",
+          "do": "Play from the ground and check slope, visibility and route length.",
+          "why": "Editor top view hides how exhausting/steep terrain feels.",
+          "see": null,
+          "check": "The intended route is traversable and readable.",
+          "troubleshoot": [
+            "Keep the camera, route or test condition consistent so the comparison means something."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "High-strength tiny brush scribbling.",
@@ -2156,7 +3316,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic — Landscape Sculpt",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/landscape-sculpt-mode-in-unreal-engine"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "landscape-paint",
@@ -2174,36 +3335,66 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Prepare layered material",
-          "Use a landscape material with named layers such as Grass, Dirt and Rock.",
-          "Paint mode needs material layers to target.",
-          "Layer names appear in Paint mode."
-        ],
-        [
-          "Create Layer Info assets",
-          "Create/save Layer Info for each paint layer as required.",
-          "Layer Info stores landscape paint data.",
-          "Each layer can be selected and painted."
-        ],
-        [
-          "Paint by rule",
-          "Put dirt on paths/traffic, rock on exposed steep areas and grass on stable ground.",
-          "Surface distribution looks believable when it follows terrain processes.",
-          "Materials reinforce slope and use."
-        ],
-        [
-          "Blend edges",
-          "Use lower strength/large brushes so transitions are not spray-painted circles.",
-          "Natural surfaces transition gradually unless there is a clear physical boundary.",
-          "Layer edges feel integrated."
-        ],
-        [
-          "Check from player height",
-          "Walk the path and inspect texture scale/tiling.",
-          "Top view hides giant texture scale problems.",
-          "Surfaces hold up at gameplay distance."
-        ]
+        {
+          "title": "Prepare layered material",
+          "where": "Modes toolbar → Landscape → Paint → choose/create the target layer and paint in the Viewport",
+          "do": "Use a landscape material with named layers such as Grass, Dirt and Rock.",
+          "why": "Paint mode needs material layers to target.",
+          "see": null,
+          "check": "Layer names appear in Paint mode.",
+          "troubleshoot": [
+            "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Create Layer Info assets",
+          "where": "Modes toolbar → Landscape → Paint → choose/create the target layer and paint in the Viewport",
+          "do": "Create/save Layer Info for each paint layer as required.",
+          "why": "Layer Info stores landscape paint data.",
+          "see": null,
+          "check": "Each layer can be selected and painted.",
+          "troubleshoot": [
+            "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Paint by rule",
+          "where": "Modes toolbar → Landscape → Paint → choose/create the target layer and paint in the Viewport",
+          "do": "Put dirt on paths/traffic, rock on exposed steep areas and grass on stable ground.",
+          "why": "Surface distribution looks believable when it follows terrain processes.",
+          "see": null,
+          "check": "Materials reinforce slope and use.",
+          "troubleshoot": [
+            "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Blend edges",
+          "where": "Modes toolbar → Landscape → Manage / Sculpt → choose the tool and edit broad terrain forms in the Viewport",
+          "do": "Use lower strength/large brushes so transitions are not spray-painted circles.",
+          "why": "Natural surfaces transition gradually unless there is a clear physical boundary.",
+          "see": null,
+          "check": "Layer edges feel integrated.",
+          "troubleshoot": [
+            "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Check from player height",
+          "where": "Modes toolbar → Landscape → Paint → choose/create the target layer and paint in the Viewport",
+          "do": "Walk the path and inspect texture scale/tiling.",
+          "why": "Top view hides giant texture scale problems.",
+          "see": null,
+          "check": "Surfaces hold up at gameplay distance.",
+          "troubleshoot": [
+            "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Random three-colour camouflage patterns.",
@@ -2224,7 +3415,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic — Landscape Materials",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/landscape-materials-in-unreal-engine"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "foliage-path",
@@ -2242,36 +3434,66 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Protect the route",
-          "Mark the walking corridor and important sightlines before painting foliage.",
-          "Vegetation must not erase gameplay communication.",
-          "You know where foliage should be sparse."
-        ],
-        [
-          "Build large clusters",
-          "Place tree/rock groups in masses with open gaps between them.",
-          "Nature often reads as clustered rhythm rather than uniform randomness.",
-          "The scene has dense and sparse zones."
-        ],
-        [
-          "Add ground layer",
-          "Paint grass/small plants at a density that supports the biome.",
-          "Ground detail connects larger assets to terrain.",
-          "Terrain no longer looks bare but remains readable."
-        ],
-        [
-          "Vary scale carefully",
-          "Use modest random scale/rotation ranges.",
-          "Variation hides repetition without creating absurd plant sizes.",
-          "Repeated species feel less stamped."
-        ],
-        [
-          "Trim sightlines",
-          "Delete/erase foliage blocking landmarks, corners, combat reads or camera.",
-          "Design has priority over procedural density.",
-          "Important views remain open."
-        ]
+        {
+          "title": "Protect the route",
+          "where": "Level Editor → Play → traverse the intended route at player height and remove terrain/foliage snags",
+          "do": "Mark the walking corridor and important sightlines before painting foliage.",
+          "why": "Vegetation must not erase gameplay communication.",
+          "see": null,
+          "check": "You know where foliage should be sparse.",
+          "troubleshoot": [
+            "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Build large clusters",
+          "where": "Modes toolbar → Landscape → Manage / Sculpt → choose the tool and edit broad terrain forms in the Viewport",
+          "do": "Place tree/rock groups in masses with open gaps between them.",
+          "why": "Nature often reads as clustered rhythm rather than uniform randomness.",
+          "see": null,
+          "check": "The scene has dense and sparse zones.",
+          "troubleshoot": [
+            "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Add ground layer",
+          "where": "Modes toolbar → Landscape → Paint → choose/create the target layer and paint in the Viewport",
+          "do": "Paint grass/small plants at a density that supports the biome.",
+          "why": "Ground detail connects larger assets to terrain.",
+          "see": null,
+          "check": "Terrain no longer looks bare but remains readable.",
+          "troubleshoot": [
+            "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Vary scale carefully",
+          "where": "Modes toolbar → Landscape → Manage / Sculpt → choose the tool and edit broad terrain forms in the Viewport",
+          "do": "Use modest random scale/rotation ranges.",
+          "why": "Variation hides repetition without creating absurd plant sizes.",
+          "see": null,
+          "check": "Repeated species feel less stamped.",
+          "troubleshoot": [
+            "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Trim sightlines",
+          "where": "Modes toolbar → Landscape → Manage / Sculpt → choose the tool and edit broad terrain forms in the Viewport",
+          "do": "Delete/erase foliage blocking landmarks, corners, combat reads or camera.",
+          "why": "Design has priority over procedural density.",
+          "see": null,
+          "check": "Important views remain open.",
+          "troubleshoot": [
+            "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Painting maximum density across the whole map.",
@@ -2292,7 +3514,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic — Foliage Tool",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/foliage-tool-in-unreal-engine"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "sequencer-first-shot",
@@ -2310,36 +3533,91 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Create Level Sequence",
-          "Use Cinematics > Add Level Sequence or create one in the Content Browser.",
-          "Sequencer data lives in a Level Sequence asset.",
-          "The Sequencer timeline opens."
-        ],
-        [
-          "Add Cine Camera",
-          "Create/add a Cine Camera Actor and bind it to the sequence.",
-          "Cine Camera provides film-style camera controls.",
-          "Camera track appears in Sequencer."
-        ],
-        [
-          "Frame the end first",
-          "Move the camera to the strongest final composition and key its transform.",
-          "Knowing the destination prevents aimless camera movement.",
-          "The end frame communicates the intended subject."
-        ],
-        [
-          "Set the start",
-          "Move earlier in time, place a different useful start frame and key it.",
-          "Two keyframes create movement; composition gives that movement purpose.",
-          "Playback travels cleanly from start to end."
-        ],
-        [
-          "Trim duration",
-          "Shorten the shot until it communicates the idea without lingering.",
-          "Most beginner shots are longer than the information requires.",
-          "The shot feels deliberate rather than like a camera demo."
-        ]
+        {
+          "title": "Create Level Sequence",
+          "where": "Level Editor → Cinematics → Add/Open Level Sequence → Sequencer → Cine Camera / Camera Cuts / transform tracks named in the step",
+          "do": "Use Cinematics > Add Level Sequence or create one in the Content Browser.",
+          "why": "Sequencer data lives in a Level Sequence asset.",
+          "see": null,
+          "check": "The Sequencer timeline opens.",
+          "troubleshoot": [
+            "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/sequencer-key-features.webp",
+            "caption": "Sequencer example: tracks, cameras and timed properties are organised on one timeline.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Add Cine Camera",
+          "where": "Level Editor → Cinematics → Add/Open Level Sequence → Sequencer → Cine Camera / Camera Cuts / transform tracks named in the step",
+          "do": "Create/add a Cine Camera Actor and bind it to the sequence.",
+          "why": "Cine Camera provides film-style camera controls.",
+          "see": null,
+          "check": "Camera track appears in Sequencer.",
+          "troubleshoot": [
+            "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/sequencer-camera-timing.webp",
+            "caption": "Sequencer camera example: framing and timing should be judged together during playback.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Frame the end first",
+          "where": "Level Editor → Cinematics → Add/Open Level Sequence → Sequencer → Cine Camera / Camera Cuts / transform tracks named in the step",
+          "do": "Move the camera to the strongest final composition and key its transform.",
+          "why": "Knowing the destination prevents aimless camera movement.",
+          "see": null,
+          "check": "The end frame communicates the intended subject.",
+          "troubleshoot": [
+            "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/sequencer-camera-timing.webp",
+            "caption": "Sequencer camera example: framing and timing should be judged together during playback.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Set the start",
+          "where": "Level Editor → Cinematics → Add/Open Level Sequence → Sequencer → Cine Camera / Camera Cuts / transform tracks named in the step",
+          "do": "Move earlier in time, place a different useful start frame and key it.",
+          "why": "Two keyframes create movement; composition gives that movement purpose.",
+          "see": null,
+          "check": "Playback travels cleanly from start to end.",
+          "troubleshoot": [
+            "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/sequencer-camera-timing.webp",
+            "caption": "Sequencer camera example: framing and timing should be judged together during playback.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Trim duration",
+          "where": "Level Editor → Cinematics → Add/Open Level Sequence → Sequencer → Cine Camera / Camera Cuts / transform tracks named in the step",
+          "do": "Shorten the shot until it communicates the idea without lingering.",
+          "why": "Most beginner shots are longer than the information requires.",
+          "see": null,
+          "check": "The shot feels deliberate rather than like a camera demo.",
+          "troubleshoot": [
+            "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/sequencer-camera-timing.webp",
+            "caption": "Sequencer camera example: framing and timing should be judged together during playback.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        }
       ],
       "mistakes": [
         "Making a 20-second pan to show a 3-second idea.",
@@ -2368,7 +3646,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic — Sequencer Basics",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/how-to-make-movies-in-unreal-engine"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "camera-cuts",
@@ -2386,36 +3665,86 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Create 3 cameras",
-          "Frame a wide, medium and detail/reaction angle around the same event.",
-          "Shot size changes information and emotional distance.",
-          "Each camera shows something meaningfully different."
-        ],
-        [
-          "Add Camera Cuts track",
-          "Add a Camera Cuts track in Sequencer.",
-          "The cut track decides which camera the audience sees.",
-          "The track is visible and ready for camera sections."
-        ],
-        [
-          "Assign cameras",
-          "Create sections for each camera in a clear order.",
-          "Editing is choosing when information changes.",
-          "Playback switches camera at section boundaries."
-        ],
-        [
-          "Cut on purpose",
-          "Move a cut to the moment a new action, reveal or reaction starts.",
-          "Cuts feel natural when motivated by new information.",
-          "The sequence does not cut arbitrarily every two seconds."
-        ],
-        [
-          "Check screen direction",
-          "Ensure important movement does not confusingly flip direction without reason.",
-          "Continuity helps viewers understand space.",
-          "The action remains readable across cuts."
-        ]
+        {
+          "title": "Create 3 cameras",
+          "where": "Level Editor → Cinematics → Add/Open Level Sequence → Sequencer → Cine Camera / Camera Cuts / transform tracks named in the step",
+          "do": "Frame a wide, medium and detail/reaction angle around the same event.",
+          "why": "Shot size changes information and emotional distance.",
+          "see": null,
+          "check": "Each camera shows something meaningfully different.",
+          "troubleshoot": [
+            "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/sequencer-camera-timing.webp",
+            "caption": "Sequencer camera example: framing and timing should be judged together during playback.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Add Camera Cuts track",
+          "where": "Level Editor → Cinematics → Add/Open Level Sequence → Sequencer → Cine Camera / Camera Cuts / transform tracks named in the step",
+          "do": "Add a Camera Cuts track in Sequencer.",
+          "why": "The cut track decides which camera the audience sees.",
+          "see": null,
+          "check": "The track is visible and ready for camera sections.",
+          "troubleshoot": [
+            "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/sequencer-key-features.webp",
+            "caption": "Sequencer example: tracks, cameras and timed properties are organised on one timeline.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Assign cameras",
+          "where": "Level Editor → Cinematics → Add/Open Level Sequence → Sequencer → Cine Camera / Camera Cuts / transform tracks named in the step",
+          "do": "Create sections for each camera in a clear order.",
+          "why": "Editing is choosing when information changes.",
+          "see": null,
+          "check": "Playback switches camera at section boundaries.",
+          "troubleshoot": [
+            "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/sequencer-key-features.webp",
+            "caption": "Sequencer example: tracks, cameras and timed properties are organised on one timeline.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Cut on purpose",
+          "where": "Level Editor → Cinematics → Add/Open Level Sequence → Sequencer → Cine Camera / Camera Cuts / transform tracks named in the step",
+          "do": "Move a cut to the moment a new action, reveal or reaction starts.",
+          "why": "Cuts feel natural when motivated by new information.",
+          "see": null,
+          "check": "The sequence does not cut arbitrarily every two seconds.",
+          "troubleshoot": [
+            "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/sequencer-camera-timing.webp",
+            "caption": "Sequencer camera example: framing and timing should be judged together during playback.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Check screen direction",
+          "where": "Level Editor → Cinematics → Add/Open Level Sequence → Sequencer → Cine Camera / Camera Cuts / transform tracks named in the step",
+          "do": "Ensure important movement does not confusingly flip direction without reason.",
+          "why": "Continuity helps viewers understand space.",
+          "see": null,
+          "check": "The action remains readable across cuts.",
+          "troubleshoot": [
+            "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Using five cameras that all show the same composition.",
@@ -2436,7 +3765,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic — Camera Cuts",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/creating-camera-cuts-using-sequencer-in-unreal-engine"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "reveal-shot",
@@ -2454,36 +3784,86 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Hide the subject",
-          "Frame the start so a wall, doorway, foreground prop or darkness obscures part/all of the subject.",
-          "A reveal requires withheld information.",
-          "The start frame creates a question."
-        ],
-        [
-          "Choose the reveal path",
-          "Move laterally/forward so the subject gradually becomes visible.",
-          "Simple movement is easier to read than orbiting everywhere.",
-          "The subject appears progressively."
-        ],
-        [
-          "Key only what matters",
-          "Use as few transform keys as necessary and smooth the motion.",
-          "Over-keyed cameras wobble.",
-          "Movement feels controlled."
-        ],
-        [
-          "End on composition",
-          "Stop at a frame where the subject and surrounding context read clearly.",
-          "The payoff is a strong final image.",
-          "The final frame explains what was hidden."
-        ],
-        [
-          "Add sound before sight",
-          "Optional: start a sound cue shortly before the visual reveal.",
-          "Audio can create anticipation and direction.",
-          "The audience expects something before seeing it."
-        ]
+        {
+          "title": "Hide the subject",
+          "where": "Level Editor → Cinematics → Add/Open Level Sequence → Sequencer → Cine Camera / Camera Cuts / transform tracks named in the step",
+          "do": "Frame the start so a wall, doorway, foreground prop or darkness obscures part/all of the subject.",
+          "why": "A reveal requires withheld information.",
+          "see": null,
+          "check": "The start frame creates a question.",
+          "troubleshoot": [
+            "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Choose the reveal path",
+          "where": "Level Editor → Cinematics → Add/Open Level Sequence → Sequencer → Cine Camera / Camera Cuts / transform tracks named in the step",
+          "do": "Move laterally/forward so the subject gradually becomes visible.",
+          "why": "Simple movement is easier to read than orbiting everywhere.",
+          "see": null,
+          "check": "The subject appears progressively.",
+          "troubleshoot": [
+            "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/sequencer-camera-timing.webp",
+            "caption": "Sequencer camera example: framing and timing should be judged together during playback.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Key only what matters",
+          "where": "Level Editor → Cinematics → Add/Open Level Sequence → Sequencer → Cine Camera / Camera Cuts / transform tracks named in the step",
+          "do": "Use as few transform keys as necessary and smooth the motion.",
+          "why": "Over-keyed cameras wobble.",
+          "see": null,
+          "check": "Movement feels controlled.",
+          "troubleshoot": [
+            "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/sequencer-camera-timing.webp",
+            "caption": "Sequencer camera example: framing and timing should be judged together during playback.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "End on composition",
+          "where": "Level Editor → Cinematics → Add/Open Level Sequence → Sequencer → Cine Camera / Camera Cuts / transform tracks named in the step",
+          "do": "Stop at a frame where the subject and surrounding context read clearly.",
+          "why": "The payoff is a strong final image.",
+          "see": null,
+          "check": "The final frame explains what was hidden.",
+          "troubleshoot": [
+            "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/sequencer-camera-timing.webp",
+            "caption": "Sequencer camera example: framing and timing should be judged together during playback.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Add sound before sight",
+          "where": "Level Editor → Cinematics → Add/Open Level Sequence → Sequencer → Cine Camera / Camera Cuts / transform tracks named in the step",
+          "do": "Optional: start a sound cue shortly before the visual reveal.",
+          "why": "Audio can create anticipation and direction.",
+          "see": null,
+          "check": "The audience expects something before seeing it.",
+          "troubleshoot": [
+            "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/sequencer-audio-tracks.webp",
+            "caption": "Sequencer audio example: audio can be timed directly against visual beats.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        }
       ],
       "mistakes": [
         "Moving too slowly for the amount of information.",
@@ -2504,7 +3884,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic — Cinematic workflows",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/cinematic-workflow-guides-and-examples-in-unreal-engine"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "trigger-cutscene",
@@ -2522,36 +3903,76 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Place sequence in level",
-          "Make sure the Level Sequence Actor/asset is available in the gameplay level.",
-          "Gameplay needs a reference to the sequence you want to play.",
-          "The sequence previews in the level."
-        ],
-        [
-          "Choose a trigger",
-          "Use a Trigger Box, interaction or scripted event as the start condition.",
-          "Cinematics should happen because of game state, not only editor playback.",
-          "The trigger fires once at the intended moment."
-        ],
-        [
-          "Play sequence",
-          "Use the sequence player/actor to start playback.",
-          "The game now controls when Sequencer runs.",
-          "Entering/interacting starts the cutscene."
-        ],
-        [
-          "Handle player control",
-          "Disable or appropriately limit input/camera if the sequence requires it.",
-          "Player and cinematic camera fighting each other breaks presentation.",
-          "Inputs do not cause accidental movement during the sequence."
-        ],
-        [
-          "Restore state",
-          "On sequence finished, restore input/camera and continue the objective.",
-          "A cinematic must hand control back reliably.",
-          "The player can immediately continue playing after the final frame."
-        ]
+        {
+          "title": "Place sequence in level",
+          "where": "Level Editor → Cinematics → Add/Open Level Sequence → Sequencer → Cine Camera / Camera Cuts / transform tracks named in the step",
+          "do": "Make sure the Level Sequence Actor/asset is available in the gameplay level.",
+          "why": "Gameplay needs a reference to the sequence you want to play.",
+          "see": null,
+          "check": "The sequence previews in the level.",
+          "troubleshoot": [
+            "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Choose a trigger",
+          "where": "Level Editor → Trigger Box / interaction Blueprint → Event Graph → Level Sequence Actor/Player → Play, then restore player state on Finished",
+          "do": "Use a Trigger Box, interaction or scripted event as the start condition.",
+          "why": "Cinematics should happen because of game state, not only editor playback.",
+          "see": null,
+          "check": "The trigger fires once at the intended moment.",
+          "troubleshoot": [
+            "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Play sequence",
+          "where": "Level Editor → Cinematics → Add/Open Level Sequence → Sequencer → Cine Camera / Camera Cuts / transform tracks named in the step",
+          "do": "Use the sequence player/actor to start playback.",
+          "why": "The game now controls when Sequencer runs.",
+          "see": null,
+          "check": "Entering/interacting starts the cutscene.",
+          "troubleshoot": [
+            "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/sequencer-key-features.webp",
+            "caption": "Sequencer example: tracks, cameras and timed properties are organised on one timeline.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Handle player control",
+          "where": "Level Editor → Trigger Box / interaction Blueprint → Event Graph → Level Sequence Actor/Player → Play, then restore player state on Finished",
+          "do": "Disable or appropriately limit input/camera if the sequence requires it.",
+          "why": "Player and cinematic camera fighting each other breaks presentation.",
+          "see": null,
+          "check": "Inputs do not cause accidental movement during the sequence.",
+          "troubleshoot": [
+            "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Restore state",
+          "where": "Level Editor → Cinematics → Add/Open Level Sequence → Sequencer → Cine Camera / Camera Cuts / transform tracks named in the step",
+          "do": "On sequence finished, restore input/camera and continue the objective.",
+          "why": "A cinematic must hand control back reliably.",
+          "see": null,
+          "check": "The player can immediately continue playing after the final frame.",
+          "troubleshoot": [
+            "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/sequencer-key-features.webp",
+            "caption": "Sequencer example: tracks, cameras and timed properties are organised on one timeline.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        }
       ],
       "mistakes": [
         "Never restoring input.",
@@ -2572,7 +3993,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic — Cinematics and Sequencer",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/cinematics-and-sequencer-in-unreal-engine"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "ambient-zone",
@@ -2590,36 +4012,66 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Choose the bed",
-          "Import/use a subtle loop such as room tone, wind or machinery.",
-          "The bed establishes constant space without demanding attention.",
-          "Loop is not obviously distracting."
-        ],
-        [
-          "Place in space",
-          "Use Ambient Sound/Audio Component and decide whether the bed is 2D or localised.",
-          "Some ambience belongs to a whole area; some belongs to a source.",
-          "Movement changes the sound only when appropriate."
-        ],
-        [
-          "Add sparse details",
-          "Place occasional drips, creaks, birds, distant impacts or electrical noises.",
-          "Sparse variation prevents the loop from feeling synthetic.",
-          "You hear changing detail over time."
-        ],
-        [
-          "Balance levels",
-          "Lower the bed until gameplay/focal sounds remain dominant.",
-          "Ambience should support rather than mask important cues.",
-          "Footsteps/interactions stay clearly audible."
-        ],
-        [
-          "Walk the boundary",
-          "Enter/leave the area and listen for abrupt starts/stops.",
-          "Audio transitions reveal bad setup immediately.",
-          "The ambience enters/exits naturally."
-        ]
+        {
+          "title": "Choose the bed",
+          "where": "Content Drawer → choose/import the Sound Wave / Cue / MetaSound → drag into the level as Ambient Sound or add an Audio Component → Details",
+          "do": "Import/use a subtle loop such as room tone, wind or machinery.",
+          "why": "The bed establishes constant space without demanding attention.",
+          "see": null,
+          "check": "Loop is not obviously distracting.",
+          "troubleshoot": [
+            "Judge the sound while moving through the space; a source that sounds fine while stationary may fade or spatialise badly in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Place in space",
+          "where": "Content Drawer → choose/import the Sound Wave / Cue / MetaSound → drag into the level as Ambient Sound or add an Audio Component → Details",
+          "do": "Use Ambient Sound/Audio Component and decide whether the bed is 2D or localised.",
+          "why": "Some ambience belongs to a whole area; some belongs to a source.",
+          "see": null,
+          "check": "Movement changes the sound only when appropriate.",
+          "troubleshoot": [
+            "Judge the sound while moving through the space; a source that sounds fine while stationary may fade or spatialise badly in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Add sparse details",
+          "where": "Content Drawer → choose/import the Sound Wave / Cue / MetaSound → drag into the level as Ambient Sound or add an Audio Component → Details",
+          "do": "Place occasional drips, creaks, birds, distant impacts or electrical noises.",
+          "why": "Sparse variation prevents the loop from feeling synthetic.",
+          "see": null,
+          "check": "You hear changing detail over time.",
+          "troubleshoot": [
+            "Judge the sound while moving through the space; a source that sounds fine while stationary may fade or spatialise badly in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Balance levels",
+          "where": "Level Editor → Play → walk toward, around and away from the source while listening on headphones/speakers",
+          "do": "Lower the bed until gameplay/focal sounds remain dominant.",
+          "why": "Ambience should support rather than mask important cues.",
+          "see": null,
+          "check": "Footsteps/interactions stay clearly audible.",
+          "troubleshoot": [
+            "Judge the sound while moving through the space; a source that sounds fine while stationary may fade or spatialise badly in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Walk the boundary",
+          "where": "Level Editor → Play → walk toward, around and away from the source while listening on headphones/speakers",
+          "do": "Enter/leave the area and listen for abrupt starts/stops.",
+          "why": "Audio transitions reveal bad setup immediately.",
+          "see": null,
+          "check": "The ambience enters/exits naturally.",
+          "troubleshoot": [
+            "Keep the camera, route or test condition consistent so the comparison means something."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "One loud 30-second loop carrying the entire scene.",
@@ -2648,7 +4100,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic — Audio in UE5",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/audio-in-unreal-engine-5"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "sound-attenuation",
@@ -2666,36 +4119,66 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Create attenuation asset",
-          "Create a Sound Attenuation asset or enable attenuation settings on the sound source.",
-          "Attenuation defines how audio behaves across distance.",
-          "Attenuation settings are available."
-        ],
-        [
-          "Set inner radius",
-          "Choose the distance where full volume should remain.",
-          "A sound source needs a close-range zone before falloff.",
-          "Standing near the source keeps stable volume."
-        ],
-        [
-          "Set falloff distance",
-          "Choose how far beyond the inner radius the sound fades.",
-          "Falloff communicates distance and scale.",
-          "Walking away creates a smooth reduction."
-        ],
-        [
-          "Enable spatialisation",
-          "Use spatialisation so stereo/headphone playback indicates direction when appropriate.",
-          "Directional hearing helps navigation.",
-          "Turning away/from source changes perceived direction."
-        ],
-        [
-          "Test in motion",
-          "Circle the source and approach from different rooms.",
-          "Static preview cannot prove spatial behaviour.",
-          "Direction and distance make sense during play."
-        ]
+        {
+          "title": "Create attenuation asset",
+          "where": "Content Drawer → Audio → Sound Attenuation (or source Attenuation settings) → Details → test with the source placed in the level",
+          "do": "Create a Sound Attenuation asset or enable attenuation settings on the sound source.",
+          "why": "Attenuation defines how audio behaves across distance.",
+          "see": null,
+          "check": "Attenuation settings are available.",
+          "troubleshoot": [
+            "Judge the sound while moving through the space; a source that sounds fine while stationary may fade or spatialise badly in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Set inner radius",
+          "where": "Content Drawer → choose/import the Sound Wave / Cue / MetaSound → drag into the level as Ambient Sound or add an Audio Component → Details",
+          "do": "Choose the distance where full volume should remain.",
+          "why": "A sound source needs a close-range zone before falloff.",
+          "see": null,
+          "check": "Standing near the source keeps stable volume.",
+          "troubleshoot": [
+            "Judge the sound while moving through the space; a source that sounds fine while stationary may fade or spatialise badly in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Set falloff distance",
+          "where": "Content Drawer → Audio → Sound Attenuation (or source Attenuation settings) → Details → test with the source placed in the level",
+          "do": "Choose how far beyond the inner radius the sound fades.",
+          "why": "Falloff communicates distance and scale.",
+          "see": null,
+          "check": "Walking away creates a smooth reduction.",
+          "troubleshoot": [
+            "Judge the sound while moving through the space; a source that sounds fine while stationary may fade or spatialise badly in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Enable spatialisation",
+          "where": "Content Drawer → Audio → Sound Attenuation (or source Attenuation settings) → Details → test with the source placed in the level",
+          "do": "Use spatialisation so stereo/headphone playback indicates direction when appropriate.",
+          "why": "Directional hearing helps navigation.",
+          "see": null,
+          "check": "Turning away/from source changes perceived direction.",
+          "troubleshoot": [
+            "Judge the sound while moving through the space; a source that sounds fine while stationary may fade or spatialise badly in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Test in motion",
+          "where": "Level Editor → Play → walk toward, around and away from the source while listening on headphones/speakers",
+          "do": "Circle the source and approach from different rooms.",
+          "why": "Static preview cannot prove spatial behaviour.",
+          "see": null,
+          "check": "Direction and distance make sense during play.",
+          "troubleshoot": [
+            "Keep the camera, route or test condition consistent so the comparison means something."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "A tiny falloff that makes sound pop on/off.",
@@ -2716,7 +4199,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic — Sound Attenuation",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/sound-attenuation-in-unreal-engine"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "randomised-soundcue",
@@ -2734,36 +4218,66 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Create Sound Cue",
-          "Create a Sound Cue and open the node graph.",
-          "Sound Cues combine Sound Waves with playback behaviour.",
-          "The cue graph opens."
-        ],
-        [
-          "Add several variations",
-          "Drag 3–5 similar Sound Waves into the graph.",
-          "Real repeated actions rarely produce an identical waveform.",
-          "Multiple samples are available to choose from."
-        ],
-        [
-          "Add Random node",
-          "Connect samples into a Random node then to Output.",
-          "Random selection breaks obvious repetition.",
-          "Repeated preview chooses different samples."
-        ],
-        [
-          "Add small pitch/volume variation",
-          "Use a Modulator or equivalent restrained randomisation.",
-          "Tiny variation multiplies perceived variety.",
-          "Repeats feel less machine-gunned without sounding cartoonish."
-        ],
-        [
-          "Use cue in gameplay",
-          "Replace the single Sound Wave reference with the Sound Cue.",
-          "The variation now occurs every time the event plays.",
-          "Repeated actions no longer sound identical."
-        ]
+        {
+          "title": "Create Sound Cue",
+          "where": "Content Drawer → Audio → Sound Cue → open the Sound Cue graph → add waves/nodes and connect to Output",
+          "do": "Create a Sound Cue and open the node graph.",
+          "why": "Sound Cues combine Sound Waves with playback behaviour.",
+          "see": null,
+          "check": "The cue graph opens.",
+          "troubleshoot": [
+            "Judge the sound while moving through the space; a source that sounds fine while stationary may fade or spatialise badly in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Add several variations",
+          "where": "Content Drawer → choose/import the Sound Wave / Cue / MetaSound → drag into the level as Ambient Sound or add an Audio Component → Details",
+          "do": "Drag 3–5 similar Sound Waves into the graph.",
+          "why": "Real repeated actions rarely produce an identical waveform.",
+          "see": null,
+          "check": "Multiple samples are available to choose from.",
+          "troubleshoot": [
+            "Judge the sound while moving through the space; a source that sounds fine while stationary may fade or spatialise badly in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Add Random node",
+          "where": "Content Drawer → Audio → Sound Cue → open the Sound Cue graph → add waves/nodes and connect to Output",
+          "do": "Connect samples into a Random node then to Output.",
+          "why": "Random selection breaks obvious repetition.",
+          "see": null,
+          "check": "Repeated preview chooses different samples.",
+          "troubleshoot": [
+            "Judge the sound while moving through the space; a source that sounds fine while stationary may fade or spatialise badly in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Add small pitch/volume variation",
+          "where": "Content Drawer → choose/import the Sound Wave / Cue / MetaSound → drag into the level as Ambient Sound or add an Audio Component → Details",
+          "do": "Use a Modulator or equivalent restrained randomisation.",
+          "why": "Tiny variation multiplies perceived variety.",
+          "see": null,
+          "check": "Repeats feel less machine-gunned without sounding cartoonish.",
+          "troubleshoot": [
+            "Judge the sound while moving through the space; a source that sounds fine while stationary may fade or spatialise badly in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Use cue in gameplay",
+          "where": "Content Drawer → choose/import the Sound Wave / Cue / MetaSound → drag into the level as Ambient Sound or add an Audio Component → Details",
+          "do": "Replace the single Sound Wave reference with the Sound Cue.",
+          "why": "The variation now occurs every time the event plays.",
+          "see": null,
+          "check": "Repeated actions no longer sound identical.",
+          "troubleshoot": [
+            "Judge the sound while moving through the space; a source that sounds fine while stationary may fade or spatialise badly in play."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Pitch variation so extreme it changes the object identity.",
@@ -2784,7 +4298,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic — Sound Cue Editor",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/sound-cue-editor-in-unreal-engine"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "reverb-space",
@@ -2802,36 +4317,66 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Choose the space",
-          "Pick a room where acoustic size should be obvious: hall, tunnel, bathroom, chamber.",
-          "Reverb should communicate architecture.",
-          "The chosen space has a clear acoustic idea."
-        ],
-        [
-          "Add audio/reverb volume",
-          "Place the relevant Audio Volume around the room and assign/tune reverb settings.",
-          "Volumes let location change the acoustic treatment.",
-          "Entering the volume changes the sound treatment."
-        ],
-        [
-          "Tune decay/wet amount",
-          "Adjust so the tail suggests room size without washing out all sound.",
-          "Longer/louder reverb implies larger/more reflective spaces but can destroy clarity.",
-          "Speech/gameplay cues remain understandable."
-        ],
-        [
-          "Test doorway transition",
-          "Walk repeatedly across the boundary.",
-          "Abrupt reverb jumps reveal poor blending/volume placement.",
-          "The acoustic change feels tied to entering the room."
-        ],
-        [
-          "Compare dry/wet",
-          "Toggle the effect and listen with footsteps or a short impact.",
-          "A/B testing makes the design contribution obvious.",
-          "The room feels physically different with reverb enabled."
-        ]
+        {
+          "title": "Choose the space",
+          "where": "Content Drawer → choose/import the Sound Wave / Cue / MetaSound → drag into the level as Ambient Sound or add an Audio Component → Details",
+          "do": "Pick a room where acoustic size should be obvious: hall, tunnel, bathroom, chamber.",
+          "why": "Reverb should communicate architecture.",
+          "see": null,
+          "check": "The chosen space has a clear acoustic idea.",
+          "troubleshoot": [
+            "Judge the sound while moving through the space; a source that sounds fine while stationary may fade or spatialise badly in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Add audio/reverb volume",
+          "where": "Level Editor → Add (+) → Volumes → Audio Volume → Details → Reverb → resize volume to match the room",
+          "do": "Place the relevant Audio Volume around the room and assign/tune reverb settings.",
+          "why": "Volumes let location change the acoustic treatment.",
+          "see": null,
+          "check": "Entering the volume changes the sound treatment.",
+          "troubleshoot": [
+            "Judge the sound while moving through the space; a source that sounds fine while stationary may fade or spatialise badly in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Tune decay/wet amount",
+          "where": "Content Drawer → choose/import the Sound Wave / Cue / MetaSound → drag into the level as Ambient Sound or add an Audio Component → Details",
+          "do": "Adjust so the tail suggests room size without washing out all sound.",
+          "why": "Longer/louder reverb implies larger/more reflective spaces but can destroy clarity.",
+          "see": null,
+          "check": "Speech/gameplay cues remain understandable.",
+          "troubleshoot": [
+            "Judge the sound while moving through the space; a source that sounds fine while stationary may fade or spatialise badly in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Test doorway transition",
+          "where": "Level Editor → Add (+) → Volumes → Audio Volume → Details → Reverb → resize volume to match the room",
+          "do": "Walk repeatedly across the boundary.",
+          "why": "Abrupt reverb jumps reveal poor blending/volume placement.",
+          "see": null,
+          "check": "The acoustic change feels tied to entering the room.",
+          "troubleshoot": [
+            "Keep the camera, route or test condition consistent so the comparison means something."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Compare dry/wet",
+          "where": "Content Drawer → choose/import the Sound Wave / Cue / MetaSound → drag into the level as Ambient Sound or add an Audio Component → Details",
+          "do": "Toggle the effect and listen with footsteps or a short impact.",
+          "why": "A/B testing makes the design contribution obvious.",
+          "see": null,
+          "check": "The room feels physically different with reverb enabled.",
+          "troubleshoot": [
+            "Keep the camera, route or test condition consistent so the comparison means something."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Huge cathedral reverb in a tiny room.",
@@ -2852,7 +4397,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic — Audio Engine",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/audio-engine-overview-in-unreal-engine"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "scene-polish-pass",
@@ -2871,42 +4417,78 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Capture BEFORE",
-          "Take a representative gameplay screenshot before touching anything.",
-          "Without a baseline, students mistake activity for improvement.",
-          "You have an honest comparison frame."
-        ],
-        [
-          "Pass 1: readability",
-          "Fix route clarity, focal point, collision and anything blocking the player.",
-          "Gameplay problems outrank decorative problems.",
-          "The level is easier to understand."
-        ],
-        [
-          "Pass 2: scale/composition",
-          "Fix objects that feel wrong-sized, tangencies and awkward empty/crowded areas.",
-          "Composition benefits from proportion before detail.",
-          "The image has stronger big shapes."
-        ],
-        [
-          "Pass 3: materials/lighting",
-          "Fix inconsistent roughness, exposure, colour and lights without purpose.",
-          "Surface and lighting consistency creates cohesion.",
-          "The scene feels like one art direction."
-        ],
-        [
-          "Pass 4: story/detail",
-          "Add only details that support use, age, story or focal hierarchy.",
-          "Detail now lands on a strong base.",
-          "Small props no longer carry the whole scene."
-        ],
-        [
-          "Pass 5: delete",
-          "Remove anything redundant, noisy or expensive with little payoff.",
-          "Subtraction is a real polish tool.",
-          "Final scene is clearer than the 'everything on' version."
-        ]
+        {
+          "title": "Capture BEFORE",
+          "where": "Return to the same saved gameplay camera / route → capture a matching frame so BEFORE and AFTER are comparable",
+          "do": "Take a representative gameplay screenshot before touching anything.",
+          "why": "Without a baseline, students mistake activity for improvement.",
+          "see": null,
+          "check": "You have an honest comparison frame.",
+          "troubleshoot": [
+            "Change one targeted cause, then return to the same test view before deciding whether it was an improvement."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Pass 1: readability",
+          "where": "Use the existing gameplay scene → change only the category named in the step → return to the same camera before judging the result",
+          "do": "Fix route clarity, focal point, collision and anything blocking the player.",
+          "why": "Gameplay problems outrank decorative problems.",
+          "see": null,
+          "check": "The level is easier to understand.",
+          "troubleshoot": [
+            "Change one targeted cause, then return to the same test view before deciding whether it was an improvement."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Pass 2: scale/composition",
+          "where": "Use the existing gameplay scene → change only the category named in the step → return to the same camera before judging the result",
+          "do": "Fix objects that feel wrong-sized, tangencies and awkward empty/crowded areas.",
+          "why": "Composition benefits from proportion before detail.",
+          "see": null,
+          "check": "The image has stronger big shapes.",
+          "troubleshoot": [
+            "Change one targeted cause, then return to the same test view before deciding whether it was an improvement."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Pass 3: materials/lighting",
+          "where": "Use the existing gameplay scene → change only the category named in the step → return to the same camera before judging the result",
+          "do": "Fix inconsistent roughness, exposure, colour and lights without purpose.",
+          "why": "Surface and lighting consistency creates cohesion.",
+          "see": null,
+          "check": "The scene feels like one art direction.",
+          "troubleshoot": [
+            "Change one targeted cause, then return to the same test view before deciding whether it was an improvement."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Pass 4: story/detail",
+          "where": "Use the existing gameplay scene → change only the category named in the step → return to the same camera before judging the result",
+          "do": "Add only details that support use, age, story or focal hierarchy.",
+          "why": "Detail now lands on a strong base.",
+          "see": null,
+          "check": "Small props no longer carry the whole scene.",
+          "troubleshoot": [
+            "Change one targeted cause, then return to the same test view before deciding whether it was an improvement."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Pass 5: delete",
+          "where": "Use the existing gameplay scene → change only the category named in the step → return to the same camera before judging the result",
+          "do": "Remove anything redundant, noisy or expensive with little payoff.",
+          "why": "Subtraction is a real polish tool.",
+          "see": null,
+          "check": "Final scene is clearer than the 'everything on' version.",
+          "troubleshoot": [
+            "Change one targeted cause, then return to the same test view before deciding whether it was an improvement."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Adding Niagara and bloom before fixing layout.",
@@ -2935,7 +4517,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic — Visuals / Rendering",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designing-visuals-rendering-and-graphics-in-unreal-engine"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "performance-viewmodes",
@@ -2954,36 +4537,81 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Record normal view",
-          "Stand at a representative gameplay camera and note current performance/visual issue.",
-          "Profiling needs a repeatable location.",
-          "You can return to the same test frame."
-        ],
-        [
-          "Open diagnostic view modes",
-          "Use relevant View Mode options such as Shader Complexity or lighting/debug views available in your project.",
-          "Debug views expose costs invisible in beauty view.",
-          "The viewport changes to diagnostic information."
-        ],
-        [
-          "Find the hotspot",
-          "Identify one material, overdraw area, light cluster or effect that stands out.",
-          "Fixing one measurable hotspot is better than random optimisation.",
-          "You can point to a specific offender."
-        ],
-        [
-          "Simplify one thing",
-          "Reduce unnecessary transparency/material complexity/light overlap/effect density as appropriate.",
-          "Optimisation is a design trade-off.",
-          "The visual result still supports the scene."
-        ],
-        [
-          "Compare again",
-          "Return to the same camera/view and compare.",
-          "A repeatable A/B confirms whether the change helped.",
-          "The diagnostic issue is reduced without ruining the shot."
-        ]
+        {
+          "title": "Record normal view",
+          "where": "Use the existing gameplay scene → change only the category named in the step → return to the same camera before judging the result",
+          "do": "Stand at a representative gameplay camera and note current performance/visual issue.",
+          "why": "Profiling needs a repeatable location.",
+          "see": null,
+          "check": "You can return to the same test frame.",
+          "troubleshoot": [
+            "Change one targeted cause, then return to the same test view before deciding whether it was an improvement."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Open diagnostic view modes",
+          "where": "Viewport → View Mode / Optimisation Viewmodes → choose the diagnostic view relevant to the suspected issue",
+          "do": "Use relevant View Mode options such as Shader Complexity or lighting/debug views available in your project.",
+          "why": "Debug views expose costs invisible in beauty view.",
+          "see": null,
+          "check": "The viewport changes to diagnostic information.",
+          "troubleshoot": [
+            "Change one targeted cause, then return to the same test view before deciding whether it was an improvement."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/shader-complexity-heatmap.webp",
+            "caption": "Shader Complexity visualises expensive pixel cost and overlapping translucent work.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Find the hotspot",
+          "where": "Viewport → View Mode / Optimisation Viewmodes → choose the diagnostic view relevant to the suspected issue",
+          "do": "Identify one material, overdraw area, light cluster or effect that stands out.",
+          "why": "Fixing one measurable hotspot is better than random optimisation.",
+          "see": null,
+          "check": "You can point to a specific offender.",
+          "troubleshoot": [
+            "Change one targeted cause, then return to the same test view before deciding whether it was an improvement."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/shader-complexity-heatmap.webp",
+            "caption": "Shader Complexity visualises expensive pixel cost and overlapping translucent work.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Simplify one thing",
+          "where": "Use the existing gameplay scene → change only the category named in the step → return to the same camera before judging the result",
+          "do": "Reduce unnecessary transparency/material complexity/light overlap/effect density as appropriate.",
+          "why": "Optimisation is a design trade-off.",
+          "see": null,
+          "check": "The visual result still supports the scene.",
+          "troubleshoot": [
+            "Change one targeted cause, then return to the same test view before deciding whether it was an improvement."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Compare again",
+          "where": "Use the existing gameplay scene → change only the category named in the step → return to the same camera before judging the result",
+          "do": "Return to the same camera/view and compare.",
+          "why": "A repeatable A/B confirms whether the change helped.",
+          "see": null,
+          "check": "The diagnostic issue is reduced without ruining the shot.",
+          "troubleshoot": [
+            "Keep the camera, route or test condition consistent so the comparison means something."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/shader-complexity-heatmap.webp",
+            "caption": "Shader Complexity visualises expensive pixel cost and overlapping translucent work.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        }
       ],
       "mistakes": [
         "Deleting half the scene before measuring.",
@@ -3004,7 +4632,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic — View Modes",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/view-modes-in-unreal-engine"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "lod-nanite-check",
@@ -3022,36 +4651,66 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Choose a repeated mesh",
-          "Pick a rock, prop or environment mesh used many times.",
-          "Repeated assets multiply performance cost and visual popping.",
-          "You know which asset is being tested."
-        ],
-        [
-          "Inspect mesh settings",
-          "Open the Static Mesh editor and check Nanite/LOD setup appropriate to that asset/project.",
-          "Modern UE projects may use Nanite, traditional LODs or both depending on content/platform.",
-          "You can identify the mesh's current strategy."
-        ],
-        [
-          "Test distance",
-          "Place copies near/mid/far and move the camera.",
-          "LOD decisions are judged in motion, not only asset editor.",
-          "No distracting pop or disappearing silhouette occurs."
-        ],
-        [
-          "Keep silhouette priority",
-          "Do not simplify so aggressively that important shape changes.",
-          "Players notice silhouette changes more than tiny surface detail.",
-          "Far mesh still communicates the same object."
-        ],
-        [
-          "Test target hardware",
-          "Use the project's actual quality/platform needs rather than assuming desktop maximum.",
-          "Optimisation is context-sensitive.",
-          "The chosen setup matches the class/project target."
-        ]
+        {
+          "title": "Choose a repeated mesh",
+          "where": "Use the existing gameplay scene → change only the category named in the step → return to the same camera before judging the result",
+          "do": "Pick a rock, prop or environment mesh used many times.",
+          "why": "Repeated assets multiply performance cost and visual popping.",
+          "see": null,
+          "check": "You know which asset is being tested.",
+          "troubleshoot": [
+            "Change one targeted cause, then return to the same test view before deciding whether it was an improvement."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Inspect mesh settings",
+          "where": "Content Drawer → double-click the repeated Static Mesh → Static Mesh Editor → Nanite / LOD settings → then place near/mid/far test copies",
+          "do": "Open the Static Mesh editor and check Nanite/LOD setup appropriate to that asset/project.",
+          "why": "Modern UE projects may use Nanite, traditional LODs or both depending on content/platform.",
+          "see": null,
+          "check": "You can identify the mesh's current strategy.",
+          "troubleshoot": [
+            "Change one targeted cause, then return to the same test view before deciding whether it was an improvement."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Test distance",
+          "where": "Content Drawer → double-click the repeated Static Mesh → Static Mesh Editor → Nanite / LOD settings → then place near/mid/far test copies",
+          "do": "Place copies near/mid/far and move the camera.",
+          "why": "LOD decisions are judged in motion, not only asset editor.",
+          "see": null,
+          "check": "No distracting pop or disappearing silhouette occurs.",
+          "troubleshoot": [
+            "Keep the camera, route or test condition consistent so the comparison means something."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Keep silhouette priority",
+          "where": "Use the existing gameplay scene → change only the category named in the step → return to the same camera before judging the result",
+          "do": "Do not simplify so aggressively that important shape changes.",
+          "why": "Players notice silhouette changes more than tiny surface detail.",
+          "see": null,
+          "check": "Far mesh still communicates the same object.",
+          "troubleshoot": [
+            "Change one targeted cause, then return to the same test view before deciding whether it was an improvement."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Test target hardware",
+          "where": "Use the existing gameplay scene → change only the category named in the step → return to the same camera before judging the result",
+          "do": "Use the project's actual quality/platform needs rather than assuming desktop maximum.",
+          "why": "Optimisation is context-sensitive.",
+          "see": null,
+          "check": "The chosen setup matches the class/project target.",
+          "troubleshoot": [
+            "Keep the camera, route or test condition consistent so the comparison means something."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Enabling features without understanding project/platform support.",
@@ -3072,7 +4731,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic — Nanite",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/nanite-virtualized-geometry-in-unreal-engine"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "portfolio-shot",
@@ -3090,36 +4750,66 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Choose the story shot",
-          "Pick the angle that best communicates the environment's idea, route or mood.",
-          "The hero image should sell the work before technical details.",
-          "The scene reads immediately."
-        ],
-        [
-          "Clean the frame",
-          "Hide editor clutter/UI where appropriate and remove temporary debug actors.",
-          "Presentation affects how work is judged.",
-          "Nothing accidental dominates the image."
-        ],
-        [
-          "Frame deliberately",
-          "Use foreground/midground/background, focal hierarchy and sensible field of view.",
-          "A portfolio screenshot is still composition.",
-          "The eye has a clear path through the frame."
-        ],
-        [
-          "Capture a breakdown too",
-          "Take one technical shot: blockout, lighting-only, material spheres, wireframe or before/after.",
-          "Breakdowns prove process rather than only final beauty.",
-          "Viewer can see how the scene was built."
-        ],
-        [
-          "Add concise caption",
-          "Write what you did and what you were responsible for.",
-          "Recruiters/teachers need authorship and process clarity.",
-          "Caption explains contribution without an essay."
-        ]
+        {
+          "title": "Choose the story shot",
+          "where": "Return to the same saved gameplay camera / route → capture a matching frame so BEFORE and AFTER are comparable",
+          "do": "Pick the angle that best communicates the environment's idea, route or mood.",
+          "why": "The hero image should sell the work before technical details.",
+          "see": null,
+          "check": "The scene reads immediately.",
+          "troubleshoot": [
+            "Change one targeted cause, then return to the same test view before deciding whether it was an improvement."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Clean the frame",
+          "where": "Return to the same saved gameplay camera / route → capture a matching frame so BEFORE and AFTER are comparable",
+          "do": "Hide editor clutter/UI where appropriate and remove temporary debug actors.",
+          "why": "Presentation affects how work is judged.",
+          "see": null,
+          "check": "Nothing accidental dominates the image.",
+          "troubleshoot": [
+            "Change one targeted cause, then return to the same test view before deciding whether it was an improvement."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Frame deliberately",
+          "where": "Return to the same saved gameplay camera / route → capture a matching frame so BEFORE and AFTER are comparable",
+          "do": "Use foreground/midground/background, focal hierarchy and sensible field of view.",
+          "why": "A portfolio screenshot is still composition.",
+          "see": null,
+          "check": "The eye has a clear path through the frame.",
+          "troubleshoot": [
+            "Change one targeted cause, then return to the same test view before deciding whether it was an improvement."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Capture a breakdown too",
+          "where": "Return to the same saved gameplay camera / route → capture a matching frame so BEFORE and AFTER are comparable",
+          "do": "Take one technical shot: blockout, lighting-only, material spheres, wireframe or before/after.",
+          "why": "Breakdowns prove process rather than only final beauty.",
+          "see": null,
+          "check": "Viewer can see how the scene was built.",
+          "troubleshoot": [
+            "Change one targeted cause, then return to the same test view before deciding whether it was an improvement."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Add concise caption",
+          "where": "Use the existing gameplay scene → change only the category named in the step → return to the same camera before judging the result",
+          "do": "Write what you did and what you were responsible for.",
+          "why": "Recruiters/teachers need authorship and process clarity.",
+          "see": null,
+          "check": "Caption explains contribution without an essay.",
+          "troubleshoot": [
+            "Change one targeted cause, then return to the same test view before deciding whether it was an improvement."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Only showing cinematic close-ups that hide the level.",
@@ -3140,7 +4830,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic — Screenshots",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/taking-screenshots-in-unreal-engine"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "decision-point-test",
@@ -3158,36 +4849,66 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Build three choices",
-          "Greybox a junction with one main route, one optional route and one route that is currently unavailable.",
-          "A useful decision needs alternatives with different meanings, not three identical doorways.",
-          "From player height, all three choices are visible or discoverable."
-        ],
-        [
-          "Make the main route readable",
-          "Give the primary path more visible depth, a landmark, stronger opening or repeated route language.",
-          "Players read opportunity from space before they read text.",
-          "A tester can point to the likely progression route."
-        ],
-        [
-          "Make the optional route tempting",
-          "Use a glimpse of reward, contrasting light or distinctive prop without making it look mandatory.",
-          "Optional content should invite curiosity without hijacking progression.",
-          "A tester describes it as interesting but not obviously required."
-        ],
-        [
-          "Make the blocked route honest",
-          "Use geometry, damage, locked architecture or environmental state to communicate why it cannot be used yet.",
-          "Visual denial is better than an invisible wall after the player commits to the route.",
-          "The tester understands the route is unavailable before collision stops them."
-        ],
-        [
-          "Observe silently",
-          "Watch another student choose without giving instructions and record where they hesitate.",
-          "Unprompted behaviour is the real readability test.",
-          "You make one change based on observed behaviour."
-        ]
+        {
+          "title": "Build three choices",
+          "where": "Level Editor → Add (+) → Shapes → Cube / primitives → duplicate and resize in the Viewport",
+          "do": "Greybox a junction with one main route, one optional route and one route that is currently unavailable.",
+          "why": "A useful decision needs alternatives with different meanings, not three identical doorways.",
+          "see": null,
+          "check": "From player height, all three choices are visible or discoverable.",
+          "troubleshoot": [
+            "If the decision is only visible from the editor camera, switch to Play and judge it from player height."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Make the main route readable",
+          "where": "Level Editor → Viewport / Outliner → place or adjust the geometry/landmark named in the step → re-check from player height",
+          "do": "Give the primary path more visible depth, a landmark, stronger opening or repeated route language.",
+          "why": "Players read opportunity from space before they read text.",
+          "see": null,
+          "check": "A tester can point to the likely progression route.",
+          "troubleshoot": [
+            "If the decision is only visible from the editor camera, switch to Play and judge it from player height."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Make the optional route tempting",
+          "where": "Level Editor → Viewport / Outliner → place or adjust the geometry/landmark named in the step → re-check from player height",
+          "do": "Use a glimpse of reward, contrasting light or distinctive prop without making it look mandatory.",
+          "why": "Optional content should invite curiosity without hijacking progression.",
+          "see": null,
+          "check": "A tester describes it as interesting but not obviously required.",
+          "troubleshoot": [
+            "If the decision is only visible from the editor camera, switch to Play and judge it from player height."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Make the blocked route honest",
+          "where": "Level Editor → Viewport / Outliner → place or adjust the geometry/landmark named in the step → re-check from player height",
+          "do": "Use geometry, damage, locked architecture or environmental state to communicate why it cannot be used yet.",
+          "why": "Visual denial is better than an invisible wall after the player commits to the route.",
+          "see": null,
+          "check": "The tester understands the route is unavailable before collision stops them.",
+          "troubleshoot": [
+            "If the decision is only visible from the editor camera, switch to Play and judge it from player height."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Observe silently",
+          "where": "Level Editor → Play → test from the real player camera; do not judge this step only from the editor fly camera",
+          "do": "Watch another student choose without giving instructions and record where they hesitate.",
+          "why": "Unprompted behaviour is the real readability test.",
+          "see": null,
+          "check": "You make one change based on observed behaviour.",
+          "troubleshoot": [
+            "Keep the camera, route or test condition consistent so the comparison means something."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Making all three routes equally bright/open.",
@@ -3208,7 +4929,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic UE5.8 — Modeling Mode Quick Start",
         "url": "https://dev.epicgames.com/documentation/unreal-engine/modeling-mode-quick-start-in-unreal-engine?lang=en-US"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "spatial-pacing",
@@ -3226,36 +4948,66 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Build a compressed approach",
-          "Create a narrower/lower transition space leading toward a larger room.",
-          "Compression makes the following space feel larger by comparison.",
-          "The approach feels tighter from player camera."
-        ],
-        [
-          "Hide the payoff",
-          "Use a corner, doorway or elevation change so the destination is not fully visible at the start.",
-          "Delayed information creates anticipation.",
-          "The key reveal only appears after movement."
-        ],
-        [
-          "Create the release",
-          "Open into a taller/wider space with a longer sightline and a clear focal point.",
-          "Contrast in spatial scale creates a beat without scripting.",
-          "The reveal feels noticeably more open than the approach."
-        ],
-        [
-          "Control dwell time",
-          "Place a reason to pause: overlook, objective, landmark or safe area.",
-          "Pacing is also where players stop, not only how they move.",
-          "A tester naturally slows or looks around at the intended point."
-        ],
-        [
-          "Compare the route",
-          "Walk it in reverse and decide whether the rhythm still makes sense.",
-          "Good spaces can have different emotional readings depending on direction.",
-          "You can explain the intended rhythm in three beats."
-        ]
+        {
+          "title": "Build a compressed approach",
+          "where": "Level Editor → Add (+) → Shapes → Cube / primitives → duplicate and resize in the Viewport",
+          "do": "Create a narrower/lower transition space leading toward a larger room.",
+          "why": "Compression makes the following space feel larger by comparison.",
+          "see": null,
+          "check": "The approach feels tighter from player camera.",
+          "troubleshoot": [
+            "If the decision is only visible from the editor camera, switch to Play and judge it from player height."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Hide the payoff",
+          "where": "Level Editor → Viewport / Outliner → place or adjust the geometry/landmark named in the step → re-check from player height",
+          "do": "Use a corner, doorway or elevation change so the destination is not fully visible at the start.",
+          "why": "Delayed information creates anticipation.",
+          "see": null,
+          "check": "The key reveal only appears after movement.",
+          "troubleshoot": [
+            "If the decision is only visible from the editor camera, switch to Play and judge it from player height."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Create the release",
+          "where": "Level Editor → Add (+) → Shapes → Cube / primitives → duplicate and resize in the Viewport",
+          "do": "Open into a taller/wider space with a longer sightline and a clear focal point.",
+          "why": "Contrast in spatial scale creates a beat without scripting.",
+          "see": null,
+          "check": "The reveal feels noticeably more open than the approach.",
+          "troubleshoot": [
+            "If the decision is only visible from the editor camera, switch to Play and judge it from player height."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Control dwell time",
+          "where": "Level Editor → Viewport / Outliner → place or adjust the geometry/landmark named in the step → re-check from player height",
+          "do": "Place a reason to pause: overlook, objective, landmark or safe area.",
+          "why": "Pacing is also where players stop, not only how they move.",
+          "see": null,
+          "check": "A tester naturally slows or looks around at the intended point.",
+          "troubleshoot": [
+            "If the decision is only visible from the editor camera, switch to Play and judge it from player height."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Compare the route",
+          "where": "Level Editor → Play → test from the real player camera; do not judge this step only from the editor fly camera",
+          "do": "Walk it in reverse and decide whether the rhythm still makes sense.",
+          "why": "Good spaces can have different emotional readings depending on direction.",
+          "see": null,
+          "check": "You can explain the intended rhythm in three beats.",
+          "troubleshoot": [
+            "Keep the camera, route or test condition consistent so the comparison means something."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Making every room the same scale.",
@@ -3276,7 +5028,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic UE5.8 — Modeling Mode Quick Start",
         "url": "https://dev.epicgames.com/documentation/unreal-engine/modeling-mode-quick-start-in-unreal-engine?lang=en-US"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "story-vignette",
@@ -3294,36 +5047,86 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Choose a micro-event",
-          "Pick one simple event: hurried escape, interrupted meal, repair attempt, break-in or recent fight.",
-          "A small specific event is easier to communicate than vague “abandoned” dressing.",
-          "You can describe the event in one sentence."
-        ],
-        [
-          "Choose five useful props",
-          "Select props that each have a role in the event rather than five decorative objects.",
-          "Every object should add evidence.",
-          "Removing any one prop noticeably weakens the story."
-        ],
-        [
-          "Arrange cause and effect",
-          "Place props so their positions imply sequence: what was used, moved, dropped or damaged.",
-          "Placement creates narrative relationships between objects.",
-          "A viewer can infer an action rather than just seeing clutter."
-        ],
-        [
-          "Add one environmental trace",
-          "Use a decal, light, spill, dust, footprint or damage mark to connect the props to the space.",
-          "The room should participate in the event too.",
-          "The trace supports the same interpretation."
-        ],
-        [
-          "Blind read",
-          "Show another student for five seconds and ask what happened.",
-          "If the intended story is invisible, more detail may not be the answer.",
-          "Their interpretation is close enough to your intended event."
-        ]
+        {
+          "title": "Choose a micro-event",
+          "where": "Content Drawer → find the required environment prop/mesh → drag into the Viewport → adjust Transform in Details / duplicate deliberately",
+          "do": "Pick one simple event: hurried escape, interrupted meal, repair attempt, break-in or recent fight.",
+          "why": "A small specific event is easier to communicate than vague “abandoned” dressing.",
+          "see": null,
+          "check": "You can describe the event in one sentence.",
+          "troubleshoot": [
+            "If dressing starts to block movement or the focal point, delete props before adding more."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Choose five useful props",
+          "where": "Content Drawer → find the required environment prop/mesh → drag into the Viewport → adjust Transform in Details / duplicate deliberately",
+          "do": "Select props that each have a role in the event rather than five decorative objects.",
+          "why": "Every object should add evidence.",
+          "see": null,
+          "check": "Removing any one prop noticeably weakens the story.",
+          "troubleshoot": [
+            "If dressing starts to block movement or the focal point, delete props before adding more."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/environmental-clues-dressing.webp",
+            "caption": "Professional example: environmental dressing works when props and marks communicate use, history and focal hierarchy.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Arrange cause and effect",
+          "where": "Content Drawer → find the required environment prop/mesh → drag into the Viewport → adjust Transform in Details / duplicate deliberately",
+          "do": "Place props so their positions imply sequence: what was used, moved, dropped or damaged.",
+          "why": "Placement creates narrative relationships between objects.",
+          "see": null,
+          "check": "A viewer can infer an action rather than just seeing clutter.",
+          "troubleshoot": [
+            "If dressing starts to block movement or the focal point, delete props before adding more."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/environmental-clues-dressing.webp",
+            "caption": "Professional example: environmental dressing works when props and marks communicate use, history and focal hierarchy.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Add one environmental trace",
+          "where": "Content Drawer → find the required environment prop/mesh → drag into the Viewport → adjust Transform in Details / duplicate deliberately",
+          "do": "Use a decal, light, spill, dust, footprint or damage mark to connect the props to the space.",
+          "why": "The room should participate in the event too.",
+          "see": null,
+          "check": "The trace supports the same interpretation.",
+          "troubleshoot": [
+            "If dressing starts to block movement or the focal point, delete props before adding more."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/environmental-clues-dressing.webp",
+            "caption": "Professional example: environmental dressing works when props and marks communicate use, history and focal hierarchy.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Blind read",
+          "where": "Level Editor → Play → inspect the dressed space from normal movement routes before deciding what stays",
+          "do": "Show another student for five seconds and ask what happened.",
+          "why": "If the intended story is invisible, more detail may not be the answer.",
+          "see": null,
+          "check": "Their interpretation is close enough to your intended event.",
+          "troubleshoot": [
+            "Keep the camera, route or test condition consistent so the comparison means something."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/environmental-clues-dressing.webp",
+            "caption": "Professional example: environmental dressing works when props and marks communicate use, history and focal hierarchy.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        }
       ],
       "mistakes": [
         "Using too many props.",
@@ -3351,7 +5154,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic UE5.8 — Modeling Mode",
         "url": "https://dev.epicgames.com/documentation/unreal-engine/modeling-mode-in-unreal-engine?lang=en-US"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "hero-asset",
@@ -3369,36 +5173,81 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Find the repetition",
-          "Walk through a modular area and identify the point where repeated walls/doors/props make spaces blend together.",
-          "You need to know what problem the hero asset is solving.",
-          "You can name the most forgettable location."
-        ],
-        [
-          "Choose one unique feature",
-          "Add one distinctive machine, sculpture, damaged wall, tree, sign or architectural shape at that location.",
-          "A hero asset creates memory and orientation through exception.",
-          "The location now has a recognisable silhouette."
-        ],
-        [
-          "Frame it",
-          "Adjust nearby props, sightlines or lighting so the unique feature is visible from the approach.",
-          "A landmark only helps if the player can actually perceive it.",
-          "It is visible from at least two useful positions."
-        ],
-        [
-          "Protect its contrast",
-          "Remove nearby competing clutter or repeated bright objects.",
-          "Uniqueness needs visual breathing room.",
-          "The hero feature remains the first or second thing noticed."
-        ],
-        [
-          "Test orientation",
-          "Ask a tester to navigate back to “the room with…” after exploring.",
-          "Memorable landmarks support spatial memory.",
-          "They can describe/use the hero asset as an orientation cue."
-        ]
+        {
+          "title": "Find the repetition",
+          "where": "Content Drawer → find the required environment prop/mesh → drag into the Viewport → adjust Transform in Details / duplicate deliberately",
+          "do": "Walk through a modular area and identify the point where repeated walls/doors/props make spaces blend together.",
+          "why": "You need to know what problem the hero asset is solving.",
+          "see": null,
+          "check": "You can name the most forgettable location.",
+          "troubleshoot": [
+            "If dressing starts to block movement or the focal point, delete props before adding more."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Choose one unique feature",
+          "where": "Content Drawer → find the required environment prop/mesh → drag into the Viewport → adjust Transform in Details / duplicate deliberately",
+          "do": "Add one distinctive machine, sculpture, damaged wall, tree, sign or architectural shape at that location.",
+          "why": "A hero asset creates memory and orientation through exception.",
+          "see": null,
+          "check": "The location now has a recognisable silhouette.",
+          "troubleshoot": [
+            "If dressing starts to block movement or the focal point, delete props before adding more."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/environmental-clues-dressing.webp",
+            "caption": "Professional example: environmental dressing works when props and marks communicate use, history and focal hierarchy.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Frame it",
+          "where": "Content Drawer → find the required environment prop/mesh → drag into the Viewport → adjust Transform in Details / duplicate deliberately",
+          "do": "Adjust nearby props, sightlines or lighting so the unique feature is visible from the approach.",
+          "why": "A landmark only helps if the player can actually perceive it.",
+          "see": null,
+          "check": "It is visible from at least two useful positions.",
+          "troubleshoot": [
+            "If dressing starts to block movement or the focal point, delete props before adding more."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/environmental-clues-dressing.webp",
+            "caption": "Professional example: environmental dressing works when props and marks communicate use, history and focal hierarchy.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Protect its contrast",
+          "where": "File → Save Current Level As (or duplicate the blockout map) before the dressing pass",
+          "do": "Remove nearby competing clutter or repeated bright objects.",
+          "why": "Uniqueness needs visual breathing room.",
+          "see": null,
+          "check": "The hero feature remains the first or second thing noticed.",
+          "troubleshoot": [
+            "If dressing starts to block movement or the focal point, delete props before adding more."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/environmental-clues-dressing.webp",
+            "caption": "Professional example: environmental dressing works when props and marks communicate use, history and focal hierarchy.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Test orientation",
+          "where": "Level Editor → Play → inspect the dressed space from normal movement routes before deciding what stays",
+          "do": "Ask a tester to navigate back to “the room with…” after exploring.",
+          "why": "Memorable landmarks support spatial memory.",
+          "see": null,
+          "check": "They can describe/use the hero asset as an orientation cue.",
+          "troubleshoot": [
+            "Keep the camera, route or test condition consistent so the comparison means something."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Adding a unique asset in every corner.",
@@ -3419,7 +5268,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic UE5.8 — Modeling Mode",
         "url": "https://dev.epicgames.com/documentation/unreal-engine/modeling-mode-in-unreal-engine?lang=en-US"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "material-cost-check",
@@ -3437,36 +5287,81 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Create a baseline view",
-          "Frame a representative gameplay view containing the material you want to inspect.",
-          "Performance decisions need a consistent comparison.",
-          "You can return to the same camera/view."
-        ],
-        [
-          "Open Shader Complexity",
-          "Switch the viewport to Shader Complexity and inspect where expensive pixels accumulate.",
-          "The view exposes per-pixel shader cost and overlapping transparency.",
-          "You can identify the hottest visible area."
-        ],
-        [
-          "Inspect the material",
-          "Open the material and check its Stats/instruction information plus obvious expensive features such as refraction, noise or many texture samples.",
-          "The viewport tells you where; the graph helps explain why.",
-          "You can name one likely contributor to cost."
-        ],
-        [
-          "Simplify one thing",
-          "Remove or replace one expensive operation/texture layer or reduce translucent overlap.",
-          "Changing one variable makes the result measurable.",
-          "The visual result still communicates the intended surface."
-        ],
-        [
-          "Compare again",
-          "Return to the same view and compare complexity/performance.",
-          "Optimisation is only real if measurement improves.",
-          "The cost is reduced or you can justify why the visual trade-off is not worth it."
-        ]
+        {
+          "title": "Create a baseline view",
+          "where": "Viewport → View Mode → Optimisation Viewmodes → Shader Complexity → keep the same camera for comparison",
+          "do": "Frame a representative gameplay view containing the material you want to inspect.",
+          "why": "Performance decisions need a consistent comparison.",
+          "see": null,
+          "check": "You can return to the same camera/view.",
+          "troubleshoot": [
+            "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Open Shader Complexity",
+          "where": "Viewport → View Mode → Optimisation Viewmodes → Shader Complexity → keep the same camera for comparison",
+          "do": "Switch the viewport to Shader Complexity and inspect where expensive pixels accumulate.",
+          "why": "The view exposes per-pixel shader cost and overlapping transparency.",
+          "see": null,
+          "check": "You can identify the hottest visible area.",
+          "troubleshoot": [
+            "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/shader-complexity-heatmap.webp",
+            "caption": "Shader Complexity visualises expensive pixel cost and overlapping translucent work.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Inspect the material",
+          "where": "Content Drawer → open/create the Material → Material Editor graph → select nodes/parameters in Details",
+          "do": "Open the material and check its Stats/instruction information plus obvious expensive features such as refraction, noise or many texture samples.",
+          "why": "The viewport tells you where; the graph helps explain why.",
+          "see": null,
+          "check": "You can name one likely contributor to cost.",
+          "troubleshoot": [
+            "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/shader-complexity-heatmap.webp",
+            "caption": "Shader Complexity visualises expensive pixel cost and overlapping translucent work.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Simplify one thing",
+          "where": "Content Drawer → open/create the Material → Material Editor graph → select nodes/parameters in Details",
+          "do": "Remove or replace one expensive operation/texture layer or reduce translucent overlap.",
+          "why": "Changing one variable makes the result measurable.",
+          "see": null,
+          "check": "The visual result still communicates the intended surface.",
+          "troubleshoot": [
+            "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Compare again",
+          "where": "Viewport → View Mode → Optimisation Viewmodes → Shader Complexity → keep the same camera for comparison",
+          "do": "Return to the same view and compare complexity/performance.",
+          "why": "Optimisation is only real if measurement improves.",
+          "see": null,
+          "check": "The cost is reduced or you can justify why the visual trade-off is not worth it.",
+          "troubleshoot": [
+            "Keep the camera, route or test condition consistent so the comparison means something."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/shader-complexity-heatmap.webp",
+            "caption": "Shader Complexity visualises expensive pixel cost and overlapping translucent work.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        }
       ],
       "mistakes": [
         "Optimising graph neatness instead of GPU cost.",
@@ -3494,7 +5389,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic UE5.8 — Real-time Rendering Optimisation",
         "url": "https://dev.epicgames.com/documentation/unreal-engine/guidelines-for-optimizing-rendering-for-real-time-in-unreal-engine"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "translucency-budget",
@@ -3512,36 +5408,81 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Find overlap zones",
-          "Use Shader Complexity and rotate the camera through glass, fog cards, decals/particles and foliage.",
-          "Transparent layers become expensive when many pixels are redrawn through each other.",
-          "You identify one view with heavy overlap."
-        ],
-        [
-          "Separate layers",
-          "Reduce unnecessary stacked transparent planes or increase spacing/coverage efficiency.",
-          "Fewer overlapping layers reduce repeated per-pixel work.",
-          "The same effect uses fewer overlapping surfaces."
-        ],
-        [
-          "Reduce screen coverage",
-          "Shrink particles/cards or limit where transparency is visible.",
-          "Cost grows with the number of expensive pixels on screen.",
-          "The effect still reads without filling the entire frame."
-        ],
-        [
-          "Prefer opaque/masked where suitable",
-          "Check whether an opaque/masked solution can replace a translucent surface.",
-          "Opaque/masked materials are often cheaper and more predictable.",
-          "At least one surface uses the cheaper blend mode without harming the look."
-        ],
-        [
-          "Test worst-case view",
-          "Stand where the most layers overlap and profile there.",
-          "Average views can hide the actual performance spike.",
-          "The worst-case view remains acceptable on target hardware."
-        ]
+        {
+          "title": "Find overlap zones",
+          "where": "Viewport → View Mode → Optimisation Viewmodes → Shader Complexity → keep the same camera for comparison",
+          "do": "Use Shader Complexity and rotate the camera through glass, fog cards, decals/particles and foliage.",
+          "why": "Transparent layers become expensive when many pixels are redrawn through each other.",
+          "see": null,
+          "check": "You identify one view with heavy overlap.",
+          "troubleshoot": [
+            "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/shader-complexity-heatmap.webp",
+            "caption": "Shader Complexity visualises expensive pixel cost and overlapping translucent work.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Separate layers",
+          "where": "Content Drawer → open/create the Material → Material Editor graph → select nodes/parameters in Details",
+          "do": "Reduce unnecessary stacked transparent planes or increase spacing/coverage efficiency.",
+          "why": "Fewer overlapping layers reduce repeated per-pixel work.",
+          "see": null,
+          "check": "The same effect uses fewer overlapping surfaces.",
+          "troubleshoot": [
+            "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/shader-complexity-heatmap.webp",
+            "caption": "Shader Complexity visualises expensive pixel cost and overlapping translucent work.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Reduce screen coverage",
+          "where": "Content Drawer → open/create the Material → Material Editor graph → select nodes/parameters in Details",
+          "do": "Shrink particles/cards or limit where transparency is visible.",
+          "why": "Cost grows with the number of expensive pixels on screen.",
+          "see": null,
+          "check": "The effect still reads without filling the entire frame.",
+          "troubleshoot": [
+            "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Prefer opaque/masked where suitable",
+          "where": "Content Drawer → open/create the Material → Material Editor graph → select nodes/parameters in Details",
+          "do": "Check whether an opaque/masked solution can replace a translucent surface.",
+          "why": "Opaque/masked materials are often cheaper and more predictable.",
+          "see": null,
+          "check": "At least one surface uses the cheaper blend mode without harming the look.",
+          "troubleshoot": [
+            "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Test worst-case view",
+          "where": "Viewport → View Mode → Optimisation Viewmodes → Shader Complexity → keep the same camera for comparison",
+          "do": "Stand where the most layers overlap and profile there.",
+          "why": "Average views can hide the actual performance spike.",
+          "see": null,
+          "check": "The worst-case view remains acceptable on target hardware.",
+          "troubleshoot": [
+            "Keep the camera, route or test condition consistent so the comparison means something."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/shader-complexity-heatmap.webp",
+            "caption": "Shader Complexity visualises expensive pixel cost and overlapping translucent work.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        }
       ],
       "mistakes": [
         "Checking only one camera angle.",
@@ -3562,7 +5503,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic UE5.8 — Real-time Rendering Optimisation",
         "url": "https://dev.epicgames.com/documentation/unreal-engine/guidelines-for-optimizing-rendering-for-real-time-in-unreal-engine"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "lumen-mood-pass",
@@ -3580,36 +5522,91 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Lock the viewing conditions",
-          "Choose the gameplay camera/route and set a deliberate exposure approach before balancing lights.",
-          "Changing exposure while lighting makes comparisons meaningless.",
-          "Brightness no longer swings unpredictably while judging the shot."
-        ],
-        [
-          "Establish key information",
-          "Light the route/focal point first with the minimum number of important sources.",
-          "Gameplay hierarchy should exist before atmospheric decoration.",
-          "The player can identify the goal without fog or post process."
-        ],
-        [
-          "Add indirect mood",
-          "Use environment colour, skylight/Lumen bounce and restrained emissive contribution to shape the shadow side.",
-          "Indirect light creates cohesion without flattening everything.",
-          "Shadows retain form while the focal point remains dominant."
-        ],
-        [
-          "Layer atmosphere",
-          "Add fog/volumetric response only where it improves depth or information control.",
-          "Atmosphere should separate depth, not erase it.",
-          "Foreground, middle distance and background remain distinct."
-        ],
-        [
-          "Scalability check",
-          "Compare the scene at a lower Lumen/scalability target and adjust the design if the route or focal point collapses.",
-          "A design that only works at maximum settings is fragile.",
-          "The intended hierarchy survives the target quality level."
-        ]
+        {
+          "title": "Lock the viewing conditions",
+          "where": "Level Editor → Post Process Volume → Details → Exposure → stabilise the comparison before adjusting lights",
+          "do": "Choose the gameplay camera/route and set a deliberate exposure approach before balancing lights.",
+          "why": "Changing exposure while lighting makes comparisons meaningless.",
+          "see": null,
+          "check": "Brightness no longer swings unpredictably while judging the shot.",
+          "troubleshoot": [
+            "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/lumen-gi-comparison.webp",
+            "caption": "Lumen comparison: judge indirect light and bounce from the same scene view.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Establish key information",
+          "where": "Level Editor → Add (+) → Lights → Point / Spot / Rect / Directional as required → select the light → Details",
+          "do": "Light the route/focal point first with the minimum number of important sources.",
+          "why": "Gameplay hierarchy should exist before atmospheric decoration.",
+          "see": null,
+          "check": "The player can identify the goal without fog or post process.",
+          "troubleshoot": [
+            "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/lumen-gi-comparison.webp",
+            "caption": "Lumen comparison: judge indirect light and bounce from the same scene view.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Add indirect mood",
+          "where": "Level Editor → Add (+) → Lights → Point / Spot / Rect / Directional as required → select the light → Details",
+          "do": "Use environment colour, skylight/Lumen bounce and restrained emissive contribution to shape the shadow side.",
+          "why": "Indirect light creates cohesion without flattening everything.",
+          "see": null,
+          "check": "Shadows retain form while the focal point remains dominant.",
+          "troubleshoot": [
+            "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/lumen-gi-comparison.webp",
+            "caption": "Lumen comparison: judge indirect light and bounce from the same scene view.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Layer atmosphere",
+          "where": "Level Editor → Add (+) → Lights → Point / Spot / Rect / Directional as required → select the light → Details",
+          "do": "Add fog/volumetric response only where it improves depth or information control.",
+          "why": "Atmosphere should separate depth, not erase it.",
+          "see": null,
+          "check": "Foreground, middle distance and background remain distinct.",
+          "troubleshoot": [
+            "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/lumen-gi-comparison.webp",
+            "caption": "Lumen comparison: judge indirect light and bounce from the same scene view.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Scalability check",
+          "where": "Level Editor → Add (+) → Lights → Point / Spot / Rect / Directional as required → select the light → Details",
+          "do": "Compare the scene at a lower Lumen/scalability target and adjust the design if the route or focal point collapses.",
+          "why": "A design that only works at maximum settings is fragile.",
+          "see": null,
+          "check": "The intended hierarchy survives the target quality level.",
+          "troubleshoot": [
+            "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/lumen-gi-comparison.webp",
+            "caption": "Lumen comparison: judge indirect light and bounce from the same scene view.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        }
       ],
       "mistakes": [
         "Using emissive materials as free lights everywhere.",
@@ -3643,7 +5640,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic UE5.8 — Lumen Performance Guide",
         "url": "https://dev.epicgames.com/documentation/unreal-engine/lumen-performance-guide-for-unreal-engine"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "time-of-day-contrast",
@@ -3661,36 +5659,86 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Save a neutral composition",
-          "Choose one camera angle where the route and landmark already read.",
-          "You need the same composition to compare lighting decisions.",
-          "The geometry stays unchanged between versions."
-        ],
-        [
-          "Build the day state",
-          "Use clear directional light, readable ambient fill and restrained fog.",
-          "Day should establish the base spatial information.",
-          "Routes and landmark are easy to read."
-        ],
-        [
-          "Build the night/dusk state",
-          "Shift light direction/temperature, ambient balance and fog while protecting essential route cues.",
-          "Time change should alter emotion and information, not randomly darken everything.",
-          "The scene feels different but navigation remains possible."
-        ],
-        [
-          "Change one gameplay implication",
-          "Decide how visibility affects stealth, threat, exploration or safe areas.",
-          "Lighting state becomes design when it changes player decisions.",
-          "You can name one behaviour the new time encourages."
-        ],
-        [
-          "Compare silhouettes",
-          "Place the two screenshots side by side and inspect what disappeared/appeared.",
-          "Useful time-of-day changes are deliberate.",
-          "You can explain every major readability change."
-        ]
+        {
+          "title": "Save a neutral composition",
+          "where": "Level Editor → Add (+) → Lights → Point / Spot / Rect / Directional as required → select the light → Details",
+          "do": "Choose one camera angle where the route and landmark already read.",
+          "why": "You need the same composition to compare lighting decisions.",
+          "see": null,
+          "check": "The geometry stays unchanged between versions.",
+          "troubleshoot": [
+            "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Build the day state",
+          "where": "Level Editor → Add (+) → Lights → Point / Spot / Rect / Directional as required → select the light → Details",
+          "do": "Use clear directional light, readable ambient fill and restrained fog.",
+          "why": "Day should establish the base spatial information.",
+          "see": null,
+          "check": "Routes and landmark are easy to read.",
+          "troubleshoot": [
+            "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/lighting-mood-comparison.webp",
+            "caption": "Professional example: compare lighting moods from the same viewpoint so contrast and readability are meaningful.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Build the night/dusk state",
+          "where": "Level Editor → Add (+) → Lights → Point / Spot / Rect / Directional as required → select the light → Details",
+          "do": "Shift light direction/temperature, ambient balance and fog while protecting essential route cues.",
+          "why": "Time change should alter emotion and information, not randomly darken everything.",
+          "see": null,
+          "check": "The scene feels different but navigation remains possible.",
+          "troubleshoot": [
+            "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/lighting-mood-comparison.webp",
+            "caption": "Professional example: compare lighting moods from the same viewpoint so contrast and readability are meaningful.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Change one gameplay implication",
+          "where": "Level Editor → Add (+) → Lights → Point / Spot / Rect / Directional as required → select the light → Details",
+          "do": "Decide how visibility affects stealth, threat, exploration or safe areas.",
+          "why": "Lighting state becomes design when it changes player decisions.",
+          "see": null,
+          "check": "You can name one behaviour the new time encourages.",
+          "troubleshoot": [
+            "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/lighting-mood-comparison.webp",
+            "caption": "Professional example: compare lighting moods from the same viewpoint so contrast and readability are meaningful.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Compare silhouettes",
+          "where": "Level Editor → use the same locked camera → toggle/compare lights or Play-test the route",
+          "do": "Place the two screenshots side by side and inspect what disappeared/appeared.",
+          "why": "Useful time-of-day changes are deliberate.",
+          "see": null,
+          "check": "You can explain every major readability change.",
+          "troubleshoot": [
+            "Keep the camera, route or test condition consistent so the comparison means something."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/lighting-mood-comparison.webp",
+            "caption": "Professional example: compare lighting moods from the same viewpoint so contrast and readability are meaningful.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        }
       ],
       "mistakes": [
         "Making night simply “day but darker”.",
@@ -3711,7 +5759,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic UE5.8 — Lumen Performance Guide",
         "url": "https://dev.epicgames.com/documentation/unreal-engine/lumen-performance-guide-for-unreal-engine"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "pcg-safe-route",
@@ -3729,36 +5778,66 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Define the authored route",
-          "Mark the playable path and key sightlines before generating/scattering assets.",
-          "Procedural coverage must know what it is not allowed to damage.",
-          "The path/landmark works before scatter."
-        ],
-        [
-          "Create placement constraints",
-          "Use slope, height, density, bounds or exclusion logic so assets avoid the route and critical spaces.",
-          "Rules turn random scatter into controlled distribution.",
-          "Trees/rocks no longer spawn in protected gameplay areas."
-        ],
-        [
-          "Vary density intentionally",
-          "Use denser clusters away from the route and lower density near navigation/focal points.",
-          "Density itself can guide movement and create composition.",
-          "The path reads through distribution, not only texture."
-        ],
-        [
-          "Hand-author landmarks",
-          "Place important hero trees/rocks/structures manually after procedural coverage.",
-          "Procedural systems are good at background variation; memorable navigation needs intent.",
-          "At least one landmark is deliberately placed and framed."
-        ],
-        [
-          "Regenerate and test",
-          "Change the seed/inputs if available and confirm the route remains safe.",
-          "Good rules survive variation.",
-          "Multiple generations preserve navigation."
-        ]
+        {
+          "title": "Define the authored route",
+          "where": "Level Editor → Play → traverse the intended route at player height and remove terrain/foliage snags",
+          "do": "Mark the playable path and key sightlines before generating/scattering assets.",
+          "why": "Procedural coverage must know what it is not allowed to damage.",
+          "see": null,
+          "check": "The path/landmark works before scatter.",
+          "troubleshoot": [
+            "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Create placement constraints",
+          "where": "Modes toolbar → Landscape → Manage / Sculpt → choose the tool and edit broad terrain forms in the Viewport",
+          "do": "Use slope, height, density, bounds or exclusion logic so assets avoid the route and critical spaces.",
+          "why": "Rules turn random scatter into controlled distribution.",
+          "see": null,
+          "check": "Trees/rocks no longer spawn in protected gameplay areas.",
+          "troubleshoot": [
+            "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Vary density intentionally",
+          "where": "Modes toolbar → Landscape → Manage / Sculpt → choose the tool and edit broad terrain forms in the Viewport",
+          "do": "Use denser clusters away from the route and lower density near navigation/focal points.",
+          "why": "Density itself can guide movement and create composition.",
+          "see": null,
+          "check": "The path reads through distribution, not only texture.",
+          "troubleshoot": [
+            "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Hand-author landmarks",
+          "where": "Level Editor → Play → traverse the intended route at player height and remove terrain/foliage snags",
+          "do": "Place important hero trees/rocks/structures manually after procedural coverage.",
+          "why": "Procedural systems are good at background variation; memorable navigation needs intent.",
+          "see": null,
+          "check": "At least one landmark is deliberately placed and framed.",
+          "troubleshoot": [
+            "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Regenerate and test",
+          "where": "Level Editor → Play → traverse the intended route at player height and remove terrain/foliage snags",
+          "do": "Change the seed/inputs if available and confirm the route remains safe.",
+          "why": "Good rules survive variation.",
+          "see": null,
+          "check": "Multiple generations preserve navigation.",
+          "troubleshoot": [
+            "Keep the camera, route or test condition consistent so the comparison means something."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Generating first and carving a route through chaos later.",
@@ -3779,7 +5858,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic UE5.8 — PCG Framework",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/procedural-content-generation-framework-in-unreal-engine"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "weather-readability",
@@ -3797,36 +5877,81 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Choose the information budget",
-          "List what must remain visible during the weather state: route edge, landmark, nearby threats or shelter.",
-          "Weather should hide some information deliberately, not everything equally.",
-          "You have a short must-see list."
-        ],
-        [
-          "Layer the weather",
-          "Combine sky/light change, fog, particles and sound rather than relying on one extreme effect.",
-          "Layering creates depth and avoids the “grey filter” look.",
-          "Each layer has a distinct job."
-        ],
-        [
-          "Protect navigation",
-          "Use contrast, practical lights, silhouettes or route materials to keep required cues readable.",
-          "The player still needs to act inside the atmosphere.",
-          "A tester can move through the area without memorising it first."
-        ],
-        [
-          "Add one world reaction",
-          "Change foliage motion, puddle/wetness, audio or a gameplay rule.",
-          "The environment feels alive when systems agree with the weather.",
-          "At least one non-visual system responds."
-        ],
-        [
-          "Performance check",
-          "Test the dense/worst weather view on target quality.",
-          "Fog and particles can create high GPU cost/overdraw.",
-          "The effect remains playable or has a cheaper fallback."
-        ]
+        {
+          "title": "Choose the information budget",
+          "where": "Modes toolbar → Landscape → Manage / Sculpt → choose the tool and edit broad terrain forms in the Viewport",
+          "do": "List what must remain visible during the weather state: route edge, landmark, nearby threats or shelter.",
+          "why": "Weather should hide some information deliberately, not everything equally.",
+          "see": null,
+          "check": "You have a short must-see list.",
+          "troubleshoot": [
+            "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Layer the weather",
+          "where": "Modes toolbar → Landscape → Paint → choose/create the target layer and paint in the Viewport",
+          "do": "Combine sky/light change, fog, particles and sound rather than relying on one extreme effect.",
+          "why": "Layering creates depth and avoids the “grey filter” look.",
+          "see": null,
+          "check": "Each layer has a distinct job.",
+          "troubleshoot": [
+            "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/volumetric-fog-layers.webp",
+            "caption": "Professional example: volumetric fog controls depth and visibility in layers.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Protect navigation",
+          "where": "Level Editor → Play → traverse the intended route at player height and remove terrain/foliage snags",
+          "do": "Use contrast, practical lights, silhouettes or route materials to keep required cues readable.",
+          "why": "The player still needs to act inside the atmosphere.",
+          "see": null,
+          "check": "A tester can move through the area without memorising it first.",
+          "troubleshoot": [
+            "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/volumetric-fog-layers.webp",
+            "caption": "Professional example: volumetric fog controls depth and visibility in layers.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Add one world reaction",
+          "where": "Modes toolbar → Landscape → Manage / Sculpt → choose the tool and edit broad terrain forms in the Viewport",
+          "do": "Change foliage motion, puddle/wetness, audio or a gameplay rule.",
+          "why": "The environment feels alive when systems agree with the weather.",
+          "see": null,
+          "check": "At least one non-visual system responds.",
+          "troubleshoot": [
+            "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/volumetric-fog-layers.webp",
+            "caption": "Professional example: volumetric fog controls depth and visibility in layers.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Performance check",
+          "where": "Modes toolbar → Landscape → Manage / Sculpt → choose the tool and edit broad terrain forms in the Viewport",
+          "do": "Test the dense/worst weather view on target quality.",
+          "why": "Fog and particles can create high GPU cost/overdraw.",
+          "see": null,
+          "check": "The effect remains playable or has a cheaper fallback.",
+          "troubleshoot": [
+            "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Maxing fog/particles until visibility is accidental.",
@@ -3847,7 +5972,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic UE5.8 — PCG Framework",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/procedural-content-generation-framework-in-unreal-engine"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "cine-lens-language",
@@ -3865,36 +5991,86 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Name the emotion/information",
-          "Decide whether the shot should feel intimate, exposed, compressed, powerful or disorienting.",
-          "Lens choice should solve a storytelling problem.",
-          "You can describe the shot purpose before touching the camera."
-        ],
-        [
-          "Create a Cine Camera",
-          "Add/choose a Cine Camera Actor in Sequencer and frame the subject.",
-          "Cine Camera gives filmic controls for focal length and aperture.",
-          "The camera is active on the Camera Cut track."
-        ],
-        [
-          "Compare focal lengths",
-          "Try a wider and longer focal length while repositioning the camera to keep similar subject size.",
-          "Focal length changes spatial relationships, not just zoom.",
-          "You can see the background feel expand/compress between versions."
-        ],
-        [
-          "Choose depth of field deliberately",
-          "Use aperture/focus only if it helps isolate information or mood.",
-          "Shallow focus is a storytelling tool, not automatic “cinematic” quality.",
-          "The important subject remains readable during motion."
-        ],
-        [
-          "Test in sequence",
-          "Play the shot before/after adjacent cuts.",
-          "A good standalone frame can still break edit rhythm.",
-          "The lens/framing transition feels intentional."
-        ]
+        {
+          "title": "Name the emotion/information",
+          "where": "Level Editor → Cinematics → Add/Open Level Sequence → Sequencer → Cine Camera / Camera Cuts / transform tracks named in the step",
+          "do": "Decide whether the shot should feel intimate, exposed, compressed, powerful or disorienting.",
+          "why": "Lens choice should solve a storytelling problem.",
+          "see": null,
+          "check": "You can describe the shot purpose before touching the camera.",
+          "troubleshoot": [
+            "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Create a Cine Camera",
+          "where": "Level Editor → Cinematics → Add/Open Level Sequence → Sequencer → Cine Camera / Camera Cuts / transform tracks named in the step",
+          "do": "Add/choose a Cine Camera Actor in Sequencer and frame the subject.",
+          "why": "Cine Camera gives filmic controls for focal length and aperture.",
+          "see": null,
+          "check": "The camera is active on the Camera Cut track.",
+          "troubleshoot": [
+            "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/sequencer-camera-timing.webp",
+            "caption": "Sequencer camera example: framing and timing should be judged together during playback.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Compare focal lengths",
+          "where": "Level Editor → Cinematics → Add/Open Level Sequence → Sequencer → Cine Camera / Camera Cuts / transform tracks named in the step",
+          "do": "Try a wider and longer focal length while repositioning the camera to keep similar subject size.",
+          "why": "Focal length changes spatial relationships, not just zoom.",
+          "see": null,
+          "check": "You can see the background feel expand/compress between versions.",
+          "troubleshoot": [
+            "Keep the camera, route or test condition consistent so the comparison means something."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/sequencer-camera-timing.webp",
+            "caption": "Sequencer camera example: framing and timing should be judged together during playback.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Choose depth of field deliberately",
+          "where": "Level Editor → Cinematics → Add/Open Level Sequence → Sequencer → Cine Camera / Camera Cuts / transform tracks named in the step",
+          "do": "Use aperture/focus only if it helps isolate information or mood.",
+          "why": "Shallow focus is a storytelling tool, not automatic “cinematic” quality.",
+          "see": null,
+          "check": "The important subject remains readable during motion.",
+          "troubleshoot": [
+            "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/sequencer-camera-timing.webp",
+            "caption": "Sequencer camera example: framing and timing should be judged together during playback.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Test in sequence",
+          "where": "Level Editor → Cinematics → Add/Open Level Sequence → Sequencer → Cine Camera / Camera Cuts / transform tracks named in the step",
+          "do": "Play the shot before/after adjacent cuts.",
+          "why": "A good standalone frame can still break edit rhythm.",
+          "see": null,
+          "check": "The lens/framing transition feels intentional.",
+          "troubleshoot": [
+            "Keep the camera, route or test condition consistent so the comparison means something."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/sequencer-camera-timing.webp",
+            "caption": "Sequencer camera example: framing and timing should be judged together during playback.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        }
       ],
       "mistakes": [
         "Using shallow depth of field until gameplay information is unreadable.",
@@ -3928,7 +6104,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic UE5.8 — Cinematic Cameras",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/cinematic-cameras-in-unreal-engine"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "adaptive-cutscene-mini",
@@ -3946,36 +6123,86 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Build the shared intro",
-          "Create a short intro Level Sequence/subsequence that both outcomes use.",
-          "Shared content should not be duplicated just because the ending changes.",
-          "Both versions can start from the same intro."
-        ],
-        [
-          "Create two outcome sequences",
-          "Make two very short alternate reactions/endings with clear names.",
-          "Small separate blocks are easier to test and replace.",
-          "Each outcome plays correctly on its own."
-        ],
-        [
-          "Create/choose a Boolean",
-          "Use an existing gameplay Boolean/state supplied by your project, such as HasKey, AlarmTriggered or HelpedNPC.",
-          "Adaptivity needs one clear input before it needs complex narrative logic.",
-          "The value can be changed/tested reliably."
-        ],
-        [
-          "Branch to the outcome",
-          "At the trigger point, use Blueprint logic to play the appropriate sequence/outcome based on the Boolean.",
-          "Gameplay state now controls cinematic content.",
-          "True and False produce different endings."
-        ],
-        [
-          "Return cleanly",
-          "Make sure input/camera/gameplay state returns correctly after either outcome.",
-          "Adaptive scenes still need reliable transitions back to play.",
-          "Both paths return control without leaving the wrong camera/state active."
-        ]
+        {
+          "title": "Build the shared intro",
+          "where": "Level Editor → Cinematics → Add/Open Level Sequence → Sequencer → Cine Camera / Camera Cuts / transform tracks named in the step",
+          "do": "Create a short intro Level Sequence/subsequence that both outcomes use.",
+          "why": "Shared content should not be duplicated just because the ending changes.",
+          "see": null,
+          "check": "Both versions can start from the same intro.",
+          "troubleshoot": [
+            "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/sequencer-key-features.webp",
+            "caption": "Sequencer example: tracks, cameras and timed properties are organised on one timeline.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Create two outcome sequences",
+          "where": "Gameplay Blueprint → Branch on the chosen state Boolean → call the appropriate Level Sequence / subsequence",
+          "do": "Make two very short alternate reactions/endings with clear names.",
+          "why": "Small separate blocks are easier to test and replace.",
+          "see": null,
+          "check": "Each outcome plays correctly on its own.",
+          "troubleshoot": [
+            "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/sequencer-key-features.webp",
+            "caption": "Sequencer example: tracks, cameras and timed properties are organised on one timeline.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Create/choose a Boolean",
+          "where": "Gameplay Blueprint → Branch on the chosen state Boolean → call the appropriate Level Sequence / subsequence",
+          "do": "Use an existing gameplay Boolean/state supplied by your project, such as HasKey, AlarmTriggered or HelpedNPC.",
+          "why": "Adaptivity needs one clear input before it needs complex narrative logic.",
+          "see": null,
+          "check": "The value can be changed/tested reliably.",
+          "troubleshoot": [
+            "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Branch to the outcome",
+          "where": "Gameplay Blueprint → Branch on the chosen state Boolean → call the appropriate Level Sequence / subsequence",
+          "do": "At the trigger point, use Blueprint logic to play the appropriate sequence/outcome based on the Boolean.",
+          "why": "Gameplay state now controls cinematic content.",
+          "see": null,
+          "check": "True and False produce different endings.",
+          "troubleshoot": [
+            "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/sequencer-key-features.webp",
+            "caption": "Sequencer example: tracks, cameras and timed properties are organised on one timeline.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Return cleanly",
+          "where": "Level Editor → Trigger Box / interaction Blueprint → Event Graph → Level Sequence Actor/Player → Play, then restore player state on Finished",
+          "do": "Make sure input/camera/gameplay state returns correctly after either outcome.",
+          "why": "Adaptive scenes still need reliable transitions back to play.",
+          "see": null,
+          "check": "Both paths return control without leaving the wrong camera/state active.",
+          "troubleshoot": [
+            "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/sequencer-key-features.webp",
+            "caption": "Sequencer example: tracks, cameras and timed properties are organised on one timeline.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        }
       ],
       "mistakes": [
         "Duplicating the entire cutscene for one changed reaction.",
@@ -3996,7 +6223,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic UE5.8 — Sequencer",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/sequencer-cinematic-editor-unreal-engine"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "audio-offscreen-story",
@@ -4014,36 +6242,66 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Choose the unseen information",
-          "Decide what the player should infer: machine room ahead, enemy behind door, large open hall, storm outside or safe generator nearby.",
-          "Sound needs a communication goal.",
-          "You can state the intended inference in one sentence."
-        ],
-        [
-          "Place the source out of sight",
-          "Put the sound behind geometry/around a corner rather than beside the player.",
-          "The audio now extends the perceived world beyond the camera.",
-          "The source cannot be seen at the first listening position."
-        ],
-        [
-          "Set useful attenuation",
-          "Use an attenuation asset so volume/spatialisation changes naturally as the listener moves.",
-          "Distance behaviour helps locate the source.",
-          "Walking toward/away gives a believable directional/distance cue."
-        ],
-        [
-          "Shape the space",
-          "Add suitable reverb/air absorption/occlusion behaviour if needed.",
-          "Acoustic treatment helps the player infer room type and separation.",
-          "The source feels like it belongs behind/inside that space."
-        ],
-        [
-          "Blind test",
-          "Ask a tester what they expect to find before seeing the source.",
-          "The cue succeeds only if the inference is communicated.",
-          "Their answer is close to the intended information."
-        ]
+        {
+          "title": "Choose the unseen information",
+          "where": "Content Drawer → choose/import the Sound Wave / Cue / MetaSound → drag into the level as Ambient Sound or add an Audio Component → Details",
+          "do": "Decide what the player should infer: machine room ahead, enemy behind door, large open hall, storm outside or safe generator nearby.",
+          "why": "Sound needs a communication goal.",
+          "see": null,
+          "check": "You can state the intended inference in one sentence.",
+          "troubleshoot": [
+            "Judge the sound while moving through the space; a source that sounds fine while stationary may fade or spatialise badly in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Place the source out of sight",
+          "where": "Content Drawer → choose/import the Sound Wave / Cue / MetaSound → drag into the level as Ambient Sound or add an Audio Component → Details",
+          "do": "Put the sound behind geometry/around a corner rather than beside the player.",
+          "why": "The audio now extends the perceived world beyond the camera.",
+          "see": null,
+          "check": "The source cannot be seen at the first listening position.",
+          "troubleshoot": [
+            "Judge the sound while moving through the space; a source that sounds fine while stationary may fade or spatialise badly in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Set useful attenuation",
+          "where": "Content Drawer → Audio → Sound Attenuation (or source Attenuation settings) → Details → test with the source placed in the level",
+          "do": "Use an attenuation asset so volume/spatialisation changes naturally as the listener moves.",
+          "why": "Distance behaviour helps locate the source.",
+          "see": null,
+          "check": "Walking toward/away gives a believable directional/distance cue.",
+          "troubleshoot": [
+            "Judge the sound while moving through the space; a source that sounds fine while stationary may fade or spatialise badly in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Shape the space",
+          "where": "Content Drawer → choose/import the Sound Wave / Cue / MetaSound → drag into the level as Ambient Sound or add an Audio Component → Details",
+          "do": "Add suitable reverb/air absorption/occlusion behaviour if needed.",
+          "why": "Acoustic treatment helps the player infer room type and separation.",
+          "see": null,
+          "check": "The source feels like it belongs behind/inside that space.",
+          "troubleshoot": [
+            "Judge the sound while moving through the space; a source that sounds fine while stationary may fade or spatialise badly in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Blind test",
+          "where": "Level Editor → Play → walk toward, around and away from the source while listening on headphones/speakers",
+          "do": "Ask a tester what they expect to find before seeing the source.",
+          "why": "The cue succeeds only if the inference is communicated.",
+          "see": null,
+          "check": "Their answer is close to the intended information.",
+          "troubleshoot": [
+            "Keep the camera, route or test condition consistent so the comparison means something."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Making the cue so loud it sounds non-spatial.",
@@ -4077,7 +6335,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic UE5.8 — Sound Attenuation",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/sound-attenuation-in-unreal-engine"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "metasound-wind",
@@ -4095,36 +6354,66 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Create a MetaSound Source",
-          "Create a MetaSound Source for the ambient wind and attach appropriate attenuation if it lives in 3D space.",
-          "MetaSound gives graph-level control over how the sound is generated/varied.",
-          "The source can be auditioned and placed."
-        ],
-        [
-          "Start with a wind layer",
-          "Use a suitable wind Sound Wave/input as the stable base of the sound.",
-          "A recognisable source layer keeps the system simple before adding variation.",
-          "The wind plays continuously without clicks."
-        ],
-        [
-          "Add subtle variation",
-          "Modulate volume and/or filter/pitch slowly within a restrained range.",
-          "Slow variation reduces obvious looping without sounding random.",
-          "The sound changes over time but still feels like one environment."
-        ],
-        [
-          "Add sparse gust behaviour",
-          "Introduce an occasional stronger gust or secondary layer using timing/random logic.",
-          "Rare events create texture and prevent constant density.",
-          "Gusts occur irregularly rather than every few seconds exactly."
-        ],
-        [
-          "Test in context",
-          "Walk through the level and balance wind against gameplay cues/dialogue.",
-          "An impressive solo sound can be exhausting in the mix.",
-          "Important sounds remain intelligible."
-        ]
+        {
+          "title": "Create a MetaSound Source",
+          "where": "Content Drawer → Audio → MetaSound Source → open the MetaSound graph; use Attenuation only after the source itself plays correctly",
+          "do": "Create a MetaSound Source for the ambient wind and attach appropriate attenuation if it lives in 3D space.",
+          "why": "MetaSound gives graph-level control over how the sound is generated/varied.",
+          "see": null,
+          "check": "The source can be auditioned and placed.",
+          "troubleshoot": [
+            "Judge the sound while moving through the space; a source that sounds fine while stationary may fade or spatialise badly in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Start with a wind layer",
+          "where": "Content Drawer → choose/import the Sound Wave / Cue / MetaSound → drag into the level as Ambient Sound or add an Audio Component → Details",
+          "do": "Use a suitable wind Sound Wave/input as the stable base of the sound.",
+          "why": "A recognisable source layer keeps the system simple before adding variation.",
+          "see": null,
+          "check": "The wind plays continuously without clicks.",
+          "troubleshoot": [
+            "Judge the sound while moving through the space; a source that sounds fine while stationary may fade or spatialise badly in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Add subtle variation",
+          "where": "Content Drawer → choose/import the Sound Wave / Cue / MetaSound → drag into the level as Ambient Sound or add an Audio Component → Details",
+          "do": "Modulate volume and/or filter/pitch slowly within a restrained range.",
+          "why": "Slow variation reduces obvious looping without sounding random.",
+          "see": null,
+          "check": "The sound changes over time but still feels like one environment.",
+          "troubleshoot": [
+            "Judge the sound while moving through the space; a source that sounds fine while stationary may fade or spatialise badly in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Add sparse gust behaviour",
+          "where": "Content Drawer → choose/import the Sound Wave / Cue / MetaSound → drag into the level as Ambient Sound or add an Audio Component → Details",
+          "do": "Introduce an occasional stronger gust or secondary layer using timing/random logic.",
+          "why": "Rare events create texture and prevent constant density.",
+          "see": null,
+          "check": "Gusts occur irregularly rather than every few seconds exactly.",
+          "troubleshoot": [
+            "Judge the sound while moving through the space; a source that sounds fine while stationary may fade or spatialise badly in play."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Test in context",
+          "where": "Level Editor → Play → walk toward, around and away from the source while listening on headphones/speakers",
+          "do": "Walk through the level and balance wind against gameplay cues/dialogue.",
+          "why": "An impressive solo sound can be exhausting in the mix.",
+          "see": null,
+          "check": "Important sounds remain intelligible.",
+          "troubleshoot": [
+            "Keep the camera, route or test condition consistent so the comparison means something."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Over-randomising pitch until the ambience sounds artificial.",
@@ -4145,7 +6434,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic UE5.8 — MetaSounds Quick Start",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/metasounds-quick-start"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "profile-fix-retest",
@@ -4163,36 +6453,86 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Capture a baseline",
-          "Choose a repeatable camera/route and record frame time/FPS plus the quality settings.",
-          "Without a baseline you cannot prove an optimisation worked.",
-          "You have a before measurement."
-        ],
-        [
-          "Identify the category",
-          "Use appropriate tools/view modes to decide whether the issue is GPU rendering/materials/lighting, CPU logic or asset/streaming related.",
-          "Different bottlenecks need different tools.",
-          "You can name the most likely category with evidence."
-        ],
-        [
-          "Change one targeted cause",
-          "Make one focused adjustment rather than reducing everything at once.",
-          "Single-variable changes preserve visual quality and make results interpretable.",
-          "Only one major cause changed."
-        ],
-        [
-          "Repeat the same test",
-          "Run the same route/view/settings and capture the new measurement.",
-          "Comparability is the point of the loop.",
-          "You have an after measurement."
-        ],
-        [
-          "Keep or revert",
-          "Keep the change only if the measured improvement is worth the visual/production trade-off.",
-          "Optimisation is a design decision, not a ritual.",
-          "You can explain the trade-off in one sentence."
-        ]
+        {
+          "title": "Capture a baseline",
+          "where": "Return to the same saved gameplay camera / route → capture a matching frame so BEFORE and AFTER are comparable",
+          "do": "Choose a repeatable camera/route and record frame time/FPS plus the quality settings.",
+          "why": "Without a baseline you cannot prove an optimisation worked.",
+          "see": null,
+          "check": "You have a before measurement.",
+          "troubleshoot": [
+            "Change one targeted cause, then return to the same test view before deciding whether it was an improvement."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/unreal-insights-spike.webp",
+            "caption": "Profiling example: capture a repeatable performance trace before deciding what to optimise.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Identify the category",
+          "where": "Run the same route/camera/settings → use Unreal Insights / stat unit / stat gpu / relevant profiler → record the measurement before changing anything",
+          "do": "Use appropriate tools/view modes to decide whether the issue is GPU rendering/materials/lighting, CPU logic or asset/streaming related.",
+          "why": "Different bottlenecks need different tools.",
+          "see": null,
+          "check": "You can name the most likely category with evidence.",
+          "troubleshoot": [
+            "Change one targeted cause, then return to the same test view before deciding whether it was an improvement."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/unreal-insights-spike.webp",
+            "caption": "Profiling example: capture a repeatable performance trace before deciding what to optimise.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Change one targeted cause",
+          "where": "Use the existing gameplay scene → change only the category named in the step → return to the same camera before judging the result",
+          "do": "Make one focused adjustment rather than reducing everything at once.",
+          "why": "Single-variable changes preserve visual quality and make results interpretable.",
+          "see": null,
+          "check": "Only one major cause changed.",
+          "troubleshoot": [
+            "Change one targeted cause, then return to the same test view before deciding whether it was an improvement."
+          ],
+          "visual": null
+        },
+        {
+          "title": "Repeat the same test",
+          "where": "Run the same route/camera/settings → use Unreal Insights / stat unit / stat gpu / relevant profiler → record the measurement before changing anything",
+          "do": "Run the same route/view/settings and capture the new measurement.",
+          "why": "Comparability is the point of the loop.",
+          "see": null,
+          "check": "You have an after measurement.",
+          "troubleshoot": [
+            "Keep the camera, route or test condition consistent so the comparison means something."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/stat-gpu-world-optimisation.webp",
+            "caption": "GPU profiling example: compare the same scene/camera before and after a targeted change.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Keep or revert",
+          "where": "Use the existing gameplay scene → change only the category named in the step → return to the same camera before judging the result",
+          "do": "Keep the change only if the measured improvement is worth the visual/production trade-off.",
+          "why": "Optimisation is a design decision, not a ritual.",
+          "see": null,
+          "check": "You can explain the trade-off in one sentence.",
+          "troubleshoot": [
+            "Change one targeted cause, then return to the same test view before deciding whether it was an improvement."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/stat-gpu-world-optimisation.webp",
+            "caption": "GPU profiling example: compare the same scene/camera before and after a targeted change.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        }
       ],
       "mistakes": [
         "Changing multiple settings before re-testing.",
@@ -4232,7 +6572,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic UE5.8 — Real-time Rendering Optimisation",
         "url": "https://dev.epicgames.com/documentation/unreal-engine/guidelines-for-optimizing-rendering-for-real-time-in-unreal-engine"
-      }
+      },
+      "prescriptive": true
     },
     {
       "id": "project-hygiene",
@@ -4250,36 +6591,86 @@ window.UE5_DESIGN_DATA = {
       ],
       "referenceLesson": null,
       "steps": [
-        [
-          "Create a simple folder logic",
-          "Group content by a consistent project structure rather than leaving assets in root/random import folders.",
-          "Predictable locations reduce search time and accidental duplication.",
-          "A teammate can guess where common asset types live."
-        ],
-        [
-          "Rename mystery assets",
-          "Replace names such as NewMaterial_23 or Cube4 with readable type/purpose names.",
-          "Assets should communicate what they are before being opened.",
-          "Search results are understandable at a glance."
-        ],
-        [
-          "Fix redirectors/dependencies safely",
-          "Use Unreal’s tools to clean redirectors and inspect suspicious dependencies rather than deleting files blindly.",
-          "Renames/moves can leave references that make cleanup risky.",
-          "The project opens without missing-reference surprises."
-        ],
-        [
-          "Remove or quarantine unused junk",
-          "Move clearly unused/test content to a review folder before final deletion.",
-          "Cleanup should be deliberate and recoverable.",
-          "Production folders contain only intentional assets."
-        ],
-        [
-          "Teammate test",
-          "Give another student a short find-and-edit task without telling them where anything is.",
-          "Organisation is only good if someone else can understand it.",
-          "They can find the requested mesh/material/sequence quickly."
-        ]
+        {
+          "title": "Create a simple folder logic",
+          "where": "Content Drawer → project folders / asset context menu / Reference Viewer / Fix Up Redirectors as appropriate; inspect dependencies before deletion",
+          "do": "Group content by a consistent project structure rather than leaving assets in root/random import folders.",
+          "why": "Predictable locations reduce search time and accidental duplication.",
+          "see": null,
+          "check": "A teammate can guess where common asset types live.",
+          "troubleshoot": [
+            "Change one targeted cause, then return to the same test view before deciding whether it was an improvement."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/content-browser-folders.webp",
+            "caption": "Project hygiene example: a consistent Content Browser structure makes work easier to find and hand over.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Rename mystery assets",
+          "where": "Content Drawer → project folders / asset context menu / Reference Viewer / Fix Up Redirectors as appropriate; inspect dependencies before deletion",
+          "do": "Replace names such as NewMaterial_23 or Cube4 with readable type/purpose names.",
+          "why": "Assets should communicate what they are before being opened.",
+          "see": null,
+          "check": "Search results are understandable at a glance.",
+          "troubleshoot": [
+            "Change one targeted cause, then return to the same test view before deciding whether it was an improvement."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/content-browser-folders.webp",
+            "caption": "Project hygiene example: a consistent Content Browser structure makes work easier to find and hand over.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Fix redirectors/dependencies safely",
+          "where": "Content Drawer → project folders / asset context menu / Reference Viewer / Fix Up Redirectors as appropriate; inspect dependencies before deletion",
+          "do": "Use Unreal’s tools to clean redirectors and inspect suspicious dependencies rather than deleting files blindly.",
+          "why": "Renames/moves can leave references that make cleanup risky.",
+          "see": null,
+          "check": "The project opens without missing-reference surprises.",
+          "troubleshoot": [
+            "Change one targeted cause, then return to the same test view before deciding whether it was an improvement."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/content-browser-folders.webp",
+            "caption": "Project hygiene example: a consistent Content Browser structure makes work easier to find and hand over.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Remove or quarantine unused junk",
+          "where": "Content Drawer → project folders / asset context menu / Reference Viewer / Fix Up Redirectors as appropriate; inspect dependencies before deletion",
+          "do": "Move clearly unused/test content to a review folder before final deletion.",
+          "why": "Cleanup should be deliberate and recoverable.",
+          "see": null,
+          "check": "Production folders contain only intentional assets.",
+          "troubleshoot": [
+            "Change one targeted cause, then return to the same test view before deciding whether it was an improvement."
+          ],
+          "visual": {
+            "src": "assets/book/best-practices/content-browser-folders.webp",
+            "caption": "Project hygiene example: a consistent Content Browser structure makes work easier to find and hand over.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
+        },
+        {
+          "title": "Teammate test",
+          "where": "Content Drawer → project folders / asset context menu / Reference Viewer / Fix Up Redirectors as appropriate; inspect dependencies before deletion",
+          "do": "Give another student a short find-and-edit task without telling them where anything is.",
+          "why": "Organisation is only good if someone else can understand it.",
+          "see": null,
+          "check": "They can find the requested mesh/material/sequence quickly.",
+          "troubleshoot": [
+            "Keep the camera, route or test condition consistent so the comparison means something."
+          ],
+          "visual": null
+        }
       ],
       "mistakes": [
         "Renaming/moving hundreds of assets in Explorer instead of Unreal.",
@@ -4307,7 +6698,8 @@ window.UE5_DESIGN_DATA = {
       "source": {
         "title": "Epic UE5.8 — World Partition HLOD",
         "url": "https://dev.epicgames.com/documentation/unreal-engine/world-partition---hierarchical-level-of-detail-in-unreal-engine?lang=en-US"
-      }
+      },
+      "prescriptive": true
     }
   ]
 };

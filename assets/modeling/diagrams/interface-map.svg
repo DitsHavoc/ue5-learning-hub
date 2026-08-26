@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720">
+<rect width="1200" height="720" rx="28" fill="#0b1017"/>
+<text x="60" y="62" font-family="Arial" font-size="28" font-weight="700" fill="#e7edf5">3ds Max interface map</text>
+<text x="60" y="94" font-family="Arial" font-size="16" fill="#8fa3b8">CONCEPT MAP — not a screenshot. Use the current Autodesk interface reference beside this diagram.</text>
+<rect x="60" y="125" width="1080" height="58" rx="12" fill="#1a2532" stroke="#43566c"/><text x="80" y="161" font-family="Arial" font-size="20" fill="#dbe8f5">Menu bar + Main toolbar — save, undo, selection, move / rotate / scale, snapping</text>
+<rect x="60" y="205" width="790" height="390" rx="18" fill="#141d28" stroke="#4e6780"/><text x="85" y="250" font-family="Arial" font-size="28" font-weight="700" fill="#6ed1ff">VIEWPORT</text><text x="85" y="285" font-family="Arial" font-size="18" fill="#b6c7d8">Where you select, inspect and model the object.</text>
+<line x1="210" y1="355" x2="700" y2="355" stroke="#39516a" stroke-width="2"/><line x1="455" y1="290" x2="455" y2="520" stroke="#39516a" stroke-width="2"/>
+<rect x="880" y="205" width="260" height="390" rx="18" fill="#171f2b" stroke="#a75aff"/><text x="905" y="250" font-family="Arial" font-size="24" font-weight="700" fill="#db9cff">COMMAND PANEL</text><text x="905" y="285" font-family="Arial" font-size="16" fill="#c6b6d8">Create tab</text><text x="905" y="315" font-family="Arial" font-size="16" fill="#c6b6d8">Modify tab</text><text x="905" y="345" font-family="Arial" font-size="16" fill="#c6b6d8">Modifier List</text><text x="905" y="375" font-family="Arial" font-size="16" fill="#c6b6d8">Editable Poly levels</text><text x="905" y="405" font-family="Arial" font-size="16" fill="#c6b6d8">Object parameters</text>
+<rect x="60" y="620" width="1080" height="55" rx="12" fill="#1a2532" stroke="#43566c"/><text x="80" y="655" font-family="Arial" font-size="19" fill="#dbe8f5">Status / coordinates / timeline / viewport navigation — check transforms here, but don’t accidentally enable Auto Key.</text>
+</svg>

@@ -1,4 +1,36 @@
-# UE5 Learning Hub v3.19.2 — Designer Studio Deep Dive
+# UE5 Learning Hub v3.26.0 — Sculpt Playground
+
+## Current release — v3.26.0
+
+This release adds a full **3D Modelling Studio** built around slow, cumulative Autodesk 3ds Max teaching rather than a large collection of shallow tutorials. It introduces 12 scaffolded lessons, 8 Build X projects, 6 Fix This Model clinics, original modelling concept diagrams, current Autodesk/Epic reference links, search/navigation integration, local progress/XP and three new modelling badges. No database migration is required.
+
+See `RELEASE-NOTES-v3.26.0.md`, `RELEASE-NOTES-v3.25.0.md` and `3DS-MAX-CAPTURE-LIST.md` for the current Sculpt Playground addition and the underlying 3D Modelling Studio teaching design.
+
+## V3.20 — the Hub becomes a portal
+
+The root page is now a proper landing page built around four clear destinations: **Programming, Design, Projects, and News & Industry**. Programming has its own hub page rather than making the root page carry the entire course, while the existing Designer Studio and Projects areas remain intact.
+
+The new **News & Industry** area pulls current headlines from a curated set of public RSS feeds and groups them into Development, Industry, Games, Trailers & Reveals, and Podcasts. A 20-minute browser cache keeps the page quick and avoids hammering source feeds. Full articles remain on the original publisher sites.
+
+Signed-in students can **Save for Later**, **upvote**, and **comment** on stories. Saved story metadata is retained so Read Later still works after an item has disappeared from the live feed. Teachers and comment authors can remove comments.
+
+### V3.20 database migration
+
+The V3.20 News & Industry migration (`migrations/20260826_21_news_industry_social.sql`) was applied to the current live Supabase project on 26 Aug 2026. Do **not** rerun it there. For another installation, apply it once before testing News saves, votes or comments. The live RSS feed itself works without the migration.
+
+### V3.20 live sources
+
+- Unreal Engine
+- Game Developer
+- GamesIndustry.biz
+- PC Gamer
+- Eurogamer
+- Rock Paper Shotgun
+- Game Developer Podcast
+
+The frontend uses the public rss2json conversion endpoint because the Hub is deployed as a static site and many publisher RSS feeds do not expose browser CORS headers directly. If that service is temporarily unavailable, the rest of the Hub continues to work and News shows a retry state.
+
+## Previous Designer Studio release retained
 
 ## v3.19.2 — design knowledge / production-quality pass
 
@@ -187,3 +219,7 @@ A rollback-only authenticated-role database test verified:
 Supabase's security advisor reports no new V3.16 RLS/function warning. The remaining project-level warning is **Leaked Password Protection Disabled** in Auth settings.
 
 Microsoft SSO remains optional and disabled.
+
+## v3.24.0 — Gold Instruction Pass
+
+This release completes the prescriptive teaching pass: all 20 core guided lessons, all 47 Programming Quick Tutorials, all 47 Designer Studio recipes and all eight Studio Builds now support richer instruction. See `RELEASE-NOTES-v3.24.0.md` and `CHANGELOG.md`.
