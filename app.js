@@ -283,18 +283,24 @@ function deepDive(l){
   </div>`;
 }
 
+
+function renderRichText(value, ordered=false){
+  if(Array.isArray(value)){
+    const tag=ordered?'ol':'ul';
+    const cls=ordered?'guided-numbered':'guided-bullets';
+    return '<'+tag+' class="'+cls+'">'+value.map(x=>'<li>'+esc(x)+'</li>').join('')+'</'+tag+'>';
+  }
+  return '<p>'+esc(value||'')+'</p>';
+}
+function renderStepVisual(visual, altPrefix='Step visual'){
+  if(!visual?.src)return '';
+  return '<div class="step-visual-wrap">'+zoomableImage({src:visual.src,alt:altPrefix,caption:visual.caption||'',sourceUrl:visual.sourceUrl||'',sourceTitle:visual.sourceTitle||'',kind:visual.kind||'local',eager:false})+'</div>';
+}
 function guidedBuild(l){
   if(!l.guidedDetailed?.length)return `<ol class="steps">${l.guided.map(s=>`<li>${esc(s)}</li>`).join('')}</ol>`;
-  return `<div class="guided-detailed">${l.guidedDetailed.map((s,i)=>`<article class="guided-step">
-    <div class="guided-step-num">${String(i+1).padStart(2,'0')}</div>
-    <div class="guided-step-main">
-      <h3>${esc(s.title)}</h3>
-      <div class="guided-do"><span>DO THIS</span><p>${esc(s.do)}</p></div>
-      <div class="guided-reason"><span>WHY</span><p>${esc(s.why)}</p></div>
-      <div class="guided-check"><span>CHECK</span><p>${esc(s.check)}</p></div>
-    </div>
-  </article>`).join('')}</div>`;
+  return `<div class="guided-prescriptive-note"><b>Gold-standard walkthrough:</b> exact click paths, what you should see, and troubleshooting prompts are shown directly in the steps below.</div><div class="guided-detailed">${l.guidedDetailed.map((s,i)=>`<article class="guided-step"><div class="guided-step-num">${String(i+1).padStart(2,'0')}</div><div class="guided-step-main"><h3>${esc(s.title)}</h3>${s.where?`<div class="guided-where"><span>WHERE TO CLICK</span><div>${renderRichText(s.where,false)}</div></div>`:''}<div class="guided-do"><span>DO THIS</span><div>${renderRichText(s.do,false)}${s.doList?renderRichText(s.doList,true):''}</div></div>${s.see?`<div class="guided-see"><span>YOU SHOULD SEE</span><div>${renderRichText(s.see,false)}</div></div>`:''}<div class="guided-reason"><span>WHY</span><p>${esc(s.why)}</p></div><div class="guided-check"><span>CHECK</span><div>${renderRichText(s.check,false)}</div></div>${s.troubleshoot?.length?`<div class="guided-fix"><span>IF STUCK</span><div>${renderRichText(s.troubleshoot,false)}</div></div>`:''}${renderStepVisual(s.visual,`${l.title} step ${i+1}`)}</div></article>`).join('')}</div>`;
 }
+
 function requirements(xs){
   return `<div class="requirements">${xs.map(x=>`<div class="requirement">${esc(x)}</div>`).join('')}</div>`;
 }
@@ -343,25 +349,17 @@ function tutorialOfficialRef(t){
   return ref||null;
 }
 function isBookVisual(v){return v?.kind==='book'||String(v?.src||'').includes('assets/book/best-practices/')}
+
 function tutorialReferenceVisuals(t){
   const own=t.referenceImages||[];
-  if(own.length){
-    const books=own.filter(isBookVisual),other=own.filter(v=>!isBookVisual(v));
-    const blocks=[];
-    if(other.length)blocks.push(`<div class="tutorial-reference-story"><div class="visual-story-head"><span class="deep-label">VISUAL TARGET / REAL REFERENCE</span><h2>See what you are aiming for</h2><p>Use the reference to understand the result, then build the mechanic in Unreal yourself.</p></div><div class="visual-story-grid">${other.map((v,i)=>zoomableImage({src:v.src,alt:`${t.title} reference ${i+1}`,caption:v.caption||'',sourceUrl:v.sourceUrl||'',sourceTitle:v.sourceTitle||'',kind:v.kind||'reference',eager:i===0})).join('')}</div></div>`);
-    if(books.length)blocks.push(`<div class="tutorial-reference-story book-figure-strip"><div class="visual-story-head"><span class="deep-label">LICENSED BOOK VISUALS</span><h2>See the principle in practice</h2><p>Selected figures from the college's licensed copy of <em>Unreal Engine 5 Best Practices</em>. Use them as visual teaching examples; current UE5.8 references remain the technical source of truth.</p></div><div class="visual-story-grid book-figure-grid count-${Math.min(books.length,4)}">${books.map((v,i)=>zoomableImage({src:v.src,alt:`${t.title} book figure ${i+1}`,caption:v.caption||'',sourceTitle:v.sourceTitle||'',kind:'book',eager:false})).join('')}</div></div>`);
-    return blocks.join('');
-  }
-  const l=lesson(t.referenceLesson);if(!l)return '';
-  const xs=[];
-  const current=(l.visuals||[]).find(v=>v.authenticUI===true||['ue5','screenshot','ue5-reference'].includes(v.type));
-  if(current)xs.push({src:current.src,caption:current.caption||`Related Unreal example from ${l.title}.`,kind:'current'});
-  else if(l.visual?.src)xs.push({src:l.visual.src,caption:l.visual.caption||`Related Unreal example from ${l.title}.`,kind:'current'});
-  const doc=(l.docVisuals||[])[0];
-  if(doc)xs.push({src:doc.src,caption:doc.caption||`Official Unreal Engine reference for ${l.title}.`,sourceUrl:doc.sourceUrl||'',sourceTitle:doc.sourceTitle||'',kind:'epic'});
-  if(!xs.length)return '';
-  return `<div class="tutorial-reference-story"><div class="visual-story-head"><span class="deep-label">RELATED UNREAL REFERENCE</span><h2>What this looks like in Unreal</h2></div><div class="visual-story-grid">${xs.slice(0,2).map((v,i)=>zoomableImage({src:v.src,alt:`${t.title} Unreal reference ${i+1}`,caption:v.caption,sourceUrl:v.sourceUrl||'',sourceTitle:v.sourceTitle||'',kind:v.kind,eager:i===0})).join('')}</div></div>`;
+  if(!own.length)return '';
+  const books=own.filter(isBookVisual),other=own.filter(v=>!isBookVisual(v));
+  const blocks=[];
+  if(other.length)blocks.push(`<div class="tutorial-reference-story"><div class="visual-story-head"><span class="deep-label">VISUAL TARGET / RESULT</span><h2>See the mechanic you are aiming for</h2><p>Use the reference to understand the outcome, then build it yourself step by step below.</p></div><div class="visual-story-grid">${other.map((v,i)=>zoomableImage({src:v.src,alt:`${t.title} reference ${i+1}`,caption:v.caption||'',sourceUrl:v.sourceUrl||'',sourceTitle:v.sourceTitle||'',kind:v.kind||'reference',eager:i===0})).join('')}</div></div>`);
+  if(books.length)blocks.push(`<div class="tutorial-reference-story book-figure-strip"><div class="visual-story-head"><span class="deep-label">LICENSED BOOK VISUALS</span><h2>See the principle in practice</h2><p>Selected figures from the college's licensed copy of <em>Unreal Engine 5 Best Practices</em>. Current UE5.8 references remain the technical source of truth.</p></div><div class="visual-story-grid book-figure-grid count-${Math.min(books.length,4)}">${books.map((v,i)=>zoomableImage({src:v.src,alt:`${t.title} book figure ${i+1}`,caption:v.caption||'',sourceTitle:v.sourceTitle||'',kind:'book',eager:false})).join('')}</div></div>`);
+  return blocks.join('');
 }
+
 
 function designModule(id){return DESIGN.modules.find(m=>m.id===id)}
 function designBuildDone(id){return (state.designBuildCompleted||[]).includes(id)}
@@ -408,13 +406,15 @@ function designModulePage(id){
   ${designBookReferenceGrid(m.referenceImages)}
   <section class="designer-professional-row"><div class="content-card designer-pro-habits"><span class="eyebrow">PRODUCTION HABITS</span><h2>Work like someone else has to open the project tomorrow</h2><ul>${pro}</ul></div><div class="content-card designer-engine-check"><span class="eyebrow">UE5.8 REALITY CHECK</span><h2>Current engine context</h2><p>${esc(m.engineNote||'Use current Epic documentation to verify engine-specific workflows.')}</p>${m.engineUrl?`<a class="button ghost small" href="${esc(m.engineUrl)}" target="_blank" rel="noopener">Current Epic UE5.8 reference ↗</a>`:''}${m.bookReference?`<div class="designer-book-note"><b>College reference used for this pass</b><span>${esc(m.bookReference)}</span><small>Concepts are paraphrased and rebuilt as original Hub teaching material; selected figures/page crops are embedded under the college's licensed educational use.</small></div>`:''}</div></section>
   <section class="section"><div class="section-head"><div><span class="eyebrow">PRACTICAL RECIPES</span><h2>Build the skills</h2><p>Follow the first version exactly if needed. Then change something so it becomes yours.</p></div></div><div class="quick-tutorial-grid">${ts.map(tutorialCard).join('')}</div></section>
-  <section class="designer-studio-build ${done?'done':''}"><div class="designer-studio-title"><span class="eyebrow">STUDIO BUILD • ${esc(b.duration)} • +300 XP</span><h2>🎨 ${esc(b.title)}</h2><p>${esc(b.brief)}</p></div><div class="designer-build-phases">${b.phases.map((x,i)=>`<article><span>${String(i+1).padStart(2,'0')}</span><p>${esc(x)}</p></article>`).join('')}</div><div class="designer-evidence"><h3>Show that it works</h3>${requirements(b.evidence)}<button class="button ${done?'success':'primary'}" data-action="complete-design-build" data-design-module="${m.id}">${done?'✓ Studio Build complete':'Mark Studio Build complete • +300 XP'}</button></div></section>
+  <section class="designer-studio-build ${done?'done':''}"><div class="designer-studio-title"><span class="eyebrow">STUDIO BUILD • ${esc(b.duration)} • +300 XP</span><h2>🎨 ${esc(b.title)}</h2><p>${esc(b.brief)}</p><div class="tutorial-rich-note"><b>Build it like a production task:</b> each phase now tells you where to work, what to do, what proves it is working, and what to fix before moving on.</div></div><div class="designer-build-phases rich">${(b.phaseDetails||b.phases.map((x,i)=>({title:`Phase ${i+1}`,do:x}))).map((x,i)=>`<article class="designer-build-phase-rich"><span class="designer-build-phase-num">${String(i+1).padStart(2,'0')}</span><div><h3>${esc(x.title||`Phase ${i+1}`)}</h3>${x.where?`<div class="guided-where"><span>WHERE TO WORK</span><div>${renderRichText(x.where,false)}</div></div>`:''}<div class="guided-do"><span>DO THIS</span><div>${renderRichText(x.do||x,false)}</div></div>${x.check?`<div class="guided-check"><span>PROVE IT</span><div>${renderRichText(x.check,false)}</div></div>`:''}${x.troubleshoot?.length?`<div class="guided-fix"><span>IF IT'S WEAK</span><div>${renderRichText(x.troubleshoot,false)}</div></div>`:''}</div></article>`).join('')}</div><div class="designer-evidence"><h3>Show that it works</h3>${requirements(b.evidence)}<button class="button ${done?'success':'primary'}" data-action="complete-design-build" data-design-module="${m.id}">${done?'✓ Studio Build complete':'Mark Studio Build complete • +300 XP'}</button></div></section>
   <section class="content-card designer-critique"><span class="eyebrow">CRITIQUE BEFORE YOU LEAVE</span><h2>Five questions for your own work</h2><ol>${critique}</ol></section>`;
 }
+
 function tutorialCard(t){
-  const c=tutorialCategory(t.category),done=tutorialDone(t.id);
-  return `<a class="quick-tutorial-card ${done?'done':''}" href="#/tutorial/${t.id}" data-tutorial-card data-search="${esc([t.title,t.summary,...t.uses,c?.title||''].join(' ').toLowerCase())}" data-category="${esc(t.category)}"><div class="tutorial-card-icon">${t.icon}</div><div><span class="eyebrow">${esc(c?.title||t.category)} • ${esc(t.duration)}</span><h3>${esc(t.title)}</h3><p>${esc(t.summary)}</p><div class="tutorial-tag-row">${t.uses.slice(0,4).map(x=>`<span>${esc(x)}</span>`).join('')}</div></div><span class="tutorial-card-status">${done?'✓ Done':'Open →'}</span></a>`;
+  const done=tutorialDone(t.id),c=tutorialCategory(t.category);
+  return `<a class="quick-tutorial-card ${done?'done':''}" href="#/tutorial/${t.id}"><div class="quick-tutorial-icon">${t.icon}</div><div><span class="eyebrow">${esc(c?.title||t.category)} • ${esc(t.duration)} • ${esc(t.difficulty)}</span><h3>${esc(t.title)}</h3><p>${esc(t.summary)}</p><div class="tutorial-tag-row">${t.uses.slice(0,3).map(x=>`<span>${esc(x)}</span>`).join('')}</div>${t.prescriptive?'<div class="tutorial-card-detail-badge">Detailed walkthrough</div>':''}</div><span class="tutorial-card-status">${done?'✓ Tried it':'Open →'}</span></a>`
 }
+
 function chapterBuildCard(b,{compact=false}={}){
   const p=path(b.path),done=chapterBuildDone(b.path),unlocked=pathComplete(b.path)||done;
   if(!unlocked)return `<article class="chapter-build-card locked ${compact?'compact':''}"><div class="chapter-build-icon">🔒</div><div><span class="eyebrow">${esc(p?.title||b.path)}</span><h3>${esc(b.title)}</h3><p>Complete this learning path to unlock the playable Chapter Build.</p></div><span class="chapter-build-state">${pathProgress(b.path).done}/${pathProgress(b.path).total}</span></article>`;
@@ -428,19 +428,27 @@ function tutorialLibrary(){
   <section class="section"><div class="section-head"><div><h2>All Quick Tutorials</h2><p id="tutorialResultCount">${TOOLS.tutorials.length} tutorials</p></div></div><div class="quick-tutorial-grid" id="tutorialGrid">${TOOLS.tutorials.map(tutorialCard).join('')}</div></section>
   <section class="section chapter-build-library"><div class="section-head"><div><span class="eyebrow">BIGGER APPLICATION TASKS</span><h2>🎮 Chapter Builds</h2><p>Finish a learning path and a new guided mini-game/system unlocks. The tutorial can still be step-by-step — you must test it and prove it works.</p></div></div><div class="chapter-build-grid">${TOOLS.chapterBuilds.map(b=>chapterBuildCard(b)).join('')}</div></section>`;
 }
+
+function renderTutorialStep(step,i){
+  if(Array.isArray(step)){
+    return `<article class="tutorial-step" data-level="legacy"><div class="tutorial-step-number">${String(i+1).padStart(2,'0')}</div><div><h3>${esc(step[0])}</h3><div class="guided-do"><span>DO THIS</span><p>${esc(step[1])}</p></div><div class="guided-reason"><span>WHY</span><p>${esc(step[2])}</p></div><div class="guided-check"><span>TEST / CHECK</span><p>${esc(step[3])}</p></div></div></article>`;
+  }
+  return `<article class="tutorial-step"><div class="tutorial-step-number">${String(i+1).padStart(2,'0')}</div><div><h3>${esc(step.title)}</h3>${step.where?`<div class="guided-where"><span>WHERE TO CLICK</span><div>${renderRichText(step.where,false)}</div></div>`:''}<div class="guided-do"><span>DO THIS</span><div>${renderRichText(step.do,false)}${step.doList?renderRichText(step.doList,true):''}</div></div>${step.see?`<div class="guided-see"><span>YOU SHOULD SEE</span><div>${renderRichText(step.see,false)}</div></div>`:''}<div class="guided-reason"><span>WHY</span><p>${esc(step.why)}</p></div><div class="guided-check"><span>TEST / CHECK</span><div>${renderRichText(step.check,false)}</div></div>${step.troubleshoot?.length?`<div class="guided-fix"><span>IF STUCK</span><div>${renderRichText(step.troubleshoot,false)}</div></div>`:''}${renderStepVisual(step.visual,step.title)}</div></article>`;
+}
 function tutorialPage(id){
   const t=tutorial(id);if(!t)return notFound();const c=tutorialCategory(t.category),done=tutorialDone(t.id),ref=tutorialOfficialRef(t),related=TOOLS.tutorials.filter(x=>x.id!==t.id&&(x.category===t.category||x.uses.some(u=>t.uses.includes(u)))).slice(0,4);
-  return `<div class="breadcrumb"><a href="#/">Dashboard</a> / <a href="#/tutorials">Quick Tutorials</a> / ${esc(t.title)}</div>
+  return `<div class="breadcrumb"><a href="#/Dashboard">Dashboard</a> / <a href="#/tutorials">Quick Tutorials</a> / ${esc(t.title)}</div>
   <section class="tutorial-hero"><div><span class="eyebrow">${c?.icon||'🛠'} ${esc(c?.title||t.category)} • ${esc(t.duration)} • ${esc(t.difficulty)}</span><h1>${t.icon} ${esc(t.title)}</h1><p>${esc(t.summary)}</p><div class="tutorial-tag-row large">${t.uses.map(x=>`<span>${esc(x)}</span>`).join('')}</div></div><div class="tutorial-complete-box"><strong>${done?'✓ Tried it':'Build → Test → Change'}</strong><p>${done?'You marked this tutorial as working. You can revisit it anytime.':'Follow the recipe, then make one small change of your own.'}</p><button class="button ${done?'success':'primary'}" data-action="complete-tutorial" data-tutorial="${t.id}">${done?'✓ Tutorial complete':'Mark tutorial complete'}</button></div></section>
   <article class="tutorial-detail">
     <section class="content-card tutorial-result"><span class="eyebrow">01 • What we are making</span><h2>A small working mechanic</h2><p>${esc(t.summary)}</p><div class="callout good"><b>Use this tutorial when:</b> you need this mechanic in a prototype, Chapter Build or assignment and want a short reliable route to a first working version.</div></section>
     ${tutorialReferenceVisuals(t)}
-    <section class="content-card"><span class="eyebrow">02 • Build it</span><h2>Follow the steps — understand the reason</h2><div class="tutorial-step-list">${t.steps.map((s,i)=>`<article class="tutorial-step"><div class="tutorial-step-number">${String(i+1).padStart(2,'0')}</div><div><h3>${esc(s[0])}</h3><div class="guided-do"><span>DO THIS</span><p>${esc(s[1])}</p></div><div class="guided-reason"><span>WHY</span><p>${esc(s[2])}</p></div><div class="guided-check"><span>TEST / CHECK</span><p>${esc(s[3])}</p></div></div></article>`).join('')}</div></section>
-    <section class="tutorial-three-col"><div class="content-card"><span class="eyebrow">03 • Common mistakes</span><h2>If it doesn't work</h2><ul>${t.mistakes.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><div class="content-card"><span class="eyebrow">04 • Make it yours</span><h2>Change something</h2><ul>${t.makeItYours.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><div class="content-card"><span class="eyebrow">05 • Definition of done</span><h2>It works when…</h2>${requirements(t.worksWhen)}</div></section>
+    <section class="content-card"><span class="eyebrow">02 • Build it</span><h2>Follow the steps — understand the reason</h2>${t.prescriptive?'<div class="tutorial-rich-note"><b>This tutorial now uses the new detailed format:</b> exact click paths, clearer actions, what you should see, and simple troubleshooting prompts.</div>':''}<div class="tutorial-step-list">${t.steps.map((s,i)=>renderTutorialStep(s,i)).join('')}</div></section>
+    <section class="tutorial-three-col"><div class="content-card"><span class="eyebrow">03 • Common mistakes</span><h2>If it doesn\'t work</h2><ul>${t.mistakes.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><div class="content-card"><span class="eyebrow">04 • Make it yours</span><h2>Change something</h2><ul>${t.makeItYours.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><div class="content-card"><span class="eyebrow">05 • Definition of done</span><h2>It works when…</h2>${requirements(t.worksWhen)}</div></section>
     <section class="content-card tutorial-next"><div><span class="eyebrow">GO DEEPER</span><h2>Connect this recipe to the course</h2><p>Quick Tutorials solve the immediate mechanic. The full lesson explains the transferable idea behind it.</p></div><div class="tutorial-next-links">${t.designModule?`<a class="button" href="#/design/${t.designModule}">Open ${esc(designModule(t.designModule)?.title||'Designer Studio')} →</a>`:`<a class="button" href="#/lesson/${t.referenceLesson}">Open ${esc(lesson(t.referenceLesson)?.title||'related lesson')} →</a>`}${ref?`<a class="button ghost" href="${esc(ref.url)}" target="_blank" rel="noopener">Epic UE5.8 reference ↗</a>`:''}${t.source?.url?`<a class="button ghost" href="${esc(t.source.url)}" target="_blank" rel="noopener">${esc(t.source.title||'Reference source')} ↗</a>`:''}</div></section>
     ${related.length?`<section class="section"><div class="section-head"><div><h2>Related Quick Tutorials</h2><p>Useful next mechanics.</p></div></div><div class="quick-tutorial-grid related">${related.map(tutorialCard).join('')}</div></section>`:''}
   </article>`;
 }
+
 function chapterBuildPage(pathId){
   const b=chapterBuild(pathId),p=path(pathId);if(!b||!p)return notFound();const x=pathProgress(pathId),done=chapterBuildDone(pathId),unlocked=x.pct===100||done;
   if(!unlocked){const left=DATA.lessons.filter(l=>l.path===pathId&&!state.completed.includes(l.id));return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / <a href="#/path/${p.id}">${esc(p.title)}</a> / Chapter Build</div><span class="eyebrow">🔒 Complete the chapter first</span><h1>${b.icon} ${esc(b.title)}</h1><p class="muted">This mini-build unlocks when all ${x.total} lessons in ${esc(p.title)} are complete.</p></div><section class="content-card locked-build"><h2>${x.done}/${x.total} lessons complete</h2><div class="progress"><span style="width:${x.pct}%"></span></div><div class="lesson-list">${left.map((l,i)=>lessonRow(l,i)).join('')}</div></section>`}
@@ -457,11 +465,12 @@ function chapterUnlockCard(pathId){
 }
 
 
+
 function dashboard(){
   const n=nextLesson(),np=pathProgress(n.path),i=level();
   const completed=completedLessons().length;
   return `<section class="portal-hero">
-    <div><span class="eyebrow">UE5 LEARNING HUB</span><h1>Choose your path.</h1><p>Learn the code behind the game, design the world around it, build something real, or see what the industry is doing right now.</p></div>
+    <div><span class="eyebrow">UE5 LEARNING HUB</span><h1>Choose a path.</h1><p>Choose where to start, then dive straight into guided learning, world design, practical projects or live industry news.</p></div>
     <div class="portal-hero-mark" aria-hidden="true"><span>U</span><b>4</b></div>
   </section>
 
@@ -477,6 +486,7 @@ function dashboard(){
     <div class="portal-resume-actions"><div><strong>Level ${i.n}</strong><small>${i.xp} XP • ${completed}/${DATA.lessons.length} lessons complete</small></div><a class="button primary" href="#/lesson/${n.id}">▶ Continue learning</a></div>
   </section>`;
 }
+
 
 function programmingPage(){
   const i=level(),n=nextLesson(),np=pathProgress(n.path),pb=pendingUnlockedBuild();
@@ -497,7 +507,7 @@ function programmingPage(){
   <section class="section learning-tools-section"><div class="section-head"><div><h2>Practise, solve and revise</h2><p>Use a short recipe when you need a mechanic, then test what you actually understand.</p></div></div><div class="workspace-cards"><a class="workspace-card learning-tool" href="#/tutorials"><span>🛠</span><div><strong>${TOOLS.tutorials.length} Quick Tutorials</strong><p>Short practical recipes for common mechanics, systems, effects and student requests.</p></div></a><a class="workspace-card learning-tool" href="#/revision"><span>↻</span><div><strong>Revision Quizzes</strong><p>Random, whole-path or mixed-topic quizzes with 10 / 20 / 30 questions.</p></div></a><a class="workspace-card learning-tool" href="#/challenges"><span>🔥</span><div><strong>Challenge Board</strong><p>Independent problems where the answer is no longer laid out node by node.</p></div></a></div></section>`;
 }
 
-const NEWS_CACHE_STORE='ue5hub:v320:news-cache';
+const NEWS_CACHE_STORE='ue5hub:v322:news-cache';
 let newsStories=[];
 let newsCategory='all';
 let newsSearch='';

@@ -1,6 +1,6 @@
 window.UE5_COURSE_DATA = {
-  "version": "3.19.2",
-  "buildDate": "25 Aug 2026",
+  "version": "3.22.0",
+  "buildDate": "26 Aug 2026",
   "paths": [
     {
       "id": "foundations",
@@ -248,40 +248,130 @@ window.UE5_COURSE_DATA = {
       },
       "guidedDetailed": [
         {
-          "title": "Open a Third Person project",
-          "do": "Open a Third Person project.",
-          "why": "You need a known project before practising navigation.",
-          "check": "The Third Person map is open and playable."
+          "title": "Open the Third Person template project",
+          "where": "Epic Games Launcher or Unreal Project Browser → Games → Third Person",
+          "do": "Open an existing Third Person project, or create a new one called Learning_Practice.",
+          "doList": [
+            "Wait for the default Third Person map to load.",
+            "If a dialogue asks to rebuild or save, allow it."
+          ],
+          "why": "Using a known starter project means everyone begins from the same layout and controls.",
+          "see": "The Viewport shows the mannequin level and the top toolbar includes Play.",
+          "check": "Press Play once. The character should spawn and move normally.",
+          "troubleshoot": [
+            "If the project opens on a blank map, use File → Open Level and choose the default ThirdPersonMap."
+          ],
+          "visual": {
+            "src": "assets/ue5/current/editor-main-window.webp",
+            "caption": "The main Level Editor layout in a real UE5 project.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Identify the Viewport, Outliner, Details and Content Drawer",
-          "do": "Identify the Viewport, Outliner, Details and Content Drawer.",
-          "why": "These four panels answer most early Unreal questions.",
-          "check": "You can point to each panel without hunting."
+          "title": "Find the four core panels",
+          "where": "Centre = Viewport, upper-right = Outliner, lower-right = Details, bottom = Content Drawer / Content Browser",
+          "do": "Click once inside each panel so you deliberately identify it rather than just looking at the screen.",
+          "doList": [
+            "Click an Actor in the Viewport.",
+            "Notice the same Actor highlight in the Outliner.",
+            "Notice the Details panel changes to that Actor."
+          ],
+          "why": "Most early Unreal problems are simply “which panel do I use?”",
+          "see": "You can point to the Viewport, Outliner, Details and Content Drawer without guessing.",
+          "check": "Close and reopen the Content Drawer. You should know where each panel lives.",
+          "troubleshoot": [
+            "If Outliner or Details is missing, use Window → Outliner or Window → Details."
+          ],
+          "visual": {
+            "src": "assets/ue5/current/editor-panels-closeup.webp",
+            "caption": "Close-up of the Level Editor panels beginners use first.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Place three Static Mesh Actors",
-          "do": "Place three Static Mesh Actors.",
-          "why": "Placing simple Actors lets you practise without extra gameplay complexity.",
-          "check": "Three separate mesh Actors are visible in the level."
+          "title": "Place three cube Actors into the level",
+          "where": "Toolbar → Add (+) → Shapes → Cube",
+          "do": "Drag a Cube from the Add menu into the Viewport three times.",
+          "doList": [
+            "Place the first cube near the floor.",
+            "Repeat until you have three cubes.",
+            "Press F after selecting a cube if you lose it."
+          ],
+          "why": "Simple placed Actors let you practise selection and transforms without extra Blueprint setup.",
+          "see": "Three separate cubes appear in the Viewport and three cube entries appear in the Outliner.",
+          "check": "Click each cube in the Outliner. The correct cube should highlight in the Viewport.",
+          "troubleshoot": [
+            "If you accidentally drag one huge cube, undo with Ctrl+Z and place it again."
+          ],
+          "visual": {
+            "src": "assets/ue5/current/editor-main-window.webp",
+            "caption": "Use the Add menu to place simple Shapes into the level.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Rename them in the Outliner",
-          "do": "Rename them in the Outliner.",
-          "why": "Readable names make the Outliner useful once the level grows.",
-          "check": "The Outliner shows meaningful names rather than generic duplicates."
+          "title": "Rename the placed cubes properly",
+          "where": "Outliner → select Actor → press F2 or right-click → Rename",
+          "do": "Rename the three cubes to something meaningful such as Cube_Centre, Cube_Left and Cube_Right.",
+          "why": "Good names stop the Outliner becoming unreadable as the level grows.",
+          "see": "The Outliner shows your new names instead of generic Cube / Cube2 style names.",
+          "check": "You can tell which cube is which from the Outliner alone.",
+          "troubleshoot": [
+            "If rename does not start, click once to select then press F2."
+          ],
+          "visual": {
+            "src": "assets/ue5/current/editor-panels-closeup.webp",
+            "caption": "The Outliner is where you organise and rename level Actors.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Change Location, Rotation and Scale",
-          "do": "Change Location, Rotation and Scale.",
-          "why": "Transforms are the core of positioning anything in 3D.",
-          "check": "Each Actor has a visibly different transform and you can restore it."
+          "title": "Change Location, Rotation and Scale in Details",
+          "where": "Select a cube → Details panel → Transform",
+          "do": "Select each cube and give it a different transform.",
+          "doList": [
+            "Move one cube upward by changing Location Z.",
+            "Rotate one cube on Z.",
+            "Scale one cube so it is visibly different."
+          ],
+          "why": "Every 3D object depends on transform values, so this is a core editor skill.",
+          "see": "The three cubes now look different in position, angle or size.",
+          "check": "Undo and redo one transform change so you know where the values are.",
+          "troubleshoot": [
+            "If the wrong Actor moves, re-check which Outliner row is selected."
+          ],
+          "visual": {
+            "src": "assets/ue5/current/editor-main-window.webp",
+            "caption": "Transform values are edited in Details for the selected Actor.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Create a Learning folder in the Content Drawer and save",
-          "do": "Create a Learning folder in the Content Drawer and save.",
-          "why": "Folder structure established early prevents a chaotic project later.",
-          "check": "A Learning folder exists and the level/project changes are saved."
+          "title": "Create a Learning folder and save deliberately",
+          "where": "Content Drawer → right-click empty space → New Folder",
+          "do": "Create a folder called Learning, then save the level and project changes.",
+          "doList": [
+            "Open the Content Drawer.",
+            "Create the Learning folder.",
+            "Press Ctrl+S to save the level."
+          ],
+          "why": "A tidy folder structure and frequent saves prevent chaos later.",
+          "see": "The Learning folder exists in the Content Drawer.",
+          "check": "Close and reopen the Content Drawer: the folder is still there and the level keeps your cubes.",
+          "troubleshoot": [
+            "If the folder appears inside the wrong directory, move back up one level and create it again."
+          ],
+          "visual": {
+            "src": "assets/ue5/current/editor-panels-closeup.webp",
+            "caption": "The Content Drawer is for project assets and folders, not placed level Actors.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
         }
       ],
       "evidencePrompt": {
@@ -580,40 +670,119 @@ window.UE5_COURSE_DATA = {
       },
       "guidedDetailed": [
         {
-          "title": "Create BP_PracticeBeacon as an Actor Blueprint",
-          "do": "Create BP_PracticeBeacon as an Actor Blueprint.",
-          "why": "A fresh Actor Blueprint makes ownership clear.",
-          "check": "BP_PracticeBeacon is an Actor Blueprint."
+          "title": "Create BP_PracticeBeacon",
+          "where": "Content Drawer → Learning folder → right-click → Blueprint Class → Actor",
+          "do": "Create an Actor Blueprint called BP_PracticeBeacon and open it.",
+          "why": "An Actor Blueprint is the standard place to combine components into one reusable object.",
+          "see": "The Blueprint Editor opens and shows an empty Actor with a DefaultSceneRoot.",
+          "check": "The asset name in the tab says BP_PracticeBeacon.",
+          "troubleshoot": [
+            "If you created the Blueprint in the wrong folder, move it into Learning before continuing."
+          ],
+          "visual": {
+            "src": "assets/book/blueprint-editor.webp",
+            "caption": "Blueprint Editor view showing the Components panel, Viewport and Event Graph tabs.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
         },
         {
-          "title": "Add a Static Mesh",
-          "do": "Add a Static Mesh.",
-          "why": "The mesh gives the object a visible body.",
-          "check": "The mesh is visible in the Blueprint viewport."
+          "title": "Add a Static Mesh body",
+          "where": "Blueprint Editor → Components panel → Add → Static Mesh",
+          "do": "Add a Static Mesh component and name it SM_Body.",
+          "doList": [
+            "Select the new component.",
+            "In Details, assign a simple mesh such as Cube or Sphere."
+          ],
+          "why": "The mesh gives the Blueprint a visible body that can be placed and recognised in the level.",
+          "see": "The Viewport now shows your chosen mesh component.",
+          "check": "Selecting SM_Body highlights the visible mesh in the Blueprint Viewport.",
+          "troubleshoot": [
+            "If the mesh is invisible, check that the Static Mesh asset field is not empty."
+          ],
+          "visual": {
+            "src": "assets/book/blueprint-editor.webp",
+            "caption": "Add components to a Blueprint from the Components panel.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
         },
         {
           "title": "Add a Point Light",
-          "do": "Add a Point Light.",
-          "why": "The light demonstrates a non-mesh capability.",
-          "check": "The Point Light changes the object's appearance."
+          "where": "Components panel → Add → Point Light",
+          "do": "Add a Point Light and keep it as a child of the root or mesh.",
+          "doList": [
+            "Move it slightly above the mesh in the Blueprint Viewport.",
+            "Increase Intensity if needed so the light is obvious."
+          ],
+          "why": "A Point Light proves that Blueprints can own more than visible geometry.",
+          "see": "The Blueprint Viewport shows visible lighting around the mesh.",
+          "check": "Toggling the Point Light visibility changes the look of the Blueprint.",
+          "troubleshoot": [
+            "If nothing changes, move the light closer or increase its Intensity."
+          ],
+          "visual": {
+            "src": "assets/book/blueprint-editor.webp",
+            "caption": "Components can include lights as well as meshes.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
         },
         {
           "title": "Add Box Collision",
-          "do": "Add Box Collision.",
-          "why": "Collision adds detection/physical capability.",
-          "check": "Box Collision is visible with sensible dimensions."
+          "where": "Components panel → Add → Box Collision",
+          "do": "Add Box Collision and scale it so it wraps around the visible mesh.",
+          "why": "Collision components let your Actor sense overlaps or block movement later.",
+          "see": "A green wireframe collision box appears around the object.",
+          "check": "The collision box is big enough to cover the object but not absurdly huge.",
+          "troubleshoot": [
+            "If the collision is tiny, use the Scale values or Box Extent in Details."
+          ],
+          "visual": {
+            "src": "assets/book/collision-responses.webp",
+            "caption": "Collision settings and collision shapes are edited from the component Details.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
         },
         {
           "title": "Arrange the hierarchy and transforms",
-          "do": "Arrange the hierarchy and transforms.",
-          "why": "Hierarchy practice teaches relative transforms.",
-          "check": "Moving the parent causes child Scene Components to follow predictably."
+          "where": "Components panel and Blueprint Viewport",
+          "do": "Check the component hierarchy and move components deliberately.",
+          "doList": [
+            "Make SM_Body the visual centre.",
+            "Move the Point Light above the mesh.",
+            "Keep Box Collision centred around the body."
+          ],
+          "why": "Children inherit the parent transform, so hierarchy affects how objects move together.",
+          "see": "Moving the Actor root causes all child components to follow as one object.",
+          "check": "You can explain which component is the root and which components are children.",
+          "troubleshoot": [
+            "If a component drifts too far away, reset its relative transform in Details."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/actors-components-process.svg",
+            "caption": "Original class diagram showing how multiple components form one Actor.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
           "title": "Compile and place the Blueprint into the level",
-          "do": "Compile and place the Blueprint into the level.",
-          "why": "Placing an instance proves the assembled Actor works as a reusable object.",
-          "check": "The placed Blueprint behaves as one object in the level."
+          "where": "Top toolbar in Blueprint Editor → Compile, then drag BP_PracticeBeacon from Content Drawer into the level",
+          "do": "Compile the Blueprint, return to the level and place one instance of BP_PracticeBeacon.",
+          "why": "Placing an instance proves the Blueprint has become a reusable object in the world.",
+          "see": "One placed beacon appears in the level with its mesh, light and collision setup.",
+          "check": "Selecting the placed Actor shows BP_PracticeBeacon in the Outliner.",
+          "troubleshoot": [
+            "If the instance looks old, compile again before placing or update the placed instance."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/actors-components-example.svg",
+            "caption": "Worked example: one Actor built from several components.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         }
       ],
       "evidencePrompt": {
@@ -945,39 +1114,103 @@ window.UE5_COURSE_DATA = {
       "guidedDetailed": [
         {
           "title": "Create BP_ColourBlock",
-          "do": "Create BP_ColourBlock.",
-          "why": "A simple Class keeps the example focused.",
-          "check": "BP_ColourBlock exists and compiles."
+          "where": "Content Drawer → Learning folder → right-click → Blueprint Class → Actor",
+          "do": "Create an Actor Blueprint called BP_ColourBlock and open it.",
+          "why": "You need one reusable Class before you can prove how instances work.",
+          "see": "The Blueprint Editor opens for BP_ColourBlock.",
+          "check": "The asset compiles with no errors.",
+          "visual": {
+            "src": "assets/diagrams/gold/blueprint-classes-process.svg",
+            "caption": "How one Blueprint Class produces many instances.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Add a cube Static Mesh",
-          "do": "Add a cube Static Mesh.",
-          "why": "A visible cube makes instance differences obvious.",
-          "check": "The Class contains the expected mesh."
+          "title": "Add a Cube Static Mesh",
+          "where": "Components panel → Add → Static Mesh",
+          "do": "Add a Static Mesh component, assign Cube and name it SM_Block.",
+          "why": "A simple visible mesh makes later instance differences easy to spot.",
+          "see": "The Blueprint viewport contains one cube block.",
+          "check": "Compile succeeds and the cube is visible.",
+          "troubleshoot": [
+            "If the component exists but looks empty, assign a cube mesh in Details."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/blueprint-classes-example.svg",
+            "caption": "One Class can be used repeatedly while remaining easy to edit.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Compile and place three instances",
-          "do": "Compile and place three instances.",
-          "why": "Multiple instances prove reuse.",
-          "check": "Three instances are placed."
+          "title": "Place three instances in the level",
+          "where": "Compile → return to level → drag BP_ColourBlock in three times",
+          "do": "Compile the Blueprint and place three separate instances in the level.",
+          "doList": [
+            "Spread them apart so you can tell them apart.",
+            "Rename the placed Actors if needed."
+          ],
+          "why": "Multiple placed instances are the proof that one Class can be reused.",
+          "see": "Three BP_ColourBlock Actors exist in the Outliner.",
+          "check": "Deleting one instance does not delete the Blueprint asset or the other instances.",
+          "troubleshoot": [
+            "If dragging creates only one object, drag from the Content Drawer again instead of duplicating a selected component in the Blueprint."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/blueprint-classes-process.svg",
+            "caption": "One Class, many instances.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Change transforms on each instance",
-          "do": "Change transforms on each instance.",
-          "why": "Different transforms show instances remain independent world objects.",
-          "check": "Each instance has its own transform."
+          "title": "Change each instance transform",
+          "where": "Level Editor → select each placed instance → Details → Transform",
+          "do": "Give each instance a different Location, Rotation or Scale.",
+          "why": "Instances are independent world objects even when they share the same parent Class.",
+          "see": "The three blocks look different in position or size.",
+          "check": "Changing one instance transform does not move the other two.",
+          "visual": {
+            "src": "assets/ue5/current/editor-main-window.webp",
+            "caption": "Placed instances are edited in the level through the Details panel.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Edit the Class and observe all instances update",
-          "do": "Edit the Class and observe all instances update.",
-          "why": "Editing the Class proves shared changes propagate.",
-          "check": "A Class edit appears on all instances after compile."
+          "title": "Edit the Class and watch all instances update",
+          "where": "Double-click BP_ColourBlock → change the Class → Compile",
+          "do": "Change something inside the Blueprint Class such as the mesh scale, material or an added Point Light.",
+          "why": "Class changes flow out to every instance, which is the whole point of reuse.",
+          "see": "All placed instances update after you compile the Blueprint.",
+          "check": "At least one visible Class change appears on all three instances.",
+          "troubleshoot": [
+            "If only one object changes, you edited a placed instance rather than the Class asset."
+          ],
+          "visual": {
+            "src": "assets/book/blueprint-editor.webp",
+            "caption": "Editing the Blueprint asset affects all of its placed instances.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
         },
         {
-          "title": "Expose one useful variable and give each instance a different value",
-          "do": "Expose one useful variable and give each instance a different value.",
-          "why": "An exposed variable demonstrates intentional per-instance variation.",
-          "check": "The exposed variable can differ between instances without duplicating the Blueprint."
+          "title": "Expose one instance-editable variable",
+          "where": "Blueprint Editor → My Blueprint panel → Variables → select variable → Details → Instance Editable",
+          "do": "Create a variable such as GlowIntensity or BlockLabel, mark it Instance Editable, compile, then give each placed instance a different value in the level.",
+          "why": "Instance Editable variables allow controlled variation without duplicating the whole Blueprint.",
+          "see": "Each placed instance shows the variable in its Details panel.",
+          "check": "Different instances can use different values while still coming from the same Blueprint Class.",
+          "troubleshoot": [
+            "If the variable does not appear on the placed Actor, compile after ticking Instance Editable."
+          ],
+          "visual": {
+            "src": "assets/book/variables-panel.webp",
+            "caption": "Expose variables deliberately so instances can vary in controlled ways.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
         }
       ],
       "evidencePrompt": {
@@ -1288,39 +1521,100 @@ window.UE5_COURSE_DATA = {
       "guidedDetailed": [
         {
           "title": "Create BP_EventPractice",
-          "do": "Create BP_EventPractice.",
-          "why": "A dedicated practice Blueprint isolates event flow.",
-          "check": "The practice Blueprint exists and is placed if required."
+          "where": "Learning folder → Blueprint Class → Actor",
+          "do": "Create a new Actor Blueprint called BP_EventPractice and place one copy in the level.",
+          "why": "A clean practice Blueprint makes event flow easier to observe.",
+          "see": "BP_EventPractice exists both as an asset and as one placed Actor.",
+          "check": "The placed Actor appears in the Outliner.",
+          "visual": {
+            "src": "assets/book/event-graph.webp",
+            "caption": "The Event Graph is where Blueprint execution starts and flows.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
         },
         {
-          "title": "Connect Event BeginPlay to Print String",
-          "do": "Connect Event BeginPlay to Print String.",
-          "why": "Print String immediately proves BeginPlay fired.",
-          "check": "BeginPlay produces visible debug output."
+          "title": "Add BeginPlay and one Print String",
+          "where": "BP_EventPractice → Event Graph",
+          "do": "Use Event BeginPlay and connect it to Print String with the message “BeginPlay fired”.",
+          "doList": [
+            "Delete any unwanted starter nodes.",
+            "Compile before testing."
+          ],
+          "why": "BeginPlay is the easiest event to prove that execution started.",
+          "see": "When Play starts, the message appears on screen.",
+          "check": "The string appears only when the Actor begins play.",
+          "troubleshoot": [
+            "If nothing prints, make sure a BP_EventPractice instance is actually placed in the level."
+          ],
+          "visual": {
+            "src": "assets/ue5/current/events-execution-real.webp",
+            "caption": "Real Blueprint event chain beginning with Event BeginPlay.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Add two more Print String actions",
-          "do": "Add two more Print String actions.",
-          "why": "A chain makes execution order visible.",
-          "check": "Messages appear in your predicted order."
+          "title": "Chain two more Print Strings",
+          "where": "Event Graph → connect exec pin from first Print String into two more Print String nodes",
+          "do": "Add two more Print String nodes so the execution path forms a clear chain.",
+          "why": "A chain makes execution order visible rather than abstract.",
+          "see": "You can trace the white execution wire from BeginPlay through all three messages.",
+          "check": "The messages appear in the same order as the wire path.",
+          "visual": {
+            "src": "assets/ue5/current/events-execution-closeup.webp",
+            "caption": "Execution wires show the exact order in which nodes run.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Predict the order before testing",
-          "do": "Predict the order before testing.",
-          "why": "Prediction forces reasoning about order.",
-          "check": "Disconnecting a wire prevents later messages."
+          "title": "Predict the order before pressing Play",
+          "where": "Look at the Event Graph before running the game",
+          "do": "Say out loud or write down which message will appear first, second and third.",
+          "why": "Prediction forces you to reason about execution instead of just watching it happen.",
+          "see": "Your prediction matches the node order you built.",
+          "check": "After testing, compare the real output with your prediction.",
+          "visual": {
+            "src": "assets/ue5/current/events-execution-closeup.webp",
+            "caption": "Use the wire direction to predict execution order.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Disconnect one execution wire and retest",
-          "do": "Disconnect one execution wire and retest.",
-          "why": "Breaking a wire demonstrates that downstream nodes no longer execute.",
-          "check": "Reconnecting restores the chain."
+          "title": "Break one wire and test again",
+          "where": "Event Graph → Alt-click or disconnect one execution wire",
+          "do": "Disconnect the wire before the second or third Print String and press Play again.",
+          "why": "Execution cannot continue through a broken wire, so later nodes stop firing.",
+          "see": "Only the earlier messages appear.",
+          "check": "Reconnecting the wire restores the missing message.",
+          "troubleshoot": [
+            "If all messages still appear, you disconnected a data pin rather than the white execution pin."
+          ],
+          "visual": {
+            "src": "assets/ue5/current/events-execution-closeup.webp",
+            "caption": "Downstream nodes stop when the execution wire is broken.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Add a second Event and compare when each fires",
-          "do": "Add a second Event and compare when each fires.",
-          "why": "A second event shows that different causes can start separate execution paths.",
-          "check": "You can explain exactly what causes each event to fire."
+          "title": "Add a second event and compare it",
+          "where": "Components panel → Add Box Collision, then Event Graph → Add OnComponentBeginOverlap or another clear event",
+          "do": "Add a second event that fires under a different condition and compare when each event runs.",
+          "why": "Different events are different starting points for logic.",
+          "see": "BeginPlay fires at game start, while the second event fires only when its condition is met.",
+          "check": "You can explain exactly what causes each event to run.",
+          "troubleshoot": [
+            "If the overlap never fires, enlarge the collision box and move the player through it."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/events-process.svg",
+            "caption": "Different events are separate entry points into Blueprint logic.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         }
       ],
       "evidencePrompt": {
@@ -1648,40 +1942,94 @@ window.UE5_COURSE_DATA = {
       },
       "guidedDetailed": [
         {
-          "title": "Create Health as a Float with default 100",
-          "do": "Create Health as a Float with default 100.",
-          "why": "Health is a clear numeric state with an obvious default.",
-          "check": "Health is a Float and defaults to 100."
+          "title": "Create Health as a Float",
+          "where": "My Blueprint panel → + Variable",
+          "do": "Create a variable called Health, set its type to Float and give it a default value of 100.",
+          "why": "Health is a clear example of game state that changes during play.",
+          "see": "Health appears in the Variables list as a Float.",
+          "check": "In Class Defaults or variable Details, the default value shows 100.",
+          "visual": {
+            "src": "assets/book/variables-panel.webp",
+            "caption": "Variables are created and configured from the My Blueprint panel.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
         },
         {
           "title": "Create IsActive as a Boolean",
-          "do": "Create IsActive as a Boolean.",
-          "why": "IsActive demonstrates two-state logic.",
-          "check": "IsActive is Boolean with an intentional default."
+          "where": "My Blueprint panel → + Variable → type dropdown → Boolean",
+          "do": "Create a second variable called IsActive and choose an intentional default of true or false.",
+          "why": "A Boolean shows that not every variable is a number.",
+          "see": "IsActive appears with a tick-box style default.",
+          "check": "You can explain what true and false would mean for this Blueprint.",
+          "visual": {
+            "src": "assets/book/variables-panel.webp",
+            "caption": "Use the variable type dropdown to choose the right data type.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
         },
         {
-          "title": "Get Health and print it on BeginPlay",
-          "do": "Get Health and print it on BeginPlay.",
-          "why": "Reading before changing proves what the Blueprint currently stores.",
-          "check": "The initial print matches the default Health."
+          "title": "Print Health on BeginPlay",
+          "where": "Event Graph → Event BeginPlay → drag in Health as Get → Print String",
+          "do": "Read Health on BeginPlay and print it so you can see the stored value.",
+          "why": "Reading before changing proves what the Blueprint currently knows.",
+          "see": "The printed value is 100 or whatever default you set.",
+          "check": "Changing the default value changes the printed result next time you press Play.",
+          "troubleshoot": [
+            "If Print String shows nothing useful, convert the Float to string automatically when you connect it."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/variables-example.svg",
+            "caption": "Read a variable to inspect the current stored value.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
           "title": "Set Health to a new value and print again",
-          "do": "Set Health to a new value and print again.",
-          "why": "Setting then reading shows state persistence across execution steps.",
-          "check": "After Set, the second print shows the new value."
+          "where": "Event Graph → add Set Health after the first print",
+          "do": "After printing the original value, set Health to a new number such as 60 and print Health again.",
+          "why": "Set then Get demonstrates that variables store state between steps in the same execution path.",
+          "see": "The second print now shows the new value.",
+          "check": "The first print and second print are different for the expected reason.",
+          "visual": {
+            "src": "assets/diagrams/gold/variables-process.svg",
+            "caption": "Variables are read, changed and read again as logic runs.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
           "title": "Make one variable Instance Editable",
-          "do": "Make one variable Instance Editable.",
-          "why": "Instance Editable demonstrates controlled designer variation.",
-          "check": "A placed instance exposes only the intended variable."
+          "where": "Select the variable → Details → Instance Editable",
+          "do": "Tick Instance Editable for one useful variable, compile, then select a placed instance of the Blueprint in the level.",
+          "why": "Instance-editable variables let designers vary placed Actors without opening the Blueprint asset.",
+          "see": "The chosen variable appears in the placed Actor Details panel.",
+          "check": "Change the value on one placed instance and leave another instance unchanged.",
+          "troubleshoot": [
+            "If the variable does not appear, compile after enabling Instance Editable."
+          ],
+          "visual": {
+            "src": "assets/book/ui-variables.webp",
+            "caption": "Expose only the settings that other people actually need to adjust.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
         },
         {
-          "title": "Add a useful Tooltip",
-          "do": "Add a useful Tooltip.",
-          "why": "A Tooltip turns an exposed setting into self-documenting content.",
-          "check": "Hovering/inspecting the exposed variable explains its purpose."
+          "title": "Add a tooltip that explains the setting",
+          "where": "Select the variable → Details → Tooltip",
+          "do": "Write a short tooltip such as “Starting health for this actor instance”.",
+          "why": "A tooltip turns a raw number into self-documenting content.",
+          "see": "Hovering the variable shows helpful explanation text.",
+          "check": "Another student could understand the setting without asking you.",
+          "visual": {
+            "src": "assets/book/variables-panel.webp",
+            "caption": "Tooltips help exposed variables make sense to other users.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
         }
       ],
       "evidencePrompt": {
@@ -2048,70 +2396,91 @@ window.UE5_COURSE_DATA = {
       },
       "guidedDetailed": [
         {
-          "title": "Create a safe test Blueprint",
-          "do": "Create an Actor Blueprint called BP_BranchDemo and place an instance in the level.",
-          "why": "A small isolated test makes it easier to understand the decision before combining it with a full door system.",
-          "check": "The Blueprint exists in the Content Browser and an instance is in the level."
+          "title": "Create a simple health test variable",
+          "where": "Any practice Blueprint → Variables",
+          "do": "Create a Float called Health with a default value such as 100.",
+          "why": "A Branch needs a condition, and health provides an easy one.",
+          "see": "Health exists and can be read in the graph.",
+          "check": "You can drag Health into the graph as a Get node.",
+          "visual": {
+            "src": "assets/diagrams/branch-node-anatomy.svg",
+            "caption": "The Branch node asks one yes/no question.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Create the state",
-          "do": "Create a Boolean variable named HasKey. Leave its default value False.",
-          "why": "HasKey represents game state: the player either has the key or does not.",
-          "check": "The variable type is Boolean and its default checkbox is unticked."
+          "title": "Compare the value against a threshold",
+          "where": "Event Graph → right-click → search “<=” or “>” for Float comparison",
+          "do": "Use a comparison node such as Health <= 0 to produce a Boolean result.",
+          "why": "A Branch does not compare numbers itself; it receives a true/false answer from another node.",
+          "see": "The comparison node output pin is red and labelled Boolean.",
+          "check": "You can explain what true means and what false means.",
+          "visual": {
+            "src": "assets/ue5/current/branch-condition-closeup.webp",
+            "caption": "A comparison node creates the Boolean condition that feeds the Branch.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Create an event to test",
-          "do": "For this isolated practice, use an input/event you already know or Event BeginPlay. Connect it towards a new Branch node.",
-          "why": "A Branch only does something when execution reaches it.",
-          "check": "A white execution wire reaches the Branch."
+          "title": "Add a Branch and wire the condition",
+          "where": "Event Graph → right-click → Branch",
+          "do": "Connect the comparison result to the Branch Condition pin.",
+          "why": "The Branch chooses one of two execution paths based on that single Boolean.",
+          "see": "The Branch node now has a condition connected and true/false outputs available.",
+          "check": "No compile errors appear for the Branch.",
+          "visual": {
+            "src": "assets/ue5/current/branch-node-real.webp",
+            "caption": "The Branch has one Condition input and two possible execution outputs.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Read the state",
-          "do": "Drag HasKey into the graph as Get and connect it to the Branch Condition.",
-          "why": "Get reads the current stored value without changing it.",
-          "check": "The purple Boolean wire connects HasKey to Condition."
+          "title": "Make the True and False paths obvious",
+          "where": "Branch True pin and False pin",
+          "do": "Connect Print String nodes to both outputs, e.g. “Dead” for True and “Still alive” for False.",
+          "why": "Printing both outcomes proves exactly which path ran.",
+          "see": "Only one message appears each time you test.",
+          "check": "Changing Health switches which message appears.",
+          "visual": {
+            "src": "assets/diagrams/branch-flow.svg",
+            "caption": "True and False are two different outcomes from the same decision.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Build the True path",
-          "do": "From True, add Print String with the message Door opens.",
-          "why": "This gives immediate visible feedback when the condition succeeds.",
-          "check": "True is connected to Door opens."
+          "title": "Test both outcomes deliberately",
+          "where": "Change the Health default value, then Play",
+          "do": "Run the Blueprint once with a value that should make the condition true and once with a value that should make it false.",
+          "why": "Good testing proves both routes, not just the one you happened to build first.",
+          "see": "You have observed both the True and False result in Play.",
+          "check": "You can predict the result before testing.",
+          "troubleshoot": [
+            "If the wrong route fires, re-read the comparison node. Health <= 0 and Health > 0 mean opposite things."
+          ],
+          "visual": {
+            "src": "assets/diagrams/branch-locked-door-example.svg",
+            "caption": "Worked example: a Branch deciding whether a door should open.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Build the False path",
-          "do": "From False, add Print String with the message Door is locked.",
-          "why": "A failed interaction still needs useful player feedback.",
-          "check": "False is connected to Door is locked."
-        },
-        {
-          "title": "Predict before testing",
-          "do": "Before pressing Play, write down which message you expect while HasKey is False.",
-          "why": "Prediction proves you are reasoning about the graph instead of only copying nodes.",
-          "check": "Your prediction is Door is locked."
-        },
-        {
-          "title": "Test the False path",
-          "do": "Compile, Play and trigger the event.",
-          "why": "You are deliberately proving one side of the decision.",
-          "check": "Door is locked appears. If it does not, inspect the execution wire and HasKey value."
-        },
-        {
-          "title": "Test the True path",
-          "do": "Stop, set HasKey to True, compile and test again.",
-          "why": "A Branch is not tested properly until both outcomes have been proven.",
-          "check": "Door opens appears."
-        },
-        {
-          "title": "Replace stored state with a comparison",
-          "do": "Create an Integer or Float called Health, set it above zero, compare Health > 0 and feed that result into the Branch Condition.",
-          "why": "Comparisons already produce a Boolean, so they can drive a Branch directly.",
-          "check": "Changing Health between a positive value and 0 changes the execution route."
-        },
-        {
-          "title": "Try a combined condition",
-          "do": "Create HasPower and combine HasKey AND HasPower before the Branch.",
-          "why": "Many real game rules require more than one piece of state.",
-          "check": "The success route only runs when both values are True."
+          "title": "Replace vague logic with a named question",
+          "where": "Branch condition area",
+          "do": "Rename variables or add a comment so the question is clear, e.g. “HasKey?” or “IsHealthZero?”.",
+          "why": "Readable conditions are much easier to debug than mystery comparisons.",
+          "see": "A different student can explain the decision without you narrating it.",
+          "check": "Your condition reads like a question with a yes/no answer.",
+          "visual": {
+            "src": "assets/diagrams/branch-decision-demo.svg",
+            "caption": "Think of a Branch as a clearly named question.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         }
       ],
       "visuals": [
@@ -2423,40 +2792,91 @@ window.UE5_COURSE_DATA = {
       },
       "guidedDetailed": [
         {
-          "title": "Create BP_FunctionPractice",
-          "do": "Create BP_FunctionPractice.",
-          "why": "A practice Actor gives a safe refactoring space.",
-          "check": "CalculateDamage exists and has a clear name."
+          "title": "Create a repeated job in your graph",
+          "where": "Any practice Blueprint → Event Graph",
+          "do": "Build a tiny piece of logic you could imagine using more than once, such as printing a status message and setting a variable.",
+          "why": "You need some repetition before the value of a Function makes sense.",
+          "see": "A short sequence of nodes exists in the graph.",
+          "check": "You can point at the nodes you would not want to copy and paste repeatedly.",
+          "visual": {
+            "src": "assets/book/function-example.webp",
+            "caption": "Functions wrap repeatable logic into one named reusable unit.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
         },
         {
-          "title": "Create CalculateDamage",
-          "do": "Create CalculateDamage.",
-          "why": "Two Float inputs demonstrate parameterised reuse.",
-          "check": "BaseDamage and Multiplier are Float inputs."
+          "title": "Create a Function",
+          "where": "My Blueprint panel → Functions → +",
+          "do": "Create a Function called UpdateStatus or similar.",
+          "why": "A Function gives the repeated job a name and one place to maintain it.",
+          "see": "The Function appears in the My Blueprint panel and opens in its own graph.",
+          "check": "The Function name is specific about what it does.",
+          "visual": {
+            "src": "assets/ue5/current/function-real.webp",
+            "caption": "A real Blueprint function with a separate graph and clear purpose.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Add BaseDamage and Multiplier Float inputs",
-          "do": "Add BaseDamage and Multiplier Float inputs.",
-          "why": "A returned Float shows that Functions can calculate results.",
-          "check": "FinalDamage is returned from the Function."
+          "title": "Move the repeated logic into the Function",
+          "where": "Select nodes → Ctrl+X / Ctrl+C → Function graph",
+          "do": "Put the repeated nodes inside the Function graph and wire them correctly there.",
+          "why": "Now the logic exists once instead of being duplicated everywhere.",
+          "see": "The original graph becomes shorter while the Function contains the detail.",
+          "check": "Compiling succeeds and the Function graph runs without errors.",
+          "troubleshoot": [
+            "If variables are missing inside the Function, drag them in again from My Blueprint."
+          ],
+          "visual": {
+            "src": "assets/ue5/current/function-update-closeup.webp",
+            "caption": "Put the detail inside the Function so the main graph stays readable.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Return FinalDamage",
-          "do": "Return FinalDamage.",
-          "why": "Printing the result proves the call worked.",
-          "check": "The first call prints the expected result."
+          "title": "Call the Function from the Event Graph",
+          "where": "Event Graph → right-click → search for your Function name",
+          "do": "Call the Function from Event BeginPlay or another simple event.",
+          "why": "The main graph now shows intention rather than every low-level step.",
+          "see": "One compact Function call node appears in the Event Graph.",
+          "check": "Running the graph still produces the same result as before.",
+          "visual": {
+            "src": "assets/diagrams/gold/functions-process.svg",
+            "caption": "The Event Graph calls the Function instead of storing all the detail inline.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Call it from BeginPlay and print the result",
-          "do": "Call it from BeginPlay and print the result.",
-          "why": "Different arguments prove the Function is not hard-coded.",
-          "check": "A second call with different inputs produces a different correct result."
+          "title": "Add an input or output if needed",
+          "where": "Function graph → Details / Inputs / Outputs",
+          "do": "Add one simple input such as MessageText if the Function needs a value supplied from outside.",
+          "why": "Functions become more flexible when they can accept data or return a result.",
+          "see": "The Function call node now has a parameter pin.",
+          "check": "Changing the input changes the result in a predictable way.",
+          "visual": {
+            "src": "assets/diagrams/gold/functions-example.svg",
+            "caption": "A good Function can take input and produce a useful result.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Call it again with different values",
-          "do": "Call it again with different values.",
-          "why": "Comparing call sites demonstrates why one Function is easier to maintain than copies.",
-          "check": "Changing the Function formula changes both call sites."
+          "title": "Decide whether this should stay a Function",
+          "where": "Review the Function you made",
+          "do": "Ask whether the job is a named reusable action rather than a giant grab-bag of unrelated steps.",
+          "why": "Functions should improve clarity, not just hide a mess inside another graph.",
+          "see": "The Function name still matches the single responsibility of the logic.",
+          "check": "You can explain in one sentence what the Function is for.",
+          "visual": {
+            "src": "assets/book/function-example.webp",
+            "caption": "Keep Functions focused so they stay readable and reusable.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
         }
       ],
       "evidencePrompt": {
@@ -2805,40 +3225,93 @@ window.UE5_COURSE_DATA = {
       },
       "guidedDetailed": [
         {
-          "title": "Open the Third Person character and identify its parent Class",
-          "do": "Open the Third Person character and identify its parent Class.",
-          "why": "The template Character gives a real example of framework inheritance.",
-          "check": "You can identify the Character parent Class."
+          "title": "Open the Third Person template classes",
+          "where": "Content Drawer → ThirdPerson → Blueprints (or your project’s equivalent)",
+          "do": "Locate the Character Blueprint and identify at least PlayerController, GameMode and GameInstance conceptually.",
+          "why": "Framework lessons are about putting logic in the right class, not all logic in the Character.",
+          "see": "You know which asset is the player Character and which classes control game rules.",
+          "check": "You can name one responsibility for Character, GameMode and GameInstance.",
+          "visual": {
+            "src": "assets/diagrams/gold/framework-example.svg",
+            "caption": "Different framework classes own different kinds of responsibility.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Inspect the project GameMode",
-          "do": "Inspect the project GameMode.",
-          "why": "GameMode inspection reveals what Class is actually being used.",
-          "check": "You can find the active/default GameMode."
+          "title": "Add player-specific logic to the Character",
+          "where": "Open the player Character Blueprint",
+          "do": "Create or locate a player-only variable such as Health or SprintSpeed in the Character Blueprint.",
+          "why": "Player movement and moment-to-moment character state belongs on the Character.",
+          "see": "The Character Blueprint clearly owns the player-specific variable.",
+          "check": "You can explain why this does not belong in GameMode.",
+          "visual": {
+            "src": "assets/diagrams/gold/framework-process.svg",
+            "caption": "Start by asking who owns the behaviour or state.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Find which Pawn/Character the GameMode uses",
-          "do": "Find which Pawn/Character the GameMode uses.",
-          "why": "Finding the default Pawn connects rules to spawned player bodies.",
-          "check": "You can identify which Pawn/Character it chooses."
+          "title": "Identify a whole-game rule for GameMode",
+          "where": "Project Settings / World Settings → GameMode, then open the GameMode Blueprint if one exists",
+          "do": "Choose a rule that affects the whole match, such as win condition, number of rounds or default pawn class.",
+          "why": "GameMode exists for rules of the current level or game session.",
+          "see": "You can point to at least one setting or variable that belongs at game-rule level.",
+          "check": "Your example affects the whole session rather than a single player.",
+          "visual": {
+            "src": "assets/diagrams/gold/framework-process.svg",
+            "caption": "GameMode owns session rules rather than one actor’s local state.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Create a simple custom GameMode",
-          "do": "Create a simple custom GameMode.",
-          "why": "A custom GameMode makes ownership visible.",
-          "check": "Your custom GameMode can be selected for a map/project."
+          "title": "Identify persistent state for GameInstance",
+          "where": "Content Drawer → create or open a GameInstance Blueprint",
+          "do": "Name a value that should survive level loads, such as selected difficulty or total coins.",
+          "why": "GameInstance persists while the game is running, even when levels change.",
+          "see": "You can state one example of data that belongs in GameInstance.",
+          "check": "Your example genuinely needs to survive a map change.",
+          "visual": {
+            "src": "assets/diagrams/gold/framework-example.svg",
+            "caption": "Persistent state belongs higher up than the current level’s GameMode.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Create a GameInstance Blueprint",
-          "do": "Create a GameInstance Blueprint.",
-          "why": "A GameInstance Blueprint introduces longer session lifetime.",
-          "check": "Your custom GameInstance is configured in project settings."
+          "title": "Sort three example features by owner",
+          "where": "Use the examples in the lesson or your own notes",
+          "do": "Take three features and decide which class should own each one.",
+          "doList": [
+            "Player jump count → Character.",
+            "Current score limit → GameMode.",
+            "Chosen graphics settings or chapter selection → GameInstance."
+          ],
+          "why": "Ownership becomes clearer when you compare multiple examples side by side.",
+          "see": "You have different examples mapped to different framework classes.",
+          "check": "You can justify each choice with one sentence.",
+          "visual": {
+            "src": "assets/diagrams/gold/framework-process.svg",
+            "caption": "Ask “who owns this?” before writing logic.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Store a test value in GameInstance and discuss why it survives a level change",
-          "do": "Store a test value in GameInstance and discuss why it survives a level change.",
-          "why": "A test value plus level change proves lifetime rather than relying on memory.",
-          "check": "The test value survives a map change but you understand it will not survive closing the app."
+          "title": "Apply the rule to your own project idea",
+          "where": "Think about Signal Lost or your own assignment project",
+          "do": "Pick one mechanic from your project and say where its logic should live before you build it.",
+          "why": "The framework only matters if it changes how you structure real work.",
+          "see": "You have a chosen class owner for your mechanic.",
+          "check": "Your choice would still make sense to another developer reading the project.",
+          "visual": {
+            "src": "assets/book/responsibility.webp",
+            "caption": "Responsibility is a design decision, not just a technical one.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
         }
       ],
       "evidencePrompt": {
@@ -3152,40 +3625,91 @@ window.UE5_COURSE_DATA = {
       },
       "guidedDetailed": [
         {
-          "title": "Use an overlap event to obtain Other Actor",
-          "do": "Use an overlap event to obtain Other Actor.",
-          "why": "Overlap gives a real reference without searching globally.",
-          "check": "Other Actor is available from the event."
+          "title": "Create two simple Blueprints to communicate",
+          "where": "Learning folder → Blueprint Class → Actor",
+          "do": "Create two Blueprints such as BP_Switch and BP_Lamp, then place one of each in the level.",
+          "why": "A reference lesson needs at least two separate objects.",
+          "see": "Both Actors appear in the Outliner.",
+          "check": "You can select each Actor independently.",
+          "visual": {
+            "src": "assets/book/casting-example.webp",
+            "caption": "References and casting start with real objects that need to talk to each other.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
         },
         {
-          "title": "Print the Other Actor name",
-          "do": "Print the Other Actor name.",
-          "why": "Printing its name proves what object the event supplied.",
-          "check": "The debug name changes depending on what overlaps."
+          "title": "Make a reference variable of the other type",
+          "where": "Open BP_Switch → My Blueprint → + Variable",
+          "do": "Create a variable called TargetLamp with the type set to BP_Lamp Object Reference.",
+          "why": "A reference variable is how one Blueprint remembers a specific other object.",
+          "see": "The variable type includes BP_Lamp Object Reference.",
+          "check": "The graph can now Get TargetLamp.",
+          "visual": {
+            "src": "assets/diagrams/gold/references-casting-example.svg",
+            "caption": "One Blueprint holds a reference to another specific object.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Cast Other Actor to the player Character Class",
-          "do": "Cast Other Actor to the player Character Class.",
-          "why": "The Cast demonstrates checking for a specific player Class.",
-          "check": "Player overlap follows Cast success."
+          "title": "Assign the reference in the level",
+          "where": "Compile BP_Switch → select the placed switch → Details",
+          "do": "Mark TargetLamp Instance Editable if needed, then choose the placed lamp Actor in the switch’s Details panel.",
+          "why": "A reference only works if it points at a real object instance.",
+          "see": "The TargetLamp field now names your placed lamp.",
+          "check": "The variable is no longer None on the placed switch.",
+          "troubleshoot": [
+            "If the dropdown is empty, make sure a BP_Lamp instance is placed in the level."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/references-casting-process.svg",
+            "caption": "Set the reference on the placed Actor so it knows who to talk to.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Use the successful Cast result to read one player variable",
-          "do": "Use the successful Cast result to read one player variable.",
-          "why": "Reading one variable proves why the typed result is useful.",
-          "check": "A player-specific variable can be accessed through As <Character>."
+          "title": "Use the reference to call something on the lamp",
+          "where": "BP_Switch → Event Graph",
+          "do": "From TargetLamp, call a simple action or set a property, for example toggle lamp visibility or print the lamp name.",
+          "why": "The value of a reference is that it lets you act on the target object directly.",
+          "see": "Interacting with the switch clearly affects the lamp.",
+          "check": "If TargetLamp is set to None, the action should fail or be protected by a validity check.",
+          "visual": {
+            "src": "assets/diagrams/gold/references-casting-process.svg",
+            "caption": "Once you have the reference, you can call functions or change values on that target.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Test with a non-player Actor and observe Cast Failed",
-          "do": "Test with a non-player Actor and observe Cast Failed.",
-          "why": "Testing a non-player proves Cast Failed is real.",
-          "check": "A non-player reaches Cast Failed or is safely ignored."
+          "title": "Recognise when casting is needed",
+          "where": "Think about “I have an Actor reference, but I need BP_Lamp-specific behaviour”",
+          "do": "Describe the casting problem in words before dropping the Cast node into the graph.",
+          "why": "Casting is about proving the real type of an object when you only know it loosely.",
+          "see": "You can explain that casting is for type-specific access, not for communication in every case.",
+          "check": "You know that if you already have a BP_Lamp reference, extra casting is usually unnecessary.",
+          "visual": {
+            "src": "assets/book/casting-example.webp",
+            "caption": "Cast only when you need to confirm a more specific type.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
         },
         {
-          "title": "Discuss whether an Interface would be better for a more generic interaction",
-          "do": "Discuss whether an Interface would be better for a more generic interaction.",
-          "why": "Comparing with Interfaces prevents students treating Cast as the only communication tool.",
-          "check": "You can explain when an Interface would reduce dependency."
+          "title": "Protect the graph from missing references",
+          "where": "Event Graph → Is Valid or a simple Branch",
+          "do": "Check whether the reference exists before trying to use it.",
+          "why": "Many Blueprint errors are just “Accessed None” because a reference was never assigned.",
+          "see": "Your graph handles the None case safely.",
+          "check": "You can deliberately clear the reference and explain what will happen.",
+          "visual": {
+            "src": "assets/diagrams/gold/references-casting-process.svg",
+            "caption": "Good reference handling includes checking validity.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         }
       ],
       "evidencePrompt": {
@@ -3495,40 +4019,88 @@ window.UE5_COURSE_DATA = {
       },
       "guidedDetailed": [
         {
-          "title": "Create an Interact Blueprint Interface",
-          "do": "Create an Interact Blueprint Interface.",
-          "why": "Creating the Interface establishes the shared contract.",
-          "check": "The Blueprint Interface asset exists."
+          "title": "Recognise the communication problem first",
+          "where": "Look at your project need",
+          "do": "State whether one Blueprint needs to send the same message to many types of object, or whether one object needs to announce that something happened.",
+          "why": "That choice tells you whether Interface or Dispatcher is the better fit.",
+          "see": "You can describe one Interface-style problem and one Dispatcher-style problem.",
+          "check": "Your examples are clearly different in communication direction.",
+          "visual": {
+            "src": "assets/diagrams/gold/interfaces-dispatchers-process.svg",
+            "caption": "Interfaces and Dispatchers solve different communication problems.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Add an Interact message",
-          "do": "Add an Interact message.",
-          "why": "One Interact message keeps the first version focused.",
-          "check": "Interact is defined with only necessary parameters."
+          "title": "Create a simple Blueprint Interface",
+          "where": "Content Drawer → right-click → Blueprint Interface",
+          "do": "Create a Blueprint Interface called BPI_Interact and add one function called Interact.",
+          "why": "Interfaces give many object types the same message contract.",
+          "see": "BPI_Interact exists with one function signature.",
+          "check": "The Interface function has no graph logic inside it, only the signature.",
+          "visual": {
+            "src": "assets/diagrams/gold/interfaces-dispatchers-example.svg",
+            "caption": "An Interface defines a shared message, not a shared implementation.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Implement it in two different Actors",
-          "do": "Implement it in two different Actors.",
-          "why": "Two unrelated Actors prove the same message can mean different things.",
-          "check": "Two different Actor Classes implement Interact."
+          "title": "Implement the Interface on a Blueprint",
+          "where": "Open a target Blueprint → Class Settings → Implemented Interfaces",
+          "do": "Add BPI_Interact to a Blueprint such as a door or button, then implement the Interact event/function.",
+          "why": "Implementation is where each object decides what it should do when it receives the same message.",
+          "see": "The Blueprint now has the Interface entry and an Interact implementation.",
+          "check": "The event/function can contain object-specific response logic.",
+          "visual": {
+            "src": "assets/diagrams/gold/interfaces-dispatchers-process.svg",
+            "caption": "Different actors can respond differently to the same Interface message.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Call the Interface message from a player interaction test",
-          "do": "Call the Interface message from a player interaction test.",
-          "why": "Calling from the player proves the caller does not need concrete target knowledge.",
-          "check": "The same player call produces different target behaviour."
+          "title": "Create a Dispatcher on a broadcaster",
+          "where": "Open a Blueprint that should announce something → My Blueprint → Event Dispatchers → +",
+          "do": "Create an Event Dispatcher such as OnActivated or OnDoorOpened.",
+          "why": "Dispatchers let one Blueprint broadcast that something happened to any listeners.",
+          "see": "The Event Dispatcher appears in the My Blueprint panel.",
+          "check": "You can call the Dispatcher from the graph.",
+          "visual": {
+            "src": "assets/book/dispatcher-details.webp",
+            "caption": "Event Dispatchers are created and configured from the My Blueprint panel.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
         },
         {
-          "title": "Create a simple Event Dispatcher in one Blueprint",
-          "do": "Create a simple Event Dispatcher in one Blueprint.",
-          "why": "A Dispatcher introduces one-to-many communication.",
-          "check": "A Dispatcher exists on the object that owns the event."
+          "title": "Bind a listener and test the broadcast",
+          "where": "In another Blueprint, use Bind Event / Assign, or set up the binding when the Blueprint begins play",
+          "do": "Bind a listener to the Dispatcher and make the listener print a message or react visibly.",
+          "why": "A Dispatcher only matters once something else is listening for the announcement.",
+          "see": "Triggering the broadcaster causes the listener reaction.",
+          "check": "Removing the bind stops the listener response.",
+          "visual": {
+            "src": "assets/book/dispatcher-details.webp",
+            "caption": "Listeners react only when the Dispatcher is called and the binding exists.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
         },
         {
-          "title": "Bind another Blueprint to it and prove the broadcast fires",
-          "do": "Bind another Blueprint to it and prove the broadcast fires.",
-          "why": "Binding and broadcasting proves the event owner does not directly run listener internals.",
-          "check": "At least one external listener reacts only after it has been bound."
+          "title": "Choose the cleaner tool for your own mechanic",
+          "where": "Review your project idea",
+          "do": "Decide whether your mechanic should use Interface, Dispatcher or a direct reference.",
+          "why": "Good Blueprint architecture comes from choosing the simplest communication method that fits.",
+          "see": "You have a justified choice for one real mechanic in your project.",
+          "check": "You can explain why the other two methods are less suitable in that case.",
+          "visual": {
+            "src": "assets/diagrams/gold/interfaces-dispatchers-process.svg",
+            "caption": "Choose communication tools deliberately, not by habit.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         }
       ],
       "evidencePrompt": {
@@ -3866,40 +4438,88 @@ window.UE5_COURSE_DATA = {
       },
       "guidedDetailed": [
         {
-          "title": "Create BP_TriggerPractice with Box Collision",
-          "do": "Create BP_TriggerPractice with Box Collision.",
-          "why": "A dedicated trigger Actor keeps detection clear.",
-          "check": "The Box is large enough to enter visibly."
+          "title": "Add a collision component",
+          "where": "Open a practice Blueprint → Components → Add → Box Collision (or Sphere Collision)",
+          "do": "Add a collision component around the object you want to detect.",
+          "why": "Collision components create the area that can overlap or block other Actors.",
+          "see": "A wireframe collision shape appears in the Blueprint Viewport.",
+          "check": "The shape clearly covers the interaction area.",
+          "visual": {
+            "src": "assets/book/collision-responses.webp",
+            "caption": "Collision settings are configured on the collision component itself.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
         },
         {
-          "title": "Resize it so the player can walk through",
-          "do": "Resize it so the player can walk through.",
-          "why": "Large Box Collision makes the test easy to enter/leave.",
-          "check": "The player can move through the trigger if intended."
+          "title": "Choose sensible collision settings",
+          "where": "Select the collision component → Details → Collision",
+          "do": "Set collision presets or responses so the player can trigger overlaps as intended.",
+          "why": "Collision only works when the objects are configured to respond to each other.",
+          "see": "Generate Overlap Events is enabled if you need overlap behaviour.",
+          "check": "You can explain whether you want overlap, block or ignore for the player.",
+          "visual": {
+            "src": "assets/book/collision-responses.webp",
+            "caption": "Overlap and block behaviour are separate decisions.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
         },
         {
-          "title": "Print on Begin Overlap",
-          "do": "Print on Begin Overlap.",
-          "why": "Begin Overlap proves entry detection.",
-          "check": "Begin Overlap prints once when entering."
+          "title": "Add an overlap event",
+          "where": "Event Graph → right-click with the collision selected, or use Add Event for the collision component",
+          "do": "Add OnComponentBeginOverlap and connect it to Print String or a simple response.",
+          "why": "The overlap event is the proof that the collision is detecting another object.",
+          "see": "Running into the collision area triggers the event.",
+          "check": "The message fires when the player enters the area.",
+          "visual": {
+            "src": "assets/diagrams/gold/collision-process.svg",
+            "caption": "Overlap events start when another object enters the collision area.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Print on End Overlap",
-          "do": "Print on End Overlap.",
-          "why": "End Overlap proves the state can change when leaving.",
-          "check": "End Overlap prints when leaving."
+          "title": "Filter what can trigger it",
+          "where": "Overlap event pins and collision settings",
+          "do": "Check the Other Actor or collision channel so not everything in the world triggers the response.",
+          "why": "Reliable collision usually needs filtering, otherwise every object can cause false positives.",
+          "see": "Only the intended Actor type causes the event to continue.",
+          "check": "A wrong object no longer triggers the main response.",
+          "visual": {
+            "src": "assets/diagrams/gold/collision-example.svg",
+            "caption": "Use conditions or object channels to keep collision purposeful.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Inspect Other Actor",
-          "do": "Inspect Other Actor.",
-          "why": "Other Actor teaches filtering/reference use.",
-          "check": "Other Actor identifies the player rather than an unrelated object."
+          "title": "Test the shape and size",
+          "where": "Blueprint Viewport and in-level test",
+          "do": "Adjust the collision size until it feels correct for the action.",
+          "why": "Many collision bugs are simply badly sized trigger volumes.",
+          "see": "The event fires where you expect, not metres too early or too late.",
+          "check": "Walking around the edges of the volume gives predictable results.",
+          "visual": {
+            "src": "assets/book/collision-responses.webp",
+            "caption": "Collision volumes need the right size as well as the right settings.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
         },
         {
-          "title": "Change collision responses and compare behaviour",
-          "do": "Change collision responses and compare behaviour.",
-          "why": "Changing responses demonstrates that events depend on collision configuration.",
-          "check": "Changing Block/Overlap/Ignore produces the predicted change."
+          "title": "Separate detection from response",
+          "where": "Look at the event graph after it works",
+          "do": "Notice that the collision event only detects something; your Blueprint still decides what to do next.",
+          "why": "This mindset helps you reuse collision for pickups, doors, checkpoints and hazards.",
+          "see": "You can replace Print String with a clearer gameplay response.",
+          "check": "You can name another mechanic that starts from the same overlap pattern.",
+          "visual": {
+            "src": "assets/diagrams/gold/collision-process.svg",
+            "caption": "Collision detects; your game logic decides the response.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         }
       ],
       "evidencePrompt": {
@@ -4228,40 +4848,88 @@ window.UE5_COURSE_DATA = {
       },
       "guidedDetailed": [
         {
-          "title": "Use the player camera location as Start",
-          "do": "Use the player camera location as Start.",
-          "why": "Camera location gives the correct player viewpoint.",
-          "check": "Start follows the camera."
+          "title": "Choose a clear starting point",
+          "where": "Player Character Blueprint → Event Graph",
+          "do": "Decide where the trace begins, usually the player camera or the muzzle of a weapon.",
+          "why": "A line trace needs a start and end position.",
+          "see": "You can point to the component that will provide the start location.",
+          "check": "Your chosen start makes sense for the mechanic.",
+          "visual": {
+            "src": "assets/diagrams/trace.svg",
+            "caption": "A line trace travels from a start point to an end point.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Calculate End = Start + Forward × Distance",
-          "do": "Calculate End = Start + Forward × Distance.",
-          "why": "Forward × Distance turns direction into a finite range.",
-          "check": "End points forward and is the intended distance away."
+          "title": "Create the Line Trace by Channel node",
+          "where": "Right-click in the graph → search “Line Trace by Channel”",
+          "do": "Add the node and feed it a Start position plus an End position that extends forward from the camera.",
+          "why": "This is the core node that asks “what am I pointing at along this line?”",
+          "see": "The trace node has Start, End and Hit Result outputs.",
+          "check": "The Blueprint compiles with the node connected.",
+          "visual": {
+            "src": "assets/diagrams/gold/traces-process.svg",
+            "caption": "A trace checks along a line and returns hit information.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Run Line Trace by Channel",
-          "do": "Run Line Trace by Channel.",
-          "why": "Line Trace by Channel performs the world query.",
-          "check": "The trace appears visually when debug draw is enabled."
+          "title": "Enable debugging so you can see the line",
+          "where": "Line Trace node → Draw Debug Type",
+          "do": "Set Draw Debug Type to For Duration or One Frame while learning.",
+          "why": "Visible debug lines make it much easier to understand where the trace is actually going.",
+          "see": "Pressing Play draws the trace line in the world.",
+          "check": "The line starts and ends where you expected.",
+          "visual": {
+            "src": "assets/diagrams/gold/traces-example.svg",
+            "caption": "Debug drawing lets you see the trace path in the world.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Enable debug drawing",
-          "do": "Enable debug drawing.",
-          "why": "Debug drawing makes maths visible.",
-          "check": "Return Value changes when a blocking object enters/leaves the path."
+          "title": "Break the hit result",
+          "where": "From Out Hit → Break Hit Result",
+          "do": "Break the Hit Result and inspect the Hit Actor or Impact Point.",
+          "why": "The hit result contains the useful information you need after the trace succeeds.",
+          "see": "You now have access to the object hit by the trace.",
+          "check": "Printing the Hit Actor name shows what the player was aiming at.",
+          "visual": {
+            "src": "assets/diagrams/trace.svg",
+            "caption": "The hit result carries data about what the trace touched.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Break Hit Result and print Hit Actor",
-          "do": "Break Hit Result and print Hit Actor.",
-          "why": "Breaking Hit Result reveals what was actually hit.",
-          "check": "Hit Actor prints the expected object."
+          "title": "Use the success Boolean",
+          "where": "Line Trace node → Return Value",
+          "do": "Branch from the trace Return Value so you only continue when something was actually hit.",
+          "why": "A trace does not always hit an object, so you must handle both cases.",
+          "see": "The graph now has one path for hit and another for no hit.",
+          "check": "Looking into empty space no longer causes invalid hit logic.",
+          "visual": {
+            "src": "assets/diagrams/gold/traces-process.svg",
+            "caption": "Use the trace success output to avoid acting on empty hits.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Test different collision responses and distances",
-          "do": "Test different collision responses and distances.",
-          "why": "Changing responses/range proves traces depend on both geometry and collision configuration.",
-          "check": "Objects outside range or ignored by the channel do not count."
+          "title": "Apply the pattern to a real mechanic",
+          "where": "Review the finished graph",
+          "do": "Replace Print String with the mechanic you wanted such as interact, shoot or inspect.",
+          "why": "The trace pattern is reusable once you understand the underlying detection logic.",
+          "see": "Your trace now powers a real gameplay action.",
+          "check": "You can explain start, end, hit and no-hit cases clearly.",
+          "visual": {
+            "src": "assets/diagrams/gold/traces-example.svg",
+            "caption": "The same trace idea can power many different mechanics.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         }
       ],
       "evidencePrompt": {
@@ -4586,40 +5254,88 @@ window.UE5_COURSE_DATA = {
       },
       "guidedDetailed": [
         {
-          "title": "Create BP_SlidingDoor",
-          "do": "Create BP_SlidingDoor.",
-          "why": "A dedicated door Actor gives the Timeline clear ownership.",
-          "check": "The door Actor has clear moving/static Components."
+          "title": "Create the object you want to animate",
+          "where": "Open a door or moving-platform style Blueprint",
+          "do": "Make sure the Blueprint contains the mesh that should move, rotate or open.",
+          "why": "A Timeline only animates values; you still need a target component that will use those values.",
+          "see": "The Blueprint has a named mesh such as SM_Door.",
+          "check": "You can select the moving component clearly.",
+          "visual": {
+            "src": "assets/diagrams/gold/timelines-example.svg",
+            "caption": "A Timeline drives a smooth value change over time.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Store ClosedLocation and OpenLocation",
-          "do": "Store ClosedLocation and OpenLocation.",
-          "why": "Closed/Open transforms define known endpoints.",
-          "check": "Closed and Open states are sensible."
+          "title": "Add a Timeline node",
+          "where": "Event Graph → right-click → Add Timeline",
+          "do": "Create a Timeline called TL_OpenDoor and open it.",
+          "why": "The Timeline stores a curve of values over time.",
+          "see": "The Timeline editor opens with an empty track list.",
+          "check": "The node appears in the Event Graph.",
+          "visual": {
+            "src": "assets/diagrams/gold/timelines-process.svg",
+            "caption": "Timelines produce values that change smoothly over time.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Add a Timeline with 0→1 Float track",
-          "do": "Add a Timeline with 0→1 Float track.",
-          "why": "A 0→1 Float track is easy to reason about.",
-          "check": "The Timeline duration and keys are visible."
+          "title": "Create a float track from 0 to 1",
+          "where": "Timeline editor → Add Float Track",
+          "do": "Add a Float Track and create keyframes that start at 0 and end at 1 over about 1 second.",
+          "why": "A 0→1 value is the easiest driver for a Lerp or direct transform change.",
+          "see": "The track graph rises from 0 at time 0 to 1 at the end.",
+          "check": "Scrubbing the Timeline shows the value changing smoothly.",
+          "visual": {
+            "src": "assets/diagrams/gold/timelines-example.svg",
+            "caption": "A float track is often used to drive a Lerp.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Use the Float as a Lerp Alpha",
-          "do": "Use the Float as a Lerp Alpha.",
-          "why": "Lerp turns Alpha into a position between endpoints.",
-          "check": "At Alpha 0/1 the Lerp reaches the expected endpoints."
+          "title": "Use the Timeline update to move the mesh",
+          "where": "Event Graph → Timeline Update pin",
+          "do": "Connect the Update output to a Lerp or directly set relative rotation/location on the moving component.",
+          "why": "The Timeline itself does not move the mesh until you use its output value.",
+          "see": "Playing the Timeline visibly opens the door or moves the platform.",
+          "check": "The object moves smoothly instead of snapping instantly.",
+          "visual": {
+            "src": "assets/diagrams/gold/timelines-process.svg",
+            "caption": "Use Timeline Update every frame to apply the current animated value.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Set the door location on Update",
-          "do": "Set the door location on Update.",
-          "why": "Update applies every intermediate position.",
-          "check": "Door moves smoothly during Update."
+          "title": "Trigger Play and Reverse",
+          "where": "Any event such as overlap or interact event",
+          "do": "Use an event to call Play on the Timeline and optionally Reverse to close the door again.",
+          "why": "Timelines need an event to tell them when to begin and whether to reverse.",
+          "see": "Interacting once opens it; another event can close it again.",
+          "check": "Play, Reverse and finished behaviour are predictable.",
+          "visual": {
+            "src": "assets/diagrams/gold/timelines-process.svg",
+            "caption": "Timeline control pins decide when the animation runs.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Test Play and Reverse before connecting interaction",
-          "do": "Test Play and Reverse before connecting interaction.",
-          "why": "Play/Reverse testing proves the animation works before adding interaction complexity.",
-          "check": "Play and Reverse return the door predictably without teleporting."
+          "title": "Test for snapping and wrong pivot issues",
+          "where": "Watch the object as it animates",
+          "do": "If the motion looks wrong, check the mesh pivot, whether you used world or relative transform, and the start/end values.",
+          "why": "Most Timeline bugs are really transform or pivot problems.",
+          "see": "The object now moves from the intended start point to the intended end point smoothly.",
+          "check": "You can reopen or reclose the object repeatedly without drift.",
+          "visual": {
+            "src": "assets/diagrams/gold/timelines-example.svg",
+            "caption": "Smooth motion depends on both a good Timeline and sensible transform values.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         }
       ],
       "evidencePrompt": {
@@ -4940,40 +5656,88 @@ window.UE5_COURSE_DATA = {
       },
       "guidedDetailed": [
         {
-          "title": "Create a simple HUD Widget",
-          "do": "Create a simple HUD Widget.",
-          "why": "A simple HUD focuses on essential information.",
-          "check": "The Widget Blueprint exists and has a readable layout."
+          "title": "Create a Widget Blueprint",
+          "where": "Content Drawer → right-click → User Interface → Widget Blueprint",
+          "do": "Create a Widget Blueprint such as WBP_HUD and open it.",
+          "why": "UI in Unreal lives inside Widgets rather than directly in the Character graph.",
+          "see": "The Widget Designer opens.",
+          "check": "The widget asset exists in your project.",
+          "visual": {
+            "src": "assets/diagrams/gold/ui-process.svg",
+            "caption": "UMG UI starts with a Widget Blueprint.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Add a health bar or text",
-          "do": "Add a health bar or text.",
-          "why": "One obvious element proves Designer layout.",
-          "check": "A health/text element is visible in Designer."
+          "title": "Place visible UI elements",
+          "where": "Widget Designer → Palette",
+          "do": "Drag in simple elements such as a Text block or Progress Bar and arrange them on the canvas.",
+          "why": "You need visible widgets before you can bind or update data.",
+          "see": "The Designer shows your UI layout.",
+          "check": "The widget is readable at a sensible screen position.",
+          "visual": {
+            "src": "assets/book/ui-variables.webp",
+            "caption": "Widgets contain visual elements that can later display gameplay data.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
         },
         {
-          "title": "Create the Widget at gameplay start",
-          "do": "Create the Widget at gameplay start.",
-          "why": "Create/Add to Viewport proves runtime ownership.",
-          "check": "The Widget appears exactly once when gameplay starts."
+          "title": "Create the widget at BeginPlay",
+          "where": "Player Character or PlayerController → Event BeginPlay",
+          "do": "Use Create Widget with your WBP_HUD class, then Add to Viewport.",
+          "why": "A widget must be created and added to the screen before the player can see it.",
+          "see": "Pressing Play shows the HUD on screen.",
+          "check": "The widget appears once and is not duplicated repeatedly.",
+          "visual": {
+            "src": "assets/diagrams/gold/ui-process.svg",
+            "caption": "Create the Widget and add it to the Viewport at runtime.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Add it to the Viewport",
-          "do": "Add it to the Viewport.",
-          "why": "Reading a real gameplay value connects UI to systems.",
-          "check": "The displayed value matches real player state."
+          "title": "Give the UI useful data",
+          "where": "Character variables and the Widget reference",
+          "do": "Decide what the UI should display, such as Health, Score or an objective.",
+          "why": "UI should show gameplay state, not own the gameplay state.",
+          "see": "You can name the source variable and the UI element that should display it.",
+          "check": "You can explain why the Character owns Health while the Widget only shows it.",
+          "visual": {
+            "src": "assets/diagrams/gold/ui-example.svg",
+            "caption": "The UI displays state that lives elsewhere.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Connect the displayed value to player Health",
-          "do": "Connect the displayed value to player Health.",
-          "why": "Changing Health proves the display is live.",
-          "check": "Changing Health changes the UI."
+          "title": "Update the displayed value",
+          "where": "Character / Widget communication graph",
+          "do": "Set the Text or Progress Bar Percent using the relevant variable value.",
+          "why": "The point of the widget is to reflect changing gameplay information clearly.",
+          "see": "The UI value changes when the gameplay variable changes.",
+          "check": "Testing the mechanic causes the UI to update correctly.",
+          "visual": {
+            "src": "assets/diagrams/gold/ui-process.svg",
+            "caption": "Connect gameplay state to the visual widget element.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Change Health in-game and verify the UI updates",
-          "do": "Change Health in-game and verify the UI updates.",
-          "why": "Testing updates catches a common mistake: UI showing stale/default data.",
-          "check": "Resizing/testing resolution does not throw the UI into the wrong position."
+          "title": "Check readability and purpose",
+          "where": "Watch the UI in Play mode",
+          "do": "Ask whether the HUD is clear, readable and actually useful while playing.",
+          "why": "Good UI communicates quickly and does not clutter the screen.",
+          "see": "The displayed information is easy to notice and interpret.",
+          "check": "Another player can tell what the value means without explanation.",
+          "visual": {
+            "src": "assets/book/ui-variables.webp",
+            "caption": "UI should communicate state clearly rather than just exist.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
         }
       ],
       "evidencePrompt": {
@@ -5313,40 +6077,88 @@ window.UE5_COURSE_DATA = {
       },
       "guidedDetailed": [
         {
-          "title": "Create BP_SaveData from SaveGame",
-          "do": "Create BP_SaveData from SaveGame.",
-          "why": "A dedicated SaveGame Class defines a clean serializable structure.",
-          "check": "BP_SaveData inherits from SaveGame."
+          "title": "Create a SaveGame Blueprint",
+          "where": "Content Drawer → right-click → Blueprint Class → All Classes → SaveGame",
+          "do": "Create a SaveGame Blueprint such as BP_PlayerSave.",
+          "why": "SaveGame objects exist specifically to hold data you want to write to disk.",
+          "see": "BP_PlayerSave appears as a SaveGame class asset.",
+          "check": "The asset opens with variable support.",
+          "visual": {
+            "src": "assets/diagrams/gold/savegame-process.svg",
+            "caption": "SaveGame stores the data you want to persist between play sessions.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Add one test value such as HighestRound",
-          "do": "Add one test value such as HighestRound.",
-          "why": "One simple value keeps the first save test measurable.",
-          "check": "The test value has a clear type/name."
+          "title": "Add only the data you need to save",
+          "where": "Open BP_PlayerSave → Variables",
+          "do": "Create variables such as SavedCheckpointName or SavedScore.",
+          "why": "Good saves are deliberate. Save the meaningful state, not random temporary values.",
+          "see": "The SaveGame asset contains a small, intentional set of variables.",
+          "check": "You can explain what each saved value is for.",
+          "visual": {
+            "src": "assets/diagrams/gold/savegame-example.svg",
+            "caption": "A save file should store deliberate gameplay state.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Create a save object",
-          "do": "Create a save object.",
-          "why": "Creating a save object provides somewhere to set data.",
-          "check": "The created object is your SaveGame Class."
+          "title": "Create a SaveGame object at runtime",
+          "where": "Your Character, GameMode or GameInstance graph → Create Save Game Object",
+          "do": "Create a Save Game Object of class BP_PlayerSave and set its variables before saving.",
+          "why": "At runtime you create an actual save object instance, fill it, then write it.",
+          "see": "The graph contains Create Save Game Object and Set variable nodes.",
+          "check": "The object reference is of your BP_PlayerSave type.",
+          "visual": {
+            "src": "assets/diagrams/gold/savegame-process.svg",
+            "caption": "Create the SaveGame object, set values, then write it to a slot.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Set the value and Save Game to Slot",
-          "do": "Set the value and Save Game to Slot.",
-          "why": "Save Game to Slot proves writing.",
-          "check": "A slot is written successfully."
+          "title": "Save to a named slot",
+          "where": "Graph → Save Game to Slot",
+          "do": "Use Save Game to Slot with a slot name such as PlayerSlot and user index 0.",
+          "why": "Slots identify which saved file Unreal should write or read.",
+          "see": "The save node returns success when the write works.",
+          "check": "You know the exact slot name you used.",
+          "visual": {
+            "src": "assets/diagrams/gold/savegame-process.svg",
+            "caption": "Save Game to Slot writes the object into a named slot.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Load from the same slot",
-          "do": "Load from the same slot.",
-          "why": "Load from the same slot proves retrieval.",
-          "check": "Loading returns the value you saved."
+          "title": "Load the slot and cast back to your SaveGame class",
+          "where": "Graph → Does Save Game Exist → Load Game From Slot → Cast",
+          "do": "Load the saved slot on BeginPlay or when continuing the game, then cast the loaded object to BP_PlayerSave.",
+          "why": "Loading returns a generic SaveGame object until you cast it to your specific class.",
+          "see": "The cast succeeds and you can read your saved variables.",
+          "check": "The loaded values match what you saved previously.",
+          "visual": {
+            "src": "assets/book/casting-example.webp",
+            "caption": "Loaded SaveGame objects often need casting back to your specific class.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
         },
         {
-          "title": "Print the loaded value and handle the case where no save exists",
-          "do": "Print the loaded value and handle the case where no save exists.",
-          "why": "Handling no-save prevents first-run errors and teaches robust flow.",
-          "check": "A fresh slot follows the no-save path safely."
+          "title": "Apply the loaded values back into gameplay",
+          "where": "After the successful load",
+          "do": "Use the loaded data to restore the player or world state, such as moving to a checkpoint or restoring the score.",
+          "why": "A saved file is only useful once its values are applied back into the game.",
+          "see": "Restarting and loading reproduces the saved state.",
+          "check": "You can quit, relaunch and still recover the expected values.",
+          "visual": {
+            "src": "assets/diagrams/gold/savegame-example.svg",
+            "caption": "Loading is only complete once the gameplay state is restored.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         }
       ],
       "evidencePrompt": {
@@ -5669,40 +6481,88 @@ window.UE5_COURSE_DATA = {
       },
       "guidedDetailed": [
         {
-          "title": "Create an Array of names or Actor references",
-          "do": "Create an Array of names or Actor references.",
-          "why": "An Array provides the simplest repeatable collection.",
-          "check": "The Array contains multiple correctly typed elements."
+          "title": "Create a Struct for one row of content",
+          "where": "Content Drawer → right-click → Blueprints → Structure",
+          "do": "Create a Struct such as ST_ItemData with fields you genuinely need, e.g. Name, Description and Value.",
+          "why": "A Struct groups related pieces of data into one clean row shape.",
+          "see": "The Struct asset shows several named fields of sensible types.",
+          "check": "You can explain what one row of this data would represent.",
+          "visual": {
+            "src": "assets/book/containers.webp",
+            "caption": "Structs help group related data together cleanly.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
         },
         {
-          "title": "Add, remove and iterate over items",
-          "do": "Add, remove and iterate over items.",
-          "why": "Add/remove/iterate proves the collection is dynamic.",
-          "check": "Add/remove/loop operations behave predictably."
+          "title": "Create a Data Table from that Struct",
+          "where": "Content Drawer → right-click → Miscellaneous → Data Table",
+          "do": "Choose your Struct when prompted so the Data Table knows what each row should contain.",
+          "why": "A Data Table is only useful once it has a row structure to follow.",
+          "see": "The new Data Table opens with columns matching the Struct fields.",
+          "check": "The Data Table header names match the Struct variables.",
+          "visual": {
+            "src": "assets/ue5/current/datatable-real.webp",
+            "caption": "A real UE5 Data Table showing structured rows.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Create an Enum for game state",
-          "do": "Create an Enum for game state.",
-          "why": "An Enum demonstrates readable named state.",
-          "check": "The Enum has meaningful named entries."
+          "title": "Add a few rows of test data",
+          "where": "Open the Data Table → Add row",
+          "do": "Create at least three rows with clear row names and different values.",
+          "why": "The power of data-driven design comes from changing content without editing logic graphs.",
+          "see": "The table contains several filled rows.",
+          "check": "Each row name is readable and unique.",
+          "visual": {
+            "src": "assets/ue5/current/datatable-rows-closeup.webp",
+            "caption": "Populate the table with readable, intentional row names and values.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Create a Struct for a simple item",
-          "do": "Create a Struct for a simple item.",
-          "why": "A Struct groups fields that belong to one conceptual item.",
-          "check": "The Struct groups related fields only."
+          "title": "Read a row from Blueprint",
+          "where": "A Blueprint graph → Get Data Table Row",
+          "do": "Use Get Data Table Row and feed in the Data Table plus a known row name.",
+          "why": "Blueprint logic can now fetch content from the table instead of hard-coding it.",
+          "see": "The output pin contains the Struct data for that row.",
+          "check": "Printing one field proves the correct row was found.",
+          "visual": {
+            "src": "assets/diagrams/gold/data-process.svg",
+            "caption": "Blueprint reads a row from the table and then uses its fields.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Create multiple Struct values",
-          "do": "Create multiple Struct values.",
-          "why": "Multiple Struct values prove consistent record shape.",
-          "check": "Two records use the same Struct shape with different values."
+          "title": "Break the Struct and use the fields",
+          "where": "Output of Get Data Table Row → Break your Struct",
+          "do": "Break the Struct so you can use individual fields such as Name or Damage.",
+          "why": "The row returns one grouped data bundle that you can separate into useful values.",
+          "see": "You can access each field from the row output.",
+          "check": "Changing the table value changes the behaviour or printed output without rewriting the graph.",
+          "visual": {
+            "src": "assets/diagrams/gold/data-example.svg",
+            "caption": "Break the returned Struct to use individual fields.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Discuss when many items should move into a Data Table",
-          "do": "Discuss when many items should move into a Data Table.",
-          "why": "Discussing Data Tables teaches when definitions should move out of graph variables.",
-          "check": "You can explain whether a Data Table would genuinely improve authoring."
+          "title": "Notice what moved out of the graph",
+          "where": "Compare your graph before and after using data",
+          "do": "Identify which values no longer need to be typed into the Blueprint itself.",
+          "why": "The real win is removing hard-coded content from gameplay logic.",
+          "see": "The graph is smaller and the content is centralised in the table.",
+          "check": "Another designer could change the values by editing the table instead of your nodes.",
+          "visual": {
+            "src": "assets/book/containers.webp",
+            "caption": "Data-driven design reduces hard-coded values inside logic graphs.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
         }
       ],
       "evidencePrompt": {
@@ -6022,40 +6882,94 @@ window.UE5_COURSE_DATA = {
       },
       "guidedDetailed": [
         {
-          "title": "Place a NavMesh Bounds Volume and visualise navigation",
-          "do": "Place a NavMesh Bounds Volume and visualise navigation.",
-          "why": "NavMesh is a prerequisite for movement tasks.",
-          "check": "Walkable ground is green in NavMesh visualisation."
+          "title": "Add a NavMeshBoundsVolume to the level",
+          "where": "Level Editor → Add (+) or Place Actors → NavMeshBoundsVolume",
+          "do": "Place a NavMeshBoundsVolume and scale it so it covers the area where AI should move.",
+          "why": "AI movement needs a navigable area generated in the level.",
+          "see": "Pressing P shows green navigation over the floor area.",
+          "check": "The walkable space is covered in green.",
+          "troubleshoot": [
+            "If you see no green area, make the volume larger and press P again."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/ai-process.svg",
+            "caption": "AI movement depends on navigation being generated first.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Create an AI Character/Controller",
-          "do": "Create an AI Character/Controller.",
-          "why": "A dedicated AI body/controller establishes correct ownership.",
-          "check": "The AI is controlled by the intended AIController."
+          "title": "Create or open an AI Character",
+          "where": "Content Drawer → AI Character Blueprint",
+          "do": "Use a simple AI Character or enemy Blueprint that can move.",
+          "why": "The AI needs a pawn or character to control.",
+          "see": "The AI Character is placeable in the level.",
+          "check": "One enemy instance exists in the level.",
+          "visual": {
+            "src": "assets/diagrams/gold/ai-example.svg",
+            "caption": "A basic AI setup starts with a controllable enemy Character.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Create Blackboard keys for target/patrol state",
-          "do": "Create Blackboard keys for target/patrol state.",
-          "why": "Blackboard keys make state observable.",
-          "check": "Blackboard shows understandable keys."
+          "title": "Create patrol target points",
+          "where": "Level Editor → Place Actors → Target Point",
+          "do": "Place two or more Target Points in the level and name them clearly.",
+          "why": "Patrol behaviour needs known destinations.",
+          "see": "The Target Points are visible in the Outliner.",
+          "check": "Each point has a distinct name and sensible location.",
+          "visual": {
+            "src": "assets/diagrams/gold/ai-example.svg",
+            "caption": "Patrol points give the AI clear destinations.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Create a simple Behaviour Tree",
-          "do": "Create a simple Behaviour Tree.",
-          "why": "A minimal Tree prevents hidden complexity.",
-          "check": "Behaviour Tree runs and highlights active execution in debug."
+          "title": "Give the AI a simple move instruction",
+          "where": "AI Blueprint, AI Controller or Behaviour Tree depending on the lesson flow",
+          "do": "Set up a Move To behaviour aimed at one patrol point, then switch to another when appropriate.",
+          "why": "Even basic AI is built from “where should I go next?” decisions.",
+          "see": "The enemy moves to the chosen point during Play.",
+          "check": "The AI reaches the destination rather than standing still.",
+          "troubleshoot": [
+            "If it stands still, re-check the NavMesh coverage and that the destination is on navigable ground."
+          ],
+          "visual": {
+            "src": "assets/diagrams/gold/ai-process.svg",
+            "caption": "AI picks a destination and moves there using the NavMesh.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Make AI move to a patrol point",
-          "do": "Make AI move to a patrol point.",
-          "why": "Patrol proves basic navigation/task flow.",
-          "check": "AI reaches patrol targets."
+          "title": "Add a Blackboard or stored target variable",
+          "where": "Your AI system’s data storage",
+          "do": "Store the current patrol target so the AI knows where it should go next.",
+          "why": "AI behaviour becomes easier to extend once its current target is explicit.",
+          "see": "One variable or Blackboard key holds the current destination.",
+          "check": "You can print or inspect the current target while testing.",
+          "visual": {
+            "src": "assets/diagrams/gold/ai-process.svg",
+            "caption": "AI needs a stored target or Blackboard key to drive decisions.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Add a condition that allows a chase state",
-          "do": "Add a condition that allows a chase state.",
-          "why": "A chase condition proves data-driven state change.",
-          "check": "Setting/acquiring a target changes the active behaviour to chase."
+          "title": "Test movement, pause and switching clearly",
+          "where": "Run the game and watch the enemy",
+          "do": "Observe whether the AI reaches points, waits if intended, then chooses the next point.",
+          "why": "AI work should be tested behaviour by behaviour rather than “it sort of seems okay”.",
+          "see": "The patrol looks deliberate rather than random or broken.",
+          "check": "You can explain what the AI is currently trying to do at any point in the test.",
+          "visual": {
+            "src": "assets/diagrams/gold/ai-example.svg",
+            "caption": "A patrol becomes readable when you can explain the current state.",
+            "kind": "current",
+            "sourceTitle": ""
+          }
         }
       ],
       "evidencePrompt": {
@@ -6380,40 +7294,88 @@ window.UE5_COURSE_DATA = {
       },
       "guidedDetailed": [
         {
-          "title": "Create/inspect an Animation Blueprint",
-          "do": "Create/inspect an Animation Blueprint.",
-          "why": "Opening a real AnimBP grounds the terminology.",
-          "check": "The correct AnimBP is assigned to the Skeletal Mesh."
+          "title": "Open or create the Animation Blueprint",
+          "where": "Character / skeletal mesh asset → Animation → Animation Blueprint",
+          "do": "Open the Animation Blueprint used by your player or enemy skeletal mesh.",
+          "why": "Animation logic lives in an Animation Blueprint, not directly in the Character mesh settings.",
+          "see": "The Animation Blueprint opens with Event Graph and Anim Graph tabs.",
+          "check": "The correct skeletal mesh is associated with the AnimBP.",
+          "visual": {
+            "src": "assets/book/animation-blueprint.webp",
+            "caption": "Animation Blueprints control how animation states are selected and blended.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
         },
         {
-          "title": "Identify EventGraph and AnimGraph",
-          "do": "Identify EventGraph and AnimGraph.",
-          "why": "Separating EventGraph/AnimGraph prevents role confusion.",
-          "check": "EventGraph and AnimGraph roles are identifiable."
+          "title": "Find the Event Graph update step",
+          "where": "Animation Blueprint → Event Graph",
+          "do": "Locate Event Blueprint Update Animation and use it to read movement data from the owning pawn.",
+          "why": "The AnimBP needs updated gameplay values such as speed or whether the character is in the air.",
+          "see": "The graph contains logic that gets the owning pawn or character.",
+          "check": "A Speed or similar variable updates while the game runs.",
+          "visual": {
+            "src": "assets/diagrams/gold/animation-process.svg",
+            "caption": "Animation Blueprints read movement state each frame and store it in variables.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Create Speed from character velocity",
-          "do": "Create Speed from character velocity.",
-          "why": "Speed is an easy continuous movement fact.",
-          "check": "Speed changes when the character moves."
+          "title": "Create or inspect the key animation variables",
+          "where": "Animation Blueprint variables",
+          "do": "Use variables such as Speed and IsInAir, setting them from the movement component or character.",
+          "why": "State machines need readable variables to decide which animation should play.",
+          "see": "The variables change when the character moves or jumps.",
+          "check": "Printing or debugging confirms the variables update correctly.",
+          "visual": {
+            "src": "assets/diagrams/gold/animation-example.svg",
+            "caption": "Common animation variables include speed and airborne state.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Feed locomotion through a Blend Space or existing setup",
-          "do": "Feed locomotion through a Blend Space or existing setup.",
-          "why": "A Blend Space demonstrates data-driven pose blending.",
-          "check": "Locomotion responds to Speed."
+          "title": "Use a State Machine in the Anim Graph",
+          "where": "Animation Blueprint → Anim Graph → State Machine",
+          "do": "Open the locomotion State Machine and look at states such as Idle/Walk/Run or Jump.",
+          "why": "The State Machine is where Unreal decides which animation state should currently be active.",
+          "see": "Different states and transitions are visible in the graph.",
+          "check": "You can explain what condition causes at least one transition.",
+          "visual": {
+            "src": "assets/book/animation-blueprint.webp",
+            "caption": "Animation state machines organise how movement animations switch.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
         },
         {
-          "title": "Inspect a State Machine",
-          "do": "Inspect a State Machine.",
-          "why": "State Machine inspection exposes discrete states.",
-          "check": "You can locate a State Machine and active state."
+          "title": "Set sensible transition rules",
+          "where": "Transition between animation states",
+          "do": "Use variables like Speed > 0 or IsInAir to drive the transition conditions.",
+          "why": "Transitions are just decisions based on animation-related state.",
+          "see": "The state changes at the expected moments in Play mode.",
+          "check": "Standing still returns the character to Idle.",
+          "visual": {
+            "src": "assets/diagrams/gold/animation-process.svg",
+            "caption": "Transition rules use the variables gathered in the Event Graph.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Explain one transition rule in plain English",
-          "do": "Explain one transition rule in plain English.",
-          "why": "Explaining a transition in English proves understanding rather than memorising nodes.",
-          "check": "One transition rule can be stated clearly as a gameplay fact."
+          "title": "Test the full loop in Play mode",
+          "where": "Run the character in the level",
+          "do": "Walk, stop and jump while watching the character animation closely.",
+          "why": "Animation systems only feel correct when the movement state and animation state match.",
+          "see": "Movement and animation respond together smoothly.",
+          "check": "You can describe one thing that still feels wrong and one thing that already works well.",
+          "visual": {
+            "src": "assets/diagrams/gold/animation-example.svg",
+            "caption": "Test animation by making the character move through the full state cycle.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         }
       ],
       "evidencePrompt": {
@@ -6757,40 +7719,88 @@ window.UE5_COURSE_DATA = {
       },
       "guidedDetailed": [
         {
-          "title": "Inspect a bad example where several hazards each implement player death",
-          "do": "Inspect a bad example where several hazards each implement player death.",
-          "why": "A deliberately bad example makes ownership problems visible.",
-          "check": "You can point to the duplicated/wrongly owned logic."
+          "title": "List the behaviour you are about to build",
+          "where": "Before touching the graph",
+          "do": "Write one short sentence describing what the Blueprint should do.",
+          "why": "Responsibility starts by naming the job clearly.",
+          "see": "You have a one-sentence brief such as “This Blueprint opens the door when it is unlocked.”",
+          "check": "The sentence describes one main job rather than five unrelated tasks.",
+          "visual": {
+            "src": "assets/book/responsibility.webp",
+            "caption": "A Blueprint should have a clear responsibility, not every responsibility.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
         },
         {
-          "title": "Identify what belongs to the player",
-          "do": "Identify what belongs to the player.",
-          "why": "Naming the true owner focuses the refactor.",
-          "check": "The player/system owner is justified in plain English."
+          "title": "Ask who should own it",
+          "where": "Review the relevant Actor or framework class",
+          "do": "Decide which Blueprint or framework class is the proper owner of that behaviour.",
+          "why": "Many messy Blueprints start because logic is placed in the first graph that happened to be open.",
+          "see": "You have chosen an owner and can explain why.",
+          "check": "Your choice matches the class’s role in the game.",
+          "visual": {
+            "src": "assets/diagrams/gold/practice-process.svg",
+            "caption": "Professional Blueprint practice begins with clear ownership.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Move death behaviour into one player Event/Function",
-          "do": "Move death behaviour into one player Event/Function.",
-          "why": "One central death behaviour removes duplication.",
-          "check": "One central Event/Function now handles the behaviour."
+          "title": "Name things for humans, not just yourself today",
+          "where": "Variables, functions, components and comments",
+          "do": "Use specific names that explain purpose, such as CurrentHealth instead of Var1.",
+          "why": "Readable naming is one of the fastest wins in any student project.",
+          "see": "Your graph reads more like instructions and less like random jargon.",
+          "check": "Another student can tell what the variable or function is for.",
+          "visual": {
+            "src": "assets/diagrams/gold/practice-example.svg",
+            "caption": "Readable names make graphs easier to debug and extend.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Change hazards so they request that behaviour",
-          "do": "Change hazards so they request that behaviour.",
-          "why": "Changing hazards into requesters reduces their dependencies.",
-          "check": "All hazards/requesters call the owner rather than copy internals."
+          "title": "Separate quick test code from final behaviour",
+          "where": "Review Print String nodes and temporary debug helpers",
+          "do": "Use temporary debug output while building, but recognise which parts are only for testing.",
+          "why": "Professional practice includes proving a system works without leaving the graph full of junk.",
+          "see": "You can tell which nodes are temporary checks and which are final logic.",
+          "check": "Removing the test nodes would not break the real mechanic.",
+          "visual": {
+            "src": "assets/book/responsibility.webp",
+            "caption": "Testing is good; leaving chaos behind is not.",
+            "kind": "book",
+            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+          }
         },
         {
-          "title": "Change death behaviour once and verify all hazards follow it",
-          "do": "Change death behaviour once and verify all hazards follow it.",
-          "why": "Changing death once proves the ownership improvement.",
-          "check": "Changing the owner behaviour updates every caller."
+          "title": "Reduce unnecessary duplication",
+          "where": "Look for repeated node chains",
+          "do": "Spot at least one repeated pattern that could become a Function, Macro or reused Blueprint.",
+          "why": "Good practice is not just neatness — it is reducing maintenance cost.",
+          "see": "You have identified at least one piece of duplication.",
+          "check": "You can explain how you would refactor it later if time allowed.",
+          "visual": {
+            "src": "assets/diagrams/gold/practice-process.svg",
+            "caption": "Professional practice means thinking about maintainability early.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Identify one genuinely level-specific use for Level Blueprint",
-          "do": "Identify one genuinely level-specific use for Level Blueprint.",
-          "why": "A genuine level-specific example prevents the false lesson that Level Blueprint is always forbidden.",
-          "check": "You can identify one level-specific use that should remain in Level Blueprint."
+          "title": "Leave the graph easier for the next person",
+          "where": "Review the finished graph as if you were a teammate",
+          "do": "Add a short comment, tidy alignment and remove anything misleading.",
+          "why": "Readable projects are kinder to your future self and your team.",
+          "see": "The graph looks deliberate and understandable.",
+          "check": "If you reopened it next week, you would still know what it does.",
+          "visual": {
+            "src": "assets/diagrams/gold/practice-example.svg",
+            "caption": "Good practice leaves a graph easier to understand than you found it.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         }
       ],
       "evidencePrompt": {
@@ -7093,46 +8103,88 @@ window.UE5_COURSE_DATA = {
       },
       "guidedDetailed": [
         {
-          "title": "Open a deliberately messy Event Graph",
-          "do": "Open a deliberately messy Event Graph.",
-          "why": "A messy graph gives you something real to improve.",
-          "check": "You can identify at least three conceptual jobs in the messy graph."
+          "title": "Spot the signs of spaghetti",
+          "where": "Look at a busy graph",
+          "do": "Identify common warning signs such as long crossing wires, duplicated logic, magic numbers and vague names.",
+          "why": "You cannot improve complexity until you recognise it.",
+          "see": "You can point to at least two readability problems in the graph.",
+          "check": "Your identified problems are specific, not just “it looks messy”.",
+          "visual": {
+            "src": "assets/diagrams/gold/complexity-example.svg",
+            "caption": "Spaghetti is often visible before it becomes a bug.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Identify groups that perform one job",
-          "do": "Identify groups that perform one job.",
-          "why": "Grouping nodes by one job reveals abstraction candidates.",
-          "check": "One reusable/single-purpose group is extracted."
+          "title": "Choose one small refactor target",
+          "where": "Pick one section of the graph",
+          "do": "Select one repeated or messy area instead of trying to “clean everything” at once.",
+          "why": "Safe refactoring is usually done in small steps.",
+          "see": "You have one clearly chosen target section.",
+          "check": "You can describe what the refactor should improve.",
+          "visual": {
+            "src": "assets/diagrams/gold/complexity-process.svg",
+            "caption": "Refactor in focused chunks rather than random sweeping changes.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Convert a reusable group into a Function",
-          "do": "Convert a reusable group into a Function.",
-          "why": "A Function turns implementation detail into a readable call.",
-          "check": "The Function name explains its purpose."
+          "title": "Extract repeated logic",
+          "where": "Use Functions, Macros or custom Events as appropriate",
+          "do": "Move repeated logic into one reusable unit and call it from the original places.",
+          "why": "One source of truth is easier to test and maintain than repeated copies.",
+          "see": "The main graph becomes shorter and the duplicated chain disappears.",
+          "check": "Changing the extracted logic now updates every caller.",
+          "visual": {
+            "src": "assets/diagrams/gold/complexity-process.svg",
+            "caption": "Extraction is one of the fastest ways to reduce graph complexity.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Comment remaining top-level blocks",
-          "do": "Comment remaining top-level blocks.",
-          "why": "Comments preserve top-level structure.",
-          "check": "Remaining top-level blocks are commented by intent."
+          "title": "Replace magic numbers with named variables",
+          "where": "Look for raw values typed directly into nodes",
+          "do": "Turn important repeated values such as 600, 1200 or 3.5 into clearly named variables.",
+          "why": "Named variables explain meaning and make balancing easier.",
+          "see": "The graph contains fewer unexplained raw values.",
+          "check": "Another student can tell what the number means from the variable name.",
+          "visual": {
+            "src": "assets/diagrams/gold/complexity-example.svg",
+            "caption": "Named values are easier to read than unexplained raw numbers.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Rename unclear variables",
-          "do": "Rename unclear variables.",
-          "why": "Good names reduce the need to trace wires just to understand data.",
-          "check": "Ambiguous variables have meaningful names."
+          "title": "Use comments and spacing to reveal structure",
+          "where": "Event Graph canvas",
+          "do": "Align nodes, separate logical sections and add a brief comment where a block would otherwise be unclear.",
+          "why": "Layout communicates structure before anybody reads a single pin.",
+          "see": "The graph is easier to scan left to right.",
+          "check": "The major stages of the logic are visible from the layout alone.",
+          "visual": {
+            "src": "assets/diagrams/gold/complexity-example.svg",
+            "caption": "Clean layout helps the reader see the structure of the logic.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         },
         {
-          "title": "Add Categories and Tooltips",
-          "do": "Add Categories and Tooltips.",
-          "why": "Categories/Tooltips improve the interface for future you or teammates.",
-          "check": "Exposed settings are grouped/documented."
-        },
-        {
-          "title": "Zoom out and judge whether the graph still communicates its structure",
-          "do": "Zoom out and judge whether the graph still communicates its structure.",
-          "why": "Zooming out tests whether architecture is visible at a glance.",
-          "check": "The graph is easier to explain when zoomed out and gameplay still works."
+          "title": "Retest after every refactor",
+          "where": "Run the mechanic after each cleanup step",
+          "do": "Play the game and prove the behaviour still works exactly as before unless you intentionally changed it.",
+          "why": "A refactor that breaks the mechanic is not an improvement.",
+          "see": "The cleaned graph behaves the same or better than the messy version.",
+          "check": "You can name one readability win and one functionality test you used.",
+          "visual": {
+            "src": "assets/diagrams/gold/complexity-process.svg",
+            "caption": "Refactor → test → refactor again is safer than one huge rewrite.",
+            "kind": "concept",
+            "sourceTitle": ""
+          }
         }
       ],
       "evidencePrompt": {

@@ -1,4 +1,4 @@
-# UE5 Learning Hub v3.20.0 — Pathway Landing + News & Industry
+# UE5 Learning Hub v3.22.0 — Pathway Landing + News & Industry
 
 ## V3.20 — the Hub becomes a portal
 
@@ -213,3 +213,7 @@ A rollback-only authenticated-role database test verified:
 Supabase's security advisor reports no new V3.16 RLS/function warning. The remaining project-level warning is **Leaked Password Protection Disabled** in Auth settings.
 
 Microsoft SSO remains optional and disabled.
+
+## v3.22.0 — Gold Instruction Pass
+
+This release completes the prescriptive teaching pass: all 20 core guided lessons, all 47 Programming Quick Tutorials, all 47 Designer Studio recipes and all eight Studio Builds now support richer instruction. See `RELEASE-NOTES-v3.22.0.md` and `CHANGELOG.md`.
