@@ -830,6 +830,79 @@ const api = {
     if(nErr)console.warn('Notification',nErr.message);
     return data;
   },
+  async getNewsState(storyKeys=[]){
+    if(!client||!this.user)return {saved:[],votes:{},myVotes:[],comments:{}};
+    const keys=[...new Set((storyKeys||[]).map(String).filter(Boolean))].slice(0,120);
+    if(!keys.length)return {saved:[],votes:{},myVotes:[],comments:{}};
+    const [{data:saved,error:sErr},{data:votes,error:vErr},{data:comments,error:cErr}]=await Promise.all([
+      client.from('news_saved').select('story_key').eq('user_id',this.user.id).in('story_key',keys),
+      client.from('news_votes').select('story_key,user_id').in('story_key',keys),
+      client.from('news_comments').select('story_key').in('story_key',keys)
+    ]);
+    if(sErr||vErr||cErr){
+      const err=sErr||vErr||cErr;
+      if(err?.code==='42P01')throw new Error('News social features need the V3.20 database migration.');
+      throw err;
+    }
+    const voteCounts={},commentCounts={},mine=[];
+    (votes||[]).forEach(v=>{voteCounts[v.story_key]=(voteCounts[v.story_key]||0)+1;if(v.user_id===this.user.id)mine.push(v.story_key)});
+    (comments||[]).forEach(c=>{commentCounts[c.story_key]=(commentCounts[c.story_key]||0)+1});
+    return {saved:(saved||[]).map(x=>x.story_key),votes:voteCounts,myVotes:mine,comments:commentCounts};
+  },
+  async getSavedNews(){
+    if(!client||!this.user)return [];
+    const {data,error}=await client.from('news_saved').select('story_key,story_url,story_title,story_summary,story_source,story_image,story_category,story_date,saved_at').eq('user_id',this.user.id).order('saved_at',{ascending:false});
+    if(error){if(error.code==='42P01')throw new Error('News social features need the V3.20 database migration.');throw error}
+    return data||[];
+  },
+  async setNewsSaved(story,saved){
+    if(!client||!this.user)throw new Error('Sign in to save stories for later.');
+    if(saved){
+      const {error}=await client.from('news_saved').upsert({
+        user_id:this.user.id,story_key:story.key,story_url:story.url,story_title:story.title,story_summary:story.summary||'',
+        story_source:story.source||'',story_image:story.image||'',story_category:story.category||'games',story_date:story.date||null
+      },{onConflict:'user_id,story_key'});
+      if(error)throw error;
+    }else{
+      const {error}=await client.from('news_saved').delete().eq('user_id',this.user.id).eq('story_key',story.key);
+      if(error)throw error;
+    }
+    return true;
+  },
+  async setNewsVote(story,voted){
+    if(!client||!this.user)throw new Error('Sign in to upvote stories.');
+    if(voted){
+      const {error}=await client.from('news_votes').insert({user_id:this.user.id,story_key:story.key,story_url:story.url});
+      if(error&&error.code!=='23505')throw error;
+    }else{
+      const {error}=await client.from('news_votes').delete().eq('user_id',this.user.id).eq('story_key',story.key);
+      if(error)throw error;
+    }
+    return true;
+  },
+  async getNewsComments(storyKey){
+    if(!client||!this.user)return [];
+    const {data,error}=await client.rpc('get_news_comments',{p_story_key:String(storyKey||'')});
+    if(error){
+      if(error.code==='42883'||error.code==='42P01')throw new Error('News comments need the V3.20 database migration.');
+      throw error;
+    }
+    return data||[];
+  },
+  async postNewsComment(story,body){
+    if(!client||!this.user)throw new Error('Sign in to join the discussion.');
+    const clean=String(body||'').trim().slice(0,2000);
+    if(!clean)throw new Error('Write a comment first.');
+    const {data,error}=await client.from('news_comments').insert({
+      story_key:story.key,story_url:story.url,story_title:story.title,story_source:story.source||'',author_id:this.user.id,body:clean
+    }).select('id').single();
+    if(error)throw error;return data;
+  },
+  async deleteNewsComment(commentId){
+    if(!client||!this.user)throw new Error('Sign in first.');
+    const {error}=await client.from('news_comments').delete().eq('id',commentId);
+    if(error)throw error;return true;
+  },
   async getRequests(){
     if(!client||!this.user)return [];
     const [{data,error},{data:replies,error:rErr}]=await Promise.all([

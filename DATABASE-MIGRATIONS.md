@@ -76,3 +76,17 @@ For a new installation, apply the base schema first and then the incremental mig
 ## V3.17
 
 No database migration is required. Quick Tutorial completion is stored as `lesson_progress.lesson_id = tutorial:<tutorial-id>` and Chapter Build completion as `chapter:<path-id>`. The existing `(user_id, lesson_id)` progress key and class-scoped teacher access continue to apply.
+
+## V3.20 News & Industry
+
+File:
+`migrations/20260826_21_news_industry_social.sql`
+
+Adds the signed-in social layer for the new News & Industry area:
+- Read Later / saved stories
+- story upvotes
+- story comments
+- teacher/author comment deletion
+- `get_news_comments(...)` for safe display-name/role lookup without opening profile visibility globally
+
+The live news feed itself is read from public RSS feeds in the browser and does not require database ingestion. This migration was applied to the current live Supabase project on 26 Aug 2026, so do **not** rerun it there. For another installation, apply it once before testing saves, votes or comments.

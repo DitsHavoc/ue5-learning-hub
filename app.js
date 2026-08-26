@@ -6,6 +6,7 @@ const DATA = window.UE5_COURSE_DATA;
 const PROJECT = window.UE5_PROJECT_DATA;
 const TOOLS = window.UE5_TUTORIAL_DATA;
 const DESIGN = window.UE5_DESIGN_DATA;
+const NEWS = window.UE5_NEWS_DATA;
 const BACKEND = window.UE5_BACKEND;
 
 // V3.19 deepens Designer Studio using the same Quick Tutorial recipe system so students can
@@ -20,7 +21,7 @@ DESIGN.tutorials.forEach(t=>{if(!knownTutorials.has(t.id))TOOLS.tutorials.push(t
 DESIGN.modules.forEach(m=>m.tutorials.forEach(id=>{const t=TOOLS.tutorials.find(x=>x.id===id);if(t&&!t.designModule)t.designModule=m.id}));
 
 
-if (!DATA || !PROJECT || !TOOLS || !DESIGN || !BACKEND) {
+if (!DATA || !PROJECT || !TOOLS || !DESIGN || !NEWS || !BACKEND) {
   const e = document.querySelector('#bootError');
   if (e) e.hidden = false;
   return;
@@ -457,62 +458,163 @@ function chapterUnlockCard(pathId){
 
 
 function dashboard(){
+  const n=nextLesson(),np=pathProgress(n.path),i=level();
+  const completed=completedLessons().length;
+  return `<section class="portal-hero">
+    <div><span class="eyebrow">UE5 LEARNING HUB</span><h1>Choose your path.</h1><p>Learn the code behind the game, design the world around it, build something real, or see what the industry is doing right now.</p></div>
+    <div class="portal-hero-mark" aria-hidden="true"><span>U</span><b>4</b></div>
+  </section>
+
+  <section class="portal-path-grid" aria-label="Choose a Learning Hub area">
+    <a class="portal-path-card programming" href="#/programming"><div class="portal-path-icon">⌘</div><span class="portal-kicker">SYSTEMS • BLUEPRINTS • LOGIC</span><h2>Programming</h2><p>Understand how Unreal works, build mechanics, solve problems and turn Blueprint graphs into reliable game systems.</p><div class="portal-chip-row"><span>20 core lessons</span><span>${TOOLS.tutorials.filter(t=>!t.designModule).length}+ recipes</span><span>Revision</span></div><strong>Enter Programming →</strong></a>
+    <a class="portal-path-card design" href="#/design"><div class="portal-path-icon">✦</div><span class="portal-kicker">LEVELS • ART • LIGHT • SOUND</span><h2>Design</h2><p>Build readable spaces, create atmosphere, guide players and learn why strong game worlds communicate rather than simply decorate.</p><div class="portal-chip-row"><span>${DESIGN.modules.length} disciplines</span><span>${DESIGN.tutorials.length} recipes</span><span>Studio builds</span></div><strong>Enter Designer Studio →</strong></a>
+    <a class="portal-path-card projects" href="#/projects"><div class="portal-path-icon">▣</div><span class="portal-kicker">MAKE • DOCUMENT • ITERATE</span><h2>Projects</h2><p>Take what you know into assignments, game jams and team projects with development logs, milestones, screenshots and feedback.</p><div class="portal-chip-row"><span>Solo</span><span>Group</span><span>Development logs</span></div><strong>Open Projects →</strong></a>
+    <a class="portal-path-card news" href="#/news"><div class="portal-path-icon">◉</div><span class="portal-kicker">LIVE • INDUSTRY • WATCH & LISTEN</span><h2>News & Industry</h2><p>Follow live games and development stories, trailers, podcasts and industry discussion. Save stories, upvote them and talk about them.</p><div class="portal-chip-row"><span>Live feeds</span><span>Read later</span><span>Discussion</span></div><strong>See what is happening →</strong></a>
+  </section>
+
+  <section class="portal-resume">
+    <div class="portal-resume-copy"><span class="eyebrow">PICK UP WHERE YOU LEFT OFF</span><h2>${esc(n.title)}</h2><p>${esc(n.short)}</p><div class="path-meta"><span>${esc(path(n.path).title)} • ${n.duration}</span><span>${np.pct}% of path complete</span></div><div class="progress"><span style="width:${np.pct}%"></span></div></div>
+    <div class="portal-resume-actions"><div><strong>Level ${i.n}</strong><small>${i.xp} XP • ${completed}/${DATA.lessons.length} lessons complete</small></div><a class="button primary" href="#/lesson/${n.id}">▶ Continue learning</a></div>
+  </section>`;
+}
+
+function programmingPage(){
   const i=level(),n=nextLesson(),np=pathProgress(n.path),pb=pendingUnlockedBuild();
   const pathsComplete=DATA.paths.filter(p=>pathProgress(p.id).pct===100).length;
-  return `<section class="hero learning-first-hero">
-    <div class="hero-copy">
-      <span class="eyebrow">Learn • Practise • Test • Apply</span>
-      <h1>Learn Unreal.<br>Build better games.</h1>
-      <p>The Learning Hub is first and foremost a UE5 course. Learn the idea, see it in Unreal, practise it immediately, then prove you can apply it independently.</p>
-      <div class="hero-actions">
-        <a class="button primary" href="${pb?`#/chapter-build/${pb.path}`:`#/lesson/${n.id}`}">${pb?`🎮 Build: ${esc(pb.title)}`:`▶ Continue learning`}</a>
-        <a class="button ghost" href="#/tutorials">🛠 Quick Tutorials</a>
-        <a class="button ghost" href="#/revision">↻ Revision Quiz</a>
-      </div>
-    </div>
-    <div class="hero-art" aria-hidden="true">
-      <div class="bp-node one"><div class="bp-head">Learn Skill</div><div class="bp-body">Understand WHY<br>See it in Unreal</div></div>
-      <div class="bp-node two"><div class="bp-head">Practise Skill</div><div class="bp-body">Build → Test → Change</div></div>
-    </div>
+  return `<div class="page-head programming-page-head"><div class="breadcrumb"><a href="#/">Home</a> / Programming</div><span class="eyebrow">BLUEPRINTS • GAMEPLAY SYSTEMS • PROBLEM SOLVING</span><h1>⌘ Programming</h1><p class="muted">Learn the idea first, see how Unreal expresses it, practise it, then prove you can apply it without simply copying a graph.</p></div>
+
+  <section class="programming-continue">
+    <div><span class="eyebrow">CONTINUE LEARNING • ${esc(path(n.path).title)}</span><h2>${esc(n.title)}</h2><p>${esc(n.short)}</p><div class="path-meta"><span>${n.duration} • ${n.xp} XP</span><span>${np.pct}% path complete</span></div><div class="progress"><span style="width:${np.pct}%"></span></div></div>
+    <div class="programming-continue-actions"><a class="button primary" href="${pb?`#/chapter-build/${pb.path}`:`#/lesson/${n.id}`}">${pb?`🎮 Build: ${esc(pb.title)}`:'▶ Continue'}</a><a class="button ghost" href="#/tutorials">🛠 Quick Tutorial</a></div>
   </section>
 
-  <div class="stat-grid">
-    <div class="stat"><small>Current level</small><strong>${i.n}</strong></div>
-    <div class="stat"><small>Total XP</small><strong>${i.xp}</strong></div>
-    <div class="stat"><small>Lessons complete</small><strong>${completedLessons().length}/${DATA.lessons.length}</strong></div>
-    <div class="stat"><small>Learning paths complete</small><strong>${pathsComplete}/${DATA.paths.length}</strong></div>
-  </div>
+  <div class="stat-grid programming-stats"><div class="stat"><small>Current level</small><strong>${i.n}</strong></div><div class="stat"><small>Total XP</small><strong>${i.xp}</strong></div><div class="stat"><small>Lessons complete</small><strong>${completedLessons().length}/${DATA.lessons.length}</strong></div><div class="stat"><small>Paths complete</small><strong>${pathsComplete}/${DATA.paths.length}</strong></div></div>
 
-  <section class="section">
-    <div class="section-head"><div><h2>Continue learning</h2><p>Pick up the next skill before worrying about project admin.</p></div></div>
-    <a class="continue-card" href="#/lesson/${n.id}">
-      <div class="continue-icon">${path(n.path).icon}</div>
-      <div class="continue-main">
-        <span class="eyebrow">${esc(path(n.path).title)}</span>
-        <h3>${esc(n.title)}</h3><p>${esc(n.short)}</p>
-        <div class="path-meta"><span>${n.duration} • ${n.xp} XP</span><span>${np.pct}% path complete</span></div>
-        <div class="progress"><span style="width:${np.pct}%"></span></div>
-      </div><span class="button small">Open →</span>
-    </a>
-  </section>
-
-  <section class="section"><div class="section-head"><div><h2>Learning paths</h2><p>Follow them in order or jump to the exact UE5 skill you need.</p></div></div>
-    <div class="path-grid">${DATA.paths.map(p=>{const x=pathProgress(p.id);return `<a class="path-card" href="#/path/${p.id}"><div class="path-icon">${p.icon}</div><h3>${esc(p.title)}</h3><p>${esc(p.description)}</p><div class="path-meta"><span>${x.done}/${x.total} lessons</span><span>${x.pct}%</span></div><div class="progress"><span style="width:${x.pct}%"></span></div></a>`}).join('')}</div>
-  </section>
+  <section class="section"><div class="section-head"><div><h2>Core learning paths</h2><p>Follow them in order for a structured course, or jump to the exact concept your project needs.</p></div></div><div class="path-grid">${DATA.paths.map(p=>{const x=pathProgress(p.id);return `<a class="path-card" href="#/path/${p.id}"><div class="path-icon">${p.icon}</div><h3>${esc(p.title)}</h3><p>${esc(p.description)}</p><div class="path-meta"><span>${x.done}/${x.total} lessons</span><span>${x.pct}%</span></div><div class="progress"><span style="width:${x.pct}%"></span></div></a>`}).join('')}</div></section>
 
   ${pb?`<section class="section dashboard-unlock"><div class="section-head"><div><span class="eyebrow">YOU FINISHED A CHAPTER</span><h2>🎮 New Chapter Build unlocked</h2><p>Combine what you learned into something playable before moving on.</p></div></div>${chapterBuildCard(pb,{compact:true})}</section>`:''}
 
-  <section class="section learning-tools-section"><div class="section-head"><div><h2>Learning tools</h2><p>Short recipes when you need a mechanic, then quizzes and challenges to check what stuck.</p></div></div><div class="workspace-cards"><a class="workspace-card learning-tool" href="#/tutorials"><span>🛠</span><div><strong>${TOOLS.tutorials.length} Quick Tutorials</strong><p>Line trace gun, key + door, double jump, HUD, health, AI, Silent Hill-style fog and loads more.</p></div></a><a class="workspace-card learning-tool" href="#/revision"><span>↻</span><div><strong>Revision Quizzes</strong><p>Random, whole-path or mixed-topic quizzes with 10 / 20 / 30 questions.</p></div></a><a class="workspace-card learning-tool" href="#/challenges"><span>🔥</span><div><strong>Challenge Board</strong><p>Independent problems when following steps is no longer enough.</p></div></a></div></section>
-
-  <section class="section secondary-workspace-section">
-    <div class="section-head"><div><h2>Projects & assessment</h2><p>Use this workspace when a lesson turns into real assignment, game-jam or team work.</p></div></div>
-    <div class="workspace-cards">
-      <a class="workspace-card" href="#/projects"><span>▣</span><div><strong>Projects</strong><p>Multiple solo or group projects, development logs, screenshots, milestones and individual contribution.</p></div></a>
-      <a class="workspace-card" href="#/progress"><span>◎</span><div><strong>Evidence & progress</strong><p>Course evidence, teacher feedback and approved practical work.</p></div></a>
-      <a class="workspace-card" href="#/requests"><span>✦</span><div><strong>Feature requests</strong><p>Suggest improvements, vote, and see teacher replies.</p></div></a>
-    </div>
-  </section>`;
+  <section class="section learning-tools-section"><div class="section-head"><div><h2>Practise, solve and revise</h2><p>Use a short recipe when you need a mechanic, then test what you actually understand.</p></div></div><div class="workspace-cards"><a class="workspace-card learning-tool" href="#/tutorials"><span>🛠</span><div><strong>${TOOLS.tutorials.length} Quick Tutorials</strong><p>Short practical recipes for common mechanics, systems, effects and student requests.</p></div></a><a class="workspace-card learning-tool" href="#/revision"><span>↻</span><div><strong>Revision Quizzes</strong><p>Random, whole-path or mixed-topic quizzes with 10 / 20 / 30 questions.</p></div></a><a class="workspace-card learning-tool" href="#/challenges"><span>🔥</span><div><strong>Challenge Board</strong><p>Independent problems where the answer is no longer laid out node by node.</p></div></a></div></section>`;
 }
+
+const NEWS_CACHE_STORE='ue5hub:v320:news-cache';
+let newsStories=[];
+let newsCategory='all';
+let newsSearch='';
+let newsSocial={saved:new Set(),savedItems:[],votes:{},myVotes:new Set(),comments:{},available:true};
+
+function newsStoryKey(value){
+  const text=String(value||'');let h=2166136261;
+  for(let i=0;i<text.length;i++){h^=text.charCodeAt(i);h=Math.imul(h,16777619)}
+  return `news-${(h>>>0).toString(36)}`;
+}
+function newsPlainText(value){
+  const doc=new DOMParser().parseFromString(String(value||''),'text/html');
+  return (doc.body.textContent||'').replace(/\s+/g,' ').trim();
+}
+function newsImage(item){
+  const direct=safeUrl(item.thumbnail)||safeUrl(item.enclosure?.link);
+  if(direct)return direct;
+  const html=String(item.description||item.content||''),m=html.match(/<img[^>]+src=["']([^"']+)["']/i);
+  return safeUrl(m?.[1]||'');
+}
+function newsItemCategory(source,item){
+  if(source.category==='podcast')return 'podcast';
+  const text=`${item.title||''} ${newsPlainText(item.description||'')}`.toLowerCase();
+  if(/\b(trailer|teaser|gameplay reveal|reveal trailer|launch trailer|announcement trailer)\b/.test(text))return 'trailer';
+  return source.category||'games';
+}
+function newsDate(value){
+  const d=new Date(value||0);return Number.isNaN(d.getTime())?new Date(0):d;
+}
+function newsAge(value){
+  const d=new Date(value),diff=Date.now()-d.getTime();if(!Number.isFinite(diff))return '';
+  const mins=Math.max(0,Math.round(diff/60000));if(mins<60)return mins<=1?'just now':`${mins}m ago`;
+  const hrs=Math.round(mins/60);if(hrs<24)return `${hrs}h ago`;
+  const days=Math.round(hrs/24);if(days<14)return `${days}d ago`;
+  return d.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+}
+function loadNewsCache(){
+  try{const c=JSON.parse(localStorage.getItem(NEWS_CACHE_STORE)||'null');if(!c?.items?.length)return null;const age=Date.now()-Number(c.time||0);if(age>NEWS.cacheMinutes*60000)return null;return c}catch(e){return null}
+}
+function saveNewsCache(items){
+  try{localStorage.setItem(NEWS_CACHE_STORE,JSON.stringify({time:Date.now(),items:items.slice(0,90)}))}catch(e){}
+}
+async function fetchNewsSource(source){
+  const url=`${NEWS.proxy}${encodeURIComponent(source.feed)}`;
+  const res=await fetch(url,{headers:{Accept:'application/json'}});if(!res.ok)throw new Error(`${source.name}: HTTP ${res.status}`);
+  const data=await res.json();if(data.status!=='ok'||!Array.isArray(data.items))throw new Error(`${source.name}: feed unavailable`);
+  return data.items.map(item=>{
+    const link=safeUrl(item.link||item.guid);if(!link)return null;
+    const description=newsPlainText(item.description||item.content||'').slice(0,360);
+    return {key:newsStoryKey(link),url:link,title:newsPlainText(item.title||'Untitled story').slice(0,500),summary:description,source:source.name,sourceId:source.id,badge:source.badge||'NEWS',category:newsItemCategory(source,item),date:newsDate(item.pubDate).toISOString(),image:newsImage(item)};
+  }).filter(Boolean);
+}
+async function loadNewsSocial(){
+  newsSocial={saved:new Set(),savedItems:[],votes:{},myVotes:new Set(),comments:{},available:true};
+  if(!BACKEND.user)return;
+  try{
+    const savedRows=await BACKEND.getSavedNews();
+    const keys=[...newsStories.map(s=>s.key),...(savedRows||[]).map(r=>r.story_key)];
+    const x=await BACKEND.getNewsState(keys);
+    const savedItems=(savedRows||[]).map(r=>({key:r.story_key,url:r.story_url,title:r.story_title,summary:r.story_summary||'Saved for later.',source:r.story_source||'Saved story',sourceId:'saved',badge:'★',category:r.story_category||'games',date:r.story_date||r.saved_at,image:r.story_image||'',savedAt:r.saved_at}));
+    newsSocial={saved:new Set((savedRows||[]).map(r=>r.story_key)),savedItems,votes:x.votes||{},myVotes:new Set(x.myVotes||[]),comments:x.comments||{},available:true};
+  }catch(err){newsSocial.available=false;console.warn('News social',err.message);toast(err.message)}
+}
+async function loadNewsFeed(force=false){
+  const box=$('#newsFeed');if(!box)return;
+  box.innerHTML='<div class="news-loading"><span class="news-pulse"></span><div><strong>Checking the feeds…</strong><p>Pulling current stories from the selected games and development sources.</p></div></div>';
+  let items=[];
+  const cached=!force&&loadNewsCache();
+  if(cached)items=cached.items;
+  else{
+    const results=await Promise.allSettled(NEWS.sources.map(fetchNewsSource));
+    items=results.flatMap(r=>r.status==='fulfilled'?r.value:[]);
+    const seen=new Set();items=items.filter(x=>!seen.has(x.url)&&(seen.add(x.url),true)).sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0,90);
+    if(items.length)saveNewsCache(items);
+  }
+  newsStories=items;
+  await loadNewsSocial();
+  renderNewsFeed();
+  const status=$('#newsLiveStatus');if(status)status.textContent=items.length?`${items.length} live stories • ${cached?'cached recently':'updated now'}`:'Live feeds unavailable';
+}
+function newsStoryByKey(key){return newsStories.find(x=>x.key===key)||(newsSocial.savedItems||[]).find(x=>x.key===key)}
+function newsCard(story){
+  const saved=newsSocial.saved.has(story.key),voted=newsSocial.myVotes.has(story.key),votes=newsSocial.votes[story.key]||0,comments=newsSocial.comments[story.key]||0;
+  const category=NEWS.categories.find(c=>c.id===story.category)?.label||'Games';
+  return `<article class="news-card" data-news-story="${esc(story.key)}"><div class="news-card-media">${story.image?`<img src="${esc(story.image)}" alt="" loading="lazy" referrerpolicy="no-referrer">`:`<div class="news-image-fallback"><b>${esc(story.badge)}</b><span>${esc(story.source)}</span></div>`}<span class="news-category-pill ${esc(story.category)}">${esc(category)}</span></div><div class="news-card-body"><div class="news-meta"><span>${esc(story.source)}</span><time datetime="${esc(story.date)}">${esc(newsAge(story.date))}</time></div><h2>${esc(story.title)}</h2><p>${esc(story.summary||'Open the original source to read or watch the full story.')}</p><div class="news-actions"><a class="button small primary" href="${esc(story.url)}" target="_blank" rel="noopener">Open source ↗</a><button class="news-action ${saved?'active':''}" data-action="news-save" data-story="${esc(story.key)}" title="Save for later">${saved?'★ Saved':'☆ Save'}</button><button class="news-action ${voted?'active':''}" data-action="news-vote" data-story="${esc(story.key)}" title="Upvote story">↑ ${votes}</button><button class="news-action" data-action="news-discuss" data-story="${esc(story.key)}">💬 ${comments}</button></div></div><div class="news-comments-panel" id="news-comments-${esc(story.key)}" hidden></div></article>`;
+}
+function renderNewsFeed(){
+  const box=$('#newsFeed');if(!box)return;
+  let rows=newsStories;
+  if(newsCategory==='saved'){
+    if(BACKEND.user){const live=Object.fromEntries(newsStories.map(x=>[x.key,x]));rows=(newsSocial.savedItems||[]).map(x=>live[x.key]||x)}else rows=[];
+  }
+  else if(newsCategory!=='all')rows=rows.filter(x=>x.category===newsCategory);
+  if(newsSearch){const q=newsSearch.toLowerCase();rows=rows.filter(x=>`${x.title} ${x.summary} ${x.source}`.toLowerCase().includes(q))}
+  const count=$('#newsResultCount');if(count)count.textContent=`${rows.length} stor${rows.length===1?'y':'ies'}`;
+  if(!newsStories.length&&!(newsCategory==='saved'&&rows.length)){box.innerHTML='<div class="empty news-empty"><h2>The live feed did not load.</h2><p>The Learning Hub is still usable. Try the refresh button in a moment; source sites or the RSS converter may simply be unavailable.</p><button class="button" data-action="news-refresh">Try again</button></div>';return}
+  if(newsCategory==='saved'&&!BACKEND.user){box.innerHTML='<div class="project-login-gate"><h2>Read Later follows your account.</h2><p>Sign in to save stories on one device and come back to them from another.</p><button class="button primary" data-action="open-auth">Sign in / create account</button></div>';return}
+  box.innerHTML=rows.length?`<div class="news-grid">${rows.map(newsCard).join('')}</div>`:'<div class="empty news-empty"><h2>No stories match that view.</h2><p>Try another category or clear the search.</p></div>';
+}
+function newsPage(){
+  return `<div class="page-head news-page-head"><div class="breadcrumb"><a href="#/">Home</a> / News & Industry</div><span class="eyebrow">LIVE GAMES • DEVELOPMENT • INDUSTRY • WATCH & LISTEN</span><h1>◉ News & Industry</h1><p class="muted">A student-friendly window into what is happening now. Headlines and short excerpts come from the original publishers; open the source for the full story, episode or video.</p><div class="news-live-row"><span class="live-dot"></span><strong id="newsLiveStatus">Loading live feeds…</strong><button class="link-button" data-action="news-refresh">Refresh</button></div></div>
+  <section class="news-toolbar"><div class="news-filter-row">${NEWS.categories.map(c=>`<button class="news-filter ${c.id==='all'?'active':''}" data-news-filter="${esc(c.id)}">${c.icon} ${esc(c.label)}</button>`).join('')}</div><div class="news-search-wrap"><span>⌕</span><input id="newsSearch" type="search" placeholder="Search the live feed…"><small id="newsResultCount">0 stories</small></div></section>
+  <section class="news-source-note"><div><b>Live sources</b><span>${NEWS.sources.map(s=>esc(s.name)).join(' • ')}</span></div><p>Save, vote and discussion features require a signed-in Learning Hub account. The Hub stores your interaction with a story, not a copy of the publisher's article.</p></section>
+  <section id="newsFeed"><div class="news-loading"><span class="news-pulse"></span><div><strong>Checking the feeds…</strong><p>Pulling current stories from games and development sources.</p></div></div></section>`;
+}
+async function toggleNewsComments(key){
+  const panel=$(`#news-comments-${key}`);if(!panel)return;
+  if(!panel.hidden){panel.hidden=true;return}
+  panel.hidden=false;
+  if(!BACKEND.user){panel.innerHTML='<div class="news-comment-signin"><p>Sign in to read and join the Learning Hub discussion.</p><button class="button small" data-action="open-auth">Sign in</button></div>';return}
+  panel.innerHTML='<div class="muted">Loading discussion…</div>';
+  try{
+    const rows=await BACKEND.getNewsComments(key),story=newsStoryByKey(key);
+    panel.innerHTML=`<div class="news-comment-head"><strong>Learning Hub discussion</strong><span>${rows.length} comment${rows.length===1?'':'s'}</span></div><div class="news-comment-list">${rows.length?rows.map(c=>`<div class="news-comment"><div><b>${esc(c.display_name||'Student')}</b><span>${esc(c.role||'student')} • ${new Date(c.created_at).toLocaleString('en-GB')}</span></div><p>${esc(c.body)}</p>${c.can_delete?`<button class="link-button danger-link" data-action="news-comment-delete" data-comment="${esc(c.id)}" data-story="${esc(key)}">Delete</button>`:''}</div>`).join(''):'<div class="muted">No comments yet. Start the discussion.</div>'}</div><form class="news-comment-form" data-action-form="news-comment" data-story="${esc(key)}"><label>Comment on this story<textarea name="body" maxlength="2000" required placeholder="What is interesting, useful or worth questioning here?"></textarea></label><button class="button small primary" type="submit">Post comment</button></form>${story?`<a class="news-discussion-source" href="${esc(story.url)}" target="_blank" rel="noopener">Open the original story before replying ↗</a>`:''}`;
+  }catch(err){panel.innerHTML=`<div class="offline-note">${esc(err.message)}</div>`}
+}
+
 function pathPage(id){
   const p=path(id);if(!p)return notFound();
   const ls=DATA.lessons.filter(l=>l.path===id).sort((a,b)=>a.order-b.order),x=pathProgress(id);
@@ -1319,6 +1421,8 @@ function route(){
   const parts=(location.hash||'#/').replace(/^#\//,'').split('/').filter(Boolean),app=$('#app');
   $$('.nav a').forEach(a=>a.classList.remove('active'));
   if(!parts.length){app.innerHTML=dashboard();activate('home')}
+  else if(parts[0]==='programming'){app.innerHTML=programmingPage();activate('programming')}
+  else if(parts[0]==='news'){app.innerHTML=newsPage();activate('news')}
   else if(parts[0]==='path'){app.innerHTML=pathPage(parts[1]);activate(parts[1])}
   else if(parts[0]==='lesson'){app.innerHTML=lessonPage(parts[1]);const l=lesson(parts[1]);if(l)activate(l.path)}
   else if(parts[0]==='my-game'){location.replace('#/projects');return}
@@ -1347,6 +1451,7 @@ function route(){
   $('#sidebar').classList.remove('open');
 
   if(parts[0]==='lesson'&&BACKEND.user){loadComments(parts[1]);loadEvidence(parts[1]);}
+  if(parts[0]==='news') loadNewsFeed();
   if(parts[0]==='progress'&&BACKEND.user) renderProgressCloud();
   if(parts[0]==='projects'&&!parts[1]&&BACKEND.user) renderProjects();
   if(parts[0]==='projects'&&parts[1]==='template'&&parts[2]&&BACKEND.user) renderProjectTemplate(parts[2]);
@@ -1376,6 +1481,15 @@ function bindTutorialLibrary(){
   search.addEventListener('input',apply);
   $$('.tutorial-filter').forEach(btn=>btn.addEventListener('click',()=>{$$('.tutorial-filter').forEach(x=>x.classList.remove('active'));btn.classList.add('active');category=btn.dataset.tutorialFilter||'all';apply();}));
 }
+function bindNewsPage(){
+  const search=$('#newsSearch');if(!search)return;
+  newsCategory='all';newsSearch='';
+  search.addEventListener('input',()=>{newsSearch=search.value.trim();renderNewsFeed()});
+  $$('[data-news-filter]').forEach(btn=>btn.addEventListener('click',()=>{
+    $$('[data-news-filter]').forEach(x=>x.classList.remove('active'));btn.classList.add('active');
+    newsCategory=btn.dataset.newsFilter||'all';renderNewsFeed();
+  }));
+}
 function bindPageInputs(){
   const gs=$('#glossarySearch');
   if(gs)gs.addEventListener('input',()=>{
@@ -1384,6 +1498,7 @@ function bindPageInputs(){
   });
   bindRevisionBuilder();
   bindTutorialLibrary();
+  bindNewsPage();
 }
 async function copyHomework(id){
   const l=lesson(id);if(!l)return;
@@ -1719,6 +1834,28 @@ document.addEventListener('click',async e=>{
       try{await BACKEND.deleteRequest(b.dataset.request);await renderRequests();toast('Request deleted.')}catch(err){toast(err.message)}
     }
   }
+  else if(a==='news-refresh'){
+    try{localStorage.removeItem(NEWS_CACHE_STORE)}catch(e){}
+    await loadNewsFeed(true);
+  }
+  else if(a==='news-save'){
+    if(!BACKEND.user){authView='signin';openAuth();toast('Sign in to save stories for later.');return}
+    const story=newsStoryByKey(b.dataset.story);if(!story)return;
+    const saved=newsSocial.saved.has(story.key);
+    try{await BACKEND.setNewsSaved(story,!saved);if(saved){newsSocial.saved.delete(story.key);newsSocial.savedItems=(newsSocial.savedItems||[]).filter(x=>x.key!==story.key)}else{newsSocial.saved.add(story.key);newsSocial.savedItems=[story,...(newsSocial.savedItems||[]).filter(x=>x.key!==story.key)]}renderNewsFeed();toast(saved?'Removed from Read Later.':'Saved for later ★')}catch(err){toast(err.message)}
+  }
+  else if(a==='news-vote'){
+    if(!BACKEND.user){authView='signin';openAuth();toast('Sign in to upvote stories.');return}
+    const story=newsStoryByKey(b.dataset.story);if(!story)return;
+    const voted=newsSocial.myVotes.has(story.key);
+    try{await BACKEND.setNewsVote(story,!voted);if(voted){newsSocial.myVotes.delete(story.key);newsSocial.votes[story.key]=Math.max(0,(newsSocial.votes[story.key]||1)-1)}else{newsSocial.myVotes.add(story.key);newsSocial.votes[story.key]=(newsSocial.votes[story.key]||0)+1}renderNewsFeed()}catch(err){toast(err.message)}
+  }
+  else if(a==='news-discuss') await toggleNewsComments(b.dataset.story);
+  else if(a==='news-comment-delete'){
+    if(confirm('Delete this comment?')){
+      try{await BACKEND.deleteNewsComment(b.dataset.comment);newsSocial.comments[b.dataset.story]=Math.max(0,(newsSocial.comments[b.dataset.story]||1)-1);renderNewsFeed();await toggleNewsComments(b.dataset.story);toast('Comment deleted.')}catch(err){toast(err.message)}
+    }
+  }
   else if(a==='revision-restart'){revisionSession=null;route()}
   else if(a==='revision-repeat'){const ids=revisionSession?.lessonIds?[...revisionSession.lessonIds]:null,label=revisionSession?.topicLabel||'Random mixed',count=revisionSession?.requestedCount||10;revisionSession=null;startRevisionQuiz(ids,count,label)}
   else if(a==='revision-abandon'){revisionSession=null;route()}
@@ -1757,6 +1894,11 @@ document.addEventListener('click',async e=>{
 });
 
 document.addEventListener('submit',async e=>{
+  if(e.target.dataset.actionForm==='news-comment'){
+    e.preventDefault();const key=e.target.dataset.story,story=newsStoryByKey(key);if(!story)return;
+    if(!BACKEND.user){authView='signin';openAuth();toast('Sign in to comment.');return}
+    const fd=new FormData(e.target);try{await BACKEND.postNewsComment(story,fd.get('body'));newsSocial.comments[key]=(newsSocial.comments[key]||0)+1;renderNewsFeed();await toggleNewsComments(key);toast('Comment posted.')}catch(err){toast(err.message)}return;
+  }
   if(e.target.dataset.actionForm==='revision-random-start'){
     e.preventDefault();const fd=new FormData(e.target);startRevisionQuiz(null,Number(fd.get('count')||10),'Random mixed');return;
   }
