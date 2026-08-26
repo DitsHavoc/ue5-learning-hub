@@ -1,98 +1,110 @@
 window.UE5_MODELING_DATA = {
-  "version": "3.27.0",
+  "version": "3.28.0",
   "updated": "26 Aug 2026",
-  "philosophy": "Slow, methodical, visual and cumulative. Build correctly before building quickly; use reference figures to judge form and topology, but current vendor documentation for current UI.",
+  "philosophy": "Slow, methodical, visual and cumulative. Learn one operation, prove it is correct, reuse it, then add the next. Build correctly before building quickly.",
   "lessons": [
     {
       "id": "max-orientation",
       "order": 1,
       "title": "Know the Workspace Before You Model",
       "icon": "◫",
-      "duration": "45–60 min",
-      "newSkill": "Interface orientation + safe files",
+      "duration": "50–65 min",
+      "newSkill": "Interface map + safe files + recovery habits",
       "priorSkills": [],
       "reuseNext": [
         "Primitives",
         "Transforms"
       ],
       "aim": "Navigate the parts of 3ds Max used for modelling, save safely and recover from a mistake without damaging the scene.",
-      "intro": "3ds Max contains a lot of interface because it does a lot of jobs. You do not need to learn all of it. This first lesson reduces the program to the few areas a modeller needs today.",
-      "safety": "Create a new practice folder before touching geometry. Never use a student’s only copy of a model for an experiment.",
+      "intro": "3ds Max contains far more interface than a beginner needs. Today you learn only the five areas a modeller will actually touch: viewport, Command Panel, main toolbar, Transform Type-In and Scene Explorer. Everything else can wait.",
+      "safety": "Create a new practice folder and save before touching geometry. Never experiment in the only copy of an assessment model.",
       "steps": [
         {
-          "title": "Start a clean scene",
-          "where": "File menu → New",
-          "do": "Create a new scene. If Max asks what to reset, choose the normal new-scene option. Immediately use File → Save As and save it as 01_Max_Orientation.max inside a new modelling practice folder.",
-          "see": "You should be looking at an empty scene and the title bar should show your saved file name.",
-          "check": "Press Ctrl+S once. If Max does not ask where to save, the file is already safely located.",
-          "why": "Saving before modelling gives Undo and crash recovery somewhere sensible to return to.",
+          "title": "Save before you model",
+          "where": "File menu → Save As",
+          "do": "Create a new scene and immediately save it as 01_Max_Orientation.max inside a new practice folder. Press Ctrl+S once after the first save.",
+          "see": "The title bar shows the saved file name and Ctrl+S no longer asks for a location.",
+          "check": "Locate the file in your folder before continuing.",
+          "why": "A modelling mistake is annoying; losing the entire scene is worse.",
           "stuck": [],
           "warning": "Do not practise inside an assessment model or downloaded asset.",
           "visual": ""
         },
         {
-          "title": "Find the viewport",
-          "where": "Centre of the 3ds Max window",
-          "do": "Click once inside a viewport, then use Alt+W to maximise that active viewport. Press Alt+W again to return to the multi-viewport layout.",
-          "see": "The active viewport fills the modelling area, then returns to the previous layout.",
-          "check": "Right-click a different viewport and press Alt+W. That viewport should maximise without changing your object selection.",
-          "why": "The viewport is where you inspect and edit geometry. Knowing which viewport is active prevents edits happening from an unexpected view.",
+          "title": "Find the five modelling zones",
+          "where": "Whole 3ds Max window",
+          "do": "Without clicking tools yet, point to: 1) the viewport area, 2) Command Panel on the right, 3) main toolbar, 4) Transform Type-In/status area near the bottom, and 5) Scene Explorer if it is visible.",
+          "see": "You can identify each region and roughly explain its job.",
+          "check": "Ask yourself: where would I CREATE an object, where would I MODIFY it, and where would I type an exact position?",
+          "why": "Students get lost because Max hides commands in different regions. Naming the regions gives every later instruction an address.",
+          "stuck": [],
+          "warning": "Ignore animation controls, rendering controls and advanced ribbons today.",
+          "visual": ""
+        },
+        {
+          "title": "Control the active viewport",
+          "where": "Centre viewport area",
+          "do": "Right-click inside one viewport so it becomes active without accidentally selecting geometry. Press Alt+W to maximise it. Press Alt+W again to restore the layout. Repeat in a second viewport.",
+          "see": "Only the chosen viewport expands and restores.",
+          "check": "You can maximise a chosen viewport twice in a row without changing object selection.",
+          "why": "You need to inspect models from different views without accidentally moving or selecting them.",
           "stuck": [
-            "If Alt+W does nothing, click inside a viewport first.",
-            "If you accidentally select something, press Ctrl+Z or click empty space."
+            "If Alt+W does nothing, click/right-click inside a viewport first."
           ],
           "warning": "",
-          "visual": "assets/modeling/diagrams/interface-map.svg"
+          "visual": ""
         },
         {
-          "title": "Find Create and Modify",
+          "title": "Switch Create and Modify on purpose",
           "where": "Right side → Command Panel",
-          "do": "Locate the Command Panel on the right. Click the Create tab, then the Modify tab beside it. Do not change anything yet.",
-          "see": "The contents of the right panel should change between object-creation controls and modification controls.",
-          "check": "Say out loud which tab you would use to create a Box and which you would use to edit an existing object.",
-          "why": "Most early Max confusion is simply being in the wrong panel. Create makes objects; Modify edits selected objects.",
+          "do": "Click Create, then Modify. Do not change any values. Say: “Create makes the starting object; Modify changes the selected object.”",
+          "see": "The panel contents change between creation controls and modification controls.",
+          "check": "Before every later instruction, check which tab is active.",
+          "why": "Being in the wrong Command Panel tab is one of the simplest ways to become completely lost in Max.",
           "stuck": [],
           "warning": "",
           "visual": ""
         },
         {
-          "title": "Find the transform tools",
-          "where": "Main toolbar near the top",
-          "do": "Locate Select and Move, Select and Rotate, and Select and Uniform Scale. Hover each tool and read its tooltip. Do not memorise icons by colour alone.",
-          "see": "Each tool should show a tooltip naming the transform.",
-          "check": "Use the W, E and R keys one at a time and watch which transform tool becomes active.",
-          "why": "These are the three transforms you will use constantly. Keyboard shortcuts are faster, but the toolbar confirms what mode is active.",
+          "title": "Confirm the transform mode",
+          "where": "Main toolbar → Move / Rotate / Scale",
+          "do": "Press W, E and R one at a time. Watch which transform tool becomes active. Then press W again so Move is active.",
+          "see": "The active toolbar tool changes each time.",
+          "check": "Hover the active tool and read its tooltip.",
+          "why": "Keyboard shortcuts are fast; the toolbar is your visual confirmation of what the mouse will do.",
           "stuck": [],
-          "warning": "Do not press Auto Key. A red timeline/viewport border means animation recording may be active.",
+          "warning": "If the timeline or viewport border turns red, Auto Key may be active. Turn it off before modelling.",
           "visual": ""
         },
         {
-          "title": "Practise safe Undo",
-          "where": "Command Panel → Create → Geometry → Standard Primitives → Box",
-          "do": "Create one Box in the viewport. Press W and move it somewhere obvious. Press Ctrl+Z once. Then press Ctrl+Y once.",
-          "see": "Undo returns the box to its previous position; Redo reapplies the movement.",
-          "check": "Move the box again, undo it, then save the scene as 01_Max_Orientation_v02.max.",
-          "why": "Modelling is iterative. Undo is a normal tool, but versioned files protect you when Undo history is no longer enough.",
+          "title": "Practise Undo, Redo and versioning",
+          "where": "Create → Geometry → Standard Primitives → Box",
+          "do": "Create one Box. Move it with W. Press Ctrl+Z once, then Ctrl+Y once. Finally use Save As to create 01_Max_Orientation_v02.max.",
+          "see": "Undo removes the move, Redo reapplies it, and you now have two saved versions.",
+          "check": "Close neither file yet: check that v01 and v02 both exist in the folder.",
+          "why": "Undo protects minutes. Versioned saves protect hours.",
           "stuck": [],
           "warning": "",
           "visual": ""
         }
       ],
       "practice": {
-        "title": "Primitive sculpture",
-        "task": "Using only Box, Cylinder and Sphere primitives, make a recognisable robot, vehicle or tiny room. Do not convert anything to Editable Poly yet. The goal is navigation and selection, not detail.",
+        "title": "Interface scavenger hunt → primitive mascot",
+        "task": "First, identify the five modelling zones without help. Then use only Box, Cylinder and Sphere primitives to make a tiny robot/vehicle/mascot. No Editable Poly and no detail modelling.",
         "check": [
+          "You can name the five modelling zones.",
           "Every object has a clear name.",
-          "You can select the object you intend.",
-          "You can maximise and restore a viewport.",
-          "You saved a second version before finishing."
+          "You can maximise/restore a viewport.",
+          "You have at least two saved versions.",
+          "Nothing has been converted to Editable Poly."
         ]
       },
       "common": [
-        "Modelling before the file has been saved.",
-        "Working in the wrong viewport.",
+        "Starting work before the scene is saved.",
+        "Clicking tools because the icon “looks right” rather than checking the tooltip.",
         "Accidentally enabling Auto Key.",
-        "Moving the wrong object because selection was not checked."
+        "Working in a viewport you did not intend.",
+        "Trying to learn every panel on day one."
       ],
       "officialRefs": [
         {
@@ -118,15 +130,31 @@ window.UE5_MODELING_DATA = {
       "bookTakeaways": [
         "Learn the names and jobs of the main interface regions before trying to memorise every icon.",
         "The book supports a broad interface map; the current Autodesk Help links remain the source of truth for the college install."
+      ],
+      "stage": "foundation",
+      "todayTools": [
+        "File → Save As",
+        "Viewport + Alt+W",
+        "Command Panel",
+        "W / E / R",
+        "Transform Type-In",
+        "Ctrl+Z / Ctrl+S"
+      ],
+      "notYet": [
+        "Editable Poly",
+        "Extrude / Inset",
+        "Boolean",
+        "TurboSmooth",
+        "UV Editor"
       ]
     },
     {
       "id": "max-primitives-transforms",
       "order": 2,
-      "title": "Primitives, Exact Transforms & Blockout",
+      "title": "Primitives, Precision & Transform Discipline",
       "icon": "⬚",
-      "duration": "60–75 min",
-      "newSkill": "Primitives + accurate Move/Rotate/Scale",
+      "duration": "75–90 min",
+      "newSkill": "Measured primitives + exact transforms + snapping",
       "priorSkills": [
         "Workspace orientation"
       ],
@@ -135,89 +163,139 @@ window.UE5_MODELING_DATA = {
         "Modular modelling"
       ],
       "aim": "Create simple forms at sensible dimensions and place them accurately without distorting the scene by accident.",
-      "intro": "Good modelling starts with proportion and silhouette. If the blockout is wrong, detail only makes the wrong object more expensive.",
-      "safety": "Before scaling an object, decide whether you really want a transform scale or whether changing the primitive’s dimensions would be cleaner.",
+      "intro": "A clean model starts with controlled proportion. Today is deliberately not polygon modelling: you learn to place simple forms accurately, use type-in values and snap objects together before detail is allowed.",
+      "safety": "Do not use freehand Scale to fix a primitive that simply has the wrong dimensions. Change the primitive parameters while you still can.",
       "steps": [
         {
           "title": "Create a measured Box",
-          "where": "Command Panel → Create → Geometry → Standard Primitives → Box",
-          "do": "Create a Box. With it selected, open the Modify tab and type sensible Length, Width and Height values rather than dragging until it “looks about right”.",
-          "see": "The box changes shape while remaining a Box in the modifier stack.",
-          "check": "Change one dimension twice. You should be able to return to the previous value exactly.",
-          "why": "Parametric primitives are editable starting points. Keeping dimensions available makes blockout changes easy.",
+          "where": "Create → Geometry → Standard Primitives → Box",
+          "do": "Create a Box. With it selected, switch to Modify and type known Length, Width and Height values. Change one value, then return it exactly to the starting value.",
+          "see": "The object changes shape but remains a parametric Box with editable dimensions.",
+          "check": "Read all three dimensions back before continuing.",
+          "why": "Parametric dimensions are safer than eyeballing size when you are still blocking out.",
           "stuck": [],
           "warning": "",
           "visual": ""
         },
         {
-          "title": "Move on one axis",
+          "title": "Move one axis at a time",
           "where": "Main toolbar → Select and Move, or W",
-          "do": "Select the Box. Drag only the red X arrow. Undo. Then drag only the green Y arrow. Undo. Then use the coordinate fields at the bottom of Max to enter a known position.",
-          "see": "Only one coordinate changes at a time when you constrain the movement.",
-          "check": "Check the coordinate readout: the axis you did not move should retain its value.",
-          "why": "Axis-constrained movement is safer than dragging the centre freely when alignment matters.",
+          "do": "Drag only the red X arrow. Undo. Drag only the green Y arrow. Undo. Finally move only the blue Z arrow.",
+          "see": "Only one coordinate changes during each move.",
+          "check": "Watch the Transform Type-In/status values and confirm the other axes do not drift.",
+          "why": "Beginners lose control when they drag the centre of the gizmo without knowing which axes are changing.",
           "stuck": [],
           "warning": "",
           "visual": ""
         },
         {
-          "title": "Rotate deliberately",
-          "where": "Select and Rotate, or E",
-          "do": "Create a second primitive. Rotate it using one coloured ring at a time. Then enter a clean 90-degree rotation instead of eyeballing it.",
-          "see": "The object should rotate around one axis without drifting in position.",
-          "check": "Return the object to a clean 0 or 90 degree value.",
-          "why": "Clean rotations matter for modular assets, symmetry and export.",
-          "stuck": [],
+          "title": "Use exact Type-In values",
+          "where": "Move active → status-bar Transform Type-In or right-click Move",
+          "do": "Set the object to a clean known position using X/Y/Z values. Then switch to Offset mode and move it a known distance on one axis.",
+          "see": "Absolute values place the object at a coordinate; Offset moves it relative to where it already is.",
+          "check": "Return the object to a known coordinate such as 0,0,0 or another teacher-specified position.",
+          "why": "Exact values are essential for modular kits and clean layout work.",
+          "stuck": [
+            "If the fields are grey, make sure an object is selected and a transform tool is active."
+          ],
           "warning": "",
           "visual": ""
         },
         {
-          "title": "Scale without destroying proportion",
+          "title": "Rotate with Angle Snap",
+          "where": "Main toolbar → Angle Snap Toggle; Rotate with E",
+          "do": "Turn Angle Snap on. Rotate a duplicate by a clean 90 degrees around one coloured rotation ring. Then turn Angle Snap off and compare the feel.",
+          "see": "With snapping on, rotation lands on predictable angle increments.",
+          "check": "Use Type-In or the readout to prove the final rotation is exactly 90 degrees.",
+          "why": "Clean rotations prevent tiny alignment errors that become obvious in modular work.",
+          "stuck": [],
+          "warning": "Do not grab the free-rotate centre when you need an exact architectural/game-asset angle.",
+          "visual": ""
+        },
+        {
+          "title": "Understand why Scale is dangerous",
           "where": "Select and Uniform Scale, or R",
-          "do": "Duplicate a primitive. Uniform-scale one copy from the centre. On the other copy, change its Length/Width/Height in the Modify panel. Compare the two methods.",
-          "see": "Both can make an object larger, but only the primitive-parameter method changes the base dimensions while keeping object scale cleaner.",
-          "check": "Select both objects and inspect their transform scale values.",
-          "why": "Students often use Scale as a substitute for modelling. Knowing the difference prevents later transform/export problems.",
+          "do": "Duplicate the Box. Uniform-scale one copy. On the other copy, change Length/Width/Height in Modify. Compare the transform Scale values and base parameters.",
+          "see": "Both may look larger, but the parameter-edited Box retains cleaner base dimensions.",
+          "check": "Return the scaled copy to 100% and prove the parameter-edited copy still has the intended dimensions.",
+          "why": "Scaling is a transform layered on top of the object. Clean dimensions make later modifiers/export easier to reason about.",
           "stuck": [],
-          "warning": "",
+          "warning": "For beginner hard-surface work, avoid non-uniform scaling unless you understand why you need it.",
           "visual": ""
         },
         {
-          "title": "Make a blockout only",
+          "title": "Precision drill: stack three boxes",
+          "where": "Main toolbar → Snaps Toggle → configure Vertex snap if required",
+          "do": "Create three differently sized Boxes. Turn on an appropriate Object Snap and place the corner of one box exactly onto a corner of the box below it. Repeat for the third box. Turn snapping off when finished.",
+          "see": "The boxes touch exactly at the intended points rather than hovering or intersecting.",
+          "check": "Inspect the join closely in Front and Top views. There should be no tiny gap.",
+          "why": "Snapping teaches precision without asking students to guess coordinates every time.",
+          "stuck": [
+            "If everything keeps snapping to unwanted points, turn Snaps off, then enable only the snap type you actually need."
+          ],
+          "warning": "Do not leave broad snap types enabled for the rest of the lesson.",
+          "visual": ""
+        },
+        {
+          "title": "Block out before detailing",
           "where": "Create → Standard Primitives",
-          "do": "Using Boxes and Cylinders only, block out a simple desk or storage unit from reference. Match large proportions first. Do not add bevels, bolts or tiny details.",
-          "see": "The object should read correctly from several metres away even though it is made from simple forms.",
-          "check": "Orbit around it. If the silhouette is wrong from side/front views, fix it now rather than adding detail.",
-          "why": "Blockout tests proportion cheaply. Detail should come after the large forms work.",
+          "do": "Using Boxes and Cylinders only, block out a small desk, storage unit or room corner from reference. Match big proportions first and name the objects.",
+          "see": "The subject reads correctly from several metres away despite having no detail.",
+          "check": "Check Front, Side and Perspective. If silhouette/proportion is wrong, fix it now.",
+          "why": "Detail cannot rescue a bad blockout.",
           "stuck": [],
           "warning": "",
           "visual": ""
         }
       ],
       "practice": {
-        "title": "Blockout a small room",
-        "task": "Create floor, four walls, a doorway gap and three large props using primitives only. Work to a grid and name every object.",
+        "title": "Precision Stack → room blockout",
+        "task": "Complete the three-box snap tower first. Then create a floor, walls, doorway gap and three large props using primitives only. Use exact dimensions and clean rotations.",
         "check": [
-          "No tiny detail.",
+          "Snap tower has no visible gaps.",
+          "No tiny decorative detail.",
           "Objects have sensible dimensions.",
-          "Walls meet cleanly.",
-          "Door opening is believable human scale."
+          "90-degree parts are actually 90 degrees.",
+          "Walls meet cleanly and doorway scale is believable."
         ]
       },
       "common": [
-        "Using Scale for every size change.",
-        "Free-dragging when an axis constraint is needed.",
-        "Adding detail before proportions are correct.",
-        "Leaving objects named Box001, Box002, Box003."
+        "Using Scale instead of changing primitive dimensions.",
+        "Moving diagonally when only one axis should change.",
+        "Leaving Angle Snap or Object Snap on accidentally.",
+        "Adding detail before silhouette works.",
+        "Leaving objects named Box001, Box002 and Box003."
       ],
       "officialRefs": [
         {
-          "title": "Autodesk Quick Start Guide",
-          "url": "https://www.autodesk.com/learn/ondemand/curated/3ds-max-quick-start-guide",
-          "note": "Official current beginner reference for primitives, navigation and scene work."
+          "title": "Autodesk: Using Transforms",
+          "url": "https://help.autodesk.com/cloudhelp/2026/ENU/3DSMax-Basics/files/GUID-B287B821-8C01-41E3-8B5F-8173E765BF97.htm",
+          "note": "Current Autodesk explanation of gizmos and Transform Type-In."
+        },
+        {
+          "title": "Autodesk: Main Toolbar",
+          "url": "https://help.autodesk.com/cloudhelp/2026/ENU/3DSMax-Basics/files/GUID-D60DB151-D25D-498D-AF02-410D4237A140.htm",
+          "note": "Current location of Move/Rotate/Scale, snaps and Angle Snap."
         }
       ],
-      "visual": "assets/modeling/diagrams/interface-map.svg"
+      "visual": "assets/modeling/diagrams/interface-map.svg",
+      "stage": "foundation",
+      "todayTools": [
+        "Box / Cylinder / Sphere",
+        "W Move",
+        "E Rotate",
+        "R Uniform Scale",
+        "Transform Type-In",
+        "Angle Snap",
+        "Object Snap"
+      ],
+      "notYet": [
+        "Editable Poly",
+        "Extrude",
+        "Inset",
+        "Chamfer",
+        "Boolean"
+      ]
     },
     {
       "id": "max-editable-poly",
@@ -236,7 +314,7 @@ window.UE5_MODELING_DATA = {
         "Topology"
       ],
       "aim": "Convert a copy of a primitive to Editable Poly and make controlled sub-object edits without accidentally changing the wrong geometry.",
-      "intro": "This is the point where 3D modelling becomes easy to break. The most important skill today is not a button: it is checking what level and what geometry you have selected before committing an edit.",
+      "intro": "This is where modelling becomes easy to damage. Today the goal is selection discipline: know exactly which object, sub-object level and components are active before making a change.",
       "safety": "Duplicate the object before conversion. Converting to Editable Poly removes the original primitive creation parameters.",
       "steps": [
         {
@@ -259,6 +337,17 @@ window.UE5_MODELING_DATA = {
           "why": "Conversion changes the type of object and gives direct polygon modelling tools, but sacrifices parametric Box controls.",
           "stuck": [],
           "warning": "If both objects became Editable Poly, undo immediately.",
+          "visual": ""
+        },
+        {
+          "title": "Turn on Edged Faces before editing",
+          "where": "Active viewport → F4",
+          "do": "Press F4 so the shaded model displays its polygon edges. Toggle F4 off and on once so you recognise the difference.",
+          "see": "You can see the surface and the actual polygon structure at the same time.",
+          "check": "Count how many visible face divisions your simple box has before you change anything.",
+          "why": "A shaded model can hide bad geometry. Edged Faces makes the structure visible before you edit it.",
+          "stuck": [],
+          "warning": "",
           "visual": ""
         },
         {
@@ -320,13 +409,15 @@ window.UE5_MODELING_DATA = {
         "Forgetting which sub-object level is active.",
         "Moving the whole model while still at Vertex/Polygon level.",
         "Converting the only copy of the primitive.",
-        "Selecting through the model and moving hidden components accidentally."
+        "Selecting through the model and moving hidden components accidentally.",
+        "Editing while the wrong sub-object level is active.",
+        "Forgetting to exit sub-object mode before selecting another object."
       ],
       "officialRefs": [
         {
-          "title": "Autodesk: Use polygon modifiers in 3ds Max",
-          "url": "https://www.autodesk.com/learn/ondemand/curated/3ds-max-quick-start-guide/315e7GVmeOpE0HYf7F1QT0",
-          "note": "Official Autodesk walkthrough of Editable Poly, sub-object levels and Edit Poly workflows."
+          "title": "Autodesk: Editable Poly Surface",
+          "url": "https://help.autodesk.com/cloudhelp/2026/ENU/3DSMax-Modeling/files/GUID-D05DF785-F905-453E-BF64-DB4D59A9F200.htm",
+          "note": "Current Autodesk Editable Poly overview and sub-object levels."
         }
       ],
       "visual": "assets/modeling/diagrams/editable-poly.svg",
@@ -338,6 +429,24 @@ window.UE5_MODELING_DATA = {
           "sourceTitle": "Autodesk Community — Editable Poly 2024",
           "version": "2024"
         }
+      ],
+      "stage": "mesh",
+      "todayTools": [
+        "F4 Edged Faces",
+        "Editable Poly",
+        "Vertex",
+        "Edge",
+        "Border",
+        "Polygon",
+        "Element",
+        "Ctrl+Z"
+      ],
+      "notYet": [
+        "Extrude as a build tool",
+        "Inset",
+        "Chamfer",
+        "TurboSmooth",
+        "Boolean"
       ]
     },
     {
@@ -358,8 +467,19 @@ window.UE5_MODELING_DATA = {
       ],
       "aim": "Use Inset and Extrude to create controlled surface depth without repeatedly extruding by accident or destroying the base shape.",
       "intro": "Extrude and Inset are simple tools, but careless repeated clicks create overlapping faces, double extrusions and ugly topology. Work slowly and commit one operation at a time.",
-      "safety": "Save Crate_01_Blockout.max before starting. At each checkpoint, save a new numbered version.",
+      "safety": "Save a clean pre-detail crate version. Inset and Extrude create new geometry: check the result after every operation before doing another.",
       "steps": [
+        {
+          "title": "Five-minute throwaway drill",
+          "where": "New Box copy → Editable Poly → Polygon",
+          "do": "On a disposable Box, select one polygon. Apply a small Inset once, then a small Extrude once. Undo both operations and repeat deliberately. Do not use the crate yet.",
+          "see": "You can clearly identify the original face, inset border and new extruded depth.",
+          "check": "You can repeat Inset → Extrude once without creating duplicate accidental extrusions.",
+          "why": "A tiny practice object lets you understand the operation before risking the spine asset.",
+          "stuck": [],
+          "warning": "If the surface folds over itself, stop and Undo immediately.",
+          "visual": ""
+        },
         {
           "title": "Prepare one clean face",
           "where": "Open Crate_01_Blockout.max → select Crate_WORK → Modify → Editable Poly → Polygon",
@@ -430,7 +550,9 @@ window.UE5_MODELING_DATA = {
         "Double extruding the same polygon.",
         "Inset crossing itself because the amount is too large.",
         "Adding tiny detail before the main forms are resolved.",
-        "Extruding in the wrong direction because the face normal/orientation was not checked."
+        "Extruding in the wrong direction because the face normal/orientation was not checked.",
+        "Repeating Extrude several times because the first result was not obvious.",
+        "Continuing after an inset has crossed/overlapped itself."
       ],
       "officialRefs": [
         {
@@ -439,7 +561,22 @@ window.UE5_MODELING_DATA = {
           "note": "Official Autodesk reference for polygon modelling tools."
         }
       ],
-      "visual": "assets/modeling/diagrams/editable-poly.svg"
+      "visual": "assets/modeling/diagrams/editable-poly.svg",
+      "stage": "mesh",
+      "todayTools": [
+        "Polygon selection",
+        "Inset",
+        "Extrude",
+        "F4",
+        "Undo",
+        "Save As"
+      ],
+      "notYet": [
+        "Chamfer",
+        "TurboSmooth",
+        "Boolean",
+        "Random detail cuts"
+      ]
     },
     {
       "id": "max-edge-control",
@@ -459,9 +596,20 @@ window.UE5_MODELING_DATA = {
         "Hard surface"
       ],
       "aim": "Add edges only where they support shape or future edits, then use loops/rings to select repeated structure safely.",
-      "intro": "Extra geometry is not automatically better geometry. Today you add edges with a purpose: control shape, support a panel, or make a clean selection path.",
+      "intro": "Edges should have a job. Today you learn Loop, Ring and Connect as ways to place control exactly where the shape needs it — not as permission to cover the mesh in lines.",
       "safety": "Work on Crate_02_ExtrudeInset.max and immediately save Crate_03_EdgeControl.max before editing.",
       "steps": [
+        {
+          "title": "Ring / Loop drill on a cylinder",
+          "where": "Create Cylinder → copy → Editable Poly → Edge",
+          "do": "On a disposable cylinder, select one vertical edge and use Ring. Undo. Select one horizontal edge and use Loop. Undo. Repeat until you can predict which direction will be selected.",
+          "see": "Ring and Loop select different connected edge patterns around the form.",
+          "check": "Before clicking the command, point to the edges you expect Max to select.",
+          "why": "Predicting selection is safer than clicking Ring/Loop and hoping it grabbed the right geometry.",
+          "stuck": [],
+          "warning": "",
+          "visual": ""
+        },
         {
           "title": "Identify an edge ring",
           "where": "Editable Poly → Edge",
@@ -536,9 +684,14 @@ window.UE5_MODELING_DATA = {
       ],
       "officialRefs": [
         {
-          "title": "Autodesk polygon modelling Quick Start",
-          "url": "https://www.autodesk.com/learn/ondemand/curated/3ds-max-quick-start-guide/315e7GVmeOpE0HYf7F1QT0",
-          "note": "Official Autodesk introduction to poly tools and modifier workflows."
+          "title": "Autodesk: Modeling Tab / Graphite Modeling Tools",
+          "url": "https://help.autodesk.com/cloudhelp/2026/ENU/3DSMax-Modeling/files/GUID-8176E3EA-5300-496E-AC9A-9C94DBBC6987.htm",
+          "note": "Current Autodesk overview of polygon modelling, Loop/Ring and related tools."
+        },
+        {
+          "title": "Autodesk: Editable Poly Surface",
+          "url": "https://help.autodesk.com/cloudhelp/2026/ENU/3DSMax-Modeling/files/GUID-D05DF785-F905-453E-BF64-DB4D59A9F200.htm",
+          "note": "Current Editable Poly reference."
         }
       ],
       "visual": "assets/modeling/diagrams/topology-check.svg",
@@ -553,6 +706,21 @@ window.UE5_MODELING_DATA = {
       "bookTakeaways": [
         "Edges should have a job: hold silhouette, control a transition, support shading or create a useful modelling selection path.",
         "Compare wireframe and shaded views together; a clean-looking shaded surface can hide poor or wasteful topology."
+      ],
+      "stage": "mesh",
+      "todayTools": [
+        "Edge",
+        "Loop",
+        "Ring",
+        "Connect",
+        "F4",
+        "Orthographic views"
+      ],
+      "notYet": [
+        "Random Cut",
+        "Dense support loops everywhere",
+        "TurboSmooth",
+        "Boolean"
       ]
     },
     {
@@ -648,12 +816,25 @@ window.UE5_MODELING_DATA = {
       ],
       "officialRefs": [
         {
-          "title": "Autodesk modelling learning catalogue",
-          "url": "https://www.autodesk.com/learn/ondemand/curated/3ds-max-quick-start-guide",
-          "note": "Current Autodesk modelling and modifier reference."
+          "title": "Autodesk: Chamfer Modifier",
+          "url": "https://help.autodesk.com/cloudhelp/2026/ENU/3DSMax-Modifiers/files/GUID-E7BF59A4-BFDD-4DEB-B29D-CA0E434BE355.htm",
+          "note": "Current Autodesk guided Chamfer workflow and options."
         }
       ],
-      "visual": "assets/modeling/diagrams/topology-check.svg"
+      "visual": "assets/modeling/diagrams/topology-check.svg",
+      "stage": "mesh",
+      "todayTools": [
+        "Edge selection",
+        "Chamfer",
+        "Chamfer Modifier",
+        "Shaded + Edged Faces",
+        "Grazing light test"
+      ],
+      "notYet": [
+        "Huge chamfers",
+        "High segment counts by default",
+        "TurboSmooth as a repair button"
+      ]
     },
     {
       "id": "max-modifier-stack",
@@ -672,7 +853,7 @@ window.UE5_MODELING_DATA = {
         "Reusable workflow"
       ],
       "aim": "Use the modifier stack to preserve editable decisions and understand why stack order changes the result.",
-      "intro": "The modifier stack is one of Max’s strongest features. Treat it like editable history, not a pile of buttons to collapse as soon as the object looks finished.",
+      "intro": "The modifier stack is your modelling history. Today you learn to keep useful decisions editable rather than baking every experiment permanently into the mesh.",
       "safety": "Always save before Collapse. If you cannot explain what editability you will lose, do not collapse the stack.",
       "steps": [
         {
@@ -777,6 +958,20 @@ window.UE5_MODELING_DATA = {
       "bookTakeaways": [
         "Subdivision keeps the general form while increasing mesh density; each extra level should be justified by the result you need.",
         "The course deliberately keeps the editable base and modifier stack available instead of collapsing early."
+      ],
+      "stage": "judgement",
+      "todayTools": [
+        "Modifier stack",
+        "Edit Poly modifier",
+        "Symmetry",
+        "Shell",
+        "Clone",
+        "Toggle modifier visibility"
+      ],
+      "notYet": [
+        "Collapse Stack without a reason",
+        "Destructive Boolean cleanup",
+        "Modifier pile-up"
       ]
     },
     {
@@ -797,7 +992,7 @@ window.UE5_MODELING_DATA = {
         "Fix This Model"
       ],
       "aim": "Identify unnecessary density, accidental doubles, open borders, broken smoothing and topology that makes the asset difficult to edit.",
-      "intro": "Topology is not about making every face a quad. It is about producing geometry that supports the shape, shades correctly, unwraps predictably and is easy to maintain.",
+      "intro": "Topology is judgement, not religion. Geometry earns its place by supporting silhouette, shading, deformation, UVs or editability. Today you learn to diagnose before touching the mesh.",
       "safety": "Never “clean up” a model by randomly deleting edges. Save a diagnostic copy and make one repair at a time.",
       "steps": [
         {
@@ -821,6 +1016,17 @@ window.UE5_MODELING_DATA = {
           "stuck": [],
           "warning": "",
           "visual": "assets/modeling/diagrams/topology-check.svg"
+        },
+        {
+          "title": "Segment-budget drill: 12 vs 24 vs 48",
+          "where": "Create three same-size Cylinders → change Sides",
+          "do": "Create three identical cylinders with low, medium and high side counts. View them at the distance the game will usually show them. Toggle F4 and compare silhouette against polygon cost.",
+          "see": "The low version may visibly facet; the high version may add many edges without visible benefit.",
+          "check": "Choose the lowest side count that still reads as round at the intended distance and explain why.",
+          "why": "Good optimisation is not “low poly at all costs”; it is spending geometry where the player can see the benefit.",
+          "stuck": [],
+          "warning": "",
+          "visual": ""
         },
         {
           "title": "Check open boundaries",
@@ -868,9 +1074,10 @@ window.UE5_MODELING_DATA = {
         }
       ],
       "practice": {
-        "title": "Repair a deliberately bad crate",
-        "task": "Use the Fix This Model clinic to diagnose a dense or damaged crate. Record the symptom, cause, repair and proof for at least three issues.",
+        "title": "Diagnose → budget → repair a bad crate",
+        "task": "First complete the cylinder segment-budget drill. Then use a Fix This Model clinic to diagnose a deliberately dense/damaged crate and repair at least three issues one at a time.",
         "check": [
+          "You can justify a sensible segment count.",
           "You diagnosed before editing.",
           "Every repair has a reason.",
           "Shading improved or stayed correct.",
@@ -902,6 +1109,21 @@ window.UE5_MODELING_DATA = {
       "bookTakeaways": [
         "The book’s retopology guidance emphasises clean edge flow and keeping the new mesh faithful to the original form while optimising it.",
         "Treat this as an inspection example, not a target polygon count. A student crate should be dramatically simpler than a vehicle."
+      ],
+      "stage": "judgement",
+      "todayTools": [
+        "F4 Edged Faces",
+        "Border",
+        "Weld carefully",
+        "Remove edge/loop",
+        "Shaded comparison",
+        "Segment budget test"
+      ],
+      "notYet": [
+        "ProOptimizer as a magic fix",
+        "Huge Weld thresholds",
+        "Delete random edges",
+        "“Quads at any cost”"
       ]
     },
     {
@@ -909,7 +1131,7 @@ window.UE5_MODELING_DATA = {
       "order": 9,
       "title": "Modular Assets: Grid, Scale, Pivots & Reuse",
       "icon": "▦",
-      "duration": "90–120 min",
+      "duration": "105–120 min",
       "newSkill": "Modularity + pivots + snapping",
       "priorSkills": [
         "Transforms",
@@ -921,9 +1143,23 @@ window.UE5_MODELING_DATA = {
         "UE5 grid snapping"
       ],
       "aim": "Create wall/floor pieces that share dimensions, align on a grid and have pivots placed for reliable assembly.",
-      "intro": "A modular asset is successful when another person can place it quickly and predictably. Pretty geometry with the wrong dimensions or pivot is a bad modular asset.",
+      "intro": "A modular kit is a system, not a pile of walls. Before the room kit, you will build a tiny plank strip that proves you can reuse Connect, Chamfer and Shell to create repeatable pieces.",
       "safety": "Decide the module size before modelling. Do not “fix” mismatched pieces by scaling them differently in Unreal later.",
       "steps": [
+        {
+          "title": "Mini build: one Plane becomes a plank strip",
+          "where": "Create → Geometry → Standard Primitives → Plane",
+          "do": "Create one long Plane at a known module size. Give it 1 segment along its length and about 6 evenly spaced segments across the plank direction. Convert a safe copy to Editable Poly, enter Edge mode and select only the internal divider edges. Apply a tiny Chamfer with Open enabled to create narrow gaps. Exit sub-object mode and add Shell for thickness.",
+          "see": "You should have a row of evenly sized plank-like strips with narrow consistent gaps and one controlled thickness.",
+          "check": "Inspect from Top, Side and Perspective. Gaps should be even, no faces should overlap, and Shell should thicken the planks without closing the gaps unexpectedly.",
+          "why": "This shows how one clean source and a few controlled operations can create repeated structure without manually modelling and aligning every plank.",
+          "stuck": [
+            "If the gaps are irregular, Undo and check the Plane segment spacing before Chamfer.",
+            "If Shell produces odd side faces, check that the open gaps are clean before adding thickness."
+          ],
+          "warning": "Save before Open Chamfer. If the geometry behaves unexpectedly, Undo instead of stacking more modifiers on top.",
+          "visual": ""
+        },
         {
           "title": "Choose a module size",
           "where": "Scene units / grid setup + primitive dimensions",
@@ -981,13 +1217,14 @@ window.UE5_MODELING_DATA = {
         }
       ],
       "practice": {
-        "title": "Five-piece modular room kit",
-        "task": "Build a small set: straight wall, corner, doorway wall, floor and ceiling. Assemble a test room from duplicates without non-uniformly scaling the pieces.",
+        "title": "Plank strip → five-piece modular room kit",
+        "task": "Complete the small plank-strip drill first. Then build straight wall, corner, doorway wall, floor and ceiling pieces using one repeatable module size. Assemble a test room from duplicates without non-uniform scaling.",
         "check": [
+          "Plank gaps/thickness are consistent.",
           "Pieces snap/alignment is repeatable.",
           "Pivots are useful.",
           "Naming is consistent.",
-          "Room can be rearranged quickly."
+          "The room can be rearranged quickly without scaling fixes."
         ]
       },
       "common": [
@@ -1003,7 +1240,23 @@ window.UE5_MODELING_DATA = {
           "note": "Epic explains why pivot placement matters for snapping and placement in Unreal."
         }
       ],
-      "visual": "assets/modeling/diagrams/pipeline.svg"
+      "visual": "assets/modeling/diagrams/pipeline.svg",
+      "stage": "judgement",
+      "todayTools": [
+        "Exact dimensions",
+        "Clone",
+        "90° rotation",
+        "Object Snap",
+        "Pivot",
+        "Connect",
+        "Open Chamfer",
+        "Shell"
+      ],
+      "notYet": [
+        "Random scale fixes",
+        "One giant room mesh",
+        "Arbitrary module sizes"
+      ]
     },
     {
       "id": "max-uvs",
@@ -1022,8 +1275,8 @@ window.UE5_MODELING_DATA = {
         "UE5"
       ],
       "aim": "Create usable UVs, identify stretching with a checker pattern and keep shell scale reasonably consistent before texturing.",
-      "intro": "UVs are not decoration. They tell a flat texture how to sit on a 3D surface. If the checker is stretched, the texture will be stretched too.",
-      "safety": "Do not start texturing until the checker passes. Save a pre-UV model version first.",
+      "intro": "UVs are a diagnostic stage before they are a texturing stage. The checker tells you whether the 2D layout is respecting the 3D model; if the squares stretch, your material will stretch too.",
+      "safety": "Save a pre-UV version. Do not start Substance Painter until the checker pattern passes on the important surfaces.",
       "steps": [
         {
           "title": "Add Unwrap UVW non-destructively",
@@ -1143,6 +1396,21 @@ window.UE5_MODELING_DATA = {
       "bookTakeaways": [
         "Use a checker before texturing: stretched or uneven squares reveal UV distortion immediately.",
         "The book also reinforces logical UV placement and even texel density; our lesson adds the hard stop that the checker must pass before Substance Painter."
+      ],
+      "stage": "pipeline",
+      "todayTools": [
+        "Unwrap UVW",
+        "UV Editor",
+        "Checker",
+        "Seams",
+        "Relax",
+        "Pack",
+        "Texel-density comparison"
+      ],
+      "notYet": [
+        "Texture painting",
+        "Tiny packed gaps",
+        "Blind automatic unwrap"
       ]
     },
     {
@@ -1161,8 +1429,8 @@ window.UE5_MODELING_DATA = {
         "UE5 materials"
       ],
       "aim": "Prepare a clean asset for Substance Painter or another texturing tool without trying to hide modelling or UV problems with materials.",
-      "intro": "Colour and texture cannot rescue broken geometry. This lesson is a handoff checkpoint: geometry passes, UVs pass, naming passes, then texturing starts.",
-      "safety": "Keep the modelling master file. Export a copy for texturing; do not destructively alter the only source asset just to satisfy an export.",
+      "intro": "This lesson is a handoff lesson, not a rendering lesson. The goal is to prepare clean material assignments and asset data for Substance Painter without dragging legacy Max-render workflows into a UE5 game pipeline.",
+      "safety": "Do not switch renderers or rebuild the scene around an old material tutorial. For the game pipeline, keep the asset UVs/naming/material IDs clean and use current PBR/Substance workflows.",
       "steps": [
         {
           "title": "Run the geometry checkpoint",
@@ -1247,6 +1515,20 @@ window.UE5_MODELING_DATA = {
       "bookTakeaways": [
         "The book recommends descriptive asset names, logical folders and keeping linked textures/materials organised together.",
         "That supports the handoff rule here: clean geometry, clean UVs, clear names, then export a copy while preserving the Max master."
+      ],
+      "stage": "pipeline",
+      "todayTools": [
+        "Material IDs",
+        "Physical/PBR thinking",
+        "UV check",
+        "Naming",
+        "FBX handoff",
+        "Substance Painter"
+      ],
+      "notYet": [
+        "Legacy Scanline workflow",
+        "Old Standard material tutorials",
+        "Painting before UV proof"
       ]
     },
     {
@@ -1268,7 +1550,7 @@ window.UE5_MODELING_DATA = {
       ],
       "aim": "Export a static mesh from 3ds Max and verify its scale, pivot, geometry, UVs and placement behaviour inside Unreal Engine 5.8.",
       "intro": "The asset is not finished when it leaves Max. It is finished when it behaves correctly in the engine where the game will use it.",
-      "safety": "Export Selected, not Export All, unless you intentionally want every supported object in the scene. Keep the Max master and exported FBX as separate artefacts.",
+      "safety": "Save the clean Max source before export. If Unreal exposes a geometry, pivot, scale or UV problem, fix the source asset and re-export rather than hiding the problem with engine-side workarounds.",
       "steps": [
         {
           "title": "Place and test the pivot",
@@ -1378,7 +1660,20 @@ window.UE5_MODELING_DATA = {
           "note": "Current Epic step-by-step import and verification workflow, including 3ds Max."
         }
       ],
-      "visual": "assets/modeling/diagrams/pipeline.svg"
+      "visual": "assets/modeling/diagrams/pipeline.svg",
+      "stage": "pipeline",
+      "todayTools": [
+        "Pivot check",
+        "Reset/check transforms",
+        "FBX export",
+        "UE5 import",
+        "Static Mesh Editor",
+        "Collision check"
+      ],
+      "notYet": [
+        "Fixing source geometry inside UE5",
+        "Random import-scale compensation"
+      ]
     }
   ],
   "builds": [
@@ -1465,7 +1760,8 @@ window.UE5_MODELING_DATA = {
           ],
           "stop": "Do not start the next phase until this phase looks correct in both shaded and edged/wireframe views."
         }
-      ]
+      ],
+      "support": "Full guidance"
     },
     {
       "id": "build-barrel",
@@ -1532,62 +1828,83 @@ window.UE5_MODELING_DATA = {
           ],
           "stop": "Do not start the next phase until this phase looks correct in both shaded and edged/wireframe views."
         }
-      ]
+      ],
+      "support": "Guided with familiar tools"
     },
     {
-      "id": "build-desk",
-      "title": "Simple Desk / Workstation",
-      "icon": "⌑",
-      "difficulty": "Foundation+",
+      "id": "build-tyre",
+      "title": "Simple Game Tyre",
+      "icon": "◉",
+      "difficulty": "Intermediate scaffold",
       "time": "2–3 sessions",
       "requires": [
         "max-primitives-transforms",
+        "max-editable-poly",
+        "max-extrude-inset",
+        "max-edge-control",
+        "max-chamfer-smoothing",
         "max-modifier-stack"
       ],
       "teaches": [
-        "Multiple objects",
+        "Tube segment judgement",
+        "Ring + Connect",
+        "Sidewall profile",
+        "Inset / Extrude tread",
         "Symmetry",
-        "Pivots",
-        "Proportion",
-        "Naming"
+        "Wireframe checking"
       ],
-      "summary": "Build a believable prop from several clean components rather than forcing everything into one mesh.",
+      "summary": "Build a believable tyre while learning that roundness, profile and tread detail need controlled geometry rather than huge segment counts.",
       "phases": [
         {
-          "name": "Reference blockout",
-          "brief": "Break the desk into top, supports, drawer/panel forms and block them out separately.",
-          "proof": "Labelled blockout screenshot.",
+          "name": "01 • Choose the base density",
+          "brief": "Start with a Tube and deliberately choose a side count by silhouette, not habit.",
+          "proof": "Screenshot showing the chosen Tube in shaded + F4 views.",
+          "stop": "If the tyre visibly facets at intended game distance, adjust sides now. If extra sides make no visible difference, do not add them.",
           "steps": [
-            "Collect one front and one side reference. Break the desk into top, supports, drawer/panel and optional monitor/fixture blocks.",
-            "Create each major form as a separate primitive.",
-            "Do not attach them simply because they touch. Check proportion first."
-          ],
-          "stop": "Do not start the next phase until this phase looks correct in both shaded and edged/wireframe views."
+            "Create a Tube in Front view and set sensible outer radius, inner radius and width for the prop scale.",
+            "Make two temporary copies with lower and higher side counts.",
+            "Compare all three from intended game distance and choose the lowest count that still reads as round.",
+            "Delete the comparison copies and save Tyre_01_Base.max."
+          ]
         },
         {
-          "name": "Symmetry and repeat",
-          "brief": "Reuse mirrored/repeated parts instead of remodelling identical geometry.",
-          "proof": "Modifier stack screenshot.",
+          "name": "02 • Shape the sidewall",
+          "brief": "Convert a safe working copy and use Ring/Connect to add only the loops needed to control the tyre profile.",
+          "proof": "Front/side orthographic screenshot with F4 visible.",
+          "stop": "The tyre should have a clean rounded shoulder without pinching. If a new loop does not improve the profile, remove/undo it.",
           "steps": [
-            "Identify repeated left/right parts. Model one clean source part.",
-            "Use Clone/Symmetry where appropriate rather than remodelling the twin.",
-            "Change the source and prove the repeat updates or remains identical."
-          ],
-          "stop": "Do not start the next phase until this phase looks correct in both shaded and edged/wireframe views."
+            "Duplicate the Tube as Tyre_SAFE and Tyre_WORK before conversion.",
+            "Convert Tyre_WORK to Editable Poly and enter Edge level.",
+            "Use Ring to select matching cross-section edges, then Connect to add a small number of profile loops.",
+            "Scale/move those loops gradually to round the shoulder while checking Front and Perspective views."
+          ]
         },
         {
-          "name": "Clean assembly",
-          "brief": "Name parts, align them accurately and decide what should remain separate.",
-          "proof": "Scene Explorer/object list screenshot.",
+          "name": "03 • Add simple tread language",
+          "brief": "Use shallow, repeated tread blocks. The goal is readable form, not a racing-simulator tyre.",
+          "proof": "Close shaded view plus wireframe showing controlled added geometry.",
+          "stop": "Tread should not intersect itself or create paper-thin slivers. If the pattern is messy, return to the clean sidewall version.",
           "steps": [
-            "Align parts with axis constraints and exact values where possible.",
-            "Give each logical part a clear name.",
-            "Inspect Scene Explorer and remove/rename leftover Box### objects.",
-            "Save a clean assembled milestone before detail."
-          ],
-          "stop": "Do not start the next phase until this phase looks correct in both shaded and edged/wireframe views."
+            "Select a small, evenly spaced set of outer tread polygons rather than every polygon.",
+            "Use Inset By Polygon with a small value to create borders around those tread faces.",
+            "Extrude the selected tread faces outward only a little.",
+            "Orbit around the tyre and verify the tread remains consistent around the circumference."
+          ]
+        },
+        {
+          "name": "04 • Finish and prove the mesh",
+          "brief": "Use a small Chamfer only where a highlight is needed and keep the stack/source recoverable.",
+          "proof": "Final shaded + edged view and saved milestone.",
+          "stop": "Do not add TurboSmooth merely because the object is round. The silhouette and shading should already be doing the job.",
+          "steps": [
+            "Chamfer only the edges that look unnaturally razor-sharp in the final view.",
+            "If you deliberately modelled only a half/section, use Symmetry and check the seam before continuing.",
+            "Toggle F4 and inspect for accidental density spikes, open borders or doubled geometry.",
+            "Save Tyre_04_Clean.max before any later UV/texturing work."
+          ]
         }
-      ]
+      ],
+      "support": "Guided with selection judgement"
     },
     {
       "id": "build-wall-panel",
@@ -1642,7 +1959,8 @@ window.UE5_MODELING_DATA = {
           ],
           "stop": "Do not start the next phase until this phase looks correct in both shaded and edged/wireframe views."
         }
-      ]
+      ],
+      "support": "Guided checkpoints"
     },
     {
       "id": "build-scifi-door",
@@ -1708,7 +2026,8 @@ window.UE5_MODELING_DATA = {
           ],
           "stop": "Do not start the next phase until this phase looks correct in both shaded and edged/wireframe views."
         }
-      ]
+      ],
+      "support": "Reduced prompts"
     },
     {
       "id": "build-pipe-kit",
@@ -1762,7 +2081,8 @@ window.UE5_MODELING_DATA = {
           ],
           "stop": "Do not start the next phase until this phase looks correct in both shaded and edged/wireframe views."
         }
-      ]
+      ],
+      "support": "Reduced prompts"
     },
     {
       "id": "build-modular-room",
@@ -1829,7 +2149,8 @@ window.UE5_MODELING_DATA = {
           ],
           "stop": "Do not start the next phase until this phase looks correct in both shaded and edged/wireframe views."
         }
-      ]
+      ],
+      "support": "Production brief"
     },
     {
       "id": "build-hero-prop",
@@ -1897,7 +2218,8 @@ window.UE5_MODELING_DATA = {
           ],
           "stop": "Do not start the next phase until this phase looks correct in both shaded and edged/wireframe views."
         }
-      ]
+      ],
+      "support": "Independent outcome brief"
     }
   ],
   "fixes": [
@@ -2086,5 +2408,38 @@ window.UE5_MODELING_DATA = {
     "title": "Essential Guide to 3ds Max for All Levels",
     "author": "Adeolu O / Computer Guru Institute",
     "note": "Selected figures and principles are used as supporting teaching references. Current Autodesk documentation remains the authority for current interface and version-specific controls."
-  }
+  },
+  "courseStages": [
+    {
+      "id": "foundation",
+      "title": "Stage 1 • Control the software",
+      "range": "Lessons 01–02",
+      "summary": "Workspace, primitives, precision, transforms and snapping. No polygon modelling yet."
+    },
+    {
+      "id": "mesh",
+      "title": "Stage 2 • Build clean geometry",
+      "range": "Lessons 03–06",
+      "summary": "Editable Poly, Extrude, Inset, edge control, Chamfer and shading."
+    },
+    {
+      "id": "judgement",
+      "title": "Stage 3 • Work like a modeller",
+      "range": "Lessons 07–09",
+      "summary": "Modifier stack, symmetry, topology judgement and modular asset rules."
+    },
+    {
+      "id": "pipeline",
+      "title": "Stage 4 • Make it game ready",
+      "range": "Lessons 10–12",
+      "summary": "UVs, Substance handoff, pivots, FBX and UE5 verification."
+    }
+  ],
+  "studyReferences": [
+    {
+      "title": "Autodesk 3ds Max 2023 Bible",
+      "author": "Seyi Sunday O.",
+      "use": "Curriculum sequencing, scaffold-task ideas and interface-capture planning only. Screenshots/pages are not reproduced in this release."
+    }
+  ]
 };

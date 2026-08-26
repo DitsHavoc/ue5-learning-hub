@@ -1,5 +1,24 @@
 # Changelog
 
+## v3.28.0 — 3ds Max Teaching Quality Pass — 26 Aug 2026
+
+### Changed
+- Re-audited the full 12-lesson 3D Modelling Studio using the uploaded *Autodesk 3ds Max 2023 Bible* as a curriculum/task reference.
+- Grouped modelling into four visible learning stages.
+- Added per-lesson **TOOLS YOU MAY USE TODAY** and **LEAVE THESE ALONE FOR NOW** guardrails.
+- Strengthened workspace, transforms, snapping, Editable Poly, edge control, topology and modular scaffolds.
+- Added a three-box snapping drill, Ring/Loop drill, segment-budget comparison and plank-strip mini build.
+- Replaced Simple Desk / Workstation Build X with **Simple Game Tyre**.
+- Added visible Build X support fading from full guidance to independent outcome brief.
+- Expanded the current-version 3ds Max interface capture checklist to 45 high-value captures.
+- Kept legacy Scanline/material workflows out of the game-production route.
+
+### Copyright handling
+- The 2023 Bible is All Rights Reserved; used for curriculum/task analysis only. No screenshots/pages from it are reproduced in the Hub.
+
+### Database
+- No migration required.
+
 ## v3.27.0 — 3ds Max Book Reference Quality Pass — 26 Aug 2026
 
 ### Added
