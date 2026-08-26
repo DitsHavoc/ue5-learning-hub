@@ -1,5 +1,5 @@
 window.UE5_TUTORIAL_DATA = {
-  "version": "3.22.0",
+  "version": "3.30.0",
   "buildDate": "26 Aug 2026",
   "categories": [
     {
@@ -167,7 +167,22 @@ window.UE5_TUTORIAL_DATA = {
       "featured": true,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "Asset: IA_Action",
+        "Value Type: Digital (Bool)",
+        "Mapping Context: IMC_Default",
+        "Teaching key: E"
+      ],
+      "studentRecipe": [
+        "Content Drawer → Input folder → right-click → Input → Input Action. Name it IA_Action.",
+        "Open IA_Action → set Value Type Digital (Bool) → Save.",
+        "Open IMC_Default → add a mapping row → choose IA_Action → set key E → Save.",
+        "Open the player Character Blueprint → Event Graph → right-click → search IA_Action → add the Started event.",
+        "From Started add Print String “Action pressed”. Compile.",
+        "Play and press E once. The message should print once per press. If not, check the Mapping Context is the one added to the player."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "double-jump",
@@ -271,7 +286,21 @@ window.UE5_TUTORIAL_DATA = {
       "featured": true,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "Jump Max Count: 2",
+        "Jump Z Velocity: keep project default first",
+        "Test: one ground jump + one air jump"
+      ],
+      "studentRecipe": [
+        "Open the player Character Blueprint → Class Defaults.",
+        "Search “Jump Max Count” and set it to 2. Compile.",
+        "Make sure the existing Jump input still calls Jump on Started/Triggered and Stop Jumping on Completed if your template uses it.",
+        "Play: press Jump once from the floor, then press Jump once again before landing.",
+        "Try a third press before landing. It must not create a third jump.",
+        "Land and repeat. If the second jump never occurs, confirm Jump Max Count is 2 on the actual pawn class being played."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "sprint",
@@ -378,7 +407,21 @@ window.UE5_TUTORIAL_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "IA_Sprint: Left Shift",
+        "Walk speed: 500",
+        "Sprint speed: 900"
+      ],
+      "studentRecipe": [
+        "Create/use IA_Sprint and map it to Left Shift in the active Mapping Context.",
+        "Open the player Character Blueprint → Event Graph → add IA_Sprint Started.",
+        "Drag Character Movement into the graph → Set Max Walk Speed → set 900 → connect Started execution.",
+        "Use IA_Sprint Completed (and Canceled if exposed) → Set Max Walk Speed → set 500.",
+        "Compile and Play. Move normally, hold Left Shift, release it.",
+        "If speed stays at 900 after release, your Completed/Canceled path is not connected."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "dash",
@@ -483,7 +526,22 @@ window.UE5_TUTORIAL_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "IA_Dash: Left Alt",
+        "Dash strength: 1200",
+        "Cooldown: 0.60 s",
+        "Launch: XY Override ON, Z Override OFF"
+      ],
+      "studentRecipe": [
+        "Create/use IA_Dash mapped to Left Alt.",
+        "Character Blueprint → Event Graph → IA_Dash Started.",
+        "Get Actor Forward Vector → multiply by Float 1200.",
+        "Add Launch Character. Connect the scaled vector to Launch Velocity. Enable XY Override; leave Z Override off.",
+        "After the launch, set CanDash False → Delay 0.60 → Set CanDash True. Branch on CanDash before Launch Character.",
+        "Compile and Play. Press Left Alt while still and while moving. The launch must remain forward and should not be endlessly spammable."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "crouch",
@@ -587,7 +645,21 @@ window.UE5_TUTORIAL_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "IA_Crouch: C or Left Ctrl",
+        "Can Crouch: Enabled",
+        "Max Walk Speed Crouched: 250"
+      ],
+      "studentRecipe": [
+        "Create/use IA_Crouch mapped to C or Left Ctrl.",
+        "Select Character Movement → Nav Movement / Character Movement settings → enable Can Crouch.",
+        "Set Max Walk Speed Crouched to 250. Compile.",
+        "IA_Crouch Started → call Crouch on the Character.",
+        "IA_Crouch Completed → call UnCrouch.",
+        "Play under an open ceiling first. Hold/release crouch. If capsule/mesh does not change, verify Can Crouch is enabled on the Character Movement component."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "line-trace-interact",
@@ -693,7 +765,22 @@ window.UE5_TUTORIAL_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "IA_Interact: E",
+        "Trace distance: 300 cm",
+        "Trace channel: Visibility",
+        "Debug: For Duration"
+      ],
+      "studentRecipe": [
+        "Create/use IA_Interact mapped to E.",
+        "Character Blueprint → IA_Interact Started. Get FollowCamera World Location = Start.",
+        "Get FollowCamera Forward Vector × 300 → add Start = End.",
+        "Add Line Trace By Channel: Start/End as above, Visibility channel, Draw Debug For Duration.",
+        "Branch from Return Value. True → Break Hit Result → Hit Actor → Print Display Name.",
+        "Play, aim at an Actor within 300 cm and press E. If the line misses, first verify Start/End before adding casts or interfaces."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "key-pickup",
@@ -798,7 +885,21 @@ window.UE5_TUTORIAL_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "HasKey Boolean: False",
+        "Pickup collision radius/extent: 75 cm for the first build",
+        "Key ID (optional): Key_A"
+      ],
+      "studentRecipe": [
+        "Create BP_KeyPickup (Actor) with a visible mesh + collision.",
+        "Player Character → create HasKey Boolean default False. Compile.",
+        "BP_KeyPickup collision → OnComponentBeginOverlap → cast/check Player Character.",
+        "On success → Set HasKey True on player → Destroy Actor (the pickup).",
+        "Place the pickup and Play. Walk into it once.",
+        "After pickup, print HasKey or inspect it in Blueprint debugger. It must change False → True before the key destroys itself."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "locked-door",
@@ -904,7 +1005,22 @@ window.UE5_TUTORIAL_DATA = {
       "featured": true,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "HasKey Boolean: False",
+        "Door timeline: 1.0 s",
+        "Closed Yaw: 0°",
+        "Open Yaw: 90°"
+      ],
+      "studentRecipe": [
+        "Player Character must already have HasKey Boolean default False.",
+        "Create BP_LockedDoor with a door mesh and interaction trigger/input path.",
+        "On interact: get player HasKey → Branch. False → Print “Door is locked”.",
+        "True → run TL_OpenDoor: 1.0 s Alpha 0→1 → Lerp Rotator Yaw 0→90 → Set Relative Rotation on door mesh.",
+        "Compile. Test without the key first; door must stay shut.",
+        "Pick up the key, return and interact. Door must open. Do not remove the Branch just to make the animation work."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "pressure-plate",
@@ -1019,7 +1135,21 @@ window.UE5_TUTORIAL_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "Box Extent: 100,100,20",
+        "Pressed offset: Z -5 cm",
+        "Timeline: 0.20 s"
+      ],
+      "studentRecipe": [
+        "Create BP_PressurePlate with Plate mesh + Box Collision.",
+        "Set Box Collision Extent to X100 Y100 Z20 and preset Trigger.",
+        "Create Timeline TL_Press, length 0.20 s, float Alpha 0→1.",
+        "Lerp Relative Location from plate start to start + Z -5 cm. Timeline Update → Set Relative Location.",
+        "BeginOverlap → Play; EndOverlap → Reverse.",
+        "Play and step on/off. The plate should move only 5 cm and return cleanly."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "button-lever",
@@ -1128,7 +1258,21 @@ window.UE5_TUTORIAL_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "Interact key: E",
+        "Lever rotation: 0° → 45°",
+        "Timeline: 0.25 s"
+      ],
+      "studentRecipe": [
+        "Create BP_Lever with base mesh, lever mesh and interaction collision.",
+        "Create Timeline TL_Lever: 0.25 s, Alpha 0→1.",
+        "Lerp Rotator from 0° to 45° on the lever’s intended axis → Set Relative Rotation.",
+        "On interaction: if IsOn False → Play, Set IsOn True; else → Reverse, Set IsOn False.",
+        "Compile and interact repeatedly.",
+        "If the lever orbits, fix the component pivot/hierarchy; do not compensate by inventing strange rotation values."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "collectable",
@@ -1243,7 +1387,21 @@ window.UE5_TUTORIAL_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "CollectableValue: 1",
+        "Target count: 5",
+        "Collision radius: 60 cm for the first build"
+      ],
+      "studentRecipe": [
+        "Player Character → create Collectables Integer default 0.",
+        "Create BP_Collectable with visible mesh + Trigger collision.",
+        "On player overlap → Get Collectables + 1 → Set Collectables.",
+        "Print the new count, then Destroy Actor.",
+        "Place five collectables. Compile and Play.",
+        "Collect all five. Count must read 1,2,3,4,5 exactly; if it jumps by more than one, check the overlap fires only once."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "flashlight",
@@ -1347,7 +1505,22 @@ window.UE5_TUTORIAL_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "IA_Flashlight: F",
+        "Spot Light Intensity: 5000",
+        "Attenuation Radius: 1500",
+        "Outer Cone Angle: 35°"
+      ],
+      "studentRecipe": [
+        "Open player Character → add Spot Light component as child of camera. Name it Flashlight.",
+        "Set Intensity 5000, Attenuation Radius 1500, Outer Cone Angle 35°. Set Visibility off by default.",
+        "Create/use IA_Flashlight mapped to F.",
+        "Create FlashlightOn Boolean default False. IA_Flashlight Started → NOT Boolean → set FlashlightOn.",
+        "Set Visibility on Flashlight from FlashlightOn. Compile.",
+        "Play in a darker area and press F repeatedly. Light should toggle once per press and follow the camera."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "line-trace-gun",
@@ -1456,7 +1629,23 @@ window.UE5_TUTORIAL_DATA = {
       "featured": true,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "IA_Fire: Left Mouse Button",
+        "Trace distance: 10000 cm",
+        "Damage: 20",
+        "Channel: Visibility",
+        "Debug: For Duration while learning"
+      ],
+      "studentRecipe": [
+        "Create/use IA_Fire mapped to Left Mouse Button.",
+        "Player/weapon Blueprint → IA_Fire Started. Camera location = Start.",
+        "Camera forward × 10000 + Start = End. Add Line Trace By Channel, Visibility, Draw Debug For Duration.",
+        "Branch on Return Value → Break Hit Result → Hit Actor.",
+        "True path → Apply Damage to Hit Actor with Base Damage 20.",
+        "Play against a damageable target. Verify the debug line hits the same object that receives damage before adding VFX/sound."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "projectile-gun",
@@ -1566,7 +1755,22 @@ window.UE5_TUTORIAL_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "Projectile speed: 3000 cm/s",
+        "Projectile damage: 20",
+        "Collision sphere radius: 8 cm",
+        "Initial Life Span: 5.0 s"
+      ],
+      "studentRecipe": [
+        "Create BP_Projectile (Actor). Add Sphere Collision and set Sphere Radius to exactly 8 cm. Add Projectile Movement.",
+        "Projectile Movement → Initial Speed 3000, Max Speed 3000. Set Initial Life Span 5.0.",
+        "Create/use IA_Fire. On fire → Spawn Actor BP_Projectile at muzzle/camera transform.",
+        "BP_Projectile OnHit/BeginOverlap → Apply Damage 20 to Other Actor → Destroy Actor.",
+        "Compile and fire at a static wall first. Projectile should travel forward and destroy on contact.",
+        "Then test against a damageable Actor. If it spawns inside the player, move the spawn transform forward before changing collision logic."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "player-health",
@@ -1672,7 +1876,22 @@ window.UE5_TUTORIAL_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "MaxHealth: 100",
+        "Health: 100",
+        "Test damage: 20",
+        "Clamp range: 0–100"
+      ],
+      "studentRecipe": [
+        "Player Character → add MaxHealth Float 100 and Health Float 100.",
+        "Create Function ApplyHealthChange with input DamageAmount Float.",
+        "Inside: Health - DamageAmount → Clamp(Float) Min0 MaxMaxHealth → Set Health.",
+        "After Set Health → Branch Health <= 0. True → Print “Player dead” for first proof.",
+        "Call ApplyHealthChange with 20 from a test key/damage Actor.",
+        "Play and apply five hits: 100→80→60→40→20→0. It must never become negative."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "enemy-health",
@@ -1769,7 +1988,22 @@ window.UE5_TUTORIAL_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "MaxHealth: 60",
+        "Health: 60",
+        "Test damage: 20",
+        "Expected hits to zero: 3"
+      ],
+      "studentRecipe": [
+        "Enemy Blueprint → MaxHealth Float 60, Health Float 60.",
+        "Add Event AnyDamage (or your chosen damage interface/event).",
+        "Health - Damage → Clamp 0..MaxHealth → Set Health.",
+        "Branch Health <= 0 → True → Destroy Actor after a Print “Enemy defeated”.",
+        "Use your test weapon with Damage 20.",
+        "Exactly three valid 20-damage hits should remove a 60-health enemy. If one shot triggers multiple times, fix hit detection first."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "health-pickup",
@@ -1867,7 +2101,21 @@ window.UE5_TUTORIAL_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "HealAmount: 25",
+        "Player MaxHealth: 100",
+        "Do not heal above 100"
+      ],
+      "studentRecipe": [
+        "Player must have Health/MaxHealth (100 max). Create BP_HealthPickup with Trigger collision.",
+        "Add HealAmount Float = 25.",
+        "On player overlap → NewHealth = Min(Health + HealAmount, MaxHealth).",
+        "Set player Health = NewHealth → then Destroy pickup.",
+        "Test at Health 50: pickup should produce 75.",
+        "Test at Health 90: pickup should produce 100, not 115."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "ammo-reload",
@@ -1994,7 +2242,22 @@ window.UE5_TUTORIAL_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "MagazineSize: 12",
+        "AmmoInMag: 12",
+        "ReserveAmmo: 48",
+        "Reload key: R"
+      ],
+      "studentRecipe": [
+        "Add MagazineSize=12, AmmoInMag=12, ReserveAmmo=48 Integers.",
+        "Before firing → AmmoInMag > 0 → Branch. False: do not fire.",
+        "After a successful shot → Set AmmoInMag = AmmoInMag - 1.",
+        "Create IA_Reload mapped to R → call Function Reload.",
+        "Reload: Needed = MagazineSize - AmmoInMag. ToLoad = Min(Needed, ReserveAmmo).",
+        "Set AmmoInMag = AmmoInMag + ToLoad; ReserveAmmo = ReserveAmmo - ToLoad. Test with AmmoInMag 9 / Reserve 3: result must be 12 / 0."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "melee-trace",
@@ -2108,7 +2371,22 @@ window.UE5_TUTORIAL_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "Attack range: 150 cm",
+        "Sphere/box radius: 35 cm",
+        "Damage: 25",
+        "Cooldown: 0.60 s"
+      ],
+      "studentRecipe": [
+        "Create/use IA_Attack mapped to a chosen button.",
+        "On attack get player/camera location and forward vector. End = Start + Forward×150.",
+        "Use Sphere Trace By Channel/Objects with Radius 35 (or a Box Trace of equivalent reach). Turn debug on while learning.",
+        "Branch on hit → Apply Damage 25 to valid target.",
+        "Gate attack with CanAttack Boolean: False after hit → Delay 0.60 → True.",
+        "Play near/far from one target. A target outside 150 cm must not take damage."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "lives-respawn",
@@ -2213,7 +2491,21 @@ window.UE5_TUTORIAL_DATA = {
       "featured": true,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "Lives: 3",
+        "Respawn delay: 2.0 s",
+        "Spawn point: PlayerStart"
+      ],
+      "studentRecipe": [
+        "GameMode → create Lives Integer and set Default Value to 3 for this teaching version.",
+        "Create Function/Custom Event PlayerDied. First set Lives = Lives - 1.",
+        "Branch Lives > 0. True → Delay 2.0 → respawn/restart player at PlayerStart/checkpoint.",
+        "False → show/print Game Over and do not respawn.",
+        "Test by forcing death three times.",
+        "Expected: Lives 3→2 respawn, 2→1 respawn, 1→0 Game Over."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "checkpoint",
@@ -2318,7 +2610,21 @@ window.UE5_TUTORIAL_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "Checkpoint ID: CP_01",
+        "Respawn Transform: checkpoint Actor transform",
+        "Trigger extent: 100 cm for the first build"
+      ],
+      "studentRecipe": [
+        "Create BP_Checkpoint with Trigger collision and ID Name CP_01.",
+        "Player/GameMode owner → store RespawnTransform (Transform) and ActiveCheckpointID.",
+        "On player overlap → set RespawnTransform = checkpoint GetActorTransform; set ID = CP_01.",
+        "Print “Checkpoint CP_01 active” once for proof.",
+        "On death, spawn/move player using RespawnTransform after your respawn delay.",
+        "Test death before and after activating checkpoint. After activation, respawn must occur at CP_01."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "score-system",
@@ -2415,7 +2721,21 @@ window.UE5_TUTORIAL_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "Score Integer: 0",
+        "Standard award: +100",
+        "Test target: 500"
+      ],
+      "studentRecipe": [
+        "Choose the owner (GameMode for match score, PlayerState for per-player networked score). Add Score Integer=0.",
+        "Create Function AddScore with input Amount Integer.",
+        "Inside → Score + Amount → Set Score.",
+        "Call AddScore(100) from a test collectable/target.",
+        "Print/update HUD after the Set Score.",
+        "Trigger five awards. Score must be 100,200,300,400,500 exactly."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "countdown-timer",
@@ -2525,7 +2845,21 @@ window.UE5_TUTORIAL_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "TimeRemaining: 60.0",
+        "Timer interval: 1.0 s",
+        "Stop at: 0"
+      ],
+      "studentRecipe": [
+        "Owner Blueprint → TimeRemaining Float/Integer = 60.",
+        "BeginPlay → Set Timer by Event, Time 1.0, Looping True.",
+        "Timer event → TimeRemaining - 1 → Max with 0 → Set TimeRemaining.",
+        "After Set → Branch TimeRemaining <= 0.",
+        "True → Clear/Invalidate Timer and fire your timeout event once.",
+        "Play with a temporary start value 5 to test quickly. It must show 5,4,3,2,1,0 and then stop."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "win-lose-state",
@@ -2640,7 +2974,21 @@ window.UE5_TUTORIAL_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "Win target: Score >= 500",
+        "Lose condition: Health <= 0",
+        "Only fire end state once"
+      ],
+      "studentRecipe": [
+        "Set your test win target: Score >= 500. Lose target: Health <= 0.",
+        "Create Boolean GameEnded default False.",
+        "After Score changes: if NOT GameEnded AND Score >= 500 → Set GameEnded True → Win event.",
+        "After Health changes: if NOT GameEnded AND Health <= 0 → Set GameEnded True → Lose event.",
+        "Test win first with Score 400 then add 100.",
+        "Reset and test lose with Health 20 then apply 20 damage. Neither end event should fire more than once."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "spawn-destroy",
@@ -2745,7 +3093,21 @@ window.UE5_TUTORIAL_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "Spawn class: chosen test Actor",
+        "Spawn offset: 200 cm forward",
+        "Life Span: 5.0 s"
+      ],
+      "studentRecipe": [
+        "Choose/create BP_SpawnTest actor and set Initial Life Span 5.0 for the first test.",
+        "On a test input/event get owner Location + Forward Vector×200 for spawn location.",
+        "Make Transform using that location and owner rotation.",
+        "Spawn Actor From Class → BP_SpawnTest → Spawn Transform.",
+        "Compile and trigger once. The Actor should appear 200 cm ahead rather than inside the player.",
+        "Wait 5 seconds and prove it destroys itself. Then decide whether real gameplay needs manual destruction instead."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "basic-hud",
@@ -2850,7 +3212,21 @@ window.UE5_TUTORIAL_DATA = {
       "featured": true,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "Widget: WBP_HUD",
+        "Add once on BeginPlay",
+        "Test text: HUD READY"
+      ],
+      "studentRecipe": [
+        "Create Widget Blueprint WBP_HUD.",
+        "Designer → add a Text Block. Set Text to HUD READY. In its Canvas Panel Slot use the Top-Left anchor and Position X 40, Y 40.",
+        "PlayerController/Character BeginPlay → Create Widget WBP_HUD.",
+        "Promote Return Value to HUDRef if you will update it later.",
+        "Connect Create Widget → Add to Viewport. Compile.",
+        "Play. Exactly one HUD READY should appear. If duplicates stack, check you are not creating the widget repeatedly."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "health-bar",
@@ -2954,7 +3330,22 @@ window.UE5_TUTORIAL_DATA = {
       "featured": true,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "Health: 100",
+        "MaxHealth: 100",
+        "Progress Percent: Health / MaxHealth",
+        "Tests: 100/100, 50/100, 0/100"
+      ],
+      "studentRecipe": [
+        "WBP_HUD → add Progress Bar named PB_Health.",
+        "Player → Health=100, MaxHealth=100.",
+        "Create widget function SetHealthDisplay(CurrentHealth,MaxHealth).",
+        "Inside → CurrentHealth / MaxHealth → Set Percent on PB_Health.",
+        "Call it with 100/100, then 50/100, then 0/100.",
+        "Expected bar: full, half, empty. Clamp/guard against MaxHealth=0 if that can ever occur."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "score-lives-hud",
@@ -3068,7 +3459,21 @@ window.UE5_TUTORIAL_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "Score: 0",
+        "Lives: 3",
+        "Example text: Score: 000 / Lives: 3"
+      ],
+      "studentRecipe": [
+        "WBP_HUD → add Text ScoreText and LivesText.",
+        "Set first test text: Score: 0 and Lives: 3.",
+        "Create function UpdateScoreLives(NewScore Integer, NewLives Integer).",
+        "Use Format Text or Conv_IntToText/String → SetText on each Text block.",
+        "Store HUD reference when widget is created and call UpdateScoreLives after score/lives change.",
+        "Test Score 500 / Lives 2. HUD must update once and show the exact new values."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "crosshair",
@@ -3153,7 +3558,21 @@ window.UE5_TUTORIAL_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "Image size: 32 × 32",
+        "Anchor: centre",
+        "Alignment: 0.5,0.5"
+      ],
+      "studentRecipe": [
+        "WBP_HUD → add Image widget named Crosshair.",
+        "Set desired brush/image, Size X 32 Y 32.",
+        "Set Anchor to centre of canvas.",
+        "Set Alignment X 0.5 Y 0.5 and Position X 0 Y 0 relative to centre anchor.",
+        "Compile and Play at more than one window resolution.",
+        "Crosshair must stay centred. If it moves with resolution, fix anchor/alignment rather than adding magic position offsets."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "interaction-prompt",
@@ -3267,7 +3686,21 @@ window.UE5_TUTORIAL_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "Prompt text: E - Interact",
+        "Default visibility: Hidden",
+        "Show only while valid target is detected"
+      ],
+      "studentRecipe": [
+        "WBP_HUD → add Text named InteractionPrompt → text E - Interact.",
+        "Set InteractionPrompt Visibility Hidden by default.",
+        "Create widget function SetInteractionPrompt(Show Boolean).",
+        "Inside set Visibility Visible when True, Hidden when False.",
+        "Your interaction trace/overlap calls True only while a valid interactable target is detected; otherwise False.",
+        "Play and aim at target / away from target. Prompt must appear/disappear cleanly without creating another widget."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "objective-text",
@@ -3376,7 +3809,21 @@ window.UE5_TUTORIAL_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "Widget text: Find the exit",
+        "Default objective ID: OBJ_01",
+        "Update only when objective changes"
+      ],
+      "studentRecipe": [
+        "WBP_HUD → add Text ObjectiveText. Set initial text Find the exit.",
+        "Create function SetObjective(NewObjective Text) → SetText ObjectiveText.",
+        "Store HUDRef when WBP_HUD is created.",
+        "When objective changes, call SetObjective once with the new Text.",
+        "Test sequence: Find the key → Unlock the door → Reach the exit.",
+        "Do not update objective text every Tick; update it only when objective state changes."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "pause-menu",
@@ -3481,7 +3928,22 @@ window.UE5_TUTORIAL_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "Pause key: Escape",
+        "Set Game Paused: True when opened",
+        "Set Game Paused: False when resumed",
+        "Input Mode UI Only while paused"
+      ],
+      "studentRecipe": [
+        "Create Widget Blueprint WBP_Pause with Resume button.",
+        "Create/use IA_Pause or Escape input. On press → Set Game Paused True.",
+        "Create WBP_Pause → Add to Viewport → Set Input Mode UI Only → Show Mouse Cursor True.",
+        "Resume button OnClicked → Remove From Parent → Set Game Paused False.",
+        "Set Input Mode Game Only → Show Mouse Cursor False.",
+        "Play: pause, click Resume, move player. If Escape cannot fire while paused, enable Execute When Paused on the input path or handle pause in the PlayerController appropriately."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "timeline-door",
@@ -3586,7 +4048,21 @@ window.UE5_TUTORIAL_DATA = {
       "featured": true,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "Timeline: 1.0 s",
+        "Alpha: 0 → 1",
+        "Door Yaw: 0° → 90°"
+      ],
+      "studentRecipe": [
+        "Create BP_Door with movable door mesh component.",
+        "Add Timeline TL_Door length 1.0, float Alpha keys (0s,0) and (1s,1).",
+        "Lerp Rotator Closed 0,0,0 to Open 0,0,90. Alpha → Lerp Alpha.",
+        "Timeline Update → Set Relative Rotation on door mesh.",
+        "Interact/overlap → Play; second interaction/exit → Reverse.",
+        "Test. Door should take exactly one second. If it orbits, fix pivot/component setup, not the Lerp values."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "moving-platform",
@@ -3696,7 +4172,22 @@ window.UE5_TUTORIAL_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "Timeline: 2.0 s",
+        "Travel distance: 400 cm",
+        "Alpha: 0 → 1",
+        "Use relative location"
+      ],
+      "studentRecipe": [
+        "Create BP_MovingPlatform with mesh component. Record StartLocation.",
+        "Create EndLocation = StartLocation + chosen axis vector×400.",
+        "Timeline TL_Move length 2.0, Alpha 0→1.",
+        "Lerp Vector StartLocation → EndLocation using Alpha. Update → Set Relative/World Location consistently.",
+        "BeginPlay → Play; Finished → Reverse; reverse Finished → Play (or use a looping pattern you understand).",
+        "Ride/test it. Travel must be 400 cm and take 2 seconds. If endpoints drift, stop mixing world and relative spaces."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "damage-zone",
@@ -3810,7 +4301,21 @@ window.UE5_TUTORIAL_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "Damage: 25 per trigger/test",
+        "Collision preset: Trigger",
+        "Player test health: 100"
+      ],
+      "studentRecipe": [
+        "Create BP_DamageZone with Box Collision preset Trigger.",
+        "On player BeginOverlap → Apply Damage Base Damage 25 (single-hit version) or call your health function with 25.",
+        "Print current Health after damage for proof.",
+        "Test with player Health 100. One entry should produce 75.",
+        "Leave/re-enter. Second entry should produce 50.",
+        "If health plummets instantly, you used Tick/repeating overlap logic unintentionally; fix event frequency before changing the damage number."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "random-spawner",
@@ -3937,7 +4442,21 @@ window.UE5_TUTORIAL_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "Spawn interval: 3.0 s",
+        "Spawn radius/box half-size: 500 cm",
+        "Maximum alive for first test: 5"
+      ],
+      "studentRecipe": [
+        "Create BP_RandomSpawner with Box Collision/Scene bounds representing ±500 cm area.",
+        "Create Array SpawnClasses with at least 2 valid Actor classes.",
+        "Set Timer by Event on BeginPlay: 3.0 s looping.",
+        "On timer → choose Random Array Item → choose Random Point in Bounding Box / random X,Y within ±500.",
+        "Spawn Actor from selected class at that location. Track AliveCount and stop at 5 for the first test.",
+        "Play for 20 seconds. You should never exceed 5 living test Actors."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "ai-patrol",
@@ -4042,7 +4561,22 @@ window.UE5_TUTORIAL_DATA = {
       "featured": true,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "Patrol points: at least 2",
+        "Point spacing: exactly 600 cm for the first test",
+        "Acceptance Radius: 75 cm",
+        "Wait: 2.0 s"
+      ],
+      "studentRecipe": [
+        "Place NavMeshBoundsVolume; press P and confirm patrol floor is green.",
+        "Place Patrol_A at X 0, Y -300, Z 0 and Patrol_B at X 0, Y 300, Z 0.",
+        "AI Controller/BT stores current PatrolTarget. First set Patrol_A.",
+        "Move To / AI Move To PatrolTarget with Acceptance Radius 75.",
+        "On success wait 2.0 s → switch target to the other point → move again.",
+        "Play. AI must alternate A↔B. If it does not move, check navmesh/possessed controller before Behaviour Tree complexity."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "ai-chase",
@@ -4157,7 +4691,21 @@ window.UE5_TUTORIAL_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "Acceptance Radius: 150 cm",
+        "Chase start example: 1000 cm",
+        "Lose target example: 1400 cm"
+      ],
+      "studentRecipe": [
+        "Get/set TargetActor when player is detected (use player pawn directly only for a simple prototype).",
+        "Store TargetActor in Blackboard/AIController variable.",
+        "Move To TargetActor with Acceptance Radius 150.",
+        "Only set/chase target inside your detection rule (example start within 1000 cm).",
+        "Clear TargetActor when lost/outside your rule (example beyond 1400 cm) and resume patrol.",
+        "Play and cross both thresholds. The AI should not flicker rapidly between chase/patrol at the same distance."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "ai-perception",
@@ -4267,7 +4815,22 @@ window.UE5_TUTORIAL_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "Sight Radius: 1200 cm",
+        "Lose Sight Radius: 1500 cm",
+        "Peripheral Vision Half Angle: 60°",
+        "Detect Neutrals: enabled for simple test"
+      ],
+      "studentRecipe": [
+        "AIController → add AI Perception component → add Sight config.",
+        "Set Sight Radius 1200, Lose Sight Radius 1500, Peripheral Vision Half Angle 60°.",
+        "For the first test enable Detect Neutrals = true in the Sight configuration. Leave the other affiliation settings unchanged.",
+        "On Target Perception Updated → if Successfully Sensed True set TargetActor; False clear it.",
+        "Print sensed/forgotten target while learning.",
+        "Play three tests in order: stand 800 cm directly in front of the AI; move beyond 1500 cm; then return inside 800 cm with a solid wall fully blocking line of sight. Confirm the perception event changes in each test before adding chase logic."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "ai-attack-range",
@@ -4377,7 +4940,21 @@ window.UE5_TUTORIAL_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "Attack range: 200 cm",
+        "Damage: 15",
+        "Attack cooldown: 1.2 s"
+      ],
+      "studentRecipe": [
+        "Enemy → set AttackRange Float 200 and AttackDamage 15.",
+        "On AI decision update get Distance To player.",
+        "Branch Distance <= AttackRange and CanAttack True.",
+        "True → Apply Damage 15 → Set CanAttack False → Delay 1.2 → Set CanAttack True.",
+        "Set Move To Acceptance Radius to 200 cm for this first build so movement stops at the same distance used by AttackRange.",
+        "Test at 250 cm (no hit) and 150 cm (hit). Damage must not apply faster than every 1.2 seconds."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "save-checkpoint",
@@ -4482,7 +5059,21 @@ window.UE5_TUTORIAL_DATA = {
       "featured": true,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "Slot Name: PlayerSlot",
+        "User Index: 0",
+        "Checkpoint ID: CP_01"
+      ],
+      "studentRecipe": [
+        "Create SaveGame class with CheckpointID Name and/or RespawnTransform.",
+        "When checkpoint activates set CheckpointID CP_01 and its Transform on the SaveGame object.",
+        "Save Game To Slot: PlayerSlot, User Index 0.",
+        "On Continue/BeginPlay → Does Save Game Exist PlayerSlot/0 → Load Game From Slot.",
+        "Cast to your SaveGame class and restore checkpoint transform/ID.",
+        "Close/restart Play/session and verify CP_01 survives. Do not trust a same-run variable as proof of persistence."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "struct-data-table",
@@ -4614,7 +5205,21 @@ window.UE5_TUTORIAL_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "Struct: ST_ItemData",
+        "Fields: DisplayName Text / Damage Float / Value Integer",
+        "Rows: TrainingSword, HeavySword, Medkit"
+      ],
+      "studentRecipe": [
+        "Create Struct ST_ItemData: DisplayName Text, Damage Float, Value Integer.",
+        "Create Data Table DT_ItemData from ST_ItemData.",
+        "Add TrainingSword (Damage25 Value100), HeavySword (40,250), Medkit (0,75).",
+        "Blueprint → Get Data Table Row → DT_ItemData → Row TrainingSword.",
+        "Break ST_ItemData → Print DisplayName and Damage.",
+        "Change TrainingSword Damage to 30 in the table and rerun. Blueprint should read 30 without graph edits."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "gameinstance-state",
@@ -4722,7 +5327,21 @@ window.UE5_TUTORIAL_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "GameInstance: GI_Learning",
+        "TotalCoins Integer: 0",
+        "SelectedDifficulty Name: Normal"
+      ],
+      "studentRecipe": [
+        "Create Blueprint GameInstance GI_Learning.",
+        "Add TotalCoins Integer=0 and SelectedDifficulty Name=Normal. Compile.",
+        "Project Settings → Maps & Modes → Game Instance Class → GI_Learning.",
+        "In Level A cast Get Game Instance to GI_Learning → Set TotalCoins 5.",
+        "Open Level B → Get Game Instance → cast → Print TotalCoins.",
+        "Expected: 5 after level load. Restart the whole game and expect it to reset unless you also use SaveGame."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "sound-feedback",
@@ -4808,7 +5427,21 @@ window.UE5_TUTORIAL_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "Volume Multiplier: 1.0",
+        "Pitch Multiplier: 1.0",
+        "Play once per action"
+      ],
+      "studentRecipe": [
+        "Choose an imported Sound Wave/Sound Cue.",
+        "At the gameplay event add Play Sound 2D for UI/non-positional feedback or Play Sound at Location for world sound.",
+        "Set Volume Multiplier 1.0 and Pitch Multiplier 1.0 first.",
+        "Compile and trigger the action exactly once.",
+        "Confirm one action produces one sound, not several overlapping copies.",
+        "Only after timing works, tune volume/pitch or add concurrency."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "niagara-impact",
@@ -4918,7 +5551,21 @@ window.UE5_TUTORIAL_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "Spawn at: Impact Point",
+        "Scale: 1,1,1 first",
+        "Auto destroy: use system default/one-shot setup"
+      ],
+      "studentRecipe": [
+        "Choose one one-shot Niagara System for the test and write down its exact asset name. Use that same system for every step in this tutorial.",
+        "From trace/projectile Hit Result get Impact Point (and Normal if orientation is needed).",
+        "Add Spawn System at Location → System = chosen Niagara → Location = Impact Point.",
+        "Start with Scale 1,1,1 and default rotation; prove position first.",
+        "Trigger several hits on different surfaces.",
+        "If effect appears at origin/player, inspect the Hit Result wiring before changing Niagara itself."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "camera-shake",
@@ -5005,7 +5652,22 @@ window.UE5_TUTORIAL_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": null,
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "Duration: 0.15 s for the first build",
+        "Location amplitude: 2",
+        "Rotation amplitude: 1.5",
+        "Frequency: 15 for the first build"
+      ],
+      "studentRecipe": [
+        "Create a Camera Shake Base Blueprint using a simple oscillation/perlin pattern supported by your project version.",
+        "Set first teaching values: Duration ~0.15 s, Location Amplitude 2, Rotation Amplitude 1.5, Frequency ~15.",
+        "From the action event get Player Camera Manager → Start Camera Shake → choose your shake class.",
+        "Compile and trigger one action.",
+        "If it is nauseating, reduce amplitude before shortening everything to zero.",
+        "Test on repeated action; the shake should support feedback, not make aiming impossible."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "silent-hill-fog",
@@ -5160,7 +5822,23 @@ window.UE5_TUTORIAL_DATA = {
         "title": "Silent Hill 2 official reference imagery © Konami Digital Entertainment",
         "url": "https://www.konami.com/games/eu/en/products/silenthill2r/"
       },
-      "prescriptive": true
+      "prescriptive": true,
+      "starterValues": [
+        "Fog Density: 0.03 starting point",
+        "Fog Height Falloff: 0.20",
+        "Volumetric Fog: Enabled",
+        "Extinction Scale: 1.5 starting point",
+        "Post-process saturation: 0.85 starting point"
+      ],
+      "studentRecipe": [
+        "Level Editor → Add → Visual Effects → Exponential Height Fog.",
+        "Select fog → enable Volumetric Fog. Start Fog Density 0.03 and Fog Height Falloff 0.20.",
+        "Set Volumetric Fog Extinction Scale 1.5 as a starting point. Do not chase mood before basic visibility works.",
+        "Play the route. Mark the distance where important silhouettes first become visible.",
+        "If the route becomes unreadable, add one Point Light at the problem area. Start Intensity 2500, Attenuation Radius 500 and Volumetric Scattering Intensity 1.0, then re-test.",
+        "Optional Post Process Volume: set Saturation to 0.85 for the first test. Re-test the same route before changing any other post-process value."
+      ],
+      "prescriptivePass": "3.30"
     }
   ],
   "chapterBuilds": [

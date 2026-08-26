@@ -1,10 +1,10 @@
-# UE5 Learning Hub v3.28.0 — 3ds Max Teaching Quality Pass
+# UE5 Learning Hub v3.30.0 — Single Clear Guide Pass
 
-## Current release — v3.28.0
+## Current release — v3.30.0
 
-This release adds a full **3D Modelling Studio** built around slow, cumulative Autodesk 3ds Max teaching rather than a large collection of shallow tutorials. It introduces 12 scaffolded lessons, 8 Build X projects, 6 Fix This Model clinics, original modelling concept diagrams, current Autodesk/Epic reference links, search/navigation integration, local progress/XP and three new modelling badges. No database migration is required.
+This release consolidates practical teaching into **one authoritative walkthrough per first build**. The exact recipe is no longer followed by a second competing set of numbered instructions. UE core lessons, Programming Quick Tutorials, 3ds Max lessons and Build X now lead with the exact action, known-working values, immediate checkpoint, reason and recovery information where available. No database migration is required.
 
-See `RELEASE-NOTES-v3.28.0.md`, `3DS-MAX-2023-BIBLE-TEACHING-PASS.md`, `3DS-MAX-CAPTURE-LIST.md`, `RELEASE-NOTES-v3.27.0.md`, `RELEASE-NOTES-v3.26.2.md`, `RELEASE-NOTES-v3.26.0.md` and `RELEASE-NOTES-v3.25.0.md` for the current modelling teaching pass and prior releases.
+See `RELEASE-NOTES-v3.30.0.md` and `INSTRUCTION-AUTHORING-STANDARD.md` for the new tutorial standard. Prior release notes remain in the repository for the modelling, profile, visual and portal passes.
 
 ## V3.20 — the Hub becomes a portal
 

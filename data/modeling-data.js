@@ -1,5 +1,5 @@
 window.UE5_MODELING_DATA = {
-  "version": "3.28.0",
+  "version": "3.30.0",
   "updated": "26 Aug 2026",
   "philosophy": "Slow, methodical, visual and cumulative. Learn one operation, prove it is correct, reuse it, then add the next. Build correctly before building quickly.",
   "lessons": [
@@ -146,7 +146,24 @@ window.UE5_MODELING_DATA = {
         "Boolean",
         "TurboSmooth",
         "UV Editor"
-      ]
+      ],
+      "starterValues": [
+        "Display Unit Scale: Centimetres",
+        "First file: Max_Practice_v001.max",
+        "Second file: Max_Practice_v002.max",
+        "Do not use Editable Poly yet"
+      ],
+      "studentRecipe": [
+        "Customize/Units Setup → set Display Unit Scale to Centimetres. Do not change random system settings you do not understand.",
+        "File → Save As → Max_Practice_v001.max before modelling.",
+        "Point to and name: Viewport, Command Panel, Modifier Stack area, Main Toolbar, Scene Explorer/Layer Explorer.",
+        "Create one Box only. Rename it Blockout_Box.",
+        "Press W, E and R one at a time and identify Move, Rotate, Scale. Undo any accidental transform with Ctrl+Z.",
+        "Press Alt+W to maximise the active viewport; press Alt+W again to restore four views.",
+        "File → Save As → Max_Practice_v002.max.",
+        "STOP: no Editable Poly, Boolean, TurboSmooth or detail modelling yet."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "max-primitives-transforms",
@@ -295,7 +312,24 @@ window.UE5_MODELING_DATA = {
         "Inset",
         "Chamfer",
         "Boolean"
-      ]
+      ],
+      "starterValues": [
+        "Box: Length 100 cm / Width 60 cm / Height 40 cm",
+        "Angle test: 90°",
+        "Precision stack boxes: 100×100×20; 70×70×20; 40×40×20 cm",
+        "Use one-axis movement before two-axis movement"
+      ],
+      "studentRecipe": [
+        "Create → Geometry → Standard Primitives → Box. Set Length 100, Width 60, Height 40 cm in Modify.",
+        "Press W. Move only X, undo; only Y, undo; only Z, undo. Watch the other coordinates stay unchanged.",
+        "Right-click Move / use Transform Type-In. Set a known position such as X0 Y0 Z0, then offset X by 150 cm.",
+        "Press E → enable Angle Snap → rotate exactly 90° on one axis. Undo and repeat once.",
+        "Duplicate the box. Uniform-scale one copy, then compare its Scale values with a copy resized by Length/Width/Height parameters. Return scaled copy to 100%.",
+        "Create stack boxes: 100×100×20, 70×70×20, 40×40×20 cm. Right-click Snaps Toggle → enable Vertex only. Snap one bottom corner of the 70×70×20 box to a top corner of the 100×100×20 box, then repeat with the 40×40×20 box.",
+        "Turn Snaps off when finished. Inspect Front and Top for zero gaps.",
+        "Build a tiny desk/room corner using primitives only. Use exact dimensions and 90° rotations; no detail."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "max-editable-poly",
@@ -447,7 +481,25 @@ window.UE5_MODELING_DATA = {
         "Chamfer",
         "TurboSmooth",
         "Boolean"
-      ]
+      ],
+      "starterValues": [
+        "Practice Box: 100×70×50 cm",
+        "Segments before conversion: 1/1/1",
+        "Edged Faces: F4",
+        "Safe copy suffix: _SAFE",
+        "Working copy suffix: _WORK"
+      ],
+      "studentRecipe": [
+        "Create Box 100×70×50 cm with Length/Width/Height Segs all 1.",
+        "Duplicate it. Rename copies Poly_SAFE and Poly_WORK. Hide/leave Poly_SAFE untouched.",
+        "Select Poly_WORK → right-click → Convert To → Convert to Editable Poly (or use the agreed Edit Poly modifier workflow if teaching non-destructive conversion).",
+        "Press F4. Confirm you still have only the minimum outer edges; no mystery loops appeared.",
+        "Enter Vertex level → select one obvious corner → move it 10 cm on one axis → Undo.",
+        "Repeat at Edge, Polygon and Element levels. At each level, select exactly one intended sub-object before moving anything.",
+        "Exit sub-object mode. The whole object should select again.",
+        "Save Max_EditPoly_v001.max before learning geometry-creating tools."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "max-extrude-inset",
@@ -576,7 +628,25 @@ window.UE5_MODELING_DATA = {
         "TurboSmooth",
         "Boolean",
         "Random detail cuts"
-      ]
+      ],
+      "starterValues": [
+        "Crate base: 80×60×45 cm",
+        "Inset: 5 cm first test",
+        "Recess Extrude: -3 cm",
+        "One operation at a time",
+        "Save: Crate_02_PrimaryForms.max"
+      ],
+      "studentRecipe": [
+        "Open/create Crate_WORK from a Box 80×60×45 cm; keep Crate_SAFE untouched.",
+        "Convert only Crate_WORK to Editable Poly. Press F4.",
+        "Polygon mode → click the front face only. Orbit 90° to a side/rear view and prove the rear face is NOT selected, then return to the front.",
+        "Inset → Amount 5 cm → confirm/exit the tool. STOP and check the border is even.",
+        "Select the centre polygon → Extrude → Height -3 cm → confirm/exit.",
+        "Orbit to a side view. The recess should go inward 3 cm without punching through the back.",
+        "Repeat one controlled panel operation on one side only. Do not decorate every face.",
+        "Save Crate_02_PrimaryForms.max."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "max-edge-control",
@@ -721,7 +791,24 @@ window.UE5_MODELING_DATA = {
         "Dense support loops everywhere",
         "TurboSmooth",
         "Boolean"
-      ]
+      ],
+      "starterValues": [
+        "Practice box: 100×60×40 cm",
+        "Connect first test: 2 Segments / Pinch 0 / Slide 0",
+        "Support-loop teaching target: 3 cm from the intended hard edge",
+        "F4 after every Connect"
+      ],
+      "studentRecipe": [
+        "Create/use practice box 100×60×40 cm. Press F4.",
+        "Edge mode → select one edge → use Ring. Confirm only parallel corresponding edges select.",
+        "Use Connect settings: Segments 2, Pinch 0, Slide 0 → confirm.",
+        "Undo. Repeat with one segment and move/slide it deliberately so you understand what changed.",
+        "On the teaching crate, add one support loop for the front panel edge. Position it 3 cm from the intended hard edge, then inspect the highlight before adding any other loop.",
+        "Orbit and inspect whether the new loop actually improves the form. If not, undo it.",
+        "Do not add loops “for detail”. Every added edge needs a job.",
+        "Save a clean version before Chamfer work."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "max-chamfer-smoothing",
@@ -834,7 +921,23 @@ window.UE5_MODELING_DATA = {
         "Huge chamfers",
         "High segment counts by default",
         "TurboSmooth as a repair button"
-      ]
+      ],
+      "starterValues": [
+        "Teaching Chamfer: Amount 1.5 cm / Segments 2",
+        "Low-cost comparison: Segments 1",
+        "Keep large flat faces flat",
+        "Save before/after versions"
+      ],
+      "studentRecipe": [
+        "Duplicate the clean crate/object into Chamfer_1Seg and Chamfer_2Seg versions.",
+        "Select only outer hard edges that should catch a highlight.",
+        "On first copy Chamfer Amount 1.5 cm, Segments 1.",
+        "On second copy Chamfer Amount 1.5 cm, Segments 2.",
+        "Turn F4 off and compare both from intended game distance under a readable light/shaded view.",
+        "Keep the cheaper version if the visual difference is negligible.",
+        "Turn F4 on and verify chamfer did not create accidental dense areas or collapse thin faces."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "max-modifier-stack",
@@ -972,7 +1075,23 @@ window.UE5_MODELING_DATA = {
         "Collapse Stack without a reason",
         "Destructive Boolean cleanup",
         "Modifier pile-up"
-      ]
+      ],
+      "starterValues": [
+        "Symmetry test object width: 100 cm total",
+        "Work on half: 50 cm",
+        "Symmetry axis: X for the teaching example",
+        "Do not Collapse Stack during the lesson"
+      ],
+      "studentRecipe": [
+        "Create a symmetrical practice object 100 cm total width, but model only the 50 cm left/right half.",
+        "Add Edit Poly modifier for the deliberate edits if using stack-based workflow.",
+        "Add Symmetry modifier above it. Set mirror axis X for this teaching example.",
+        "Move/edit geometry below Symmetry and watch the other half update.",
+        "Inspect the centre seam closely. There must be no gap or doubled centre vertices where a welded seam is intended.",
+        "Add a temporary Chamfer above/below as demonstrated and toggle modifier lightbulbs to see stack order effects.",
+        "Do NOT Collapse Stack. Save ModifierStack_v001.max with the stack intact."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "max-topology-clinic",
@@ -1124,7 +1243,23 @@ window.UE5_MODELING_DATA = {
         "Huge Weld thresholds",
         "Delete random edges",
         "“Quads at any cost”"
-      ]
+      ],
+      "starterValues": [
+        "Cylinder comparison: Radius 30 cm / Height 60 cm",
+        "Sides: 12 / 24 / 48",
+        "Use F4 to judge density",
+        "Choose lowest side count that holds silhouette at game distance"
+      ],
+      "studentRecipe": [
+        "Create three Cylinders with Radius 30 cm, Height 60 cm.",
+        "Set Sides to 12, 24 and 48 respectively. Keep other dimensions identical.",
+        "Press F4 and compare edge density. Then turn F4 off and inspect silhouette from intended game distance.",
+        "For the first known-working version keep the 24-side cylinder. Then compare it with 12 and 48 sides and write one sentence explaining whether 24 is justified at the intended camera distance.",
+        "Inspect one deliberately bad/dense mesh: look for unused loops, tiny faces, long thin triangles, open borders and accidental duplicates.",
+        "Repair ONE identified issue, then re-check. Do not run random cleanup tools across the whole asset.",
+        "Compare shaded view AND F4 before calling the repair successful."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "max-modular-kit",
@@ -1256,7 +1391,25 @@ window.UE5_MODELING_DATA = {
         "Random scale fixes",
         "One giant room mesh",
         "Arbitrary module sizes"
-      ]
+      ],
+      "starterValues": [
+        "Grid step: 10 cm",
+        "Wall module: 400×20×300 cm",
+        "Floor module: 400×400×20 cm",
+        "Door opening: 100×210 cm",
+        "Rotations: exact 90°"
+      ],
+      "studentRecipe": [
+        "Set modelling/grid workflow to 10 cm increments for the exercise.",
+        "Create Wall_400: 400 cm wide × 20 cm thick × 300 cm high.",
+        "Create Floor_400: 400×400×20 cm. Put pivots at a useful base/grid corner using the agreed pivot workflow.",
+        "Create doorway wall using the same 400×20×300 outer module and a 100×210 cm opening.",
+        "Duplicate and rotate pieces only in exact 90° increments.",
+        "Assemble one room. Zoom into every join; there should be no gaps or overlaps caused by eyeballing.",
+        "Build a second layout from the same pieces WITHOUT non-uniform scaling.",
+        "If a piece needs scaling to fit, repair the source dimensions instead."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "max-uvs",
@@ -1411,7 +1564,24 @@ window.UE5_MODELING_DATA = {
         "Texture painting",
         "Tiny packed gaps",
         "Blind automatic unwrap"
-      ]
+      ],
+      "starterValues": [
+        "Checker texture: 1024×1024",
+        "Keep consistent checker square size across same material set",
+        "Padding target: 8 px at 1024 where the pack tool/workflow supports it",
+        "No overlapping shells unless intentionally mirrored/stacked"
+      ],
+      "studentRecipe": [
+        "Use a clean finished teaching asset. Add Unwrap UVW; do not collapse the modelling stack just to start UV work.",
+        "Open UV Editor and apply/use a 1024×1024 checker reference.",
+        "Create logical seams so shells can flatten without extreme stretching.",
+        "Flatten/Peel the shells using the taught method. Inspect checker squares on the model.",
+        "Scale shells so equal material surfaces show comparable checker square size.",
+        "Remove accidental overlaps. Keep overlaps only when deliberately mirrored/stacked and your texturing plan allows it.",
+        "Pack shells into 0–1 space with an 8 px padding target at 1024 wherever the pack tool exposes pixel padding.",
+        "Capture UV layout + checker-on-model proof before texturing."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "max-materials-substance",
@@ -1529,7 +1699,21 @@ window.UE5_MODELING_DATA = {
         "Legacy Scanline workflow",
         "Old Standard material tutorials",
         "Painting before UV proof"
-      ]
+      ],
+      "starterValues": [
+        "Material IDs: 1 = main surface, 2 = secondary detail where needed",
+        "Naming example: SM_Crate / M_Crate / T_Crate_BaseColor",
+        "Export a clean low-poly mesh with UVs before Painter"
+      ],
+      "studentRecipe": [
+        "Take a clean UVd asset; do not use texturing to hide modelling/UV faults.",
+        "Assign clear Material IDs only where the asset genuinely needs separate material regions: e.g. ID1 main, ID2 secondary.",
+        "Name asset/material consistently: SM_Crate, M_Crate, and texture set names derived from Crate.",
+        "Export a clean low-poly mesh for Substance Painter using the agreed course preset/current workflow.",
+        "In Painter verify the mesh imports at expected scale, UVs are present and material sets are sensible before painting.",
+        "If Painter shows stretching or unexpected material sets, return to Max and repair the source instead of painting around the problem."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "max-ue5-export",
@@ -1673,7 +1857,24 @@ window.UE5_MODELING_DATA = {
       "notYet": [
         "Fixing source geometry inside UE5",
         "Random import-scale compensation"
-      ]
+      ],
+      "starterValues": [
+        "System/display working units: centimetres for game asset workflow",
+        "Naming: SM_AssetName",
+        "Export Selected only",
+        "Animation: Off for static mesh",
+        "UE scale check: 100 cm = 1 metre"
+      ],
+      "studentRecipe": [
+        "Select only the finished static mesh asset. Confirm dimensions in centimetres and naming SM_AssetName.",
+        "Set pivot to the intended base/corner/hinge location, then TURN Affect Pivot Only off.",
+        "Use Export Selected → FBX. Keep Animation off for a static mesh and use the current college/Epic preset.",
+        "In UE5 import as Static Mesh at scale 1.0. Do not “fix” a wrong Max scale with random Unreal import scale.",
+        "Open Static Mesh Editor. Check dimensions, pivot/origin behaviour, normals/shading, UV channels and collision expectation.",
+        "Place three copies in the level on a 100 cm / 1 m reference. Rotate/move them to prove snapping and pivot behaviour.",
+        "If any source issue is wrong, fix the Max file and re-export/reimport. Do not fork a broken “UE-fixed” version unless there is a deliberate reason."
+      ],
+      "prescriptivePass": "3.30"
     }
   ],
   "builds": [
@@ -1761,7 +1962,23 @@ window.UE5_MODELING_DATA = {
           "stop": "Do not start the next phase until this phase looks correct in both shaded and edged/wireframe views."
         }
       ],
-      "support": "Full guidance"
+      "support": "Full guidance",
+      "starterValues": [
+        "Base Box: 80×60×45 cm",
+        "Inset: 5 cm",
+        "Recess Extrude: -3 cm",
+        "Chamfer teaching start: 1.5 cm / 2 segments",
+        "UV checker: 1024×1024"
+      ],
+      "studentRecipe": [
+        "Create Box exactly 80×60×45 cm. Name Crate_WORK; duplicate Crate_SAFE. Save Crate_01_Blockout.max.",
+        "Convert only Crate_WORK. Front polygon → Inset 5 cm → STOP. Centre polygon → Extrude -3 cm → STOP.",
+        "Add only the edge loops needed to support large forms. Do not add decorative density.",
+        "Chamfer selected outer highlight edges: start Amount 1.5 cm, Segments 2. Compare against Segments 1 before keeping it.",
+        "UV with 1024 checker. Fix stretching → match shell scale → pack with sensible padding.",
+        "Place pivot at useful base/corner, Export Selected, import to UE5 at scale 1.0 and compare beside a 100 cm reference."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "build-barrel",
@@ -1829,7 +2046,23 @@ window.UE5_MODELING_DATA = {
           "stop": "Do not start the next phase until this phase looks correct in both shaded and edged/wireframe views."
         }
       ],
-      "support": "Guided with familiar tools"
+      "support": "Guided with familiar tools",
+      "starterValues": [
+        "Cylinder Radius: 30 cm",
+        "Height: 90 cm",
+        "Compare Sides: 16 / 24 / 32",
+        "Start choice: 24 sides",
+        "Chamfer: 1.5 cm / 2 segments for the first test"
+      ],
+      "studentRecipe": [
+        "Create Cylinder Radius 30, Height 90. Make copies at 16,24,32 sides and compare silhouette. Keep the lowest acceptable; start with 24 if unsure.",
+        "Convert safe working copy. Add only the loops needed for top rim, body break and base.",
+        "Shape profile in orthographic side view. Keep the main cylinder wall smooth and even.",
+        "Chamfer the chosen highlight edges with Amount 1.5 cm and Segments 2. Inspect shaded + F4 views before changing the amount.",
+        "Create one logical vertical UV seam + separate cap shells. Checker-test.",
+        "Export to UE5 and compare scale beside the 80×60×45 crate."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "build-tyre",
@@ -1904,7 +2137,24 @@ window.UE5_MODELING_DATA = {
           ]
         }
       ],
-      "support": "Guided with selection judgement"
+      "support": "Guided with selection judgement",
+      "starterValues": [
+        "Tube outer radius: 35 cm",
+        "Inner radius: 20 cm",
+        "Width/Height: 18 cm",
+        "Compare Sides: 16 / 24 / 32",
+        "Start choice: 24 sides",
+        "Tread Extrude: 1.5 cm"
+      ],
+      "studentRecipe": [
+        "Create Tube: outer radius 35, inner radius 20, width/height 18. Compare 16,24,32 sides; keep 24 unless silhouette proves otherwise.",
+        "Duplicate Tyre_SAFE and Tyre_WORK. Convert only WORK.",
+        "Edge mode → Ring the shoulder edges → Connect with Segments 2, Pinch 60, Slide 0. Commit, then inspect the sidewall in Front view before moving any loop.",
+        "On the 24-side teaching tyre, select every third outer tread polygon. Use Inset By Polygon Amount 0.8 cm, then Extrude Height 1.5 cm.",
+        "Chamfer only edges that remain unnaturally razor sharp. F4 check for density spikes/open borders.",
+        "Save Tyre_04_Clean.max before UVs."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "build-wall-panel",
@@ -1960,7 +2210,23 @@ window.UE5_MODELING_DATA = {
           "stop": "Do not start the next phase until this phase looks correct in both shaded and edged/wireframe views."
         }
       ],
-      "support": "Guided checkpoints"
+      "support": "Guided checkpoints",
+      "starterValues": [
+        "Panel: 400×20×300 cm",
+        "Primary Inset: 8 cm",
+        "Primary recess: -3 cm",
+        "Secondary recess: -1.5 cm",
+        "Chamfer: 1 cm / 1–2 segments"
+      ],
+      "studentRecipe": [
+        "Create panel 400×20×300 cm. Keep a safe copy.",
+        "Mark 2–3 large regions. Primary panel: Inset 8 cm → Extrude -3 cm.",
+        "Secondary region: Inset 8 cm, then Extrude Height -1.5 cm so it is visibly shallower than the -3 cm primary recess.",
+        "Only after large shapes read well, add one restrained focal/asymmetric detail.",
+        "Chamfer the selected hard edges with Amount 1 cm and Segments 2. Preserve the broad flat surfaces.",
+        "F4 + shaded check from game distance. If tiny detail disappears, remove it."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "build-scifi-door",
@@ -2027,7 +2293,22 @@ window.UE5_MODELING_DATA = {
           "stop": "Do not start the next phase until this phase looks correct in both shaded and edged/wireframe views."
         }
       ],
-      "support": "Reduced prompts"
+      "support": "Reduced prompts",
+      "starterValues": [
+        "Opening target: exactly 120×220 cm for the first build",
+        "Door slab: 120×20×220 cm",
+        "Frame outer width: 160 cm for the first build",
+        "Hinge test rotation: 90° or slide distance: 130 cm",
+        "Use exact 90° rotations"
+      ],
+      "studentRecipe": [
+        "Block the door opening at exactly 120×220 cm and the moving slab at 120×20×220 cm. Set the frame outer width to 160 cm. Keep frame and moving slab separate.",
+        "If symmetrical, model half of repeated detail and use Symmetry. Check centre seam before detail.",
+        "Choose one teaching motion before continuing: HINGE → Hierarchy → Affect Pivot Only → snap the pivot to the vertical hinge edge; or SLIDE → keep the slab pivot unchanged and use a 130 cm X-axis translation. Turn Affect Pivot Only off after hinge editing.",
+        "Test exact 90° rotation (hinge) or exact 130 cm translation (slide) in Max, then Undo.",
+        "Export frame/slab deliberately. UE5 import at scale1 and test movement in an empty level before materials/VFX."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "build-pipe-kit",
@@ -2082,7 +2363,23 @@ window.UE5_MODELING_DATA = {
           "stop": "Do not start the next phase until this phase looks correct in both shaded and edged/wireframe views."
         }
       ],
-      "support": "Reduced prompts"
+      "support": "Reduced prompts",
+      "starterValues": [
+        "Outer diameter: 20 cm",
+        "Radial sides: 16",
+        "Straight lengths: 100 cm and 200 cm",
+        "Elbow: 90°",
+        "Grid connection step: 10 cm"
+      ],
+      "studentRecipe": [
+        "Choose outer diameter 20 cm and radial sides 16. Write these down and do not change them between pieces.",
+        "Create straight pieces 100 cm and 200 cm long. Put pivots on clean connection centres/grid positions.",
+        "Create a 90° elbow using the same diameter and connection dimensions.",
+        "Create T/junction with the same ends. Check there are no diameter mismatches.",
+        "Assemble layout A and layout B using duplicates and 90° rotations only.",
+        "If a join needs non-uniform scaling, stop and repair the source kit."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "build-modular-room",
@@ -2150,7 +2447,24 @@ window.UE5_MODELING_DATA = {
           "stop": "Do not start the next phase until this phase looks correct in both shaded and edged/wireframe views."
         }
       ],
-      "support": "Production brief"
+      "support": "Production brief",
+      "starterValues": [
+        "Module: 400 cm",
+        "Wall: 400×20×300 cm",
+        "Floor/Ceiling: 400×400×20 cm",
+        "Door opening: 100×210 cm",
+        "Grid: 10 cm",
+        "Rotations: 90°"
+      ],
+      "studentRecipe": [
+        "Use 400 cm module and 10 cm grid. Wall 400×20×300; Floor/Ceiling 400×400×20; doorway 100×210.",
+        "Create Wall, Corner, DoorwayWall, Floor, Ceiling from the same measurement rules.",
+        "Put pivots at useful base/grid corners; name with SM_ prefix and role/size.",
+        "Assemble room A in Max with exact 90° rotations. Inspect all joins.",
+        "Build room B from same pieces without scaling any instance.",
+        "Export Selected and assemble two UE5 layouts. Any unique scale correction means the Max source needs repair."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "build-hero-prop",
@@ -2219,7 +2533,22 @@ window.UE5_MODELING_DATA = {
           "stop": "Do not start the next phase until this phase looks correct in both shaded and edged/wireframe views."
         }
       ],
-      "support": "Independent outcome brief"
+      "support": "Independent outcome brief",
+      "starterValues": [
+        "Independent build: choose dimensions from reference",
+        "Before detail: write target bounding dimensions",
+        "Keep numbered saves at each destructive milestone",
+        "No UV work until topology/shading checkpoint passes"
+      ],
+      "studentRecipe": [
+        "Choose reference with at least two useful views. Write target overall dimensions before opening Max.",
+        "Annotate reference into primitives, repeated/symmetrical parts and silhouette-critical features.",
+        "Block only largest forms. Get teacher/self-check approval before secondary detail.",
+        "Model independently using the course tools. Save numbered versions before destructive changes.",
+        "Run topology + shading checkpoint before UVs. Fix source problems now.",
+        "UV/checker → texture in agreed workflow → UE5 verification. Capture final shaded, F4 wireframe, UV and engine proof."
+      ],
+      "prescriptivePass": "3.30"
     }
   ],
   "fixes": [

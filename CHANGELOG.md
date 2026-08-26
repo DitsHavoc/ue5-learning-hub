@@ -1,5 +1,38 @@
 # Changelog
 
+## v3.30.0 — Single Clear Guide Pass — 26 Aug 2026
+
+- Replaced the recipe + duplicate walkthrough pattern with one authoritative practical guide.
+- Main steps now combine exact first-build action, checkpoint, expected result, reason and recovery where available.
+- Applied to all 20 UE core lessons, 47 Programming Quick Tutorials, 12 Max lessons and 8 Build X projects.
+- Tightened remaining vague first-build measurements/settings across UE and Max.
+- Kept independent Chapter Builds deliberately less prescriptive so scaffolded skills still progress toward judgement.
+- Added `INSTRUCTION-AUTHORING-STANDARD.md` to prevent future content regression.
+- No database migration required.
+
+## v3.29.0 — Prescriptive Instruction Pass — 26 Aug 2026
+
+### Teaching hierarchy
+- Practical pages now lead with an **Exact First Build** instead of burying the student under explanation.
+- Known-working teaching values are shown before the steps.
+- The default flow is now **Copy → Test → Understand → Change**.
+- Why / troubleshooting / deeper reference material is still available, but collapsed behind the practical route.
+
+### Unreal Engine
+- Added exact first-build recipes and working values to all **20 core UE lessons**.
+- Added exact first-build recipes and working values to all **47 Programming Quick Tutorials**.
+- Core lesson order changed to **Goal → Build Exactly → Check → Understand**.
+- Blueprint guides now specify names, data types, default values, trace distances, timeline durations, speeds, health/damage values and test conditions where appropriate.
+
+### 3ds Max
+- Added exact modelling routes and measurements to all **12 modelling lessons**.
+- Added exact first-build measurements to all **8 Build X projects**.
+- Early Max tasks now specify dimensions, segment counts, Inset/Extrude/Chamfer values, grid sizes, modular measurements and explicit stop checks.
+- Interface/book/reference material moved behind the first practical route so it supports the task instead of obscuring it.
+
+### Database
+- No migration required.
+
 ## v3.28.0 — 3ds Max Teaching Quality Pass — 26 Aug 2026
 
 ### Changed

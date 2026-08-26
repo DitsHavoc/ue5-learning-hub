@@ -1,5 +1,5 @@
 window.UE5_COURSE_DATA = {
-  "version": "3.22.0",
+  "version": "3.30.0",
   "buildDate": "26 Aug 2026",
   "paths": [
     {
@@ -459,7 +459,27 @@ window.UE5_COURSE_DATA = {
           "check": "Your scene and project structure are clearer than when you started."
         }
       ],
-      "docVisuals": []
+      "docVisuals": [],
+      "starterValues": [
+        "Project: Learning_Practice",
+        "Cube size: default 100 cm",
+        "Cube_Centre Location: X 0, Y 0, Z 50",
+        "Cube_Left Location: X 0, Y -200, Z 50",
+        "Cube_Right Location: X 0, Y 200, Z 50",
+        "Cube_Right Rotation Z (Yaw): 45°",
+        "Use Scale 1,1,1 unless the step explicitly asks otherwise"
+      ],
+      "studentRecipe": [
+        "Open Games → Third Person and create/open the project Learning_Practice. Wait for the default Third Person map to finish loading.",
+        "Press Play once. Move the character, then press Esc. If this does not work, fix the project/map before continuing.",
+        "Use Add (+) → Shapes → Cube and place three cubes. Do not resize them by dragging.",
+        "In the Outliner rename them exactly: Cube_Centre, Cube_Left, Cube_Right.",
+        "Select Cube_Centre → Details → Transform and enter Location X 0, Y 0, Z 50. Repeat with Cube_Left at 0,-200,50 and Cube_Right at 0,200,50.",
+        "Select Cube_Right and set Rotation Z/Yaw to 45°. Leave X and Y rotation at 0°.",
+        "Click each Outliner name and prove the matching cube highlights. Press F once for each selected Actor and confirm the camera frames the matching cube.",
+        "Content Drawer → create folder Learning. Use File → Save All. Do not continue with unsaved changes."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "actors-components",
@@ -906,7 +926,26 @@ window.UE5_COURSE_DATA = {
           "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/module-2-create-a-flashlight-with-enhanced-input",
           "sourceTitle": "Epic UE5.8 — Create a Flashlight with Enhanced Input"
         }
-      ]
+      ],
+      "starterValues": [
+        "Blueprint: BP_PracticeBeacon",
+        "Static Mesh component: SM_Body",
+        "Mesh: Cube",
+        "Point Light: Intensity 2500, Attenuation Radius 350",
+        "Box Collision Box Extent: X 75, Y 75, Z 75",
+        "Placed Actor Location: X 0, Y 0, Z 100"
+      ],
+      "studentRecipe": [
+        "Content Drawer → Learning → right-click → Blueprint Class → Actor. Name it BP_PracticeBeacon and open it.",
+        "Components → Add → Static Mesh. Rename it SM_Body. In Details → Static Mesh choose the basic Cube mesh.",
+        "Components → Add → Point Light. Set Intensity to 2500 and Attenuation Radius to 350. Keep the light centred for now.",
+        "Components → Add → Box Collision. Set Box Extent X 75, Y 75, Z 75.",
+        "In the Components tree make sure SM_Body, PointLight and Box are components of the same Actor. Do not create separate level Actors for them.",
+        "Compile. Fix every compile error before leaving the Blueprint.",
+        "Drag BP_PracticeBeacon into the level and set Location X 0, Y 0, Z 100.",
+        "Press Play. View the beacon from two different angles and confirm the mesh and light remain together as one reusable Actor."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "blueprint-classes",
@@ -1311,7 +1350,25 @@ window.UE5_COURSE_DATA = {
           "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/module-2-create-a-flashlight-with-enhanced-input",
           "sourceTitle": "Epic UE5.8 — Create a Flashlight with Enhanced Input"
         }
-      ]
+      ],
+      "starterValues": [
+        "Blueprint: BP_ColourBlock",
+        "Component: SM_Block",
+        "Instance variable: BlockLabel (String)",
+        "Default BlockLabel: A",
+        "Placed labels: A, B, C"
+      ],
+      "studentRecipe": [
+        "Create Actor Blueprint BP_ColourBlock in Learning and open it.",
+        "Add Static Mesh → rename SM_Block → choose Cube → Compile.",
+        "Drag BP_ColourBlock into the level three times. Rename the instances Block_A, Block_B and Block_C.",
+        "Inside BP_ColourBlock create variable BlockLabel. Set type to String, default A, tick Instance Editable, then Compile.",
+        "Return to the level. Select Block_A and set BlockLabel to A; Block_B to B; Block_C to C.",
+        "Move the three instances to visibly different positions. Do not duplicate the Blueprint asset itself.",
+        "Open BP_ColourBlock, add one Point Light component, set Intensity 1000, Compile.",
+        "Return to the level and prove all three instances gained the light while their BlockLabel values stayed different."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "events",
@@ -1718,7 +1775,24 @@ window.UE5_COURSE_DATA = {
           "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/module-3-create-a-coin-pickup-with-modeling-tools-and-blueprints",
           "sourceTitle": "Epic UE5.8 — Create a Coin Pickup with Blueprints"
         }
-      ]
+      ],
+      "starterValues": [
+        "Blueprint: BP_EventPractice",
+        "Print duration: 2.0 s",
+        "Messages: 01 BeginPlay / 02 Second / 03 Third",
+        "Overlap Box Extent: 100,100,100"
+      ],
+      "studentRecipe": [
+        "Create BP_EventPractice (Actor), place one instance in the level and open its Event Graph.",
+        "From Event BeginPlay add Print String. Set In String to 01 BeginPlay and Duration to 2.0.",
+        "From that Print String execution output connect a second Print String: 02 Second, Duration 2.0.",
+        "Connect a third Print String: 03 Third, Duration 2.0. Compile.",
+        "Before Play, predict the order. Press Play and prove the messages run 01 → 02 → 03.",
+        "Exit Play. Disconnect the execution wire before 03 Third. Play again and prove 03 no longer runs.",
+        "Add Box Collision with Extent 100,100,100. Add OnComponentBeginOverlap(Box) → Print String “Overlap fired”.",
+        "Compile and Play. Walk into the box and prove BeginPlay fires once while Overlap fires when the player enters."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "variables",
@@ -2154,7 +2228,24 @@ window.UE5_COURSE_DATA = {
           "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/module-4-build-a-hud-with-unreal-motion-graphics",
           "sourceTitle": "Epic UE5.8 — Build a HUD with Unreal Motion Graphics"
         }
-      ]
+      ],
+      "starterValues": [
+        "Health: Float = 100.0",
+        "IsActive: Boolean = True",
+        "Health test value: 60.0",
+        "Tooltip: Starting health for this actor instance"
+      ],
+      "studentRecipe": [
+        "Open a practice Actor Blueprint. My Blueprint → + Variable → name Health → type Float.",
+        "Compile once, then set Health Default Value to 100.0.",
+        "Create IsActive → Boolean → set Default Value True → Compile.",
+        "Event BeginPlay → Get Health → Print String. Use Conv_FloatToString if Unreal inserts the conversion automatically.",
+        "After the first Print String add Set Health = 60.0, then Get Health → Print String again.",
+        "Compile and Play. The first value must be 100 and the second 60.",
+        "Select Health → tick Instance Editable → set Tooltip to “Starting health for this actor instance” → Compile.",
+        "Place two instances and give one Health 100 and the other 40. Prove the instance values can differ without duplicating the Blueprint."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "branches",
@@ -2583,7 +2674,25 @@ window.UE5_COURSE_DATA = {
           "slot": "deeper",
           "type": "epic-doc"
         }
-      ]
+      ],
+      "starterValues": [
+        "Health: Float = 100.0",
+        "Comparison: Health <= 0.0",
+        "True message: Dead",
+        "False message: Still alive",
+        "Test values: 100.0 then 0.0"
+      ],
+      "studentRecipe": [
+        "Create Float variable Health and set Default Value 100.0.",
+        "Event BeginPlay → Get Health → add Float <= Float. Type 0.0 into the second input.",
+        "Add Branch. Connect the <= result Boolean to Branch Condition.",
+        "True → Print String “Dead”. False → Print String “Still alive”. Compile.",
+        "Play with Health = 100. Confirm only “Still alive” prints.",
+        "Stop, set Health = 0, Compile and Play. Confirm only “Dead” prints.",
+        "Change Health to -10 and prove the True path still runs.",
+        "Add a comment around the comparison + Branch: “Is Health zero or below?” so the graph reads like a question."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "functions",
@@ -3014,7 +3123,24 @@ window.UE5_COURSE_DATA = {
           "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/module-3-creating-the-game-timer-in-unreal-engine",
           "sourceTitle": "Epic UE5.8 — Creating the Game Timer"
         }
-      ]
+      ],
+      "starterValues": [
+        "Function: ShowStatus",
+        "Input: Message (String)",
+        "Test message: Ready",
+        "Second test message: Door unlocked"
+      ],
+      "studentRecipe": [
+        "In a practice Blueprint, My Blueprint → Functions → +. Name the function ShowStatus.",
+        "Open ShowStatus. In Details → Inputs add Message, type String.",
+        "Inside the function add Print String and connect Message to In String.",
+        "Compile. Return to Event Graph → Event BeginPlay → call ShowStatus.",
+        "On the ShowStatus call set Message to Ready. Compile and Play; prove Ready appears.",
+        "Add a Custom Event named TestSecondCall → call ShowStatus with Message Door unlocked.",
+        "Call TestSecondCall after the first ShowStatus call and prove both messages use the same function.",
+        "Open ShowStatus and confirm it performs one clearly named job. Do not add unrelated gameplay logic to it."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "framework",
@@ -3419,7 +3545,24 @@ window.UE5_COURSE_DATA = {
           "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/module-6-creating-level-checkpoints-and-kill-volumes-in-unreal-engine",
           "sourceTitle": "Epic UE5.8 — Level Checkpoints and Kill Volumes"
         }
-      ]
+      ],
+      "starterValues": [
+        "Character variable: Health Float = 100",
+        "Character variable: SprintSpeed Float = 800",
+        "GameMode variable: TargetScore Integer = 500",
+        "GameInstance variable: SelectedDifficulty Name = Normal"
+      ],
+      "studentRecipe": [
+        "Open the player Character Blueprint. Add Health Float = 100 and SprintSpeed Float = 800. These belong to the player.",
+        "Create/open your GameMode Blueprint. Add TargetScore Integer = 500. This is a whole-match rule.",
+        "Create Blueprint Class → All Classes → GameInstance. Name it GI_Learning.",
+        "Open GI_Learning and add SelectedDifficulty, type Name, default Normal.",
+        "Project Settings → Maps & Modes → Game Instance Class → choose GI_Learning.",
+        "Write these three ownership rules in your notes: player state → Character; match rules → GameMode; cross-level session state → GameInstance.",
+        "Pick one mechanic from your own project and write its owner before building it.",
+        "If you cannot justify the owner in one sentence, do not add the logic yet."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "references-casting",
@@ -3808,7 +3951,24 @@ window.UE5_COURSE_DATA = {
           "slot": "practice",
           "type": "epic-doc"
         }
-      ]
+      ],
+      "starterValues": [
+        "Blueprints: BP_Switch, BP_Lamp",
+        "Reference variable: TargetLamp (BP_Lamp Object Reference)",
+        "Lamp function: SetLampOn(NewOn Boolean)",
+        "Test value: NewOn = True"
+      ],
+      "studentRecipe": [
+        "Create BP_Lamp (Actor). Add Point Light and set Intensity 2500. Create Function SetLampOn with Boolean input NewOn.",
+        "Inside SetLampOn drag the Point Light reference → Set Visibility. Connect NewOn to New Visibility. Compile.",
+        "Create BP_Switch (Actor). Add variable TargetLamp → type BP_Lamp Object Reference → tick Instance Editable → Compile.",
+        "Place one BP_Lamp and one BP_Switch in the level. Select BP_Switch → Details → TargetLamp → eyedropper/select the placed BP_Lamp.",
+        "In BP_Switch Event BeginPlay → Get TargetLamp → call SetLampOn and set NewOn False. Compile and Play; the lamp should switch off.",
+        "Change NewOn to True and prove the same reference can control the lamp.",
+        "Create a temporary Actor Object Reference variable and note that BP_Lamp-specific functions are unavailable until you Cast To BP_Lamp.",
+        "Remove the temporary test. Keep the typed TargetLamp reference because it is clearer when you already know the object type."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "interfaces-dispatchers",
@@ -4230,7 +4390,25 @@ window.UE5_COURSE_DATA = {
           "slot": "deeper",
           "type": "epic-doc"
         }
-      ]
+      ],
+      "starterValues": [
+        "Interface: BPI_Interact",
+        "Interface function: Interact",
+        "Door Blueprint: BP_InterfaceDoor",
+        "Button Blueprint: BP_InterfaceButton",
+        "Dispatcher: OnPressed"
+      ],
+      "studentRecipe": [
+        "Content Drawer → right-click → Blueprints → Blueprint Interface. Name it BPI_Interact.",
+        "Open BPI_Interact. Rename the default function Interact. Do not add implementation nodes here. Save.",
+        "Open/create BP_InterfaceDoor → Class Settings → Implemented Interfaces → Add BPI_Interact → Compile.",
+        "In BP_InterfaceDoor add the Event Interact implementation → Print String “Door interacted”. Compile.",
+        "Create BP_InterfaceButton with an Instance Editable Actor reference TargetActor. On your test event call Interact (Message) on TargetActor.",
+        "Place both, assign TargetActor to the door, trigger the button and prove the interface message reaches the door.",
+        "In BP_InterfaceButton add Event Dispatcher OnPressed. Call it immediately after the interaction message.",
+        "Bind one listener only if you need a broadcast response. Keep the interface for direct capability and the dispatcher for one-to-many notification."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "collision",
@@ -4636,7 +4814,24 @@ window.UE5_COURSE_DATA = {
           "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/module-6-creating-level-checkpoints-and-kill-volumes-in-unreal-engine",
           "sourceTitle": "Epic UE5.8 — Level Checkpoints and Kill Volumes"
         }
-      ]
+      ],
+      "starterValues": [
+        "Blueprint: BP_TriggerPractice",
+        "Box Extent: X 100, Y 100, Z 100",
+        "Collision Preset: Trigger",
+        "Response test: Print “Player entered trigger”"
+      ],
+      "studentRecipe": [
+        "Create BP_TriggerPractice (Actor). Add Box Collision.",
+        "Select Box Collision → set Box Extent X 100, Y 100, Z 100.",
+        "Details → Collision Presets → Trigger. Make sure Generate Overlap Events is enabled.",
+        "Add OnComponentBeginOverlap(Box) → Print String “Player entered trigger”. Duration 2.0.",
+        "Compile, place the Blueprint so the box crosses the player path, then Play.",
+        "Walk into the volume once. The message should appear when entering, not continuously every frame.",
+        "Use Other Actor → Equal (Object) with Get Player Character if you want to prove only the player should trigger it.",
+        "After the first successful test, change Box Extent to X 150, Y 75, Z 100 and test again. Confirm the larger trigger still fires once on entry."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "traces",
@@ -5042,7 +5237,25 @@ window.UE5_COURSE_DATA = {
           "slot": "practice",
           "type": "epic-doc"
         }
-      ]
+      ],
+      "starterValues": [
+        "Input: E / IA_Interact",
+        "Trace distance: 1500 cm",
+        "Trace Channel: Visibility",
+        "Draw Debug Type: For Duration",
+        "Debug Draw Time: 2.0 s"
+      ],
+      "studentRecipe": [
+        "Use/create IA_Interact mapped to E. Open the player Character Blueprint Event Graph.",
+        "Add IA_Interact Started. From FollowCamera get World Location → this is Start.",
+        "From FollowCamera get Forward Vector → multiply Vector * Float by 1500.",
+        "Add Start + scaled Forward Vector → connect result to Line Trace By Channel End. Connect camera location to Start.",
+        "Set Trace Channel Visibility and Draw Debug Type For Duration. Compile.",
+        "From Out Hit → Break Hit Result → Hit Actor → Get Display Name → Print String.",
+        "Branch from the Line Trace Return Value. Only use hit data from the True path.",
+        "Play, aim at a visible Actor within 1500 cm and press E. Confirm the debug line reaches the target and the correct Actor name prints."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "timelines",
@@ -5445,7 +5658,28 @@ window.UE5_COURSE_DATA = {
           "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/module-7-building-more-game-obstacles-in-unreal-engine",
           "sourceTitle": "Epic UE5.8 — Building More Game Obstacles"
         }
-      ]
+      ],
+      "starterValues": [
+        "Blueprint: BP_PracticeDoor",
+        "Timeline: TL_OpenDoor",
+        "Timeline length: 1.0 s",
+        "Float track: Alpha",
+        "Key 1: Time 0.0 / Value 0.0",
+        "Key 2: Time 1.0 / Value 1.0",
+        "Closed Yaw: 0°",
+        "Open Yaw: 90°"
+      ],
+      "studentRecipe": [
+        "Create BP_PracticeDoor with a Static Mesh component named SM_Door. Compile.",
+        "Event Graph → Add Timeline → name it TL_OpenDoor → double-click it.",
+        "Add Float Track named Alpha. Add key Time 0.0 Value 0.0 and key Time 1.0 Value 1.0. Set Timeline Length 1.0.",
+        "Return to Event Graph. Add Lerp (Rotator). A = 0,0,0. B = 0,0,90. Connect Alpha to Lerp Alpha.",
+        "Timeline Update → Set Relative Rotation on SM_Door. Connect Lerp result to New Rotation.",
+        "Use a simple test event (BeginPlay or interaction) → Play From Start on TL_OpenDoor.",
+        "Compile and Play. The door should rotate smoothly from 0° to 90° in one second.",
+        "If it orbits instead of hinges, stop changing Timeline values: the mesh pivot/component hierarchy is the problem."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "ui",
@@ -5870,7 +6104,27 @@ window.UE5_COURSE_DATA = {
           "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/module-2-setting-up-the-start-countdown-in-unreal-engine",
           "sourceTitle": "Epic UE5.8 — Setting Up the Start Countdown"
         }
-      ]
+      ],
+      "starterValues": [
+        "Widget: WBP_HUD",
+        "Health: 100.0",
+        "MaxHealth: 100.0",
+        "Text position: X 40 / Y 40",
+        "Health bar position: X 40 / Y 80",
+        "Health bar size: 300 × 24",
+        "Percent formula: Health / MaxHealth"
+      ],
+      "studentRecipe": [
+        "Content Drawer → User Interface → Widget Blueprint → User Widget. Name it WBP_HUD.",
+        "In Designer add Text Block at X 40, Y 40. Set text temporarily to Health: 100.",
+        "Add Progress Bar at X 40, Y 80. Set width 300 and height 24.",
+        "Create Function SetHealthDisplay with inputs CurrentHealth Float and MaxHealth Float.",
+        "Inside SetHealthDisplay calculate CurrentHealth / MaxHealth and Set Percent on the Progress Bar.",
+        "In the player Character create Health Float 100 and MaxHealth Float 100.",
+        "BeginPlay → Create Widget WBP_HUD → promote Return Value to HUDRef → Add to Viewport → call SetHealthDisplay(100,100).",
+        "Play. The widget must appear once and the bar must be full. Test 50,100 and prove the bar becomes half full."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "savegame",
@@ -6249,7 +6503,25 @@ window.UE5_COURSE_DATA = {
           "slot": "intro",
           "type": "epic-doc"
         }
-      ]
+      ],
+      "starterValues": [
+        "SaveGame class: BP_PlayerSave",
+        "SavedScore Integer = 0",
+        "SavedCheckpointName Name = Start",
+        "Slot Name: PlayerSlot",
+        "User Index: 0"
+      ],
+      "studentRecipe": [
+        "Create Blueprint Class → All Classes → SaveGame. Name it BP_PlayerSave.",
+        "Add SavedScore Integer default 0 and SavedCheckpointName Name default Start. Compile.",
+        "In the Blueprint that owns saving, add Create Save Game Object → class BP_PlayerSave.",
+        "Cast/use the returned BP_PlayerSave reference and set SavedScore and SavedCheckpointName before saving.",
+        "Add Save Game To Slot. Slot Name PlayerSlot; User Index 0.",
+        "For loading: Does Save Game Exist(PlayerSlot,0) → Branch → True → Load Game From Slot(PlayerSlot,0).",
+        "Cast the loaded object to BP_PlayerSave and Print SavedScore as a first proof.",
+        "Save a non-zero test score such as 250, restart Play and prove the loaded value is still 250."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "data",
@@ -6675,7 +6947,24 @@ window.UE5_COURSE_DATA = {
           "slot": "deeper",
           "type": "epic-doc"
         }
-      ]
+      ],
+      "starterValues": [
+        "Struct: ST_ItemData",
+        "Fields: DisplayName Text / Damage Float / Value Integer",
+        "Data Table: DT_ItemData",
+        "Rows: TrainingSword 25/100; HeavySword 40/250; Medkit 0/75"
+      ],
+      "studentRecipe": [
+        "Content Drawer → Blueprints → Structure. Name it ST_ItemData.",
+        "Add fields DisplayName (Text), Damage (Float), Value (Integer). Save the Struct.",
+        "Content Drawer → Miscellaneous → Data Table → choose ST_ItemData → name DT_ItemData.",
+        "Add row TrainingSword: DisplayName “Training Sword”, Damage 25, Value 100.",
+        "Add row HeavySword: DisplayName “Heavy Sword”, Damage 40, Value 250. Add Medkit: Damage 0, Value 75.",
+        "In a practice Blueprint add Get Data Table Row → Data Table DT_ItemData → Row Name TrainingSword.",
+        "Break ST_ItemData from Out Row → Print DisplayName and Damage.",
+        "Play and prove changing the TrainingSword Damage in the Data Table changes the value read by the Blueprint without editing the graph."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "ai",
@@ -7083,7 +7372,24 @@ window.UE5_COURSE_DATA = {
           "slot": "deeper",
           "type": "epic-doc"
         }
-      ]
+      ],
+      "starterValues": [
+        "Patrol spacing: exactly 600 cm for the first test",
+        "AI Move To Acceptance Radius: 75 cm",
+        "Wait time at point: 2.0 s",
+        "NavMesh: press P to visualise"
+      ],
+      "studentRecipe": [
+        "Add NavMeshBoundsVolume and scale it until the entire intended patrol floor is covered. Press P and confirm the floor shows green navigation.",
+        "Place Patrol_A at X 0, Y -300, Z 0 and Patrol_B at X 0, Y 300, Z 0 so they are exactly 600 cm apart.",
+        "Create/use an AI Character and AIController. Make sure the AI Character is set to use the controller.",
+        "Give the controller a TargetPoint Actor reference and assign Patrol_A for the first test.",
+        "Run AI Move To with Target Actor Patrol_A and Acceptance Radius 75. Compile and Play.",
+        "Prove the AI walks around obstacles and stops within the 75 cm Acceptance Radius of Patrol_A rather than sliding through geometry.",
+        "After success, wait 2.0 seconds, switch the target to Patrol_B and run AI Move To again.",
+        "Only after the two-point prototype works should you move the same target logic into Blackboard/Behaviour Tree."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "animation",
@@ -7508,7 +7814,24 @@ window.UE5_COURSE_DATA = {
           "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/skeletal-mesh-assets-in-unreal-engine",
           "sourceTitle": "Epic UE5.8 — Skeletal Mesh Assets"
         }
-      ]
+      ],
+      "starterValues": [
+        "Variables: Speed Float / IsInAir Boolean",
+        "Idle → Run condition: Speed > 5",
+        "Run → Idle condition: Speed <= 5",
+        "Any locomotion → Jump/Fall: IsInAir = True"
+      ],
+      "studentRecipe": [
+        "Open the Animation Blueprint used by the character. In Event Graph find Event Blueprint Update Animation.",
+        "Create Speed Float and IsInAir Boolean.",
+        "Try Get Pawn Owner → Get Velocity → Vector Length XY → Set Speed.",
+        "From the pawn/Character Movement → Is Falling → Set IsInAir.",
+        "Open Anim Graph → locomotion State Machine. Identify the Idle/Run and air states before editing transitions.",
+        "Set Idle → Run rule Speed > 5. Set Run → Idle rule Speed <= 5.",
+        "Set transition to the jump/fall state when IsInAir is True, and return when IsInAir is False.",
+        "Play: stand still, walk/run, jump, land. Watch the animation change with the same variables you can inspect in the Anim Blueprint debugger."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "practice",
@@ -7891,7 +8214,23 @@ window.UE5_COURSE_DATA = {
           "slot": "concept",
           "type": "epic-doc"
         }
-      ]
+      ],
+      "starterValues": [
+        "Rule: one behaviour sentence before nodes",
+        "Naming: CurrentHealth not Var1",
+        "Debug: remove temporary Print String before final handoff"
+      ],
+      "studentRecipe": [
+        "Before opening the graph, write one sentence: “This Blueprint should …”. Keep it to one behaviour.",
+        "Write the owner underneath: Character, Actor, Component, GameMode, GameInstance, Widget, etc.",
+        "Build one event-to-result chain only. End it with Print String so you can prove the behaviour before adding a second responsibility.",
+        "Rename every new variable/component/function so another student can understand it without asking you.",
+        "Find one repeated node chain. If it is truly the same job, move it into a Function/Macro or reusable Blueprint.",
+        "Remove debug nodes that no longer prove anything.",
+        "Add one short comment above the main logic block explaining its responsibility.",
+        "Play-test once more. The graph must be easier to read without changing the mechanic."
+      ],
+      "prescriptivePass": "3.30"
     },
     {
       "id": "complexity",
@@ -8282,7 +8621,23 @@ window.UE5_COURSE_DATA = {
           "slot": "deeper",
           "type": "epic-doc"
         }
-      ]
+      ],
+      "starterValues": [
+        "Refactor one block at a time",
+        "Replace repeated magic numbers with named variables",
+        "Retest after every refactor"
+      ],
+      "studentRecipe": [
+        "Choose one messy section only. Do not attempt to clean the whole Blueprint at once.",
+        "Circle/identify crossing wires, duplicated chains, unnamed values and vague variable names in that section.",
+        "Move one repeated action into a clearly named Function or Macro.",
+        "Replace important raw values such as 600, 1200 or 3.5 with named variables that describe purpose.",
+        "Align nodes left-to-right and keep execution flow visually obvious.",
+        "Add one comment that says what the block does, not what every node literally is.",
+        "Compile and Play immediately. Prove behaviour is unchanged.",
+        "Only after the Play test passes, choose exactly one more logic block and repeat the same refactor cycle."
+      ],
+      "prescriptivePass": "3.30"
     }
   ],
   "glossary": [

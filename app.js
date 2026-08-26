@@ -416,9 +416,63 @@ function renderStepVisual(visual, altPrefix='Step visual'){
   if(!visual?.src)return '';
   return '<div class="step-visual-wrap">'+zoomableImage({src:visual.src,alt:altPrefix,caption:visual.caption||'',sourceUrl:visual.sourceUrl||'',sourceTitle:visual.sourceTitle||'',kind:visual.kind||'local',eager:false})+'</div>';
 }
+function guideSupportShape(step){
+  if(!step)return {};
+  if(Array.isArray(step))return {title:step[0]||'',do:step[1]||'',why:step[2]||'',check:step[3]||''};
+  return step;
+}
+function guideTokens(value){
+  const stop=new Set(['the','and','for','with','this','that','from','into','your','then','only','once','after','before','first','use','using','set','add','create','open','play','test','step','should','will','when','where','make','keep']);
+  return new Set(String(value||'').toLowerCase().match(/[a-z0-9_.+-]+/g)?.filter(x=>x.length>2&&!stop.has(x))||[]);
+}
+function guideSupportFor(instruction,index,total,supportSteps=[]){
+  if(!supportSteps?.length)return {};
+  if(total<=1)return guideSupportShape(supportSteps[0]);
+  const mapped=Math.round(index*(supportSteps.length-1)/(total-1));
+  const target=guideTokens(instruction);
+  const overlapFor=(raw)=>{const hay=guideTokens(JSON.stringify(guideSupportShape(raw)));let n=0;target.forEach(t=>{if(hay.has(t))n+=/^[-+]?\d/.test(t)?2:1});return n};
+  const mappedOverlap=overlapFor(supportSteps[mapped]);
+  let best=mapped,bestOverlap=mappedOverlap;
+  supportSteps.forEach((raw,idx)=>{
+    if(Math.abs(idx-mapped)>1)return;
+    const overlap=overlapFor(raw);
+    if(overlap>=bestOverlap+2){best=idx;bestOverlap=overlap;}
+  });
+  return guideSupportShape(supportSteps[Math.max(0,Math.min(supportSteps.length-1,best))]);
+}
+function guideFixes(s){
+  const out=[];
+  if(s.warning)out.push(s.warning);
+  const xs=s.troubleshoot||s.stuck||[];
+  if(Array.isArray(xs))out.push(...xs);
+  else if(xs)out.push(xs);
+  return [...new Set(out.filter(Boolean))];
+}
+function renderSingleClearGuide(values=[],steps=[],supportSteps=[],opts={}){
+  if(!steps?.length)return '';
+  const title=opts.title||'Single clear guide';
+  const intro=opts.intro||'Follow this walkthrough in order. Use the exact first-build values until every checkpoint passes.';
+  const valuesHtml=values?.length?`<div class="guide-values"><span>PIN THESE FIRST-BUILD VALUES</span>${values.map(v=>`<code>${esc(v)}</code>`).join('')}</div>`:'';
+  const articles=steps.map((instruction,i)=>{
+    const sup=guideSupportFor(instruction,i,steps.length,supportSteps);
+    const fixes=guideFixes(sup);
+    const see=sup.see?`<div class="guide-field see"><span>YOU SHOULD SEE</span><div>${renderRichText(sup.see,false)}</div></div>`:'';
+    const fallbackCheck=i===steps.length-1?'Complete this exact action and prove the final result before marking the tutorial/build complete.':`Complete this exact action before moving to Step ${String(i+2).padStart(2,'0')}.`;
+    const check=sup.check?`<div class="guide-field check"><span>STOP + CHECK</span><div>${renderRichText(sup.check,false)}</div></div>`:`<div class="guide-field check"><span>STOP + CHECK</span><p>${esc(fallbackCheck)}</p></div>`;
+    const why=sup.why?`<div class="guide-field why"><span>WHY</span><div>${renderRichText(sup.why,false)}</div></div>`:'';
+    const fix=fixes.length?`<details class="guide-fix"><summary>If yours does not match</summary><ul>${fixes.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></details>`:'';
+    const visual=sup.visual?(typeof sup.visual==='string'?modelDiagram(sup.visual,`${title} step ${i+1}`):renderStepVisual(sup.visual,`${title} step ${i+1}`)):'';
+    return `<article class="single-guide-step"><div class="single-guide-number">${String(i+1).padStart(2,'0')}</div><div class="single-guide-body"><div class="guide-field action"><span>WHERE + DO THIS</span><p><strong>${esc(instruction)}</strong></p></div>${see}${check}${why}${visual}${fix}</div></article>`;
+  }).join('');
+  return `<section class="single-clear-guide"><div class="single-guide-head"><div><span class="eyebrow">ONE AUTHORITATIVE WALKTHROUGH</span><h2>${esc(title)}</h2><p>${esc(intro)}</p></div><span class="recipe-lock">COPY → CHECK → UNDERSTAND → CHANGE</span></div>${valuesHtml}<div class="single-guide-steps">${articles}</div><div class="recipe-stop"><b>RULE:</b> Do not build on top of a failed checkpoint. Fix the current step or undo to the last known-good state first.</div></section>`;
+}
+function buildGuideSupports(phases=[]){
+  return phases.map(ph=>({title:ph.name||'',why:ph.brief||'',see:ph.proof||'',check:ph.stop||'',stuck:ph.stop?[ph.stop]:[]}));
+}
 function guidedBuild(l){
-  if(!l.guidedDetailed?.length)return `<ol class="steps">${l.guided.map(s=>`<li>${esc(s)}</li>`).join('')}</ol>`;
-  return `<div class="guided-prescriptive-note"><b>Gold-standard walkthrough:</b> exact click paths, what you should see, and troubleshooting prompts are shown directly in the steps below.</div><div class="guided-detailed">${l.guidedDetailed.map((s,i)=>`<article class="guided-step"><div class="guided-step-num">${String(i+1).padStart(2,'0')}</div><div class="guided-step-main"><h3>${esc(s.title)}</h3>${s.where?`<div class="guided-where"><span>WHERE TO CLICK</span><div>${renderRichText(s.where,false)}</div></div>`:''}<div class="guided-do"><span>DO THIS</span><div>${renderRichText(s.do,false)}${s.doList?renderRichText(s.doList,true):''}</div></div>${s.see?`<div class="guided-see"><span>YOU SHOULD SEE</span><div>${renderRichText(s.see,false)}</div></div>`:''}<div class="guided-reason"><span>WHY</span><p>${esc(s.why)}</p></div><div class="guided-check"><span>CHECK</span><div>${renderRichText(s.check,false)}</div></div>${s.troubleshoot?.length?`<div class="guided-fix"><span>IF STUCK</span><div>${renderRichText(s.troubleshoot,false)}</div></div>`:''}${renderStepVisual(s.visual,`${l.title} step ${i+1}`)}</div></article>`).join('')}</div>`;
+  if(l.studentRecipe?.length)return renderSingleClearGuide(l.starterValues,l.studentRecipe,l.guidedDetailed||[],{title:'Exact first build',intro:'This is the walkthrough. Follow the clicks, names and values in order; use the Why line to understand each choice, then change values only after the build works.'});
+  if(l.guidedDetailed?.length)return `<div class="guided-detailed">${l.guidedDetailed.map((s,i)=>`<article class="guided-step"><div class="guided-step-num">${String(i+1).padStart(2,'0')}</div><div class="guided-step-main"><h3>${esc(s.title)}</h3>${s.where?`<div class="guided-where"><span>WHERE TO CLICK</span><div>${renderRichText(s.where,false)}</div></div>`:''}<div class="guided-do"><span>DO THIS</span><div>${renderRichText(s.do,false)}${s.doList?renderRichText(s.doList,true):''}</div></div>${s.see?`<div class="guided-see"><span>YOU SHOULD SEE</span><div>${renderRichText(s.see,false)}</div></div>`:''}<div class="guided-check"><span>CHECK</span><div>${renderRichText(s.check,false)}</div></div>${s.why?`<div class="guided-reason"><span>WHY</span><p>${esc(s.why)}</p></div>`:''}${renderStepVisual(s.visual,`${l.title} step ${i+1}`)}</div></article>`).join('')}</div>`;
+  return `<ol class="steps">${(l.guided||[]).map(s=>`<li>${esc(s)}</li>`).join('')}</ol>`;
 }
 
 function requirements(xs){
@@ -562,8 +616,8 @@ function tutorialPage(id){
   <section class="tutorial-hero"><div><span class="eyebrow">${c?.icon||'🛠'} ${esc(c?.title||t.category)} • ${esc(t.duration)} • ${esc(t.difficulty)}</span><h1>${t.icon} ${esc(t.title)}</h1><p>${esc(t.summary)}</p><div class="tutorial-tag-row large">${t.uses.map(x=>`<span>${esc(x)}</span>`).join('')}</div></div><div class="tutorial-complete-box"><strong>${done?'✓ Tried it':'Build → Test → Change'}</strong><p>${done?'You marked this tutorial as working. You can revisit it anytime.':'Follow the recipe, then make one small change of your own.'}</p><button class="button ${done?'success':'primary'}" data-action="complete-tutorial" data-tutorial="${t.id}">${done?'✓ Tutorial complete':'Mark tutorial complete'}</button></div></section>
   <article class="tutorial-detail">
     <section class="content-card tutorial-result"><span class="eyebrow">01 • What we are making</span><h2>A small working mechanic</h2><p>${esc(t.summary)}</p><div class="callout good"><b>Use this tutorial when:</b> you need this mechanic in a prototype, Chapter Build or assignment and want a short reliable route to a first working version.</div></section>
+    <section class="content-card practical-first-card"><span class="eyebrow">02 • BUILD IT</span><h2>${t.studentRecipe?.length?'One clear walkthrough':'Follow the practical steps'}</h2>${t.studentRecipe?.length?renderSingleClearGuide(t.starterValues,t.studentRecipe,t.steps||[],{title:'Known-working tutorial',intro:'Follow this exact first version in order. The step itself tells you what to do; the checkpoint tells you when it is safe to continue; the Why line builds the skill rather than just copying nodes.'}):`<div class="tutorial-step-list">${t.steps.map((s,i)=>renderTutorialStep(s,i)).join('')}</div>`}</section>
     ${tutorialReferenceVisuals(t)}
-    <section class="content-card"><span class="eyebrow">02 • Build it</span><h2>Follow the steps — understand the reason</h2>${t.prescriptive?'<div class="tutorial-rich-note"><b>This tutorial now uses the new detailed format:</b> exact click paths, clearer actions, what you should see, and simple troubleshooting prompts.</div>':''}<div class="tutorial-step-list">${t.steps.map((s,i)=>renderTutorialStep(s,i)).join('')}</div></section>
     <section class="tutorial-three-col"><div class="content-card"><span class="eyebrow">03 • Common mistakes</span><h2>If it doesn\'t work</h2><ul>${t.mistakes.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><div class="content-card"><span class="eyebrow">04 • Make it yours</span><h2>Change something</h2><ul>${t.makeItYours.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><div class="content-card"><span class="eyebrow">05 • Definition of done</span><h2>It works when…</h2>${requirements(t.worksWhen)}</div></section>
     <section class="content-card tutorial-next"><div><span class="eyebrow">GO DEEPER</span><h2>Connect this recipe to the course</h2><p>Quick Tutorials solve the immediate mechanic. The full lesson explains the transferable idea behind it.</p></div><div class="tutorial-next-links">${t.designModule?`<a class="button" href="#/design/${t.designModule}">Open ${esc(designModule(t.designModule)?.title||'Designer Studio')} →</a>`:`<a class="button" href="#/lesson/${t.referenceLesson}">Open ${esc(lesson(t.referenceLesson)?.title||'related lesson')} →</a>`}${ref?`<a class="button ghost" href="${esc(ref.url)}" target="_blank" rel="noopener">Epic UE5.8 reference ↗</a>`:''}${t.source?.url?`<a class="button ghost" href="${esc(t.source.url)}" target="_blank" rel="noopener">${esc(t.source.title||'Reference source')} ↗</a>`:''}</div></section>
     ${related.length?`<section class="section"><div class="section-head"><div><h2>Related Quick Tutorials</h2><p>Useful next mechanics.</p></div></div><div class="quick-tutorial-grid related">${related.map(tutorialCard).join('')}</div></section>`:''}
@@ -675,7 +729,7 @@ function modelingPage(){
   <section class="section"><div class="section-head"><div><span class="eyebrow">CURRENT SOURCES</span><h2>Autodesk + Epic references</h2><p>The Hub teaches in its own words. Current Autodesk documentation is canonical for 3ds Max UI; current Epic UE5.8 documentation is canonical for the Unreal import pipeline.</p></div></div>${modelReferenceCards(MODEL.references.map(x=>({title:x.title,url:x.url,note:x.type})))}</section>`;
 }
 function renderModelStep(s,i){
-  return `<article class="model-step"><div class="model-step-index">${String(i+1).padStart(2,'0')}</div><div class="model-step-body"><h3>${esc(s.title)}</h3>${s.warning?`<div class="model-warning"><b>⚠ BEFORE YOU DO THIS</b><p>${esc(s.warning)}</p></div>`:''}<div class="model-field where"><span>WHERE TO CLICK</span><p>${esc(s.where)}</p></div><div class="model-field do"><span>DO THIS</span><p>${esc(s.do)}</p></div><div class="model-field see"><span>YOU SHOULD SEE</span><p>${esc(s.see)}</p></div><div class="model-field checkpoint"><span>STOP AND CHECK BEFORE CONTINUING</span><p>${esc(s.check)}</p></div><div class="model-field why"><span>WHY</span><p>${esc(s.why)}</p></div>${s.stuck?.length?`<div class="model-field stuck"><span>IF YOURS DOESN'T MATCH</span><ul>${s.stuck.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:''}${s.visual?modelDiagram(s.visual,s.title):''}</div></article>`;
+  return `<article class="model-step"><div class="model-step-index">${String(i+1).padStart(2,'0')}</div><div class="model-step-body"><h3>${esc(s.title)}</h3>${s.warning?`<div class="model-warning"><b>⚠ BEFORE YOU DO THIS</b><p>${esc(s.warning)}</p></div>`:''}<div class="model-field where"><span>WHERE TO CLICK</span><p>${esc(s.where)}</p></div><div class="model-field do"><span>DO THIS NOW</span><p>${esc(s.do)}</p></div><div class="model-field checkpoint"><span>STOP AND CHECK BEFORE CONTINUING</span><p>${esc(s.check)}</p></div>${s.visual?modelDiagram(s.visual,s.title):''}<details class="step-support"><summary>Why / expected result / if yours is different</summary><div class="model-field see"><span>YOU SHOULD SEE</span><p>${esc(s.see)}</p></div><div class="model-field why"><span>WHY</span><p>${esc(s.why)}</p></div>${s.stuck?.length?`<div class="model-field stuck"><span>IF YOURS DOESN'T MATCH</span><ul>${s.stuck.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:''}</details></div></article>`;
 }
 function modelingLessonPage(id){
   const l=modelLesson(id);if(!l)return notFound();const done=modelLessonDone(id),prev=MODEL.lessons.find(x=>x.order===l.order-1),next=MODEL.lessons.find(x=>x.order===l.order+1);
@@ -683,11 +737,8 @@ function modelingLessonPage(id){
   <section class="model-lesson-hero"><div><span class="eyebrow">LESSON ${String(l.order).padStart(2,'0')} • ${esc(l.duration)} • +100 XP</span><h1>${l.icon} ${esc(l.title)}</h1><p>${esc(l.aim)}</p><div class="model-skill-map"><div><small>NEW TODAY</small><strong>${esc(l.newSkill)}</strong></div><div><small>YOU ALREADY KNOW</small><strong>${l.priorSkills.length?esc(l.priorSkills.join(' • ')):'Nothing assumed'}</strong></div><div><small>YOU'LL USE THIS AGAIN IN</small><strong>${esc(l.reuseNext.join(' • '))}</strong></div></div></div><div class="model-complete-box"><strong>${done?'✓ Lesson checked off':'Accuracy first'}</strong><p>${done?'Revisit any stage when a later model exposes a gap.':'Do not move on because the clock says so. Move on when the checkpoint passes.'}</p><button class="button ${done?'success':'primary'}" data-action="complete-model-lesson" data-model-lesson="${l.id}">${done?'✓ Modelling lesson complete':'Mark lesson complete • +100 XP'}</button></div></section>
   <section class="model-safety-card"><span>⚠ SAFETY HABIT</span><strong>${esc(l.safety)}</strong></section>
   ${modelToolBoundaries(l)}
-  ${modelInterfaceImages(l)}
-  ${l.visual?modelDiagram(l.visual,`${l.title} concept map`):''}
-  <article class="model-lesson-detail"><section class="content-card"><span class="eyebrow">01 • UNDERSTAND</span><h2>What we are learning</h2><p>${esc(l.intro)}</p></section>
-  ${modelBookReferences(l)}
-  <section class="content-card"><span class="eyebrow">02 • BUILD SLOWLY</span><h2>One controlled change at a time</h2><div class="model-step-list">${l.steps.map(renderModelStep).join('')}</div></section>
+  <article class="model-lesson-detail"><section class="content-card practical-first-card"><span class="eyebrow">01 • DO IT FIRST</span><h2>One clear modelling walkthrough</h2>${renderSingleClearGuide(l.starterValues,l.studentRecipe,l.steps||[],{title:'Exact modelling route',intro:'Follow one authoritative route from start to finish. Use the exact dimensions and operations on the first attempt; every checkpoint must pass before you continue.'})}</section>
+  <details class="content-card model-support-details"><summary>02 • Understand the idea, diagrams and references</summary><div class="support-details-inner"><p>${esc(l.intro)}</p>${modelInterfaceImages(l)}${l.visual?modelDiagram(l.visual,`${l.title} concept map`):''}${modelBookReferences(l)}</div></details>
   <section class="content-card model-practice-card"><span class="eyebrow">03 • USE IT</span><h2>${esc(l.practice.title)}</h2><p>${esc(l.practice.task)}</p><div class="model-check-grid">${l.practice.check.map(x=>`<div>✓ ${esc(x)}</div>`).join('')}</div></section>
   <section class="model-two-col"><div class="content-card"><span class="eyebrow">04 • COMMON WAYS TO BREAK IT</span><h2>Watch for these</h2><ul>${l.common.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><div class="content-card"><span class="eyebrow">05 • CURRENT REFERENCES</span><h2>If your screen differs</h2><p>Use current vendor documentation rather than forcing an old screenshot to match.</p>${modelReferenceCards(l.officialRefs)}</div></section>
   <section class="model-lesson-footer"><div>${prev?`<a class="button ghost" href="#/modeling/lesson/${prev.id}">← ${esc(prev.title)}</a>`:''}</div><button class="button ${done?'success':'primary'}" data-action="complete-model-lesson" data-model-lesson="${l.id}">${done?'✓ Complete':'Mark complete • +100 XP'}</button><div>${next?`<a class="button ghost" href="#/modeling/lesson/${next.id}">${esc(next.title)} →</a>`:`<a class="button ghost" href="#/modeling">Back to Studio →</a>`}</div></section></article>`;
@@ -696,7 +747,8 @@ function modelingBuildPage(id){
   const b=modelBuild(id);if(!b)return notFound();const done=modelBuildDone(id),req=modelRequirements(b.requires),ready=req.every(x=>modelLessonDone(x.id));
   return `<div class="breadcrumb"><a href="#/">Home</a> / <a href="#/modeling">3D Modelling Studio</a> / Build X / ${esc(b.title)}</div><section class="model-build-hero"><div><span class="eyebrow">BUILD X • ${esc(b.difficulty)} • ${esc(b.time)} • ${esc(b.support||'Guided checkpoints')}</span><h1>${b.icon} How to build: ${esc(b.title)}</h1><p>${esc(b.summary)}</p><div class="tutorial-tag-row large">${b.teaches.map(x=>`<span>${esc(x)}</span>`).join('')}</div></div><div class="model-complete-box"><strong>${ready?'Prerequisites covered':'Scaffold first'}</strong><p>${ready?'You have completed the lessons this build expects.':'You can still view the build, but the linked lessons teach the risky tools properly first.'}</p><button class="button ${done?'success':'primary'}" data-action="complete-model-build" data-model-build="${b.id}">${done?'✓ Build complete':'Mark Build X complete • +250 XP'}</button></div></section>
   <section class="content-card"><span class="eyebrow">BEFORE YOU START</span><h2>Skills this build expects</h2><div class="model-prereq-grid">${req.map(l=>`<a class="model-prereq ${modelLessonDone(l.id)?'done':''}" href="#/modeling/lesson/${l.id}"><span>${modelLessonDone(l.id)?'✓':'○'}</span><div><strong>${esc(l.title)}</strong><small>${esc(l.newSkill)}</small></div></a>`).join('')}</div></section>
-  <section class="content-card"><span class="eyebrow">BUILD PIPELINE • ${esc(b.support||'Guided checkpoints')}</span><h2>Work in recoverable stages</h2><div class="model-build-phases">${b.phases.map((ph,i)=>`<article><span>${String(i+1).padStart(2,'0')}</span><div><h3>${esc(ph.name)}</h3><p>${esc(ph.brief)}</p>${ph.steps?.length?`<ol class="model-build-microsteps">${ph.steps.map(x=>`<li>${esc(x)}</li>`).join('')}</ol>`:''}${ph.stop?`<div class="model-phase-stop"><b>STOP:</b> ${esc(ph.stop)}</div>`:''}<div class="callout good"><b>PROVE THIS STAGE:</b> ${esc(ph.proof)}</div></div></article>`).join('')}</div></section><section class="model-finish-bar"><p><b>Do not skip failed checkpoints.</b> If the geometry becomes wrong, return to the last clean version rather than building detail on top of damage.</p><button class="button ${done?'success':'primary'}" data-action="complete-model-build" data-model-build="${b.id}">${done?'✓ Build complete':'Mark complete • +250 XP'}</button></section>`;
+  <section class="content-card practical-first-card"><span class="eyebrow">EXACT FIRST BUILD • ${esc(b.support||'Guided checkpoints')}</span><h2>One clear Build X walkthrough</h2>${renderSingleClearGuide(b.starterValues,b.studentRecipe,buildGuideSupports(b.phases||[]),{title:`Build ${b.title}`,intro:'Build the known-working version in order. The phase purpose and proof are attached to the steps instead of being repeated in a second set of instructions.'})}</section>
+  <details class="content-card model-support-details"><summary>Phase map — what each stage is trying to achieve</summary><div class="support-details-inner"><div class="model-build-phases compact">${b.phases.map((ph,i)=>`<article><span>${String(i+1).padStart(2,'0')}</span><div><h3>${esc(ph.name)}</h3><p>${esc(ph.brief)}</p><div class="callout good"><b>PROOF:</b> ${esc(ph.proof)}</div></div></article>`).join('')}</div></div></details><section class="model-finish-bar"><p><b>Do not skip failed checkpoints.</b> If the geometry becomes wrong, return to the last clean version rather than building detail on top of damage.</p><button class="button ${done?'success':'primary'}" data-action="complete-model-build" data-model-build="${b.id}">${done?'✓ Build complete':'Mark complete • +250 XP'}</button></section>`;
 }
 function modelingFixPage(id){
   const f=modelFix(id);if(!f)return notFound();const done=modelFixDone(id);
@@ -744,7 +796,7 @@ function programmingPage(){
   <section class="section learning-tools-section"><div class="section-head"><div><h2>Practise, solve and revise</h2><p>Use a short recipe when you need a mechanic, then test what you actually understand.</p></div></div><div class="workspace-cards"><a class="workspace-card learning-tool" href="#/tutorials"><span>🛠</span><div><strong>${TOOLS.tutorials.length} Quick Tutorials</strong><p>Short practical recipes for common mechanics, systems, effects and student requests.</p></div></a><a class="workspace-card learning-tool" href="#/revision"><span>↻</span><div><strong>Revision Quizzes</strong><p>Random, whole-path or mixed-topic quizzes with 10 / 20 / 30 questions.</p></div></a><a class="workspace-card learning-tool" href="#/challenges"><span>🔥</span><div><strong>Challenge Board</strong><p>Independent problems where the answer is no longer laid out node by node.</p></div></a></div></section>`;
 }
 
-const NEWS_CACHE_STORE='ue5hub:v3261:news-cache';
+const NEWS_CACHE_STORE='ue5hub:v329:news-cache';
 let newsStories=[];
 let newsCategory='all';
 let newsSearch='';
@@ -930,14 +982,19 @@ function lessonPage(id){
 
   <section class="lesson-flow-callout">
     <div><span class="eyebrow">SIMPLE STUDENT FLOW</span><h2>Do these four first</h2><p>Core route first. Everything else is there to extend, troubleshoot, apply and submit.</p></div>
-    <div class="lesson-flow-steps"><span>01 Goal</span><span>02 Learn</span><span>03 Guided build</span><span>04 Quick check</span></div>
+    <div class="lesson-flow-steps"><span>01 Goal</span><span>02 Build exactly</span><span>03 Check it</span><span>04 Understand</span></div>
   </section>
 
   <div class="lesson-layout ${lessonMode==='independent'?'independent':''}">
   <article>
     <section class="content-card" id="aims"><span class="eyebrow">01 • Goal</span><h2>What you should be able to do</h2><div class="goal-grid">${l.goals.map(g=>`<div class="goal">${esc(g)}</div>`).join('')}</div></section>
 
-    <section class="content-card learn-card" id="learn"><span class="eyebrow">02 • Learn</span><h2>Understand the idea first</h2>
+    <section class="content-card guided-section practical-first-card" id="guided"><span class="eyebrow">02 • BUILD IT</span><h2>One clear walkthrough</h2><p>This is the authoritative build route. Follow it in order; each step includes the action, checkpoint and reason where the lesson needs it.</p>${guidedBuild(l)}</section>
+    <section class="content-card guided-hidden-note"><span class="eyebrow">Independent mode</span><h2>Guided steps hidden</h2><p>Use the aim, explanation and challenges as your brief. Switch back only when the walkthrough is genuinely needed.</p></section>
+
+    <section class="content-card" id="check"><span class="eyebrow">03 • CHECK IT</span><h2>Prove the build and the idea</h2>${quizHtml(l)}</section>
+
+    <details class="content-card learn-card lesson-support-details" id="learn"><summary>04 • Understand why this works</summary><div class="support-details-inner">
       ${l.explanation ? `<div class="explain-lead"><h3>What is it?</h3><p>${esc(l.explanation.what)}</p></div>
       ${currentVisuals(l)}
       ${docVisuals(l,'intro')}
@@ -962,12 +1019,7 @@ function lessonPage(id){
       <div class="goal-grid">${l.concepts.map(c=>`<div class="concept"><strong>${esc(c[0])}</strong><br>${esc(c[1])}</div>`).join('')}</div>
       ${inlineExercise(l,2)}
       ${officialReferences(l)}
-    </section>
-
-    <section class="content-card guided-section" id="guided"><span class="eyebrow">03 • Full guided build</span><h2>Put the pieces together</h2><p>The short exercises above make you stop and prove each idea. This walkthrough now combines the lesson into one complete working build.</p>${guidedBuild(l)}</section>
-    <section class="content-card guided-hidden-note"><span class="eyebrow">Independent mode</span><h2>Guided steps hidden</h2><p>Use the aim, explanation and challenges as your brief. Switch back only when the walkthrough is genuinely needed.</p></section>
-
-    <section class="content-card" id="check"><span class="eyebrow">04 • Quick check</span><h2>Do you understand the idea?</h2>${quizHtml(l)}</section>
+    </div></details>
     <section class="content-card" id="apply"><span class="eyebrow">05 • Apply</span><h2>Stretch & Challenge</h2>${task('stretch','★ Stretch',l.stretch)}${task('challenge','🔥 Challenge',l.challenge)}</section>
 
     <section class="content-card" id="experience"><span class="eyebrow">06 • Experience it</span><h2>Play it or watch it</h2>
@@ -995,9 +1047,9 @@ function lessonPage(id){
   <aside class="lesson-nav">
     <div class="lesson-nav-group"><span class="lesson-nav-label">DO THESE FIRST</span>
       <button class="section-button" data-action="scroll" data-target="aims">01 Learning aims</button>
-      <button class="section-button" data-action="scroll" data-target="learn">02 Learn</button>
-      <button class="section-button" data-action="scroll" data-target="guided">03 Guided build</button>
-      <button class="section-button" data-action="scroll" data-target="check">04 Quick check</button>
+      <button class="section-button" data-action="scroll" data-target="guided">02 Exact build</button>
+      <button class="section-button" data-action="scroll" data-target="check">03 Check it</button>
+      <button class="section-button" data-action="scroll" data-target="learn">04 Understand</button>
     </div>
     <div class="lesson-nav-group"><span class="lesson-nav-label">EXTEND IF ASKED</span>
       <button class="section-button" data-action="scroll" data-target="apply">05 Stretch & challenge</button>
