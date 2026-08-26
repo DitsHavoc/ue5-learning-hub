@@ -2,6 +2,11 @@
 
 The live Supabase project is upgraded incrementally. Production data is not rebuilt or wiped when features are added.
 
+
+## V3.19
+
+No database migration is required. V3.19 is a Designer Studio content/teaching-quality release; new recipe and Studio Build completion continues to use the existing progress ID scheme.
+
 ## Current production sequence
 
 The project currently contains these migration generations:

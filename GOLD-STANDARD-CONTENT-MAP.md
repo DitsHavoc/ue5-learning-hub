@@ -67,19 +67,19 @@ Quick Tutorials use: **What we are making → DO THIS → WHY → TEST/CHECK →
 
 Chapter Builds unlock after all lessons in a learning path are complete and ask students to combine several previously learned ideas into a small working prototype. Guided steps are allowed; students must test the result, make at least one independent change and capture evidence that it works.
 
-## v3.18 Designer Studio
+## v3.19 Designer Studio — deep-learning standard
 
-The Hub now includes a parallel design/world-building curriculum rather than treating design as decoration around Blueprint lessons.
+The Hub includes a parallel design/world-building curriculum rather than treating design as decoration around Blueprint lessons. V3.19 deepens each discipline beyond recipes: **3 Design Thinking cards + module-specific production habits + visual analysis + current UE5.8 check + 6 practical recipes + an applied Studio Build + discipline-specific critique**. The result is 24 theory/application cards and 48 Designer recipes across the eight disciplines.
 
 | Discipline | Core practical focus | Studio Build |
 |---|---|---|
-| Level Design Foundations | blockout, scale, focal points, route readability | The Three-Room Journey |
-| Environment Art & Set Dressing | prop logic, clusters, decals, modular kits | Abandoned Workroom |
-| Materials & Surfaces | PBR, instances, wet surfaces, emissive materials | Surface Library |
-| Lighting & Atmosphere | room lighting, horror lighting, post process, Silent Hill-style fog | One Room, Three Moods |
-| Landscape, Terrain & Foliage | landscape creation, sculpting, paint layers, foliage paths | The Valley Route |
-| Sequencer & Cutscenes | first sequence, camera cuts, reveal shots, gameplay triggers | 20-Second Reveal |
-| Audio & Sound Design | ambience, attenuation, variation, reverb | The Room You Hear First |
-| Polish, Optimisation & Presentation | polish passes, view modes, LOD/Nanite checks, portfolio shots | Final Environment Pass |
+| Level Design Foundations | blockout, scale, focal points, route readability, decision points, spatial pacing | The Three-Room Journey |
+| Environment Art & Set Dressing | prop logic, story vignettes, decals, modular kits, hero assets | Abandoned Workroom |
+| Materials & Surfaces | PBR, instances, wet/emissive surfaces, Shader Complexity, translucency cost | Surface Library |
+| Lighting & Atmosphere | hierarchy, Lumen mood/scalability, post process, time of day, Silent Hill-style fog | One Room, Three Moods |
+| Landscape, Terrain & Foliage | landscape creation, sculpting, paint, foliage, procedural-route protection, weather readability | The Valley Route |
+| Sequencer & Cutscenes | camera language, cuts/reveals, gameplay triggers, adaptive outcomes, modular sequences | 20-Second Reveal |
+| Audio & Sound Design | ambience, attenuation, reverb, off-screen storytelling, procedural MetaSound | The Room You Hear First |
+| Polish, Optimisation & Presentation | polish, profiling loop, view modes, LOD/Nanite, project hygiene, presentation | Final Environment Pass |
 
-Every discipline combines visual analysis, short practical recipes, an applied Studio Build and evidence/critique prompts. Game screenshots are used as educational references for design analysis; Unreal screenshots/documentation remain the technical reference.
+Every discipline combines transferable theory, visual analysis, production habits, short practical recipes, an applied Studio Build and evidence/critique prompts. The 2025 Packt book is a licensed college reference for principles and production thinking; current Epic UE5.8 documentation remains the technical source of truth for engine-specific behaviour.

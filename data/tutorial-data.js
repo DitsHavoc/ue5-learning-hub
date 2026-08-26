@@ -1,5 +1,5 @@
 window.UE5_TUTORIAL_DATA = {
-  "version": "3.18.0",
+  "version": "3.19.0",
   "buildDate": "25 Aug 2026",
   "categories": [
     {

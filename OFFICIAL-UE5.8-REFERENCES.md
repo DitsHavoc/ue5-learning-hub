@@ -100,3 +100,24 @@ These links are used inside the Learning Hub as the current Unreal Engine source
 - [Local Fog Volumes](https://dev.epicgames.com/documentation/unreal-engine/local-fog-volumes-in-unreal-engine) — optional localised fog pockets.
 
 The **Make Silent Hill-style Fog** tutorial also uses two source-linked official *Silent Hill 2* screenshots from Konami as mood/visibility references. They are labelled as reference imagery, not Unreal Engine UI.
+
+
+## V3.19 Designer Studio — current UE5.8 verification links
+
+These references are used to verify engine-specific details while the licensed 2025 Packt book supplies additional design/production context.
+
+- [Modeling Mode](https://dev.epicgames.com/documentation/unreal-engine/modeling-mode-in-unreal-engine?lang=en-US) — in-editor geometry, topology, UV, collision and baking workflows.
+- [Modeling Mode Quick Start](https://dev.epicgames.com/documentation/unreal-engine/modeling-mode-quick-start-in-unreal-engine?lang=en-US) — rapid level geometry / asset iteration.
+- [Guidelines for Optimizing Rendering for Real-Time](https://dev.epicgames.com/documentation/unreal-engine/guidelines-for-optimizing-rendering-for-real-time-in-unreal-engine) — material cost, instruction count and rendering optimisation.
+- [Lumen Performance Guide](https://dev.epicgames.com/documentation/unreal-engine/lumen-performance-guide-for-unreal-engine) — current Lumen scalability/performance targets, including UE5.8 Medium quality.
+- [Procedural Content Generation Framework](https://dev.epicgames.com/documentation/en-us/unreal-engine/procedural-content-generation-framework-in-unreal-engine) — controlled procedural environment workflows.
+- [Sequencer Cinematic Editor](https://dev.epicgames.com/documentation/en-us/unreal-engine/sequencer-cinematic-editor-unreal-engine) — Level Sequences, camera cuts, Director/Event workflows and timeline tools.
+- [Cinematic Cameras](https://dev.epicgames.com/documentation/en-us/unreal-engine/cinematic-cameras-in-unreal-engine) — Cine Camera Actor and filmic camera controls.
+- [Movie Render Queue](https://dev.epicgames.com/documentation/unreal-engine/rendering-high-quality-frames-with-movie-render-queue-in-unreal-engine) — high-quality cinematic output.
+- [Sound Attenuation](https://dev.epicgames.com/documentation/en-us/unreal-engine/sound-attenuation-in-unreal-engine) — distance, spatialization and reverb-send behaviour.
+- [MetaSounds Quick Start](https://dev.epicgames.com/documentation/en-us/unreal-engine/metasounds-quick-start) — graph-based procedural audio.
+- [World Partition HLOD](https://dev.epicgames.com/documentation/unreal-engine/world-partition---hierarchical-level-of-detail-in-unreal-engine?lang=en-US) — large-world proxy/HLOD workflow and draw-call reduction.
+
+### Licensed design reference
+
+**Unreal Engine 5 Best Practices**, Tyson Butler-Boschma, Packt, 2025 (college educational licence). It is used for design thinking, production workflow and curriculum inspiration only. No book pages, diagrams or long extracts are shipped with the Hub. The book targets UE5.4, so current Epic documentation above takes precedence for changed engine behaviour.
