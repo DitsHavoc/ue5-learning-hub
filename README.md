@@ -1,10 +1,10 @@
-# UE5 Learning Hub v3.30.0 — Single Clear Guide Pass
+# UE5 Learning Hub v3.31.0 — Straight-Through Guide Pass
 
-## Current release — v3.30.0
+## Current release — v3.31.0
 
-This release consolidates practical teaching into **one authoritative walkthrough per first build**. The exact recipe is no longer followed by a second competing set of numbered instructions. UE core lessons, Programming Quick Tutorials, 3ds Max lessons and Build X now lead with the exact action, known-working values, immediate checkpoint, reason and recovery information where available. No database migration is required.
+This release simplifies practical teaching into a **straight-through Step 1 → finish flow**. There is no visible prep list of files, variables or values before the walkthrough. Each asset, setting and measurement is introduced when it is actually needed, followed immediately by a short Why and Check. No database migration is required.
 
-See `RELEASE-NOTES-v3.30.0.md` and `INSTRUCTION-AUTHORING-STANDARD.md` for the new tutorial standard. Prior release notes remain in the repository for the modelling, profile, visual and portal passes.
+See `RELEASE-NOTES-v3.31.0.md` and `INSTRUCTION-AUTHORING-STANDARD.md` for the new tutorial standard. Prior release notes remain in the repository for the modelling, profile, visual and portal passes.
 
 ## V3.20 — the Hub becomes a portal
 

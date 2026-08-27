@@ -3,6 +3,7 @@
 'use strict';
 
 const DATA = window.UE5_COURSE_DATA;
+const BLOCKS = window.UE5_BUILDING_BLOCK_DATA;
 const PROJECT = window.UE5_PROJECT_DATA;
 const TOOLS = window.UE5_TUTORIAL_DATA;
 const DESIGN = window.UE5_DESIGN_DATA;
@@ -23,7 +24,7 @@ DESIGN.tutorials.forEach(t=>{if(!knownTutorials.has(t.id))TOOLS.tutorials.push(t
 DESIGN.modules.forEach(m=>m.tutorials.forEach(id=>{const t=TOOLS.tutorials.find(x=>x.id===id);if(t&&!t.designModule)t.designModule=m.id}));
 
 
-if (!DATA || !PROJECT || !TOOLS || !DESIGN || !NEWS || !MODEL || !SCULPT || !BACKEND) {
+if (!DATA || !BLOCKS || !PROJECT || !TOOLS || !DESIGN || !NEWS || !MODEL || !SCULPT || !BACKEND) {
   const e = document.querySelector('#bootError');
   if (e) e.hidden = false;
   return;
@@ -68,6 +69,7 @@ let profilePrefs = loadProfilePrefs();
 let lessonMode = 'guided';
 let authView = 'signin';
 let revisionSession = null;
+let blocksTier = 'core';
 
 function $(s,root=document){return root.querySelector(s)}
 function $$(s,root=document){return [...root.querySelectorAll(s)]}
@@ -80,7 +82,7 @@ function safeUrl(value){
 }
 
 function loadState(){
-  const clean={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[]};
+  const clean={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[],blockCompleted:[]};
   try{
     const current=JSON.parse(localStorage.getItem(STORE)||'null');
     if(current) return {...clean,...current};
@@ -191,7 +193,7 @@ function lesson(id){return DATA.lessons.find(x=>x.id===id)}
 function path(id){return DATA.paths.find(x=>x.id===id)}
 function mechanic(id){return PROJECT.mechanics[id]}
 function completedLessons(){return DATA.lessons.filter(l=>state.completed.includes(l.id))}
-function totalXp(){return completedLessons().reduce((n,l)=>n+l.xp,0)+TOOLS.chapterBuilds.filter(b=>state.chapterBuildCompleted.includes(b.path)).reduce((n,b)=>n+(b.xp||0),0)+(state.designBuildCompleted||[]).length*300+(state.modelLessonCompleted||[]).length*100+(state.modelBuildCompleted||[]).length*250+(state.modelFixCompleted||[]).length*75+(state.sculptCompleted||[]).reduce((n,id)=>n+(SCULPT.practices.find(x=>x.id===id)?.xp||0),0)}
+function totalXp(){return (state.blockCompleted||[]).length*25+completedLessons().reduce((n,l)=>n+l.xp,0)+TOOLS.chapterBuilds.filter(b=>state.chapterBuildCompleted.includes(b.path)).reduce((n,b)=>n+(b.xp||0),0)+(state.designBuildCompleted||[]).length*300+(state.modelLessonCompleted||[]).length*100+(state.modelBuildCompleted||[]).length*250+(state.modelFixCompleted||[]).length*75+(state.sculptCompleted||[]).reduce((n,id)=>n+(SCULPT.practices.find(x=>x.id===id)?.xp||0),0)}
 function level(){
   const xp=totalXp(),n=Math.floor(xp/500)+1,into=xp%500;
   return {n,xp,into,left:500-into,pct:into/5};
@@ -281,6 +283,7 @@ async function syncCloudProgress(){
     const lessonIds=new Set(DATA.lessons.map(l=>l.id));
     state.completed=[...new Set([...state.completed,...cloudCompleted.filter(id=>lessonIds.has(id))])];
     state.tutorialCompleted=[...new Set([...(state.tutorialCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('tutorial:')).map(id=>id.slice(9))])];
+    state.blockCompleted=[...new Set([...(state.blockCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('block:')).map(id=>id.slice(6))])];
     state.chapterBuildCompleted=[...new Set([...(state.chapterBuildCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('chapter:')).map(id=>id.slice(8))])];
     state.designBuildCompleted=[...new Set([...(state.designBuildCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('designbuild:')).map(id=>id.slice(12))])];
     state.modelLessonCompleted=[...new Set([...(state.modelLessonCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('model:')).map(id=>id.slice(6))])];
@@ -425,20 +428,26 @@ function guideTokens(value){
   const stop=new Set(['the','and','for','with','this','that','from','into','your','then','only','once','after','before','first','use','using','set','add','create','open','play','test','step','should','will','when','where','make','keep']);
   return new Set(String(value||'').toLowerCase().match(/[a-z0-9_.+-]+/g)?.filter(x=>x.length>2&&!stop.has(x))||[]);
 }
+function guideSupportScore(instruction,raw){
+  const target=guideTokens(instruction),shape=guideSupportShape(raw),hay=guideTokens(JSON.stringify(shape));
+  let score=0;
+  const strong=new Set(['instance','editable','tooltip','started','completed','canceled','beginplay','overlap','collision','timeline','widget','trace','branch','function','pivot','symmetry','chamfer','inset','extrude','unwrap','checker','export','forward','location','rotation']);
+  target.forEach(t=>{if(hay.has(t))score+=/^[-+]?\d/.test(t)?1:(strong.has(t)?4:(t.includes('_')?3:1))});
+  const a=String(instruction||'').toLowerCase(),b=JSON.stringify(shape).toLowerCase();
+  ['compile','save','rename','variable','collision','light','mesh','input action','mapping context','event graph','started','completed','canceled','instance editable','tooltip','speed','branch','function','timeline','widget','line trace','forward vector','world location','hit result','ai','animation','uv','checker','chamfer','inset','extrude','symmetry','pivot','export'].forEach(k=>{if(a.includes(k)&&b.includes(k))score+=3});
+  return score;
+}
 function guideSupportFor(instruction,index,total,supportSteps=[]){
   if(!supportSteps?.length)return {};
-  if(total<=1)return guideSupportShape(supportSteps[0]);
-  const mapped=Math.round(index*(supportSteps.length-1)/(total-1));
-  const target=guideTokens(instruction);
-  const overlapFor=(raw)=>{const hay=guideTokens(JSON.stringify(guideSupportShape(raw)));let n=0;target.forEach(t=>{if(hay.has(t))n+=/^[-+]?\d/.test(t)?2:1});return n};
-  const mappedOverlap=overlapFor(supportSteps[mapped]);
-  let best=mapped,bestOverlap=mappedOverlap;
+  const text=String(instruction||'').trim().toLowerCase();
+  if(/^(if\b|play\b|press play\b|compile\b|save\b)/.test(text))return {};
+  let best=-1,bestScore=-1;
   supportSteps.forEach((raw,idx)=>{
-    if(Math.abs(idx-mapped)>1)return;
-    const overlap=overlapFor(raw);
-    if(overlap>=bestOverlap+2){best=idx;bestOverlap=overlap;}
+    const score=guideSupportScore(instruction,raw);
+    if(score>bestScore){best=idx;bestScore=score;}
   });
-  return guideSupportShape(supportSteps[Math.max(0,Math.min(supportSteps.length-1,best))]);
+  if(bestScore<4)return {};
+  return guideSupportShape(supportSteps[best]);
 }
 function guideFixes(s){
   const out=[];
@@ -448,29 +457,98 @@ function guideFixes(s){
   else if(xs)out.push(xs);
   return [...new Set(out.filter(Boolean))];
 }
+function guideFallbackWhy(instruction){
+  const s=String(instruction||'').toLowerCase();
+  if(/^if\b/.test(s))return 'This is a fault check. Fix this behaviour now so you do not build the next step on top of a broken one.';
+  if(s.includes('default value'))return 'The default value is the starting state new instances use unless you deliberately override it.';
+  if(s.includes('world location'))return 'World Location gives the trace an exact starting position in the level rather than a local offset inside the camera or Actor.';
+  if(s.includes('forward vector'))return 'The Forward Vector gives a direction; multiplying it by a distance turns that direction into the end point for the trace.';
+  if(s.includes('compile'))return 'Compiling catches Blueprint errors now, before you mistake them for a gameplay problem later.';
+  if(s.includes('press play')||s.includes(' play.')||s.startsWith('play '))return 'Testing immediately proves the last change works before the build becomes more complicated.';
+  if(s.includes('save'))return 'Saving here gives you a known-good version to return to if a later edit goes wrong.';
+  if(s.includes('rename'))return 'Clear names stop you editing the wrong asset or object when the project becomes busier.';
+  if(s.includes('input action')||s.includes('ia_'))return 'Enhanced Input keeps the control separate from the gameplay logic, so the key can change without rebuilding the mechanic.';
+  if(s.includes('mapping context')||s.includes('imc_'))return 'The Mapping Context is what connects the Input Action to an actual keyboard or controller button.';
+  if(s.includes('event graph'))return 'The Event Graph is where this runtime behaviour will execute while the game is playing.';
+  if(s.includes('variable'))return 'The variable gives the system a named value it can read, change and reuse instead of hiding the value inside one node.';
+  if(s.includes('branch'))return 'A Branch makes the next action depend on a clear true/false condition.';
+  if(s.includes('function'))return 'Putting repeated logic in a Function gives it one clear job and one place to update later.';
+  if(s.includes('collision')||s.includes('overlap'))return 'Collision gives the Actor a controlled way to detect when something enters, leaves or touches the gameplay area.';
+  if(s.includes('trace'))return 'The trace checks a precise line through the world, which is useful for aiming and interaction without needing a large trigger volume.';
+  if(s.includes('max walk speed'))return 'Max Walk Speed is the Character Movement setting that directly controls how fast the Character is allowed to move.';
+  if(s.includes('timeline'))return 'A Timeline gives you a predictable value over time, which is easier to tune than moving something manually every frame.';
+  if(s.includes('widget'))return 'The Widget contains the on-screen UI; keeping it separate from world Actors makes the interface easier to manage.';
+  if(s.includes('inset'))return 'Inset creates a controlled border around the selected face without adding detail everywhere else.';
+  if(s.includes('extrude'))return 'Extrude moves the selected face while creating the side faces needed to keep the mesh connected.';
+  if(s.includes('chamfer'))return 'Chamfer removes the mathematically sharp edge so light can create a believable highlight without adding unnecessary detail elsewhere.';
+  if(s.includes('connect'))return 'Connect adds deliberate supporting edges exactly where the form needs them.';
+  if(s.includes('symmetry'))return 'Symmetry lets you model one clean half and guarantees the repeated half matches it.';
+  if(s.includes('pivot'))return 'The pivot controls where the object rotates, moves and snaps from, so it needs to match how the asset will be used.';
+  if(s.includes('uv')||s.includes('unwrap')||s.includes('checker'))return 'The checker test reveals stretching and scale problems before you spend time painting textures.';
+  if(s.includes('export')||s.includes('fbx')||s.includes('import to ue'))return 'This proves the asset survives the real Max-to-Unreal pipeline at the correct scale, pivot and orientation.';
+  if(s.includes('create')||s.includes('add'))return 'This creates the exact piece the next steps need, so make it now rather than preparing a separate checklist first.';
+  if(s.includes('set ')||s.includes('enter ')||s.includes('location')||s.includes('rotation')||s.includes('scale'))return 'A known working value gives you a reliable first result. Tune it only after the system or model works correctly.';
+  if(s.includes('connect'))return 'The connection controls how data or execution reaches the next part of the system.';
+  if(s.includes('select'))return 'The next edit only works correctly if the intended object, component or sub-object is selected.';
+  return 'This puts the project into the exact state the next step expects.';
+}
+function guideFallbackCheck(instruction,index,total){
+  const s=String(instruction||'').toLowerCase();
+  if(s.includes('input action')||s.includes('ia_'))return 'The named Input Action exists, and if this step maps it, the Mapping Context shows the intended key beside it.';
+  if(s.includes('mapping context')||s.includes('imc_'))return 'The active Mapping Context shows the new action/key row and has been saved.';
+  if(s.includes('compile'))return 'Compile finishes with no errors. Do not continue while the Blueprint shows a compile error.';
+  if(s.includes('press play')||s.startsWith('play ')||s.includes(' play.'))return 'Run the exact behaviour described in the step and confirm it happens every time you repeat the test.';
+  if(s.includes('variable'))return 'The variable appears in My Blueprint with the exact name, type and value requested in this step.';
+  if(s.includes('default value'))return 'The variable Details/Class Defaults shows the exact starting value requested.';
+  if(s.includes('instance editable'))return 'Select a placed instance and confirm the exposed variable appears in its Details panel.';
+  if(s.includes('world location'))return 'The graph has a World Location value feeding the Start side of the trace setup.';
+  if(s.includes('forward vector'))return 'The direction is multiplied by the stated distance and combined with Start to produce End.';
+  if(s.includes('line trace'))return 'The trace node has the intended Start, End and channel. With debug drawing enabled you should see the line in Play mode.';
+  if(s.includes('branch'))return 'The Branch has a Boolean condition connected and only the intended True/False path continues.';
+  if(s.includes('overlap')||s.includes('collision'))return 'The collision shape covers the intended area and the event fires only when something actually enters/leaves it.';
+  if(s.includes('inset'))return 'The selected face now has an even border and no neighbouring face has been changed by mistake.';
+  if(s.includes('extrude'))return 'The selected face has moved by the requested amount and the new side faces remain connected.';
+  if(s.includes('chamfer'))return 'F4/edged view shows the expected new support edges and shaded view shows a controlled highlight, not a melted edge.';
+  if(s.includes('symmetry'))return 'Both halves meet cleanly on the centre seam with no gap or doubled strip of geometry.';
+  if(s.includes('uv')||s.includes('unwrap')||s.includes('checker'))return 'The checker pattern is readable and reasonably even; obvious stretching is fixed before packing/export.';
+  if(s.includes('pivot'))return 'Rotate or move the object once and confirm it transforms from the intended hinge/base/snap point.';
+  if(s.includes('export')||s.includes('import to ue')||s.includes('fbx'))return 'The asset appears in Unreal at the intended scale and orientation, with the expected pivot.';
+  if(s.includes('location')||s.includes('rotation')||s.includes('scale'))return 'The Details/Transform fields show the exact values from the step and the object visibly matches them.';
+  if(s.includes('save'))return 'The file/asset is saved at the requested name/version before you continue.';
+  return index===total-1?'Run the completed result once from the start and prove it works.':`The result of this step is correct before you move to Step ${index+2}.`;
+}
+function guideStepTitle(instruction,sup,i){
+  if(sup?.title)return sup.title;
+  const text=String(instruction||'').replace(/→/g,' ').replace(/\s+/g,' ').trim();
+  const first=text.split(/[.!?]/)[0];
+  return first.length<=68?first:`Step ${i+1}`;
+}
 function renderSingleClearGuide(values=[],steps=[],supportSteps=[],opts={}){
   if(!steps?.length)return '';
-  const title=opts.title||'Single clear guide';
-  const intro=opts.intro||'Follow this walkthrough in order. Use the exact first-build values until every checkpoint passes.';
-  const valuesHtml=values?.length?`<div class="guide-values"><span>PIN THESE FIRST-BUILD VALUES</span>${values.map(v=>`<code>${esc(v)}</code>`).join('')}</div>`:'';
+  const title=opts.title||'Follow the guide';
+  const intro=opts.intro||'Start at Step 1 and work straight down. The guide introduces every asset, variable, value and test when you actually need it.';
   const articles=steps.map((instruction,i)=>{
     const sup=guideSupportFor(instruction,i,steps.length,supportSteps);
     const fixes=guideFixes(sup);
-    const see=sup.see?`<div class="guide-field see"><span>YOU SHOULD SEE</span><div>${renderRichText(sup.see,false)}</div></div>`:'';
-    const fallbackCheck=i===steps.length-1?'Complete this exact action and prove the final result before marking the tutorial/build complete.':`Complete this exact action before moving to Step ${String(i+2).padStart(2,'0')}.`;
-    const check=sup.check?`<div class="guide-field check"><span>STOP + CHECK</span><div>${renderRichText(sup.check,false)}</div></div>`:`<div class="guide-field check"><span>STOP + CHECK</span><p>${esc(fallbackCheck)}</p></div>`;
-    const why=sup.why?`<div class="guide-field why"><span>WHY</span><div>${renderRichText(sup.why,false)}</div></div>`:'';
-    const fix=fixes.length?`<details class="guide-fix"><summary>If yours does not match</summary><ul>${fixes.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></details>`:'';
+    const titleText=guideStepTitle(instruction,sup,i);
+    const why=sup.why||guideFallbackWhy(instruction);
+    const see=String(sup.see||'').trim();
+    const rawCheck=String(sup.check||'').trim();
+    const fallbackCheck=guideFallbackCheck(instruction,i,steps.length);
+    const check=[see,rawCheck].filter(Boolean).join(' ' )||fallbackCheck;
     const visual=sup.visual?(typeof sup.visual==='string'?modelDiagram(sup.visual,`${title} step ${i+1}`):renderStepVisual(sup.visual,`${title} step ${i+1}`)):'';
-    return `<article class="single-guide-step"><div class="single-guide-number">${String(i+1).padStart(2,'0')}</div><div class="single-guide-body"><div class="guide-field action"><span>WHERE + DO THIS</span><p><strong>${esc(instruction)}</strong></p></div>${see}${check}${why}${visual}${fix}</div></article>`;
+    const fix=fixes.length?`<details class="flow-fix"><summary>Something went wrong?</summary><ul>${fixes.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></details>`:'';
+    const where=String(sup.where||'').trim();
+    const whereHtml=where?`<p class="flow-where"><b>Go to:</b> ${renderRichText(where,false)}</p>`:'';
+    return `<article class="flow-guide-step"><div class="flow-step-number">${String(i+1).padStart(2,'0')}</div><div class="flow-step-body"><span class="flow-step-kicker">STEP ${i+1}</span><h3>${esc(titleText)}</h3>${whereHtml}<p class="flow-instruction">${esc(instruction)}</p><p class="flow-why"><b>Why:</b> ${esc(why)}</p><p class="flow-check"><b>Check:</b> ${esc(check)}</p>${visual}${fix}</div></article>`;
   }).join('');
-  return `<section class="single-clear-guide"><div class="single-guide-head"><div><span class="eyebrow">ONE AUTHORITATIVE WALKTHROUGH</span><h2>${esc(title)}</h2><p>${esc(intro)}</p></div><span class="recipe-lock">COPY → CHECK → UNDERSTAND → CHANGE</span></div>${valuesHtml}<div class="single-guide-steps">${articles}</div><div class="recipe-stop"><b>RULE:</b> Do not build on top of a failed checkpoint. Fix the current step or undo to the last known-good state first.</div></section>`;
+  return `<section class="straight-through-guide"><div class="flow-guide-head"><p>${esc(intro)}</p><div class="flow-guide-rule">Start with Step 1. Do not prepare a separate list of files, variables, components or settings first — each one appears when you need it.</div></div><div class="flow-guide-steps">${articles}</div></section>`;
 }
 function buildGuideSupports(phases=[]){
   return phases.map(ph=>({title:ph.name||'',why:ph.brief||'',see:ph.proof||'',check:ph.stop||'',stuck:ph.stop?[ph.stop]:[]}));
 }
 function guidedBuild(l){
-  if(l.studentRecipe?.length)return renderSingleClearGuide(l.starterValues,l.studentRecipe,l.guidedDetailed||[],{title:'Exact first build',intro:'This is the walkthrough. Follow the clicks, names and values in order; use the Why line to understand each choice, then change values only after the build works.'});
+  if(l.studentRecipe?.length)return renderSingleClearGuide(l.starterValues,l.studentRecipe,l.guidedDetailed||[],{title:'Build it from Step 1',intro:'Start at Step 1 and work straight down. Create each asset, variable, component and value only when the step asks for it.'});
   if(l.guidedDetailed?.length)return `<div class="guided-detailed">${l.guidedDetailed.map((s,i)=>`<article class="guided-step"><div class="guided-step-num">${String(i+1).padStart(2,'0')}</div><div class="guided-step-main"><h3>${esc(s.title)}</h3>${s.where?`<div class="guided-where"><span>WHERE TO CLICK</span><div>${renderRichText(s.where,false)}</div></div>`:''}<div class="guided-do"><span>DO THIS</span><div>${renderRichText(s.do,false)}${s.doList?renderRichText(s.doList,true):''}</div></div>${s.see?`<div class="guided-see"><span>YOU SHOULD SEE</span><div>${renderRichText(s.see,false)}</div></div>`:''}<div class="guided-check"><span>CHECK</span><div>${renderRichText(s.check,false)}</div></div>${s.why?`<div class="guided-reason"><span>WHY</span><p>${esc(s.why)}</p></div>`:''}${renderStepVisual(s.visual,`${l.title} step ${i+1}`)}</div></article>`).join('')}</div>`;
   return `<ol class="steps">${(l.guided||[]).map(s=>`<li>${esc(s)}</li>`).join('')}</ol>`;
 }
@@ -507,6 +585,51 @@ function projectTaskCard(l){
       ${statusControls(l.id)}
     </div>
   </div>`;
+}
+
+
+function buildingBlock(id){return BLOCKS.blocks.find(x=>x.id===id)}
+function buildingTrack(id){return BLOCKS.tracks.find(x=>x.id===id)}
+function blockDone(id){return (state.blockCompleted||[]).includes(id)}
+function blockTierRank(tier){return tier==='core'?0:tier==='common'?1:2}
+function normaliseBlockTerm(v){return String(v||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim()}
+function blockMatchesTutorial(b,t){
+  if((b.tutorials||[]).includes(t.id))return true;
+  if((b.lessons||[]).includes(t.referenceLesson))return true;
+  const uses=(t.uses||[]).map(normaliseBlockTerm);
+  const terms=[b.title,...(b.aliases||[])].map(normaliseBlockTerm).filter(x=>x.length>2);
+  return uses.some(u=>terms.some(term=>{
+    if(u===term)return true;
+    const words=u.split(' ');
+    if(!term.includes(' '))return words.includes(term);
+    return (` ${u} `).includes(` ${term} `);
+  }));
+}
+function blocksForTutorial(t){
+  if(!t||t.designModule)return [];
+  return BLOCKS.blocks.filter(b=>blockMatchesTutorial(b,t)).sort((a,b)=>blockTierRank(a.tier)-blockTierRank(b.tier)).slice(0,4);
+}
+function blocksForLesson(l){return BLOCKS.blocks.filter(b=>(b.lessons||[]).includes(l.id)).sort((a,b)=>blockTierRank(a.tier)-blockTierRank(b.tier));}
+function blockStatusChip(b){const done=blockDone(b.id);return `<a class="block-use-chip ${done?'learned':b.tier}" href="#/block/${b.id}"><span>${done?'✓':'🧱'}</span><div><strong>${esc(b.title)}</strong><small>${done?'Learned':`${BLOCKS.tiers[b.tier].title} • ${b.minutes} min`}</small></div></a>`}
+function tutorialBuildingBlocks(t){const bs=blocksForTutorial(t);if(!bs.length)return '';return `<section class="tutorial-block-strip"><div><span class="eyebrow">YOU'RE ABOUT TO USE</span><h2>${bs.every(x=>blockDone(x.id))?'You already know these building blocks':'New term? Learn it in a few minutes.'}</h2><p>This is not a prerequisite wall. Open a Building Block only if the term is new, then come straight back to the tutorial.</p></div><div class="block-use-row">${bs.map(blockStatusChip).join('')}</div></section>`}
+function lessonBuildingBlocks(l){const bs=blocksForLesson(l);if(!bs.length)return '';return `<section class="lesson-block-strip"><span class="eyebrow">BUILDING BLOCKS USED HERE</span><div class="block-use-row">${bs.map(blockStatusChip).join('')}</div></section>`}
+function blockCard(b){const done=blockDone(b.id),tier=BLOCKS.tiers[b.tier];return `<a class="building-block-card ${b.tier} ${done?'done':''}" href="#/block/${b.id}"><div class="building-block-card-top"><span class="block-tier ${b.tier}">${done?'✓ LEARNED':tier.title}</span><span>${b.minutes} min</span></div><h3>${esc(b.title)}</h3><p>${esc(b.short)}</p>${b.prefix?`<code>${esc(b.prefix)}</code>`:''}<strong>${done?'Revisit':'Learn it'} →</strong></a>`}
+function blockTrackSummary(t){const xs=BLOCKS.blocks.filter(b=>b.track===t.id),core=xs.filter(b=>b.tier==='core').length;return `<div class="block-track-summary"><span>${t.icon}</span><div><strong>${esc(t.title)}</strong><small>${core?`${core} core • ${xs.length} total`:`Learn when needed • ${xs.length} blocks`}</small></div></div>`}
+function blocksPage(){
+  const filtered=BLOCKS.blocks.filter(b=>blocksTier==='all'||b.tier===blocksTier),done=(state.blockCompleted||[]).length,core=BLOCKS.blocks.filter(b=>b.tier==='core');
+  return `<div class="page-head blocks-page-head"><div class="breadcrumb"><a href="#/">Home</a> / <a href="#/programming">Unreal Learning</a> / Building Blocks</div><span class="eyebrow">LEARN THE LANGUAGE • THEN BUILD THE GAME</span><h1>🧱 Unreal Building Blocks</h1><p class="muted">Tiny explanations and one small proof exercise for the Unreal terms tutorials keep using. You are <b>not</b> expected to learn all ${BLOCKS.blocks.length} up front.</p><div class="blocks-hero-stats"><span><b>${core.length}</b> Core first</span><span><b>${BLOCKS.blocks.filter(x=>x.tier==='common').length}</b> Common when needed</span><span><b>${BLOCKS.blocks.filter(x=>x.tier==='later').length}</b> Later</span><span><b>${done}</b> learned</span></div></div>
+  <section class="blocks-rule"><div><span class="deep-label">THE ANTI-EXPLOSION RULE</span><h2>Learn only what today's build needs.</h2><p>Start with Core. When Sprint introduces an Input Action, learn IA/IMC. When AI introduces NavMesh, learn NavMesh. The tutorial links you here at the moment the concept becomes useful.</p></div><a class="button primary" href="#/tutorials">🛠 Build something →</a></section>
+  <section class="section"><div class="section-head"><div><h2>Five shelves, not five compulsory courses</h2><p>These organise the knowledge so you can find it later.</p></div></div><div class="block-track-summaries">${BLOCKS.tracks.map(blockTrackSummary).join('')}</div></section>
+  <section class="section"><div class="section-head"><div><h2>${blocksTier==='core'?'Start here: Core Building Blocks':blocksTier==='all'?'All Building Blocks':BLOCKS.tiers[blocksTier].title+' Building Blocks'}</h2><p>${blocksTier==='core'?'These are the only ones we actively recommend learning early. Everything else is just-in-time.':BLOCKS.tiers[blocksTier]?.description||'Browse everything when you need a reference.'}</p></div><div class="block-filter-row"><button class="block-filter ${blocksTier==='core'?'active':''}" data-action="block-filter" data-tier="core">Core</button><button class="block-filter ${blocksTier==='common'?'active':''}" data-action="block-filter" data-tier="common">Common</button><button class="block-filter ${blocksTier==='later'?'active':''}" data-action="block-filter" data-tier="later">Later</button><button class="block-filter ${blocksTier==='all'?'active':''}" data-action="block-filter" data-tier="all">All</button></div></div><div class="building-block-grid">${filtered.map(blockCard).join('')}</div></section>`;
+}
+function blockPage(id){
+  const b=buildingBlock(id);if(!b)return notFound();const t=buildingTrack(b.track),done=blockDone(id),relatedTutorials=TOOLS.tutorials.filter(x=>blockMatchesTutorial(b,x)&&!x.designModule).slice(0,6),relatedLessons=(b.lessons||[]).map(lesson).filter(Boolean),requires=(b.requires||[]).map(buildingBlock).filter(Boolean);
+  return `<div class="breadcrumb"><a href="#/">Home</a> / <a href="#/programming">Unreal Learning</a> / <a href="#/blocks">Building Blocks</a> / ${esc(b.title)}</div>
+  <section class="block-detail-hero"><div><span class="block-tier ${b.tier}">${BLOCKS.tiers[b.tier].title} • ${b.minutes} MIN</span><h1>🧱 ${esc(b.title)}</h1><p>${esc(b.short)}</p>${b.prefix?`<code>${esc(b.prefix)}</code>`:''}</div><button class="button ${done?'success':'primary'}" data-action="complete-block" data-block="${b.id}">${done?'✓ Learned':'Mark learned • +25 XP'}</button></section>
+  ${requires.length?`<section class="block-useful-first"><span class="eyebrow">USEFUL FIRST • NOT A LOCK</span><div class="block-use-row">${requires.map(blockStatusChip).join('')}</div></section>`:''}
+  <article class="block-detail-layout"><section class="content-card block-plain"><span class="eyebrow">30-SECOND EXPLANATION</span><h2>What is it?</h2><p>${esc(b.remember)}</p>${b.cheatSheet?.length?`<div class="block-cheat-sheet">${b.cheatSheet.map(x=>`<div><code>${esc(x[0])}</code><span>${esc(x[1])}</span></div>`).join('')}</div>`:''}<div class="callout good"><b>Use it when:</b> ${esc(b.useWhen)}</div></section>
+  <section class="content-card block-practice"><span class="eyebrow">DO IT ONCE</span><h2>Prove the idea in Unreal</h2><ol>${b.steps.map((x,i)=>`<li><span>${String(i+1).padStart(2,'0')}</span><p>${esc(x)}</p></li>`).join('')}</ol><div class="block-check"><b>CHECK YOU GET IT</b><p>${esc(b.check)}</p></div></section>
+  ${(relatedTutorials.length||relatedLessons.length)?`<section class="content-card"><span class="eyebrow">YOU'LL SEE THIS AGAIN</span><h2>Apply it in a real system</h2><div class="block-related-links">${relatedTutorials.map(x=>`<a href="#/tutorial/${x.id}"><span>${x.icon||'🛠'}</span><div><strong>${esc(x.title)}</strong><small>Quick Tutorial • ${esc(x.duration)}</small></div></a>`).join('')}${relatedLessons.map(x=>`<a href="#/lesson/${x.id}"><span>⌘</span><div><strong>${esc(x.title)}</strong><small>Core System Lesson • ${esc(x.duration)}</small></div></a>`).join('')}</div></section>`:''}</article>`;
 }
 
 function tutorial(id){return TOOLS.tutorials.find(x=>x.id===id)}
@@ -598,6 +721,7 @@ function chapterBuildCard(b,{compact=false}={}){
 function tutorialLibrary(){
   const featured=TOOLS.tutorials.filter(t=>t.featured),done=completedTutorialCount();
   return `<div class="page-head tutorial-library-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Quick Tutorials</div><span class="eyebrow">${TOOLS.tutorials.length} short practical recipes</span><h1>🛠 Quick Tutorials</h1><p class="muted">Need one mechanic for a prototype or assignment? Find it, build it, test it, then change it. These are deliberately shorter than full lessons.</p></div>
+  <section class="tutorial-blocks-bridge"><div><span class="deep-label">SEE A TERM YOU DON'T KNOW?</span><h2>Don't abandon the tutorial.</h2><p>Each programming recipe now shows the Building Blocks it uses. Open the unfamiliar one for a 3–8 minute explanation, then come straight back.</p></div><a class="button ghost" href="#/blocks">🧱 Browse Building Blocks</a></section>
   <section class="tutorial-library-tools"><div class="tutorial-search-box"><span>⌕</span><input id="tutorialSearch" type="search" placeholder="Try: gun, door, fog, health, AI, HUD…"></div><div class="tutorial-filter-row"><button class="tutorial-filter active" data-tutorial-filter="all">All</button>${TOOLS.categories.map(c=>`<button class="tutorial-filter" data-tutorial-filter="${c.id}">${c.icon} ${esc(c.title)}</button>`).join('')}</div><div class="tutorial-library-count"><strong>${done}/${TOOLS.tutorials.length}</strong><span>tutorials tried</span></div></section>
   <section class="section"><div class="section-head"><div><h2>Start with something useful</h2><p>Common mechanics students reach for constantly.</p></div></div><div class="quick-tutorial-grid featured">${featured.map(tutorialCard).join('')}</div></section>
   <section class="section"><div class="section-head"><div><h2>All Quick Tutorials</h2><p id="tutorialResultCount">${TOOLS.tutorials.length} tutorials</p></div></div><div class="quick-tutorial-grid" id="tutorialGrid">${TOOLS.tutorials.map(tutorialCard).join('')}</div></section>
@@ -616,8 +740,9 @@ function tutorialPage(id){
   <section class="tutorial-hero"><div><span class="eyebrow">${c?.icon||'🛠'} ${esc(c?.title||t.category)} • ${esc(t.duration)} • ${esc(t.difficulty)}</span><h1>${t.icon} ${esc(t.title)}</h1><p>${esc(t.summary)}</p><div class="tutorial-tag-row large">${t.uses.map(x=>`<span>${esc(x)}</span>`).join('')}</div></div><div class="tutorial-complete-box"><strong>${done?'✓ Tried it':'Build → Test → Change'}</strong><p>${done?'You marked this tutorial as working. You can revisit it anytime.':'Follow the recipe, then make one small change of your own.'}</p><button class="button ${done?'success':'primary'}" data-action="complete-tutorial" data-tutorial="${t.id}">${done?'✓ Tutorial complete':'Mark tutorial complete'}</button></div></section>
   <article class="tutorial-detail">
     <section class="content-card tutorial-result"><span class="eyebrow">01 • What we are making</span><h2>A small working mechanic</h2><p>${esc(t.summary)}</p><div class="callout good"><b>Use this tutorial when:</b> you need this mechanic in a prototype, Chapter Build or assignment and want a short reliable route to a first working version.</div></section>
-    <section class="content-card practical-first-card"><span class="eyebrow">02 • BUILD IT</span><h2>${t.studentRecipe?.length?'One clear walkthrough':'Follow the practical steps'}</h2>${t.studentRecipe?.length?renderSingleClearGuide(t.starterValues,t.studentRecipe,t.steps||[],{title:'Known-working tutorial',intro:'Follow this exact first version in order. The step itself tells you what to do; the checkpoint tells you when it is safe to continue; the Why line builds the skill rather than just copying nodes.'}):`<div class="tutorial-step-list">${t.steps.map((s,i)=>renderTutorialStep(s,i)).join('')}</div>`}</section>
-    ${tutorialReferenceVisuals(t)}
+    ${tutorialBuildingBlocks(t)}
+    <section class="content-card practical-first-card"><span class="eyebrow">02 • BUILD IT</span><h2>${t.studentRecipe?.length?'Start at Step 1':'Follow the practical steps'}</h2>${t.studentRecipe?.length?renderSingleClearGuide(t.starterValues,t.studentRecipe,t.steps||[],{title:'Build the working version',intro:'Follow the steps in order. Each step tells you exactly what to make or click, the value to use, why you are doing it and how to check it worked.'}):`<div class="tutorial-step-list">${t.steps.map((s,i)=>renderTutorialStep(s,i)).join('')}</div>`}</section>
+  ${tutorialReferenceVisuals(t)}
     <section class="tutorial-three-col"><div class="content-card"><span class="eyebrow">03 • Common mistakes</span><h2>If it doesn\'t work</h2><ul>${t.mistakes.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><div class="content-card"><span class="eyebrow">04 • Make it yours</span><h2>Change something</h2><ul>${t.makeItYours.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><div class="content-card"><span class="eyebrow">05 • Definition of done</span><h2>It works when…</h2>${requirements(t.worksWhen)}</div></section>
     <section class="content-card tutorial-next"><div><span class="eyebrow">GO DEEPER</span><h2>Connect this recipe to the course</h2><p>Quick Tutorials solve the immediate mechanic. The full lesson explains the transferable idea behind it.</p></div><div class="tutorial-next-links">${t.designModule?`<a class="button" href="#/design/${t.designModule}">Open ${esc(designModule(t.designModule)?.title||'Designer Studio')} →</a>`:`<a class="button" href="#/lesson/${t.referenceLesson}">Open ${esc(lesson(t.referenceLesson)?.title||'related lesson')} →</a>`}${ref?`<a class="button ghost" href="${esc(ref.url)}" target="_blank" rel="noopener">Epic UE5.8 reference ↗</a>`:''}${t.source?.url?`<a class="button ghost" href="${esc(t.source.url)}" target="_blank" rel="noopener">${esc(t.source.title||'Reference source')} ↗</a>`:''}</div></section>
     ${related.length?`<section class="section"><div class="section-head"><div><h2>Related Quick Tutorials</h2><p>Useful next mechanics.</p></div></div><div class="quick-tutorial-grid related">${related.map(tutorialCard).join('')}</div></section>`:''}
@@ -737,7 +862,7 @@ function modelingLessonPage(id){
   <section class="model-lesson-hero"><div><span class="eyebrow">LESSON ${String(l.order).padStart(2,'0')} • ${esc(l.duration)} • +100 XP</span><h1>${l.icon} ${esc(l.title)}</h1><p>${esc(l.aim)}</p><div class="model-skill-map"><div><small>NEW TODAY</small><strong>${esc(l.newSkill)}</strong></div><div><small>YOU ALREADY KNOW</small><strong>${l.priorSkills.length?esc(l.priorSkills.join(' • ')):'Nothing assumed'}</strong></div><div><small>YOU'LL USE THIS AGAIN IN</small><strong>${esc(l.reuseNext.join(' • '))}</strong></div></div></div><div class="model-complete-box"><strong>${done?'✓ Lesson checked off':'Accuracy first'}</strong><p>${done?'Revisit any stage when a later model exposes a gap.':'Do not move on because the clock says so. Move on when the checkpoint passes.'}</p><button class="button ${done?'success':'primary'}" data-action="complete-model-lesson" data-model-lesson="${l.id}">${done?'✓ Modelling lesson complete':'Mark lesson complete • +100 XP'}</button></div></section>
   <section class="model-safety-card"><span>⚠ SAFETY HABIT</span><strong>${esc(l.safety)}</strong></section>
   ${modelToolBoundaries(l)}
-  <article class="model-lesson-detail"><section class="content-card practical-first-card"><span class="eyebrow">01 • DO IT FIRST</span><h2>One clear modelling walkthrough</h2>${renderSingleClearGuide(l.starterValues,l.studentRecipe,l.steps||[],{title:'Exact modelling route',intro:'Follow one authoritative route from start to finish. Use the exact dimensions and operations on the first attempt; every checkpoint must pass before you continue.'})}</section>
+  <article class="model-lesson-detail"><section class="content-card practical-first-card"><span class="eyebrow">01 • DO IT FIRST</span><h2>Start at Step 1</h2>${renderSingleClearGuide(l.starterValues,l.studentRecipe,l.steps||[],{title:'Model it from Step 1',intro:'Work straight down the page. The dimensions, selections and tools appear at the exact moment you need them, followed by a quick reason and check.'})}</section>
   <details class="content-card model-support-details"><summary>02 • Understand the idea, diagrams and references</summary><div class="support-details-inner"><p>${esc(l.intro)}</p>${modelInterfaceImages(l)}${l.visual?modelDiagram(l.visual,`${l.title} concept map`):''}${modelBookReferences(l)}</div></details>
   <section class="content-card model-practice-card"><span class="eyebrow">03 • USE IT</span><h2>${esc(l.practice.title)}</h2><p>${esc(l.practice.task)}</p><div class="model-check-grid">${l.practice.check.map(x=>`<div>✓ ${esc(x)}</div>`).join('')}</div></section>
   <section class="model-two-col"><div class="content-card"><span class="eyebrow">04 • COMMON WAYS TO BREAK IT</span><h2>Watch for these</h2><ul>${l.common.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><div class="content-card"><span class="eyebrow">05 • CURRENT REFERENCES</span><h2>If your screen differs</h2><p>Use current vendor documentation rather than forcing an old screenshot to match.</p>${modelReferenceCards(l.officialRefs)}</div></section>
@@ -747,7 +872,7 @@ function modelingBuildPage(id){
   const b=modelBuild(id);if(!b)return notFound();const done=modelBuildDone(id),req=modelRequirements(b.requires),ready=req.every(x=>modelLessonDone(x.id));
   return `<div class="breadcrumb"><a href="#/">Home</a> / <a href="#/modeling">3D Modelling Studio</a> / Build X / ${esc(b.title)}</div><section class="model-build-hero"><div><span class="eyebrow">BUILD X • ${esc(b.difficulty)} • ${esc(b.time)} • ${esc(b.support||'Guided checkpoints')}</span><h1>${b.icon} How to build: ${esc(b.title)}</h1><p>${esc(b.summary)}</p><div class="tutorial-tag-row large">${b.teaches.map(x=>`<span>${esc(x)}</span>`).join('')}</div></div><div class="model-complete-box"><strong>${ready?'Prerequisites covered':'Scaffold first'}</strong><p>${ready?'You have completed the lessons this build expects.':'You can still view the build, but the linked lessons teach the risky tools properly first.'}</p><button class="button ${done?'success':'primary'}" data-action="complete-model-build" data-model-build="${b.id}">${done?'✓ Build complete':'Mark Build X complete • +250 XP'}</button></div></section>
   <section class="content-card"><span class="eyebrow">BEFORE YOU START</span><h2>Skills this build expects</h2><div class="model-prereq-grid">${req.map(l=>`<a class="model-prereq ${modelLessonDone(l.id)?'done':''}" href="#/modeling/lesson/${l.id}"><span>${modelLessonDone(l.id)?'✓':'○'}</span><div><strong>${esc(l.title)}</strong><small>${esc(l.newSkill)}</small></div></a>`).join('')}</div></section>
-  <section class="content-card practical-first-card"><span class="eyebrow">EXACT FIRST BUILD • ${esc(b.support||'Guided checkpoints')}</span><h2>One clear Build X walkthrough</h2>${renderSingleClearGuide(b.starterValues,b.studentRecipe,buildGuideSupports(b.phases||[]),{title:`Build ${b.title}`,intro:'Build the known-working version in order. The phase purpose and proof are attached to the steps instead of being repeated in a second set of instructions.'})}</section>
+  <section class="content-card practical-first-card"><span class="eyebrow">BUILD X • ${esc(b.support||'Guided checkpoints')}</span><h2>Start at Step 1</h2>${renderSingleClearGuide(b.starterValues,b.studentRecipe,buildGuideSupports(b.phases||[]),{title:`Build ${b.title}`,intro:'Start with Step 1 and keep going. Do not prepare a separate list of settings first; use each dimension or operation when the walkthrough introduces it.'})}</section>
   <details class="content-card model-support-details"><summary>Phase map — what each stage is trying to achieve</summary><div class="support-details-inner"><div class="model-build-phases compact">${b.phases.map((ph,i)=>`<article><span>${String(i+1).padStart(2,'0')}</span><div><h3>${esc(ph.name)}</h3><p>${esc(ph.brief)}</p><div class="callout good"><b>PROOF:</b> ${esc(ph.proof)}</div></div></article>`).join('')}</div></div></details><section class="model-finish-bar"><p><b>Do not skip failed checkpoints.</b> If the geometry becomes wrong, return to the last clean version rather than building detail on top of damage.</p><button class="button ${done?'success':'primary'}" data-action="complete-model-build" data-model-build="${b.id}">${done?'✓ Build complete':'Mark complete • +250 XP'}</button></section>`;
 }
 function modelingFixPage(id){
@@ -762,7 +887,7 @@ function dashboard(){
   </section>
 
   <section class="portal-path-grid" aria-label="Choose a Learning Hub area">
-    <a class="portal-path-card programming" href="#/programming"><div class="portal-path-icon">⌘</div><span class="portal-kicker">SYSTEMS • BLUEPRINTS • LOGIC</span><h2>Programming</h2><p>Understand how Unreal works, build mechanics, solve problems and turn Blueprint graphs into reliable game systems.</p><div class="portal-chip-row"><span>20 core lessons</span><span>${TOOLS.tutorials.filter(t=>!t.designModule).length}+ recipes</span><span>Revision</span></div><strong>Enter Programming →</strong></a>
+    <a class="portal-path-card programming" href="#/programming"><div class="portal-path-icon">⌘</div><span class="portal-kicker">BUILDING BLOCKS • SYSTEMS • BLUEPRINTS</span><h2>Unreal Learning</h2><p>Learn Unreal terms in tiny Building Blocks, understand the deeper systems, then apply them in practical tutorials and projects.</p><div class="portal-chip-row"><span>${BLOCKS.blocks.filter(b=>b.tier==='core').length} core blocks</span><span>${DATA.lessons.length} system lessons</span><span>${TOOLS.tutorials.filter(t=>!t.designModule).length}+ recipes</span></div><strong>Enter Unreal Learning →</strong></a>
     <a class="portal-path-card design" href="#/design"><div class="portal-path-icon">✦</div><span class="portal-kicker">LEVELS • ART • LIGHT • SOUND</span><h2>Design</h2><p>Build readable spaces, create atmosphere, guide players and learn why strong game worlds communicate rather than simply decorate.</p><div class="portal-chip-row"><span>${DESIGN.modules.length} disciplines</span><span>Studio builds</span><span>Critique</span></div><strong>Enter Designer Studio →</strong></a>
     <a class="portal-path-card modeling" href="#/modeling"><div class="portal-path-icon">⬡</div><span class="portal-kicker">3DS MAX • TOPOLOGY • UVS</span><h2>3D Modelling</h2><p>Learn 3ds Max slowly and correctly, build game-ready assets and understand what clean modelling actually looks like.</p><div class="portal-chip-row"><span>${MODEL.lessons.length} deep lessons</span><span>${MODEL.builds.length} Build X</span><span>${MODEL.fixes.length} repair clinics</span></div><strong>Open 3D Modelling Studio →</strong></a>
     <a class="portal-path-card sculpt" href="#/sculpt"><div class="portal-path-icon">🗿</div><span class="portal-kicker">DIGITAL CLAY • FORM • SILHOUETTE</span><h2>Sculpt Playground</h2><p>Push and pull digital clay in SculptGL with six tiny guided exercises, then inspect what exists underneath the surface.</p><div class="portal-chip-row"><span>${SCULPT.practices.length} exercises</span><span>Browser sculpting</span><span>OBJ → Max</span></div><strong>Play with clay →</strong></a>
@@ -778,22 +903,15 @@ function dashboard(){
 
 
 function programmingPage(){
-  const i=level(),n=nextLesson(),np=pathProgress(n.path),pb=pendingUnlockedBuild();
+  const i=level(),n=nextLesson(),np=pathProgress(n.path),pb=pendingUnlockedBuild(),blocksDone=(state.blockCompleted||[]).length,coreBlocks=BLOCKS.blocks.filter(b=>b.tier==='core'),coreDone=coreBlocks.filter(b=>blockDone(b.id)).length;
   const pathsComplete=DATA.paths.filter(p=>pathProgress(p.id).pct===100).length;
-  return `<div class="page-head programming-page-head"><div class="breadcrumb"><a href="#/">Home</a> / Programming</div><span class="eyebrow">BLUEPRINTS • GAMEPLAY SYSTEMS • PROBLEM SOLVING</span><h1>⌘ Programming</h1><p class="muted">Learn the idea first, see how Unreal expresses it, practise it, then prove you can apply it without simply copying a graph.</p></div>
-
-  <section class="programming-continue">
-    <div><span class="eyebrow">CONTINUE LEARNING • ${esc(path(n.path).title)}</span><h2>${esc(n.title)}</h2><p>${esc(n.short)}</p><div class="path-meta"><span>${n.duration} • ${n.xp} XP</span><span>${np.pct}% path complete</span></div><div class="progress"><span style="width:${np.pct}%"></span></div></div>
-    <div class="programming-continue-actions"><a class="button primary" href="${pb?`#/chapter-build/${pb.path}`:`#/lesson/${n.id}`}">${pb?`🎮 Build: ${esc(pb.title)}`:'▶ Continue'}</a><a class="button ghost" href="#/tutorials">🛠 Quick Tutorial</a></div>
-  </section>
-
-  <div class="stat-grid programming-stats"><div class="stat"><small>Current level</small><strong>${i.n}</strong></div><div class="stat"><small>Total XP</small><strong>${i.xp}</strong></div><div class="stat"><small>Lessons complete</small><strong>${completedLessons().length}/${DATA.lessons.length}</strong></div><div class="stat"><small>Paths complete</small><strong>${pathsComplete}/${DATA.paths.length}</strong></div></div>
-
-  <section class="section"><div class="section-head"><div><h2>Core learning paths</h2><p>Follow them in order for a structured course, or jump to the exact concept your project needs.</p></div></div><div class="path-grid">${DATA.paths.map(p=>{const x=pathProgress(p.id);return `<a class="path-card" href="#/path/${p.id}"><div class="path-icon">${p.icon}</div><h3>${esc(p.title)}</h3><p>${esc(p.description)}</p><div class="path-meta"><span>${x.done}/${x.total} lessons</span><span>${x.pct}%</span></div><div class="progress"><span style="width:${x.pct}%"></span></div></a>`}).join('')}</div></section>
-
-  ${pb?`<section class="section dashboard-unlock"><div class="section-head"><div><span class="eyebrow">YOU FINISHED A CHAPTER</span><h2>🎮 New Chapter Build unlocked</h2><p>Combine what you learned into something playable before moving on.</p></div></div>${chapterBuildCard(pb,{compact:true})}</section>`:''}
-
-  <section class="section learning-tools-section"><div class="section-head"><div><h2>Practise, solve and revise</h2><p>Use a short recipe when you need a mechanic, then test what you actually understand.</p></div></div><div class="workspace-cards"><a class="workspace-card learning-tool" href="#/tutorials"><span>🛠</span><div><strong>${TOOLS.tutorials.length} Quick Tutorials</strong><p>Short practical recipes for common mechanics, systems, effects and student requests.</p></div></a><a class="workspace-card learning-tool" href="#/revision"><span>↻</span><div><strong>Revision Quizzes</strong><p>Random, whole-path or mixed-topic quizzes with 10 / 20 / 30 questions.</p></div></a><a class="workspace-card learning-tool" href="#/challenges"><span>🔥</span><div><strong>Challenge Board</strong><p>Independent problems where the answer is no longer laid out node by node.</p></div></a></div></section>`;
+  return `<div class="page-head programming-page-head"><div class="breadcrumb"><a href="#/">Home</a> / Unreal Learning</div><span class="eyebrow">UNDERSTAND THE ENGINE • BUILD SYSTEMS • APPLY THEM</span><h1>⌘ Unreal Learning</h1><p class="muted">You do not need to memorise Unreal before making games. Learn a small Building Block, use it in a system, then meet it again in tutorials and projects.</p></div>
+  <section class="unreal-learning-ladder"><a href="#/blocks"><span>01</span><div><small>3–8 MINUTE MICRO-LEARNING</small><h2>🧱 Building Blocks</h2><p>What does IA, BPI, Struct, AnimBP, NavMesh or Skeletal Mesh actually mean? Learn the term once with a tiny proof exercise.</p><strong>${coreDone}/${coreBlocks.length} Core learned →</strong></div></a><a href="#/path/${n.path}"><span>02</span><div><small>DEEPER SYSTEM UNDERSTANDING</small><h2>⌘ Core System Lessons</h2><p>Understand why systems work, build them carefully, debug them and apply them in a larger mechanic.</p><strong>${completedLessons().length}/${DATA.lessons.length} lessons complete →</strong></div></a><a href="#/tutorials"><span>03</span><div><small>JUST-IN-TIME BUILDING</small><h2>🛠 Quick Tutorials</h2><p>Need sprint, a locked door, a health bar or AI patrol? Build the exact thing and jump to a Building Block only when a term is new.</p><strong>${completedTutorialCount()} tried →</strong></div></a><a href="#/challenges"><span>04</span><div><small>REMOVE THE TRAINING WHEELS</small><h2>🔥 Challenges & Projects</h2><p>Combine systems without every node being handed to you. This is where copying becomes understanding.</p><strong>Prove it →</strong></div></a></section>
+  <section class="programming-continue"><div><span class="eyebrow">CONTINUE CORE SYSTEMS • ${esc(path(n.path).title)}</span><h2>${esc(n.title)}</h2><p>${esc(n.short)}</p><div class="path-meta"><span>${n.duration} • ${n.xp} XP</span><span>${np.pct}% path complete</span></div><div class="progress"><span style="width:${np.pct}%"></span></div></div><div class="programming-continue-actions"><a class="button primary" href="${pb?`#/chapter-build/${pb.path}`:`#/lesson/${n.id}`}">${pb?`🎮 Build: ${esc(pb.title)}`:'▶ Continue core lesson'}</a><a class="button ghost" href="#/blocks">🧱 Building Blocks</a></div></section>
+  <div class="stat-grid programming-stats"><div class="stat"><small>Building Blocks</small><strong>${blocksDone}/${BLOCKS.blocks.length}</strong></div><div class="stat"><small>Core lessons</small><strong>${completedLessons().length}/${DATA.lessons.length}</strong></div><div class="stat"><small>Quick Tutorials</small><strong>${completedTutorialCount()}</strong></div><div class="stat"><small>Total XP</small><strong>${i.xp}</strong></div></div>
+  <section class="section"><div class="section-head"><div><span class="eyebrow">WHEN YOU WANT THE DEEPER VERSION</span><h2>Core System Lessons</h2><p>These are not prerequisites for every tutorial. Follow them in order as a course, or open the system your project needs.</p></div></div><div class="path-grid">${DATA.paths.map(p=>{const x=pathProgress(p.id);return `<a class="path-card" href="#/path/${p.id}"><div class="path-icon">${p.icon}</div><h3>${esc(p.title)}</h3><p>${esc(p.description)}</p><div class="path-meta"><span>${x.done}/${x.total} lessons</span><span>${x.pct}%</span></div><div class="progress"><span style="width:${x.pct}%"></span></div></a>`}).join('')}</div></section>
+  <section class="blocks-mini-cta"><div><span class="deep-label">DON'T KNOW A TERM?</span><h2>Search the Building Blocks, not YouTube roulette.</h2><p>${BLOCKS.blocks.length} concise Unreal concepts are organised into Core, Common and Later. Only ${coreBlocks.length} are suggested early; the rest appear when tutorials need them.</p></div><a class="button primary" href="#/blocks">Open Building Blocks →</a></section>
+  ${pb?`<section class="section dashboard-unlock"><div class="section-head"><div><span class="eyebrow">YOU FINISHED A CHAPTER</span><h2>🎮 New Chapter Build unlocked</h2><p>Combine what you learned into something playable before moving on.</p></div></div>${chapterBuildCard(pb,{compact:true})}</section>`:''}`;
 }
 
 const NEWS_CACHE_STORE='ue5hub:v329:news-cache';
@@ -979,17 +1097,13 @@ function lessonPage(id){
     </div>
     <div class="lesson-meta"><div class="meta-line"><small>Learning aim</small><strong>${esc(l.aim)}</strong></div><div class="meta-line"><small>Lesson model</small><strong>Learn → Practise → Prove</strong></div><div class="meta-line"><small>Practice mechanic</small><strong>${esc(l.projectTask?.name||'Practice build')}</strong></div></div>
   </section>
-
-  <section class="lesson-flow-callout">
-    <div><span class="eyebrow">SIMPLE STUDENT FLOW</span><h2>Do these four first</h2><p>Core route first. Everything else is there to extend, troubleshoot, apply and submit.</p></div>
-    <div class="lesson-flow-steps"><span>01 Goal</span><span>02 Build exactly</span><span>03 Check it</span><span>04 Understand</span></div>
-  </section>
+  ${lessonBuildingBlocks(l)}
 
   <div class="lesson-layout ${lessonMode==='independent'?'independent':''}">
   <article>
     <section class="content-card" id="aims"><span class="eyebrow">01 • Goal</span><h2>What you should be able to do</h2><div class="goal-grid">${l.goals.map(g=>`<div class="goal">${esc(g)}</div>`).join('')}</div></section>
 
-    <section class="content-card guided-section practical-first-card" id="guided"><span class="eyebrow">02 • BUILD IT</span><h2>One clear walkthrough</h2><p>This is the authoritative build route. Follow it in order; each step includes the action, checkpoint and reason where the lesson needs it.</p>${guidedBuild(l)}</section>
+    <section class="content-card guided-section practical-first-card" id="guided"><span class="eyebrow">02 • BUILD IT</span><h2>Start at Step 1</h2><p>No prep list. No jumping between sections. Make each thing when the walkthrough asks for it and test as you go.</p>${guidedBuild(l)}</section>
     <section class="content-card guided-hidden-note"><span class="eyebrow">Independent mode</span><h2>Guided steps hidden</h2><p>Use the aim, explanation and challenges as your brief. Switch back only when the walkthrough is genuinely needed.</p></section>
 
     <section class="content-card" id="check"><span class="eyebrow">03 • CHECK IT</span><h2>Prove the build and the idea</h2>${quizHtml(l)}</section>
@@ -1047,7 +1161,7 @@ function lessonPage(id){
   <aside class="lesson-nav">
     <div class="lesson-nav-group"><span class="lesson-nav-label">DO THESE FIRST</span>
       <button class="section-button" data-action="scroll" data-target="aims">01 Learning aims</button>
-      <button class="section-button" data-action="scroll" data-target="guided">02 Exact build</button>
+      <button class="section-button" data-action="scroll" data-target="guided">02 Step-by-step guide</button>
       <button class="section-button" data-action="scroll" data-target="check">03 Check it</button>
       <button class="section-button" data-action="scroll" data-target="learn">04 Understand</button>
     </div>
@@ -1746,6 +1860,8 @@ function route(){
   $$('.nav a').forEach(a=>a.classList.remove('active'));
   if(!parts.length){app.innerHTML=dashboard();activate('home')}
   else if(parts[0]==='programming'){app.innerHTML=programmingPage();activate('programming')}
+  else if(parts[0]==='blocks'){app.innerHTML=blocksPage();activate('blocks')}
+  else if(parts[0]==='block'&&parts[1]){app.innerHTML=blockPage(parts[1]);activate('blocks')}
   else if(parts[0]==='news'){app.innerHTML=newsPage();activate('news')}
   else if(parts[0]==='path'){app.innerHTML=pathPage(parts[1]);activate(parts[1])}
   else if(parts[0]==='lesson'){app.innerHTML=lessonPage(parts[1]);const l=lesson(parts[1]);if(l)activate(l.path)}
@@ -1855,6 +1971,12 @@ async function setLessonComplete(id){
   else if(unlocked)toast('Chapter complete — 🎮 Chapter Build unlocked!','badge');
   else badgeUnlockAfter(before,`Lesson complete! +${l.xp} XP`);
   route();
+}
+async function setBlockComplete(id){
+  const b=buildingBlock(id);if(!b)return;const was=blockDone(id);
+  state.blockCompleted=was?(state.blockCompleted||[]).filter(x=>x!==id):[...new Set([...(state.blockCompleted||[]),id])];saveState();
+  if(BACKEND.user){try{await BACKEND.setLessonComplete(`block:${id}`,!was)}catch(e){toast('Saved locally; cloud sync failed.')}}
+  toast(was?'Building Block marked not learned.':'Building Block learned • +25 XP');route();
 }
 async function setTutorialComplete(id){
   const t=tutorial(id);if(!t)return;const was=tutorialDone(id),before=localUnlockedBadgeIds();
@@ -2119,6 +2241,8 @@ document.addEventListener('click',async e=>{
   else if(a==='close-image'){closeImageLightbox();}
   else if(a==='scroll'){document.getElementById(b.dataset.target)?.scrollIntoView({behavior:'smooth',block:'start'});}
   else if(a==='complete') await setLessonComplete(b.dataset.lesson);
+  else if(a==='complete-block') await setBlockComplete(b.dataset.block);
+  else if(a==='block-filter'){blocksTier=b.dataset.tier||'core';route();}
   else if(a==='complete-tutorial') await setTutorialComplete(b.dataset.tutorial);
   else if(a==='complete-chapter-build') await setChapterBuildComplete(b.dataset.path);
   else if(a==='complete-design-build') await setDesignBuildComplete(b.dataset.designModule);
@@ -2600,6 +2724,7 @@ function setupSearch(){
     const mbs=MODEL.builds.filter(x=>[x.title,x.summary,...x.teaches].join(' ').toLowerCase().includes(q)).slice(0,3);
     const mfs=MODEL.fixes.filter(x=>[x.title,x.symptom,...x.diagnose,...x.repair].join(' ').toLowerCase().includes(q)).slice(0,3);
     const sps=SCULPT.practices.filter(x=>[x.title,x.aim,x.newSkill,...x.tools].join(' ').toLowerCase().includes(q)).slice(0,4);
+    const bs=BLOCKS.blocks.filter(b=>[b.title,b.short,b.prefix,...(b.aliases||[])].join(' ').toLowerCase().includes(q)).slice(0,5);
     const gs=DATA.glossary.filter(x=>x.join(' ').toLowerCase().includes(q)).slice(0,4);
     panel.innerHTML=[
       ...ls.map(l=>`<a class="search-result" href="#/lesson/${l.id}"><strong>${esc(l.title)}</strong><small>Lesson • ${esc(l.projectTask?.name||path(l.path).title)}</small></a>`),
@@ -2610,6 +2735,7 @@ function setupSearch(){
       ...mfs.map(f=>`<a class="search-result" href="#/modeling/fix/${f.id}"><strong>${esc(f.icon)} ${esc(f.title)}</strong><small>3D Modelling Studio • Fix This Model</small></a>`),
       ...sps.map(p=>`<a class="search-result" href="#/sculpt/${p.id}"><strong>🗿 ${esc(p.title)}</strong><small>Sculpt Playground • ${esc(p.time)}</small></a>`),
       ...rs.map(r=>`<a class="search-result" href="#/design"><strong>${esc(r.icon||'🎁')} ${esc(r.title)}</strong><small>Free resource • ${esc(r.type)}</small></a>`),
+      ...bs.map(b=>`<a class="search-result" href="#/block/${b.id}"><strong>🧱 ${esc(b.title)}</strong><small>${BLOCKS.tiers[b.tier].title} Building Block • ${b.minutes} min</small></a>`),
       ...gs.map(g=>`<a class="search-result" href="#/glossary"><strong>${esc(g[0])}</strong><small>${esc(g[1])}</small></a>`)
     ].join('')||'<div class="search-result"><strong>No results</strong><small>Try a broader UE5 / 3ds Max term.</small></div>';
     panel.hidden=false;
@@ -2624,7 +2750,7 @@ function setupSearch(){
 $('#menuButton').addEventListener('click',()=>$('#sidebar').classList.toggle('open'));
 $('#resetProgress').addEventListener('click',()=>{
   if(confirm('Reset all locally saved lesson progress, XP and game-project status on this browser?')){
-    state={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[]};
+    state={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[],blockCompleted:[]};
     projectState={project_title:'Signal Lost',theme:PROJECT.themes[0],pitch:'',mechanics:{}};
     saveState();saveProjectState();route();toast('Local progress reset.');
   }

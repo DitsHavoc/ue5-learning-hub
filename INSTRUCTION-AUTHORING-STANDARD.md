@@ -1,57 +1,80 @@
-# Instruction Authoring Standard — v3.30
+# Instruction Authoring Standard — v3.31
 
 ## The rule
-A beginner practical guide must have **one authoritative walkthrough**. Do not present a short recipe and then a second competing set of numbered instructions underneath it.
+A beginner should be able to start at **Step 1** and keep moving down the page without first decoding a shopping list of assets, variables, files, measurements or settings.
 
-## First-build step pattern
-For the first taught version, each step should answer as many of these as the task needs:
+Do not make the learner prepare everything up front. Introduce each thing at the exact moment it becomes useful.
 
-1. **WHERE + DO THIS** — exact editor/Blueprint/panel/tool/action.
-2. **EXACT FIRST-BUILD VALUE** — names, types, dimensions, speeds, distances, times, counts or settings.
-3. **YOU SHOULD SEE** — visible result immediately after the action.
-4. **STOP + CHECK** — a condition that must pass before continuing.
-5. **WHY** — one short reason that transfers to future work.
-6. **IF YOURS DOES NOT MATCH** — recovery, not another pile of new instructions.
+## Straight-through step pattern
+Use this order:
 
-## Language rules
-Avoid vague first-build wording such as “roughly”, “a little”, “some”, “suitable”, “adjust until it looks right” or “use an appropriate value” when a known teaching value can be supplied.
+1. **STEP TITLE** — plain English outcome: “Create the Sprint Input Action”.
+2. **GO TO** — exact location in Unreal/Max when the learner needs navigation help.
+3. **DO THIS** — exact action, name and known-working value.
+4. **WHY** — one short sentence explaining the transferable reason.
+5. **CHECK** — an observable result that proves the step worked.
+6. **SOMETHING WENT WRONG?** — recovery only when useful; keep it out of the successful learner’s way.
 
-Art/design judgement can become open-ended later. The first controlled build should establish a known-good result before support fades.
+## Do not use a prep/specification block
+Avoid front-loading a tutorial with something like:
+
+- BP_Player
+- IA_Sprint
+- WalkSpeed Float
+- SprintSpeed Float
+- 500
+- 900
+
+Instead teach it in sequence:
+
+**Step 1 — Create IA_Sprint**  
+Go to Content Drawer → Input → Input Action. Name it `IA_Sprint`.  
+Why: the input asset separates the control from the mechanic.  
+Check: `IA_Sprint` exists in the Input folder.
+
+**Step 2 — Map it to Left Shift**  
+Open the active Mapping Context → add `IA_Sprint` → choose Left Shift.  
+Why: the Mapping Context connects the action to a physical control.  
+Check: the mapping row shows `IA_Sprint — Left Shift`.
+
+Only later, when the speed change is being built, introduce `500` and `900`.
+
+## Prescriptive first, judgement later
+The first taught version should still contain real values:
+- Max crate: `80 × 60 × 45 cm`
+- Inset: `5 cm`
+- Extrude: `-3 cm`
+- Chamfer: `1.5 cm`, `2 segments`
+- UE walk speed: `500`
+- UE sprint speed: `900`
+
+Do not replace those with “roughly”, “a bit”, “appropriate” or “whatever looks right” during the first controlled build.
 
 ## Scaffold fade
-- **First encounter:** exact click/path + exact value + exact checkpoint.
-- **Second encounter:** tool named + starting value + checkpoint.
-- **Third encounter:** desired outcome + relevant tool family.
-- **Independent task:** outcome/constraints only; student chooses values and method.
+- **First encounter:** exact click/path + exact value + immediate check + why.
+- **Second encounter:** tool/path + starting value + check.
+- **Third encounter:** desired result + suggested tool family.
+- **Independent task:** outcome and constraints; learner chooses values/method.
 
-## Unreal Engine examples
-Prefer:
+## One action cluster per step
+A step can contain a small group of actions that naturally belong together, but it should have one obvious purpose. Do not hide an entire subsystem in one paragraph.
 
-`Character Blueprint → Event Graph → IA_Sprint Started → Character Movement → Set Max Walk Speed → 900`
+## The beginner test
+Before publishing a practical step, ask:
 
-Then provide the release path and test condition:
+> Could a student who has never done this perform the next action without asking what I meant — and can they tell whether it worked before continuing?
 
-`IA_Sprint Completed → Set Max Walk Speed → 500`.
+If not, rewrite the step.
 
-Test: normal movement, hold Left Shift, release; speed must return to 500.
+## v3.32 — Building Blocks vs tutorials
 
-Avoid: “Add sprint logic and tune the speed.”
+Do not turn a practical tutorial into a terminology lesson.
 
-## 3ds Max examples
-Prefer:
+If a mechanic uses a reusable Unreal concept such as an Input Action, Blueprint Interface, Struct, Data Table, Animation Blueprint or NavMesh:
 
-`Create → Geometry → Standard Primitives → Box → Length 80 cm / Width 60 cm / Height 45 cm`.
+- the **Building Block** explains what the concept is and proves it once;
+- the **Quick Tutorial** uses the concept to build the mechanic;
+- the **Core Lesson** explains the larger system deeply;
+- the **Challenge / Project** removes support and asks the learner to choose/apply it.
 
-Then:
-
-`Editable Poly → Polygon → front face only → Inset 5 cm → centre polygon → Extrude -3 cm`.
-
-Checkpoint: orbit to the rear and prove the back face has not moved.
-
-Avoid: “Make a box, inset it a bit and push the middle in.”
-
-## Values are teaching values
-Known-working values are not presented as universal game-design or art-direction truths. They exist to let a learner build a controlled example, prove cause and effect, and then make informed changes.
-
-## Independent application remains independent
-Chapter Builds, Stretch/Challenge, design critique and later Build X tasks should deliberately remove some support. Prescriptive teaching is used to establish skill; it should not permanently replace judgement.
+A tutorial may briefly explain why a step exists, but it should link to the Building Block rather than repeating a full mini-course inside every recipe.

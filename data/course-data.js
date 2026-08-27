@@ -1,5 +1,5 @@
 window.UE5_COURSE_DATA = {
-  "version": "3.30.0",
+  "version": "3.32.0",
   "buildDate": "26 Aug 2026",
   "paths": [
     {
@@ -479,7 +479,7 @@ window.UE5_COURSE_DATA = {
         "Click each Outliner name and prove the matching cube highlights. Press F once for each selected Actor and confirm the camera frames the matching cube.",
         "Content Drawer → create folder Learning. Use File → Save All. Do not continue with unsaved changes."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "actors-components",
@@ -945,7 +945,7 @@ window.UE5_COURSE_DATA = {
         "Drag BP_PracticeBeacon into the level and set Location X 0, Y 0, Z 100.",
         "Press Play. View the beacon from two different angles and confirm the mesh and light remain together as one reusable Actor."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "blueprint-classes",
@@ -1368,7 +1368,7 @@ window.UE5_COURSE_DATA = {
         "Open BP_ColourBlock, add one Point Light component, set Intensity 1000, Compile.",
         "Return to the level and prove all three instances gained the light while their BlockLabel values stayed different."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "events",
@@ -1792,7 +1792,7 @@ window.UE5_COURSE_DATA = {
         "Add Box Collision with Extent 100,100,100. Add OnComponentBeginOverlap(Box) → Print String “Overlap fired”.",
         "Compile and Play. Walk into the box and prove BeginPlay fires once while Overlap fires when the player enters."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "variables",
@@ -2245,7 +2245,7 @@ window.UE5_COURSE_DATA = {
         "Select Health → tick Instance Editable → set Tooltip to “Starting health for this actor instance” → Compile.",
         "Place two instances and give one Health 100 and the other 40. Prove the instance values can differ without duplicating the Blueprint."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "branches",
@@ -2692,7 +2692,7 @@ window.UE5_COURSE_DATA = {
         "Change Health to -10 and prove the True path still runs.",
         "Add a comment around the comparison + Branch: “Is Health zero or below?” so the graph reads like a question."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "functions",
@@ -3140,7 +3140,7 @@ window.UE5_COURSE_DATA = {
         "Call TestSecondCall after the first ShowStatus call and prove both messages use the same function.",
         "Open ShowStatus and confirm it performs one clearly named job. Do not add unrelated gameplay logic to it."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "framework",
@@ -3562,7 +3562,7 @@ window.UE5_COURSE_DATA = {
         "Pick one mechanic from your own project and write its owner before building it.",
         "If you cannot justify the owner in one sentence, do not add the logic yet."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "references-casting",
@@ -3968,7 +3968,7 @@ window.UE5_COURSE_DATA = {
         "Create a temporary Actor Object Reference variable and note that BP_Lamp-specific functions are unavailable until you Cast To BP_Lamp.",
         "Remove the temporary test. Keep the typed TargetLamp reference because it is clearer when you already know the object type."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "interfaces-dispatchers",
@@ -4408,7 +4408,7 @@ window.UE5_COURSE_DATA = {
         "In BP_InterfaceButton add Event Dispatcher OnPressed. Call it immediately after the interaction message.",
         "Bind one listener only if you need a broadcast response. Keep the interface for direct capability and the dispatcher for one-to-many notification."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "collision",
@@ -4831,7 +4831,7 @@ window.UE5_COURSE_DATA = {
         "Use Other Actor → Equal (Object) with Get Player Character if you want to prove only the player should trigger it.",
         "After the first successful test, change Box Extent to X 150, Y 75, Z 100 and test again. Confirm the larger trigger still fires once on entry."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "traces",
@@ -5255,7 +5255,7 @@ window.UE5_COURSE_DATA = {
         "Branch from the Line Trace Return Value. Only use hit data from the True path.",
         "Play, aim at a visible Actor within 1500 cm and press E. Confirm the debug line reaches the target and the correct Actor name prints."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "timelines",
@@ -5679,7 +5679,7 @@ window.UE5_COURSE_DATA = {
         "Compile and Play. The door should rotate smoothly from 0° to 90° in one second.",
         "If it orbits instead of hinges, stop changing Timeline values: the mesh pivot/component hierarchy is the problem."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "ui",
@@ -6124,7 +6124,7 @@ window.UE5_COURSE_DATA = {
         "BeginPlay → Create Widget WBP_HUD → promote Return Value to HUDRef → Add to Viewport → call SetHealthDisplay(100,100).",
         "Play. The widget must appear once and the bar must be full. Test 50,100 and prove the bar becomes half full."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "savegame",
@@ -6521,7 +6521,7 @@ window.UE5_COURSE_DATA = {
         "Cast the loaded object to BP_PlayerSave and Print SavedScore as a first proof.",
         "Save a non-zero test score such as 250, restart Play and prove the loaded value is still 250."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "data",
@@ -6964,7 +6964,7 @@ window.UE5_COURSE_DATA = {
         "Break ST_ItemData from Out Row → Print DisplayName and Damage.",
         "Play and prove changing the TrainingSword Damage in the Data Table changes the value read by the Blueprint without editing the graph."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "ai",
@@ -7389,7 +7389,7 @@ window.UE5_COURSE_DATA = {
         "After success, wait 2.0 seconds, switch the target to Patrol_B and run AI Move To again.",
         "Only after the two-point prototype works should you move the same target logic into Blackboard/Behaviour Tree."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "animation",
@@ -7831,7 +7831,7 @@ window.UE5_COURSE_DATA = {
         "Set transition to the jump/fall state when IsInAir is True, and return when IsInAir is False.",
         "Play: stand still, walk/run, jump, land. Watch the animation change with the same variables you can inspect in the Anim Blueprint debugger."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "practice",
@@ -8230,7 +8230,7 @@ window.UE5_COURSE_DATA = {
         "Add one short comment above the main logic block explaining its responsibility.",
         "Play-test once more. The graph must be easier to read without changing the mechanic."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "complexity",
@@ -8637,10 +8637,54 @@ window.UE5_COURSE_DATA = {
         "Compile and Play immediately. Prove behaviour is unchanged.",
         "Only after the Play test passes, choose exactly one more logic block and repeat the same refactor cycle."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     }
   ],
   "glossary": [
+    [
+      "Input Action (IA)",
+      "Enhanced Input asset representing a gameplay intention such as Sprint, Jump or Interact."
+    ],
+    [
+      "Input Mapping Context (IMC)",
+      "Enhanced Input asset that maps Input Actions to physical controls such as keys or gamepad buttons."
+    ],
+    [
+      "Class Reference",
+      "A reference to a type/class rather than one specific object instance."
+    ],
+    [
+      "Enum",
+      "A custom type representing one named choice from a controlled list."
+    ],
+    [
+      "Data Table",
+      "Rows of structured data using a Struct as the row definition."
+    ],
+    [
+      "Static Mesh",
+      "A 3D mesh asset without a deforming skeleton, commonly used for props and environments."
+    ],
+    [
+      "Skeletal Mesh",
+      "A 3D mesh bound to a skeleton/bones so it can deform and animate."
+    ],
+    [
+      "Animation Blueprint",
+      "Blueprint type that calculates the runtime pose/animation for a Skeletal Mesh."
+    ],
+    [
+      "Behaviour Tree",
+      "AI decision graph that runs tasks and reads shared data such as Blackboard keys."
+    ],
+    [
+      "Blackboard",
+      "Shared key/value memory used by Unreal AI systems such as Behaviour Trees."
+    ],
+    [
+      "Material Instance",
+      "An instance of a Material that exposes parameters for fast variation without duplicating the full shader."
+    ],
     [
       "Actor",
       "An object that can be placed or spawned in an Unreal level."

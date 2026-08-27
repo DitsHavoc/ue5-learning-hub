@@ -1,5 +1,5 @@
 window.UE5_MODELING_DATA = {
-  "version": "3.30.0",
+  "version": "3.32.0",
   "updated": "26 Aug 2026",
   "philosophy": "Slow, methodical, visual and cumulative. Learn one operation, prove it is correct, reuse it, then add the next. Build correctly before building quickly.",
   "lessons": [
@@ -163,7 +163,7 @@ window.UE5_MODELING_DATA = {
         "File → Save As → Max_Practice_v002.max.",
         "STOP: no Editable Poly, Boolean, TurboSmooth or detail modelling yet."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "max-primitives-transforms",
@@ -329,7 +329,7 @@ window.UE5_MODELING_DATA = {
         "Turn Snaps off when finished. Inspect Front and Top for zero gaps.",
         "Build a tiny desk/room corner using primitives only. Use exact dimensions and 90° rotations; no detail."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "max-editable-poly",
@@ -499,7 +499,7 @@ window.UE5_MODELING_DATA = {
         "Exit sub-object mode. The whole object should select again.",
         "Save Max_EditPoly_v001.max before learning geometry-creating tools."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "max-extrude-inset",
@@ -646,7 +646,7 @@ window.UE5_MODELING_DATA = {
         "Repeat one controlled panel operation on one side only. Do not decorate every face.",
         "Save Crate_02_PrimaryForms.max."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "max-edge-control",
@@ -808,7 +808,7 @@ window.UE5_MODELING_DATA = {
         "Do not add loops “for detail”. Every added edge needs a job.",
         "Save a clean version before Chamfer work."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "max-chamfer-smoothing",
@@ -937,7 +937,7 @@ window.UE5_MODELING_DATA = {
         "Keep the cheaper version if the visual difference is negligible.",
         "Turn F4 on and verify chamfer did not create accidental dense areas or collapse thin faces."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "max-modifier-stack",
@@ -1091,7 +1091,7 @@ window.UE5_MODELING_DATA = {
         "Add a temporary Chamfer above/below as demonstrated and toggle modifier lightbulbs to see stack order effects.",
         "Do NOT Collapse Stack. Save ModifierStack_v001.max with the stack intact."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "max-topology-clinic",
@@ -1259,7 +1259,7 @@ window.UE5_MODELING_DATA = {
         "Repair ONE identified issue, then re-check. Do not run random cleanup tools across the whole asset.",
         "Compare shaded view AND F4 before calling the repair successful."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "max-modular-kit",
@@ -1409,7 +1409,7 @@ window.UE5_MODELING_DATA = {
         "Build a second layout from the same pieces WITHOUT non-uniform scaling.",
         "If a piece needs scaling to fit, repair the source dimensions instead."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "max-uvs",
@@ -1581,7 +1581,7 @@ window.UE5_MODELING_DATA = {
         "Pack shells into 0–1 space with an 8 px padding target at 1024 wherever the pack tool exposes pixel padding.",
         "Capture UV layout + checker-on-model proof before texturing."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "max-materials-substance",
@@ -1713,7 +1713,7 @@ window.UE5_MODELING_DATA = {
         "In Painter verify the mesh imports at expected scale, UVs are present and material sets are sensible before painting.",
         "If Painter shows stretching or unexpected material sets, return to Max and repair the source instead of painting around the problem."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "max-ue5-export",
@@ -1874,7 +1874,7 @@ window.UE5_MODELING_DATA = {
         "Place three copies in the level on a 100 cm / 1 m reference. Rotate/move them to prove snapping and pivot behaviour.",
         "If any source issue is wrong, fix the Max file and re-export/reimport. Do not fork a broken “UE-fixed” version unless there is a deliberate reason."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     }
   ],
   "builds": [
@@ -1978,7 +1978,7 @@ window.UE5_MODELING_DATA = {
         "UV with 1024 checker. Fix stretching → match shell scale → pack with sensible padding.",
         "Place pivot at useful base/corner, Export Selected, import to UE5 at scale 1.0 and compare beside a 100 cm reference."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "build-barrel",
@@ -2062,7 +2062,7 @@ window.UE5_MODELING_DATA = {
         "Create one logical vertical UV seam + separate cap shells. Checker-test.",
         "Export to UE5 and compare scale beside the 80×60×45 crate."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "build-tyre",
@@ -2154,7 +2154,7 @@ window.UE5_MODELING_DATA = {
         "Chamfer only edges that remain unnaturally razor sharp. F4 check for density spikes/open borders.",
         "Save Tyre_04_Clean.max before UVs."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "build-wall-panel",
@@ -2226,7 +2226,7 @@ window.UE5_MODELING_DATA = {
         "Chamfer the selected hard edges with Amount 1 cm and Segments 2. Preserve the broad flat surfaces.",
         "F4 + shaded check from game distance. If tiny detail disappears, remove it."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "build-scifi-door",
@@ -2308,7 +2308,7 @@ window.UE5_MODELING_DATA = {
         "Test exact 90° rotation (hinge) or exact 130 cm translation (slide) in Max, then Undo.",
         "Export frame/slab deliberately. UE5 import at scale1 and test movement in an empty level before materials/VFX."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "build-pipe-kit",
@@ -2379,7 +2379,7 @@ window.UE5_MODELING_DATA = {
         "Assemble layout A and layout B using duplicates and 90° rotations only.",
         "If a join needs non-uniform scaling, stop and repair the source kit."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "build-modular-room",
@@ -2464,7 +2464,7 @@ window.UE5_MODELING_DATA = {
         "Build room B from same pieces without scaling any instance.",
         "Export Selected and assemble two UE5 layouts. Any unique scale correction means the Max source needs repair."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "build-hero-prop",
@@ -2548,7 +2548,7 @@ window.UE5_MODELING_DATA = {
         "Run topology + shading checkpoint before UVs. Fix source problems now.",
         "UV/checker → texture in agreed workflow → UE5 verification. Capture final shaded, F4 wireframe, UV and engine proof."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     }
   ],
   "fixes": [

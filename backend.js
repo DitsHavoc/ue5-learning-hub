@@ -296,7 +296,7 @@ const api = {
     if(!client||!this.user)return;
     let local=null;
     try{local=JSON.parse(localStorage.getItem('ue5hub:v2:progress')||'null')}catch(e){}
-    const ids=[...(local?.completed||[]),...(local?.tutorialCompleted||[]).map(id=>`tutorial:${id}`),...(local?.chapterBuildCompleted||[]).map(id=>`chapter:${id}`),...(local?.designBuildCompleted||[]).map(id=>`designbuild:${id}`),...(local?.modelLessonCompleted||[]).map(id=>`model:${id}`),...(local?.modelBuildCompleted||[]).map(id=>`modelbuild:${id}`),...(local?.modelFixCompleted||[]).map(id=>`modelfix:${id}`)];
+    const ids=[...(local?.completed||[]),...(local?.tutorialCompleted||[]).map(id=>`tutorial:${id}`),...(local?.chapterBuildCompleted||[]).map(id=>`chapter:${id}`),...(local?.designBuildCompleted||[]).map(id=>`designbuild:${id}`),...(local?.modelLessonCompleted||[]).map(id=>`model:${id}`),...(local?.modelBuildCompleted||[]).map(id=>`modelbuild:${id}`),...(local?.modelFixCompleted||[]).map(id=>`modelfix:${id}`),...(local?.blockCompleted||[]).map(id=>`block:${id}`)];
     if(!ids.length)return;
     const rows=[...new Set(ids)].map(id=>({user_id:this.user.id,lesson_id:id,completed:true,completed_at:new Date().toISOString()}));
     const {error}=await client.from('lesson_progress').upsert(rows,{onConflict:'user_id,lesson_id'});

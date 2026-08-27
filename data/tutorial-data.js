@@ -1,5 +1,5 @@
 window.UE5_TUTORIAL_DATA = {
-  "version": "3.30.0",
+  "version": "3.32.0",
   "buildDate": "26 Aug 2026",
   "categories": [
     {
@@ -182,7 +182,7 @@ window.UE5_TUTORIAL_DATA = {
         "From Started add Print String “Action pressed”. Compile.",
         "Play and press E once. The message should print once per press. If not, check the Mapping Context is the one added to the player."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "double-jump",
@@ -300,7 +300,7 @@ window.UE5_TUTORIAL_DATA = {
         "Try a third press before landing. It must not create a third jump.",
         "Land and repeat. If the second jump never occurs, confirm Jump Max Count is 2 on the actual pawn class being played."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "sprint",
@@ -421,7 +421,7 @@ window.UE5_TUTORIAL_DATA = {
         "Compile and Play. Move normally, hold Left Shift, release it.",
         "If speed stays at 900 after release, your Completed/Canceled path is not connected."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "dash",
@@ -541,7 +541,7 @@ window.UE5_TUTORIAL_DATA = {
         "After the launch, set CanDash False → Delay 0.60 → Set CanDash True. Branch on CanDash before Launch Character.",
         "Compile and Play. Press Left Alt while still and while moving. The launch must remain forward and should not be endlessly spammable."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "crouch",
@@ -659,7 +659,7 @@ window.UE5_TUTORIAL_DATA = {
         "IA_Crouch Completed → call UnCrouch.",
         "Play under an open ceiling first. Hold/release crouch. If capsule/mesh does not change, verify Can Crouch is enabled on the Character Movement component."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "line-trace-interact",
@@ -780,7 +780,7 @@ window.UE5_TUTORIAL_DATA = {
         "Branch from Return Value. True → Break Hit Result → Hit Actor → Print Display Name.",
         "Play, aim at an Actor within 300 cm and press E. If the line misses, first verify Start/End before adding casts or interfaces."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "key-pickup",
@@ -899,7 +899,7 @@ window.UE5_TUTORIAL_DATA = {
         "Place the pickup and Play. Walk into it once.",
         "After pickup, print HasKey or inspect it in Blueprint debugger. It must change False → True before the key destroys itself."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "locked-door",
@@ -1020,7 +1020,7 @@ window.UE5_TUTORIAL_DATA = {
         "Compile. Test without the key first; door must stay shut.",
         "Pick up the key, return and interact. Door must open. Do not remove the Branch just to make the animation work."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "pressure-plate",
@@ -1149,7 +1149,7 @@ window.UE5_TUTORIAL_DATA = {
         "BeginOverlap → Play; EndOverlap → Reverse.",
         "Play and step on/off. The plate should move only 5 cm and return cleanly."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "button-lever",
@@ -1272,7 +1272,7 @@ window.UE5_TUTORIAL_DATA = {
         "Compile and interact repeatedly.",
         "If the lever orbits, fix the component pivot/hierarchy; do not compensate by inventing strange rotation values."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "collectable",
@@ -1401,7 +1401,7 @@ window.UE5_TUTORIAL_DATA = {
         "Place five collectables. Compile and Play.",
         "Collect all five. Count must read 1,2,3,4,5 exactly; if it jumps by more than one, check the overlap fires only once."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "flashlight",
@@ -1520,7 +1520,7 @@ window.UE5_TUTORIAL_DATA = {
         "Set Visibility on Flashlight from FlashlightOn. Compile.",
         "Play in a darker area and press F repeatedly. Light should toggle once per press and follow the camera."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "line-trace-gun",
@@ -1645,7 +1645,7 @@ window.UE5_TUTORIAL_DATA = {
         "True path → Apply Damage to Hit Actor with Base Damage 20.",
         "Play against a damageable target. Verify the debug line hits the same object that receives damage before adding VFX/sound."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "projectile-gun",
@@ -1770,7 +1770,7 @@ window.UE5_TUTORIAL_DATA = {
         "Compile and fire at a static wall first. Projectile should travel forward and destroy on contact.",
         "Then test against a damageable Actor. If it spawns inside the player, move the spawn transform forward before changing collision logic."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "player-health",
@@ -1891,7 +1891,7 @@ window.UE5_TUTORIAL_DATA = {
         "Call ApplyHealthChange with 20 from a test key/damage Actor.",
         "Play and apply five hits: 100→80→60→40→20→0. It must never become negative."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "enemy-health",
@@ -2003,7 +2003,7 @@ window.UE5_TUTORIAL_DATA = {
         "Use your test weapon with Damage 20.",
         "Exactly three valid 20-damage hits should remove a 60-health enemy. If one shot triggers multiple times, fix hit detection first."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "health-pickup",
@@ -2115,7 +2115,7 @@ window.UE5_TUTORIAL_DATA = {
         "Test at Health 50: pickup should produce 75.",
         "Test at Health 90: pickup should produce 100, not 115."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "ammo-reload",
@@ -2257,7 +2257,7 @@ window.UE5_TUTORIAL_DATA = {
         "Reload: Needed = MagazineSize - AmmoInMag. ToLoad = Min(Needed, ReserveAmmo).",
         "Set AmmoInMag = AmmoInMag + ToLoad; ReserveAmmo = ReserveAmmo - ToLoad. Test with AmmoInMag 9 / Reserve 3: result must be 12 / 0."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "melee-trace",
@@ -2386,7 +2386,7 @@ window.UE5_TUTORIAL_DATA = {
         "Gate attack with CanAttack Boolean: False after hit → Delay 0.60 → True.",
         "Play near/far from one target. A target outside 150 cm must not take damage."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "lives-respawn",
@@ -2505,7 +2505,7 @@ window.UE5_TUTORIAL_DATA = {
         "Test by forcing death three times.",
         "Expected: Lives 3→2 respawn, 2→1 respawn, 1→0 Game Over."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "checkpoint",
@@ -2624,7 +2624,7 @@ window.UE5_TUTORIAL_DATA = {
         "On death, spawn/move player using RespawnTransform after your respawn delay.",
         "Test death before and after activating checkpoint. After activation, respawn must occur at CP_01."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "score-system",
@@ -2735,7 +2735,7 @@ window.UE5_TUTORIAL_DATA = {
         "Print/update HUD after the Set Score.",
         "Trigger five awards. Score must be 100,200,300,400,500 exactly."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "countdown-timer",
@@ -2859,7 +2859,7 @@ window.UE5_TUTORIAL_DATA = {
         "True → Clear/Invalidate Timer and fire your timeout event once.",
         "Play with a temporary start value 5 to test quickly. It must show 5,4,3,2,1,0 and then stop."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "win-lose-state",
@@ -2988,7 +2988,7 @@ window.UE5_TUTORIAL_DATA = {
         "Test win first with Score 400 then add 100.",
         "Reset and test lose with Health 20 then apply 20 damage. Neither end event should fire more than once."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "spawn-destroy",
@@ -3107,7 +3107,7 @@ window.UE5_TUTORIAL_DATA = {
         "Compile and trigger once. The Actor should appear 200 cm ahead rather than inside the player.",
         "Wait 5 seconds and prove it destroys itself. Then decide whether real gameplay needs manual destruction instead."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "basic-hud",
@@ -3226,7 +3226,7 @@ window.UE5_TUTORIAL_DATA = {
         "Connect Create Widget → Add to Viewport. Compile.",
         "Play. Exactly one HUD READY should appear. If duplicates stack, check you are not creating the widget repeatedly."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "health-bar",
@@ -3345,7 +3345,7 @@ window.UE5_TUTORIAL_DATA = {
         "Call it with 100/100, then 50/100, then 0/100.",
         "Expected bar: full, half, empty. Clamp/guard against MaxHealth=0 if that can ever occur."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "score-lives-hud",
@@ -3473,7 +3473,7 @@ window.UE5_TUTORIAL_DATA = {
         "Store HUD reference when widget is created and call UpdateScoreLives after score/lives change.",
         "Test Score 500 / Lives 2. HUD must update once and show the exact new values."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "crosshair",
@@ -3572,7 +3572,7 @@ window.UE5_TUTORIAL_DATA = {
         "Compile and Play at more than one window resolution.",
         "Crosshair must stay centred. If it moves with resolution, fix anchor/alignment rather than adding magic position offsets."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "interaction-prompt",
@@ -3700,7 +3700,7 @@ window.UE5_TUTORIAL_DATA = {
         "Your interaction trace/overlap calls True only while a valid interactable target is detected; otherwise False.",
         "Play and aim at target / away from target. Prompt must appear/disappear cleanly without creating another widget."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "objective-text",
@@ -3823,7 +3823,7 @@ window.UE5_TUTORIAL_DATA = {
         "Test sequence: Find the key → Unlock the door → Reach the exit.",
         "Do not update objective text every Tick; update it only when objective state changes."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "pause-menu",
@@ -3943,7 +3943,7 @@ window.UE5_TUTORIAL_DATA = {
         "Set Input Mode Game Only → Show Mouse Cursor False.",
         "Play: pause, click Resume, move player. If Escape cannot fire while paused, enable Execute When Paused on the input path or handle pause in the PlayerController appropriately."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "timeline-door",
@@ -4062,7 +4062,7 @@ window.UE5_TUTORIAL_DATA = {
         "Interact/overlap → Play; second interaction/exit → Reverse.",
         "Test. Door should take exactly one second. If it orbits, fix pivot/component setup, not the Lerp values."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "moving-platform",
@@ -4187,7 +4187,7 @@ window.UE5_TUTORIAL_DATA = {
         "BeginPlay → Play; Finished → Reverse; reverse Finished → Play (or use a looping pattern you understand).",
         "Ride/test it. Travel must be 400 cm and take 2 seconds. If endpoints drift, stop mixing world and relative spaces."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "damage-zone",
@@ -4315,7 +4315,7 @@ window.UE5_TUTORIAL_DATA = {
         "Leave/re-enter. Second entry should produce 50.",
         "If health plummets instantly, you used Tick/repeating overlap logic unintentionally; fix event frequency before changing the damage number."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "random-spawner",
@@ -4456,7 +4456,7 @@ window.UE5_TUTORIAL_DATA = {
         "Spawn Actor from selected class at that location. Track AliveCount and stop at 5 for the first test.",
         "Play for 20 seconds. You should never exceed 5 living test Actors."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "ai-patrol",
@@ -4576,7 +4576,7 @@ window.UE5_TUTORIAL_DATA = {
         "On success wait 2.0 s → switch target to the other point → move again.",
         "Play. AI must alternate A↔B. If it does not move, check navmesh/possessed controller before Behaviour Tree complexity."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "ai-chase",
@@ -4705,7 +4705,7 @@ window.UE5_TUTORIAL_DATA = {
         "Clear TargetActor when lost/outside your rule (example beyond 1400 cm) and resume patrol.",
         "Play and cross both thresholds. The AI should not flicker rapidly between chase/patrol at the same distance."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "ai-perception",
@@ -4830,7 +4830,7 @@ window.UE5_TUTORIAL_DATA = {
         "Print sensed/forgotten target while learning.",
         "Play three tests in order: stand 800 cm directly in front of the AI; move beyond 1500 cm; then return inside 800 cm with a solid wall fully blocking line of sight. Confirm the perception event changes in each test before adding chase logic."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "ai-attack-range",
@@ -4954,7 +4954,7 @@ window.UE5_TUTORIAL_DATA = {
         "Set Move To Acceptance Radius to 200 cm for this first build so movement stops at the same distance used by AttackRange.",
         "Test at 250 cm (no hit) and 150 cm (hit). Damage must not apply faster than every 1.2 seconds."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "save-checkpoint",
@@ -5073,7 +5073,7 @@ window.UE5_TUTORIAL_DATA = {
         "Cast to your SaveGame class and restore checkpoint transform/ID.",
         "Close/restart Play/session and verify CP_01 survives. Do not trust a same-run variable as proof of persistence."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "struct-data-table",
@@ -5219,7 +5219,7 @@ window.UE5_TUTORIAL_DATA = {
         "Break ST_ItemData → Print DisplayName and Damage.",
         "Change TrainingSword Damage to 30 in the table and rerun. Blueprint should read 30 without graph edits."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "gameinstance-state",
@@ -5341,7 +5341,7 @@ window.UE5_TUTORIAL_DATA = {
         "Open Level B → Get Game Instance → cast → Print TotalCoins.",
         "Expected: 5 after level load. Restart the whole game and expect it to reset unless you also use SaveGame."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "sound-feedback",
@@ -5441,7 +5441,7 @@ window.UE5_TUTORIAL_DATA = {
         "Confirm one action produces one sound, not several overlapping copies.",
         "Only after timing works, tune volume/pitch or add concurrency."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "niagara-impact",
@@ -5565,7 +5565,7 @@ window.UE5_TUTORIAL_DATA = {
         "Trigger several hits on different surfaces.",
         "If effect appears at origin/player, inspect the Hit Result wiring before changing Niagara itself."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "camera-shake",
@@ -5667,7 +5667,7 @@ window.UE5_TUTORIAL_DATA = {
         "If it is nauseating, reduce amplitude before shortening everything to zero.",
         "Test on repeated action; the shake should support feedback, not make aiming impossible."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     },
     {
       "id": "silent-hill-fog",
@@ -5838,7 +5838,7 @@ window.UE5_TUTORIAL_DATA = {
         "If the route becomes unreadable, add one Point Light at the problem area. Start Intensity 2500, Attenuation Radius 500 and Volumetric Scattering Intensity 1.0, then re-test.",
         "Optional Post Process Volume: set Saturation to 0.85 for the first test. Re-test the same route before changing any other post-process value."
       ],
-      "prescriptivePass": "3.30"
+      "prescriptivePass": "3.31"
     }
   ],
   "chapterBuilds": [

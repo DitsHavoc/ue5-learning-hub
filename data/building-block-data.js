@@ -1,0 +1,1444 @@
+window.UE5_BUILDING_BLOCK_DATA = {
+  "version": "3.32.0",
+  "buildDate": "26 Aug 2026",
+  "tiers": {
+    "core": {
+      "title": "CORE",
+      "description": "Learn these first. Tutorials will assume them more often."
+    },
+    "common": {
+      "title": "COMMON",
+      "description": "Learn when a tutorial introduces one. You do not need them all up front."
+    },
+    "later": {
+      "title": "LATER",
+      "description": "Useful for larger systems. Ignore until your project needs them."
+    }
+  },
+  "tracks": [
+    {
+      "id": "unreal-basics",
+      "title": "Start Here — Unreal Basics",
+      "icon": "◫",
+      "description": "The editor, assets and object types Unreal tutorials assume you recognise."
+    },
+    {
+      "id": "blueprint-basics",
+      "title": "Blueprint Basics",
+      "icon": "◇",
+      "description": "The language of Blueprint: events, data, input, references and debugging."
+    },
+    {
+      "id": "communication-data",
+      "title": "Communication & Data",
+      "icon": "↔",
+      "description": "Clean ways for Blueprints to talk and for game data to stay organised."
+    },
+    {
+      "id": "characters-animation",
+      "title": "Characters & Animation",
+      "icon": "♟",
+      "description": "Characters, skeletal assets and the animation systems that drive them."
+    },
+    {
+      "id": "world-ai",
+      "title": "World, UI & AI",
+      "icon": "◉",
+      "description": "Collision, traces, UI, navigation and simple AI building blocks."
+    }
+  ],
+  "blocks": [
+    {
+      "id": "assets-prefixes",
+      "track": "unreal-basics",
+      "title": "Assets & Naming Prefixes",
+      "short": "Recognise what a file is before opening it.",
+      "tier": "core",
+      "minutes": 4,
+      "prefix": "BP_ • BPI_ • WBP_ • ABP_ • IA_ • IMC_ • SM_ • SK_ • M_ • MI_",
+      "remember": "The prefix is a label for humans, not magic Unreal requires.",
+      "useWhen": "Whenever a tutorial tells you to create or open an asset.",
+      "steps": [
+        "In the Content Drawer, create a folder called Learning_BlockTest.",
+        "Create one Blueprint Class and name it BP_BlockTest.",
+        "Create one Input Action and name it IA_BlockTest.",
+        "Look at the asset icons and prefixes side by side; delete the test folder when finished."
+      ],
+      "check": "You can look at BP_Door, IA_Interact or WBP_HUD and predict what kind of asset it is.",
+      "aliases": [
+        "asset",
+        "prefix",
+        "naming",
+        "blueprint class",
+        "input action",
+        "widget blueprint",
+        "animation blueprint"
+      ],
+      "tutorials": [],
+      "lessons": [],
+      "cheatSheet": [
+        [
+          "BP_",
+          "Blueprint Class"
+        ],
+        [
+          "BPI_",
+          "Blueprint Interface"
+        ],
+        [
+          "WBP_",
+          "Widget Blueprint"
+        ],
+        [
+          "ABP_",
+          "Animation Blueprint"
+        ],
+        [
+          "IA_",
+          "Input Action"
+        ],
+        [
+          "IMC_",
+          "Input Mapping Context"
+        ],
+        [
+          "E_",
+          "Enum"
+        ],
+        [
+          "ST_",
+          "Struct"
+        ],
+        [
+          "DT_",
+          "Data Table"
+        ],
+        [
+          "SM_",
+          "Static Mesh"
+        ],
+        [
+          "SK_",
+          "Skeletal Mesh"
+        ],
+        [
+          "M_",
+          "Material"
+        ],
+        [
+          "MI_",
+          "Material Instance"
+        ],
+        [
+          "T_",
+          "Texture"
+        ]
+      ]
+    },
+    {
+      "id": "actors-components",
+      "track": "unreal-basics",
+      "title": "Actors vs Components",
+      "short": "Understand the container and the pieces inside it.",
+      "tier": "core",
+      "minutes": 5,
+      "prefix": "Actor → Components",
+      "remember": "An Actor is the thing in the world; Components give it mesh, collision, light, audio, cameras and other capabilities.",
+      "useWhen": "Any time you add a mesh, collision box, camera, light or Niagara system to a Blueprint.",
+      "steps": [
+        "Create BP_TestLamp as an Actor Blueprint.",
+        "Add a Static Mesh Component and a Point Light Component.",
+        "Place BP_TestLamp in the level and move the Actor 200 cm on X.",
+        "Open the Blueprint and move only the Point Light Component 50 cm on Z."
+      ],
+      "check": "Moving the Actor moves both components; moving one component changes only its position relative to the Actor.",
+      "aliases": [
+        "actor",
+        "component",
+        "components",
+        "scene component"
+      ],
+      "tutorials": [],
+      "lessons": [
+        "actors-components"
+      ]
+    },
+    {
+      "id": "blueprint-types",
+      "track": "unreal-basics",
+      "title": "Different Types of Blueprint",
+      "short": "Know where different kinds of game logic belong.",
+      "tier": "core",
+      "minutes": 6,
+      "prefix": "Actor • Pawn • Character • Controllers • GameMode • GameState • PlayerState • GameInstance • Level BP • WBP • ABP",
+      "remember": "Blueprint is not one type of thing. The parent class decides what the Blueprint represents and what it can do.",
+      "useWhen": "Before deciding where to put gameplay logic.",
+      "steps": [
+        "Open Project Settings → Maps & Modes and identify the current GameMode.",
+        "Open the current player Character Blueprint and identify its parent class.",
+        "Open the Level Blueprint, then close it without adding gameplay logic.",
+        "Say where each belongs: door behaviour = Actor; player body = Character; game rules = GameMode."
+      ],
+      "check": "You can explain why a door should not normally be scripted in the Level Blueprint.",
+      "aliases": [
+        "blueprint type",
+        "game mode",
+        "game state",
+        "player state",
+        "level blueprint",
+        "pawn",
+        "character",
+        "controller"
+      ],
+      "tutorials": [],
+      "lessons": [
+        "blueprint-classes",
+        "framework"
+      ],
+      "cheatSheet": [
+        [
+          "Actor",
+          "A thing that can exist in the world."
+        ],
+        [
+          "Pawn",
+          "An Actor that can be possessed."
+        ],
+        [
+          "Character",
+          "A Pawn with common character movement and capsule features."
+        ],
+        [
+          "PlayerController",
+          "The player’s controlling logic."
+        ],
+        [
+          "AIController",
+          "Control logic for an AI Pawn/Character."
+        ],
+        [
+          "GameMode",
+          "Rules/default classes for the current game mode; authoritative gameplay rules."
+        ],
+        [
+          "GameState",
+          "Shared state about the current match/game."
+        ],
+        [
+          "PlayerState",
+          "State about one player in a match."
+        ],
+        [
+          "GameInstance",
+          "Lives for the whole running game and survives level changes."
+        ],
+        [
+          "Level Blueprint",
+          "Level-specific scripting; avoid using it as the default home for reusable gameplay."
+        ],
+        [
+          "Widget Blueprint",
+          "UI presentation and interaction."
+        ],
+        [
+          "Animation Blueprint",
+          "Runtime animation/pose logic for a Skeletal Mesh."
+        ]
+      ]
+    },
+    {
+      "id": "transforms-units",
+      "track": "unreal-basics",
+      "title": "Transforms & Unreal Units",
+      "short": "Read and change position, rotation and scale deliberately.",
+      "tier": "core",
+      "minutes": 5,
+      "prefix": "Location • Rotation • Scale • X/Y/Z • 1 uu = 1 cm",
+      "remember": "A Transform is Location + Rotation + Scale. Unreal’s default distance unit is centimetres.",
+      "useWhen": "Movement, spawning, traces, level design, cameras and almost every 3D system.",
+      "steps": [
+        "Place a Cube Static Mesh Actor.",
+        "Set Location X = 200, Y = 0, Z = 100.",
+        "Set Rotation Z = 90 degrees.",
+        "Set Scale X = 2, Y = 1, Z = 1, then return Scale to 1,1,1."
+      ],
+      "check": "The cube is 2 m along X, 1 m above the origin and rotated 90 degrees around Z.",
+      "aliases": [
+        "transform",
+        "vector",
+        "rotator",
+        "location",
+        "rotation",
+        "scale",
+        "world local",
+        "units",
+        "centimetres"
+      ],
+      "tutorials": [],
+      "lessons": [
+        "editor"
+      ]
+    },
+    {
+      "id": "static-skeletal",
+      "track": "unreal-basics",
+      "title": "Static Mesh vs Skeletal Mesh",
+      "short": "Choose the correct 3D asset type.",
+      "tier": "core",
+      "minutes": 4,
+      "prefix": "SM_ vs SK_",
+      "remember": "Static Meshes have no deforming skeleton; Skeletal Meshes are bound to bones for animation/deformation.",
+      "useWhen": "Props, environments, characters, creatures and animated rigs.",
+      "steps": [
+        "In the Content Drawer, find one SM_ asset and one SK_ character asset.",
+        "Open the Static Mesh and identify that it has mesh data but no character skeleton workflow.",
+        "Open the Skeletal Mesh and locate its Skeleton/animation-related information.",
+        "Classify these: crate = Static; playable character = Skeletal."
+      ],
+      "check": "You can explain why a chair normally does not need to be a Skeletal Mesh.",
+      "aliases": [
+        "static mesh",
+        "skeletal mesh",
+        "mesh",
+        "skeleton",
+        "sm_",
+        "sk_"
+      ],
+      "tutorials": [],
+      "lessons": []
+    },
+    {
+      "id": "compile-save-play",
+      "track": "unreal-basics",
+      "title": "Compile, Save, Play & Stop",
+      "short": "Use the basic Unreal edit-test loop.",
+      "tier": "core",
+      "minutes": 3,
+      "prefix": "Compile → Save → Play → Stop",
+      "remember": "Compile checks Blueprint changes; Save writes assets; Play proves behaviour. These are separate actions.",
+      "useWhen": "Every Blueprint tutorial.",
+      "steps": [
+        "Open any safe practice Blueprint.",
+        "Move one harmless node or add a comment, then press Compile.",
+        "Press Save.",
+        "Press Play, observe the game, then Stop."
+      ],
+      "check": "You know which action checks Blueprint logic and which action actually tests gameplay.",
+      "aliases": [
+        "compile",
+        "save",
+        "play",
+        "pie",
+        "play in editor"
+      ],
+      "tutorials": [],
+      "lessons": []
+    },
+    {
+      "id": "materials-instances",
+      "track": "unreal-basics",
+      "title": "Materials, Material Instances & Textures",
+      "short": "Recognise the visual asset chain without becoming a material artist yet.",
+      "tier": "common",
+      "minutes": 6,
+      "prefix": "T_ → M_ → MI_",
+      "remember": "Textures provide image/data inputs; Materials define the shader; Material Instances expose parameters without duplicating the whole shader.",
+      "useWhen": "Changing surface appearance or following art/design tutorials.",
+      "steps": [
+        "Find one Material and one Material Instance in the Content Drawer.",
+        "Open the Material Instance and locate its parameter controls.",
+        "Apply the Material Instance to a Static Mesh.",
+        "Change one exposed parameter and observe the mesh update."
+      ],
+      "check": "You can explain why MI_Wall_Red is usually preferable to duplicating M_Wall just to change one parameter.",
+      "aliases": [
+        "material",
+        "material instance",
+        "texture",
+        "m_",
+        "mi_",
+        "t_"
+      ],
+      "tutorials": [],
+      "lessons": []
+    },
+    {
+      "id": "events-execution",
+      "track": "blueprint-basics",
+      "title": "Events & Execution Wires",
+      "short": "Understand what starts Blueprint logic and what runs next.",
+      "tier": "core",
+      "minutes": 5,
+      "prefix": "Event → white execution wire → actions",
+      "remember": "An Event is an entry point. White wires show execution order; coloured wires carry data.",
+      "useWhen": "Every Blueprint graph.",
+      "steps": [
+        "Create BP_EventTest and place it in the level.",
+        "In Event Graph, use Event BeginPlay → Print String.",
+        "Set the message to BeginPlay works.",
+        "Play once and watch the message appear."
+      ],
+      "check": "The message appears once when play starts, and you can point to the white wire that caused it.",
+      "aliases": [
+        "event",
+        "execution",
+        "begin play",
+        "white wire",
+        "event beginplay"
+      ],
+      "tutorials": [],
+      "lessons": [
+        "events"
+      ]
+    },
+    {
+      "id": "variables-types",
+      "track": "blueprint-basics",
+      "title": "Variables, Types, Get & Set",
+      "short": "Store game state and recognise common data types.",
+      "tier": "core",
+      "minutes": 7,
+      "prefix": "Bool • Integer • Float • Text • Name • Vector • Object Ref",
+      "remember": "A variable stores one piece of data of a specific type. Get reads it; Set changes it.",
+      "useWhen": "Health, score, keys, speed, states, references and almost every system.",
+      "steps": [
+        "In a practice Blueprint create Health as Float and set Default Value = 100.",
+        "Create HasKey as Boolean and leave it False.",
+        "Drag Health into the graph once as Get and once as Set.",
+        "Set Health to 75 from BeginPlay, then Print String using Health."
+      ],
+      "check": "The printed value is 75 and you can explain the difference between Get Health and Set Health.",
+      "aliases": [
+        "variable",
+        "boolean",
+        "bool",
+        "integer",
+        "int",
+        "float",
+        "text",
+        "name",
+        "get set",
+        "data type"
+      ],
+      "tutorials": [],
+      "lessons": [
+        "variables"
+      ],
+      "cheatSheet": [
+        [
+          "Boolean",
+          "True / False"
+        ],
+        [
+          "Integer",
+          "Whole number"
+        ],
+        [
+          "Float",
+          "Decimal number"
+        ],
+        [
+          "Text",
+          "Player-facing text"
+        ],
+        [
+          "Name",
+          "Efficient identifier/name value"
+        ],
+        [
+          "Vector",
+          "X/Y/Z numbers, often position or direction"
+        ],
+        [
+          "Rotator",
+          "Pitch/Yaw/Roll rotation"
+        ],
+        [
+          "Transform",
+          "Location + Rotation + Scale"
+        ],
+        [
+          "Object Reference",
+          "One specific object"
+        ],
+        [
+          "Class Reference",
+          "A type/class you could spawn or compare against"
+        ]
+      ]
+    },
+    {
+      "id": "enhanced-input",
+      "track": "blueprint-basics",
+      "title": "Enhanced Input: IA & IMC",
+      "short": "Know what Input Actions and Mapping Contexts actually do.",
+      "tier": "core",
+      "minutes": 6,
+      "prefix": "IA_ = intention • IMC_ = physical control mapping",
+      "remember": "IA_ describes the gameplay intention; IMC_ maps it to physical controls. Started means trigger evaluation began, Ongoing means it is still being evaluated, Triggered means the trigger requirements were satisfied, Completed means the triggered action finished, and Canceled means evaluation ended before it triggered.",
+      "useWhen": "Movement, interaction, combat and any player control.",
+      "steps": [
+        "Content Drawer → Input → create Input Action IA_TestAction; keep Value Type = Digital (Bool).",
+        "Open the player’s active IMC and add IA_TestAction mapped to T.",
+        "In the Character Event Graph, add the IA_TestAction event and inspect Started, Ongoing, Triggered, Completed and Canceled.",
+        "Connect Started → Print String with Started and Completed → Print String with Completed.",
+        "Play: press T once, hold briefly, then release. Watch the two messages."
+      ],
+      "check": "Started prints once when T is pressed and Completed prints when the action ends; changing the key in the IMC changes the control without rewriting gameplay logic.",
+      "aliases": [
+        "enhanced input",
+        "input action",
+        "ia_",
+        "mapping context",
+        "imc_",
+        "started",
+        "triggered",
+        "completed",
+        "canceled"
+      ],
+      "tutorials": [
+        "enhanced-input-action"
+      ],
+      "lessons": [],
+      "cheatSheet": [
+        [
+          "IA_",
+          "What the player intends to do."
+        ],
+        [
+          "IMC_",
+          "Which physical controls trigger the action."
+        ],
+        [
+          "Started",
+          "Trigger evaluation began."
+        ],
+        [
+          "Ongoing",
+          "Still evaluating and not yet triggered."
+        ],
+        [
+          "Triggered",
+          "Trigger requirements were satisfied."
+        ],
+        [
+          "Completed",
+          "The triggered action finished."
+        ],
+        [
+          "Canceled",
+          "Evaluation ended before the action triggered."
+        ]
+      ]
+    },
+    {
+      "id": "branches-switches",
+      "track": "blueprint-basics",
+      "title": "Branches, Switches & Select",
+      "short": "Choose between outcomes based on data.",
+      "tier": "core",
+      "minutes": 6,
+      "prefix": "Branch = True/False • Switch = named/multiple routes • Select = choose a value",
+      "remember": "Use the simplest decision node that matches the question you are asking.",
+      "useWhen": "Doors, states, modes, weapon types and conditional behaviour.",
+      "steps": [
+        "Create Boolean HasKey = False.",
+        "BeginPlay → Branch with HasKey connected to Condition.",
+        "True → Print Key found; False → Print No key.",
+        "Test False, then change HasKey default to True and test again."
+      ],
+      "check": "Both outcomes work and only one route runs each time.",
+      "aliases": [
+        "branch",
+        "switch",
+        "select",
+        "condition",
+        "true false"
+      ],
+      "tutorials": [],
+      "lessons": [
+        "branches"
+      ]
+    },
+    {
+      "id": "functions-events-macros",
+      "track": "blueprint-basics",
+      "title": "Functions, Custom Events & Macros",
+      "short": "Package repeated logic without treating every reusable graph the same.",
+      "tier": "common",
+      "minutes": 7,
+      "prefix": "Function • Custom Event • Macro",
+      "remember": "Functions are great for named reusable calculations/actions; Custom Events are execution entry points; Macros expand reusable graph patterns.",
+      "useWhen": "When a graph repeats or a section has one clear job.",
+      "steps": [
+        "Create a Function called GetHalfHealth with Float input Health and Float output Result.",
+        "Inside it, divide Health by 2 and connect to Result.",
+        "Call GetHalfHealth from Event Graph using 100.",
+        "Print the returned value."
+      ],
+      "check": "The function returns 50 and has no BeginPlay/Input event inside it.",
+      "aliases": [
+        "function",
+        "custom event",
+        "macro",
+        "function library"
+      ],
+      "tutorials": [],
+      "lessons": [
+        "functions"
+      ]
+    },
+    {
+      "id": "object-class-references",
+      "track": "blueprint-basics",
+      "title": "Object Reference vs Class Reference",
+      "short": "Know whether you mean this object or this type of object.",
+      "tier": "core",
+      "minutes": 6,
+      "prefix": "Object = specific instance • Class = recipe/type",
+      "remember": "An Object Reference points to an existing object; a Class Reference points to a type you could create or compare against.",
+      "useWhen": "Spawning, interactions, UI, enemies, pickups and communication.",
+      "steps": [
+        "Create BP_Target and place one instance in the level.",
+        "In another Blueprint create TargetObject as BP_Target Object Reference.",
+        "Create TargetClass as BP_Target Class Reference.",
+        "Use the eyedropper on TargetObject to select the placed instance; leave TargetClass pointing at the class."
+      ],
+      "check": "You can say “TargetObject is that placed target; TargetClass is the kind of target”.",
+      "aliases": [
+        "object reference",
+        "class reference",
+        "reference",
+        "soft reference"
+      ],
+      "tutorials": [],
+      "lessons": [
+        "references-casting"
+      ]
+    },
+    {
+      "id": "casting",
+      "track": "blueprint-basics",
+      "title": "Casting",
+      "short": "Check what kind of object a reference really is.",
+      "tier": "common",
+      "minutes": 5,
+      "prefix": "Object reference → Cast To target class",
+      "remember": "Casting does not find an object. It tests/converts a reference you already have if that object is compatible with the target class.",
+      "useWhen": "When you have a general reference but need class-specific variables/functions.",
+      "steps": [
+        "Use a trace or overlap that gives you an Actor reference.",
+        "Drag from that Actor reference and add Cast To your test Blueprint class.",
+        "From Cast Succeeded, Print String Cast worked.",
+        "Test once with the correct class and once with something else."
+      ],
+      "check": "The correct object succeeds and an unrelated object follows Cast Failed.",
+      "aliases": [
+        "cast",
+        "casting",
+        "cast to"
+      ],
+      "tutorials": [],
+      "lessons": [
+        "references-casting"
+      ]
+    },
+    {
+      "id": "debugging",
+      "track": "blueprint-basics",
+      "title": "Debugging: Print, Breakpoints & Watch",
+      "short": "Diagnose a system instead of randomly changing nodes.",
+      "tier": "core",
+      "minutes": 7,
+      "prefix": "Print String • Breakpoint • Watch Value • Debug Object",
+      "remember": "Debugging asks “what actually happened?” before “what should I change?”.",
+      "useWhen": "Whenever a Blueprint does nothing, fires twice or has the wrong value.",
+      "steps": [
+        "Add Print String before and after one important node in a practice graph.",
+        "Play and confirm which messages appear.",
+        "Add a breakpoint to a node and Play again.",
+        "Inspect one variable while execution is paused."
+      ],
+      "check": "You can identify whether the event fired and what value a variable held when it did.",
+      "aliases": [
+        "debug",
+        "debugging",
+        "print string",
+        "breakpoint",
+        "watch value",
+        "blueprint debugger"
+      ],
+      "tutorials": [],
+      "lessons": [
+        "practice",
+        "complexity"
+      ]
+    },
+    {
+      "id": "spawn-destroy",
+      "track": "blueprint-basics",
+      "title": "Spawn & Destroy Actors",
+      "short": "Create and remove world objects at runtime.",
+      "tier": "common",
+      "minutes": 6,
+      "prefix": "Spawn Actor from Class • Spawn Transform • Destroy Actor",
+      "remember": "Spawning needs a Class and a Transform; destroying removes a specific Actor instance.",
+      "useWhen": "Projectiles, pickups, enemies, effects and procedural gameplay.",
+      "steps": [
+        "Create BP_SpawnCube as a simple Actor with a Cube mesh.",
+        "In a Level-safe practice Blueprint use Spawn Actor from Class → BP_SpawnCube.",
+        "Use a Spawn Transform with Location X = 200, Y = 0, Z = 100.",
+        "Store the Return Value, wait 2 seconds, then Destroy Actor using that reference."
+      ],
+      "check": "The cube appears at the chosen position and disappears after 2 seconds.",
+      "aliases": [
+        "spawn actor",
+        "destroy actor",
+        "spawn transform",
+        "spawn"
+      ],
+      "tutorials": [],
+      "lessons": []
+    },
+    {
+      "id": "timers-delay-tick",
+      "track": "blueprint-basics",
+      "title": "Timers vs Delay vs Tick",
+      "short": "Choose the right way to run logic over time.",
+      "tier": "common",
+      "minutes": 7,
+      "prefix": "Timer = scheduled/repeating • Delay = pause one execution chain • Tick = every frame",
+      "remember": "Do not use Tick just because something needs to happen later or repeatedly.",
+      "useWhen": "Cooldowns, countdowns, periodic checks and repeated events.",
+      "steps": [
+        "Create Custom Event Pulse → Print String Pulse.",
+        "On BeginPlay, Set Timer by Event: Time = 1.0, Looping = true; bind Pulse.",
+        "Play for 4 seconds and count the messages.",
+        "Stop and compare that behaviour with Event Tick firing every frame."
+      ],
+      "check": "Pulse prints about once per second rather than dozens of times per second.",
+      "aliases": [
+        "timer",
+        "delay",
+        "tick",
+        "event tick",
+        "set timer"
+      ],
+      "tutorials": [],
+      "lessons": []
+    },
+    {
+      "id": "construction-script",
+      "track": "blueprint-basics",
+      "title": "Construction Script",
+      "short": "Use editor-time Blueprint setup without confusing it with BeginPlay.",
+      "tier": "common",
+      "minutes": 6,
+      "prefix": "Construction Script ≠ BeginPlay",
+      "remember": "Construction Script updates an Actor as it is constructed/edited; BeginPlay runs when gameplay starts.",
+      "useWhen": "Procedural editor setup, previewable parameters and repeated placement tools.",
+      "steps": [
+        "Create BP_ConstructionTest with a Static Mesh Component.",
+        "Create Editable Float Height = 100.",
+        "In Construction Script, set the mesh Relative Location Z from Height.",
+        "Place the Actor and change Height in Details while not playing."
+      ],
+      "check": "The mesh moves in the editor immediately when Height changes.",
+      "aliases": [
+        "construction script",
+        "begin play"
+      ],
+      "tutorials": [],
+      "lessons": []
+    },
+    {
+      "id": "inheritance-child-bp",
+      "track": "blueprint-basics",
+      "title": "Parent & Child Blueprints",
+      "short": "Reuse shared behaviour through inheritance.",
+      "tier": "common",
+      "minutes": 7,
+      "prefix": "Parent class → Child class",
+      "remember": "A child inherits parent variables, components and behaviour, then specialises what is different.",
+      "useWhen": "Pickups, enemy families, doors, weapons and reusable game systems.",
+      "steps": [
+        "Create BP_PickupBase with a Sphere Collision Component and Value Integer = 10.",
+        "Right-click BP_PickupBase → Create Child Blueprint Class → name BP_CoinPickup.",
+        "Open BP_CoinPickup and confirm the inherited component/variable.",
+        "Change Value in the child to 25 without changing the parent."
+      ],
+      "check": "The child keeps the shared setup but can use a different default Value.",
+      "aliases": [
+        "inheritance",
+        "child blueprint",
+        "parent blueprint",
+        "override"
+      ],
+      "tutorials": [],
+      "lessons": [],
+      "requires": [
+        "blueprint-types",
+        "variables-types"
+      ]
+    },
+    {
+      "id": "bpi",
+      "track": "communication-data",
+      "title": "Blueprint Interfaces (BPI)",
+      "short": "Send a shared message without caring about the receiver’s exact class.",
+      "tier": "common",
+      "minutes": 7,
+      "prefix": "BPI_",
+      "remember": "An Interface says “if you implement this message, I can call it” — useful when many unrelated classes share one behaviour.",
+      "useWhen": "Interactable doors, buttons, pickups, terminals and reusable communication.",
+      "steps": [
+        "Create Blueprint Interface BPI_Interactable.",
+        "Add function Interact with no implementation inside the BPI.",
+        "Implement BPI_Interactable on BP_TestDoor.",
+        "Call Interact (Message) on a reference to the door and make BP_TestDoor print Door interacted."
+      ],
+      "check": "The caller does not need Cast To BP_TestDoor just to send Interact.",
+      "aliases": [
+        "bpi",
+        "blueprint interface",
+        "interface",
+        "interact interface"
+      ],
+      "tutorials": [],
+      "lessons": [
+        "interfaces-dispatchers"
+      ],
+      "requires": [
+        "object-class-references"
+      ]
+    },
+    {
+      "id": "dispatchers",
+      "track": "communication-data",
+      "title": "Event Dispatchers",
+      "short": "Broadcast that something happened to any listeners that care.",
+      "tier": "common",
+      "minutes": 7,
+      "prefix": "Dispatcher = broadcaster → bound listeners",
+      "remember": "The sender does not need to know every listener. Listeners bind to the dispatcher and react when it broadcasts.",
+      "useWhen": "UI updates, switches, objectives and one-to-many communication.",
+      "steps": [
+        "Create BP_Button with Event Dispatcher OnPressed.",
+        "Call OnPressed from a simple test event.",
+        "In another Blueprint get a reference to BP_Button and Bind Event to OnPressed.",
+        "Make the bound event Print String Listener heard it."
+      ],
+      "check": "Calling the dispatcher triggers the bound listener without the button directly calling that listener’s function.",
+      "aliases": [
+        "event dispatcher",
+        "dispatcher",
+        "bind event",
+        "broadcast"
+      ],
+      "tutorials": [],
+      "lessons": [
+        "interfaces-dispatchers"
+      ],
+      "requires": [
+        "object-class-references",
+        "events-execution"
+      ]
+    },
+    {
+      "id": "arrays-sets-maps",
+      "track": "communication-data",
+      "title": "Arrays, Sets & Maps",
+      "short": "Store collections of values in the right shape.",
+      "tier": "common",
+      "minutes": 8,
+      "prefix": "Array = ordered list • Set = unique values • Map = key → value",
+      "remember": "Choose the container based on how you need to retrieve and organise the data.",
+      "useWhen": "Inventories, target lists, completed objectives, item lookups and data systems.",
+      "steps": [
+        "Create String Array Inventory and add Key, Battery, Note.",
+        "Use Get on Index 0 and Print String.",
+        "Create Name Set VisitedRooms and add Room_A twice; observe uniqueness.",
+        "Create Name→Integer Map AmmoByType and set Pistol = 12."
+      ],
+      "check": "You can explain why a Map is useful when you want “Pistol → 12” rather than “item at index 0”.",
+      "aliases": [
+        "array",
+        "set",
+        "map",
+        "container",
+        "dictionary"
+      ],
+      "tutorials": [],
+      "lessons": [
+        "data"
+      ]
+    },
+    {
+      "id": "enums",
+      "track": "communication-data",
+      "title": "Enums",
+      "short": "Represent one named choice from a controlled list.",
+      "tier": "common",
+      "minutes": 6,
+      "prefix": "E_",
+      "remember": "An Enum replaces mystery numbers/strings with readable named states or categories.",
+      "useWhen": "Weapon types, game states, teams, doors, difficulty and modes.",
+      "steps": [
+        "Create Blueprint Enumeration E_WeaponType.",
+        "Add Pistol, Shotgun and Rifle.",
+        "Create variable WeaponType using E_WeaponType.",
+        "Use Switch on E_WeaponType and print a different message for each value."
+      ],
+      "check": "Changing WeaponType chooses the matching named route without comparing text strings.",
+      "aliases": [
+        "enum",
+        "enumeration",
+        "e_",
+        "switch on enum"
+      ],
+      "tutorials": [],
+      "lessons": [
+        "data"
+      ]
+    },
+    {
+      "id": "structs",
+      "track": "communication-data",
+      "title": "Structs",
+      "short": "Bundle related fields into one reusable data type.",
+      "tier": "common",
+      "minutes": 7,
+      "prefix": "ST_",
+      "remember": "A Struct groups fields that belong together, such as all the data describing one weapon.",
+      "useWhen": "Inventory items, weapons, quests, stats and Data Tables.",
+      "steps": [
+        "Create Blueprint Structure ST_WeaponData.",
+        "Add WeaponName Text, Damage Float, FireRate Float and Ammo Integer.",
+        "Create variable TestWeapon using ST_WeaponData.",
+        "Set values: Training Pistol, Damage 20, FireRate 0.25, Ammo 12."
+      ],
+      "check": "One TestWeapon value now contains all four related fields.",
+      "aliases": [
+        "struct",
+        "structure",
+        "st_",
+        "break struct",
+        "make struct"
+      ],
+      "tutorials": [],
+      "lessons": [
+        "data"
+      ]
+    },
+    {
+      "id": "data-tables",
+      "track": "communication-data",
+      "title": "Data Tables",
+      "short": "Store many rows of structured game data outside individual Blueprints.",
+      "tier": "common",
+      "minutes": 8,
+      "prefix": "ST_ → DT_ rows",
+      "remember": "A Data Table uses a Struct as its row shape, then stores named rows of content.",
+      "useWhen": "Weapons, enemies, items, dialogue, level data and balancing.",
+      "steps": [
+        "Use ST_WeaponData as the row type for a new Data Table DT_Weapons.",
+        "Add rows Pistol and Shotgun.",
+        "Set Pistol Damage = 20, Ammo = 12; Shotgun Damage = 60, Ammo = 6.",
+        "In a Blueprint use Get Data Table Row with Row Name Pistol and print Damage."
+      ],
+      "check": "The Blueprint reads 20 from the Pistol row without hard-coding that value in the graph.",
+      "aliases": [
+        "data table",
+        "datatable",
+        "dt_",
+        "get data table row",
+        "row name"
+      ],
+      "tutorials": [],
+      "lessons": [
+        "data"
+      ],
+      "requires": [
+        "structs"
+      ]
+    },
+    {
+      "id": "savegame-block",
+      "track": "communication-data",
+      "title": "SaveGame",
+      "short": "Persist selected data between play sessions.",
+      "tier": "common",
+      "minutes": 8,
+      "prefix": "SaveGame Class → Save Slot → Load Slot",
+      "remember": "Save only the state that must survive; loading reconstructs runtime state from saved data.",
+      "useWhen": "Checkpoints, settings, collected items and player progress.",
+      "steps": [
+        "Create SaveGame Blueprint SG_TestSave with Integer Score.",
+        "Create Save Game Object using SG_TestSave.",
+        "Set Score = 250 and Save Game to Slot using Slot Name TestSlot.",
+        "Load Game from Slot, cast to SG_TestSave and print Score."
+      ],
+      "check": "The loaded save prints 250 after the save operation.",
+      "aliases": [
+        "savegame",
+        "save game",
+        "load game",
+        "save slot"
+      ],
+      "tutorials": [],
+      "lessons": [
+        "savegame"
+      ],
+      "requires": [
+        "variables-types",
+        "object-class-references"
+      ]
+    },
+    {
+      "id": "gameplay-tags",
+      "track": "communication-data",
+      "title": "Gameplay Tags",
+      "short": "Use hierarchical named labels for scalable categorisation.",
+      "tier": "later",
+      "minutes": 7,
+      "prefix": "GameplayTag: Ability.Fire.Primary",
+      "remember": "Gameplay Tags are structured labels designed for querying relationships and categories more robustly than scattered Booleans/strings.",
+      "useWhen": "Larger ability, item, status and interaction systems.",
+      "steps": [
+        "Open Project Settings → Gameplay Tags and add State.Stunned.",
+        "Create a Gameplay Tag variable in a practice Blueprint.",
+        "Assign State.Stunned.",
+        "Use a tag comparison/query to prove the tag is present."
+      ],
+      "check": "You can explain why State.Stunned is clearer and more scalable than many unrelated string comparisons.",
+      "aliases": [
+        "gameplay tag",
+        "gameplay tags",
+        "tag"
+      ],
+      "tutorials": [],
+      "lessons": []
+    },
+    {
+      "id": "data-assets",
+      "track": "communication-data",
+      "title": "Data Assets",
+      "short": "Create reusable authored data objects that are not tied to a placed Actor.",
+      "tier": "later",
+      "minutes": 7,
+      "prefix": "Primary/Data Asset",
+      "remember": "Data Assets are useful when you want reusable content records with class-based structure and references rather than table rows.",
+      "useWhen": "Items, abilities, characters and larger data-driven systems.",
+      "steps": [
+        "Create a simple Blueprint class based on Primary Data Asset.",
+        "Add DisplayName Text and Cost Integer.",
+        "Create one asset instance from that data class.",
+        "Set DisplayName = Training Item and Cost = 100."
+      ],
+      "check": "You have reusable authored data without placing an Actor in the level.",
+      "aliases": [
+        "data asset",
+        "primary data asset"
+      ],
+      "tutorials": [],
+      "lessons": []
+    },
+    {
+      "id": "pawn-character-controller",
+      "track": "characters-animation",
+      "title": "Pawn, Character & Controller",
+      "short": "Understand the player/AI body and who possesses it.",
+      "tier": "core",
+      "minutes": 7,
+      "prefix": "Controller → possesses → Pawn/Character",
+      "remember": "A Pawn can be possessed; Character is a Pawn with common character movement/capsule features; Controllers provide control logic.",
+      "useWhen": "Player characters, AI characters and Gameplay Framework decisions.",
+      "steps": [
+        "Open the Third Person Character Blueprint and identify Character Movement and Capsule components.",
+        "Open its Class Defaults and identify Auto Possess/Controller-related settings if visible.",
+        "In Project Settings → Maps & Modes identify the default Pawn/Character class.",
+        "Play and confirm the PlayerController possesses that Character."
+      ],
+      "check": "You can explain why Character is more specialised than a plain Actor.",
+      "aliases": [
+        "pawn",
+        "character",
+        "player controller",
+        "ai controller",
+        "possess",
+        "possession"
+      ],
+      "tutorials": [],
+      "lessons": [
+        "framework"
+      ]
+    },
+    {
+      "id": "skeleton-assets",
+      "track": "characters-animation",
+      "title": "Skeletal Mesh, Skeleton & Bones",
+      "short": "See the asset relationship underneath character animation.",
+      "tier": "common",
+      "minutes": 6,
+      "prefix": "SK_ mesh ↔ Skeleton → bones",
+      "remember": "The Skeletal Mesh is the visible geometry; the Skeleton defines the bone hierarchy animations target.",
+      "useWhen": "Character animation, retargeting, sockets and Animation Blueprints.",
+      "steps": [
+        "Open a Skeletal Mesh character.",
+        "Locate/open the Skeleton associated with it.",
+        "Inspect the bone hierarchy.",
+        "Select a hand bone and identify where a socket could be added."
+      ],
+      "check": "You can distinguish the visible Skeletal Mesh from the Skeleton asset that defines its bones.",
+      "aliases": [
+        "skeletal mesh",
+        "skeleton",
+        "bone",
+        "bones",
+        "retarget"
+      ],
+      "tutorials": [],
+      "lessons": [],
+      "requires": [
+        "static-skeletal"
+      ]
+    },
+    {
+      "id": "animation-sequence-abp",
+      "track": "characters-animation",
+      "title": "Animation Sequences & Animation Blueprints",
+      "short": "Know the clip versus the logic that chooses clips.",
+      "tier": "common",
+      "minutes": 8,
+      "prefix": "Animation Sequence = clip • ABP_ = runtime animation logic",
+      "remember": "An Animation Sequence contains motion; an Animation Blueprint decides which animation/pose the Skeletal Mesh should use at runtime.",
+      "useWhen": "Idle/walk/run systems, enemies and animated characters.",
+      "steps": [
+        "Open one Animation Sequence and scrub its timeline.",
+        "Open the character Animation Blueprint.",
+        "Find the Event Graph and Anim Graph.",
+        "Play and observe the AnimBP updating while the character moves."
+      ],
+      "check": "You can explain why an AnimBP is not itself “the walk animation”.",
+      "aliases": [
+        "animation blueprint",
+        "animbp",
+        "abp_",
+        "animation sequence",
+        "anim graph",
+        "event graph"
+      ],
+      "tutorials": [],
+      "lessons": [
+        "animation"
+      ],
+      "cheatSheet": [
+        [
+          "Skeletal Mesh",
+          "Visible skinned geometry"
+        ],
+        [
+          "Skeleton",
+          "Bone hierarchy the animations target"
+        ],
+        [
+          "Animation Sequence",
+          "One animation clip"
+        ],
+        [
+          "Blend Space",
+          "Blends samples using values such as Speed"
+        ],
+        [
+          "Animation Blueprint",
+          "Chooses/calculates the runtime pose"
+        ],
+        [
+          "State Machine",
+          "Controls transitions between animation states"
+        ]
+      ],
+      "requires": [
+        "static-skeletal",
+        "skeleton-assets"
+      ]
+    },
+    {
+      "id": "state-machines-blendspaces",
+      "track": "characters-animation",
+      "title": "State Machines & Blend Spaces",
+      "short": "Move between animation states and blend motion smoothly.",
+      "tier": "common",
+      "minutes": 8,
+      "prefix": "State Machine = state/transition • Blend Space = interpolate samples",
+      "remember": "State Machines manage modes such as Idle/Move/Jump; Blend Spaces smoothly choose between animation samples using values such as Speed.",
+      "useWhen": "Locomotion and character animation logic.",
+      "steps": [
+        "Open the current character AnimBP and locate its locomotion State Machine.",
+        "Open one transition rule and identify the condition.",
+        "Open the locomotion Blend Space and identify its Speed axis.",
+        "Play and watch the active state/blend respond to movement."
+      ],
+      "check": "You can point to where “should we change state?” and “how much walk/run blend?” are decided.",
+      "aliases": [
+        "state machine",
+        "blend space",
+        "transition rule",
+        "locomotion"
+      ],
+      "tutorials": [],
+      "lessons": [
+        "animation"
+      ],
+      "requires": [
+        "animation-sequence-abp"
+      ]
+    },
+    {
+      "id": "montages-notifies-sockets",
+      "track": "characters-animation",
+      "title": "Montages, Notifies & Sockets",
+      "short": "Trigger authored animation actions and synchronise gameplay to them.",
+      "tier": "common",
+      "minutes": 9,
+      "prefix": "Montage • Notify • Socket",
+      "remember": "Montages play controlled animation sections; Notifies fire at meaningful animation moments; Sockets provide named attachment points on bones.",
+      "useWhen": "Melee attacks, reloads, footsteps, weapon attachment and animation-driven events.",
+      "steps": [
+        "Open a character Skeleton and inspect or create a hand socket.",
+        "Open an Animation Montage and identify its timeline/sections.",
+        "Add or inspect an Anim Notify at a clear moment such as impact/footstep.",
+        "Explain which piece would attach a sword, which would play an attack, and which would signal the hit moment."
+      ],
+      "check": "Socket = attachment location; Montage = controlled animation; Notify = timed event marker.",
+      "aliases": [
+        "animation montage",
+        "montage",
+        "anim notify",
+        "notify",
+        "socket",
+        "sockets"
+      ],
+      "tutorials": [],
+      "lessons": [],
+      "requires": [
+        "skeleton-assets",
+        "animation-sequence-abp"
+      ]
+    },
+    {
+      "id": "collision-channels",
+      "track": "world-ai",
+      "title": "Collision, Presets & Channels",
+      "short": "Control what blocks, overlaps or ignores what.",
+      "tier": "common",
+      "minutes": 8,
+      "prefix": "Object Type + Channel Response = Block / Overlap / Ignore",
+      "remember": "Collision is a response table, not just “collision on/off”.",
+      "useWhen": "Pickups, projectiles, traces, characters, doors and triggers.",
+      "steps": [
+        "Create Actor Blueprint BP_CollisionTest. Add a Box Collision Component and set Box Extent X = 100, Y = 100, Z = 100.",
+        "Set Collision Preset = OverlapOnlyPawn and ensure Generate Overlap Events is enabled.",
+        "Add On Component Begin Overlap for the Box → Print String with Overlap works.",
+        "Place BP_CollisionTest across the player’s route. Play and walk through it: the message prints and the player is not blocked.",
+        "Stop, change Collision Preset to BlockAll, then Play again and walk into it to compare the response."
+      ],
+      "check": "OverlapOnlyPawn lets the player pass and generates the overlap event; BlockAll physically blocks the player.",
+      "aliases": [
+        "collision",
+        "collision channel",
+        "collision preset",
+        "block",
+        "overlap",
+        "ignore",
+        "object type"
+      ],
+      "tutorials": [],
+      "lessons": [
+        "collision"
+      ],
+      "cheatSheet": [
+        [
+          "Block",
+          "Stops/blocks the other collision object"
+        ],
+        [
+          "Overlap",
+          "Allows passage but can generate overlap events"
+        ],
+        [
+          "Ignore",
+          "No collision response between the two"
+        ],
+        [
+          "Object Type",
+          "What this object says it is"
+        ],
+        [
+          "Trace Channel",
+          "What a trace asks the world to respond to"
+        ]
+      ]
+    },
+    {
+      "id": "traces-hit-results",
+      "track": "world-ai",
+      "title": "Traces & Hit Results",
+      "short": "Ask the world what lies along a line/shape and inspect the answer.",
+      "tier": "common",
+      "minutes": 8,
+      "prefix": "Trace → Hit? → Hit Result",
+      "remember": "A trace queries collision without needing a physical projectile. Hit Result contains details such as Actor, location and normal.",
+      "useWhen": "Interaction, hitscan weapons, placement and line-of-sight checks.",
+      "steps": [
+        "From a player Blueprint create a Line Trace By Channel with Start at camera location.",
+        "Set End = Start + Forward Vector × 300.",
+        "Enable Draw Debug Type = For Duration while learning.",
+        "Break Hit Result and Print the Hit Actor display name when blocking hit is True."
+      ],
+      "check": "A 300 cm debug line appears and hitting an Actor prints its name.",
+      "aliases": [
+        "line trace",
+        "trace",
+        "hit result",
+        "break hit result",
+        "sphere trace"
+      ],
+      "tutorials": [],
+      "lessons": [
+        "traces"
+      ],
+      "requires": [
+        "transforms-units",
+        "collision-channels"
+      ]
+    },
+    {
+      "id": "umg-widgets",
+      "track": "world-ai",
+      "title": "UMG & Widget Blueprints",
+      "short": "Build UI as a separate visual layer that reads game state.",
+      "tier": "common",
+      "minutes": 8,
+      "prefix": "WBP_ → Create Widget → Add to Viewport",
+      "remember": "A Widget Blueprint draws UI; the gameplay system should usually own the state the UI displays.",
+      "useWhen": "HUDs, prompts, menus, health bars and score displays.",
+      "steps": [
+        "Create Widget Blueprint WBP_TestHUD.",
+        "Add a Text widget that says HUD works.",
+        "From the Player Character BeginPlay: Create Widget using WBP_TestHUD.",
+        "Connect Return Value → Add to Viewport and Play."
+      ],
+      "check": "HUD works appears on screen and the Widget asset contains presentation rather than player health ownership.",
+      "aliases": [
+        "umg",
+        "widget",
+        "widget blueprint",
+        "wbp_",
+        "create widget",
+        "add to viewport"
+      ],
+      "tutorials": [],
+      "lessons": [
+        "ui"
+      ]
+    },
+    {
+      "id": "navmesh",
+      "track": "world-ai",
+      "title": "NavMesh",
+      "short": "Show AI where it is allowed to navigate.",
+      "tier": "common",
+      "minutes": 6,
+      "prefix": "NavMesh Bounds Volume • P = visualise",
+      "remember": "NavMesh is generated navigation data over traversable space; AI movement needs reachable navigable areas.",
+      "useWhen": "AI patrol, chase and Move To systems.",
+      "steps": [
+        "Place Actors → Volumes → Nav Mesh Bounds Volume. Put it over the Third Person template floor.",
+        "With the volume selected, set Transform Scale X = 10, Y = 10, Z = 2 for this proof exercise.",
+        "Press P in the Level Editor to toggle navigation visualisation.",
+        "Confirm the floor inside the volume appears green. Move the volume away, then back, to prove the green area follows the bounds."
+      ],
+      "check": "With P enabled, the intended walkable floor is green only where the Nav Mesh Bounds Volume covers reachable space.",
+      "aliases": [
+        "navmesh",
+        "navigation",
+        "nav mesh",
+        "navmesh bounds volume",
+        "p key"
+      ],
+      "tutorials": [],
+      "lessons": [
+        "ai"
+      ]
+    },
+    {
+      "id": "ai-controller-moveto",
+      "track": "world-ai",
+      "title": "AIController & Move To",
+      "short": "Give an AI-controlled Character a destination.",
+      "tier": "common",
+      "minutes": 8,
+      "prefix": "AIController → possesses AI Character → Move To destination",
+      "remember": "The Controller drives the Pawn/Character; Move To asks the navigation system for a path.",
+      "useWhen": "Patrol, chase and simple enemy movement.",
+      "steps": [
+        "Create Blueprint Class → AIController and name it BP_TestAIController.",
+        "On your test AI Character, set AI Controller Class = BP_TestAIController and Auto Possess AI = Placed in World or Spawned.",
+        "In BP_TestAIController Event BeginPlay: Get Controlled Pawn and Get Player Character, then add AI Move To. Set Pawn = Controlled Pawn, Target Actor = Player Character, Acceptance Radius = 100.",
+        "Place the AI Character on green NavMesh, Compile, Save and Play."
+      ],
+      "check": "The AI moves through the green NavMesh toward the player and stops when it is within roughly the 100 cm acceptance radius.",
+      "aliases": [
+        "ai controller",
+        "aicontroller",
+        "ai move to",
+        "move to",
+        "acceptance radius"
+      ],
+      "tutorials": [],
+      "lessons": [
+        "ai"
+      ],
+      "requires": [
+        "navmesh",
+        "pawn-character-controller"
+      ]
+    },
+    {
+      "id": "blackboard-behaviour-tree",
+      "track": "world-ai",
+      "title": "Blackboard & Behaviour Tree",
+      "short": "Separate AI memory from decision flow.",
+      "tier": "common",
+      "minutes": 9,
+      "prefix": "Blackboard = shared AI data • Behaviour Tree = decision/task flow",
+      "remember": "The Blackboard stores facts such as TargetActor; the Behaviour Tree reads those facts to decide what the AI should do.",
+      "useWhen": "Patrol/chase/search AI and reusable enemy behaviours.",
+      "steps": [
+        "Create Blackboard BB_TestAI. Add Object key TargetActor and set its Base Class to Actor.",
+        "Create Behaviour Tree BT_TestAI and assign BB_TestAI. Add Root → Sequence → Move To; set the Move To Blackboard Key = TargetActor and Acceptable Radius = 100.",
+        "In BP_TestAIController BeginPlay, Run Behavior Tree using BT_TestAI.",
+        "After Run Behavior Tree, get the Blackboard Component and Set Value as Object: Key Name TargetActor, Object Value = Get Player Character.",
+        "Place the AI on green NavMesh and Play."
+      ],
+      "check": "The Blackboard holds the player in TargetActor and the Behaviour Tree Move To task drives the AI toward that target.",
+      "aliases": [
+        "blackboard",
+        "behaviour tree",
+        "behavior tree",
+        "bt_",
+        "bb_",
+        "ai task"
+      ],
+      "tutorials": [],
+      "lessons": [
+        "ai"
+      ],
+      "requires": [
+        "navmesh",
+        "ai-controller-moveto"
+      ]
+    }
+  ]
+};

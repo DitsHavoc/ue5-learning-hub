@@ -1,5 +1,23 @@
 # Changelog
 
+
+## v3.32.0 — Unreal Learning Path Redesign — 26 Aug 2026
+- Added 39 searchable Unreal Building Blocks with 13 Core concepts shown first.
+- Redesigned the Unreal learning flow as Building Blocks → Core Systems → Quick Tutorials → Challenges / Projects.
+- Added just-in-time Building Block links to Programming Quick Tutorials and relevant Core Lessons.
+- Simplified the sidebar by removing six simultaneous Programming-path links while preserving the deeper paths inside Unreal Learning.
+- Added local/cloud Building Block completion using the existing lesson-progress table; no migration required.
+- Expanded glossary coverage for IA, IMC, Class References, Enums, Data Tables, Static/Skeletal Meshes, AnimBP, Blackboard, Behaviour Tree and Material Instances.
+- Verified high-risk terminology/workflows against current Epic UE5.8 documentation.
+
+
+## v3.31.0 — Straight-Through Guide Pass — 26 Aug 2026
+- Removed visible starter-value / asset / variable prep strips from practical guides.
+- Practical teaching now starts at Step 1 and introduces every required item in sequence.
+- Simplified step presentation to: Go to → Do this → Why → Check → optional recovery.
+- Replaced positional support-step mapping with content matching and a confidence threshold to stop unrelated explanations attaching to exact steps.
+- Kept known-working values and scaffold fade from the prescriptive pass.
+
 ## v3.30.0 — Single Clear Guide Pass — 26 Aug 2026
 
 - Replaced the recipe + duplicate walkthrough pattern with one authoritative practical guide.
