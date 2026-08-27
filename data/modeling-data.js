@@ -1,5 +1,5 @@
 window.UE5_MODELING_DATA = {
-  "version": "3.32.0",
+  "version": "3.32.1",
   "updated": "26 Aug 2026",
   "philosophy": "Slow, methodical, visual and cumulative. Learn one operation, prove it is correct, reuse it, then add the next. Build correctly before building quickly.",
   "lessons": [

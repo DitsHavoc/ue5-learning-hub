@@ -1,10 +1,10 @@
-# UE5 Learning Hub v3.31.0 — Straight-Through Guide Pass
+# UE5 Learning Hub v3.32.1 — Unreal Path Audit & Link Accuracy Pass
 
-## Current release — v3.31.0
+## Current release — v3.32.1
 
 This release simplifies practical teaching into a **straight-through Step 1 → finish flow**. There is no visible prep list of files, variables or values before the walkthrough. Each asset, setting and measurement is introduced when it is actually needed, followed immediately by a short Why and Check. No database migration is required.
 
-See `RELEASE-NOTES-v3.31.0.md` and `INSTRUCTION-AUTHORING-STANDARD.md` for the new tutorial standard. Prior release notes remain in the repository for the modelling, profile, visual and portal passes.
+See `RELEASE-NOTES-v3.32.1.md`, `UNREAL-LEARNING-PATH-v3.32.1.md` and `INSTRUCTION-AUTHORING-STANDARD.md`. Prior release notes remain in the repository.
 
 ## V3.20 — the Hub becomes a portal
 

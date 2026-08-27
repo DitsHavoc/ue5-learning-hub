@@ -1,4 +1,4 @@
-# Instruction Authoring Standard — v3.31
+# Instruction Authoring Standard — v3.32.1
 
 ## The rule
 A beginner should be able to start at **Step 1** and keep moving down the page without first decoding a shopping list of assets, variables, files, measurements or settings.
@@ -78,3 +78,12 @@ If a mechanic uses a reusable Unreal concept such as an Input Action, Blueprint 
 - the **Challenge / Project** removes support and asks the learner to choose/apply it.
 
 A tutorial may briefly explain why a step exists, but it should link to the Building Block rather than repeating a full mini-course inside every recipe.
+
+
+## v3.32.1 — Building Block link rule
+
+Programming tutorials should declare their Building Blocks explicitly. Do not rely on a generic word matcher to decide what knowledge a student needs: words such as `Set`, `Play` and `Spawn` are too overloaded in Unreal.
+
+A tutorial should normally surface **1–4** blocks, ordered by usefulness to that exact mechanic.
+
+A Building Block proof exercise must be just as concrete as a beginner tutorial: when creating an unfamiliar asset, state the editor path, asset/class type, exact name and a known-working value where one is useful. Keep the explanation short; make the action unambiguous.

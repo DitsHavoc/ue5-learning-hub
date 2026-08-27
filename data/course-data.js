@@ -1,5 +1,5 @@
 window.UE5_COURSE_DATA = {
-  "version": "3.32.0",
+  "version": "3.32.1",
   "buildDate": "26 Aug 2026",
   "paths": [
     {

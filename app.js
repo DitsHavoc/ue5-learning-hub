@@ -594,6 +594,7 @@ function blockDone(id){return (state.blockCompleted||[]).includes(id)}
 function blockTierRank(tier){return tier==='core'?0:tier==='common'?1:2}
 function normaliseBlockTerm(v){return String(v||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim()}
 function blockMatchesTutorial(b,t){
+  if(Array.isArray(t?.buildingBlocks))return t.buildingBlocks.includes(b.id);
   if((b.tutorials||[]).includes(t.id))return true;
   if((b.lessons||[]).includes(t.referenceLesson))return true;
   const uses=(t.uses||[]).map(normaliseBlockTerm);
@@ -607,6 +608,7 @@ function blockMatchesTutorial(b,t){
 }
 function blocksForTutorial(t){
   if(!t||t.designModule)return [];
+  if(Array.isArray(t.buildingBlocks))return t.buildingBlocks.map(buildingBlock).filter(Boolean).slice(0,4);
   return BLOCKS.blocks.filter(b=>blockMatchesTutorial(b,t)).sort((a,b)=>blockTierRank(a.tier)-blockTierRank(b.tier)).slice(0,4);
 }
 function blocksForLesson(l){return BLOCKS.blocks.filter(b=>(b.lessons||[]).includes(l.id)).sort((a,b)=>blockTierRank(a.tier)-blockTierRank(b.tier));}

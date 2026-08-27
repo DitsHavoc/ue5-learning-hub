@@ -1,5 +1,12 @@
 # Changelog
 
+## v3.32.1 — Unreal Path Audit & Link Accuracy Pass — 27 Aug 2026
+- Replaced fuzzy tutorial-to-Building-Block guessing with explicit mappings for all 47 Programming Quick Tutorials.
+- Expanded Building Blocks from 39 to 47 while keeping only 13 Core concepts.
+- Added Character Movement, Timelines/Lerp, Damage, Camera, Audio, Niagara, Fog/Post Process and AI Perception blocks.
+- Tightened Building Block proof exercises to use clearer editor paths and exact first-build values.
+- Fixed misleading automatic matches such as Set Game Paused → Sets and Play Sound → Compile/Save/Play.
+- No database migration.
 
 ## v3.32.0 — Unreal Learning Path Redesign — 26 Aug 2026
 - Added 39 searchable Unreal Building Blocks with 13 Core concepts shown first.
