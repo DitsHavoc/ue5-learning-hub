@@ -1718,7 +1718,7 @@ function studentCompletedContent(o,userId){
 async function renderTeacherClass(classId){
   const box=$('#teacherClassContent');if(!box)return;
   try{
-    const o=await BACKEND.teacherOverview();
+    const [o,allProjects,allTemplates]=await Promise.all([BACKEND.teacherOverview(),BACKEND.getProjects(),BACKEND.getProjectTemplates()]);
     const c=(o?.classes||[]).find(x=>String(x.id)===String(classId));
     if(!c){box.innerHTML='<div class="empty"><h3>Class not found.</h3><p>You may no longer teach this class, or it may have been deleted.</p><a class="button ghost" href="#/teacher">Back to Teacher Dashboard</a></div>';return}
     const memberIds=(c.class_members||[]).map(m=>m.user_id);
@@ -1728,7 +1728,8 @@ async function renderTeacherClass(classId){
     const count=(uid,items,prefix='')=>items.filter(x=>done(uid,prefix+x.id)).length;
     const pending=(o.submissions||[]).filter(s=>memberIds.includes(s.user_id)&&s.status==='submitted');
     const approved=(o.submissions||[]).filter(s=>memberIds.includes(s.user_id)&&s.status==='approved');
-    const classProjects=(o.collabProjects||[]).filter(p=>String(p.class_id||'')===String(c.id));
+    const classProjects=(allProjects||[]).filter(p=>String(p.class_id||'')===String(c.id));
+    const classTemplates=(allTemplates||[]).filter(t=>String(t.class_id||'')===String(c.id));
     const teacherNames=Object.fromEntries((o.teachers||[]).map(t=>[t.id,t.display_name]));
     const teacherIds=(c.class_teachers||[]).map(t=>t.teacher_id);
     const head=document.querySelector('.class-detail-head');
@@ -1753,6 +1754,10 @@ async function renderTeacherClass(classId){
           const core=count(p.id,DATA.lessons),blocks=count(p.id,BLOCKS.blocks,'block:'),tutorials=count(p.id,TOOLS.tutorials,'tutorial:'),model=count(p.id,MODEL.lessons,'model:')+count(p.id,SCULPT.practices,'sculpt:'),evidence=approved.filter(s=>s.user_id===p.id).length;
           return `<article class="class-student-card"><div class="class-student-head">${avatarMarkup('sm',p.display_name)}<div><h3>${esc(p.display_name)}</h3><span>${core}/${DATA.lessons.length} core lessons</span></div></div><div class="class-student-stats"><span><b>${blocks}</b> blocks</span><span><b>${tutorials}</b> tutorials</span><span><b>${model}</b> 3D/sculpt</span><span><b>${evidence}</b> evidence</span></div><details><summary>View completed content</summary>${studentCompletedContent(o,p.id)}</details></article>`;
         }).join(''):'<div class="empty"><h3>No students yet.</h3><p>Students will appear here after joining this class.</p></div>'}</div>
+      </section>
+      <section class="section class-project-workspace"><div class="section-head"><div><span class="eyebrow">CLASS PROJECTS</span><h2>Projects for ${esc(c.name)}</h2><p>See the briefs you have given this class and open the live individual or group project copies from the same workspace.</p></div><a class="button ghost small" href="#/projects">Open all Projects →</a></div>
+        <details open class="class-content-group"><summary>▣ Project templates <span>${classTemplates.length} linked to this class</span></summary><div style="padding:16px">${classTemplates.length?`<div class="multi-project-grid">${classTemplates.map(t=>`<article class="multi-project-card template-card"><div class="project-card-top"><span class="project-type-pill solo">${esc(projectTemplateWorkModeLabel(t.work_mode).toUpperCase())}</span><span class="request-status ${t.status==='published'?'shipped':t.status==='archived'?'declined':'new'}">${esc(t.status==='published'?'Published':t.status==='archived'?'Archived':'Draft')}</span></div><h3>${esc(t.title)}</h3><p>${esc(t.brief||'No brief yet.')}</p><div class="project-card-meta"><span>${esc(projectKindLabel(t.project_kind))}</span><span>${t.milestones.length} milestone${t.milestones.length===1?'':'s'}</span>${t.assessment_unit?`<span>${esc(t.assessment_unit)}</span>`:''}</div><a class="button primary small" href="#/projects/template/${t.id}">Manage template →</a></article>`).join('')}</div>`:'<div class="empty"><h3>No project templates for this class yet.</h3><p>Create one from Projects when you are ready.</p></div>'}</div></details>
+        <details open class="class-content-group"><summary>🎮 Student project activity <span>${classProjects.length} project${classProjects.length===1?'':'s'}</span></summary><div style="padding:16px">${projectListCards(classProjects,'No student project copies for this class yet.')}</div></details>
       </section>
       <section class="section class-learning-content"><div class="section-head"><div><span class="eyebrow">CLASS CONTENT</span><h2>What has this class completed?</h2><p>Every row shows how many students in this class have completed that piece of Hub content. This is progress visibility, not an assignment wall.</p></div></div>
         <details open class="class-content-group"><summary>🧱 Building Blocks <span>${BLOCKS.blocks.length} concepts</span></summary><div>${classProgressRows(o,memberIds,BLOCKS.blocks,'block:')}</div></details>
