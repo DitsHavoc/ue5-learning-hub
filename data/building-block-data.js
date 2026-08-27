@@ -1,5 +1,5 @@
 window.UE5_BUILDING_BLOCK_DATA = {
-  "version": "3.32.1",
+  "version": "3.33.0",
   "buildDate": "27 Aug 2026",
   "tiers": {
     "core": {
@@ -161,7 +161,14 @@ window.UE5_BUILDING_BLOCK_DATA = {
       "tutorials": [],
       "lessons": [
         "actors-components"
-      ]
+      ],
+      "visual": {
+        "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/6da79f18-bdc3-4588-9d20-e9f624bd1686/components_pane.png",
+        "caption": "Official UE5.8 Components window. This is the hierarchy that turns one Actor into a collection of reusable parts.",
+        "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/components-window-in-unreal-engine",
+        "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+        "kind": "epic"
+      }
     },
     {
       "id": "blueprint-types",
@@ -244,7 +251,14 @@ window.UE5_BUILDING_BLOCK_DATA = {
           "Animation Blueprint",
           "Runtime animation/pose logic for a Skeletal Mesh."
         ]
-      ]
+      ],
+      "visual": {
+        "src": "https://dev.epicgames.com/community/api/documentation/image/bd914bd2-52e6-4926-844b-ed56b093a736?height=335&resizing_type=fill&width=1920",
+        "caption": "Official UE5.8 Blueprint Class reference. A Blueprint Class defines a reusable type; placed Actors are instances of that type.",
+        "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-class-assets-in-unreal-engine",
+        "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+        "kind": "epic"
+      }
     },
     {
       "id": "transforms-units",
@@ -388,7 +402,13 @@ window.UE5_BUILDING_BLOCK_DATA = {
       "tutorials": [],
       "lessons": [
         "events"
-      ]
+      ],
+      "visual": {
+        "src": "assets/ue5/current/events-execution-real.webp",
+        "caption": "Current classroom Blueprint example showing an Event starting execution through the white execution wire.",
+        "sourceTitle": "Current classroom Unreal Engine capture (Aug 2026)",
+        "kind": "ue5"
+      }
     },
     {
       "id": "variables-types",
@@ -464,7 +484,14 @@ window.UE5_BUILDING_BLOCK_DATA = {
           "Class Reference",
           "A type/class you could spawn or compare against"
         ]
-      ]
+      ],
+      "visual": {
+        "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/d891edb3-17af-428d-b3ce-53ed05ffc12d/myblueprintpane.png",
+        "caption": "Official UE5.8 My Blueprint panel: create variables here, then drag them into the graph as Get or Set.",
+        "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-variables-in-unreal-engine",
+        "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+        "kind": "epic"
+      }
     },
     {
       "id": "enhanced-input",
@@ -528,7 +555,14 @@ window.UE5_BUILDING_BLOCK_DATA = {
           "Canceled",
           "Evaluation ended before the action triggered."
         ]
-      ]
+      ],
+      "visual": {
+        "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/6c38fff1-2df0-4100-9a7d-bc6f3b06427a/image_6.png",
+        "caption": "Official UE5.8 Input Mapping Context showing Input Actions mapped to physical controls.",
+        "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/enhanced-input-in-unreal-engine",
+        "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+        "kind": "epic"
+      }
     },
     {
       "id": "branches-switches",
@@ -557,7 +591,14 @@ window.UE5_BUILDING_BLOCK_DATA = {
       "tutorials": [],
       "lessons": [
         "branches"
-      ]
+      ],
+      "visual": {
+        "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/f71f4d3e-8707-4d18-b398-fca822b66bdd/branch_example.png",
+        "caption": "Official UE5.8 Branch example. The Condition is Boolean; only the True or False execution output continues.",
+        "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/flow-control-in-unreal-engine",
+        "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+        "kind": "epic"
+      }
     },
     {
       "id": "functions-events-macros",
@@ -585,7 +626,14 @@ window.UE5_BUILDING_BLOCK_DATA = {
       "tutorials": [],
       "lessons": [
         "functions"
-      ]
+      ],
+      "visual": {
+        "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/cd54af36-d3ee-4cc5-8283-f3ddd2d79f65/name_function_blueprint.png",
+        "caption": "Official UE5.8 My Blueprint workflow for creating a named Function.",
+        "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/functions-in-unreal-engine",
+        "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+        "kind": "epic"
+      }
     },
     {
       "id": "timelines-lerp",
@@ -620,7 +668,14 @@ window.UE5_BUILDING_BLOCK_DATA = {
       "tutorials": [],
       "lessons": [
         "timelines"
-      ]
+      ],
+      "visual": {
+        "src": "https://dev.epicgames.com/community/api/documentation/image/6e44536d-af86-4aae-a863-afec370143db?resizing_type=fit",
+        "caption": "Official UE5.8 Timeline Editor. Timelines output values over time that can feed a Lerp or transform update.",
+        "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/editing-timelines-in-unreal-engine",
+        "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+        "kind": "epic"
+      }
     },
     {
       "id": "object-class-references",
@@ -679,7 +734,14 @@ window.UE5_BUILDING_BLOCK_DATA = {
       "requires": [
         "object-class-references",
         "events-execution"
-      ]
+      ],
+      "visual": {
+        "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/fe5fe968-0fb7-4e45-83fc-b76afca4a15b/3_2.png",
+        "caption": "Official UE5.8 Cast node example. Casting checks the type of a reference you already have.",
+        "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-communications-in-unreal-engine",
+        "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+        "kind": "epic"
+      }
     },
     {
       "id": "damage-system",
@@ -886,7 +948,14 @@ window.UE5_BUILDING_BLOCK_DATA = {
       ],
       "requires": [
         "object-class-references"
-      ]
+      ],
+      "visual": {
+        "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/ca176849-4f39-4e50-bd83-e01672bddf2d/interfaceeditor.png",
+        "caption": "Official UE5.8 Blueprint Interface editor. A BPI defines a contract that multiple Blueprint classes can implement.",
+        "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-interface-in-unreal-engine",
+        "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+        "kind": "epic"
+      }
     },
     {
       "id": "dispatchers",
@@ -919,7 +988,14 @@ window.UE5_BUILDING_BLOCK_DATA = {
       "requires": [
         "object-class-references",
         "events-execution"
-      ]
+      ],
+      "visual": {
+        "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/7ff64b05-8f8f-46d2-a574-a0646b951fff/event7.png",
+        "caption": "Official UE5.8 Event Dispatcher binding example. The listener binds before it can respond to the broadcast.",
+        "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-communications-in-unreal-engine",
+        "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+        "kind": "epic"
+      }
     },
     {
       "id": "arrays-sets-maps",
@@ -1037,7 +1113,14 @@ window.UE5_BUILDING_BLOCK_DATA = {
       ],
       "requires": [
         "structs"
-      ]
+      ],
+      "visual": {
+        "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/8197a9d4-1212-445f-aedb-19379fb043d9/datarowtype.png",
+        "caption": "Official UE5.8 Data Table Row Type selection. The chosen Struct defines the columns and data types for each row.",
+        "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/data-driven-gameplay-elements-in-unreal-engine",
+        "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+        "kind": "epic"
+      }
     },
     {
       "id": "savegame-block",
@@ -1274,7 +1357,14 @@ window.UE5_BUILDING_BLOCK_DATA = {
       "requires": [
         "static-skeletal",
         "skeleton-assets"
-      ]
+      ],
+      "visual": {
+        "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/6368083b-2787-4801-bf9f-2a60bc1e6952/create1.png",
+        "caption": "Official UE5.8 Animation Blueprint creation workflow, including choosing the Skeleton it will animate.",
+        "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/animation-blueprints-in-unreal-engine",
+        "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+        "kind": "epic"
+      }
     },
     {
       "id": "state-machines-blendspaces",
@@ -1305,7 +1395,14 @@ window.UE5_BUILDING_BLOCK_DATA = {
       ],
       "requires": [
         "animation-sequence-abp"
-      ]
+      ],
+      "visual": {
+        "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/ddbd59bf-8e71-405b-8b5d-a7bbc3284178/create1.png",
+        "caption": "Official UE5.8 State Machine creation inside an Animation Blueprint Anim Graph.",
+        "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/state-machines-in-unreal-engine",
+        "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+        "kind": "epic"
+      }
     },
     {
       "id": "montages-notifies-sockets",
@@ -1391,7 +1488,14 @@ window.UE5_BUILDING_BLOCK_DATA = {
           "Trace Channel",
           "What a trace asks the world to respond to"
         ]
-      ]
+      ],
+      "visual": {
+        "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/10c10808-3c0e-4637-bfee-e931a8b5e308/col_collidenoevent_sphere.png",
+        "caption": "Official UE5.8 collision response settings showing Block, Overlap and Ignore.",
+        "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/collision-in-unreal-engine---overview",
+        "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+        "kind": "epic"
+      }
     },
     {
       "id": "traces-hit-results",
@@ -1424,7 +1528,14 @@ window.UE5_BUILDING_BLOCK_DATA = {
       "requires": [
         "transforms-units",
         "collision-channels"
-      ]
+      ],
+      "visual": {
+        "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/bd67ce85-1155-4bfd-9da7-6a7f4c9126d8/guide-how-to-2b-11.png",
+        "caption": "Official UE5.8 Line Trace running in Play with debug drawing visible.",
+        "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/using-a-single-line-trace-raycast-by-channel-in-unreal-engine",
+        "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+        "kind": "epic"
+      }
     },
     {
       "id": "umg-widgets",
@@ -1480,7 +1591,14 @@ window.UE5_BUILDING_BLOCK_DATA = {
           "Show Mouse Cursor",
           "PlayerController setting commonly enabled for clickable menus."
         ]
-      ]
+      ],
+      "visual": {
+        "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/bf146350-4103-4b5a-a33d-23b00ca8bc63/01-01_createwidgetblueprint.png",
+        "caption": "Official UE5.8 workflow for creating a Widget Blueprint asset.",
+        "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-ui-designer-quick-start-guide-in-unreal-engine",
+        "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+        "kind": "epic"
+      }
     },
     {
       "id": "camera-feedback",
@@ -1515,7 +1633,14 @@ window.UE5_BUILDING_BLOCK_DATA = {
       "tutorials": [],
       "lessons": [
         "actors-components"
-      ]
+      ],
+      "visual": {
+        "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/7e414054-56b2-49c1-a8cc-505a0d8da4ec/createshake.png",
+        "caption": "Official UE5.8 Camera Shake creation workflow for a CameraShakeBase asset.",
+        "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/camera-shakes-in-unreal-engine",
+        "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+        "kind": "epic"
+      }
     },
     {
       "id": "audio-feedback",
@@ -1617,7 +1742,14 @@ window.UE5_BUILDING_BLOCK_DATA = {
       "tutorials": [],
       "lessons": [
         "editor"
-      ]
+      ],
+      "visual": {
+        "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/669dc61c-9481-43a6-b117-ec6c76244ccb/03-exponential-height-fog-enabled.png",
+        "caption": "Official UE5.8 example placing Exponential Height Fog into a level.",
+        "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/exponential-height-fog-in-unreal-engine",
+        "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+        "kind": "epic"
+      }
     },
     {
       "id": "navmesh",
@@ -1646,7 +1778,14 @@ window.UE5_BUILDING_BLOCK_DATA = {
       "tutorials": [],
       "lessons": [
         "ai"
-      ]
+      ],
+      "visual": {
+        "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/69bc24a6-f990-4cfe-b45a-f1d1d899ea8f/basic-navmesh-visualize-a.png",
+        "caption": "Official UE5.8 NavMesh visualisation. Press P: green shows where AI navigation is available.",
+        "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/basic-navigation-in-unreal-engine",
+        "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+        "kind": "epic"
+      }
     },
     {
       "id": "ai-controller-moveto",
@@ -1679,7 +1818,14 @@ window.UE5_BUILDING_BLOCK_DATA = {
       "requires": [
         "navmesh",
         "pawn-character-controller"
-      ]
+      ],
+      "visual": {
+        "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/fccc3f17-4a64-4262-989e-dddb80d139e2/basic-npc-ai-moveto.png",
+        "caption": "Official UE5.8 Blueprint example using AI Move To to send an AI-controlled Pawn toward a destination.",
+        "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/basic-navigation-in-unreal-engine",
+        "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+        "kind": "epic"
+      }
     },
     {
       "id": "ai-perception-block",
@@ -1714,7 +1860,14 @@ window.UE5_BUILDING_BLOCK_DATA = {
       "tutorials": [],
       "lessons": [
         "ai"
-      ]
+      ],
+      "visual": {
+        "src": "https://dev.epicgames.com/community/api/documentation/image/0b940733-0aba-46b5-8022-2079bef92697?height=335&resizing_type=fill&width=1920",
+        "caption": "Official UE5.8 AI Perception documentation reference. The exact Sight settings capture is still on the Hub capture list.",
+        "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/ai-perception-in-unreal-engine",
+        "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+        "kind": "epic"
+      }
     },
     {
       "id": "blackboard-behaviour-tree",
@@ -1749,7 +1902,14 @@ window.UE5_BUILDING_BLOCK_DATA = {
       "requires": [
         "navmesh",
         "ai-controller-moveto"
-      ]
+      ],
+      "visual": {
+        "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/2816f24c-2b8d-45f2-be92-e9ca9b7b4993/behavior-tree-overview-anatomy-blackboard.png",
+        "caption": "Official UE5.8 Blackboard assigned to a Behavior Tree. Blackboard Keys store the facts the tree uses for decisions.",
+        "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/behavior-tree-in-unreal-engine---overview",
+        "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+        "kind": "epic"
+      }
     }
   ]
 };

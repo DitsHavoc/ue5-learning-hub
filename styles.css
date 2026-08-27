@@ -783,3 +783,11 @@ button:disabled{opacity:.48;cursor:not-allowed;transform:none!important}
 .confetti-bit.c0{background:#57d7ff}.confetti-bit.c1{background:#9b7cff}.confetti-bit.c2{background:#68e39a}.confetti-bit.c3{background:#ffd166}.confetti-bit.c4{background:#ff6fae}
 @keyframes completion-pop{0%{opacity:0;transform:translate(-50%,-50%) scale(.35) rotate(0)}10%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(1) rotate(var(--r))}}
 @media (prefers-reduced-motion:reduce){.completion-confetti{display:none}}
+
+/* v3.33 — visual accuracy / official Epic reference treatment */
+.visual-kind-badge.epic-source-badge{background:rgba(31,103,165,.92);border-color:rgba(128,200,255,.5);color:#e9f6ff}
+.epic-reference-story{border-color:rgba(86,167,235,.38);background:rgba(30,92,143,.08)}
+.target-reference-story{border-color:rgba(206,192,150,.28);background:rgba(108,91,46,.055)}
+.block-visual-reference{grid-column:1/-1}.block-visual-reference>.visual-flow-card{max-width:880px;margin-top:12px}.block-visual-reference>.muted{max-width:850px}
+.step-visual-wrap .visual-flow-card.epic{box-shadow:0 0 0 1px rgba(79,160,226,.08)}
+@media(max-width:800px){.block-visual-reference>.visual-flow-card{max-width:none}}

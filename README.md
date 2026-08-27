@@ -1,10 +1,10 @@
-# UE5 Learning Hub v3.32.1 — Unreal Path Audit & Link Accuracy Pass
+# UE5 Learning Hub v3.32.2 — Class Detail Workspace
 
-## Current release — v3.32.1
+## Current release — v3.32.2
 
-This release simplifies practical teaching into a **straight-through Step 1 → finish flow**. There is no visible prep list of files, variables or values before the walkthrough. Each asset, setting and measurement is introduced when it is actually needed, followed immediately by a short Why and Check. No database migration is required.
+Teachers can now open a specific class from the Teacher Dashboard and inspect that class's students and learning-content progress. The view shows exact completed Building Blocks, Core Lessons, Quick Tutorials, 3D/Sculpt content and class-wide completion counts without adding a new assignment/LMS layer. No database migration is required.
 
-See `RELEASE-NOTES-v3.32.1.md`, `UNREAL-LEARNING-PATH-v3.32.1.md` and `INSTRUCTION-AUTHORING-STANDARD.md`. Prior release notes remain in the repository.
+See `RELEASE-NOTES-v3.32.2.md` for this release. The Unreal learning-path architecture remains documented in `UNREAL-LEARNING-PATH-v3.32.1.md`.
 
 ## V3.20 — the Hub becomes a portal
 

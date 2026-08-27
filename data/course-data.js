@@ -1,6 +1,6 @@
 window.UE5_COURSE_DATA = {
-  "version": "3.32.1",
-  "buildDate": "26 Aug 2026",
+  "version": "3.33.0",
+  "buildDate": "27 Aug 2026",
   "paths": [
     {
       "id": "foundations",
@@ -260,13 +260,7 @@ window.UE5_COURSE_DATA = {
           "check": "Press Play once. The character should spawn and move normally.",
           "troubleshoot": [
             "If the project opens on a blank map, use File → Open Level and choose the default ThirdPersonMap."
-          ],
-          "visual": {
-            "src": "assets/ue5/current/editor-main-window.webp",
-            "caption": "The main Level Editor layout in a real UE5 project.",
-            "kind": "current",
-            "sourceTitle": ""
-          }
+          ]
         },
         {
           "title": "Find the four core panels",
@@ -284,10 +278,10 @@ window.UE5_COURSE_DATA = {
             "If Outliner or Details is missing, use Window → Outliner or Window → Details."
           ],
           "visual": {
-            "src": "assets/ue5/current/editor-panels-closeup.webp",
-            "caption": "Close-up of the Level Editor panels beginners use first.",
-            "kind": "current",
-            "sourceTitle": ""
+            "src": "assets/ue5/current/editor-main-window.webp",
+            "caption": "Current classroom UE5 Level Editor showing the Viewport, Outliner, Details and Content Browser / Drawer areas students need to identify.",
+            "sourceTitle": "Current classroom Unreal Engine capture (Aug 2026)",
+            "kind": "ue5"
           }
         },
         {
@@ -304,13 +298,7 @@ window.UE5_COURSE_DATA = {
           "check": "Click each cube in the Outliner. The correct cube should highlight in the Viewport.",
           "troubleshoot": [
             "If you accidentally drag one huge cube, undo with Ctrl+Z and place it again."
-          ],
-          "visual": {
-            "src": "assets/ue5/current/editor-main-window.webp",
-            "caption": "Use the Add menu to place simple Shapes into the level.",
-            "kind": "current",
-            "sourceTitle": ""
-          }
+          ]
         },
         {
           "title": "Rename the placed cubes properly",
@@ -324,9 +312,9 @@ window.UE5_COURSE_DATA = {
           ],
           "visual": {
             "src": "assets/ue5/current/editor-panels-closeup.webp",
-            "caption": "The Outliner is where you organise and rename level Actors.",
-            "kind": "current",
-            "sourceTitle": ""
+            "caption": "Current classroom UE5 panel close-up. Use the Outliner to identify and rename placed Actors.",
+            "sourceTitle": "Current classroom Unreal Engine capture (Aug 2026)",
+            "kind": "ue5"
           }
         },
         {
@@ -343,13 +331,7 @@ window.UE5_COURSE_DATA = {
           "check": "Undo and redo one transform change so you know where the values are.",
           "troubleshoot": [
             "If the wrong Actor moves, re-check which Outliner row is selected."
-          ],
-          "visual": {
-            "src": "assets/ue5/current/editor-main-window.webp",
-            "caption": "Transform values are edited in Details for the selected Actor.",
-            "kind": "current",
-            "sourceTitle": ""
-          }
+          ]
         },
         {
           "title": "Create a Learning folder and save deliberately",
@@ -365,13 +347,7 @@ window.UE5_COURSE_DATA = {
           "check": "Close and reopen the Content Drawer: the folder is still there and the level keeps your cubes.",
           "troubleshoot": [
             "If the folder appears inside the wrong directory, move back up one level and create it again."
-          ],
-          "visual": {
-            "src": "assets/ue5/current/editor-panels-closeup.webp",
-            "caption": "The Content Drawer is for project assets and folders, not placed level Actors.",
-            "kind": "current",
-            "sourceTitle": ""
-          }
+          ]
         }
       ],
       "evidencePrompt": {
@@ -479,7 +455,27 @@ window.UE5_COURSE_DATA = {
         "Click each Outliner name and prove the matching cube highlights. Press F once for each selected Actor and confirm the camera frames the matching cube.",
         "Content Drawer → create folder Learning. Use File → Save All. Do not continue with unsaved changes."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "recipeVisuals": [
+        null,
+        null,
+        null,
+        {
+          "src": "assets/ue5/current/editor-panels-closeup.webp",
+          "caption": "Current classroom UE5 panel close-up showing the Outliner used to identify and rename placed Actors.",
+          "sourceTitle": "Current classroom Unreal Engine capture (Aug 2026)",
+          "kind": "ue5"
+        },
+        null,
+        null,
+        {
+          "src": "assets/ue5/current/editor-main-window.webp",
+          "caption": "Current classroom UE5 Level Editor showing the Viewport and Outliner together for selecting and framing Actors.",
+          "sourceTitle": "Current classroom Unreal Engine capture (Aug 2026)",
+          "kind": "ue5"
+        },
+        null
+      ]
     },
     {
       "id": "actors-components",
@@ -595,9 +591,13 @@ window.UE5_COURSE_DATA = {
       ],
       "goodPractice": "Name Components by role: DoorMesh, InteractionBox and AlarmLight are better than StaticMesh2.",
       "visual": {
-        "type": "book",
-        "src": "assets/book/blueprint-editor.webp",
-        "caption": "Reference figure from the supplied book: Blueprint Editor layout."
+        "type": "ue5-reference",
+        "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/6da79f18-bdc3-4588-9d20-e9f624bd1686/components_pane.png",
+        "caption": "The real Components window inside the Blueprint Editor. Components form the hierarchy that builds an Actor from smaller pieces.",
+        "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/components-window-in-unreal-engine",
+        "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+        "authenticUI": true,
+        "versionNote": "Official Epic Games Unreal Engine 5.8 documentation."
       },
       "bookRef": "Chapter 1: Components and the Blueprint Editor",
       "explanation": {
@@ -698,13 +698,7 @@ window.UE5_COURSE_DATA = {
           "check": "The asset name in the tab says BP_PracticeBeacon.",
           "troubleshoot": [
             "If you created the Blueprint in the wrong folder, move it into Learning before continuing."
-          ],
-          "visual": {
-            "src": "assets/book/blueprint-editor.webp",
-            "caption": "Blueprint Editor view showing the Components panel, Viewport and Event Graph tabs.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          ]
         },
         {
           "title": "Add a Static Mesh body",
@@ -721,10 +715,11 @@ window.UE5_COURSE_DATA = {
             "If the mesh is invisible, check that the Static Mesh asset field is not empty."
           ],
           "visual": {
-            "src": "assets/book/blueprint-editor.webp",
-            "caption": "Add components to a Blueprint from the Components panel.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/67a54191-1b18-4e82-abb2-4f8ff258ee55/add_new_component_list.png",
+            "caption": "Official UE5.8 Add Component menu. Use this menu to add the Static Mesh component requested in this step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/components-window-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -740,13 +735,7 @@ window.UE5_COURSE_DATA = {
           "check": "Toggling the Point Light visibility changes the look of the Blueprint.",
           "troubleshoot": [
             "If nothing changes, move the light closer or increase its Intensity."
-          ],
-          "visual": {
-            "src": "assets/book/blueprint-editor.webp",
-            "caption": "Components can include lights as well as meshes.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          ]
         },
         {
           "title": "Add Box Collision",
@@ -757,13 +746,7 @@ window.UE5_COURSE_DATA = {
           "check": "The collision box is big enough to cover the object but not absurdly huge.",
           "troubleshoot": [
             "If the collision is tiny, use the Scale values or Box Extent in Details."
-          ],
-          "visual": {
-            "src": "assets/book/collision-responses.webp",
-            "caption": "Collision settings and collision shapes are edited from the component Details.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          ]
         },
         {
           "title": "Arrange the hierarchy and transforms",
@@ -781,10 +764,11 @@ window.UE5_COURSE_DATA = {
             "If a component drifts too far away, reset its relative transform in Details."
           ],
           "visual": {
-            "src": "assets/diagrams/gold/actors-components-process.svg",
-            "caption": "Original class diagram showing how multiple components form one Actor.",
-            "kind": "concept",
-            "sourceTitle": ""
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/b6089ad5-c41f-4916-b269-c07e885d5c27/transform_details.png",
+            "caption": "Official UE5.8 component Transform fields in Details. Use these values to position child components deliberately.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/components-window-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -796,13 +780,7 @@ window.UE5_COURSE_DATA = {
           "check": "Selecting the placed Actor shows BP_PracticeBeacon in the Outliner.",
           "troubleshoot": [
             "If the instance looks old, compile again before placing or update the placed instance."
-          ],
-          "visual": {
-            "src": "assets/diagrams/gold/actors-components-example.svg",
-            "caption": "Worked example: one Actor built from several components.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          ]
         }
       ],
       "evidencePrompt": {
@@ -820,13 +798,6 @@ window.UE5_COURSE_DATA = {
         ]
       },
       "visuals": [
-        {
-          "type": "book",
-          "src": "assets/book/blueprint-editor.webp",
-          "caption": "Reference figure from the supplied book: Blueprint Editor layout.",
-          "authenticUI": true,
-          "versionNote": "Supplied book reference (UE5.0-era). Current Unreal may look slightly different."
-        },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/actors-components-process.svg",
@@ -945,7 +916,23 @@ window.UE5_COURSE_DATA = {
         "Drag BP_PracticeBeacon into the level and set Location X 0, Y 0, Z 100.",
         "Press Play. View the beacon from two different angles and confirm the mesh and light remain together as one reusable Actor."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "recipeVisuals": [
+        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/67a54191-1b18-4e82-abb2-4f8ff258ee55/add_new_component_list.png",
+          "caption": "Official UE5.8 Add Component menu. Use this menu to add the Static Mesh component requested in this step.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/components-window-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
     },
     {
       "id": "blueprint-classes",
@@ -1061,9 +1048,13 @@ window.UE5_COURSE_DATA = {
       ],
       "goodPractice": "Reusable object behaviour belongs with the reusable object.",
       "visual": {
-        "type": "book",
-        "src": "assets/book/blueprint-editor.webp",
-        "caption": "Reference figure from the supplied book: the Blueprint Class Editor and its main panels."
+        "type": "ue5-reference",
+        "src": "https://dev.epicgames.com/community/api/documentation/image/bd914bd2-52e6-4926-844b-ed56b093a736?height=335&resizing_type=fill&width=1920",
+        "caption": "Epic’s current Blueprint Class reference. A Blueprint Class defines a reusable type; instances placed in the world inherit that class behaviour.",
+        "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-class-assets-in-unreal-engine",
+        "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+        "authenticUI": true,
+        "versionNote": "Official Epic Games Unreal Engine 5.8 documentation."
       },
       "bookRef": "Chapter 1: Creating a Blueprint Class",
       "explanation": {
@@ -1157,13 +1148,7 @@ window.UE5_COURSE_DATA = {
           "do": "Create an Actor Blueprint called BP_ColourBlock and open it.",
           "why": "You need one reusable Class before you can prove how instances work.",
           "see": "The Blueprint Editor opens for BP_ColourBlock.",
-          "check": "The asset compiles with no errors.",
-          "visual": {
-            "src": "assets/diagrams/gold/blueprint-classes-process.svg",
-            "caption": "How one Blueprint Class produces many instances.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "The asset compiles with no errors."
         },
         {
           "title": "Add a Cube Static Mesh",
@@ -1174,13 +1159,7 @@ window.UE5_COURSE_DATA = {
           "check": "Compile succeeds and the cube is visible.",
           "troubleshoot": [
             "If the component exists but looks empty, assign a cube mesh in Details."
-          ],
-          "visual": {
-            "src": "assets/diagrams/gold/blueprint-classes-example.svg",
-            "caption": "One Class can be used repeatedly while remaining easy to edit.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          ]
         },
         {
           "title": "Place three instances in the level",
@@ -1195,13 +1174,7 @@ window.UE5_COURSE_DATA = {
           "check": "Deleting one instance does not delete the Blueprint asset or the other instances.",
           "troubleshoot": [
             "If dragging creates only one object, drag from the Content Drawer again instead of duplicating a selected component in the Blueprint."
-          ],
-          "visual": {
-            "src": "assets/diagrams/gold/blueprint-classes-process.svg",
-            "caption": "One Class, many instances.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          ]
         },
         {
           "title": "Change each instance transform",
@@ -1209,13 +1182,7 @@ window.UE5_COURSE_DATA = {
           "do": "Give each instance a different Location, Rotation or Scale.",
           "why": "Instances are independent world objects even when they share the same parent Class.",
           "see": "The three blocks look different in position or size.",
-          "check": "Changing one instance transform does not move the other two.",
-          "visual": {
-            "src": "assets/ue5/current/editor-main-window.webp",
-            "caption": "Placed instances are edited in the level through the Details panel.",
-            "kind": "current",
-            "sourceTitle": ""
-          }
+          "check": "Changing one instance transform does not move the other two."
         },
         {
           "title": "Edit the Class and watch all instances update",
@@ -1226,13 +1193,7 @@ window.UE5_COURSE_DATA = {
           "check": "At least one visible Class change appears on all three instances.",
           "troubleshoot": [
             "If only one object changes, you edited a placed instance rather than the Class asset."
-          ],
-          "visual": {
-            "src": "assets/book/blueprint-editor.webp",
-            "caption": "Editing the Blueprint asset affects all of its placed instances.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          ]
         },
         {
           "title": "Expose one instance-editable variable",
@@ -1245,10 +1206,11 @@ window.UE5_COURSE_DATA = {
             "If the variable does not appear on the placed Actor, compile after ticking Instance Editable."
           ],
           "visual": {
-            "src": "assets/book/variables-panel.webp",
-            "caption": "Expose variables deliberately so instances can vary in controlled ways.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/1a1c94bb-ee27-48da-a1fa-0e58d6e2aaaf/blueprint_details_variable_callout.png",
+            "caption": "Official UE5.8 variable Details. Instance Editable is the setting that exposes a class variable on each placed instance.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-variables-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         }
       ],
@@ -1267,13 +1229,6 @@ window.UE5_COURSE_DATA = {
         ]
       },
       "visuals": [
-        {
-          "type": "book",
-          "src": "assets/book/blueprint-editor.webp",
-          "caption": "Reference figure from the supplied book: the Blueprint Class Editor and its main panels.",
-          "authenticUI": true,
-          "versionNote": "Supplied book reference (UE5.0-era). Current Unreal may look slightly different."
-        },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/blueprint-classes-process.svg",
@@ -1368,7 +1323,23 @@ window.UE5_COURSE_DATA = {
         "Open BP_ColourBlock, add one Point Light component, set Intensity 1000, Compile.",
         "Return to the level and prove all three instances gained the light while their BlockLabel values stayed different."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "recipeVisuals": [
+        null,
+        null,
+        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/1a1c94bb-ee27-48da-a1fa-0e58d6e2aaaf/blueprint_details_variable_callout.png",
+          "caption": "Official UE5.8 variable Details. Instance Editable is the setting that exposes a class variable on each placed instance.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-variables-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        null,
+        null,
+        null,
+        null
+      ]
     },
     {
       "id": "events",
@@ -1582,13 +1553,7 @@ window.UE5_COURSE_DATA = {
           "do": "Create a new Actor Blueprint called BP_EventPractice and place one copy in the level.",
           "why": "A clean practice Blueprint makes event flow easier to observe.",
           "see": "BP_EventPractice exists both as an asset and as one placed Actor.",
-          "check": "The placed Actor appears in the Outliner.",
-          "visual": {
-            "src": "assets/book/event-graph.webp",
-            "caption": "The Event Graph is where Blueprint execution starts and flows.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "check": "The placed Actor appears in the Outliner."
         },
         {
           "title": "Add BeginPlay and one Print String",
@@ -1606,9 +1571,9 @@ window.UE5_COURSE_DATA = {
           ],
           "visual": {
             "src": "assets/ue5/current/events-execution-real.webp",
-            "caption": "Real Blueprint event chain beginning with Event BeginPlay.",
-            "kind": "current",
-            "sourceTitle": ""
+            "caption": "Current classroom Blueprint example showing an event driving Print String through the white execution wire.",
+            "sourceTitle": "Current classroom Unreal Engine capture (Aug 2026)",
+            "kind": "ue5"
           }
         },
         {
@@ -1620,9 +1585,9 @@ window.UE5_COURSE_DATA = {
           "check": "The messages appear in the same order as the wire path.",
           "visual": {
             "src": "assets/ue5/current/events-execution-closeup.webp",
-            "caption": "Execution wires show the exact order in which nodes run.",
-            "kind": "current",
-            "sourceTitle": ""
+            "caption": "Current classroom close-up of an execution chain. Follow the white wire in order before testing it.",
+            "sourceTitle": "Current classroom Unreal Engine capture (Aug 2026)",
+            "kind": "ue5"
           }
         },
         {
@@ -1631,13 +1596,7 @@ window.UE5_COURSE_DATA = {
           "do": "Say out loud or write down which message will appear first, second and third.",
           "why": "Prediction forces you to reason about execution instead of just watching it happen.",
           "see": "Your prediction matches the node order you built.",
-          "check": "After testing, compare the real output with your prediction.",
-          "visual": {
-            "src": "assets/ue5/current/events-execution-closeup.webp",
-            "caption": "Use the wire direction to predict execution order.",
-            "kind": "current",
-            "sourceTitle": ""
-          }
+          "check": "After testing, compare the real output with your prediction."
         },
         {
           "title": "Break one wire and test again",
@@ -1648,13 +1607,7 @@ window.UE5_COURSE_DATA = {
           "check": "Reconnecting the wire restores the missing message.",
           "troubleshoot": [
             "If all messages still appear, you disconnected a data pin rather than the white execution pin."
-          ],
-          "visual": {
-            "src": "assets/ue5/current/events-execution-closeup.webp",
-            "caption": "Downstream nodes stop when the execution wire is broken.",
-            "kind": "current",
-            "sourceTitle": ""
-          }
+          ]
         },
         {
           "title": "Add a second event and compare it",
@@ -1665,13 +1618,7 @@ window.UE5_COURSE_DATA = {
           "check": "You can explain exactly what causes each event to run.",
           "troubleshoot": [
             "If the overlap never fires, enlarge the collision box and move the player through it."
-          ],
-          "visual": {
-            "src": "assets/diagrams/gold/events-process.svg",
-            "caption": "Different events are separate entry points into Blueprint logic.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          ]
         }
       ],
       "evidencePrompt": {
@@ -1792,7 +1739,27 @@ window.UE5_COURSE_DATA = {
         "Add Box Collision with Extent 100,100,100. Add OnComponentBeginOverlap(Box) → Print String “Overlap fired”.",
         "Compile and Play. Walk into the box and prove BeginPlay fires once while Overlap fires when the player enters."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "recipeVisuals": [
+        null,
+        {
+          "src": "assets/ue5/current/events-execution-real.webp",
+          "caption": "Current classroom Blueprint example showing an Event driving Print String through the white execution wire.",
+          "sourceTitle": "Current classroom Unreal Engine capture (Aug 2026)",
+          "kind": "ue5"
+        },
+        {
+          "src": "assets/ue5/current/events-execution-closeup.webp",
+          "caption": "Current classroom close-up of an execution chain. Follow the white wire in order before testing it.",
+          "sourceTitle": "Current classroom Unreal Engine capture (Aug 2026)",
+          "kind": "ue5"
+        },
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
     },
     {
       "id": "variables",
@@ -1921,9 +1888,13 @@ window.UE5_COURSE_DATA = {
       ],
       "goodPractice": "Meaningful names and Tooltips make Blueprints usable by other people.",
       "visual": {
-        "type": "book",
-        "src": "assets/book/variables-panel.webp",
-        "caption": "Reference figure from the supplied book: variables in My Blueprint."
+        "type": "ue5-reference",
+        "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/d891edb3-17af-428d-b3ce-53ed05ffc12d/myblueprintpane.png",
+        "caption": "Variables listed in the real My Blueprint panel. This is where students create, name and organise gameplay state.",
+        "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-variables-in-unreal-engine",
+        "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+        "authenticUI": true,
+        "versionNote": "Official Epic Games Unreal Engine 5.8 documentation."
       },
       "bookRef": "Chapter 2: Storing values in variables",
       "explanation": {
@@ -2023,10 +1994,11 @@ window.UE5_COURSE_DATA = {
           "see": "Health appears in the Variables list as a Float.",
           "check": "In Class Defaults or variable Details, the default value shows 100.",
           "visual": {
-            "src": "assets/book/variables-panel.webp",
-            "caption": "Variables are created and configured from the My Blueprint panel.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/d891edb3-17af-428d-b3ce-53ed05ffc12d/myblueprintpane.png",
+            "caption": "Official UE5.8 My Blueprint panel. Create and name Health here, then set its type and default in Details.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-variables-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -2037,10 +2009,11 @@ window.UE5_COURSE_DATA = {
           "see": "IsActive appears with a tick-box style default.",
           "check": "You can explain what true and false would mean for this Blueprint.",
           "visual": {
-            "src": "assets/book/variables-panel.webp",
-            "caption": "Use the variable type dropdown to choose the right data type.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/d891edb3-17af-428d-b3ce-53ed05ffc12d/myblueprintpane.png",
+            "caption": "Official UE5.8 My Blueprint panel. Create IsActive as a separate variable rather than reusing Health.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-variables-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -2054,10 +2027,11 @@ window.UE5_COURSE_DATA = {
             "If Print String shows nothing useful, convert the Float to string automatically when you connect it."
           ],
           "visual": {
-            "src": "assets/diagrams/gold/variables-example.svg",
-            "caption": "Read a variable to inspect the current stored value.",
-            "kind": "concept",
-            "sourceTitle": ""
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/b434ff6d-758e-4d90-8948-858f44451ad4/getvariable.png",
+            "caption": "Official UE5.8 Get variable node. A Get reads the stored Health value without changing it.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-variables-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -2068,10 +2042,11 @@ window.UE5_COURSE_DATA = {
           "see": "The second print now shows the new value.",
           "check": "The first print and second print are different for the expected reason.",
           "visual": {
-            "src": "assets/diagrams/gold/variables-process.svg",
-            "caption": "Variables are read, changed and read again as logic runs.",
-            "kind": "concept",
-            "sourceTitle": ""
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/7aae90b4-6b4c-41a5-a6de-c04da58f511e/setvariable.png",
+            "caption": "Official UE5.8 Set variable node. A Set changes the stored value and participates in execution flow.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-variables-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -2085,10 +2060,11 @@ window.UE5_COURSE_DATA = {
             "If the variable does not appear, compile after enabling Instance Editable."
           ],
           "visual": {
-            "src": "assets/book/ui-variables.webp",
-            "caption": "Expose only the settings that other people actually need to adjust.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/1a1c94bb-ee27-48da-a1fa-0e58d6e2aaaf/blueprint_details_variable_callout.png",
+            "caption": "Official UE5.8 variable Details showing the editor-facing properties used for Instance Editable variables.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-variables-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -2099,10 +2075,11 @@ window.UE5_COURSE_DATA = {
           "see": "Hovering the variable shows helpful explanation text.",
           "check": "Another student could understand the setting without asking you.",
           "visual": {
-            "src": "assets/book/variables-panel.webp",
-            "caption": "Tooltips help exposed variables make sense to other users.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/1a1c94bb-ee27-48da-a1fa-0e58d6e2aaaf/blueprint_details_variable_callout.png",
+            "caption": "Official UE5.8 variable Details. Add the Tooltip in the variable properties rather than as a graph comment.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-variables-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         }
       ],
@@ -2121,13 +2098,6 @@ window.UE5_COURSE_DATA = {
         ]
       },
       "visuals": [
-        {
-          "type": "book",
-          "src": "assets/book/variables-panel.webp",
-          "caption": "Reference figure from the supplied book: variables in My Blueprint.",
-          "authenticUI": true,
-          "versionNote": "Supplied book reference (UE5.0-era). Current Unreal may look slightly different."
-        },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/variables-process.svg",
@@ -2245,7 +2215,47 @@ window.UE5_COURSE_DATA = {
         "Select Health → tick Instance Editable → set Tooltip to “Starting health for this actor instance” → Compile.",
         "Place two instances and give one Health 100 and the other 40. Prove the instance values can differ without duplicating the Blueprint."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "recipeVisuals": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/d891edb3-17af-428d-b3ce-53ed05ffc12d/myblueprintpane.png",
+          "caption": "Official UE5.8 My Blueprint panel. Create and name variables here.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-variables-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/d891edb3-17af-428d-b3ce-53ed05ffc12d/myblueprintpane.png",
+          "caption": "Official UE5.8 My Blueprint panel. Create IsActive as a separate Boolean variable.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-variables-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/b434ff6d-758e-4d90-8948-858f44451ad4/getvariable.png",
+          "caption": "Official UE5.8 Get variable node. A Get reads the stored value without changing it.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-variables-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/7aae90b4-6b4c-41a5-a6de-c04da58f511e/setvariable.png",
+          "caption": "Official UE5.8 Set variable node. A Set changes the stored value and participates in execution flow.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-variables-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/1a1c94bb-ee27-48da-a1fa-0e58d6e2aaaf/blueprint_details_variable_callout.png",
+          "caption": "Official UE5.8 variable Details showing Instance Editable and the editor-facing variable properties.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-variables-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        null
+      ]
     },
     {
       "id": "branches",
@@ -2492,13 +2502,7 @@ window.UE5_COURSE_DATA = {
           "do": "Create a Float called Health with a default value such as 100.",
           "why": "A Branch needs a condition, and health provides an easy one.",
           "see": "Health exists and can be read in the graph.",
-          "check": "You can drag Health into the graph as a Get node.",
-          "visual": {
-            "src": "assets/diagrams/branch-node-anatomy.svg",
-            "caption": "The Branch node asks one yes/no question.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "You can drag Health into the graph as a Get node."
         },
         {
           "title": "Compare the value against a threshold",
@@ -2509,9 +2513,9 @@ window.UE5_COURSE_DATA = {
           "check": "You can explain what true means and what false means.",
           "visual": {
             "src": "assets/ue5/current/branch-condition-closeup.webp",
-            "caption": "A comparison node creates the Boolean condition that feeds the Branch.",
-            "kind": "current",
-            "sourceTitle": ""
+            "caption": "Current classroom Blueprint close-up of a comparison producing the Boolean condition for a Branch.",
+            "sourceTitle": "Current classroom Unreal Engine capture (Aug 2026)",
+            "kind": "ue5"
           }
         },
         {
@@ -2522,10 +2526,11 @@ window.UE5_COURSE_DATA = {
           "see": "The Branch node now has a condition connected and true/false outputs available.",
           "check": "No compile errors appear for the Branch.",
           "visual": {
-            "src": "assets/ue5/current/branch-node-real.webp",
-            "caption": "The Branch has one Condition input and two possible execution outputs.",
-            "kind": "current",
-            "sourceTitle": ""
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/f71f4d3e-8707-4d18-b398-fca822b66bdd/branch_example.png",
+            "caption": "Official UE5.8 Branch example. The Boolean feeds Condition; only True or False continues.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/flow-control-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -2534,13 +2539,7 @@ window.UE5_COURSE_DATA = {
           "do": "Connect Print String nodes to both outputs, e.g. “Dead” for True and “Still alive” for False.",
           "why": "Printing both outcomes proves exactly which path ran.",
           "see": "Only one message appears each time you test.",
-          "check": "Changing Health switches which message appears.",
-          "visual": {
-            "src": "assets/diagrams/branch-flow.svg",
-            "caption": "True and False are two different outcomes from the same decision.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "Changing Health switches which message appears."
         },
         {
           "title": "Test both outcomes deliberately",
@@ -2551,13 +2550,7 @@ window.UE5_COURSE_DATA = {
           "check": "You can predict the result before testing.",
           "troubleshoot": [
             "If the wrong route fires, re-read the comparison node. Health <= 0 and Health > 0 mean opposite things."
-          ],
-          "visual": {
-            "src": "assets/diagrams/branch-locked-door-example.svg",
-            "caption": "Worked example: a Branch deciding whether a door should open.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          ]
         },
         {
           "title": "Replace vague logic with a named question",
@@ -2565,13 +2558,7 @@ window.UE5_COURSE_DATA = {
           "do": "Rename variables or add a comment so the question is clear, e.g. “HasKey?” or “IsHealthZero?”.",
           "why": "Readable conditions are much easier to debug than mystery comparisons.",
           "see": "A different student can explain the decision without you narrating it.",
-          "check": "Your condition reads like a question with a yes/no answer.",
-          "visual": {
-            "src": "assets/diagrams/branch-decision-demo.svg",
-            "caption": "Think of a Branch as a clearly named question.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "Your condition reads like a question with a yes/no answer."
         }
       ],
       "visuals": [
@@ -2692,7 +2679,28 @@ window.UE5_COURSE_DATA = {
         "Change Health to -10 and prove the True path still runs.",
         "Add a comment around the comparison + Branch: “Is Health zero or below?” so the graph reads like a question."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "recipeVisuals": [
+        null,
+        {
+          "src": "assets/ue5/current/branch-condition-closeup.webp",
+          "caption": "Current classroom Blueprint close-up of a comparison producing the Boolean condition for a Branch.",
+          "sourceTitle": "Current classroom Unreal Engine capture (Aug 2026)",
+          "kind": "ue5"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/f71f4d3e-8707-4d18-b398-fca822b66bdd/branch_example.png",
+          "caption": "Official UE5.8 Branch example. The Boolean feeds Condition; only True or False continues.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/flow-control-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
     },
     {
       "id": "functions",
@@ -2906,13 +2914,7 @@ window.UE5_COURSE_DATA = {
           "do": "Build a tiny piece of logic you could imagine using more than once, such as printing a status message and setting a variable.",
           "why": "You need some repetition before the value of a Function makes sense.",
           "see": "A short sequence of nodes exists in the graph.",
-          "check": "You can point at the nodes you would not want to copy and paste repeatedly.",
-          "visual": {
-            "src": "assets/book/function-example.webp",
-            "caption": "Functions wrap repeatable logic into one named reusable unit.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "check": "You can point at the nodes you would not want to copy and paste repeatedly."
         },
         {
           "title": "Create a Function",
@@ -2922,10 +2924,11 @@ window.UE5_COURSE_DATA = {
           "see": "The Function appears in the My Blueprint panel and opens in its own graph.",
           "check": "The Function name is specific about what it does.",
           "visual": {
-            "src": "assets/ue5/current/function-real.webp",
-            "caption": "A real Blueprint function with a separate graph and clear purpose.",
-            "kind": "current",
-            "sourceTitle": ""
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/cd54af36-d3ee-4cc5-8283-f3ddd2d79f65/name_function_blueprint.png",
+            "caption": "Official UE5.8 My Blueprint workflow for creating and naming a Function.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/functions-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -2940,9 +2943,9 @@ window.UE5_COURSE_DATA = {
           ],
           "visual": {
             "src": "assets/ue5/current/function-update-closeup.webp",
-            "caption": "Put the detail inside the Function so the main graph stays readable.",
-            "kind": "current",
-            "sourceTitle": ""
+            "caption": "Current classroom Function graph close-up showing logic moved into a reusable named function.",
+            "sourceTitle": "Current classroom Unreal Engine capture (Aug 2026)",
+            "kind": "ue5"
           }
         },
         {
@@ -2951,13 +2954,7 @@ window.UE5_COURSE_DATA = {
           "do": "Call the Function from Event BeginPlay or another simple event.",
           "why": "The main graph now shows intention rather than every low-level step.",
           "see": "One compact Function call node appears in the Event Graph.",
-          "check": "Running the graph still produces the same result as before.",
-          "visual": {
-            "src": "assets/diagrams/gold/functions-process.svg",
-            "caption": "The Event Graph calls the Function instead of storing all the detail inline.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "Running the graph still produces the same result as before."
         },
         {
           "title": "Add an input or output if needed",
@@ -2967,10 +2964,11 @@ window.UE5_COURSE_DATA = {
           "see": "The Function call node now has a parameter pin.",
           "check": "Changing the input changes the result in a predictable way.",
           "visual": {
-            "src": "assets/diagrams/gold/functions-example.svg",
-            "caption": "A good Function can take input and produce a useful result.",
-            "kind": "concept",
-            "sourceTitle": ""
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/285c04b9-ff68-41c8-b4b3-d38c7ff3aeb3/function_details.png",
+            "caption": "Official UE5.8 Function Details, where inputs and outputs are defined.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/functions-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -2979,13 +2977,7 @@ window.UE5_COURSE_DATA = {
           "do": "Ask whether the job is a named reusable action rather than a giant grab-bag of unrelated steps.",
           "why": "Functions should improve clarity, not just hide a mess inside another graph.",
           "see": "The Function name still matches the single responsibility of the logic.",
-          "check": "You can explain in one sentence what the Function is for.",
-          "visual": {
-            "src": "assets/book/function-example.webp",
-            "caption": "Keep Functions focused so they stay readable and reusable.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "check": "You can explain in one sentence what the Function is for."
         }
       ],
       "evidencePrompt": {
@@ -3140,7 +3132,29 @@ window.UE5_COURSE_DATA = {
         "Call TestSecondCall after the first ShowStatus call and prove both messages use the same function.",
         "Open ShowStatus and confirm it performs one clearly named job. Do not add unrelated gameplay logic to it."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "recipeVisuals": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/cd54af36-d3ee-4cc5-8283-f3ddd2d79f65/name_function_blueprint.png",
+          "caption": "Official UE5.8 My Blueprint workflow for creating and naming a Function.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/functions-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/285c04b9-ff68-41c8-b4b3-d38c7ff3aeb3/function_details.png",
+          "caption": "Official UE5.8 Function Details, where inputs and outputs are defined.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/functions-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
     },
     {
       "id": "framework",
@@ -3260,9 +3274,13 @@ window.UE5_COURSE_DATA = {
       ],
       "goodPractice": "Choose a class because its lifetime and responsibility fit the problem.",
       "visual": {
-        "type": "diagram",
-        "src": "assets/diagrams/communication.svg",
-        "caption": "Original classroom relationship diagram; use alongside the framework notes."
+        "type": "ue5-reference",
+        "src": "https://dev.epicgames.com/community/api/documentation/image/ddca6cd5-4c8a-4299-b615-7c55831f5cd3?height=335&resizing_type=fill&width=1920",
+        "caption": "Epic’s Game Mode / Game State reference. These classes are part of the Gameplay Framework, but they have different responsibilities and lifetimes.",
+        "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/game-mode-and-game-state-in-unreal-engine",
+        "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+        "authenticUI": true,
+        "versionNote": "Official Epic Games Unreal Engine 5.8 documentation."
       },
       "bookRef": "Chapter 3: OOP and the Gameplay Framework",
       "explanation": {
@@ -3356,13 +3374,7 @@ window.UE5_COURSE_DATA = {
           "do": "Locate the Character Blueprint and identify at least PlayerController, GameMode and GameInstance conceptually.",
           "why": "Framework lessons are about putting logic in the right class, not all logic in the Character.",
           "see": "You know which asset is the player Character and which classes control game rules.",
-          "check": "You can name one responsibility for Character, GameMode and GameInstance.",
-          "visual": {
-            "src": "assets/diagrams/gold/framework-example.svg",
-            "caption": "Different framework classes own different kinds of responsibility.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "You can name one responsibility for Character, GameMode and GameInstance."
         },
         {
           "title": "Add player-specific logic to the Character",
@@ -3370,13 +3382,7 @@ window.UE5_COURSE_DATA = {
           "do": "Create or locate a player-only variable such as Health or SprintSpeed in the Character Blueprint.",
           "why": "Player movement and moment-to-moment character state belongs on the Character.",
           "see": "The Character Blueprint clearly owns the player-specific variable.",
-          "check": "You can explain why this does not belong in GameMode.",
-          "visual": {
-            "src": "assets/diagrams/gold/framework-process.svg",
-            "caption": "Start by asking who owns the behaviour or state.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "You can explain why this does not belong in GameMode."
         },
         {
           "title": "Identify a whole-game rule for GameMode",
@@ -3386,10 +3392,11 @@ window.UE5_COURSE_DATA = {
           "see": "You can point to at least one setting or variable that belongs at game-rule level.",
           "check": "Your example affects the whole session rather than a single player.",
           "visual": {
-            "src": "assets/diagrams/gold/framework-process.svg",
-            "caption": "GameMode owns session rules rather than one actor’s local state.",
-            "kind": "concept",
-            "sourceTitle": ""
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/82de9ad7-aa25-4e39-9fef-164ab79afe03/world-settings-search.gif",
+            "caption": "Official UE5.8 World Settings. GameMode Override is one place a level chooses the GameMode that owns whole-game rules.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/world-settings-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -3398,13 +3405,7 @@ window.UE5_COURSE_DATA = {
           "do": "Name a value that should survive level loads, such as selected difficulty or total coins.",
           "why": "GameInstance persists while the game is running, even when levels change.",
           "see": "You can state one example of data that belongs in GameInstance.",
-          "check": "Your example genuinely needs to survive a map change.",
-          "visual": {
-            "src": "assets/diagrams/gold/framework-example.svg",
-            "caption": "Persistent state belongs higher up than the current level’s GameMode.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "Your example genuinely needs to survive a map change."
         },
         {
           "title": "Sort three example features by owner",
@@ -3417,13 +3418,7 @@ window.UE5_COURSE_DATA = {
           ],
           "why": "Ownership becomes clearer when you compare multiple examples side by side.",
           "see": "You have different examples mapped to different framework classes.",
-          "check": "You can justify each choice with one sentence.",
-          "visual": {
-            "src": "assets/diagrams/gold/framework-process.svg",
-            "caption": "Ask “who owns this?” before writing logic.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "You can justify each choice with one sentence."
         },
         {
           "title": "Apply the rule to your own project idea",
@@ -3431,13 +3426,7 @@ window.UE5_COURSE_DATA = {
           "do": "Pick one mechanic from your project and say where its logic should live before you build it.",
           "why": "The framework only matters if it changes how you structure real work.",
           "see": "You have a chosen class owner for your mechanic.",
-          "check": "Your choice would still make sense to another developer reading the project.",
-          "visual": {
-            "src": "assets/book/responsibility.webp",
-            "caption": "Responsibility is a design decision, not just a technical one.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "check": "Your choice would still make sense to another developer reading the project."
         }
       ],
       "evidencePrompt": {
@@ -3562,7 +3551,17 @@ window.UE5_COURSE_DATA = {
         "Pick one mechanic from your own project and write its owner before building it.",
         "If you cannot justify the owner in one sentence, do not add the logic yet."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "recipeVisuals": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
     },
     {
       "id": "references-casting",
@@ -3677,9 +3676,13 @@ window.UE5_COURSE_DATA = {
       ],
       "goodPractice": "Ask 'how did I get this reference?' before asking 'what should I Cast it to?'",
       "visual": {
-        "type": "book",
-        "src": "assets/book/casting-example.webp",
-        "caption": "Reference figure from the supplied book: Casting in Blueprints."
+        "type": "ue5-reference",
+        "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/fe5fe968-0fb7-4e45-83fc-b76afca4a15b/3_2.png",
+        "caption": "Adding a Cast node from an Actor reference. A cast does not magically find an object; it checks whether the reference you already have is the requested class.",
+        "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-communications-in-unreal-engine",
+        "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+        "authenticUI": true,
+        "versionNote": "Official Epic Games Unreal Engine 5.8 documentation."
       },
       "bookRef": "Chapter 4: Casting in Blueprints",
       "explanation": {
@@ -3773,13 +3776,7 @@ window.UE5_COURSE_DATA = {
           "do": "Create two Blueprints such as BP_Switch and BP_Lamp, then place one of each in the level.",
           "why": "A reference lesson needs at least two separate objects.",
           "see": "Both Actors appear in the Outliner.",
-          "check": "You can select each Actor independently.",
-          "visual": {
-            "src": "assets/book/casting-example.webp",
-            "caption": "References and casting start with real objects that need to talk to each other.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "check": "You can select each Actor independently."
         },
         {
           "title": "Make a reference variable of the other type",
@@ -3787,13 +3784,7 @@ window.UE5_COURSE_DATA = {
           "do": "Create a variable called TargetLamp with the type set to BP_Lamp Object Reference.",
           "why": "A reference variable is how one Blueprint remembers a specific other object.",
           "see": "The variable type includes BP_Lamp Object Reference.",
-          "check": "The graph can now Get TargetLamp.",
-          "visual": {
-            "src": "assets/diagrams/gold/references-casting-example.svg",
-            "caption": "One Blueprint holds a reference to another specific object.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "The graph can now Get TargetLamp."
         },
         {
           "title": "Assign the reference in the level",
@@ -3804,13 +3795,7 @@ window.UE5_COURSE_DATA = {
           "check": "The variable is no longer None on the placed switch.",
           "troubleshoot": [
             "If the dropdown is empty, make sure a BP_Lamp instance is placed in the level."
-          ],
-          "visual": {
-            "src": "assets/diagrams/gold/references-casting-process.svg",
-            "caption": "Set the reference on the placed Actor so it knows who to talk to.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          ]
         },
         {
           "title": "Use the reference to call something on the lamp",
@@ -3818,13 +3803,7 @@ window.UE5_COURSE_DATA = {
           "do": "From TargetLamp, call a simple action or set a property, for example toggle lamp visibility or print the lamp name.",
           "why": "The value of a reference is that it lets you act on the target object directly.",
           "see": "Interacting with the switch clearly affects the lamp.",
-          "check": "If TargetLamp is set to None, the action should fail or be protected by a validity check.",
-          "visual": {
-            "src": "assets/diagrams/gold/references-casting-process.svg",
-            "caption": "Once you have the reference, you can call functions or change values on that target.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "If TargetLamp is set to None, the action should fail or be protected by a validity check."
         },
         {
           "title": "Recognise when casting is needed",
@@ -3834,10 +3813,11 @@ window.UE5_COURSE_DATA = {
           "see": "You can explain that casting is for type-specific access, not for communication in every case.",
           "check": "You know that if you already have a BP_Lamp reference, extra casting is usually unnecessary.",
           "visual": {
-            "src": "assets/book/casting-example.webp",
-            "caption": "Cast only when you need to confirm a more specific type.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/fe5fe968-0fb7-4e45-83fc-b76afca4a15b/3_2.png",
+            "caption": "Official UE5.8 Cast node example. Casting checks the type of a reference you already have; it does not find the object for you.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-communications-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -3846,13 +3826,7 @@ window.UE5_COURSE_DATA = {
           "do": "Check whether the reference exists before trying to use it.",
           "why": "Many Blueprint errors are just “Accessed None” because a reference was never assigned.",
           "see": "Your graph handles the None case safely.",
-          "check": "You can deliberately clear the reference and explain what will happen.",
-          "visual": {
-            "src": "assets/diagrams/gold/references-casting-process.svg",
-            "caption": "Good reference handling includes checking validity.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "You can deliberately clear the reference and explain what will happen."
         }
       ],
       "evidencePrompt": {
@@ -3870,13 +3844,6 @@ window.UE5_COURSE_DATA = {
         ]
       },
       "visuals": [
-        {
-          "type": "book",
-          "src": "assets/book/casting-example.webp",
-          "caption": "Reference figure from the supplied book: Casting in Blueprints.",
-          "authenticUI": true,
-          "versionNote": "Supplied book reference (UE5.0-era). Current Unreal may look slightly different."
-        },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/references-casting-process.svg",
@@ -3968,7 +3935,23 @@ window.UE5_COURSE_DATA = {
         "Create a temporary Actor Object Reference variable and note that BP_Lamp-specific functions are unavailable until you Cast To BP_Lamp.",
         "Remove the temporary test. Keep the typed TargetLamp reference because it is clearer when you already know the object type."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "recipeVisuals": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/fe5fe968-0fb7-4e45-83fc-b76afca4a15b/3_2.png",
+          "caption": "Official UE5.8 Cast node example. Casting checks the type of a reference you already have; it does not find the object for you.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-communications-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        null
+      ]
     },
     {
       "id": "interfaces-dispatchers",
@@ -4084,9 +4067,13 @@ window.UE5_COURSE_DATA = {
       ],
       "goodPractice": "Communication should request behaviour; the receiving Blueprint should usually own how that behaviour is performed.",
       "visual": {
-        "type": "book",
-        "src": "assets/book/dispatcher-details.webp",
-        "caption": "Reference figure from the supplied book: Event Dispatcher setup/details."
+        "type": "ue5-reference",
+        "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/ca176849-4f39-4e50-bd83-e01672bddf2d/interfaceeditor.png",
+        "caption": "The Blueprint Interface editor. An Interface defines function signatures but does not contain the implementation itself.",
+        "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-interface-in-unreal-engine",
+        "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+        "authenticUI": true,
+        "versionNote": "Official Epic Games Unreal Engine 5.8 documentation."
       },
       "bookRef": "Chapter 4: Direct communication, Casting and Event Dispatchers",
       "explanation": {
@@ -4184,13 +4171,7 @@ window.UE5_COURSE_DATA = {
           "do": "State whether one Blueprint needs to send the same message to many types of object, or whether one object needs to announce that something happened.",
           "why": "That choice tells you whether Interface or Dispatcher is the better fit.",
           "see": "You can describe one Interface-style problem and one Dispatcher-style problem.",
-          "check": "Your examples are clearly different in communication direction.",
-          "visual": {
-            "src": "assets/diagrams/gold/interfaces-dispatchers-process.svg",
-            "caption": "Interfaces and Dispatchers solve different communication problems.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "Your examples are clearly different in communication direction."
         },
         {
           "title": "Create a simple Blueprint Interface",
@@ -4200,10 +4181,11 @@ window.UE5_COURSE_DATA = {
           "see": "BPI_Interact exists with one function signature.",
           "check": "The Interface function has no graph logic inside it, only the signature.",
           "visual": {
-            "src": "assets/diagrams/gold/interfaces-dispatchers-example.svg",
-            "caption": "An Interface defines a shared message, not a shared implementation.",
-            "kind": "concept",
-            "sourceTitle": ""
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/ca176849-4f39-4e50-bd83-e01672bddf2d/interfaceeditor.png",
+            "caption": "Official UE5.8 Blueprint Interface editor. Add the Interact function signature here.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-interface-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -4212,13 +4194,7 @@ window.UE5_COURSE_DATA = {
           "do": "Add BPI_Interact to a Blueprint such as a door or button, then implement the Interact event/function.",
           "why": "Implementation is where each object decides what it should do when it receives the same message.",
           "see": "The Blueprint now has the Interface entry and an Interact implementation.",
-          "check": "The event/function can contain object-specific response logic.",
-          "visual": {
-            "src": "assets/diagrams/gold/interfaces-dispatchers-process.svg",
-            "caption": "Different actors can respond differently to the same Interface message.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "The event/function can contain object-specific response logic."
         },
         {
           "title": "Create a Dispatcher on a broadcaster",
@@ -4226,13 +4202,7 @@ window.UE5_COURSE_DATA = {
           "do": "Create an Event Dispatcher such as OnActivated or OnDoorOpened.",
           "why": "Dispatchers let one Blueprint broadcast that something happened to any listeners.",
           "see": "The Event Dispatcher appears in the My Blueprint panel.",
-          "check": "You can call the Dispatcher from the graph.",
-          "visual": {
-            "src": "assets/book/dispatcher-details.webp",
-            "caption": "Event Dispatchers are created and configured from the My Blueprint panel.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "check": "You can call the Dispatcher from the graph."
         },
         {
           "title": "Bind a listener and test the broadcast",
@@ -4242,10 +4212,11 @@ window.UE5_COURSE_DATA = {
           "see": "Triggering the broadcaster causes the listener reaction.",
           "check": "Removing the bind stops the listener response.",
           "visual": {
-            "src": "assets/book/dispatcher-details.webp",
-            "caption": "Listeners react only when the Dispatcher is called and the binding exists.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/7ff64b05-8f8f-46d2-a574-a0646b951fff/event7.png",
+            "caption": "Official UE5.8 dispatcher binding example. The listener must bind / assign before it can react to the broadcast.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-communications-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -4254,13 +4225,7 @@ window.UE5_COURSE_DATA = {
           "do": "Decide whether your mechanic should use Interface, Dispatcher or a direct reference.",
           "why": "Good Blueprint architecture comes from choosing the simplest communication method that fits.",
           "see": "You have a justified choice for one real mechanic in your project.",
-          "check": "You can explain why the other two methods are less suitable in that case.",
-          "visual": {
-            "src": "assets/diagrams/gold/interfaces-dispatchers-process.svg",
-            "caption": "Choose communication tools deliberately, not by habit.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "You can explain why the other two methods are less suitable in that case."
         }
       ],
       "evidencePrompt": {
@@ -4278,13 +4243,6 @@ window.UE5_COURSE_DATA = {
         ]
       },
       "visuals": [
-        {
-          "type": "book",
-          "src": "assets/book/dispatcher-details.webp",
-          "caption": "Reference figure from the supplied book: Event Dispatcher setup/details.",
-          "authenticUI": true,
-          "versionNote": "Supplied book reference (UE5.0-era). Current Unreal may look slightly different."
-        },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/interfaces-dispatchers-process.svg",
@@ -4408,7 +4366,35 @@ window.UE5_COURSE_DATA = {
         "In BP_InterfaceButton add Event Dispatcher OnPressed. Call it immediately after the interaction message.",
         "Bind one listener only if you need a broadcast response. Keep the interface for direct capability and the dispatcher for one-to-many notification."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "recipeVisuals": [
+        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/ca176849-4f39-4e50-bd83-e01672bddf2d/interfaceeditor.png",
+          "caption": "Official UE5.8 Blueprint Interface editor. Add or rename the function signature here; implementation happens in the receiving Blueprint.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-interface-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        null,
+        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/7e12bfb2-7b3e-43bc-ad16-28b87c6b522d/interface6.png",
+          "caption": "Official UE5.8 Interface Message call. The receiver responds only if it implements the Interface.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-communications-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        null,
+        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/7ff64b05-8f8f-46d2-a574-a0646b951fff/event7.png",
+          "caption": "Official UE5.8 Event Dispatcher binding example. Bind a listener before expecting it to react to a broadcast.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-communications-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        }
+      ]
     },
     {
       "id": "collision",
@@ -4525,9 +4511,13 @@ window.UE5_COURSE_DATA = {
       ],
       "goodPractice": "Keep the trigger focused: detect the event, then tell the system that owns the consequence.",
       "visual": {
-        "type": "book",
-        "src": "assets/book/collision-responses.webp",
-        "caption": "Reference figure from the supplied book: Collision Responses table."
+        "type": "ue5-reference",
+        "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/1c7f22c6-c2ca-4d30-9a56-eefeb61f1219/col_setup.png",
+        "caption": "Epic’s collision setup example showing two objects with different Object Types. Collision behaviour comes from both objects’ responses.",
+        "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/collision-in-unreal-engine---overview",
+        "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+        "authenticUI": true,
+        "versionNote": "Official Epic Games Unreal Engine 5.8 documentation."
       },
       "bookRef": "Chapter 14 / collision response examples",
       "explanation": {
@@ -4621,13 +4611,7 @@ window.UE5_COURSE_DATA = {
           "do": "Add a collision component around the object you want to detect.",
           "why": "Collision components create the area that can overlap or block other Actors.",
           "see": "A wireframe collision shape appears in the Blueprint Viewport.",
-          "check": "The shape clearly covers the interaction area.",
-          "visual": {
-            "src": "assets/book/collision-responses.webp",
-            "caption": "Collision settings are configured on the collision component itself.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "check": "The shape clearly covers the interaction area."
         },
         {
           "title": "Choose sensible collision settings",
@@ -4637,10 +4621,11 @@ window.UE5_COURSE_DATA = {
           "see": "Generate Overlap Events is enabled if you need overlap behaviour.",
           "check": "You can explain whether you want overlap, block or ignore for the player.",
           "visual": {
-            "src": "assets/book/collision-responses.webp",
-            "caption": "Overlap and block behaviour are separate decisions.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/10c10808-3c0e-4637-bfee-e931a8b5e308/col_collidenoevent_sphere.png",
+            "caption": "Official UE5.8 collision response settings. Block, Overlap and Ignore determine how this object responds to other Object Types.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/collision-in-unreal-engine---overview",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -4649,13 +4634,7 @@ window.UE5_COURSE_DATA = {
           "do": "Add OnComponentBeginOverlap and connect it to Print String or a simple response.",
           "why": "The overlap event is the proof that the collision is detecting another object.",
           "see": "Running into the collision area triggers the event.",
-          "check": "The message fires when the player enters the area.",
-          "visual": {
-            "src": "assets/diagrams/gold/collision-process.svg",
-            "caption": "Overlap events start when another object enters the collision area.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "The message fires when the player enters the area."
         },
         {
           "title": "Filter what can trigger it",
@@ -4663,13 +4642,7 @@ window.UE5_COURSE_DATA = {
           "do": "Check the Other Actor or collision channel so not everything in the world triggers the response.",
           "why": "Reliable collision usually needs filtering, otherwise every object can cause false positives.",
           "see": "Only the intended Actor type causes the event to continue.",
-          "check": "A wrong object no longer triggers the main response.",
-          "visual": {
-            "src": "assets/diagrams/gold/collision-example.svg",
-            "caption": "Use conditions or object channels to keep collision purposeful.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "A wrong object no longer triggers the main response."
         },
         {
           "title": "Test the shape and size",
@@ -4677,13 +4650,7 @@ window.UE5_COURSE_DATA = {
           "do": "Adjust the collision size until it feels correct for the action.",
           "why": "Many collision bugs are simply badly sized trigger volumes.",
           "see": "The event fires where you expect, not metres too early or too late.",
-          "check": "Walking around the edges of the volume gives predictable results.",
-          "visual": {
-            "src": "assets/book/collision-responses.webp",
-            "caption": "Collision volumes need the right size as well as the right settings.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "check": "Walking around the edges of the volume gives predictable results."
         },
         {
           "title": "Separate detection from response",
@@ -4691,13 +4658,7 @@ window.UE5_COURSE_DATA = {
           "do": "Notice that the collision event only detects something; your Blueprint still decides what to do next.",
           "why": "This mindset helps you reuse collision for pickups, doors, checkpoints and hazards.",
           "see": "You can replace Print String with a clearer gameplay response.",
-          "check": "You can name another mechanic that starts from the same overlap pattern.",
-          "visual": {
-            "src": "assets/diagrams/gold/collision-process.svg",
-            "caption": "Collision detects; your game logic decides the response.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "You can name another mechanic that starts from the same overlap pattern."
         }
       ],
       "evidencePrompt": {
@@ -4715,13 +4676,6 @@ window.UE5_COURSE_DATA = {
         ]
       },
       "visuals": [
-        {
-          "type": "book",
-          "src": "assets/book/collision-responses.webp",
-          "caption": "Reference figure from the supplied book: Collision Responses table.",
-          "authenticUI": true,
-          "versionNote": "Supplied book reference (UE5.0-era). Current Unreal may look slightly different."
-        },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/collision-process.svg",
@@ -4831,7 +4785,23 @@ window.UE5_COURSE_DATA = {
         "Use Other Actor → Equal (Object) with Get Player Character if you want to prove only the player should trigger it.",
         "After the first successful test, change Box Extent to X 150, Y 75, Z 100 and test again. Confirm the larger trigger still fires once on entry."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "recipeVisuals": [
+        null,
+        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/10c10808-3c0e-4637-bfee-e931a8b5e308/col_collidenoevent_sphere.png",
+          "caption": "Official UE5.8 collision response settings showing Block, Overlap and Ignore.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/collision-in-unreal-engine---overview",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
     },
     {
       "id": "traces",
@@ -4948,9 +4918,13 @@ window.UE5_COURSE_DATA = {
       ],
       "goodPractice": "Do not build an interaction system on top of a trace you have not visually proved.",
       "visual": {
-        "type": "diagram",
-        "src": "assets/diagrams/trace.svg",
-        "caption": "Original classroom diagram: camera-based line trace and Hit Result."
+        "type": "ue5-reference",
+        "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/243f760d-f655-4247-8c43-a8b6ea39de69/guide-how-to-2b-2.png",
+        "caption": "Adding the real Line Trace By Channel node to a Blueprint graph.",
+        "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/using-a-single-line-trace-raycast-by-channel-in-unreal-engine",
+        "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+        "authenticUI": true,
+        "versionNote": "Official Epic Games Unreal Engine 5.8 documentation."
       },
       "bookRef": "Chapter 14: Introduction to traces and trace functions",
       "explanation": {
@@ -5048,13 +5022,7 @@ window.UE5_COURSE_DATA = {
           "do": "Decide where the trace begins, usually the player camera or the muzzle of a weapon.",
           "why": "A line trace needs a start and end position.",
           "see": "You can point to the component that will provide the start location.",
-          "check": "Your chosen start makes sense for the mechanic.",
-          "visual": {
-            "src": "assets/diagrams/trace.svg",
-            "caption": "A line trace travels from a start point to an end point.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "Your chosen start makes sense for the mechanic."
         },
         {
           "title": "Create the Line Trace by Channel node",
@@ -5064,10 +5032,11 @@ window.UE5_COURSE_DATA = {
           "see": "The trace node has Start, End and Hit Result outputs.",
           "check": "The Blueprint compiles with the node connected.",
           "visual": {
-            "src": "assets/diagrams/gold/traces-process.svg",
-            "caption": "A trace checks along a line and returns hit information.",
-            "kind": "concept",
-            "sourceTitle": ""
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/243f760d-f655-4247-8c43-a8b6ea39de69/guide-how-to-2b-2.png",
+            "caption": "Official UE5.8 Line Trace By Channel node being added to a Blueprint graph.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/using-a-single-line-trace-raycast-by-channel-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -5078,10 +5047,11 @@ window.UE5_COURSE_DATA = {
           "see": "Pressing Play draws the trace line in the world.",
           "check": "The line starts and ends where you expected.",
           "visual": {
-            "src": "assets/diagrams/gold/traces-example.svg",
-            "caption": "Debug drawing lets you see the trace path in the world.",
-            "kind": "concept",
-            "sourceTitle": ""
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/bd67ce85-1155-4bfd-9da7-6a7f4c9126d8/guide-how-to-2b-11.png",
+            "caption": "Official UE5.8 trace running with debug drawing visible in Play.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/using-a-single-line-trace-raycast-by-channel-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -5090,13 +5060,7 @@ window.UE5_COURSE_DATA = {
           "do": "Break the Hit Result and inspect the Hit Actor or Impact Point.",
           "why": "The hit result contains the useful information you need after the trace succeeds.",
           "see": "You now have access to the object hit by the trace.",
-          "check": "Printing the Hit Actor name shows what the player was aiming at.",
-          "visual": {
-            "src": "assets/diagrams/trace.svg",
-            "caption": "The hit result carries data about what the trace touched.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "Printing the Hit Actor name shows what the player was aiming at."
         },
         {
           "title": "Use the success Boolean",
@@ -5104,13 +5068,7 @@ window.UE5_COURSE_DATA = {
           "do": "Branch from the trace Return Value so you only continue when something was actually hit.",
           "why": "A trace does not always hit an object, so you must handle both cases.",
           "see": "The graph now has one path for hit and another for no hit.",
-          "check": "Looking into empty space no longer causes invalid hit logic.",
-          "visual": {
-            "src": "assets/diagrams/gold/traces-process.svg",
-            "caption": "Use the trace success output to avoid acting on empty hits.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "Looking into empty space no longer causes invalid hit logic."
         },
         {
           "title": "Apply the pattern to a real mechanic",
@@ -5118,13 +5076,7 @@ window.UE5_COURSE_DATA = {
           "do": "Replace Print String with the mechanic you wanted such as interact, shoot or inspect.",
           "why": "The trace pattern is reusable once you understand the underlying detection logic.",
           "see": "Your trace now powers a real gameplay action.",
-          "check": "You can explain start, end, hit and no-hit cases clearly.",
-          "visual": {
-            "src": "assets/diagrams/gold/traces-example.svg",
-            "caption": "The same trace idea can power many different mechanics.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "You can explain start, end, hit and no-hit cases clearly."
         }
       ],
       "evidencePrompt": {
@@ -5255,7 +5207,35 @@ window.UE5_COURSE_DATA = {
         "Branch from the Line Trace Return Value. Only use hit data from the True path.",
         "Play, aim at a visible Actor within 1500 cm and press E. Confirm the debug line reaches the target and the correct Actor name prints."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "recipeVisuals": [
+        null,
+        null,
+        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/f64e0a22-515e-41bb-af3a-c93361c5631f/guide-how-to-2b-6.png",
+          "caption": "Official UE5.8 trace End calculation from camera location, forward direction and distance.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/using-a-single-line-trace-raycast-by-channel-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/243f760d-f655-4247-8c43-a8b6ea39de69/guide-how-to-2b-2.png",
+          "caption": "Official UE5.8 Line Trace By Channel node. Check the trace channel and debug options on the node.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/using-a-single-line-trace-raycast-by-channel-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        null,
+        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/bd67ce85-1155-4bfd-9da7-6a7f4c9126d8/guide-how-to-2b-11.png",
+          "caption": "Official UE5.8 trace running in Play with debug drawing visible.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/using-a-single-line-trace-raycast-by-channel-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        }
+      ]
     },
     {
       "id": "timelines",
@@ -5372,9 +5352,13 @@ window.UE5_COURSE_DATA = {
       ],
       "goodPractice": "Expose design values so one Blueprint can serve many level-design situations.",
       "visual": {
-        "type": "diagram",
-        "src": "assets/diagrams/branch-flow.svg",
-        "caption": "Use the decision diagram alongside the Timeline task: decide first, animate second."
+        "type": "ue5-reference",
+        "src": "https://dev.epicgames.com/community/api/documentation/image/6e44536d-af86-4aae-a863-afec370143db?resizing_type=fit",
+        "caption": "The current Timeline Editor. A Timeline turns keyframed data over time into Blueprint output values and events.",
+        "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/editing-timelines-in-unreal-engine",
+        "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+        "authenticUI": true,
+        "versionNote": "Official Epic Games Unreal Engine 5.8 documentation."
       },
       "bookRef": "Chapter 6: Timelines / movement examples",
       "explanation": {
@@ -5472,13 +5456,7 @@ window.UE5_COURSE_DATA = {
           "do": "Make sure the Blueprint contains the mesh that should move, rotate or open.",
           "why": "A Timeline only animates values; you still need a target component that will use those values.",
           "see": "The Blueprint has a named mesh such as SM_Door.",
-          "check": "You can select the moving component clearly.",
-          "visual": {
-            "src": "assets/diagrams/gold/timelines-example.svg",
-            "caption": "A Timeline drives a smooth value change over time.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "You can select the moving component clearly."
         },
         {
           "title": "Add a Timeline node",
@@ -5488,10 +5466,11 @@ window.UE5_COURSE_DATA = {
           "see": "The Timeline editor opens with an empty track list.",
           "check": "The node appears in the Event Graph.",
           "visual": {
-            "src": "assets/diagrams/gold/timelines-process.svg",
-            "caption": "Timelines produce values that change smoothly over time.",
-            "kind": "concept",
-            "sourceTitle": ""
+            "src": "https://dev.epicgames.com/community/api/documentation/image/6e44536d-af86-4aae-a863-afec370143db?resizing_type=fit",
+            "caption": "Official UE5.8 Timeline Editor. Open TL_OpenDoor here before adding tracks and keys.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/editing-timelines-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -5502,10 +5481,11 @@ window.UE5_COURSE_DATA = {
           "see": "The track graph rises from 0 at time 0 to 1 at the end.",
           "check": "Scrubbing the Timeline shows the value changing smoothly.",
           "visual": {
-            "src": "assets/diagrams/gold/timelines-example.svg",
-            "caption": "A float track is often used to drive a Lerp.",
-            "kind": "current",
-            "sourceTitle": ""
+            "src": "https://dev.epicgames.com/community/api/documentation/image/02c05d7d-44db-4251-9485-16e852833735?resizing_type=fit",
+            "caption": "Official UE5.8 Float Track with keyframes. Use this editor to create the 0 → 1 alpha over time.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/editing-timelines-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -5516,10 +5496,11 @@ window.UE5_COURSE_DATA = {
           "see": "Playing the Timeline visibly opens the door or moves the platform.",
           "check": "The object moves smoothly instead of snapping instantly.",
           "visual": {
-            "src": "assets/diagrams/gold/timelines-process.svg",
-            "caption": "Use Timeline Update every frame to apply the current animated value.",
-            "kind": "concept",
-            "sourceTitle": ""
+            "src": "https://dev.epicgames.com/community/api/documentation/image/9a0884b6-e598-411d-a20e-1044d0d76bc3?resizing_type=fit",
+            "caption": "Official UE5.8 Timeline node outputs. The float track output is what drives the Lerp / transform update.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/editing-timelines-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -5528,13 +5509,7 @@ window.UE5_COURSE_DATA = {
           "do": "Use an event to call Play on the Timeline and optionally Reverse to close the door again.",
           "why": "Timelines need an event to tell them when to begin and whether to reverse.",
           "see": "Interacting once opens it; another event can close it again.",
-          "check": "Play, Reverse and finished behaviour are predictable.",
-          "visual": {
-            "src": "assets/diagrams/gold/timelines-process.svg",
-            "caption": "Timeline control pins decide when the animation runs.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "Play, Reverse and finished behaviour are predictable."
         },
         {
           "title": "Test for snapping and wrong pivot issues",
@@ -5542,13 +5517,7 @@ window.UE5_COURSE_DATA = {
           "do": "If the motion looks wrong, check the mesh pivot, whether you used world or relative transform, and the start/end values.",
           "why": "Most Timeline bugs are really transform or pivot problems.",
           "see": "The object now moves from the intended start point to the intended end point smoothly.",
-          "check": "You can reopen or reclose the object repeatedly without drift.",
-          "visual": {
-            "src": "assets/diagrams/gold/timelines-example.svg",
-            "caption": "Smooth motion depends on both a good Timeline and sensible transform values.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "You can reopen or reclose the object repeatedly without drift."
         }
       ],
       "evidencePrompt": {
@@ -5679,7 +5648,29 @@ window.UE5_COURSE_DATA = {
         "Compile and Play. The door should rotate smoothly from 0° to 90° in one second.",
         "If it orbits instead of hinges, stop changing Timeline values: the mesh pivot/component hierarchy is the problem."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "recipeVisuals": [
+        null,
+        {
+          "src": "https://dev.epicgames.com/community/api/documentation/image/6e44536d-af86-4aae-a863-afec370143db?resizing_type=fit",
+          "caption": "Official UE5.8 Timeline Editor. Open TL_OpenDoor here before adding tracks and keys.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/editing-timelines-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://dev.epicgames.com/community/api/documentation/image/02c05d7d-44db-4251-9485-16e852833735?resizing_type=fit",
+          "caption": "Official UE5.8 Float Track with keyframes. Use this editor to create the 0 → 1 alpha over time.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/editing-timelines-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
     },
     {
       "id": "ui",
@@ -5795,9 +5786,13 @@ window.UE5_COURSE_DATA = {
       ],
       "goodPractice": "UI should communicate game state clearly; the game systems should own that state.",
       "visual": {
-        "type": "book",
-        "src": "assets/book/ui-variables.webp",
-        "caption": "Reference figure from the supplied book: UI-related gameplay variables."
+        "type": "ue5-reference",
+        "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/bf146350-4103-4b5a-a33d-23b00ca8bc63/01-01_createwidgetblueprint.png",
+        "caption": "Creating a real Widget Blueprint from the Content Browser. UMG UI lives in Widget Blueprint assets.",
+        "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-ui-designer-quick-start-guide-in-unreal-engine",
+        "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+        "authenticUI": true,
+        "versionNote": "Official Epic Games Unreal Engine 5.8 documentation."
       },
       "bookRef": "Chapter 7: Creating Screen UI Elements",
       "explanation": {
@@ -5897,10 +5892,11 @@ window.UE5_COURSE_DATA = {
           "see": "The Widget Designer opens.",
           "check": "The widget asset exists in your project.",
           "visual": {
-            "src": "assets/diagrams/gold/ui-process.svg",
-            "caption": "UMG UI starts with a Widget Blueprint.",
-            "kind": "concept",
-            "sourceTitle": ""
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/bf146350-4103-4b5a-a33d-23b00ca8bc63/01-01_createwidgetblueprint.png",
+            "caption": "Official UE5.8 workflow for creating a Widget Blueprint. Create WBP_HUD as a Widget Blueprint asset.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-ui-designer-quick-start-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -5909,13 +5905,7 @@ window.UE5_COURSE_DATA = {
           "do": "Drag in simple elements such as a Text block or Progress Bar and arrange them on the canvas.",
           "why": "You need visible widgets before you can bind or update data.",
           "see": "The Designer shows your UI layout.",
-          "check": "The widget is readable at a sensible screen position.",
-          "visual": {
-            "src": "assets/book/ui-variables.webp",
-            "caption": "Widgets contain visual elements that can later display gameplay data.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "check": "The widget is readable at a sensible screen position."
         },
         {
           "title": "Create the widget at BeginPlay",
@@ -5925,10 +5915,11 @@ window.UE5_COURSE_DATA = {
           "see": "Pressing Play shows the HUD on screen.",
           "check": "The widget appears once and is not duplicated repeatedly.",
           "visual": {
-            "src": "assets/diagrams/gold/ui-process.svg",
-            "caption": "Create the Widget and add it to the Viewport at runtime.",
-            "kind": "concept",
-            "sourceTitle": ""
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/79856c5e-fe2e-4653-9092-081396b85652/01-18_beginplay.png",
+            "caption": "Official UE5.8 BeginPlay HUD flow showing widget creation and Add to Viewport.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-ui-designer-quick-start-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -5937,13 +5928,7 @@ window.UE5_COURSE_DATA = {
           "do": "Decide what the UI should display, such as Health, Score or an objective.",
           "why": "UI should show gameplay state, not own the gameplay state.",
           "see": "You can name the source variable and the UI element that should display it.",
-          "check": "You can explain why the Character owns Health while the Widget only shows it.",
-          "visual": {
-            "src": "assets/diagrams/gold/ui-example.svg",
-            "caption": "The UI displays state that lives elsewhere.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "You can explain why the Character owns Health while the Widget only shows it."
         },
         {
           "title": "Update the displayed value",
@@ -5951,13 +5936,7 @@ window.UE5_COURSE_DATA = {
           "do": "Set the Text or Progress Bar Percent using the relevant variable value.",
           "why": "The point of the widget is to reflect changing gameplay information clearly.",
           "see": "The UI value changes when the gameplay variable changes.",
-          "check": "Testing the mechanic causes the UI to update correctly.",
-          "visual": {
-            "src": "assets/diagrams/gold/ui-process.svg",
-            "caption": "Connect gameplay state to the visual widget element.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "Testing the mechanic causes the UI to update correctly."
         },
         {
           "title": "Check readability and purpose",
@@ -5965,13 +5944,7 @@ window.UE5_COURSE_DATA = {
           "do": "Ask whether the HUD is clear, readable and actually useful while playing.",
           "why": "Good UI communicates quickly and does not clutter the screen.",
           "see": "The displayed information is easy to notice and interpret.",
-          "check": "Another player can tell what the value means without explanation.",
-          "visual": {
-            "src": "assets/book/ui-variables.webp",
-            "caption": "UI should communicate state clearly rather than just exist.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "check": "Another player can tell what the value means without explanation."
         }
       ],
       "evidencePrompt": {
@@ -5989,13 +5962,6 @@ window.UE5_COURSE_DATA = {
         ]
       },
       "visuals": [
-        {
-          "type": "book",
-          "src": "assets/book/ui-variables.webp",
-          "caption": "Reference figure from the supplied book: UI-related gameplay variables.",
-          "authenticUI": true,
-          "versionNote": "Supplied book reference (UE5.0-era). Current Unreal may look slightly different."
-        },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/ui-process.svg",
@@ -6124,7 +6090,29 @@ window.UE5_COURSE_DATA = {
         "BeginPlay → Create Widget WBP_HUD → promote Return Value to HUDRef → Add to Viewport → call SetHealthDisplay(100,100).",
         "Play. The widget must appear once and the bar must be full. Test 50,100 and prove the bar becomes half full."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "recipeVisuals": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/bf146350-4103-4b5a-a33d-23b00ca8bc63/01-01_createwidgetblueprint.png",
+          "caption": "Official UE5.8 workflow for creating a Widget Blueprint asset.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-ui-designer-quick-start-guide-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/79856c5e-fe2e-4653-9092-081396b85652/01-18_beginplay.png",
+          "caption": "Official UE5.8 BeginPlay HUD flow showing Create Widget and Add to Viewport.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-ui-designer-quick-start-guide-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        null
+      ]
     },
     {
       "id": "savegame",
@@ -6336,13 +6324,7 @@ window.UE5_COURSE_DATA = {
           "do": "Create a SaveGame Blueprint such as BP_PlayerSave.",
           "why": "SaveGame objects exist specifically to hold data you want to write to disk.",
           "see": "BP_PlayerSave appears as a SaveGame class asset.",
-          "check": "The asset opens with variable support.",
-          "visual": {
-            "src": "assets/diagrams/gold/savegame-process.svg",
-            "caption": "SaveGame stores the data you want to persist between play sessions.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "The asset opens with variable support."
         },
         {
           "title": "Add only the data you need to save",
@@ -6350,13 +6332,7 @@ window.UE5_COURSE_DATA = {
           "do": "Create variables such as SavedCheckpointName or SavedScore.",
           "why": "Good saves are deliberate. Save the meaningful state, not random temporary values.",
           "see": "The SaveGame asset contains a small, intentional set of variables.",
-          "check": "You can explain what each saved value is for.",
-          "visual": {
-            "src": "assets/diagrams/gold/savegame-example.svg",
-            "caption": "A save file should store deliberate gameplay state.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "You can explain what each saved value is for."
         },
         {
           "title": "Create a SaveGame object at runtime",
@@ -6364,13 +6340,7 @@ window.UE5_COURSE_DATA = {
           "do": "Create a Save Game Object of class BP_PlayerSave and set its variables before saving.",
           "why": "At runtime you create an actual save object instance, fill it, then write it.",
           "see": "The graph contains Create Save Game Object and Set variable nodes.",
-          "check": "The object reference is of your BP_PlayerSave type.",
-          "visual": {
-            "src": "assets/diagrams/gold/savegame-process.svg",
-            "caption": "Create the SaveGame object, set values, then write it to a slot.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "The object reference is of your BP_PlayerSave type."
         },
         {
           "title": "Save to a named slot",
@@ -6378,13 +6348,7 @@ window.UE5_COURSE_DATA = {
           "do": "Use Save Game to Slot with a slot name such as PlayerSlot and user index 0.",
           "why": "Slots identify which saved file Unreal should write or read.",
           "see": "The save node returns success when the write works.",
-          "check": "You know the exact slot name you used.",
-          "visual": {
-            "src": "assets/diagrams/gold/savegame-process.svg",
-            "caption": "Save Game to Slot writes the object into a named slot.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "You know the exact slot name you used."
         },
         {
           "title": "Load the slot and cast back to your SaveGame class",
@@ -6392,13 +6356,7 @@ window.UE5_COURSE_DATA = {
           "do": "Load the saved slot on BeginPlay or when continuing the game, then cast the loaded object to BP_PlayerSave.",
           "why": "Loading returns a generic SaveGame object until you cast it to your specific class.",
           "see": "The cast succeeds and you can read your saved variables.",
-          "check": "The loaded values match what you saved previously.",
-          "visual": {
-            "src": "assets/book/casting-example.webp",
-            "caption": "Loaded SaveGame objects often need casting back to your specific class.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "check": "The loaded values match what you saved previously."
         },
         {
           "title": "Apply the loaded values back into gameplay",
@@ -6406,13 +6364,7 @@ window.UE5_COURSE_DATA = {
           "do": "Use the loaded data to restore the player or world state, such as moving to a checkpoint or restoring the score.",
           "why": "A saved file is only useful once its values are applied back into the game.",
           "see": "Restarting and loading reproduces the saved state.",
-          "check": "You can quit, relaunch and still recover the expected values.",
-          "visual": {
-            "src": "assets/diagrams/gold/savegame-example.svg",
-            "caption": "Loading is only complete once the gameplay state is restored.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "You can quit, relaunch and still recover the expected values."
         }
       ],
       "evidencePrompt": {
@@ -6521,7 +6473,17 @@ window.UE5_COURSE_DATA = {
         "Cast the loaded object to BP_PlayerSave and Print SavedScore as a first proof.",
         "Save a non-zero test score such as 250, restart Play and prove the loaded value is still 250."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "recipeVisuals": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
     },
     {
       "id": "data",
@@ -6758,13 +6720,7 @@ window.UE5_COURSE_DATA = {
           "do": "Create a Struct such as ST_ItemData with fields you genuinely need, e.g. Name, Description and Value.",
           "why": "A Struct groups related pieces of data into one clean row shape.",
           "see": "The Struct asset shows several named fields of sensible types.",
-          "check": "You can explain what one row of this data would represent.",
-          "visual": {
-            "src": "assets/book/containers.webp",
-            "caption": "Structs help group related data together cleanly.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "check": "You can explain what one row of this data would represent."
         },
         {
           "title": "Create a Data Table from that Struct",
@@ -6774,10 +6730,11 @@ window.UE5_COURSE_DATA = {
           "see": "The new Data Table opens with columns matching the Struct fields.",
           "check": "The Data Table header names match the Struct variables.",
           "visual": {
-            "src": "assets/ue5/current/datatable-real.webp",
-            "caption": "A real UE5 Data Table showing structured rows.",
-            "kind": "current",
-            "sourceTitle": ""
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/8197a9d4-1212-445f-aedb-19379fb043d9/datarowtype.png",
+            "caption": "Official UE5.8 Data Table Row Type selection. Choose the Struct that defines each row.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/data-driven-gameplay-elements-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -6789,9 +6746,9 @@ window.UE5_COURSE_DATA = {
           "check": "Each row name is readable and unique.",
           "visual": {
             "src": "assets/ue5/current/datatable-rows-closeup.webp",
-            "caption": "Populate the table with readable, intentional row names and values.",
-            "kind": "current",
-            "sourceTitle": ""
+            "caption": "Current classroom Data Table showing named rows and their values. Add a few deliberately different test rows.",
+            "sourceTitle": "Current classroom Unreal Engine capture (Aug 2026)",
+            "kind": "ue5"
           }
         },
         {
@@ -6800,13 +6757,7 @@ window.UE5_COURSE_DATA = {
           "do": "Use Get Data Table Row and feed in the Data Table plus a known row name.",
           "why": "Blueprint logic can now fetch content from the table instead of hard-coding it.",
           "see": "The output pin contains the Struct data for that row.",
-          "check": "Printing one field proves the correct row was found.",
-          "visual": {
-            "src": "assets/diagrams/gold/data-process.svg",
-            "caption": "Blueprint reads a row from the table and then uses its fields.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "Printing one field proves the correct row was found."
         },
         {
           "title": "Break the Struct and use the fields",
@@ -6814,13 +6765,7 @@ window.UE5_COURSE_DATA = {
           "do": "Break the Struct so you can use individual fields such as Name or Damage.",
           "why": "The row returns one grouped data bundle that you can separate into useful values.",
           "see": "You can access each field from the row output.",
-          "check": "Changing the table value changes the behaviour or printed output without rewriting the graph.",
-          "visual": {
-            "src": "assets/diagrams/gold/data-example.svg",
-            "caption": "Break the returned Struct to use individual fields.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "Changing the table value changes the behaviour or printed output without rewriting the graph."
         },
         {
           "title": "Notice what moved out of the graph",
@@ -6828,13 +6773,7 @@ window.UE5_COURSE_DATA = {
           "do": "Identify which values no longer need to be typed into the Blueprint itself.",
           "why": "The real win is removing hard-coded content from gameplay logic.",
           "see": "The graph is smaller and the content is centralised in the table.",
-          "check": "Another designer could change the values by editing the table instead of your nodes.",
-          "visual": {
-            "src": "assets/book/containers.webp",
-            "caption": "Data-driven design reduces hard-coded values inside logic graphs.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "check": "Another designer could change the values by editing the table instead of your nodes."
         }
       ],
       "evidencePrompt": {
@@ -6964,7 +6903,28 @@ window.UE5_COURSE_DATA = {
         "Break ST_ItemData from Out Row → Print DisplayName and Damage.",
         "Play and prove changing the TrainingSword Damage in the Data Table changes the value read by the Blueprint without editing the graph."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "recipeVisuals": [
+        null,
+        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/8197a9d4-1212-445f-aedb-19379fb043d9/datarowtype.png",
+          "caption": "Official UE5.8 Data Table Row Type selection. Choose the Struct that defines each row.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/data-driven-gameplay-elements-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "assets/ue5/current/datatable-rows-closeup.webp",
+          "caption": "Current classroom Data Table showing named rows and field values.",
+          "sourceTitle": "Current classroom Unreal Engine capture (Aug 2026)",
+          "kind": "ue5"
+        },
+        null,
+        null,
+        null,
+        null
+      ]
     },
     {
       "id": "ai",
@@ -7079,7 +7039,15 @@ window.UE5_COURSE_DATA = {
         "Behaviour Trees organise decisions; individual tasks should stay focused."
       ],
       "goodPractice": "Model what the AI knows and what decision it should make next.",
-      "visual": null,
+      "visual": {
+        "type": "ue5-reference",
+        "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/69bc24a6-f990-4cfe-b45a-f1d1d899ea8f/basic-navmesh-visualize-a.png",
+        "caption": "Official UE5.8 example: press P to visualise the generated NavMesh. Green shows where AI navigation is available.",
+        "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/basic-navigation-in-unreal-engine",
+        "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+        "authenticUI": true,
+        "versionNote": "Official Epic Games Unreal Engine 5.8 documentation."
+      },
       "bookRef": "Chapters 9–10: AI navigation, Blackboard and Behaviour Trees",
       "explanation": {
         "what": "Unreal AI is usually built from several cooperating systems. NavMesh describes where an AI can travel, an AI Controller controls the Pawn, Blackboard stores useful AI state, and a Behaviour Tree organises decisions and tasks.",
@@ -7181,10 +7149,11 @@ window.UE5_COURSE_DATA = {
             "If you see no green area, make the volume larger and press P again."
           ],
           "visual": {
-            "src": "assets/diagrams/gold/ai-process.svg",
-            "caption": "AI movement depends on navigation being generated first.",
-            "kind": "concept",
-            "sourceTitle": ""
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/e1ad172b-0e6c-431d-ac24-642f9d7f1577/basic-drag-navmesh-bounds.png",
+            "caption": "Official UE5.8 example: drag a Nav Mesh Bounds Volume into the level and scale it over the walkable area.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/basic-navigation-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -7193,13 +7162,7 @@ window.UE5_COURSE_DATA = {
           "do": "Use a simple AI Character or enemy Blueprint that can move.",
           "why": "The AI needs a pawn or character to control.",
           "see": "The AI Character is placeable in the level.",
-          "check": "One enemy instance exists in the level.",
-          "visual": {
-            "src": "assets/diagrams/gold/ai-example.svg",
-            "caption": "A basic AI setup starts with a controllable enemy Character.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "One enemy instance exists in the level."
         },
         {
           "title": "Create patrol target points",
@@ -7207,13 +7170,7 @@ window.UE5_COURSE_DATA = {
           "do": "Place two or more Target Points in the level and name them clearly.",
           "why": "Patrol behaviour needs known destinations.",
           "see": "The Target Points are visible in the Outliner.",
-          "check": "Each point has a distinct name and sensible location.",
-          "visual": {
-            "src": "assets/diagrams/gold/ai-example.svg",
-            "caption": "Patrol points give the AI clear destinations.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "Each point has a distinct name and sensible location."
         },
         {
           "title": "Give the AI a simple move instruction",
@@ -7226,10 +7183,11 @@ window.UE5_COURSE_DATA = {
             "If it stands still, re-check the NavMesh coverage and that the destination is on navigable ground."
           ],
           "visual": {
-            "src": "assets/diagrams/gold/ai-process.svg",
-            "caption": "AI picks a destination and moves there using the NavMesh.",
-            "kind": "concept",
-            "sourceTitle": ""
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/fccc3f17-4a64-4262-989e-dddb80d139e2/basic-npc-ai-moveto.png",
+            "caption": "Official UE5.8 Blueprint example using AI Move To to send an AI-controlled Pawn toward a destination.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/basic-navigation-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -7240,10 +7198,11 @@ window.UE5_COURSE_DATA = {
           "see": "One variable or Blackboard key holds the current destination.",
           "check": "You can print or inspect the current target while testing.",
           "visual": {
-            "src": "assets/diagrams/gold/ai-process.svg",
-            "caption": "AI needs a stored target or Blackboard key to drive decisions.",
-            "kind": "concept",
-            "sourceTitle": ""
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/2816f24c-2b8d-45f2-be92-e9ca9b7b4993/behavior-tree-overview-anatomy-blackboard.png",
+            "caption": "Official UE5.8 Blackboard assigned to a Behavior Tree. Blackboard Keys store facts such as the current target.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/behavior-tree-in-unreal-engine---overview",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -7252,13 +7211,7 @@ window.UE5_COURSE_DATA = {
           "do": "Observe whether the AI reaches points, waits if intended, then chooses the next point.",
           "why": "AI work should be tested behaviour by behaviour rather than “it sort of seems okay”.",
           "see": "The patrol looks deliberate rather than random or broken.",
-          "check": "You can explain what the AI is currently trying to do at any point in the test.",
-          "visual": {
-            "src": "assets/diagrams/gold/ai-example.svg",
-            "caption": "A patrol becomes readable when you can explain the current state.",
-            "kind": "current",
-            "sourceTitle": ""
-          }
+          "check": "You can explain what the AI is currently trying to do at any point in the test."
         }
       ],
       "evidencePrompt": {
@@ -7349,6 +7302,33 @@ window.UE5_COURSE_DATA = {
       ],
       "docVisuals": [
         {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/69bc24a6-f990-4cfe-b45a-f1d1d899ea8f/basic-navmesh-visualize-a.png",
+          "caption": "Official UE5.8 example: press P to visualise the generated NavMesh. Green shows where AI navigation is available.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/basic-navigation-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic",
+          "type": "epic-doc",
+          "slot": "intro"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/e1ad172b-0e6c-431d-ac24-642f9d7f1577/basic-drag-navmesh-bounds.png",
+          "caption": "Official UE5.8 example: drag a Nav Mesh Bounds Volume into the level and scale it over the walkable area.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/basic-navigation-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic",
+          "type": "epic-doc",
+          "slot": "practice"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/fccc3f17-4a64-4262-989e-dddb80d139e2/basic-npc-ai-moveto.png",
+          "caption": "Official UE5.8 Blueprint example using AI Move To to send an AI-controlled Pawn toward a destination.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/basic-navigation-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic",
+          "type": "epic-doc",
+          "slot": "practice"
+        },
+        {
           "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/2816f24c-2b8d-45f2-be92-e9ca9b7b4993/behavior-tree-overview-anatomy-blackboard.png",
           "caption": "A Blackboard assigned to a Behavior Tree. Blackboard Keys hold the facts the AI uses to make decisions.",
           "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/behavior-tree-in-unreal-engine---overview",
@@ -7389,7 +7369,35 @@ window.UE5_COURSE_DATA = {
         "After success, wait 2.0 seconds, switch the target to Patrol_B and run AI Move To again.",
         "Only after the two-point prototype works should you move the same target logic into Blackboard/Behaviour Tree."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "recipeVisuals": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/69bc24a6-f990-4cfe-b45a-f1d1d899ea8f/basic-navmesh-visualize-a.png",
+          "caption": "Official UE5.8 example: press P to visualise the generated NavMesh. Green shows where AI navigation is available.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/basic-navigation-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        null,
+        null,
+        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/fccc3f17-4a64-4262-989e-dddb80d139e2/basic-npc-ai-moveto.png",
+          "caption": "Official UE5.8 Blueprint example using AI Move To to send an AI-controlled Pawn toward a destination.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/basic-navigation-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        null,
+        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/2816f24c-2b8d-45f2-be92-e9ca9b7b4993/behavior-tree-overview-anatomy-blackboard.png",
+          "caption": "Official UE5.8 Blackboard assigned to a Behavior Tree. Blackboard Keys store the facts the tree uses for decisions.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/behavior-tree-in-unreal-engine---overview",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        }
+      ]
     },
     {
       "id": "animation",
@@ -7505,9 +7513,13 @@ window.UE5_COURSE_DATA = {
       ],
       "goodPractice": "Animation logic is easier to maintain when data gathering and pose generation have clear roles.",
       "visual": {
-        "type": "book",
-        "src": "assets/book/animation-blueprint.webp",
-        "caption": "Reference figure from the supplied book: creating an Animation Blueprint."
+        "type": "ue5-reference",
+        "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/6368083b-2787-4801-bf9f-2a60bc1e6952/create1.png",
+        "caption": "Creating an Animation Blueprint and choosing its Skeleton. Animation Blueprints are specialised Blueprints for controlling skeletal animation.",
+        "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/animation-blueprints-in-unreal-engine",
+        "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+        "authenticUI": true,
+        "versionNote": "Official Epic Games Unreal Engine 5.8 documentation."
       },
       "bookRef": "Chapter 17: Animation Blueprints",
       "explanation": {
@@ -7607,10 +7619,11 @@ window.UE5_COURSE_DATA = {
           "see": "The Animation Blueprint opens with Event Graph and Anim Graph tabs.",
           "check": "The correct skeletal mesh is associated with the AnimBP.",
           "visual": {
-            "src": "assets/book/animation-blueprint.webp",
-            "caption": "Animation Blueprints control how animation states are selected and blended.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/6368083b-2787-4801-bf9f-2a60bc1e6952/create1.png",
+            "caption": "Official UE5.8 Animation Blueprint creation workflow, including choosing the Skeleton.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/animation-blueprints-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -7619,13 +7632,7 @@ window.UE5_COURSE_DATA = {
           "do": "Locate Event Blueprint Update Animation and use it to read movement data from the owning pawn.",
           "why": "The AnimBP needs updated gameplay values such as speed or whether the character is in the air.",
           "see": "The graph contains logic that gets the owning pawn or character.",
-          "check": "A Speed or similar variable updates while the game runs.",
-          "visual": {
-            "src": "assets/diagrams/gold/animation-process.svg",
-            "caption": "Animation Blueprints read movement state each frame and store it in variables.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "A Speed or similar variable updates while the game runs."
         },
         {
           "title": "Create or inspect the key animation variables",
@@ -7633,13 +7640,7 @@ window.UE5_COURSE_DATA = {
           "do": "Use variables such as Speed and IsInAir, setting them from the movement component or character.",
           "why": "State machines need readable variables to decide which animation should play.",
           "see": "The variables change when the character moves or jumps.",
-          "check": "Printing or debugging confirms the variables update correctly.",
-          "visual": {
-            "src": "assets/diagrams/gold/animation-example.svg",
-            "caption": "Common animation variables include speed and airborne state.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "Printing or debugging confirms the variables update correctly."
         },
         {
           "title": "Use a State Machine in the Anim Graph",
@@ -7649,10 +7650,11 @@ window.UE5_COURSE_DATA = {
           "see": "Different states and transitions are visible in the graph.",
           "check": "You can explain what condition causes at least one transition.",
           "visual": {
-            "src": "assets/book/animation-blueprint.webp",
-            "caption": "Animation state machines organise how movement animations switch.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/ddbd59bf-8e71-405b-8b5d-a7bbc3284178/create1.png",
+            "caption": "Official UE5.8 State Machine creation inside an Animation Blueprint Anim Graph.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/state-machines-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -7663,10 +7665,11 @@ window.UE5_COURSE_DATA = {
           "see": "The state changes at the expected moments in Play mode.",
           "check": "Standing still returns the character to Idle.",
           "visual": {
-            "src": "assets/diagrams/gold/animation-process.svg",
-            "caption": "Transition rules use the variables gathered in the Event Graph.",
-            "kind": "concept",
-            "sourceTitle": ""
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/85ec3324-7fcd-4767-8d6a-e075928e5301/state2.png",
+            "caption": "Official UE5.8 connected animation states. Transition Rules decide when the character can move between states.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/state-machines-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -7675,13 +7678,7 @@ window.UE5_COURSE_DATA = {
           "do": "Walk, stop and jump while watching the character animation closely.",
           "why": "Animation systems only feel correct when the movement state and animation state match.",
           "see": "Movement and animation respond together smoothly.",
-          "check": "You can describe one thing that still feels wrong and one thing that already works well.",
-          "visual": {
-            "src": "assets/diagrams/gold/animation-example.svg",
-            "caption": "Test animation by making the character move through the full state cycle.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "You can describe one thing that still feels wrong and one thing that already works well."
         }
       ],
       "evidencePrompt": {
@@ -7699,13 +7696,6 @@ window.UE5_COURSE_DATA = {
         ]
       },
       "visuals": [
-        {
-          "type": "book",
-          "src": "assets/book/animation-blueprint.webp",
-          "caption": "Reference figure from the supplied book: creating an Animation Blueprint.",
-          "authenticUI": true,
-          "versionNote": "Supplied book reference (UE5.0-era). Current Unreal may look slightly different."
-        },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/animation-process.svg",
@@ -7831,7 +7821,29 @@ window.UE5_COURSE_DATA = {
         "Set transition to the jump/fall state when IsInAir is True, and return when IsInAir is False.",
         "Play: stand still, walk/run, jump, land. Watch the animation change with the same variables you can inspect in the Anim Blueprint debugger."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "recipeVisuals": [
+        null,
+        null,
+        null,
+        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/ddbd59bf-8e71-405b-8b5d-a7bbc3284178/create1.png",
+          "caption": "Official UE5.8 State Machine creation inside an Animation Blueprint Anim Graph.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/state-machines-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/85ec3324-7fcd-4767-8d6a-e075928e5301/state2.png",
+          "caption": "Official UE5.8 connected animation states. Transition Rules decide when the character can move between states.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/state-machines-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        null
+      ]
     },
     {
       "id": "practice",
@@ -7946,11 +7958,6 @@ window.UE5_COURSE_DATA = {
         "Level Blueprint is useful but should not become the entire game."
       ],
       "goodPractice": "A Blueprint should be as independent as practical and responsible for its own internal state.",
-      "visual": {
-        "type": "book",
-        "src": "assets/book/responsibility.webp",
-        "caption": "Reference figure from the supplied book: an example of moving player-death responsibility into the player Blueprint."
-      },
       "bookRef": "Chapter 15: Blueprint responsibilities",
       "explanation": {
         "what": "Blueprint responsibility is about deciding which object owns a piece of state and which object should control the behaviour that changes it. A Blueprint should generally be responsible for its own internal state instead of unrelated Actors directly manipulating its internals.",
@@ -8047,13 +8054,7 @@ window.UE5_COURSE_DATA = {
           "do": "Write one short sentence describing what the Blueprint should do.",
           "why": "Responsibility starts by naming the job clearly.",
           "see": "You have a one-sentence brief such as “This Blueprint opens the door when it is unlocked.”",
-          "check": "The sentence describes one main job rather than five unrelated tasks.",
-          "visual": {
-            "src": "assets/book/responsibility.webp",
-            "caption": "A Blueprint should have a clear responsibility, not every responsibility.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "check": "The sentence describes one main job rather than five unrelated tasks."
         },
         {
           "title": "Ask who should own it",
@@ -8061,13 +8062,7 @@ window.UE5_COURSE_DATA = {
           "do": "Decide which Blueprint or framework class is the proper owner of that behaviour.",
           "why": "Many messy Blueprints start because logic is placed in the first graph that happened to be open.",
           "see": "You have chosen an owner and can explain why.",
-          "check": "Your choice matches the class’s role in the game.",
-          "visual": {
-            "src": "assets/diagrams/gold/practice-process.svg",
-            "caption": "Professional Blueprint practice begins with clear ownership.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "Your choice matches the class’s role in the game."
         },
         {
           "title": "Name things for humans, not just yourself today",
@@ -8075,13 +8070,7 @@ window.UE5_COURSE_DATA = {
           "do": "Use specific names that explain purpose, such as CurrentHealth instead of Var1.",
           "why": "Readable naming is one of the fastest wins in any student project.",
           "see": "Your graph reads more like instructions and less like random jargon.",
-          "check": "Another student can tell what the variable or function is for.",
-          "visual": {
-            "src": "assets/diagrams/gold/practice-example.svg",
-            "caption": "Readable names make graphs easier to debug and extend.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "Another student can tell what the variable or function is for."
         },
         {
           "title": "Separate quick test code from final behaviour",
@@ -8089,13 +8078,7 @@ window.UE5_COURSE_DATA = {
           "do": "Use temporary debug output while building, but recognise which parts are only for testing.",
           "why": "Professional practice includes proving a system works without leaving the graph full of junk.",
           "see": "You can tell which nodes are temporary checks and which are final logic.",
-          "check": "Removing the test nodes would not break the real mechanic.",
-          "visual": {
-            "src": "assets/book/responsibility.webp",
-            "caption": "Testing is good; leaving chaos behind is not.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "check": "Removing the test nodes would not break the real mechanic."
         },
         {
           "title": "Reduce unnecessary duplication",
@@ -8103,13 +8086,7 @@ window.UE5_COURSE_DATA = {
           "do": "Spot at least one repeated pattern that could become a Function, Macro or reused Blueprint.",
           "why": "Good practice is not just neatness — it is reducing maintenance cost.",
           "see": "You have identified at least one piece of duplication.",
-          "check": "You can explain how you would refactor it later if time allowed.",
-          "visual": {
-            "src": "assets/diagrams/gold/practice-process.svg",
-            "caption": "Professional practice means thinking about maintainability early.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "You can explain how you would refactor it later if time allowed."
         },
         {
           "title": "Leave the graph easier for the next person",
@@ -8117,13 +8094,7 @@ window.UE5_COURSE_DATA = {
           "do": "Add a short comment, tidy alignment and remove anything misleading.",
           "why": "Readable projects are kinder to your future self and your team.",
           "see": "The graph looks deliberate and understandable.",
-          "check": "If you reopened it next week, you would still know what it does.",
-          "visual": {
-            "src": "assets/diagrams/gold/practice-example.svg",
-            "caption": "Good practice leaves a graph easier to understand than you found it.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "If you reopened it next week, you would still know what it does."
         }
       ],
       "evidencePrompt": {
@@ -8141,13 +8112,6 @@ window.UE5_COURSE_DATA = {
         ]
       },
       "visuals": [
-        {
-          "type": "book",
-          "src": "assets/book/responsibility.webp",
-          "caption": "Reference figure from the supplied book: an example of moving player-death responsibility into the player Blueprint.",
-          "authenticUI": true,
-          "versionNote": "Supplied book reference (UE5.0-era). Current Unreal may look slightly different."
-        },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/practice-process.svg",
@@ -8230,7 +8194,17 @@ window.UE5_COURSE_DATA = {
         "Add one short comment above the main logic block explaining its responsibility.",
         "Play-test once more. The graph must be easier to read without changing the mechanic."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "recipeVisuals": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
     },
     {
       "id": "complexity",
@@ -8346,11 +8320,6 @@ window.UE5_COURSE_DATA = {
         "Meaningful names are documentation."
       ],
       "goodPractice": "A giant Event Graph is not a badge of honour. Make intent visible and low-level detail accessible when needed.",
-      "visual": {
-        "type": "book",
-        "src": "assets/book/responsibility.webp",
-        "caption": "Book reference for the best-practice section; the lesson also applies the book's abstraction/readability guidance."
-      },
       "bookRef": "Chapter 15: Managing Blueprint complexities",
       "explanation": {
         "what": "Blueprint complexity is managed by making intent visible and low-level detail easier to navigate. Functions, Macros, collapsed graphs, comments, good variable names, Categories and Tooltips all help, but they should be used deliberately rather than simply hiding nodes.",
@@ -8447,13 +8416,7 @@ window.UE5_COURSE_DATA = {
           "do": "Identify common warning signs such as long crossing wires, duplicated logic, magic numbers and vague names.",
           "why": "You cannot improve complexity until you recognise it.",
           "see": "You can point to at least two readability problems in the graph.",
-          "check": "Your identified problems are specific, not just “it looks messy”.",
-          "visual": {
-            "src": "assets/diagrams/gold/complexity-example.svg",
-            "caption": "Spaghetti is often visible before it becomes a bug.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "Your identified problems are specific, not just “it looks messy”."
         },
         {
           "title": "Choose one small refactor target",
@@ -8461,13 +8424,7 @@ window.UE5_COURSE_DATA = {
           "do": "Select one repeated or messy area instead of trying to “clean everything” at once.",
           "why": "Safe refactoring is usually done in small steps.",
           "see": "You have one clearly chosen target section.",
-          "check": "You can describe what the refactor should improve.",
-          "visual": {
-            "src": "assets/diagrams/gold/complexity-process.svg",
-            "caption": "Refactor in focused chunks rather than random sweeping changes.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "You can describe what the refactor should improve."
         },
         {
           "title": "Extract repeated logic",
@@ -8475,13 +8432,7 @@ window.UE5_COURSE_DATA = {
           "do": "Move repeated logic into one reusable unit and call it from the original places.",
           "why": "One source of truth is easier to test and maintain than repeated copies.",
           "see": "The main graph becomes shorter and the duplicated chain disappears.",
-          "check": "Changing the extracted logic now updates every caller.",
-          "visual": {
-            "src": "assets/diagrams/gold/complexity-process.svg",
-            "caption": "Extraction is one of the fastest ways to reduce graph complexity.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "Changing the extracted logic now updates every caller."
         },
         {
           "title": "Replace magic numbers with named variables",
@@ -8489,13 +8440,7 @@ window.UE5_COURSE_DATA = {
           "do": "Turn important repeated values such as 600, 1200 or 3.5 into clearly named variables.",
           "why": "Named variables explain meaning and make balancing easier.",
           "see": "The graph contains fewer unexplained raw values.",
-          "check": "Another student can tell what the number means from the variable name.",
-          "visual": {
-            "src": "assets/diagrams/gold/complexity-example.svg",
-            "caption": "Named values are easier to read than unexplained raw numbers.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "Another student can tell what the number means from the variable name."
         },
         {
           "title": "Use comments and spacing to reveal structure",
@@ -8503,13 +8448,7 @@ window.UE5_COURSE_DATA = {
           "do": "Align nodes, separate logical sections and add a brief comment where a block would otherwise be unclear.",
           "why": "Layout communicates structure before anybody reads a single pin.",
           "see": "The graph is easier to scan left to right.",
-          "check": "The major stages of the logic are visible from the layout alone.",
-          "visual": {
-            "src": "assets/diagrams/gold/complexity-example.svg",
-            "caption": "Clean layout helps the reader see the structure of the logic.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "The major stages of the logic are visible from the layout alone."
         },
         {
           "title": "Retest after every refactor",
@@ -8517,13 +8456,7 @@ window.UE5_COURSE_DATA = {
           "do": "Play the game and prove the behaviour still works exactly as before unless you intentionally changed it.",
           "why": "A refactor that breaks the mechanic is not an improvement.",
           "see": "The cleaned graph behaves the same or better than the messy version.",
-          "check": "You can name one readability win and one functionality test you used.",
-          "visual": {
-            "src": "assets/diagrams/gold/complexity-process.svg",
-            "caption": "Refactor → test → refactor again is safer than one huge rewrite.",
-            "kind": "concept",
-            "sourceTitle": ""
-          }
+          "check": "You can name one readability win and one functionality test you used."
         }
       ],
       "evidencePrompt": {
@@ -8541,13 +8474,6 @@ window.UE5_COURSE_DATA = {
         ]
       },
       "visuals": [
-        {
-          "type": "book",
-          "src": "assets/book/responsibility.webp",
-          "caption": "Book reference for the best-practice section; the lesson also applies the book's abstraction/readability guidance.",
-          "authenticUI": true,
-          "versionNote": "Supplied book reference (UE5.0-era). Current Unreal may look slightly different."
-        },
         {
           "type": "diagram",
           "src": "assets/diagrams/gold/complexity-process.svg",
@@ -8637,7 +8563,17 @@ window.UE5_COURSE_DATA = {
         "Compile and Play immediately. Prove behaviour is unchanged.",
         "Only after the Play test passes, choose exactly one more logic block and repeat the same refactor cycle."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "recipeVisuals": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
     }
   ],
   "glossary": [

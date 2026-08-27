@@ -1,5 +1,12 @@
 # Changelog
 
+## v3.32.2 — Class Detail Workspace — 27 Aug 2026
+- Added **Open class →** to every active class in the Teacher Dashboard.
+- Added a class-specific teacher route with roster, per-student progress and exact completed-content lists.
+- Added class-wide progress rows for Building Blocks, Core Lessons, Quick Tutorials, 3D Modelling, Sculpt and Chapter Builds.
+- Kept the existing class-management, evidence and co-teaching systems unchanged.
+- No database migration.
+
 ## v3.32.1 — Unreal Path Audit & Link Accuracy Pass — 27 Aug 2026
 - Replaced fuzzy tutorial-to-Building-Block guessing with explicit mappings for all 47 Programming Quick Tutorials.
 - Expanded Building Blocks from 39 to 47 while keeping only 13 Core concepts.
