@@ -774,3 +774,12 @@ button:disabled{opacity:.48;cursor:not-allowed;transform:none!important}
 .staff-role-pill{display:inline-flex!important;align-items:center!important;width:max-content;margin-top:5px;padding:4px 7px;border-radius:999px;border:1px solid rgba(98,224,255,.34);background:rgba(69,194,230,.09);color:#a8efff!important;font-size:8px!important;font-weight:950;letter-spacing:.08em;text-transform:uppercase}
 .staff-role-pill.compact{display:inline-flex!important;margin:0 0 0 5px!important;padding:2px 5px;vertical-align:middle;font-size:7px!important}
 .comment-head strong .staff-role-pill,.news-comment b .staff-role-pill{font-weight:950}
+
+/* v3.32.6 — lightweight completion celebration */
+.completion-confetti{position:fixed;left:50%;top:34%;width:0;height:0;z-index:10050;pointer-events:none}
+.confetti-bit{--x:0px;--y:140px;--r:360deg;--d:0ms;--s:8px;position:absolute;left:0;top:0;width:var(--s);height:calc(var(--s)*1.55);border-radius:2px;opacity:0;transform:translate(-50%,-50%);animation:completion-pop 950ms cubic-bezier(.12,.68,.2,1) var(--d) forwards}
+.confetti-bit:nth-child(3n){border-radius:50%;height:var(--s)}
+.confetti-bit:nth-child(4n){clip-path:polygon(50% 0,100% 100%,0 100%)}
+.confetti-bit.c0{background:#57d7ff}.confetti-bit.c1{background:#9b7cff}.confetti-bit.c2{background:#68e39a}.confetti-bit.c3{background:#ffd166}.confetti-bit.c4{background:#ff6fae}
+@keyframes completion-pop{0%{opacity:0;transform:translate(-50%,-50%) scale(.35) rotate(0)}10%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(1) rotate(var(--r))}}
+@media (prefers-reduced-motion:reduce){.completion-confetti{display:none}}

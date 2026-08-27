@@ -329,6 +329,31 @@ function toast(msg,kind=''){
   toast.timer=setTimeout(()=>{t.classList.remove('show','badge-toast')},kind==='badge'?3600:2200);
 }
 
+
+function completionConfetti(){
+  if(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)return;
+  const burst=document.createElement('div');
+  burst.className='completion-confetti';
+  burst.setAttribute('aria-hidden','true');
+  const colours=5,count=30;
+  for(let i=0;i<count;i++){
+    const bit=document.createElement('i'),angle=(Math.PI*2*i/count)+(Math.random()-.5)*.24,distance=90+Math.random()*180;
+    bit.className=`confetti-bit c${i%colours}`;
+    bit.style.setProperty('--x',`${Math.cos(angle)*distance}px`);
+    bit.style.setProperty('--y',`${Math.sin(angle)*distance+70+Math.random()*80}px`);
+    bit.style.setProperty('--r',`${Math.round((Math.random()-.5)*900)}deg`);
+    bit.style.setProperty('--d',`${Math.round(Math.random()*90)}ms`);
+    bit.style.setProperty('--s',`${6+Math.round(Math.random()*7)}px`);
+    burst.appendChild(bit);
+  }
+  document.body.appendChild(burst);
+  window.setTimeout(()=>burst.remove(),1150);
+}
+function finishInlineUpdate(becameComplete=false){
+  if(becameComplete)completionConfetti();
+  route({preserveScroll:true});
+}
+
 function updateChrome(){
   const i=level(),teacherRole=isTeacher();
   $('#sideLevel').textContent=teacherRole?'LEVEL MAX':`LEVEL ${i.n}`;
@@ -2038,7 +2063,9 @@ async function loadComments(id){
   }).join('');
 }
 
-function route(){
+function route(options={}){
+  const preserveScroll=options===true||options?.preserveScroll===true;
+  const previousScroll=window.scrollY;
   const parts=(location.hash||'#/').replace(/^#\//,'').split('/').filter(Boolean),app=$('#app');
   $$('.nav a').forEach(a=>a.classList.remove('active'));
   if(!parts.length){app.innerHTML=dashboard();activate('home')}
@@ -2075,7 +2102,8 @@ function route(){
   bindPageInputs();
   updateChrome();
   refreshNotificationCount();
-  window.scrollTo(0,0);
+  if(preserveScroll)requestAnimationFrame(()=>window.scrollTo({top:previousScroll,left:0,behavior:'auto'}));
+  else window.scrollTo(0,0);
   app.focus({preventScroll:true});
   $('#sidebar').classList.remove('open');
 
@@ -2155,55 +2183,55 @@ async function setLessonComplete(id){
   if(was)toast('Marked incomplete.');
   else if(unlocked)toast('Chapter complete — 🎮 Chapter Build unlocked!','badge');
   else badgeUnlockAfter(before,`Lesson complete! +${l.xp} XP`);
-  route();
+  finishInlineUpdate(!was);
 }
 async function setBlockComplete(id){
   const b=buildingBlock(id);if(!b)return;const was=blockDone(id);
   state.blockCompleted=was?(state.blockCompleted||[]).filter(x=>x!==id):[...new Set([...(state.blockCompleted||[]),id])];saveState();
   if(BACKEND.user){try{await BACKEND.setLessonComplete(`block:${id}`,!was)}catch(e){toast('Saved locally; cloud sync failed.')}}
-  toast(was?'Building Block marked not learned.':'Building Block learned • +25 XP');route();
+  toast(was?'Building Block marked not learned.':'Building Block learned • +25 XP');finishInlineUpdate(!was);
 }
 async function setTutorialComplete(id){
   const t=tutorial(id);if(!t)return;const was=tutorialDone(id),before=localUnlockedBadgeIds();
   state.tutorialCompleted=was?state.tutorialCompleted.filter(x=>x!==id):[...new Set([...state.tutorialCompleted,id])];saveState();
   if(BACKEND.user){try{await BACKEND.setLessonComplete(`tutorial:${id}`,!was)}catch(e){toast('Saved locally; cloud sync failed.')}}
-  if(was)toast('Tutorial marked not complete.');else badgeUnlockAfter(before,'Tutorial complete ✓');route();
+  if(was)toast('Tutorial marked not complete.');else badgeUnlockAfter(before,'Tutorial complete ✓');finishInlineUpdate(!was);
 }
 async function setChapterBuildComplete(pathId){
   const b=chapterBuild(pathId),was=chapterBuildDone(pathId),before=localUnlockedBadgeIds();if(!b||(!pathComplete(pathId)&&!was)){toast('Finish the learning path first.');return}
   state.chapterBuildCompleted=was?state.chapterBuildCompleted.filter(x=>x!==pathId):[...new Set([...state.chapterBuildCompleted,pathId])];saveState();
   if(BACKEND.user){try{await BACKEND.setLessonComplete(`chapter:${pathId}`,!was)}catch(e){toast('Saved locally; cloud sync failed.')}}
-  if(was)toast('Chapter Build marked incomplete.');else badgeUnlockAfter(before,`Chapter Build complete! +${b.xp} XP`);route();
+  if(was)toast('Chapter Build marked incomplete.');else badgeUnlockAfter(before,`Chapter Build complete! +${b.xp} XP`);finishInlineUpdate(!was);
 }
 async function setDesignBuildComplete(id){
   const m=designModule(id);if(!m)return;const was=designBuildDone(id);
   state.designBuildCompleted=was?state.designBuildCompleted.filter(x=>x!==id):[...new Set([...state.designBuildCompleted,id])];saveState();
   if(BACKEND.user){try{await BACKEND.setLessonComplete(`designbuild:${id}`,!was)}catch(e){toast('Saved locally; cloud sync failed.')}}
-  toast(was?'Studio Build marked incomplete.':'Studio Build complete • +300 XP');route();
+  toast(was?'Studio Build marked incomplete.':'Studio Build complete • +300 XP');finishInlineUpdate(!was);
 }
 async function setModelLessonComplete(id){
   const l=modelLesson(id);if(!l)return;const was=modelLessonDone(id),before=localUnlockedBadgeIds();
   state.modelLessonCompleted=was?(state.modelLessonCompleted||[]).filter(x=>x!==id):[...new Set([...(state.modelLessonCompleted||[]),id])];saveState();
   if(BACKEND.user){try{await BACKEND.setLessonComplete(`model:${id}`,!was)}catch(e){toast('Saved locally; cloud sync failed.')}}
-  if(was)toast('Modelling lesson marked incomplete.');else badgeUnlockAfter(before,'⬡ Modelling lesson complete • +100 XP');route();
+  if(was)toast('Modelling lesson marked incomplete.');else badgeUnlockAfter(before,'⬡ Modelling lesson complete • +100 XP');finishInlineUpdate(!was);
 }
 async function setModelBuildComplete(id){
   const b=modelBuild(id);if(!b)return;const was=modelBuildDone(id),before=localUnlockedBadgeIds();
   state.modelBuildCompleted=was?(state.modelBuildCompleted||[]).filter(x=>x!==id):[...new Set([...(state.modelBuildCompleted||[]),id])];saveState();
   if(BACKEND.user){try{await BACKEND.setLessonComplete(`modelbuild:${id}`,!was)}catch(e){toast('Saved locally; cloud sync failed.')}}
-  if(was)toast('Build X marked incomplete.');else badgeUnlockAfter(before,'◆ Build X complete • +250 XP');route();
+  if(was)toast('Build X marked incomplete.');else badgeUnlockAfter(before,'◆ Build X complete • +250 XP');finishInlineUpdate(!was);
 }
 async function setModelFixComplete(id){
   const f=modelFix(id);if(!f)return;const was=modelFixDone(id),before=localUnlockedBadgeIds();
   state.modelFixCompleted=was?(state.modelFixCompleted||[]).filter(x=>x!==id):[...new Set([...(state.modelFixCompleted||[]),id])];saveState();
   if(BACKEND.user){try{await BACKEND.setLessonComplete(`modelfix:${id}`,!was)}catch(e){toast('Saved locally; cloud sync failed.')}}
-  if(was)toast('Repair clinic marked incomplete.');else badgeUnlockAfter(before,'⚕ Repair clinic complete • +75 XP');route();
+  if(was)toast('Repair clinic marked incomplete.');else badgeUnlockAfter(before,'⚕ Repair clinic complete • +75 XP');finishInlineUpdate(!was);
 }
 async function setSculptComplete(id){
   const p=sculptPractice(id);if(!p)return;const was=sculptDone(id),before=localUnlockedBadgeIds();
   state.sculptCompleted=was?(state.sculptCompleted||[]).filter(x=>x!==id):[...new Set([...(state.sculptCompleted||[]),id])];saveState();
   if(BACKEND.user){try{await BACKEND.setLessonComplete(`sculpt:${id}`,!was)}catch(e){toast('Saved locally; cloud sync failed.')}}
-  if(was)toast('Sculpt exercise marked incomplete.');else badgeUnlockAfter(before,`🗿 Sculpt exercise complete • +${p.xp} XP`);route();
+  if(was)toast('Sculpt exercise marked incomplete.');else badgeUnlockAfter(before,`🗿 Sculpt exercise complete • +${p.xp} XP`);finishInlineUpdate(!was);
 }
 
 async function setMechanicStatus(id,status){
@@ -2214,7 +2242,7 @@ async function setMechanicStatus(id,status){
     try{await BACKEND.setProjectMechanic(id,status,old.notes||'')}catch(e){toast('Saved locally; cloud sync failed.')}
   }
   toast(status==='complete'?'Game mechanic complete ✓':status==='building'?'Marked as building.':'Reset to not started.');
-  route();
+  finishInlineUpdate(status==='complete'&&old.status!=='complete');
 }
 async function saveProjectProfile(){
   projectState.project_title=$('#projectTitle')?.value.trim()||'Signal Lost';
@@ -2577,9 +2605,9 @@ document.addEventListener('click',async e=>{
   else if(a==='regenerate-project-code'){if(confirm('Generate a new group code? The old code will stop working.')){try{await BACKEND.regenerateProjectCode(b.dataset.project);await renderProjectDetail(b.dataset.project);toast('New project code generated.')}catch(err){toast(err.message)}}}
   else if(a==='remove-project-member'){if(confirm('Remove this student from the project? Their existing authored log entries stay in the project record.')){try{await BACKEND.removeProjectMember(b.dataset.project,b.dataset.user);await renderProjectDetail(b.dataset.project);toast('Team member removed.')}catch(err){toast(err.message)}}}
   else if(a==='leave-project'){if(confirm('Leave this group project? Your existing authored development-log entries stay attributed to you.')){try{await BACKEND.removeProjectMember(b.dataset.project,b.dataset.user);location.hash='#/projects';toast('You left the project.')}catch(err){toast(err.message)}}}
-  else if(a==='milestone-toggle'){try{await BACKEND.setProjectMilestoneStatus(b.dataset.milestone,b.dataset.status);await renderProjectDetail(b.dataset.project)}catch(err){toast(err.message)}}
+  else if(a==='milestone-toggle'){try{const completed=b.dataset.status==='complete';await BACKEND.setProjectMilestoneStatus(b.dataset.milestone,b.dataset.status);await renderProjectDetail(b.dataset.project);if(completed)completionConfetti()}catch(err){toast(err.message)}}
   else if(a==='delete-milestone'){if(confirm('Delete this milestone? Development-log entries will remain.')){try{await BACKEND.deleteProjectMilestone(b.dataset.milestone);await renderProjectDetail(b.dataset.project)}catch(err){toast(err.message)}}}
-  else if(a==='complete-project'){if(confirm('Mark this project complete?\n\nThe project becomes read-only until you reopen it.')){try{await BACKEND.setProjectStatus(b.dataset.project,'complete');await renderProjectDetail(b.dataset.project);toast('Project marked complete.')}catch(err){toast(err.message)}}}
+  else if(a==='complete-project'){if(confirm('Mark this project complete?\n\nThe project becomes read-only until you reopen it.')){try{await BACKEND.setProjectStatus(b.dataset.project,'complete');await renderProjectDetail(b.dataset.project);completionConfetti();toast('Project marked complete.')}catch(err){toast(err.message)}}}
   else if(a==='reopen-project'){try{await BACKEND.setProjectStatus(b.dataset.project,'active');await renderProjectDetail(b.dataset.project);toast('Project reopened.')}catch(err){toast(err.message)}}
   else if(a==='delete-project-update'){if(confirm('Delete this development-log entry?\n\nIts screenshots and comments will also be removed. This cannot be undone.')){try{await BACKEND.deleteProjectUpdate(b.dataset.project,b.dataset.update);await renderProjectDetail(b.dataset.project);toast('Log entry deleted.')}catch(err){toast(err.message)}}}
   else if(a==='open-project-image'){try{const url=await BACKEND.openProjectFile(b.dataset.path);if(url)openImageLightbox({dataset:{src:url,caption:b.dataset.caption||'',source:''},querySelector:()=>({alt:b.dataset.name||'Project screenshot'})})}catch(err){toast(err.message)}}
