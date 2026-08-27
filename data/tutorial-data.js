@@ -83,14 +83,7 @@ window.UE5_TUTORIAL_DATA = {
           ],
           "why": "Input Actions represent a gameplay intention such as Interact or Dash, not a specific key.",
           "see": "IA_Action exists and shows a Boolean value type.",
-          "check": "The asset saves without warnings.",
-          "visual": {
-            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/bb3fb38c-3a7e-4d0b-b920-b31b88d11f5a/image_0.png",
-            "caption": "Official UE5.8 Content Browser menu for creating Enhanced Input assets such as Input Actions and Input Mapping Contexts.",
-            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/enhanced-input-in-unreal-engine",
-            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-            "kind": "epic"
-          }
+          "check": "The asset saves without warnings."
         },
         {
           "title": "Open the Mapping Context",
@@ -98,14 +91,7 @@ window.UE5_TUTORIAL_DATA = {
           "do": "Open the Mapping Context used by the player.",
           "why": "The Mapping Context is where physical buttons are linked to the abstract Input Action.",
           "see": "Existing mappings such as movement or jump are visible.",
-          "check": "You can identify where keyboard and gamepad bindings are listed.",
-          "visual": {
-            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/f2c62175-7fbb-4d83-81b3-4b09d51d24bd/image_1.png",
-            "caption": "Official UE5.8 Input Action Details, including the action Value Type.",
-            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/enhanced-input-in-unreal-engine",
-            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-            "kind": "epic"
-          }
+          "check": "You can identify where keyboard and gamepad bindings are listed."
         },
         {
           "title": "Add IA_Action to the mappings",
@@ -113,14 +99,7 @@ window.UE5_TUTORIAL_DATA = {
           "do": "Add IA_Action and bind it to a key such as E.",
           "why": "Until the Mapping Context contains a binding, pressing the key will do nothing.",
           "see": "IA_Action appears in the mapping list with E assigned.",
-          "check": "The binding is saved in the Mapping Context asset.",
-          "visual": {
-            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/6c38fff1-2df0-4100-9a7d-bc6f3b06427a/image_6.png",
-            "caption": "Official UE5.8 Input Mapping Context showing Input Actions mapped to physical controls.",
-            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/enhanced-input-in-unreal-engine",
-            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-            "kind": "epic"
-          }
+          "check": "The binding is saved in the Mapping Context asset."
         },
         {
           "title": "Add the event to the Character Blueprint",
@@ -128,14 +107,7 @@ window.UE5_TUTORIAL_DATA = {
           "do": "Add the IA_Action event to the Character Blueprint.",
           "why": "Gameplay logic should respond to the action event rather than hard-coded keyboard checks.",
           "see": "An IA_Action event node appears in the graph.",
-          "check": "The event node has pins such as Started or Triggered.",
-          "visual": {
-            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/f6187c7e-2858-4553-b5bc-9b746d5bef0e/image_3.png",
-            "caption": "Official UE5.8 Blueprint example responding to an Enhanced Input Action event.",
-            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/enhanced-input-in-unreal-engine",
-            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-            "kind": "epic"
-          }
+          "check": "The event node has pins such as Started or Triggered."
         },
         {
           "title": "Prove it fires",
@@ -231,8 +203,8 @@ window.UE5_TUTORIAL_DATA = {
           "kind": "epic"
         },
         {
-          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/bb3fb38c-3a7e-4d0b-b920-b31b88d11f5a/image_0.png",
-          "caption": "Official UE5.8 Content Browser menu for creating Enhanced Input assets such as Input Actions and Input Mapping Contexts.",
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/6c38fff1-2df0-4100-9a7d-bc6f3b06427a/image_6.png",
+          "caption": "Official UE5.8 Input Mapping Context. Add IA_Action as a mapping row here and assign the physical key E.",
           "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/enhanced-input-in-unreal-engine",
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
@@ -701,14 +673,7 @@ window.UE5_TUTORIAL_DATA = {
           "do": "Build a trace from the camera forward a short distance such as 300–500 units.",
           "why": "This asks the world “what is directly in front of the player?”",
           "see": "The trace node is wired with Start and End values.",
-          "check": "The Blueprint compiles successfully.",
-          "visual": {
-            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/f64e0a22-515e-41bb-af3a-c93361c5631f/guide-how-to-2b-6.png",
-            "caption": "Building the trace End point from camera location, forward direction and distance. This is the vector maths behind “what am I looking at?”",
-            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/using-a-single-line-trace-raycast-by-channel-in-unreal-engine",
-            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-            "kind": "epic"
-          }
+          "check": "The Blueprint compiles successfully."
         },
         {
           "title": "Enable debug drawing",
@@ -716,14 +681,7 @@ window.UE5_TUTORIAL_DATA = {
           "do": "Set Draw Debug Type to For Duration while learning.",
           "why": "The debug line helps you see whether the trace reaches the object you expected.",
           "see": "A visible line appears when you test the interaction.",
-          "check": "The debug line points where the camera aims.",
-          "visual": {
-            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/bd67ce85-1155-4bfd-9da7-6a7f4c9126d8/guide-how-to-2b-11.png",
-            "caption": "The trace running in Play with debug drawing enabled. Debug visualization is one of the fastest ways to diagnose a broken trace.",
-            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/using-a-single-line-trace-raycast-by-channel-in-unreal-engine",
-            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-            "kind": "epic"
-          }
+          "check": "The debug line points where the camera aims."
         },
         {
           "title": "Use the hit result to decide if something is interactable",
@@ -1526,14 +1484,7 @@ window.UE5_TUTORIAL_DATA = {
           "do": "Run a Line Trace by Channel when the fire input is pressed.",
           "why": "Each trigger pull asks whether the shot hit something.",
           "see": "The trace fires only when the input is pressed.",
-          "check": "The Blueprint compiles without disconnected pins.",
-          "visual": {
-            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/243f760d-f655-4247-8c43-a8b6ea39de69/guide-how-to-2b-2.png",
-            "caption": "Adding the real Line Trace By Channel node to a Blueprint graph.",
-            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/using-a-single-line-trace-raycast-by-channel-in-unreal-engine",
-            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-            "kind": "epic"
-          }
+          "check": "The Blueprint compiles without disconnected pins."
         },
         {
           "title": "Draw debug and inspect the hit",
@@ -1541,14 +1492,7 @@ window.UE5_TUTORIAL_DATA = {
           "do": "Turn on debug drawing and inspect the Hit Actor or Impact Point.",
           "why": "This proves where the shot went and what it struck.",
           "see": "A debug line appears and the hit data can be printed.",
-          "check": "A wall or enemy in front of the player can be identified.",
-          "visual": {
-            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/bd67ce85-1155-4bfd-9da7-6a7f4c9126d8/guide-how-to-2b-11.png",
-            "caption": "The trace running in Play with debug drawing enabled. Debug visualization is one of the fastest ways to diagnose a broken trace.",
-            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/using-a-single-line-trace-raycast-by-channel-in-unreal-engine",
-            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-            "kind": "epic"
-          }
+          "check": "A wall or enemy in front of the player can be identified."
         },
         {
           "title": "Apply a response to the hit actor",
@@ -2255,14 +2199,7 @@ window.UE5_TUTORIAL_DATA = {
           "check": "Before moving on, prove this step: Targets within the swing volume are detected.",
           "troubleshoot": [
             "Ignore Self so the attacker does not hit its own collision."
-          ],
-          "visual": {
-            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/243f760d-f655-4247-8c43-a8b6ea39de69/guide-how-to-2b-2.png",
-            "caption": "Adding the real Line Trace By Channel node to a Blueprint graph.",
-            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/using-a-single-line-trace-raycast-by-channel-in-unreal-engine",
-            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-            "kind": "epic"
-          }
+          ]
         },
         {
           "title": "Apply damage to hit Actor",
@@ -3018,14 +2955,7 @@ window.UE5_TUTORIAL_DATA = {
           "do": "Create WBP_HUD and open it.",
           "why": "A HUD begins as a Widget Blueprint.",
           "see": "The Widget Designer opens.",
-          "check": "The asset exists in the intended folder.",
-          "visual": {
-            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/bf146350-4103-4b5a-a33d-23b00ca8bc63/01-01_createwidgetblueprint.png",
-            "caption": "Creating a real Widget Blueprint from the Content Browser. UMG UI lives in Widget Blueprint assets.",
-            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-ui-designer-quick-start-guide-in-unreal-engine",
-            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-            "kind": "epic"
-          }
+          "check": "The asset exists in the intended folder."
         },
         {
           "title": "Add a simple text block",
@@ -3041,14 +2971,7 @@ window.UE5_TUTORIAL_DATA = {
           "do": "Use Create Widget with WBP_HUD and Add to Viewport.",
           "why": "The widget must exist at runtime before it can appear.",
           "see": "Pressing Play shows the HUD on screen.",
-          "check": "Only one HUD appears, not duplicates every frame.",
-          "visual": {
-            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/79856c5e-fe2e-4653-9092-081396b85652/01-18_beginplay.png",
-            "caption": "Add to Viewport completes the basic HUD flow so the created widget becomes visible to the player.",
-            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-ui-designer-quick-start-guide-in-unreal-engine",
-            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-            "kind": "epic"
-          }
+          "check": "Only one HUD appears, not duplicates every frame."
         },
         {
           "title": "Store the widget reference if useful",
@@ -3176,14 +3099,7 @@ window.UE5_TUTORIAL_DATA = {
           "do": "Create WBP_HUD and Add to Viewport if you have not already.",
           "why": "The bar must exist onscreen before it can update.",
           "see": "The HUD appears during Play.",
-          "check": "The Progress Bar is visible in the running game.",
-          "visual": {
-            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/79856c5e-fe2e-4653-9092-081396b85652/01-18_beginplay.png",
-            "caption": "Add to Viewport completes the basic HUD flow so the created widget becomes visible to the player.",
-            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-ui-designer-quick-start-guide-in-unreal-engine",
-            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-            "kind": "epic"
-          }
+          "check": "The Progress Bar is visible in the running game."
         },
         {
           "title": "Set the bar Percent from health values",
@@ -3217,22 +3133,7 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "icon": "▰",
       "featured": true,
-      "referenceImages": [
-        {
-          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/bf146350-4103-4b5a-a33d-23b00ca8bc63/01-01_createwidgetblueprint.png",
-          "caption": "Creating a real Widget Blueprint from the Content Browser. UMG UI lives in Widget Blueprint assets.",
-          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-ui-designer-quick-start-guide-in-unreal-engine",
-          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-          "kind": "epic"
-        },
-        {
-          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/79856c5e-fe2e-4653-9092-081396b85652/01-18_beginplay.png",
-          "caption": "Add to Viewport completes the basic HUD flow so the created widget becomes visible to the player.",
-          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-ui-designer-quick-start-guide-in-unreal-engine",
-          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-          "kind": "epic"
-        }
-      ],
+      "referenceImages": [],
       "source": null,
       "prescriptive": true,
       "starterValues": [
@@ -3349,15 +3250,7 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "icon": "123",
       "featured": false,
-      "referenceImages": [
-        {
-          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/bf146350-4103-4b5a-a33d-23b00ca8bc63/01-01_createwidgetblueprint.png",
-          "caption": "Creating a real Widget Blueprint from the Content Browser. UMG UI lives in Widget Blueprint assets.",
-          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-ui-designer-quick-start-guide-in-unreal-engine",
-          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-          "kind": "epic"
-        }
-      ],
+      "referenceImages": [],
       "source": null,
       "prescriptive": true,
       "starterValues": [
@@ -3461,15 +3354,7 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "icon": "+",
       "featured": false,
-      "referenceImages": [
-        {
-          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/bf146350-4103-4b5a-a33d-23b00ca8bc63/01-01_createwidgetblueprint.png",
-          "caption": "Creating a real Widget Blueprint from the Content Browser. UMG UI lives in Widget Blueprint assets.",
-          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-ui-designer-quick-start-guide-in-unreal-engine",
-          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-          "kind": "epic"
-        }
-      ],
+      "referenceImages": [],
       "source": null,
       "prescriptive": true,
       "starterValues": [
@@ -3583,15 +3468,7 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "icon": "E",
       "featured": false,
-      "referenceImages": [
-        {
-          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/bf146350-4103-4b5a-a33d-23b00ca8bc63/01-01_createwidgetblueprint.png",
-          "caption": "Creating a real Widget Blueprint from the Content Browser. UMG UI lives in Widget Blueprint assets.",
-          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-ui-designer-quick-start-guide-in-unreal-engine",
-          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-          "kind": "epic"
-        }
-      ],
+      "referenceImages": [],
       "source": null,
       "prescriptive": true,
       "starterValues": [
@@ -3707,15 +3584,7 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "icon": "☷",
       "featured": false,
-      "referenceImages": [
-        {
-          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/bf146350-4103-4b5a-a33d-23b00ca8bc63/01-01_createwidgetblueprint.png",
-          "caption": "Creating a real Widget Blueprint from the Content Browser. UMG UI lives in Widget Blueprint assets.",
-          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-ui-designer-quick-start-guide-in-unreal-engine",
-          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-          "kind": "epic"
-        }
-      ],
+      "referenceImages": [],
       "source": null,
       "prescriptive": true,
       "starterValues": [
@@ -3893,14 +3762,7 @@ window.UE5_TUTORIAL_DATA = {
           "do": "Create a Timeline such as TL_Door.",
           "why": "The Timeline will drive the smooth opening value.",
           "see": "The Timeline node appears in the graph.",
-          "check": "You can double-click it to edit the track.",
-          "visual": {
-            "src": "https://dev.epicgames.com/community/api/documentation/image/6e44536d-af86-4aae-a863-afec370143db?resizing_type=fit",
-            "caption": "The current Timeline Editor. A Timeline turns keyframed data over time into Blueprint output values and events.",
-            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/editing-timelines-in-unreal-engine",
-            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-            "kind": "epic"
-          }
+          "check": "You can double-click it to edit the track."
         },
         {
           "title": "Create a 0→1 float track",
@@ -3908,14 +3770,7 @@ window.UE5_TUTORIAL_DATA = {
           "do": "Create a float track that starts at 0 and ends at 1.",
           "why": "This simple value is easy to use with a Lerp for rotation or location.",
           "see": "The track rises from 0 to 1.",
-          "check": "The timeline length feels reasonable such as 1 second.",
-          "visual": {
-            "src": "https://dev.epicgames.com/community/api/documentation/image/02c05d7d-44db-4251-9485-16e852833735?resizing_type=fit",
-            "caption": "A Float Track inside a Timeline. Keys define values at specific times and the curve controls interpolation between them.",
-            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/editing-timelines-in-unreal-engine",
-            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-            "kind": "epic"
-          }
+          "check": "The timeline length feels reasonable such as 1 second."
         },
         {
           "title": "Use Update to rotate or move the door mesh",
@@ -3923,14 +3778,7 @@ window.UE5_TUTORIAL_DATA = {
           "do": "Apply the Timeline output to the door mesh so it opens smoothly.",
           "why": "The track value only matters once it drives the transform of the door.",
           "see": "The door animates smoothly instead of snapping.",
-          "check": "The closed and open positions are both correct.",
-          "visual": {
-            "src": "https://dev.epicgames.com/community/api/documentation/image/9a0884b6-e598-411d-a20e-1044d0d76bc3?resizing_type=fit",
-            "caption": "Timeline track data becomes output pins on the Timeline node, ready to drive a Lerp, transform, material value or other system.",
-            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/editing-timelines-in-unreal-engine",
-            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-            "kind": "epic"
-          }
+          "check": "The closed and open positions are both correct."
         },
         {
           "title": "Trigger Play and Reverse from interaction",
@@ -4060,14 +3908,7 @@ window.UE5_TUTORIAL_DATA = {
           "check": "Before moving on, prove this step: Timeline outputs 0 then 1.",
           "troubleshoot": [
             "Use a short 0→1 Timeline while learning."
-          ],
-          "visual": {
-            "src": "https://dev.epicgames.com/community/api/documentation/image/02c05d7d-44db-4251-9485-16e852833735?resizing_type=fit",
-            "caption": "A Float Track inside a Timeline. Keys define values at specific times and the curve controls interpolation between them.",
-            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/editing-timelines-in-unreal-engine",
-            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-            "kind": "epic"
-          }
+          ]
         },
         {
           "title": "Lerp locations",
@@ -4078,14 +3919,7 @@ window.UE5_TUTORIAL_DATA = {
           "check": "Before moving on, prove this step: Platform moves smoothly.",
           "troubleshoot": [
             "Set Actor Location from the Lerp result on Update."
-          ],
-          "visual": {
-            "src": "https://dev.epicgames.com/community/api/documentation/image/9a0884b6-e598-411d-a20e-1044d0d76bc3?resizing_type=fit",
-            "caption": "Timeline track data becomes output pins on the Timeline node, ready to drive a Lerp, transform, material value or other system.",
-            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/editing-timelines-in-unreal-engine",
-            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-            "kind": "epic"
-          }
+          ]
         },
         {
           "title": "Loop/ping-pong",
@@ -4433,14 +4267,7 @@ window.UE5_TUTORIAL_DATA = {
           "do": "Make sure the patrol area is covered by the green NavMesh.",
           "why": "Patrol AI cannot move if the level has no navigable space.",
           "see": "Green navigation covers the patrol floor area.",
-          "check": "The patrol route lies on navigable ground.",
-          "visual": {
-            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/69bc24a6-f990-4cfe-b45a-f1d1d899ea8f/basic-navmesh-visualize-a.png",
-            "caption": "Official UE5.8 example: press P to visualise the generated NavMesh. Green shows where AI navigation is available.",
-            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/basic-navigation-in-unreal-engine",
-            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-            "kind": "epic"
-          }
+          "check": "The patrol route lies on navigable ground."
         },
         {
           "title": "Place patrol points",
@@ -4464,14 +4291,7 @@ window.UE5_TUTORIAL_DATA = {
           "do": "Call Move To for the current patrol point.",
           "why": "Movement to a target is the core patrol behaviour.",
           "see": "The AI walks to PatrolA or PatrolB during Play.",
-          "check": "It actually reaches the point rather than stopping immediately.",
-          "visual": {
-            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/fccc3f17-4a64-4262-989e-dddb80d139e2/basic-npc-ai-moveto.png",
-            "caption": "Official UE5.8 Blueprint example using AI Move To to send an AI-controlled Pawn toward a destination.",
-            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/basic-navigation-in-unreal-engine",
-            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-            "kind": "epic"
-          }
+          "check": "It actually reaches the point rather than stopping immediately."
         },
         {
           "title": "Switch targets and retest",
@@ -4602,14 +4422,7 @@ window.UE5_TUTORIAL_DATA = {
           "check": "Before moving on, prove this step: Enemy follows around obstacles.",
           "troubleshoot": [
             "If AI refuses to move, verify NavMesh first."
-          ],
-          "visual": {
-            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/fccc3f17-4a64-4262-989e-dddb80d139e2/basic-npc-ai-moveto.png",
-            "caption": "Official UE5.8 Blueprint example using AI Move To to send an AI-controlled Pawn toward a destination.",
-            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/basic-navigation-in-unreal-engine",
-            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-            "kind": "epic"
-          }
+          ]
         },
         {
           "title": "Choose chase condition",
@@ -4788,15 +4601,7 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "icon": "◉",
       "featured": false,
-      "referenceImages": [
-        {
-          "src": "https://dev.epicgames.com/community/api/documentation/image/0b940733-0aba-46b5-8022-2079bef92697?height=335&resizing_type=fill&width=1920",
-          "caption": "Official UE5.8 AI Perception documentation. Use the linked source for current component, Sight configuration and perception-event terminology.",
-          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/ai-perception-in-unreal-engine",
-          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-          "kind": "epic"
-        }
-      ],
+      "referenceImages": [],
       "source": null,
       "prescriptive": true,
       "starterValues": [
@@ -5017,15 +4822,7 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "icon": "▣",
       "featured": true,
-      "referenceImages": [
-        {
-          "src": "https://dev.epicgames.com/community/api/documentation/image/135327c4-52c3-4524-9d2b-2f25d8ca173e?height=335&resizing_type=fill&width=1920",
-          "caption": "Official UE5.8 Saving and Loading Your Game documentation. The Hub capture list requests exact Blueprint-node screenshots for its Blueprint-only steps.",
-          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/saving-and-loading-your-game-in-unreal-engine",
-          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-          "kind": "epic"
-        }
-      ],
+      "referenceImages": [],
       "source": null,
       "prescriptive": true,
       "starterValues": [
@@ -5090,14 +4887,7 @@ window.UE5_TUTORIAL_DATA = {
           "check": "Before moving on, prove this step: Table columns match the Struct.",
           "troubleshoot": [
             "Choose the correct Struct when creating the Data Table."
-          ],
-          "visual": {
-            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/8197a9d4-1212-445f-aedb-19379fb043d9/datarowtype.png",
-            "caption": "Choosing the Data Table Row Type tells Unreal which Struct defines the columns and data types for every row.",
-            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/data-driven-gameplay-elements-in-unreal-engine",
-            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-            "kind": "epic"
-          }
+          ]
         },
         {
           "title": "Add rows",
@@ -5108,13 +4898,7 @@ window.UE5_TUTORIAL_DATA = {
           "check": "Before moving on, prove this step: Each row has different values.",
           "troubleshoot": [
             "Readable RowNames are much easier to debug than Row_0/Row_1."
-          ],
-          "visual": {
-            "src": "assets/ue5/current/datatable-rows-closeup.webp",
-            "caption": "Current classroom Data Table showing named rows and field values.",
-            "sourceTitle": "Current classroom Unreal Engine capture (Aug 2026)",
-            "kind": "ue5"
-          }
+          ]
         },
         {
           "title": "Choose RowName in Blueprint",
@@ -5211,12 +4995,7 @@ window.UE5_TUTORIAL_DATA = {
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
         },
-        {
-          "src": "assets/ue5/current/datatable-rows-closeup.webp",
-          "caption": "Current classroom Data Table showing named rows and field values.",
-          "sourceTitle": "Current classroom Unreal Engine capture (Aug 2026)",
-          "kind": "ue5"
-        },
+        null,
         null,
         null,
         null
@@ -5526,15 +5305,7 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "icon": "✦",
       "featured": false,
-      "referenceImages": [
-        {
-          "src": "https://dev.epicgames.com/community/api/documentation/image/be5be8f7-ad73-4008-820c-48fb6f87f919?height=335&resizing_type=fill&width=1920",
-          "caption": "Official UE5.8 Niagara Quick Start. The linked source shows the current Niagara editor workflow; the Hub still needs its own exact Spawn System at Location Blueprint capture.",
-          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/quick-start-for-niagara-effects-in-unreal-engine",
-          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-          "kind": "epic"
-        }
-      ],
+      "referenceImages": [],
       "source": null,
       "prescriptive": true,
       "starterValues": [
@@ -5588,14 +5359,7 @@ window.UE5_TUTORIAL_DATA = {
           "check": "Before moving on, prove this step: Shake can be previewed/tuned.",
           "troubleshoot": [
             "Keep the first shake subtle so it is easy to judge."
-          ],
-          "visual": {
-            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/7e414054-56b2-49c1-a8cc-505a0d8da4ec/createshake.png",
-            "caption": "Official UE5.8 Camera Shake creation workflow for a CameraShakeBase asset.",
-            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/camera-shakes-in-unreal-engine",
-            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-            "kind": "epic"
-          }
+          ]
         },
         {
           "title": "Trigger at the event",
@@ -5617,14 +5381,7 @@ window.UE5_TUTORIAL_DATA = {
           "check": "Before moving on, prove this step: The effect is noticeable without making aiming impossible.",
           "troubleshoot": [
             "Test several times; strong shake quickly becomes exhausting."
-          ],
-          "visual": {
-            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/3b0a48d7-5ea0-4696-b775-5f8f6ccaf5bf/openshake.png",
-            "caption": "Official UE5.8 Camera Shake asset open in the editor so the shake pattern can be configured and tuned.",
-            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/camera-shakes-in-unreal-engine",
-            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-            "kind": "epic"
-          }
+          ]
         },
         {
           "title": "Respect player comfort",
@@ -5698,13 +5455,7 @@ window.UE5_TUTORIAL_DATA = {
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
         },
-        {
-          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/3b0a48d7-5ea0-4696-b775-5f8f6ccaf5bf/openshake.png",
-          "caption": "Official UE5.8 Camera Shake asset open in the editor so the shake pattern can be configured and tuned.",
-          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/camera-shakes-in-unreal-engine",
-          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-          "kind": "epic"
-        },
+        null,
         null,
         null,
         null,
@@ -5733,14 +5484,7 @@ window.UE5_TUTORIAL_DATA = {
           "do": "Place Exponential Height Fog in the level.",
           "why": "This is the main fog actor for broad atmospheric control in Unreal.",
           "see": "A fog actor appears in the Outliner and the level look changes immediately.",
-          "check": "You can select the fog actor and see its settings in Details.",
-          "visual": {
-            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/f2bff354-b80f-457a-88af-e34aac99afe0/01-placing-exponential-fog-in-the-world.png",
-            "caption": "Official UE5.8 example placing Exponential Height Fog into a level.",
-            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/exponential-height-fog-in-unreal-engine",
-            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-            "kind": "epic"
-          }
+          "check": "You can select the fog actor and see its settings in Details."
         },
         {
           "title": "Enable volumetric fog and reduce visibility",
@@ -5748,14 +5492,7 @@ window.UE5_TUTORIAL_DATA = {
           "do": "Enable Volumetric Fog, then adjust Fog Density and Extinction Scale to reduce how far the player can see.",
           "why": "Silent Hill-style fog works because it limits information, not just because it is “white”.",
           "see": "The distant background becomes obscured while nearer space remains readable.",
-          "check": "You can still navigate the scene without the whole screen becoming a flat grey wall.",
-          "visual": {
-            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/384ec87a-79c8-47ee-9dca-c664802cc995/volumetricfog.png",
-            "caption": "Official UE5.8 Volumetric Fog example showing lighting interacting with fog volume.",
-            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/volumetric-fog-in-unreal-engine",
-            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-            "kind": "epic"
-          }
+          "check": "You can still navigate the scene without the whole screen becoming a flat grey wall."
         },
         {
           "title": "Shape the mood with lighting",

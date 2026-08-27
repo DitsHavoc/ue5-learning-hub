@@ -1,43 +1,41 @@
-# v3.33.0 — Official Epic Visual Accuracy Pass
+# v3.33.0 — Official Epic Imagery Pass
 
 ## Goal
 
-Make Unreal imagery trustworthy. A visual beside a practical step must explain that exact step; a merely related Blueprint/editor image is no longer good enough.
+Make Unreal imagery trustworthy. A screenshot beside a practical step must show that exact operation or setting; “same general topic” is not enough.
 
 ## What changed
 
-- Audited Unreal core lessons, Building Blocks and all 47 Programming Quick Tutorials.
-- Practical recipe visuals are now **explicitly mapped to the exact studentRecipe step** instead of inherited through fuzzy text matching.
-- Every Unreal lesson/tutorial recipe now has an explicit visual slot. If there is no exact image, the slot is deliberately empty.
-- Added official Epic UE5.8 documentation visuals where they genuinely match the feature/action.
-- Kept a small number of current classroom Unreal captures where they are a better exact match.
-- Added visual support to 23/47 Building Blocks where an exact useful reference exists.
-- Separated **GAME / DESIGN TARGET** imagery from **OFFICIAL UE5.8 REFERENCE** imagery in Quick Tutorials.
-- Removed Unreal-side book figures from the practical/reference visual path in this pass.
-- Silent Hill fog now treats Silent Hill imagery as the design target and Unreal screenshots as the technical reference.
-- Official-source imagery is labelled `OFFICIAL EPIC DOCS` and links back to the source documentation page.
-- Existing click-to-enlarge lightbox, responsive image sizing and remote-image fallback remain in place.
+- Audited all **20 Unreal core lessons**, **47 Building Blocks** and **47 Programming Quick Tutorials**.
+- Rebuilt v3.33 from the genuine v3.32.7 stable chain rather than treating the abandoned v3.33 candidate as a baseline.
+- Practical recipe imagery now uses explicit per-step `recipeVisuals` arrays. A `null` entry stays blank and cannot fuzzy-match a nearby support image.
+- Removed stale `visual` fields from tutorial/support steps so old fuzzy imagery cannot silently return through a future fallback.
+- Added/kept official Epic UE5.8 documentation imagery only where the source image genuinely illustrates the feature/action.
+- Kept current classroom Unreal captures in explanatory sections when they accurately show the concept.
+- Kept original diagrams for conceptual relationships and clearly labels them as non-UE UI.
+- Kept Silent Hill 2 imagery only as a **GAME / DESIGN TARGET** for the fog tutorial, separate from Unreal technical references.
+- Removed generic Widget Blueprint imagery from health-bar, score/lives, crosshair, interaction prompt and objective tutorials.
+- Removed generic AI Perception, SaveGame and Niagara hero/reference images where they did not show the exact Blueprint/settings being taught.
+- Removed the unrelated classroom Data Table rows from the `TrainingSword / HeavySword / Medkit` practical step.
+- Removed the unrelated classroom Branch and EventGraph screenshots from practical steps while retaining them as honest concept examples.
+- Corrected the Enhanced Input tutorial so the IMC mapping step uses Epic's actual **Input Mapping Context** image rather than the Content Browser asset-creation menu.
+- Reduced Building Block direct imagery to the references that pass the stricter match test.
+- Existing image lightbox, responsive image sizing and remote-image fallback are retained.
 
-## Accuracy policy
+## Final strict-pass numbers
 
-1. Exact official Epic visual first.
-2. Current classroom capture when the official docs do not show the exact action/settings.
-3. Original explanatory diagram for a relationship/concept where a screenshot is not the right teaching tool.
-4. Game imagery only for design analysis/reference, never masquerading as an Unreal click instruction.
-5. **No image is better than the wrong image.**
-
-## Numbers
-
-- 20/20 Unreal core lesson recipes protected by explicit visual-slot mapping.
-- 47/47 Programming Quick Tutorial recipes protected by explicit visual-slot mapping.
-- 55 exact practical recipe visuals currently populated: 34 lesson steps + 21 tutorial steps.
-- 23/47 Building Blocks have a direct visual reference.
-- 28 unique linked source pages across the current Unreal visual reference set.
-- 0 missing local image files in the v3.33 visual QA.
+- 20/20 lesson recipes protected by exact indexed visual slots.
+- 47/47 Quick Tutorial recipes protected by exact indexed visual slots.
+- **24** lesson practical steps have an exact visual.
+- **19** Quick Tutorial practical steps have an exact visual.
+- **43** exact practical visuals total.
+- **13/47** Building Blocks have a direct image; the rest deliberately remain image-free.
+- Reused practical images now occur only for the same exact Unreal operation repeated in another lesson/tutorial (for example AI Move To, Line Trace construction, Widget Blueprint creation, Data Table Row Type or Timeline Float Track).
+- No licensed book figures are used in the audited Unreal lesson/Building Block/Quick Tutorial technical visual paths.
 
 ## Remaining capture work
 
-See `UNREAL-SCREENSHOT-CAPTURE-LIST-v3.33.md`. This is intentionally a targeted list for exact mechanics/settings that the official docs do not illustrate well enough.
+See `UNREAL-SCREENSHOT-CAPTURE-LIST-v3.33.md`. It contains only cases where our own current classroom screenshot would be more accurate than a generic substitute.
 
 ## Database
 
