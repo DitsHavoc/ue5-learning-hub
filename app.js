@@ -81,6 +81,87 @@ function safeUrl(value){
   }catch(e){return ''}
 }
 
+// Project briefs are teacher/student-authored rich text. Keep the format deliberately small,
+// sanitise again every time it is rendered, and leave legacy plain-text briefs readable.
+const PROJECT_RICH_TAGS=new Set(['P','BR','STRONG','B','EM','I','UL','OL','LI','H2','H3','BLOCKQUOTE','A']);
+const PROJECT_RICH_DROP=new Set(['SCRIPT','STYLE','IFRAME','OBJECT','EMBED','FORM','INPUT','BUTTON','TEXTAREA','SELECT','OPTION','SVG','MATH','LINK','META']);
+function projectRichHtml(value){
+  const raw=String(value||'').trim();
+  if(!raw)return '';
+  if(!/<[a-z][\s\S]*>/i.test(raw)){
+    const text=esc(raw.replace(/\r\n?/g,'\n'));
+    return '<p>'+text.replace(/\n{2,}/g,'</p><p>').replace(/\n/g,'<br>')+'</p>';
+  }
+  const doc=new DOMParser().parseFromString('<div id="projectRichRoot">'+raw+'</div>','text/html');
+  const root=doc.querySelector('#projectRichRoot');
+  if(!root)return '<p>'+esc(raw)+'</p>';
+  const clean=node=>{
+    if(node.nodeType===Node.TEXT_NODE)return esc(node.nodeValue||'');
+    if(node.nodeType!==Node.ELEMENT_NODE)return '';
+    const tag=node.tagName.toUpperCase();
+    if(PROJECT_RICH_DROP.has(tag))return '';
+    const inner=[...node.childNodes].map(clean).join('');
+    if(tag==='DIV')return inner?'<p>'+inner+'</p>':'';
+    if(!PROJECT_RICH_TAGS.has(tag))return inner;
+    if(tag==='BR')return '<br>';
+    if(tag==='B')return '<strong>'+inner+'</strong>';
+    if(tag==='I')return '<em>'+inner+'</em>';
+    if(tag==='A'){
+      const href=safeUrl(node.getAttribute('href')||'');
+      return href?'<a href="'+esc(href)+'" target="_blank" rel="noopener noreferrer">'+inner+'</a>':inner;
+    }
+    return '<'+tag.toLowerCase()+'>'+inner+'</'+tag.toLowerCase()+'>';
+  };
+  return [...root.childNodes].map(clean).join('').trim();
+}
+function projectRichText(value){
+  const div=document.createElement('div');
+  div.innerHTML=projectRichHtml(value);
+  return (div.textContent||'').replace(/\s+/g,' ').trim();
+}
+function projectRichExcerpt(value,max=220){
+  const text=projectRichText(value);
+  return text.length>max?text.slice(0,max-1).trimEnd()+'…':text;
+}
+function projectRichEditor(name,value='',placeholder='Write the brief…',maxLength=6000){
+  const html=projectRichHtml(value);
+  const count=projectRichText(html).length;
+  return `<div class="project-rich-editor" data-rich-editor data-maxlength="${maxLength}">
+    <div class="project-rich-toolbar" role="toolbar" aria-label="Rich text formatting">
+      <button type="button" data-action="rich-command" data-command="formatBlock" data-value="p" title="Paragraph">P</button>
+      <button type="button" data-action="rich-command" data-command="formatBlock" data-value="h2" title="Large heading">H2</button>
+      <button type="button" data-action="rich-command" data-command="formatBlock" data-value="h3" title="Small heading">H3</button>
+      <span class="rich-toolbar-divider"></span>
+      <button type="button" data-action="rich-command" data-command="bold" title="Bold"><strong>B</strong></button>
+      <button type="button" data-action="rich-command" data-command="italic" title="Italic"><em>I</em></button>
+      <span class="rich-toolbar-divider"></span>
+      <button type="button" data-action="rich-command" data-command="insertUnorderedList" title="Bulleted list">• List</button>
+      <button type="button" data-action="rich-command" data-command="insertOrderedList" title="Numbered list">1. List</button>
+      <span class="rich-toolbar-divider"></span>
+      <button type="button" data-action="rich-command" data-command="createLink" title="Add link">Link</button>
+      <button type="button" data-action="rich-command" data-command="unlink" title="Remove link">Unlink</button>
+      <button type="button" data-action="rich-command" data-command="removeFormat" title="Remove bold/italic formatting">Clear</button>
+    </div>
+    <div class="project-rich-surface" contenteditable="true" role="textbox" aria-multiline="true" data-rich-surface data-placeholder="${esc(placeholder)}">${html}</div>
+    <textarea name="${esc(name)}" data-rich-value hidden>${esc(html)}</textarea>
+    <div class="project-rich-editor-foot"><span>Headings, emphasis, lists and links only — pasted styling is cleaned when you save.</span><span data-rich-count class="${count>maxLength?'over':''}">${count}/${maxLength}</span></div>
+  </div>`;
+}
+function syncProjectRichEditor(editor){
+  if(!editor)return false;
+  const surface=editor.querySelector('[data-rich-surface]'),value=editor.querySelector('[data-rich-value]'),count=editor.querySelector('[data-rich-count]');
+  if(!surface||!value)return false;
+  const html=projectRichHtml(surface.innerHTML);
+  value.value=html;
+  const max=Number(editor.dataset.maxlength||6000),length=(surface.textContent||'').trim().length;
+  if(count){count.textContent=length+'/'+max;count.classList.toggle('over',length>max)}
+  editor.classList.toggle('over-limit',length>max);
+  return length>max;
+}
+function syncProjectRichEditors(root=document){
+  return $$('[data-rich-editor]',root).some(syncProjectRichEditor);
+}
+
 function loadState(){
   const clean={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[],blockCompleted:[]};
   try{
@@ -1259,7 +1340,7 @@ function projectsPage(){
         <label>Project title<input name="title" maxlength="160" required placeholder="e.g. Unit 321 — 3D Environment"></label>
         <div class="form-two"><label>Class<select name="classId" id="templateClassSelect" required><option value="">Choose a class…</option></select></label><label>How students work<select name="workMode"><option value="either">Students choose individual or group</option><option value="individual">Individual only</option><option value="group">Group only</option></select></label></div><div id="templateClassHelp" class="template-class-help" hidden></div>
         <div class="form-two"><label>Type of work<select name="projectKind"><option value="assignment">Assignment</option><option value="group_project">Group project</option><option value="game_jam">Game jam</option><option value="client">Client project</option><option value="practice">Practice</option><option value="other">Other</option></select></label><label>Assessment / unit <small>optional</small><input name="assessmentUnit" maxlength="160" placeholder="e.g. Unit 321"></label></div>
-        <label>Brief<textarea name="brief" maxlength="6000" placeholder="The simple project brief students need to see."></textarea></label>
+        <div class="form-field"><span class="form-field-label">Brief</span>${projectRichEditor('brief','','Write the project brief students need to see. Use headings and lists to break up longer tasks.',6000)}</div>
         <button class="button primary" type="submit">Create template →</button>
       </form></section>
       <section class="project-panel"><span class="eyebrow">Deliberately lightweight</span><h2>What a template does</h2><p>It gives students the brief and milestone structure. It does <b>not</b> grade them, collect a final submission or replace your college assessment system.</p><div class="callout good"><b>Student flow:</b> Available Project → Start Individual / Start Group → development log → screenshots → feedback.</div></section>
@@ -1275,7 +1356,7 @@ function projectsPage(){
       <label>Project title<input name="title" maxlength="120" required placeholder="e.g. Horror Game Jam"></label>
       <div class="form-two"><label>Project type<select name="projectType"><option value="solo">Solo</option><option value="group">Group</option></select></label><label>Type of work<select name="projectKind"><option value="assignment">Assignment</option><option value="group_project">Group project</option><option value="game_jam">Game jam</option><option value="practice">Practice</option><option value="personal">Personal</option><option value="client">Client project</option><option value="other">Other</option></select></label></div>
       <div class="form-two"><label>Class <small>optional</small><select name="classId" id="projectClassSelect"><option value="">No class linked</option></select></label><label>Assessment / unit <small>optional</small><input name="assessmentUnit" maxlength="160" placeholder="e.g. Unit 321"></label></div>
-      <label>Brief / description<textarea name="description" maxlength="4000" placeholder="What are you making?"></textarea></label>
+      <div class="form-field"><span class="form-field-label">Brief / description</span>${projectRichEditor('description','','What are you making?',6000)}</div>
       <button class="button primary" type="submit">Create project</button>
     </form></section>
     <section class="project-panel"><span class="eyebrow">Join a team</span><h2>Group project code</h2><p>The Project Lead shares the group code. If the project belongs to a class, only students in that class can join.</p><form class="form-grid" data-action-form="join-project"><label>Project code<input name="projectCode" maxlength="20" required placeholder="GRP-XXXXXXXX"></label><button class="button" type="submit">Join group project</button></form></section>
@@ -1287,7 +1368,7 @@ function projectListCards(rows,emptyMessage='No projects yet.'){
   return `<div class="multi-project-grid">${rows.map(p=>{
     const mine=p.members.find(m=>m.user_id===BACKEND.user?.id);
     const memberNames=p.members.slice(0,3).map(m=>esc(m.profile?.display_name||'Student')).join(', ');
-    return `<article class="multi-project-card ${esc(p.status)}"><div class="project-card-top"><span class="project-type-pill ${p.project_type}">${p.project_type==='group'?'GROUP':'SOLO'}</span><span class="request-status ${p.status==='complete'?'shipped':p.status==='archived'?'declined':'building'}">${esc(projectStatusLabelValue(p.status))}</span></div><h3>${esc(p.title)}</h3><p>${esc(p.description||'No project description yet.')}</p><div class="project-card-meta"><span>${esc(projectKindLabel(p.project_kind))}</span>${p.class?`<span>${esc(p.class.name)}</span>`:''}${p.assessment_unit?`<span>${esc(p.assessment_unit)}</span>`:''}</div><div class="project-team-summary"><b>${p.members.length}</b> member${p.members.length===1?'':'s'}${memberNames?` • ${memberNames}`:''}${mine?.role_label?` • You: ${esc(mine.role_label)}`:''}</div><a class="button primary small" href="#/projects/${p.id}">Open project →</a></article>`;
+    return `<article class="multi-project-card ${esc(p.status)}"><div class="project-card-top"><span class="project-type-pill ${p.project_type}">${p.project_type==='group'?'GROUP':'SOLO'}</span><span class="request-status ${p.status==='complete'?'shipped':p.status==='archived'?'declined':'building'}">${esc(projectStatusLabelValue(p.status))}</span></div><h3>${esc(p.title)}</h3><p>${esc(projectRichExcerpt(p.description||'No project description yet.'))}</p><div class="project-card-meta"><span>${esc(projectKindLabel(p.project_kind))}</span>${p.class?`<span>${esc(p.class.name)}</span>`:''}${p.assessment_unit?`<span>${esc(p.assessment_unit)}</span>`:''}</div><div class="project-team-summary"><b>${p.members.length}</b> member${p.members.length===1?'':'s'}${memberNames?` • ${memberNames}`:''}${mine?.role_label?` • You: ${esc(mine.role_label)}`:''}</div><a class="button primary small" href="#/projects/${p.id}">Open project →</a></article>`;
   }).join('')}</div>`;
 }
 
@@ -1300,7 +1381,7 @@ async function renderProjects(){
       if(select)select.innerHTML='<option value="">Choose a class…</option>'+classes.map(c=>`<option value="${esc(c.id)}">${esc(c.name)}${c.academic_year?` • ${esc(c.academic_year)}`:''}</option>`).join('');
       if(classHelp){classHelp.hidden=classes.length>0;classHelp.innerHTML=classes.length?'':`<b>Create a class first.</b> Project templates belong to a class so only the right students can see them. <a href="#/teacher">Open Teacher Dashboard →</a>`;}
       if(select)select.disabled=!classes.length;if(templateSubmit)templateSubmit.disabled=!classes.length;
-      const tbox=$('#projectTemplatesList');if(tbox)tbox.innerHTML=templates.length?`<div class="multi-project-grid">${templates.map(t=>`<article class="multi-project-card template-card"><div class="project-card-top"><span class="project-type-pill solo">${esc(projectTemplateWorkModeLabel(t.work_mode).toUpperCase())}</span><span class="request-status ${t.status==='published'?'shipped':t.status==='archived'?'declined':'new'}">${esc(t.status==='published'?'Published':t.status==='archived'?'Archived':'Draft')}</span></div><h3>${esc(t.title)}</h3><p>${esc(t.brief||'No brief yet.')}</p><div class="project-card-meta"><span>${esc(t.class?.name||'Class')}</span><span>${t.milestones.length} milestone${t.milestones.length===1?'':'s'}</span>${t.assessment_unit?`<span>${esc(t.assessment_unit)}</span>`:''}</div><a class="button primary small" href="#/projects/template/${t.id}">Manage template →</a></article>`).join('')}</div>`:'<div class="empty"><h3>No templates yet.</h3><p>Create the first class project above.</p></div>';
+      const tbox=$('#projectTemplatesList');if(tbox)tbox.innerHTML=templates.length?`<div class="multi-project-grid">${templates.map(t=>`<article class="multi-project-card template-card"><div class="project-card-top"><span class="project-type-pill solo">${esc(projectTemplateWorkModeLabel(t.work_mode).toUpperCase())}</span><span class="request-status ${t.status==='published'?'shipped':t.status==='archived'?'declined':'new'}">${esc(t.status==='published'?'Published':t.status==='archived'?'Archived':'Draft')}</span></div><h3>${esc(t.title)}</h3><p>${esc(projectRichExcerpt(t.brief||'No brief yet.'))}</p><div class="project-card-meta"><span>${esc(t.class?.name||'Class')}</span><span>${t.milestones.length} milestone${t.milestones.length===1?'':'s'}</span>${t.assessment_unit?`<span>${esc(t.assessment_unit)}</span>`:''}</div><a class="button primary small" href="#/projects/template/${t.id}">Manage template →</a></article>`).join('')}</div>`:'<div class="empty"><h3>No templates yet.</h3><p>Create the first class project above.</p></div>';
       box.innerHTML=projectListCards(rows,'No student project copies yet.');
       return;
     }
@@ -1311,7 +1392,7 @@ async function renderProjects(){
     if(available)available.innerHTML=templates.length?`<div class="available-template-grid">${templates.map(t=>{
       const already=started.has(t.id);
       const solo=t.work_mode==='individual'||t.work_mode==='either',group=t.work_mode==='group'||t.work_mode==='either';
-      return `<article class="available-template-card ${already?'started':''}"><div><span class="eyebrow">${esc(t.class?.name||'Class')} • ${esc(projectKindLabel(t.project_kind))}</span><h3>${esc(t.title)}</h3><p>${esc(t.brief||'Open the project to read the brief.')}</p><div class="project-card-meta"><span>${esc(projectTemplateWorkModeLabel(t.work_mode))}</span><span>${t.milestones.length} milestone${t.milestones.length===1?'':'s'}</span>${t.assessment_unit?`<span>${esc(t.assessment_unit)}</span>`:''}</div></div>${already?`<div class="callout good"><b>Started ✓</b><br>This class project is already in Your Projects.</div>`:`<div class="button-row">${solo?`<button class="button primary" data-action="start-template-project" data-template="${t.id}" data-mode="solo">Start Individual</button>`:''}${group?`<button class="button ${solo?'ghost':'primary'}" data-action="start-template-project" data-template="${t.id}" data-mode="group">Start Group</button>`:''}</div>`}</article>`;
+      return `<article class="available-template-card ${already?'started':''}"><div><span class="eyebrow">${esc(t.class?.name||'Class')} • ${esc(projectKindLabel(t.project_kind))}</span><h3>${esc(t.title)}</h3><div class="project-rich-content project-rich-available">${projectRichHtml(t.brief||'Open the project to read the brief.')}</div><div class="project-card-meta"><span>${esc(projectTemplateWorkModeLabel(t.work_mode))}</span><span>${t.milestones.length} milestone${t.milestones.length===1?'':'s'}</span>${t.assessment_unit?`<span>${esc(t.assessment_unit)}</span>`:''}</div></div>${already?`<div class="callout good"><b>Started ✓</b><br>This class project is already in Your Projects.</div>`:`<div class="button-row">${solo?`<button class="button primary" data-action="start-template-project" data-template="${t.id}" data-mode="solo">Start Individual</button>`:''}${group?`<button class="button ${solo?'ghost':'primary'}" data-action="start-template-project" data-template="${t.id}" data-mode="group">Start Group</button>`:''}</div>`}</article>`;
     }).join('')}</div>`:'<div class="empty"><h3>No class projects available right now.</h3><p>Published teacher projects will appear here.</p></div>';
     box.innerHTML=projectListCards(rows,'No projects yet.');
   }catch(err){box.innerHTML=`<div class="offline-note">${esc(err.message)}</div>`}
@@ -1326,9 +1407,9 @@ async function renderProjectTemplate(id){
   const box=$('#projectTemplateDetail');if(!box||BACKEND.profile?.role!=='teacher')return;
   try{
     const b=await BACKEND.getProjectTemplate(id),t=b.template;
-    box.innerHTML=`<section class="project-detail-hero template-detail-hero"><div><span class="eyebrow">Teacher project template • ${esc(t.class?.name||'Class')}</span><h1>${esc(t.title)}</h1><p>${esc(t.brief||'No brief yet.')}</p><div class="project-card-meta"><span>${esc(projectTemplateWorkModeLabel(t.work_mode))}</span><span>${esc(projectKindLabel(t.project_kind))}</span>${t.assessment_unit?`<span>${esc(t.assessment_unit)}</span>`:''}</div></div><div class="template-publish-state"><span class="request-status ${t.status==='published'?'shipped':t.status==='archived'?'declined':'new'}">${esc(t.status==='published'?'Published to students':t.status==='archived'?'Archived':'Draft')}</span></div></section>
+    box.innerHTML=`<section class="project-detail-hero template-detail-hero"><div><span class="eyebrow">Teacher project template • ${esc(t.class?.name||'Class')}</span><h1>${esc(t.title)}</h1><div class="project-rich-content">${projectRichHtml(t.brief||'No brief yet.')}</div><div class="project-card-meta"><span>${esc(projectTemplateWorkModeLabel(t.work_mode))}</span><span>${esc(projectKindLabel(t.project_kind))}</span>${t.assessment_unit?`<span>${esc(t.assessment_unit)}</span>`:''}</div></div><div class="template-publish-state"><span class="request-status ${t.status==='published'?'shipped':t.status==='archived'?'declined':'new'}">${esc(t.status==='published'?'Published to students':t.status==='archived'?'Archived':'Draft')}</span></div></section>
     <div class="project-detail-grid">
-      <section class="project-panel"><span class="eyebrow">Brief</span><h2>Template settings</h2><form class="form-grid" data-action-form="project-template-settings" data-template="${t.id}"><label>Title<input name="title" maxlength="160" required value="${esc(t.title)}"></label><div class="form-two"><label>How students work<select name="workMode"><option value="either" ${t.work_mode==='either'?'selected':''}>Students choose individual or group</option><option value="individual" ${t.work_mode==='individual'?'selected':''}>Individual only</option><option value="group" ${t.work_mode==='group'?'selected':''}>Group only</option></select></label><label>Type of work<select name="projectKind"><option value="assignment" ${t.project_kind==='assignment'?'selected':''}>Assignment</option><option value="group_project" ${t.project_kind==='group_project'?'selected':''}>Group project</option><option value="game_jam" ${t.project_kind==='game_jam'?'selected':''}>Game jam</option><option value="client" ${t.project_kind==='client'?'selected':''}>Client project</option><option value="practice" ${t.project_kind==='practice'?'selected':''}>Practice</option><option value="other" ${t.project_kind==='other'?'selected':''}>Other</option></select></label></div><label>Assessment / unit <small>optional</small><input name="assessmentUnit" maxlength="160" value="${esc(t.assessment_unit||'')}"></label><label>Brief<textarea name="brief" maxlength="6000">${esc(t.brief||'')}</textarea></label><label>Visibility<select name="status"><option value="draft" ${t.status==='draft'?'selected':''}>Draft — hidden from students</option><option value="published" ${t.status==='published'?'selected':''}>Published — available to class</option></select></label><button class="button primary" type="submit">Save template</button></form></section>
+      <section class="project-panel"><span class="eyebrow">Brief</span><h2>Template settings</h2><form class="form-grid" data-action-form="project-template-settings" data-template="${t.id}"><label>Title<input name="title" maxlength="160" required value="${esc(t.title)}"></label><div class="form-two"><label>How students work<select name="workMode"><option value="either" ${t.work_mode==='either'?'selected':''}>Students choose individual or group</option><option value="individual" ${t.work_mode==='individual'?'selected':''}>Individual only</option><option value="group" ${t.work_mode==='group'?'selected':''}>Group only</option></select></label><label>Type of work<select name="projectKind"><option value="assignment" ${t.project_kind==='assignment'?'selected':''}>Assignment</option><option value="group_project" ${t.project_kind==='group_project'?'selected':''}>Group project</option><option value="game_jam" ${t.project_kind==='game_jam'?'selected':''}>Game jam</option><option value="client" ${t.project_kind==='client'?'selected':''}>Client project</option><option value="practice" ${t.project_kind==='practice'?'selected':''}>Practice</option><option value="other" ${t.project_kind==='other'?'selected':''}>Other</option></select></label></div><label>Assessment / unit <small>optional</small><input name="assessmentUnit" maxlength="160" value="${esc(t.assessment_unit||'')}"></label><div class="form-field"><span class="form-field-label">Brief</span>${projectRichEditor('brief',t.brief||'','Write the project brief students need to see.',6000)}</div><label>Visibility<select name="status"><option value="draft" ${t.status==='draft'?'selected':''}>Draft — hidden from students</option><option value="published" ${t.status==='published'?'selected':''}>Published — available to class</option></select></label><button class="button primary" type="submit">Save template</button></form></section>
       <section class="project-panel"><span class="eyebrow">Milestones</span><h2>Simple project stages</h2>${b.milestones.length?`<div class="template-milestone-list">${b.milestones.map(m=>`<div class="template-milestone"><div><strong>${esc(m.title)}</strong><p>${esc(m.description||'')}</p></div><details><summary>Edit</summary><form class="form-grid compact-form" data-action-form="edit-template-milestone" data-template="${t.id}" data-milestone="${m.id}"><label>Title<input name="title" maxlength="160" value="${esc(m.title)}" required></label><label>Description<textarea name="description" maxlength="2000">${esc(m.description||'')}</textarea></label><div class="button-row"><button class="button small" type="submit">Save</button><button class="link-button danger-link" type="button" data-action="delete-template-milestone" data-template="${t.id}" data-milestone="${m.id}">Delete</button></div></form></details></div>`).join('')}</div>`:'<div class="muted">No milestones yet.</div>'}<form class="form-grid compact-form" data-action-form="template-milestone" data-template="${t.id}"><label>Milestone title<input name="title" maxlength="160" required placeholder="e.g. Greybox complete"></label><label>Short description<textarea name="description" maxlength="2000" placeholder="What does complete look like?"></textarea></label><button class="button small" type="submit">Add milestone</button></form></section>
     </div><section class="section"><div class="danger-zone"><div><strong>Delete template</strong><p>Student projects already created from it are kept. This only removes the teacher template.</p></div><button class="button danger" data-action="delete-project-template" data-template="${t.id}" data-name="${esc(t.title)}">Delete template</button></div></section>`;
   }catch(err){box.innerHTML=`<div class="offline-note">${esc(err.message)}</div>`}
@@ -1371,7 +1452,7 @@ async function renderProjectDetail(id){
     const canStructure=active&&(owner||teacher),canLog=active&&Boolean(me);
     const myUpdates=b.updates.filter(u=>u.author_id===BACKEND.user.id),myMedia=myUpdates.reduce((n,u)=>n+(u.media?.length||0),0);
     const completed=b.milestones.filter(m=>m.status==='complete').length,progress=b.milestones.length?Math.round(completed/b.milestones.length*100):0;
-    box.innerHTML=`<section class="project-detail-hero"><div><span class="eyebrow">${esc(projectKindLabel(p.project_kind))} • ${p.project_type==='group'?'Group':'Solo'} project</span><h1>${esc(p.title)}</h1><p>${esc(p.description||'No project description yet.')}</p><div class="project-card-meta">${p.class?`<span>Class: ${esc(p.class.name)}</span>`:''}${p.assessment_unit?`<span>${esc(p.assessment_unit)}</span>`:''}<span>${esc(projectStatusLabelValue(p.status))}</span></div>${owner?`<div class="button-row project-completion-actions">${active?`<button class="button primary" data-action="complete-project" data-project="${p.id}">✓ Mark Project Complete</button>`:`<button class="button" data-action="reopen-project" data-project="${p.id}">↺ Reopen Project</button>`}</div>`:''}</div><div class="project-detail-stat"><strong>${progress}%</strong><small>${completed}/${b.milestones.length} milestones complete</small><div class="progress"><span style="width:${progress}%"></span></div></div></section>
+    box.innerHTML=`<section class="project-detail-hero"><div><span class="eyebrow">${esc(projectKindLabel(p.project_kind))} • ${p.project_type==='group'?'Group':'Solo'} project</span><h1>${esc(p.title)}</h1><div class="project-rich-content">${projectRichHtml(p.description||'No project description yet.')}</div><div class="project-card-meta">${p.class?`<span>Class: ${esc(p.class.name)}</span>`:''}${p.assessment_unit?`<span>${esc(p.assessment_unit)}</span>`:''}<span>${esc(projectStatusLabelValue(p.status))}</span></div>${owner?`<div class="button-row project-completion-actions">${active?`<button class="button primary" data-action="complete-project" data-project="${p.id}">✓ Mark Project Complete</button>`:`<button class="button" data-action="reopen-project" data-project="${p.id}">↺ Reopen Project</button>`}</div>`:''}</div><div class="project-detail-stat"><strong>${progress}%</strong><small>${completed}/${b.milestones.length} milestones complete</small><div class="progress"><span style="width:${progress}%"></span></div></div></section>
     ${!active?`<div class="project-readonly-banner"><b>PROJECT COMPLETE</b><span>This project is read-only. The Project Lead can reopen it if more work is needed.</span></div>`:''}
     <div class="project-detail-grid">
       <section class="project-panel"><span class="eyebrow">Team</span><h2>${p.project_type==='group'?'Shared project':'Project owner'}</h2><div class="project-member-list">${b.members.map(m=>`<div class="project-member"><div class="project-member-avatar">${esc((m.profile?.display_name||'?').slice(0,1).toUpperCase())}</div><div><strong>${esc(m.profile?.display_name||'Student')}</strong><small>${m.role==='owner'?'Project Lead':esc(m.role_label||'Team member')}</small></div>${owner&&active&&m.role!=='owner'?`<button class="link-button danger-link" data-action="remove-project-member" data-project="${p.id}" data-user="${m.user_id}">Remove</button>`:''}</div>`).join('')}</div>${me&&active?`<form class="inline-role-form" data-action-form="project-role" data-project="${p.id}"><label>My role in this project<input name="roleLabel" maxlength="100" value="${esc(me.role_label||'')}" placeholder="e.g. Level Designer"></label><button class="button small" type="submit">Save role</button></form>`:''}${p.project_type==='group'&&owner&&active?`<div class="project-code-box"><small>GROUP JOIN CODE</small><code>${esc(p.join_code||'')}</code><div class="button-row"><button class="button small" data-action="copy-project-code" data-code="${esc(p.join_code||'')}">Copy code</button><button class="button small ghost" data-action="regenerate-project-code" data-project="${p.id}">New code</button></div></div>`:''}${me&&me.role!=='owner'&&active?`<button class="button small danger" data-action="leave-project" data-project="${p.id}" data-user="${BACKEND.user.id}">Leave project</button>`:''}</section>
@@ -1380,7 +1461,7 @@ async function renderProjectDetail(id){
     ${canLog?`<section class="section project-log-create"><div class="section-head"><div><h2>Add development log entry</h2><p>The prompts are optional — use the ones that help explain your development.</p></div></div><form class="project-update-form" data-action-form="project-update" data-project="${p.id}" data-existing-media="0"><div class="form-two"><label>Short heading <small>optional</small><input name="title" maxlength="180" placeholder="e.g. Rebuilt the corridor greybox"></label><label>Milestone <small>optional</small><select name="milestoneId"><option value="">Not linked to a milestone</option>${b.milestones.map(m=>`<option value="${m.id}">${esc(m.title)}</option>`).join('')}</select></label></div><div class="structured-log-grid"><label><span>What I did <small>optional</small></span><textarea name="whatDid" maxlength="4000" placeholder="What did you make, test or change?"></textarea></label><label><span>Why I did it <small>optional</small></span><textarea name="why" maxlength="3000" placeholder="Why was this the right decision?"></textarea></label><label><span>Problems / changes <small>optional</small></span><textarea name="problems" maxlength="3000" placeholder="What went wrong or changed after testing?"></textarea></label><label><span>Next steps <small>optional</small></span><textarea name="nextSteps" maxlength="3000" placeholder="What will you do next?"></textarea></label></div><label>Screenshots <small>optional • up to 6 • 10 MB each</small><input type="file" name="files" multiple accept="image/png,image/jpeg,image/webp" data-project-files></label><div class="file-caption-list" data-file-captions></div><button class="button primary" type="submit">Add to development log</button></form></section>`:''}
     <section class="section"><div class="section-head"><div><h2>Team development log</h2><p>Every entry stays attached to its author. Teacher and teammate feedback sits directly underneath the relevant update.</p></div></div><div class="project-log-list">${b.updates.length?b.updates.map(u=>projectUpdateHtml(u,p,b)).join(''):'<div class="empty">No development-log entries yet.</div>'}</div></section>
     ${me?`<section class="section"><div class="section-head"><div><h2>My Contributions</h2><p>Only the development evidence attributed to you, ready to refer back to when you submit assessment work elsewhere.</p></div></div><div class="contribution-summary"><div><small>My log entries</small><strong>${myUpdates.length}</strong></div><div><small>My screenshots</small><strong>${myMedia}</strong></div><div><small>Role</small><strong>${esc(me.role_label||(me.role==='owner'?'Project Lead':'Team member'))}</strong></div></div><div class="my-contribution-list">${myUpdates.length?myUpdates.slice().reverse().map(u=>contributionEntryHtml(u,b)).join(''):'<div class="muted">Your own entries will appear here.</div>'}</div></section>`:''}
-    ${owner&&active?`<section class="section"><details class="project-settings"><summary>Project settings</summary><form class="form-grid" data-action-form="project-settings" data-project="${p.id}"><label>Title<input name="title" maxlength="120" value="${esc(p.title)}" required></label><label>Brief / description<textarea name="description" maxlength="4000">${esc(p.description||'')}</textarea></label><label>Assessment / unit <small>optional</small><input name="assessmentUnit" maxlength="160" value="${esc(p.assessment_unit||'')}"></label><button class="button" type="submit">Save project settings</button><button class="button danger" type="button" data-action="delete-project" data-project="${p.id}" data-name="${esc(p.title)}">Permanently delete project</button></form></details></section>`:''}`;
+    ${owner&&active?`<section class="section"><details class="project-settings"><summary>Project settings</summary><form class="form-grid" data-action-form="project-settings" data-project="${p.id}"><label>Title<input name="title" maxlength="120" value="${esc(p.title)}" required></label><div class="form-field"><span class="form-field-label">Brief / description</span>${projectRichEditor('description',p.description||'','Describe the project clearly.',6000)}</div><label>Assessment / unit <small>optional</small><input name="assessmentUnit" maxlength="160" value="${esc(p.assessment_unit||'')}"></label><button class="button" type="submit">Save project settings</button><button class="button danger" type="button" data-action="delete-project" data-project="${p.id}" data-name="${esc(p.title)}">Permanently delete project</button></form></details></section>`:''}`;
     await hydrateProjectMedia();bindProjectFileInputs(box);
   }catch(err){box.innerHTML=`<div class="offline-note">${esc(err.message)}</div>`}
 }
@@ -1756,7 +1837,7 @@ async function renderTeacherClass(classId){
         }).join(''):'<div class="empty"><h3>No students yet.</h3><p>Students will appear here after joining this class.</p></div>'}</div>
       </section>
       <section class="section class-project-workspace"><div class="section-head"><div><span class="eyebrow">CLASS PROJECTS</span><h2>Projects for ${esc(c.name)}</h2><p>See the briefs you have given this class and open the live individual or group project copies from the same workspace.</p></div><a class="button ghost small" href="#/projects">Open all Projects →</a></div>
-        <details open class="class-content-group"><summary>▣ Project templates <span>${classTemplates.length} linked to this class</span></summary><div style="padding:16px">${classTemplates.length?`<div class="multi-project-grid">${classTemplates.map(t=>`<article class="multi-project-card template-card"><div class="project-card-top"><span class="project-type-pill solo">${esc(projectTemplateWorkModeLabel(t.work_mode).toUpperCase())}</span><span class="request-status ${t.status==='published'?'shipped':t.status==='archived'?'declined':'new'}">${esc(t.status==='published'?'Published':t.status==='archived'?'Archived':'Draft')}</span></div><h3>${esc(t.title)}</h3><p>${esc(t.brief||'No brief yet.')}</p><div class="project-card-meta"><span>${esc(projectKindLabel(t.project_kind))}</span><span>${t.milestones.length} milestone${t.milestones.length===1?'':'s'}</span>${t.assessment_unit?`<span>${esc(t.assessment_unit)}</span>`:''}</div><a class="button primary small" href="#/projects/template/${t.id}">Manage template →</a></article>`).join('')}</div>`:'<div class="empty"><h3>No project templates for this class yet.</h3><p>Create one from Projects when you are ready.</p></div>'}</div></details>
+        <details open class="class-content-group"><summary>▣ Project templates <span>${classTemplates.length} linked to this class</span></summary><div style="padding:16px">${classTemplates.length?`<div class="multi-project-grid">${classTemplates.map(t=>`<article class="multi-project-card template-card"><div class="project-card-top"><span class="project-type-pill solo">${esc(projectTemplateWorkModeLabel(t.work_mode).toUpperCase())}</span><span class="request-status ${t.status==='published'?'shipped':t.status==='archived'?'declined':'new'}">${esc(t.status==='published'?'Published':t.status==='archived'?'Archived':'Draft')}</span></div><h3>${esc(t.title)}</h3><p>${esc(projectRichExcerpt(t.brief||'No brief yet.'))}</p><div class="project-card-meta"><span>${esc(projectKindLabel(t.project_kind))}</span><span>${t.milestones.length} milestone${t.milestones.length===1?'':'s'}</span>${t.assessment_unit?`<span>${esc(t.assessment_unit)}</span>`:''}</div><a class="button primary small" href="#/projects/template/${t.id}">Manage template →</a></article>`).join('')}</div>`:'<div class="empty"><h3>No project templates for this class yet.</h3><p>Create one from Projects when you are ready.</p></div>'}</div></details>
         <details open class="class-content-group"><summary>🎮 Student project activity <span>${classProjects.length} project${classProjects.length===1?'':'s'}</span></summary><div style="padding:16px">${projectListCards(classProjects,'No student project copies for this class yet.')}</div></details>
       </section>
       <section class="section class-learning-content"><div class="section-head"><div><span class="eyebrow">CLASS CONTENT</span><h2>What has this class completed?</h2><p>Every row shows how many students in this class have completed that piece of Hub content. This is progress visibility, not an assignment wall.</p></div></div>
@@ -2311,10 +2392,35 @@ function closeImageLightbox(){
   modal.hidden=true;document.body.classList.remove('lightbox-open');
   const img=$('#lightboxImage');if(img)img.removeAttribute('src');
 }
+document.addEventListener('mousedown',e=>{
+  if(e.target.closest?.('[data-action="rich-command"]'))e.preventDefault();
+});
+document.addEventListener('input',e=>{
+  const editor=e.target.closest?.('[data-rich-editor]');
+  if(editor)syncProjectRichEditor(editor);
+});
 document.addEventListener('click',async e=>{
   const b=e.target.closest('[data-action]');if(!b)return;
   const a=b.dataset.action;
-  if(a==='open-image'){openImageLightbox(b);}
+  if(a==='rich-command'){
+    const editor=b.closest('[data-rich-editor]'),surface=editor?.querySelector('[data-rich-surface]');
+    if(!editor||!surface)return;
+    surface.focus();
+    const cmd=b.dataset.command||'';
+    if(cmd==='createLink'){
+      const entered=prompt('Paste the full link (https://...)','https://');
+      if(entered===null)return;
+      const href=safeUrl(entered);
+      if(!href){toast('Use a full http:// or https:// link.');return}
+      document.execCommand('createLink',false,href);
+    }else if(cmd==='formatBlock'){
+      document.execCommand('formatBlock',false,b.dataset.value||'p');
+    }else if(cmd){
+      document.execCommand(cmd,false,null);
+    }
+    syncProjectRichEditor(editor);
+  }
+  else if(a==='open-image'){openImageLightbox(b);}
   else if(a==='load-video'){
     const shell=b.closest('[data-video-shell]');
     if(!shell)return;
@@ -2487,6 +2593,11 @@ document.addEventListener('click',async e=>{
 });
 
 document.addEventListener('submit',async e=>{
+  if(syncProjectRichEditors(e.target)){
+    e.preventDefault();
+    toast('That brief is over the 6,000 character limit. Shorten it before saving.');
+    return;
+  }
   if(e.target.dataset.actionForm==='news-comment'){
     e.preventDefault();const key=e.target.dataset.story,story=newsStoryByKey(key);if(!story)return;
     if(!BACKEND.user){authView='signin';openAuth();toast('Sign in to comment.');return}

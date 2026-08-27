@@ -737,3 +737,24 @@ button:disabled{opacity:.48;cursor:not-allowed;transform:none!important}
 .class-content-group{border:1px solid var(--line);border-radius:16px;background:var(--panel);margin:12px 0;overflow:hidden}.class-content-group>summary{cursor:pointer;padding:16px 18px;font-weight:800;display:flex;justify-content:space-between;gap:12px}.class-content-group>summary span{font-weight:500;color:var(--muted);font-size:.82rem}.class-content-group>div{border-top:1px solid var(--line)}
 .class-content-row{display:grid;grid-template-columns:minmax(220px,1fr) minmax(220px,.8fr);gap:20px;align-items:center;padding:12px 18px;border-bottom:1px solid var(--line)}.class-content-row:last-child{border-bottom:0}.class-content-name{display:flex;flex-direction:column;gap:3px}.class-content-name small{color:var(--muted)}.class-content-progress{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}.class-content-progress>span{font-size:.78rem;color:var(--muted);white-space:nowrap}
 @media(max-width:700px){.class-open-row{align-items:flex-start;flex-direction:column}.class-open-button{order:0;margin-left:0}.class-content-row{grid-template-columns:1fr}.class-content-progress{grid-template-columns:1fr auto}.student-content-detail{grid-template-columns:1fr}}
+
+/* v3.32.4 — safe rich-text project briefs */
+.form-field{display:grid;gap:5px}.form-field-label{font-size:14px;line-height:1.45;color:#b7c5d3;font-weight:700}
+.project-rich-editor{border:1px solid #2d4258;background:#09131d;border-radius:10px;overflow:hidden;margin-top:5px;transition:border-color .15s,box-shadow .15s}
+.project-rich-editor:focus-within{border-color:#4d88b7;box-shadow:0 0 0 3px rgba(67,169,255,.08)}
+.project-rich-editor.over-limit{border-color:#dc6372;box-shadow:0 0 0 3px rgba(220,99,114,.08)}
+.project-rich-toolbar{display:flex;flex-wrap:wrap;gap:4px;align-items:center;padding:7px;border-bottom:1px solid #26394c;background:#0d1924}
+.project-rich-toolbar button{border:1px solid #30465b;background:#111f2c;color:#dbe8f3;border-radius:6px;min-width:34px;height:31px;padding:0 8px;font:inherit;font-size:12px;font-weight:800;cursor:pointer}
+.project-rich-toolbar button:hover,.project-rich-toolbar button:focus-visible{border-color:#5a93bd;background:#162a3a;color:#fff;outline:none}
+.rich-toolbar-divider{width:1px;height:22px;background:#2b4053;margin:0 2px}
+.project-rich-surface{min-height:235px;padding:15px 16px;color:#e7f0f7;outline:none;line-height:1.7;overflow-wrap:anywhere}
+.project-rich-surface:empty:before{content:attr(data-placeholder);color:#62778a;pointer-events:none}
+.project-rich-surface p{margin:.55em 0}.project-rich-surface h2{font-size:24px;line-height:1.25;margin:1em 0 .35em}.project-rich-surface h3{font-size:18px;line-height:1.3;margin:.9em 0 .3em}
+.project-rich-surface ul,.project-rich-surface ol{padding-left:1.6em;margin:.55em 0}.project-rich-surface li{margin:.2em 0}.project-rich-surface a{color:#69c9ff;text-decoration:underline}
+.project-rich-editor-foot{display:flex;justify-content:space-between;gap:12px;padding:7px 10px;border-top:1px solid #203346;background:#08121b;color:#76899b;font-size:10px;line-height:1.4}
+.project-rich-editor-foot [data-rich-count]{white-space:nowrap;font-variant-numeric:tabular-nums}.project-rich-editor-foot [data-rich-count].over{color:#ff8996;font-weight:900}
+.project-rich-content{max-width:900px;color:#aebdca;line-height:1.72;overflow-wrap:anywhere}
+.project-rich-content p{margin:.6em 0;color:inherit}.project-rich-content h2{font-size:24px;line-height:1.25;color:#f2f7fb;margin:1em 0 .35em}.project-rich-content h3{font-size:18px;line-height:1.3;color:#dcebf5;margin:.9em 0 .3em}
+.project-rich-content ul,.project-rich-content ol{padding-left:1.55em;margin:.65em 0}.project-rich-content li{margin:.25em 0;color:#b4c3cf}.project-rich-content strong{color:#eef8ff}.project-rich-content em{color:#c9d8e3}.project-rich-content blockquote{margin:.75em 0;padding:.65em .9em;border-left:3px solid #4a90bd;background:#0b1722;border-radius:0 8px 8px 0;color:#c4d2dc}.project-rich-content a{color:#69c9ff;text-decoration:underline;text-underline-offset:2px}
+.project-rich-available{margin-top:7px}.available-template-card .project-rich-content{font-size:14px}.available-template-card .project-rich-content h2{font-size:19px}.available-template-card .project-rich-content h3{font-size:16px}
+@media(max-width:700px){.project-rich-toolbar{gap:5px}.project-rich-toolbar button{min-width:38px;height:34px}.project-rich-surface{min-height:210px;padding:13px}.project-rich-editor-foot{display:grid}.project-rich-content h2{font-size:21px}}

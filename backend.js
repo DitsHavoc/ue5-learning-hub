@@ -375,7 +375,7 @@ const api = {
       title:String(values.title||'').trim().slice(0,160),
       project_kind:String(values.projectKind||'assignment'),
       assessment_unit:String(values.assessmentUnit||'').trim().slice(0,160),
-      brief:String(values.brief||'').trim().slice(0,6000),
+      brief:String(values.brief||'').trim().slice(0,16000),
       work_mode:['individual','group','either'].includes(values.workMode)?values.workMode:'either',
       status:'draft'
     };
@@ -388,7 +388,7 @@ const api = {
     if(!client||!this.user||this.profile?.role!=='teacher')throw new Error('Teacher access required.');
     const changes={updated_at:new Date().toISOString()};
     if(values.title!==undefined)changes.title=String(values.title||'').trim().slice(0,160);
-    if(values.brief!==undefined)changes.brief=String(values.brief||'').trim().slice(0,6000);
+    if(values.brief!==undefined)changes.brief=String(values.brief||'').trim().slice(0,16000);
     if(values.assessment_unit!==undefined)changes.assessment_unit=String(values.assessment_unit||'').trim().slice(0,160);
     if(values.project_kind!==undefined)changes.project_kind=String(values.project_kind||'assignment');
     if(values.work_mode!==undefined&&['individual','group','either'].includes(values.work_mode))changes.work_mode=values.work_mode;
@@ -491,7 +491,7 @@ const api = {
       title:String(values.title||'').trim().slice(0,120),
       project_type:values.projectType==='group'?'group':'solo',
       project_kind:String(values.projectKind||'assignment'),
-      description:String(values.description||'').trim().slice(0,4000),
+      description:String(values.description||'').trim().slice(0,16000),
       class_id:values.classId||null,
       assessment_unit:String(values.assessmentUnit||'').trim().slice(0,160),
       status:'active'
@@ -503,7 +503,7 @@ const api = {
   async updateProject(projectId,values){
     if(!client||!this.user)throw new Error('Sign in first.');
     const changes={updated_at:new Date().toISOString()};
-    for(const [key,max] of [['title',120],['description',4000],['assessment_unit',160]]){
+    for(const [key,max] of [['title',120],['description',16000],['assessment_unit',160]]){
       if(values[key]!==undefined)changes[key]=String(values[key]||'').trim().slice(0,max);
     }
     if(values.status!==undefined)changes.status=values.status;
