@@ -1686,6 +1686,88 @@ function revision(){
   <section class="section revision-builder"><div class="section-head"><div><h2>Build a focused quiz</h2><p id="revisionSelectionSummary">Choose at least one topic.</p></div></div><form data-action-form="revision-focused-start" id="revisionFocusedForm"><div class="revision-path-picker-grid">${DATA.paths.map(p=>{const lessons=DATA.lessons.filter(l=>l.path===p.id);return `<fieldset class="revision-path-picker" data-revision-path="${p.id}"><legend><span>${p.icon}</span>${esc(p.title)}</legend><label class="revision-select-path"><input type="checkbox" data-revision-path-toggle="${p.id}"> Select whole path</label><div class="revision-lesson-options">${lessons.map(l=>`<label><input type="checkbox" name="lessonIds" value="${l.id}" data-revision-lesson data-path="${p.id}"><span><strong>${esc(l.title)}</strong><small>${l.quiz.length} question${l.quiz.length===1?'':'s'}</small></span></label>`).join('')}</div></fieldset>`}).join('')}</div><div class="revision-builder-footer"><label>Number of questions<select name="count"><option value="10" selected>10</option><option value="20">20</option><option value="30">30</option></select></label><button class="button primary" type="submit">Start focused quiz →</button></div></form></section>
   ${results.length?`<section class="section"><div class="section-head"><div><h2>Recent scores</h2><p>Stored on this browser for quick progress checks.</p></div></div><div class="recent-quiz-results">${results.slice(0,6).map(r=>`<div><strong>${r.pct}%</strong><span>${esc(r.topicLabel)} • ${r.correct}/${r.total}</span><small>${new Date(r.at).toLocaleString()}</small></div>`).join('')}</div></section>`:''}`;
 }
+
+function teacherClassPage(classId){
+  if(!BACKEND.user || BACKEND.profile?.role!=='teacher'){
+    return `<div class="page-head"><div class="breadcrumb"><a href="#/teacher">Teacher Dashboard</a> / Class</div><span class="eyebrow">Class view</span><h1>Teacher access required</h1><p class="muted">Sign in with a teacher account to inspect class learning.</p></div>`;
+  }
+  return `<div class="page-head class-detail-head"><div class="breadcrumb"><a href="#/teacher">Teacher Dashboard</a> / Class</div><span class="eyebrow">Class learning view</span><h1>Loading class…</h1><p class="muted">Students, content and progress for this teaching group.</p></div><div id="teacherClassContent"><div class="empty">Loading class content…</div></div>`;
+}
+function classProgressRows(o,memberIds,items,prefix='',titleKey=x=>x.title){
+  const total=memberIds.length;
+  return items.map(item=>{
+    const id=prefix+item.id;
+    const complete=memberIds.filter(uid=>o.progress.some(p=>p.user_id===uid&&p.lesson_id===id&&p.completed)).length;
+    const pct=total?Math.round((complete/total)*100):0;
+    return `<div class="class-content-row"><div class="class-content-name"><strong>${esc(titleKey(item))}</strong>${item.duration?`<small>${esc(item.duration)}</small>`:''}</div><div class="class-content-progress"><div class="progress"><span style="width:${pct}%"></span></div><span>${complete}/${total} complete</span></div></div>`;
+  }).join('');
+}
+function studentCompletedContent(o,userId){
+  const completed=new Set(o.progress.filter(p=>p.user_id===userId&&p.completed).map(p=>p.lesson_id));
+  const list=(items,prefix='')=>items.filter(x=>completed.has(prefix+x.id)).map(x=>`<li>${esc(x.title)}</li>`).join('');
+  const core=list(DATA.lessons),blocks=list(BLOCKS.blocks,'block:'),tutorials=list(TOOLS.tutorials,'tutorial:'),model=list(MODEL.lessons,'model:'),sculpt=list(SCULPT.practices,'sculpt:'),design=list(DESIGN.modules.map(m=>({id:m.id,title:m.build?.title||m.title})),'designbuild:'),modelBuild=list(MODEL.builds||[],'modelbuild:'),modelFix=list(MODEL.fixes||[],'modelfix:'),chapters=TOOLS.chapterBuilds.filter(x=>completed.has(`chapter:${x.path}`)).map(x=>`<li>${esc(x.title)}</li>`).join('');
+  return `<div class="student-content-detail">
+    <div><strong>Building Blocks</strong><ul>${blocks||'<li class="muted">None completed yet.</li>'}</ul></div>
+    <div><strong>Core lessons</strong><ul>${core||'<li class="muted">None completed yet.</li>'}</ul></div>
+    <div><strong>Quick Tutorials</strong><ul>${tutorials||'<li class="muted">None completed yet.</li>'}</ul></div>
+    <div><strong>Designer Studio</strong><ul>${design||'<li class="muted">None completed yet.</li>'}</ul></div>
+    <div><strong>3D / Sculpt</strong><ul>${model+modelBuild+modelFix+sculpt||'<li class="muted">None completed yet.</li>'}</ul></div>
+    <div><strong>Chapter Builds</strong><ul>${chapters||'<li class="muted">None completed yet.</li>'}</ul></div>
+  </div>`;
+}
+async function renderTeacherClass(classId){
+  const box=$('#teacherClassContent');if(!box)return;
+  try{
+    const o=await BACKEND.teacherOverview();
+    const c=(o?.classes||[]).find(x=>String(x.id)===String(classId));
+    if(!c){box.innerHTML='<div class="empty"><h3>Class not found.</h3><p>You may no longer teach this class, or it may have been deleted.</p><a class="button ghost" href="#/teacher">Back to Teacher Dashboard</a></div>';return}
+    const memberIds=(c.class_members||[]).map(m=>m.user_id);
+    const members=(o.profiles||[]).filter(p=>memberIds.includes(p.id));
+    const progress=o.progress||[];
+    const done=(uid,id)=>progress.some(p=>p.user_id===uid&&p.lesson_id===id&&p.completed);
+    const count=(uid,items,prefix='')=>items.filter(x=>done(uid,prefix+x.id)).length;
+    const pending=(o.submissions||[]).filter(s=>memberIds.includes(s.user_id)&&s.status==='submitted');
+    const approved=(o.submissions||[]).filter(s=>memberIds.includes(s.user_id)&&s.status==='approved');
+    const classProjects=(o.collabProjects||[]).filter(p=>String(p.class_id||'')===String(c.id));
+    const teacherNames=Object.fromEntries((o.teachers||[]).map(t=>[t.id,t.display_name]));
+    const teacherIds=(c.class_teachers||[]).map(t=>t.teacher_id);
+    const head=document.querySelector('.class-detail-head');
+    if(head)head.innerHTML=`<div class="breadcrumb"><a href="#/teacher">Teacher Dashboard</a> / ${esc(c.name)}</div><span class="eyebrow">Class learning view • ${esc(c.academic_year||'No academic year')}</span><h1>${esc(c.name)}</h1><p class="muted">One class, its students and exactly what they have completed across the Hub.</p><div class="class-detail-team">${teacherIds.map(id=>`<span>${esc(teacherNames[id]||'Teacher')}${id===c.teacher_id?' • Owner':''}</span>`).join('')}</div>`;
+    const lessonTotal=DATA.lessons.length*memberIds.length;
+    const lessonDone=memberIds.reduce((n,uid)=>n+count(uid,DATA.lessons),0);
+    const blockTotal=BLOCKS.blocks.length*memberIds.length;
+    const blockDone=memberIds.reduce((n,uid)=>n+count(uid,BLOCKS.blocks,'block:'),0);
+    const tutorialTotal=TOOLS.tutorials.length*memberIds.length;
+    const tutorialDone=memberIds.reduce((n,uid)=>n+count(uid,TOOLS.tutorials,'tutorial:'),0);
+    box.innerHTML=`
+      <div class="teacher-grid class-detail-stats">
+        <div class="teacher-stat"><small>Students</small><strong>${memberIds.length}</strong></div>
+        <div class="teacher-stat"><small>Building Blocks</small><strong>${blockDone}</strong><span>of ${blockTotal||0} student completions</span></div>
+        <div class="teacher-stat"><small>Core lessons</small><strong>${lessonDone}</strong><span>of ${lessonTotal||0} student completions</span></div>
+        <div class="teacher-stat"><small>Quick Tutorials</small><strong>${tutorialDone}</strong><span>of ${tutorialTotal||0} student completions</span></div>
+        <div class="teacher-stat"><small>Evidence waiting</small><strong>${pending.length}</strong></div>
+        <div class="teacher-stat"><small>Class projects</small><strong>${classProjects.length}</strong><span>${classProjects.filter(p=>p.status==='complete').length} complete</span></div>
+      </div>
+      <section class="section"><div class="section-head"><div><h2>Students in ${esc(c.name)}</h2><p>Open a student to see the exact content they have completed, not just a percentage.</p></div><span class="sync-chip">${members.length} student${members.length===1?'':'s'}</span></div>
+        <div class="class-student-grid">${members.length?members.map(p=>{
+          const core=count(p.id,DATA.lessons),blocks=count(p.id,BLOCKS.blocks,'block:'),tutorials=count(p.id,TOOLS.tutorials,'tutorial:'),model=count(p.id,MODEL.lessons,'model:')+count(p.id,SCULPT.practices,'sculpt:'),evidence=approved.filter(s=>s.user_id===p.id).length;
+          return `<article class="class-student-card"><div class="class-student-head">${avatarMarkup('sm',p.display_name)}<div><h3>${esc(p.display_name)}</h3><span>${core}/${DATA.lessons.length} core lessons</span></div></div><div class="class-student-stats"><span><b>${blocks}</b> blocks</span><span><b>${tutorials}</b> tutorials</span><span><b>${model}</b> 3D/sculpt</span><span><b>${evidence}</b> evidence</span></div><details><summary>View completed content</summary>${studentCompletedContent(o,p.id)}</details></article>`;
+        }).join(''):'<div class="empty"><h3>No students yet.</h3><p>Students will appear here after joining this class.</p></div>'}</div>
+      </section>
+      <section class="section class-learning-content"><div class="section-head"><div><span class="eyebrow">CLASS CONTENT</span><h2>What has this class completed?</h2><p>Every row shows how many students in this class have completed that piece of Hub content. This is progress visibility, not an assignment wall.</p></div></div>
+        <details open class="class-content-group"><summary>🧱 Building Blocks <span>${BLOCKS.blocks.length} concepts</span></summary><div>${classProgressRows(o,memberIds,BLOCKS.blocks,'block:')}</div></details>
+        <details open class="class-content-group"><summary>🧠 Core System Lessons <span>${DATA.lessons.length} lessons</span></summary><div>${classProgressRows(o,memberIds,DATA.lessons)}</div></details>
+        <details class="class-content-group"><summary>🛠 Quick Tutorials <span>${TOOLS.tutorials.length} recipes</span></summary><div>${classProgressRows(o,memberIds,TOOLS.tutorials,'tutorial:')}</div></details>
+        <details class="class-content-group"><summary>🎨 Designer Studio Builds <span>${DESIGN.modules.length} builds</span></summary><div>${classProgressRows(o,memberIds,DESIGN.modules.map(m=>({id:m.id,title:m.build?.title||m.title})),'designbuild:')}</div></details>
+        <details class="class-content-group"><summary>⬡ 3D Modelling <span>${MODEL.lessons.length} lessons</span></summary><div>${classProgressRows(o,memberIds,MODEL.lessons,'model:')}</div></details>
+        ${(MODEL.builds||[]).length?`<details class="class-content-group"><summary>🔧 3D Build X <span>${MODEL.builds.length} builds</span></summary><div>${classProgressRows(o,memberIds,MODEL.builds,'modelbuild:')}</div></details>`:''}
+        ${(MODEL.fixes||[]).length?`<details class="class-content-group"><summary>🩹 Fix This Model <span>${MODEL.fixes.length} clinics</span></summary><div>${classProgressRows(o,memberIds,MODEL.fixes,'modelfix:')}</div></details>`:''}
+        <details class="class-content-group"><summary>◉ Sculpt Playground <span>${SCULPT.practices.length} exercises</span></summary><div>${classProgressRows(o,memberIds,SCULPT.practices,'sculpt:')}</div></details>
+        <details class="class-content-group"><summary>🎮 Chapter Builds <span>${TOOLS.chapterBuilds.length} builds</span></summary><div>${classProgressRows(o,memberIds,TOOLS.chapterBuilds.map(x=>({...x,id:x.path})),'chapter:',x=>x.title)}</div></details>
+      </section>`;
+  }catch(err){box.innerHTML=`<div class="empty"><h3>Could not load this class.</h3><p>${esc(err.message)}</p></div>`}
+}
+
 function teacherPage(){
   if(!BACKEND.user || BACKEND.profile?.role!=='teacher'){
     return `<div class="page-head"><span class="eyebrow">Teacher dashboard</span><h1>Teacher access</h1><p class="muted">This page becomes available to a profile with the teacher role when the cloud backend is connected.</p></div><div class="offline-note">Student learning remains fully usable in local mode. Teacher overview needs Supabase because it is aggregating progress across different accounts/devices.</div>`;
@@ -1798,6 +1880,7 @@ async function renderTeacher(){
               <div class="class-code-panel ${c.join_enabled?'enabled':'paused'}"><div><small>STUDENT JOIN CODE</small><code>${esc(c.join_code||'—')}</code><span>${c.join_enabled?'Accepting joins':'Paused'}</span></div><div class="class-code-actions"><button class="button small ghost" data-action="copy-class-code" data-code="${esc(c.join_code||'')}">Copy</button><button class="button small ghost" data-action="toggle-class-join" data-class="${c.id}" data-enabled="${c.join_enabled?'1':'0'}">${c.join_enabled?'Pause':'Enable'}</button><button class="button small ghost" data-action="regenerate-class-code" data-class="${c.id}">New code</button></div></div>
               <div class="class-members">${memberIds.length?memberIds.map(id=>`<div class="class-member"><span>${esc(names[id]||'Student')}</span><button data-action="remove-class-member" data-class="${c.id}" data-student="${id}" title="Remove">×</button></div>`).join(''):'<div class="muted">No students in this class yet. Give students the join code above.</div>'}</div>
               ${available.length?`<form class="class-add" data-action-form="add-class-member" data-class="${c.id}"><select name="student" required><option value="">Add student already visible to you…</option>${available.map(s=>`<option value="${s.id}">${esc(s.display_name)}</option>`).join('')}</select><button class="button small" type="submit">Add</button></form>`:'<div class="muted">New students should normally join with the class code. Manual add only lists students already visible through one of your classes.</div>'}
+              <div class="class-open-row"><a class="button primary class-open-button" href="#/teacher/class/${c.id}">Open class →</a><span>See this class's students and learning content.</span></div>
               <div class="class-danger-row"><button class="button small ghost" data-action="archive-class" data-class="${c.id}" data-name="${esc(c.name)}">Archive class</button>${isOwner?`<button class="button small danger" data-action="delete-class" data-class="${c.id}" data-name="${esc(c.name)}">Delete permanently</button>`:`<button class="button small ghost" data-action="leave-class-teacher" data-class="${c.id}" data-name="${esc(c.name)}">Leave teaching team</button>`}</div>
             </div>`;
           }).join(''):'<div class="offline-note">No active classes yet. Create your first teaching group here.</div>'}
@@ -1887,6 +1970,7 @@ function route(){
   else if(parts[0]==='chapter-build'&&parts[1]){app.innerHTML=chapterBuildPage(parts[1]);activate('tutorials')}
   else if(parts[0]==='revision'){app.innerHTML=revision();activate('revision')}
   else if(parts[0]==='glossary'){app.innerHTML=glossary();activate('glossary')}
+  else if(parts[0]==='teacher'&&parts[1]==='class'&&parts[2]){app.innerHTML=teacherClassPage(parts[2]);activate('teacher')}
   else if(parts[0]==='teacher'){app.innerHTML=teacherPage();activate('teacher')}
   else app.innerHTML=notFound();
 
@@ -1904,7 +1988,8 @@ function route(){
   if(parts[0]==='projects'&&parts[1]==='template'&&parts[2]&&BACKEND.user) renderProjectTemplate(parts[2]);
   else if(parts[0]==='projects'&&parts[1]&&BACKEND.user) renderProjectDetail(parts[1]);
   if(parts[0]==='requests'&&BACKEND.user) renderRequests();
-  if(parts[0]==='teacher') renderTeacher();
+  if(parts[0]==='teacher'&&parts[1]==='class'&&parts[2]) renderTeacherClass(parts[2]);
+  else if(parts[0]==='teacher') renderTeacher();
 }
 function activate(key){
   const a=$(`[data-route="${key}"]`);if(a)a.classList.add('active');
