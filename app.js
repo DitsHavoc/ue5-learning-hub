@@ -1068,7 +1068,7 @@ function programmingPage(){
   ${pb?`<section class="section dashboard-unlock"><div class="section-head"><div><span class="eyebrow">YOU FINISHED A CHAPTER</span><h2>🎮 New Chapter Build unlocked</h2><p>Combine what you learned into something playable before moving on.</p></div></div>${chapterBuildCard(pb,{compact:true})}</section>`:''}`;
 }
 
-const NEWS_CACHE_STORE='ue5hub:v329:news-cache';
+const NEWS_CACHE_STORE='ue5hub:v3331:news-cache';
 let newsStories=[];
 let newsCategory='all';
 let newsSearch='';
@@ -1111,10 +1111,36 @@ function loadNewsCache(){
 function saveNewsCache(items){
   try{localStorage.setItem(NEWS_CACHE_STORE,JSON.stringify({time:Date.now(),items:items.slice(0,90)}))}catch(e){}
 }
-async function fetchNewsSource(source){
-  const url=`${NEWS.proxy}${encodeURIComponent(source.feed)}`;
-  const res=await fetch(url,{headers:{Accept:'application/json'}});if(!res.ok)throw new Error(`${source.name}: HTTP ${res.status}`);
-  const data=await res.json();if(data.status!=='ok'||!Array.isArray(data.items))throw new Error(`${source.name}: feed unavailable`);
+function newsFeedUrlForFetch(feed,force=false){
+  try{
+    const u=new URL(String(feed||''));
+    // rss2json/CDN can keep serving the same feed URL from its own cache even
+    // after our local cache is cleared. Give the upstream feed a shared time
+    // bucket so normal loads advance regularly and a manual refresh advances
+    // immediately without creating a unique URL for every student/page load.
+    const normalMinutes=Math.max(5,Number(NEWS.cacheMinutes)||10);
+    const bucketMs=(force?1:normalMinutes)*60000;
+    u.searchParams.set('ue5hub_feed',String(Math.floor(Date.now()/bucketMs)));
+    return u.toString();
+  }catch(e){return String(feed||'')}
+}
+async function fetchNewsSource(source,{force=false}={}){
+  const fetchFeed=async(feed,noStore=false)=>{
+    const url=`${NEWS.proxy}${encodeURIComponent(feed)}`;
+    const options={headers:{Accept:'application/json'}};
+    if(noStore)options.cache='no-store';
+    const res=await fetch(url,options);if(!res.ok)throw new Error(`${source.name}: HTTP ${res.status}`);
+    const data=await res.json();if(data.status!=='ok'||!Array.isArray(data.items))throw new Error(`${source.name}: feed unavailable`);
+    return data;
+  };
+  let data;
+  try{data=await fetchFeed(newsFeedUrlForFetch(source.feed,force),force)}
+  catch(err){
+    // A small number of RSS servers reject unknown query parameters. Fall
+    // back to their canonical feed rather than losing that source entirely.
+    console.warn(`Fresh news fetch fallback: ${source.name}`,err.message);
+    data=await fetchFeed(source.feed,force);
+  }
   return data.items.map(item=>{
     const link=safeUrl(item.link||item.guid);if(!link)return null;
     const description=newsPlainText(item.description||item.content||'').slice(0,360);
@@ -1135,11 +1161,13 @@ async function loadNewsSocial(){
 async function loadNewsFeed(force=false){
   const box=$('#newsFeed');if(!box)return;
   box.innerHTML='<div class="news-loading"><span class="news-pulse"></span><div><strong>Checking the feeds…</strong><p>Pulling current stories from the selected games and development sources.</p></div></div>';
-  let items=[];
+  let items=[],sourceCount=0;
+  const previousKeys=new Set(newsStories.map(x=>x.key));
   const cached=!force&&loadNewsCache();
-  if(cached)items=cached.items;
+  if(cached){items=cached.items;sourceCount=new Set(items.map(x=>x.sourceId)).size}
   else{
-    const results=await Promise.allSettled(NEWS.sources.map(fetchNewsSource));
+    const results=await Promise.allSettled(NEWS.sources.map(source=>fetchNewsSource(source,{force})));
+    sourceCount=results.filter(r=>r.status==='fulfilled'&&r.value.length).length;
     items=results.flatMap(r=>r.status==='fulfilled'?r.value:[]);
     const seen=new Set();items=items.filter(x=>!seen.has(x.url)&&(seen.add(x.url),true)).sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0,90);
     if(items.length)saveNewsCache(items);
@@ -1147,7 +1175,17 @@ async function loadNewsFeed(force=false){
   newsStories=items;
   await loadNewsSocial();
   renderNewsFeed();
-  const status=$('#newsLiveStatus');if(status)status.textContent=items.length?`${items.length} live stories • ${cached?'cached recently':'updated now'}`:'Live feeds unavailable';
+  const status=$('#newsLiveStatus');
+  if(status){
+    if(!items.length)status.textContent='Live feeds unavailable';
+    else if(cached)status.textContent=`${items.length} live stories • cached recently`;
+    else if(force){
+      const newCount=items.filter(x=>!previousKeys.has(x.key)).length;
+      const refreshedAt=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+      status.textContent=`${items.length} live stories • ${newCount?`${newCount} new`:'no newer items'} • ${sourceCount}/${NEWS.sources.length} sources • refreshed ${refreshedAt}`;
+      toast(newCount?`News refreshed — ${newCount} new stor${newCount===1?'y':'ies'}.`:'News refreshed — the sources returned no newer stories yet.');
+    }else status.textContent=`${items.length} live stories • ${sourceCount}/${NEWS.sources.length} sources • updated now`;
+  }
 }
 function newsStoryByKey(key){return newsStories.find(x=>x.key===key)||(newsSocial.savedItems||[]).find(x=>x.key===key)}
 function newsCard(story){

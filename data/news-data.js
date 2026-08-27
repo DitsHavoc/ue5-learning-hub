@@ -1,7 +1,7 @@
 window.UE5_NEWS_DATA = {
-  version: '3.20.0',
+  version: '3.33.1',
   proxy: 'https://api.rss2json.com/v1/api.json?rss_url=',
-  cacheMinutes: 20,
+  cacheMinutes: 10,
   sources: [
     {
       id: 'unreal',
