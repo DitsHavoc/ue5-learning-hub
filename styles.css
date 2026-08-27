@@ -758,3 +758,19 @@ button:disabled{opacity:.48;cursor:not-allowed;transform:none!important}
 .project-rich-content ul,.project-rich-content ol{padding-left:1.55em;margin:.65em 0}.project-rich-content li{margin:.25em 0;color:#b4c3cf}.project-rich-content strong{color:#eef8ff}.project-rich-content em{color:#c9d8e3}.project-rich-content blockquote{margin:.75em 0;padding:.65em .9em;border-left:3px solid #4a90bd;background:#0b1722;border-radius:0 8px 8px 0;color:#c4d2dc}.project-rich-content a{color:#69c9ff;text-decoration:underline;text-underline-offset:2px}
 .project-rich-available{margin-top:7px}.available-template-card .project-rich-content{font-size:14px}.available-template-card .project-rich-content h2{font-size:19px}.available-template-card .project-rich-content h3{font-size:16px}
 @media(max-width:700px){.project-rich-toolbar{gap:5px}.project-rich-toolbar button{min-width:38px;height:34px}.project-rich-surface{min-height:210px;padding:13px}.project-rich-editor-foot{display:grid}.project-rich-content h2{font-size:21px}}
+
+/* v3.32.5 — teacher identity / max-level presentation */
+.teacher-player-card,.teacher-progress-banner{border-color:rgba(86,215,255,.46)!important;box-shadow:0 18px 45px rgba(0,0,0,.24),0 0 42px rgba(86,215,255,.14)!important}
+.teacher-player-card:before,.teacher-progress-banner:before{content:"";pointer-events:none;position:absolute;inset:0;border-radius:inherit;background:linear-gradient(135deg,rgba(86,215,255,.045),transparent 42%,rgba(205,107,255,.05));}
+.teacher-player-card{position:relative;overflow:hidden}.teacher-player-card>*{position:relative;z-index:1}.teacher-progress-banner{position:relative;overflow:hidden}.teacher-progress-banner>*{position:relative;z-index:1}
+.teacher-max-chip{min-width:38px;border-color:#7de7ff;color:#dffaff;background:#07131b;box-shadow:0 0 16px rgba(91,222,255,.3)}
+.level-ring.teacher-max{--level-pct:360deg;background:conic-gradient(#67e6ff,#cf7cff,#67e6ff);box-shadow:0 0 28px rgba(91,222,255,.22)}
+.level-ring.teacher-max>div{border-color:rgba(105,229,255,.46);background:#07131b}.level-ring.teacher-max strong{font-size:15px;color:#dffaff;letter-spacing:.04em}
+.teacher-max-line{display:flex;justify-content:space-between;gap:12px;align-items:center;margin:16px 0 0;padding:9px 11px;border-radius:12px;border:1px solid rgba(91,222,255,.27);background:rgba(68,188,230,.07);font-size:10px;font-weight:900;letter-spacing:.08em;color:#8feaff}.teacher-max-line strong{color:#fff;font-size:12px}
+.badge-card.staff,.equipped-badge.staff{border-color:rgba(96,225,255,.48)!important;background:linear-gradient(135deg,rgba(31,106,126,.2),rgba(78,34,108,.18))!important;box-shadow:0 0 30px rgba(76,211,255,.12)}
+.badge-card.staff .badge-rarity{color:#baf5ff;background:rgba(67,201,236,.13);border:1px solid rgba(96,225,255,.22)}
+.badge-card.staff .achievement-icon,.equipped-badge.staff .equipped-badge-icon{background:linear-gradient(135deg,rgba(73,211,237,.17),rgba(192,87,255,.16));border-color:rgba(106,226,255,.38)}
+.staff-badge-lock{color:#9ceeff!important;font-weight:850}
+.staff-role-pill{display:inline-flex!important;align-items:center!important;width:max-content;margin-top:5px;padding:4px 7px;border-radius:999px;border:1px solid rgba(98,224,255,.34);background:rgba(69,194,230,.09);color:#a8efff!important;font-size:8px!important;font-weight:950;letter-spacing:.08em;text-transform:uppercase}
+.staff-role-pill.compact{display:inline-flex!important;margin:0 0 0 5px!important;padding:2px 5px;vertical-align:middle;font-size:7px!important}
+.comment-head strong .staff-role-pill,.news-comment b .staff-role-pill{font-weight:950}

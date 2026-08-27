@@ -51,7 +51,8 @@ const BADGE_META={
   'first-mesh':{rarity:'Common',tone:'common',hint:'Complete your first 3D Modelling lesson.'},
   'mesh-doctor':{rarity:'Rare',tone:'rare',hint:'Complete the Topology Clinic lesson and one Fix This Model clinic.'},
   'asset-pipeline':{rarity:'Epic',tone:'epic',hint:'Complete all 12 3D Modelling lessons and export a Build X asset.'},
-  'digital-clay':{rarity:'Uncommon',tone:'uncommon',hint:'Complete all six Sculpt Playground exercises.'}
+  'digital-clay':{rarity:'Uncommon',tone:'uncommon',hint:'Complete all six Sculpt Playground exercises.'},
+  'teacher':{rarity:'Staff',tone:'staff',hint:'Exclusive to verified Learning Hub teacher accounts.'}
 };
 
 const AVATAR_THEMES={
@@ -211,7 +212,9 @@ function avatarTheme(id){return AVATAR_THEMES[id]||AVATAR_THEMES.violet}
 function userDisplayName(){
   return BACKEND.profile?.display_name || BACKEND.user?.email?.split('@')[0] || 'Guest learner';
 }
+function isTeacher(){return BACKEND.profile?.role==='teacher'}
 function userRankTitle(){
+  if(isTeacher())return 'Unreal Instructor';
   const n=level().n;
   if(n>=10)return 'Engine Architect';
   if(n>=8)return 'Systems Director';
@@ -226,6 +229,10 @@ function avatarMarkup(size='medium',label=userDisplayName()){
 }
 function recentUnlockedBadges(limit=4){
   const rows=achievementData(0,0).filter(a=>a[3]);
+  if(isTeacher()){
+    const staff=rows.find(a=>a[0]==='teacher'),others=rows.filter(a=>a[0]!=='teacher');
+    return [staff,...others.slice(Math.max(0,others.length-Math.max(0,limit-1))).reverse()].filter(Boolean).slice(0,limit);
+  }
   return rows.slice(Math.max(0,rows.length-limit)).reverse();
 }
 function profileBadgeStrip(limit=4){
@@ -235,6 +242,7 @@ function profileBadgeStrip(limit=4){
 }
 function badgeById(id,approvedCount=0,requestCount=0){return achievementData(approvedCount,requestCount).find(a=>a[0]===id)||null}
 function equippedBadge(){
+  if(isTeacher())return badgeById('teacher')||['teacher','Unreal Instructor','Verified Learning Hub teacher account.',true,'🎓'];
   const chosen=badgeById(profilePrefs.badge||'');
   if(profilePrefs.badge&&chosen)return chosen;
   return recentUnlockedBadges(1)[0]||null;
@@ -257,6 +265,7 @@ function nextBadgeTarget(){
   return {...c,badge,pct:Math.round(c.current/c.target*100)};
 }
 function levelRingMarkup(){
+  if(isTeacher())return `<div class="level-ring teacher-max"><div><strong>MAX</strong><span>LEVEL</span></div></div>`;
   const i=level();
   return `<div class="level-ring" style="--level-pct:${i.pct*3.6}deg"><div><strong>${i.n}</strong><span>LEVEL</span></div></div>`;
 }
@@ -266,9 +275,9 @@ function continueMissionCard(){
 }
 
 function featuredStudentCard(){
-  const i=level(),name=userDisplayName(),eq=equippedBadge(),theme=avatarTheme(profilePrefs.theme);
+  const i=level(),name=userDisplayName(),eq=equippedBadge(),theme=avatarTheme(profilePrefs.theme),teacher=isTeacher();
   const badgeMeta=eq?BADGE_META[eq[0]]:null;
-  return `<section class="portal-player-card compact-player-card" style="--player-glow:${theme.shadow}"><div class="player-card-identity"><div class="player-avatar-stack">${avatarMarkup('xl',name)}<span class="player-level-chip">L${i.n}</span></div><div class="player-name-block"><span class="eyebrow">PLAYER CARD</span><h2>${esc(name)}</h2><p>${esc(userRankTitle())}</p></div>${levelRingMarkup()}</div><div class="player-xp-line"><span><b>${i.xp}</b> XP</span><span>${i.left} XP to Level ${i.n+1}</span></div><div class="progress player-xp-progress"><span style="width:${i.pct}%"></span></div><div class="equipped-badge ${badgeMeta?.tone||'locked'}"><span class="equipped-badge-icon">${eq?eq[4]:'?'}</span><div><small>${eq?'PINNED BADGE':'BADGE SLOT'}</small><strong>${eq?esc(eq[1]):'Unlock your first badge'}</strong><span>${eq?esc(badgeMeta?.rarity||'Common'):'Complete a lesson to begin'}</span></div></div><div class="player-card-mini-stats"><span><b>${completedLessons().length}</b> lessons</span><span><b>${completedTutorialCount()}</b> tutorials</span><span><b>${state.chapterBuildCompleted.length}</b> chapter builds</span></div><div class="portal-player-actions"><a class="button ghost" href="#/progress">🏆 Badge cabinet</a><button class="button ghost" data-action="open-auth">✎ Customise</button></div></section>`;
+  return `<section class="portal-player-card compact-player-card ${teacher?'teacher-player-card':''}" style="--player-glow:${teacher?'rgba(86,215,255,.34)':theme.shadow}"><div class="player-card-identity"><div class="player-avatar-stack">${avatarMarkup('xl',name)}<span class="player-level-chip ${teacher?'teacher-max-chip':''}">${teacher?'MAX':`L${i.n}`}</span></div><div class="player-name-block"><span class="eyebrow">${teacher?'STAFF PLAYER CARD':'PLAYER CARD'}</span><h2>${esc(name)}</h2><p>${esc(userRankTitle())}${teacher?' • 🎓 Teacher':''}</p></div>${levelRingMarkup()}</div>${teacher?`<div class="teacher-max-line"><span>🎓 VERIFIED TEACHER</span><strong>LEVEL MAX</strong></div>`:`<div class="player-xp-line"><span><b>${i.xp}</b> XP</span><span>${i.left} XP to Level ${i.n+1}</span></div><div class="progress player-xp-progress"><span style="width:${i.pct}%"></span></div>`}<div class="equipped-badge ${badgeMeta?.tone||'locked'}"><span class="equipped-badge-icon">${eq?eq[4]:'?'}</span><div><small>${teacher?'STAFF BADGE':eq?'PINNED BADGE':'BADGE SLOT'}</small><strong>${eq?esc(eq[1]):'Unlock your first badge'}</strong><span>${teacher?'Teacher-only • automatically equipped':eq?esc(badgeMeta?.rarity||'Common'):'Complete a lesson to begin'}</span></div></div><div class="player-card-mini-stats"><span><b>${completedLessons().length}</b> lessons</span><span><b>${completedTutorialCount()}</b> tutorials</span><span><b>${state.chapterBuildCompleted.length}</b> chapter builds</span></div><div class="portal-player-actions"><a class="button ghost" href="#/progress">🏆 Badge cabinet</a><button class="button ghost" data-action="open-auth">✎ Customise</button></div></section>`;
 }
 function lesson(id){return DATA.lessons.find(x=>x.id===id)}
 function path(id){return DATA.paths.find(x=>x.id===id)}
@@ -321,13 +330,14 @@ function toast(msg,kind=''){
 }
 
 function updateChrome(){
-  const i=level();
-  $('#sideLevel').textContent=`LEVEL ${i.n}`;
-  $('#sideXp').textContent=`${i.xp} XP`;
-  $('#sideBar').style.width=`${i.pct}%`;
-  $('#sideNext').textContent=`${i.left} XP to Level ${i.n+1}`;
+  const i=level(),teacherRole=isTeacher();
+  $('#sideLevel').textContent=teacherRole?'LEVEL MAX':`LEVEL ${i.n}`;
+  $('#sideXp').textContent=teacherRole?'🎓 TEACHER':`${i.xp} XP`;
+  $('#sideBar').style.width=teacherRole?'100%':`${i.pct}%`;
+  $('#sideNext').textContent=teacherRole?'Staff account • max level':`${i.left} XP to Level ${i.n+1}`;
   $('#topDone').textContent=completedLessons().length;
-  $('#topXp').textContent=i.xp;
+  $('#topXp').textContent=teacherRole?'MAX':i.xp;
+  const topXpUnit=$('#topXpUnit');if(topXpUnit)topXpUnit.textContent=teacherRole?'LEVEL':'XP';
 
   const btn=$('#accountButton');
   const txt=$('#accountText');
@@ -1111,7 +1121,7 @@ async function toggleNewsComments(key){
   panel.innerHTML='<div class="muted">Loading discussion…</div>';
   try{
     const rows=await BACKEND.getNewsComments(key),story=newsStoryByKey(key);
-    panel.innerHTML=`<div class="news-comment-head"><strong>Learning Hub discussion</strong><span>${rows.length} comment${rows.length===1?'':'s'}</span></div><div class="news-comment-list">${rows.length?rows.map(c=>`<div class="news-comment"><div><b>${esc(c.display_name||'Student')}</b><span>${esc(c.role||'student')} • ${new Date(c.created_at).toLocaleString('en-GB')}</span></div><p>${esc(c.body)}</p>${c.can_delete?`<button class="link-button danger-link" data-action="news-comment-delete" data-comment="${esc(c.id)}" data-story="${esc(key)}">Delete</button>`:''}</div>`).join(''):'<div class="muted">No comments yet. Start the discussion.</div>'}</div><form class="news-comment-form" data-action-form="news-comment" data-story="${esc(key)}"><label>Comment on this story<textarea name="body" maxlength="2000" required placeholder="What is interesting, useful or worth questioning here?"></textarea></label><button class="button small primary" type="submit">Post comment</button></form>${story?`<a class="news-discussion-source" href="${esc(story.url)}" target="_blank" rel="noopener">Open the original story before replying ↗</a>`:''}`;
+    panel.innerHTML=`<div class="news-comment-head"><strong>Learning Hub discussion</strong><span>${rows.length} comment${rows.length===1?'':'s'}</span></div><div class="news-comment-list">${rows.length?rows.map(c=>`<div class="news-comment"><div><b>${esc(c.display_name||'Student')}${c.role==='teacher'?' <span class="staff-role-pill compact">🎓 TEACHER</span>':''}</b><span>${esc(c.role||'student')} • ${new Date(c.created_at).toLocaleString('en-GB')}</span></div><p>${esc(c.body)}</p>${c.can_delete?`<button class="link-button danger-link" data-action="news-comment-delete" data-comment="${esc(c.id)}" data-story="${esc(key)}">Delete</button>`:''}</div>`).join(''):'<div class="muted">No comments yet. Start the discussion.</div>'}</div><form class="news-comment-form" data-action-form="news-comment" data-story="${esc(key)}"><label>Comment on this story<textarea name="body" maxlength="2000" required placeholder="What is interesting, useful or worth questioning here?"></textarea></label><button class="button small primary" type="submit">Post comment</button></form>${story?`<a class="news-discussion-source" href="${esc(story.url)}" target="_blank" rel="noopener">Open the original story before replying ↗</a>`:''}`;
   }catch(err){panel.innerHTML=`<div class="offline-note">${esc(err.message)}</div>`}
 }
 
@@ -1498,7 +1508,7 @@ async function loadEvidence(id){
     ${s.reflection?`<div class="reflection-box"><strong>Your reflection</strong><p>${esc(s.reflection)}</p></div>`:''}
     ${link?`<a class="button small ghost" href="${esc(link)}" target="_blank" rel="noopener">↗ Open evidence link</a>`:''}
     ${files.length?`<div class="evidence-files"><strong>Uploaded evidence</strong>${files.map(f=>`<button class="evidence-file" data-action="open-evidence-file" data-path="${esc(f.storage_path)}">📎 ${esc(f.original_name)}</button>`).join('')}</div>`:''}
-    ${s.teacher_feedback?`<div class="teacher-feedback ${s.status==='approved'?'good':''}"><strong>Teacher feedback</strong><p>${esc(s.teacher_feedback)}</p></div>`:''}
+    ${s.teacher_feedback?`<div class="teacher-feedback ${s.status==='approved'?'good':''}"><strong>🎓 Teacher feedback</strong><p>${esc(s.teacher_feedback)}</p></div>`:''}
     ${locked
       ?`<div class="offline-note">${s.status==='submitted'?'This submission is locked while it waits for teacher review.':'Approved evidence is kept as part of your course/project record.'}</div>`
       :evidenceForm(l,s)}
@@ -1518,7 +1528,7 @@ function evidenceForm(l,s){
 function achievementData(approvedCount=0,requestCount=0){
   const done=completedLessons().length,game=projectProgress().complete,tuts=completedTutorialCount(),builds=state.chapterBuildCompleted.length,modelDone=(state.modelLessonCompleted||[]).length,modelFixes=(state.modelFixCompleted||[]).length,modelBuilds=(state.modelBuildCompleted||[]).length,sculptDoneCount=(state.sculptCompleted||[]).length;
   const ids=new Set(state.completed);
-  return [
+  const rows=[
     ['first-step','First Steps','Complete your first lesson.',done>=1,'◉'],
     ['blueprint-core','Blueprint Builder','Complete Variables, Branches and Functions.',['variables','branches','functions'].every(x=>ids.has(x)),'◇'],
     ['game-builder','Practice Systems Builder','Complete 10 mechanics in Signal Lost practice.',game>=10,'⚙'],
@@ -1534,16 +1544,18 @@ function achievementData(approvedCount=0,requestCount=0){
     ['asset-pipeline','Game Asset Ready','Complete all 3D Modelling lessons and one Build X project.',modelDone>=MODEL.lessons.length&&modelBuilds>=1,'◆'],
     ['digital-clay','Digital Clay','Complete all six Sculpt Playground exercises.',sculptDoneCount>=SCULPT.practices.length,'🗿']
   ];
+  if(isTeacher())rows.unshift(['teacher','Unreal Instructor','Verified Learning Hub teacher account. Staff-only badge; students cannot unlock it.',true,'🎓']);
+  return rows;
 }
 function progressPage(){
-  const pp=projectProgress(),i=level(),eq=equippedBadge();
+  const pp=projectProgress(),i=level(),eq=equippedBadge(),teacher=isTeacher();
   return `<div class="page-head progress-page-head">
     <div class="breadcrumb"><a href="#/">Dashboard</a> / My Progress</div>
     <span class="eyebrow">XP • BADGES • EVIDENCE • FEEDBACK</span>
     <h1>◎ My Progress</h1>
-    <p class="muted">Track what you've completed, pin a favourite badge to your profile, and keep the evidence that proves what you can actually build.</p>
+    <p class="muted">${teacher?'Your staff badge and MAX level are automatic. Learning completion, evidence and project activity still track normally below.':"Track what you've completed, pin a favourite badge to your profile, and keep the evidence that proves what you can actually build."}</p>
   </div>
-  <section class="progress-player-banner"><div class="progress-player-id">${avatarMarkup('xl',userDisplayName())}<div><span class="eyebrow">${esc(userRankTitle())}</span><h2>${esc(userDisplayName())}</h2><p>Level ${i.n} • ${i.xp} XP</p></div></div>${levelRingMarkup()}<div class="progress-equipped"><span>PINNED BADGE</span><strong>${eq?`${eq[4]} ${esc(eq[1])}`:'None yet'}</strong><small>${eq?esc(BADGE_META[eq[0]]?.rarity||'Common'):'Unlock and pin one below'}</small></div></section>
+  <section class="progress-player-banner ${teacher?'teacher-progress-banner':''}"><div class="progress-player-id">${avatarMarkup('xl',userDisplayName())}<div><span class="eyebrow">${esc(userRankTitle())}</span><h2>${esc(userDisplayName())}</h2><p>${teacher?'🎓 Teacher • Level MAX':`Level ${i.n} • ${i.xp} XP`}</p></div></div>${levelRingMarkup()}<div class="progress-equipped"><span>${teacher?'STAFF BADGE':'PINNED BADGE'}</span><strong>${eq?`${eq[4]} ${esc(eq[1])}`:'None yet'}</strong><small>${teacher?'Teacher-only • automatically equipped':eq?esc(BADGE_META[eq[0]]?.rarity||'Common'):'Unlock and pin one below'}</small></div></section>
   <div class="stat-grid">
     <div class="stat"><small>Lessons</small><strong>${completedLessons().length}/${DATA.lessons.length}</strong></div>
     <div class="stat"><small>Quick Tutorials</small><strong>${completedTutorialCount()}/${TOOLS.tutorials.length}</strong></div>
@@ -1551,18 +1563,18 @@ function progressPage(){
     <div class="stat"><small>Sculpt Playground</small><strong>${(state.sculptCompleted||[]).length}/${SCULPT.practices.length}</strong></div>
     <div class="stat"><small>Chapter Builds</small><strong>${state.chapterBuildCompleted.length}/${TOOLS.chapterBuilds.length}</strong></div>
     <div class="stat"><small>Practice mechanics</small><strong>${pp.complete}/${pp.total}</strong></div>
-    <div class="stat"><small>XP</small><strong>${i.xp}</strong></div>
+    <div class="stat"><small>${teacher?'Level':'XP'}</small><strong>${teacher?'MAX':i.xp}</strong></div>
     <div class="stat"><small>Cloud evidence</small><strong id="progressEvidenceStat">${BACKEND.user?'…':'Locked'}</strong></div>
   </div>
-  <section class="section"><div class="section-head"><div><span class="eyebrow">BADGE CABINET</span><h2>Achievements</h2><p>Meaningful milestones rather than participation confetti. Pin any unlocked badge to your player card.</p></div></div><div class="achievement-grid badge-cabinet" id="achievementGrid">${renderAchievements(0,0)}</div></section>
+  <section class="section"><div class="section-head"><div><span class="eyebrow">BADGE CABINET</span><h2>Achievements</h2><p>${teacher?'Your Unreal Instructor badge stays equipped; student-style achievements still record your learning activity.':'Meaningful milestones rather than participation confetti. Pin any unlocked badge to your player card.'}</p></div></div><div class="achievement-grid badge-cabinet" id="achievementGrid">${renderAchievements(0,0)}</div></section>
   <section class="section"><div class="section-head"><div><h2>Evidence tracker</h2><p>See what has been submitted, approved or sent back for improvement.</p></div></div><div id="progressEvidence">${BACKEND.user?'<div class="empty">Loading evidence…</div>':'<div class="offline-note">Evidence tracking unlocks when you sign in. Lesson completion and optional Signal Lost practice status still work locally as a guest.</div>'}</div></section>
   <section class="section"><div class="section-head"><div><h2>My class</h2><p>Your teaching group once account sign-in is enabled.</p></div></div><div id="progressClasses">${BACKEND.user?'<div class="empty">Loading classes…</div>':'<div class="offline-note">Create or sign in to a Learning Hub account, then join using the class code from your teacher.</div>'}</div></section>
   <section class="section" id="notifications"><div class="section-head"><div><h2>Notifications</h2><p>Teacher feedback and roadmap updates.</p></div></div><div id="progressNotifications">${BACKEND.user?'<div class="empty">Loading notifications…</div>':'<div class="offline-note">Notifications unlock when you sign in to a Learning Hub account.</div>'}</div></section>`;
 }
 function renderAchievements(approvedCount,requestCount){
   return achievementData(approvedCount,requestCount).map(a=>{
-    const meta=BADGE_META[a[0]]||{rarity:'Common',tone:'common',hint:a[2]},pinned=profilePrefs.badge===a[0];
-    return `<article class="achievement badge-card ${a[3]?'unlocked':'locked'} ${meta.tone} ${pinned?'pinned':''}"><div class="badge-rarity">${esc(meta.rarity)}</div><div class="achievement-icon">${a[4]}</div><div class="badge-copy"><strong>${esc(a[1])}</strong><p>${esc(a[2])}</p></div><div class="badge-card-footer">${a[3]?`<button class="link-button badge-pin-button" data-action="badge-equip" data-badge="${esc(a[0])}">${pinned?'★ Pinned':'☆ Pin to profile'}</button>`:`<span>🔒 ${esc(meta.hint)}</span>`}</div></article>`;
+    const meta=BADGE_META[a[0]]||{rarity:'Common',tone:'common',hint:a[2]},staff=a[0]==='teacher',pinned=staff&&isTeacher()||profilePrefs.badge===a[0];
+    return `<article class="achievement badge-card ${a[3]?'unlocked':'locked'} ${meta.tone} ${pinned?'pinned':''}"><div class="badge-rarity">${esc(meta.rarity)}</div><div class="achievement-icon">${a[4]}</div><div class="badge-copy"><strong>${esc(a[1])}</strong><p>${esc(a[2])}</p></div><div class="badge-card-footer">${staff?'<span class="staff-badge-lock">🎓 Staff badge • automatically equipped</span>':isTeacher()&&a[3]?'<span>✓ Achievement tracked • staff badge stays equipped</span>':a[3]?`<button class="link-button badge-pin-button" data-action="badge-equip" data-badge="${esc(a[0])}">${pinned?'★ Pinned':'☆ Pin to profile'}</button>`:`<span>🔒 ${esc(meta.hint)}</span>`}</div></article>`;
   }).join('');
 }
 async function renderProgressCloud(){
@@ -2022,7 +2034,7 @@ async function loadComments(id){
   if(!rows.length){box.innerHTML='<div class="muted">No comments yet. Use this space for a question or a short learning reflection.</div>';return}
   box.innerHTML=rows.map(c=>{
     const name=c.author?.display_name||'User',role=c.author?.role||'student';
-    return `<div class="comment"><div class="comment-avatar">${esc(name.slice(0,1).toUpperCase())}</div><div><div class="comment-head"><strong>${esc(name)}</strong><span>${esc(role)} • ${new Date(c.created_at).toLocaleString()}</span></div><p>${esc(c.body)}</p></div></div>`;
+    return `<div class="comment"><div class="comment-avatar">${esc(name.slice(0,1).toUpperCase())}</div><div><div class="comment-head"><strong>${esc(name)}${role==='teacher'?' <span class="staff-role-pill compact">🎓 TEACHER</span>':''}</strong><span>${esc(role)} • ${new Date(c.created_at).toLocaleString()}</span></div><p>${esc(c.body)}</p></div></div>`;
   }).join('');
 }
 
@@ -2241,11 +2253,11 @@ function renderAuth(){
     }
     body.innerHTML=`<div class="account-summary account-summary-rich">
       ${avatarMarkup('large',userDisplayName())}
-      <div><b>${esc(userDisplayName())}</b><span>${esc(BACKEND.user.email||'')}</span><small>${esc(userRankTitle())} • Level ${level().n}</small></div>
+      <div><b>${esc(userDisplayName())}</b><span>${esc(BACKEND.user.email||'')}</span><small>${esc(userRankTitle())} • ${isTeacher()?'Level MAX':`Level ${level().n}`}</small>${isTeacher()?'<span class="staff-role-pill">🎓 TEACHER • MAX</span>':''}</div>
     </div>
     <div class="cloud-callout">
       Your lesson progress, projects, development logs, evidence, feedback, classes, notifications and requests sync to this Learning Hub account.
-      ${BACKEND.profile?.role==='teacher'?'<br><br><b>Teacher role active.</b>':''}
+      ${isTeacher()?'<br><br><b>🎓 Teacher role active • Level MAX • Unreal Instructor badge equipped.</b>':''}
     </div>
     <div class="avatar-studio">
       <div class="avatar-studio-head"><span class="eyebrow">PROFILE CUSTOMISATION</span><h3>Avatar Studio</h3><p class="muted">Choose a simple icon and colour identity for the Hub.</p></div>
