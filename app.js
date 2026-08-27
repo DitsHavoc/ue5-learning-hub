@@ -330,28 +330,55 @@ function toast(msg,kind=''){
 }
 
 
+let completionBurstPoint=null;
 function completionConfetti(){
-  if(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)return;
-  const burst=document.createElement('div');
-  burst.className='completion-confetti';
-  burst.setAttribute('aria-hidden','true');
-  const colours=5,count=30;
-  for(let i=0;i<count;i++){
-    const bit=document.createElement('i'),angle=(Math.PI*2*i/count)+(Math.random()-.5)*.24,distance=90+Math.random()*180;
-    bit.className=`confetti-bit c${i%colours}`;
-    bit.style.setProperty('--x',`${Math.cos(angle)*distance}px`);
-    bit.style.setProperty('--y',`${Math.sin(angle)*distance+70+Math.random()*80}px`);
-    bit.style.setProperty('--r',`${Math.round((Math.random()-.5)*900)}deg`);
-    bit.style.setProperty('--d',`${Math.round(Math.random()*90)}ms`);
-    bit.style.setProperty('--s',`${6+Math.round(Math.random()*7)}px`);
-    burst.appendChild(bit);
+  const w=Math.max(1,window.innerWidth||document.documentElement.clientWidth||1);
+  const h=Math.max(1,window.innerHeight||document.documentElement.clientHeight||1);
+  const origin=completionBurstPoint||{x:w/2,y:Math.min(h*.42,360)};
+  completionBurstPoint=null;
+  const canvas=document.createElement('canvas');
+  canvas.setAttribute('aria-hidden','true');
+  Object.assign(canvas.style,{position:'fixed',inset:'0',width:'100vw',height:'100vh',pointerEvents:'none',zIndex:'2147483646'});
+  const dpr=Math.min(window.devicePixelRatio||1,2);
+  canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);
+  document.body.appendChild(canvas);
+  const ctx=canvas.getContext('2d');
+  if(!ctx){canvas.remove();return}
+  ctx.scale(dpr,dpr);
+  const colours=['#57d7ff','#9b7cff','#68e39a','#ffd166','#ff6fae','#ffffff'];
+  const reduced=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  const drawPiece=(p,alpha=1)=>{
+    ctx.save();ctx.globalAlpha=Math.max(0,alpha);ctx.translate(p.x,p.y);ctx.rotate(p.r);ctx.fillStyle=p.c;
+    if(p.round){ctx.beginPath();ctx.arc(0,0,p.s*.55,0,Math.PI*2);ctx.fill()}else ctx.fillRect(-p.s/2,-p.s*.75/2,p.s,p.s*.75);
+    ctx.restore();
+  };
+  if(reduced){
+    for(let i=0;i<52;i++){
+      const a=Math.PI*2*(i/52)+(Math.random()-.5)*.18,d=35+Math.random()*150;
+      drawPiece({x:origin.x+Math.cos(a)*d,y:origin.y+Math.sin(a)*d,r:Math.random()*Math.PI,c:colours[i%colours.length],s:5+Math.random()*7,round:i%4===0});
+    }
+    window.setTimeout(()=>canvas.remove(),850);
+    return;
   }
-  document.body.appendChild(burst);
-  window.setTimeout(()=>burst.remove(),1150);
+  const pieces=Array.from({length:76},(_,i)=>({
+    x:origin.x+(Math.random()-.5)*18,y:origin.y+(Math.random()-.5)*10,
+    vx:(Math.random()-.5)*11.5,vy:-(6.5+Math.random()*9.5),
+    g:.22+Math.random()*.11,r:Math.random()*Math.PI,vr:(Math.random()-.5)*.34,
+    c:colours[i%colours.length],s:5+Math.random()*7,round:i%5===0
+  }));
+  const started=performance.now(),duration=1250;let last=started;
+  const frame=now=>{
+    const dt=Math.min(2.2,(now-last)/16.667||1);last=now;ctx.clearRect(0,0,w,h);
+    const life=(now-started)/duration;
+    for(const p of pieces){p.vy+=p.g*dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.r+=p.vr*dt;drawPiece(p,life<.72?1:1-(life-.72)/.28)}
+    if(life<1)requestAnimationFrame(frame);else canvas.remove();
+  };
+  requestAnimationFrame(frame);
 }
 function finishInlineUpdate(becameComplete=false){
-  if(becameComplete)completionConfetti();
   route({preserveScroll:true});
+  if(becameComplete)requestAnimationFrame(()=>requestAnimationFrame(completionConfetti));
+  else completionBurstPoint=null;
 }
 
 function updateChrome(){
@@ -2441,6 +2468,7 @@ document.addEventListener('input',e=>{
 });
 document.addEventListener('click',async e=>{
   const b=e.target.closest('[data-action]');if(!b)return;
+  const r=b.getBoundingClientRect();completionBurstPoint={x:r.left+r.width/2,y:r.top+r.height/2};
   const a=b.dataset.action;
   if(a==='rich-command'){
     const editor=b.closest('[data-rich-editor]'),surface=editor?.querySelector('[data-rich-surface]');
