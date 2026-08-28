@@ -121,3 +121,39 @@ These references are used to verify engine-specific details while the licensed 2
 ### Licensed design reference
 
 **Unreal Engine 5 Best Practices**, Tyson Butler-Boschma, Packt, 2025 (college educational licence). It is used for design thinking, production workflow and curriculum inspiration only. No book pages, diagrams or long extracts are shipped with the Hub. The book targets UE5.4, so current Epic documentation above takes precedence for changed engine behaviour.
+
+## v3.34 Blueprint imagery hunt — 28 Aug 2026
+
+The v3.34 visual pass explicitly checks Blueprint-focused variants and current Blueprint-heavy Epic learning material before a Hub step is marked as needing a classroom capture. A C++ default view is **not** treated as proof that no Blueprint visual exists.
+
+### Current Blueprint-heavy Epic walkthroughs
+
+- [Design a Puzzle Adventure Game](https://dev.epicgames.com/documentation/unreal-engine/design-a-puzzle-adventure-game-in-unreal-engine) — current UE5.8 Designer Track landing page.
+- [Designer 02 — Create a Key](https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-02-create-a-key-in-unreal-engine) — current key Blueprint workflow.
+- [Designer 03 — Open Doors with Keys](https://dev.epicgames.com/documentation/unreal-engine/designer-03-open-doors-with-keys-in-unreal-engine) — current door/key Blueprint workflow.
+- [Designer 05 — Puzzles: Switches and Cubes](https://dev.epicgames.com/documentation/unreal-engine/designer-05-puzzles-switches-and-cubes-in-unreal-engine?lang=en-US) — current switch/interface puzzle workflow.
+- [Designer 06 — Puzzles: Moving Platforms](https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-06-puzzles-moving-platforms-in-unreal-engine) — current Blueprint moving-platform workflow.
+- [Designer 07 — Traps and Damage](https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-07-traps-and-damage-in-unreal-engine) — current overlap, Apply Damage and fail-state workflow.
+- [Designer 08 — Create an Enemy](https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-08-create-an-enemy-in-unreal-engine) — current enemy/AI Blueprint workflow.
+- [Designer 09 — Sprint Input Action](https://dev.epicgames.com/documentation/unreal-engine/designer-09-sprint-input-action-in-unreal-engine?lang=en-US) — current Enhanced Input + Character Movement sprint workflow.
+- [Designer 10 — Complete the Level](https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-10-complete-the-level-in-unreal-engine) — current end-state/game-loop workflow.
+
+### Current UI, debugging and editor references added in v3.34
+
+- [Creating Widgets](https://dev.epicgames.com/documentation/en-us/unreal-engine/creating-widgets-in-unreal-engine) — Create Widget, Add to Viewport, Remove from Parent, Set Input Mode and Show Mouse Cursor.
+- [UMG Anchors](https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-anchors-in-unreal-engine-ui) — current anchor presets and centre anchoring.
+- [Blueprint Debugging Example](https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-debugging-example-in-unreal-engine) — breakpoints and paused Blueprint execution.
+- [Blueprint Editor Toolbar](https://dev.epicgames.com/documentation/en-us/unreal-engine/toolbar-in-the-blueprints-visual-scripting-editor-for-unreal-engine) — Compile, Save and play/debug controls.
+- [Construction Script](https://dev.epicgames.com/documentation/unreal-engine/construction-script-in-unreal-engine) — current Construction Script entry graph.
+- [Material Instance Editor UI](https://dev.epicgames.com/documentation/unreal-engine/unreal-engine-material-instance-editor-ui) — current Material Instance parameters and overrides.
+- [Material Editor UI](https://dev.epicgames.com/documentation/unreal-engine/unreal-engine-material-editor-ui?lang=en-US) — current Material Editor layout.
+- [Texture Asset Editor](https://dev.epicgames.com/documentation/unreal-engine/texture-asset-editor-in-unreal-engine?lang=en-US) — current Texture Asset Editor and texture settings.
+- [Animation Montage](https://dev.epicgames.com/documentation/unreal-engine/animation-montage-in-unreal-engine) — current Montage timeline.
+- [Animation Notifies](https://dev.epicgames.com/documentation/unreal-engine/animation-notifies-in-unreal-engine) — current Notify tracks and workflow.
+- [Skeletal Mesh Sockets](https://dev.epicgames.com/documentation/unreal-engine/skeletal-mesh-sockets-in-unreal-engine) — current Socket creation and Blueprint attachment.
+- [Camera Shakes](https://dev.epicgames.com/documentation/en-us/unreal-engine/camera-shakes-in-unreal-engine) — current Camera Shake assets and Blueprint playback.
+- [Behavior Tree Quick Start](https://dev.epicgames.com/documentation/unreal-engine/behavior-tree-in-unreal-engine---quick-start-guide?lang=en-US) — current AI Perception component, Sight setup, perception events, Blackboard and Behaviour Tree startup.
+
+### Exactness rule used for these sources
+
+A current Epic page can be technically correct without its screenshot being an exact match for a Hub step. For example, Epic's current Sprint walkthrough uses its own key mapping, asset names and movement values. Those images are useful **support references**, but they are not placed directly beside a Hub step that specifies different values. The Hub only attaches an Epic image to a practical step when the relevant UI/action shown in that image genuinely matches the instruction beside it.

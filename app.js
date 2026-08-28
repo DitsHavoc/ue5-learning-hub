@@ -559,8 +559,10 @@ function renderRichText(value, ordered=false){
   return '<p>'+esc(value||'')+'</p>';
 }
 function renderStepVisual(visual, altPrefix='Step visual'){
-  if(!visual?.src)return '';
-  return '<div class="step-visual-wrap">'+zoomableImage({src:visual.src,alt:altPrefix,caption:visual.caption||'',sourceUrl:visual.sourceUrl||'',sourceTitle:visual.sourceTitle||'',kind:visual.kind||'local',eager:false})+'</div>';
+  const visuals=(Array.isArray(visual)?visual:[visual]).filter(v=>v?.src);
+  if(!visuals.length)return '';
+  const galleryClass=visuals.length>1?' step-visual-gallery':'';
+  return '<div class="step-visual-wrap'+galleryClass+'">'+visuals.map((v,i)=>zoomableImage({src:v.src,alt:`${altPrefix}${visuals.length>1?` — view ${i+1}`:''}`,caption:v.caption||'',sourceUrl:v.sourceUrl||'',sourceTitle:v.sourceTitle||'',kind:v.kind||'local',eager:false})).join('')+'</div>';
 }
 function guideSupportShape(step){
   if(!step)return {};
@@ -763,9 +765,11 @@ function lessonBuildingBlocks(l){const bs=blocksForLesson(l);if(!bs.length)retur
 function blockCard(b){const done=blockDone(b.id),tier=BLOCKS.tiers[b.tier];return `<a class="building-block-card ${b.tier} ${done?'done':''}" href="#/block/${b.id}"><div class="building-block-card-top"><span class="block-tier ${b.tier}">${done?'✓ LEARNED':tier.title}</span><span>${b.minutes} min</span></div><h3>${esc(b.title)}</h3><p>${esc(b.short)}</p>${b.prefix?`<code>${esc(b.prefix)}</code>`:''}<strong>${done?'Revisit':'Learn it'} →</strong></a>`}
 function blockTrackSummary(t){const xs=BLOCKS.blocks.filter(b=>b.track===t.id),core=xs.filter(b=>b.tier==='core').length;return `<div class="block-track-summary"><span>${t.icon}</span><div><strong>${esc(t.title)}</strong><small>${core?`${core} core • ${xs.length} total`:`Learn when needed • ${xs.length} blocks`}</small></div></div>`}
 function blockVisual(b){
-  const v=b?.visual;if(!v?.src)return '';
-  const exact=v.kind==='epic'?'OFFICIAL UE5.8 REFERENCE':'CURRENT CLASSROOM REFERENCE';
-  return `<section class="content-card block-visual-reference"><span class="eyebrow">${exact}</span><h2>See the real thing</h2><p class="muted">This visual is here because it matches this Building Block. If an exact image is not available, the Hub deliberately leaves the block image-free.</p>${zoomableImage({src:v.src,alt:`${b.title} reference`,caption:v.caption||'',sourceUrl:v.sourceUrl||'',sourceTitle:v.sourceTitle||'',kind:v.kind||'reference',eager:false})}</section>`;
+  const visuals=(Array.isArray(b?.visual)?b.visual:[b?.visual]).filter(v=>v?.src);
+  if(!visuals.length)return '';
+  const allEpic=visuals.every(v=>v.kind==='epic');
+  const exact=allEpic?'OFFICIAL UE5.8 REFERENCE':'CURRENT CLASSROOM / OFFICIAL REFERENCE';
+  return `<section class="content-card block-visual-reference"><span class="eyebrow">${exact}</span><h2>See the real thing</h2><p class="muted">Every visual below is here because it directly explains part of this Building Block. The Hub does not use vaguely related screenshots to fill space.</p><div class="block-visual-gallery ${visuals.length>1?'multi':''}">${visuals.map((v,i)=>zoomableImage({src:v.src,alt:`${b.title} reference${visuals.length>1?` — view ${i+1}`:''}`,caption:v.caption||'',sourceUrl:v.sourceUrl||'',sourceTitle:v.sourceTitle||'',kind:v.kind||'reference',eager:false})).join('')}</div></section>`;
 }
 function blocksPage(){
   const filtered=BLOCKS.blocks.filter(b=>blocksTier==='all'||b.tier===blocksTier),done=(state.blockCompleted||[]).length,core=BLOCKS.blocks.filter(b=>b.tier==='core');

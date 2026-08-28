@@ -1,6 +1,6 @@
 window.UE5_TUTORIAL_DATA = {
-  "version": "3.33.0",
-  "buildDate": "27 Aug 2026",
+  "version": "3.34.0",
+  "buildDate": "28 Aug 2026",
   "categories": [
     {
       "id": "movement",
@@ -326,7 +326,7 @@ window.UE5_TUTORIAL_DATA = {
       "category": "movement",
       "duration": "12 min",
       "difficulty": "Beginner",
-      "summary": "Use an input action to temporarily raise Max Walk Speed while the player holds a sprint control.",
+      "summary": "Build hold-to-sprint using Epic’s current Enhanced Input workflow: a Digital Input Action, a safe PIE key, stored default speed and Set Max Walk Speed.",
       "uses": [
         "Enhanced Input",
         "Character Movement",
@@ -335,79 +335,130 @@ window.UE5_TUTORIAL_DATA = {
       "referenceLesson": "variables",
       "steps": [
         {
-          "title": "Create or confirm an Input Action for sprint",
-          "where": "Input folder and Mapping Context",
-          "do": "Use an Input Action such as IA_Sprint and map it to Left Shift.",
-          "why": "Sprint should be an input action, not a raw key check inside gameplay logic.",
-          "see": "IA_Sprint exists and is mapped to a sprint key.",
-          "check": "The action binding is visible in the Mapping Context."
+          "title": "Create IA_Sprint",
+          "where": "Content Drawer → Input / Actions → right-click → Input → Input Action",
+          "do": "Create IA_Sprint. Open it and keep Value Type = Digital (Bool).",
+          "why": "Sprint is an on/off gameplay intention, so a Boolean Input Action is the correct data type.",
+          "see": "IA_Sprint is a saved Input Action with Digital (Bool) value type.",
+          "check": "The asset opens without warnings and Value Type reads Digital (Bool)."
         },
         {
-          "title": "Open the player Character graph",
-          "where": "Character Blueprint → Event Graph",
-          "do": "Open the player Character Blueprint and find the Event Graph.",
-          "why": "Sprint changes the controlled character’s movement speed at runtime.",
-          "see": "The graph is ready for input event logic.",
-          "check": "Character Movement can be dragged in from the Components panel."
+          "title": "Add the Down trigger",
+          "where": "IA_Sprint → Details → Triggers → +",
+          "do": "Add a Trigger and choose Down.",
+          "why": "Epic uses Down because it activates immediately when the key is pressed; Hold waits for a hold-time threshold.",
+          "see": "The Triggers array contains Down.",
+          "check": "IA_Sprint is saved with the Down trigger."
         },
         {
-          "title": "Handle sprint start",
-          "where": "Right-click → search IA_Sprint → choose Started",
-          "do": "On IA_Sprint Started, drag in Character Movement and set Max Walk Speed to a higher value such as 900.",
-          "why": "The Started event is ideal for the moment the sprint key is pressed.",
-          "see": "The graph shows IA_Sprint Started → Set Max Walk Speed.",
-          "check": "Pressing sprint in Play makes the character move faster."
+          "title": "Map a PIE-safe key",
+          "where": "IMC_Default → Mappings → +",
+          "do": "Add IA_Sprint and map it to Caps Lock for the classroom build.",
+          "why": "Epic notes that Shift/Ctrl/Alt can be consumed by Unreal Editor shortcuts in PIE. Caps Lock is a safer test binding.",
+          "see": "IA_Sprint appears in IMC_Default with Caps Lock assigned.",
+          "check": "Save the Mapping Context."
         },
         {
-          "title": "Handle sprint end",
-          "where": "Same IA_Sprint event node → Completed or Canceled",
-          "do": "On Completed or Canceled, set Max Walk Speed back to the normal value such as 500.",
-          "why": "Hold-to-sprint needs a clear reset when the key is released.",
-          "see": "The character returns to normal speed when the key is released.",
-          "check": "Walking speed is consistent every time sprint ends."
+          "title": "Create movement-speed variables",
+          "where": "Player Character → My Blueprint → Variables",
+          "do": "Create DefaultMovementSpeed Float and SprintMovementSpeed Float. Compile, then set SprintMovementSpeed = 1000.",
+          "why": "Storing both values avoids hard-coding the normal speed and makes sprint tuning obvious.",
+          "see": "Both Float variables exist; SprintMovementSpeed reads 1000.",
+          "check": "Compile after creating the variables so defaults can be edited."
         },
         {
-          "title": "Test and tune the values",
-          "where": "Play mode",
-          "do": "Run, hold sprint and release it several times, adjusting the normal and sprint speed if needed.",
-          "why": "Movement values should feel intentional rather than arbitrary.",
-          "see": "The speed change is noticeable but controllable.",
-          "check": "You can point to exactly which two values control the feel.",
+          "title": "Capture the normal speed at BeginPlay",
+          "where": "Player Character → Event Graph",
+          "do": "Event BeginPlay → drag in Character Movement → Get Max Walk Speed → Set DefaultMovementSpeed.",
+          "why": "The character remembers whatever its real normal speed is instead of assuming a magic number.",
+          "see": "DefaultMovementSpeed is set from Character Movement Max Walk Speed when play starts.",
+          "check": "The Third Person template is normally 600 cm/s before you change it."
+        },
+        {
+          "title": "Set sprint speed while held and restore it on release",
+          "where": "Player Character → Event Graph → add IA_Sprint event",
+          "do": "Triggered → Set Max Walk Speed using SprintMovementSpeed. Completed → another Set Max Walk Speed using DefaultMovementSpeed. Character Movement is the Target for both.",
+          "why": "Triggered applies sprint while the action is active; Completed restores the captured normal speed on release.",
+          "see": "One IA_Sprint event drives two Set Max Walk Speed nodes.",
+          "check": "Both Set Max Walk Speed nodes target Character Movement."
+        },
+        {
+          "title": "Compile and test",
+          "where": "Play In Editor",
+          "do": "Move normally, hold Caps Lock while moving, then release it several times.",
+          "why": "Testing press and release proves both execution paths, not just the faster state.",
+          "see": "The character accelerates while Caps Lock is held and reliably returns to normal speed when released.",
+          "check": "If the character stays fast, inspect the Completed path before changing any values.",
           "troubleshoot": [
-            "If speed never changes, confirm the player character being controlled is the same Blueprint you edited."
+            "If Caps Lock does nothing, confirm IMC_Default is the Mapping Context actually added to the local player.",
+            "If normal speed restores incorrectly, confirm BeginPlay stores Get Max Walk Speed before sprint is used."
           ]
         }
       ],
       "mistakes": [
-        "Only setting sprint speed and never resetting it.",
-        "Putting the logic on Tick instead of reacting to input state changes."
+        "Using a raw keyboard key event instead of an Input Action.",
+        "Hard-coding both normal and sprint speed when the character can read its actual default Max Walk Speed at BeginPlay.",
+        "Using Shift/Ctrl/Alt as the classroom PIE test key and mistaking an editor shortcut conflict for broken Blueprint logic.",
+        "Setting sprint speed on Triggered but forgetting to restore DefaultMovementSpeed from Completed."
       ],
       "makeItYours": [
         "Prevent sprint while moving backwards.",
         "Add a stamina Boolean later and branch before enabling sprint."
       ],
       "worksWhen": [
-        "Pressing sprint increases speed.",
-        "Releasing sprint restores normal speed.",
-        "Speed values are easy to tune."
+        "IA_Sprint uses Digital (Bool) with a Down trigger and is mapped in IMC_Default.",
+        "Holding Caps Lock increases Max Walk Speed to SprintMovementSpeed.",
+        "Releasing Caps Lock restores the speed captured at BeginPlay."
       ],
       "icon": "»",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/bb3fb38c-3a7e-4d0b-b920-b31b88d11f5a/image_0.png",
+          "caption": "Official UE5.8 Content Browser route for creating Enhanced Input assets.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/enhanced-input-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/f2c62175-7fbb-4d83-81b3-4b09d51d24bd/image_1.png",
+          "caption": "Official UE5.8 Input Action Details showing the Digital (Bool) Value Type used by IA_Sprint.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/enhanced-input-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/6c38fff1-2df0-4100-9a7d-bc6f3b06427a/image_6.png",
+          "caption": "Official UE5.8 Input Mapping Context editor. The Sprint recipe uses the same mapping workflow and a PIE-safe Caps Lock binding.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/enhanced-input-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/df0f9c97-7aad-416b-b9db-8a34d6cfd10d/behavior-tree-function-complete.png",
+          "caption": "Official UE5.8 Blueprint example of a Character-owned function driving Set Max Walk Speed through Character Movement.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/behavior-tree-in-unreal-engine---quick-start-guide?lang=en-US",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        }
+      ],
       "source": null,
       "prescriptive": true,
       "starterValues": [
-        "IA_Sprint: Left Shift",
-        "Walk speed: 500",
-        "Sprint speed: 900"
+        "IA_Sprint: Digital (Bool)",
+        "Trigger: Down",
+        "Teaching key: Caps Lock",
+        "SprintMovementSpeed: 1000",
+        "DefaultMovementSpeed: read from Character Movement at BeginPlay (Third Person template is normally 600 cm/s)"
       ],
       "studentRecipe": [
-        "Create/use IA_Sprint and map it to Left Shift in the active Mapping Context.",
-        "Open the player Character Blueprint → Event Graph → add IA_Sprint Started.",
-        "Drag Character Movement into the graph → Set Max Walk Speed → set 900 → connect Started execution.",
-        "Use IA_Sprint Completed (and Canceled if exposed) → Set Max Walk Speed → set 500.",
-        "Compile and Play. Move normally, hold Left Shift, release it.",
-        "If speed stays at 900 after release, your Completed/Canceled path is not connected."
+        "Content Drawer → Input / Actions → create Input Action IA_Sprint → open it → Value Type Digital (Bool) → Save.",
+        "IA_Sprint → Details → Triggers → + → choose Down → Save.",
+        "Open IMC_Default → add IA_Sprint → map it to Caps Lock for the classroom test → Save.",
+        "Player Character → create Float DefaultMovementSpeed and Float SprintMovementSpeed → Compile → set SprintMovementSpeed = 1000.",
+        "Event BeginPlay → Character Movement → Get Max Walk Speed → Set DefaultMovementSpeed.",
+        "Add IA_Sprint event → Triggered → Set Max Walk Speed from SprintMovementSpeed; Completed → Set Max Walk Speed from DefaultMovementSpeed. Target both from Character Movement.",
+        "Compile → Play → move, hold Caps Lock, release. Sprint must start immediately and normal speed must restore every time."
       ],
       "prescriptivePass": "3.31",
       "buildingBlocks": [
@@ -416,11 +467,33 @@ window.UE5_TUTORIAL_DATA = {
         "character-movement"
       ],
       "recipeVisuals": [
+        [
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/bb3fb38c-3a7e-4d0b-b920-b31b88d11f5a/image_0.png",
+            "caption": "Create an Input Action from the official UE5.8 Input asset menu.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/enhanced-input-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/f2c62175-7fbb-4d83-81b3-4b09d51d24bd/image_1.png",
+            "caption": "Input Action Details: keep IA_Sprint as Digital (Bool).",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/enhanced-input-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
+        ],
         null,
         null,
         null,
         null,
-        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/df0f9c97-7aad-416b-b9db-8a34d6cfd10d/behavior-tree-function-complete.png",
+          "caption": "Official UE5.8 example showing Set Max Walk Speed correctly targeted through Character Movement. Your sprint graph uses this same node twice: SprintMovementSpeed on Triggered and DefaultMovementSpeed on Completed.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/behavior-tree-in-unreal-engine---quick-start-guide?lang=en-US",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null
       ]
     },
@@ -814,8 +887,8 @@ window.UE5_TUTORIAL_DATA = {
         },
         {
           "title": "Store the “has key” state on the player",
-          "where": "Player Character Blueprint → create Boolean variable HasKey",
-          "do": "Add a Boolean variable called HasKey to the player Character.",
+          "where": "BP_KeyPickup → Event Graph → Event Actor Begin Overlap",
+          "do": "Use Event Actor Begin Overlap, then cast/check Other Actor is the Player Character.",
           "why": "The player needs to remember that the key has been collected.",
           "see": "HasKey exists and defaults to false.",
           "check": "You can Get and Set HasKey in the Character graph."
@@ -852,7 +925,15 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "icon": "⌑",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/3c8fbaad-8f3c-4849-829b-0ece960f436f/beginoverlap.png",
+          "caption": "Official UE5.8 Event Actor Begin Overlap node used by the key pickup.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/events-in-unreal-engine?lang=en-US",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        }
+      ],
       "source": null,
       "prescriptive": true,
       "starterValues": [
@@ -863,7 +944,7 @@ window.UE5_TUTORIAL_DATA = {
       "studentRecipe": [
         "Create BP_KeyPickup (Actor) with a visible mesh + collision.",
         "Player Character → create HasKey Boolean default False. Compile.",
-        "BP_KeyPickup collision → OnComponentBeginOverlap → cast/check Player Character.",
+        "BP_KeyPickup → Event Actor Begin Overlap → use Other Actor to cast/check the Player Character.",
         "On success → Set HasKey True on player → Destroy Actor (the pickup).",
         "Place the pickup and Play. Walk into it once.",
         "After pickup, print HasKey or inspect it in Blueprint debugger. It must change False → True before the key destroys itself."
@@ -877,7 +958,13 @@ window.UE5_TUTORIAL_DATA = {
       "recipeVisuals": [
         null,
         null,
-        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/3c8fbaad-8f3c-4849-829b-0ece960f436f/beginoverlap.png",
+          "caption": "Official UE5.8 Event Actor Begin Overlap node. Other Actor identifies what entered the pickup.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/events-in-unreal-engine?lang=en-US",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null,
         null,
         null
@@ -1048,8 +1135,8 @@ window.UE5_TUTORIAL_DATA = {
         },
         {
           "title": "Test edge cases",
-          "where": "Play mode → approach the plate from several angles",
-          "do": "Walk on/off quickly and try standing partly on the plate.",
+          "where": "BP_PressurePlate → Event Graph",
+          "do": "Event Actor Begin Overlap → Play TL_Press. Event Actor End Overlap → Reverse TL_Press.",
           "why": "Triggers must behave reliably under awkward player movement.",
           "see": "No rapid flicker or stuck-open state occurs.",
           "check": "Before moving on, prove this step: No rapid flicker or stuck-open state occurs.",
@@ -1073,7 +1160,22 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "icon": "▣",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/3c8fbaad-8f3c-4849-829b-0ece960f436f/beginoverlap.png",
+          "caption": "Official UE5.8 Begin Overlap event.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/events-in-unreal-engine?lang=en-US",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/cad1a8a4-78b6-4d30-8211-03b2a2dd2976/endoverlap.png",
+          "caption": "Official UE5.8 End Overlap event.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/events-in-unreal-engine?lang=en-US",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        }
+      ],
       "source": null,
       "prescriptive": true,
       "starterValues": [
@@ -1086,7 +1188,7 @@ window.UE5_TUTORIAL_DATA = {
         "Set Box Collision Extent to X100 Y100 Z20 and preset Trigger.",
         "Create Timeline TL_Press, length 0.20 s, float Alpha 0→1.",
         "Lerp Relative Location from plate start to start + Z -5 cm. Timeline Update → Set Relative Location.",
-        "BeginOverlap → Play; EndOverlap → Reverse.",
+        "Event Actor Begin Overlap → Play TL_Press; Event Actor End Overlap → Reverse TL_Press.",
         "Play and step on/off. The plate should move only 5 cm and return cleanly."
       ],
       "prescriptivePass": "3.31",
@@ -1100,7 +1202,22 @@ window.UE5_TUTORIAL_DATA = {
         null,
         null,
         null,
-        null,
+        [
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/3c8fbaad-8f3c-4849-829b-0ece960f436f/beginoverlap.png",
+            "caption": "Official UE5.8 Event Actor Begin Overlap starts when the player enters the plate trigger.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/events-in-unreal-engine?lang=en-US",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/cad1a8a4-78b6-4d30-8211-03b2a2dd2976/endoverlap.png",
+            "caption": "Official UE5.8 Event Actor End Overlap runs when the player leaves the plate trigger.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/events-in-unreal-engine?lang=en-US",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
+        ],
         null
       ]
     },
@@ -1114,7 +1231,9 @@ window.UE5_TUTORIAL_DATA = {
       "uses": [
         "Blueprint Interface",
         "Custom Event",
-        "Instance Reference"
+        "Instance Reference",
+        "FlipFlop",
+        "Timeline"
       ],
       "referenceLesson": "interfaces-dispatchers",
       "steps": [
@@ -1179,17 +1298,25 @@ window.UE5_TUTORIAL_DATA = {
         "No feedback, so players press it repeatedly thinking it failed."
       ],
       "makeItYours": [
-        "Make it one-use with an IsUsed Boolean.",
+        "Replace FlipFlop with an explicit IsOn Boolean only if other game systems genuinely need to read the lever state.",
         "Make a timed button that resets after five seconds."
       ],
       "worksWhen": [
         "The universal interaction message activates the control.",
-        "The target is configurable per instance.",
+        "Repeated interactions alternate Timeline Play and Reverse.",
         "The player gets clear feedback."
       ],
       "icon": "●",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/28be1dab-7592-4213-bff6-fdd63f67b5c9/flipflop_example.png",
+          "caption": "Official UE5.8 FlipFlop example showing the alternating A/B execution pattern used by the lever.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/flow-control-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        }
+      ],
       "source": null,
       "prescriptive": true,
       "starterValues": [
@@ -1201,21 +1328,29 @@ window.UE5_TUTORIAL_DATA = {
         "Create BP_Lever with base mesh, lever mesh and interaction collision.",
         "Create Timeline TL_Lever: 0.25 s, Alpha 0→1.",
         "Lerp Rotator from 0° to 45° on the lever’s intended axis → Set Relative Rotation.",
-        "On interaction: if IsOn False → Play, Set IsOn True; else → Reverse, Set IsOn False.",
-        "Compile and interact repeatedly.",
+        "From the interaction event add FlipFlop. Connect A → TL_Lever Play and B → TL_Lever Reverse. Each interaction now alternates the lever direction without an extra IsOn Boolean.",
+        "Compile and interact repeatedly. The first press should move to 45°, the next should return to 0°, then continue alternating.",
         "If the lever orbits, fix the component pivot/hierarchy; do not compensate by inventing strange rotation values."
       ],
       "prescriptivePass": "3.31",
       "buildingBlocks": [
         "bpi",
         "object-class-references",
-        "functions-events-macros"
+        "functions-events-macros",
+        "branches-switches",
+        "timelines-lerp"
       ],
       "recipeVisuals": [
         null,
         null,
         null,
-        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/28be1dab-7592-4213-bff6-fdd63f67b5c9/flipflop_example.png",
+          "caption": "Official UE5.8 FlipFlop example. The A and B execution outputs alternate each time the node is triggered; in this lever, A drives Timeline Play and B drives Reverse.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/flow-control-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null,
         null
       ]
@@ -1238,9 +1373,9 @@ window.UE5_TUTORIAL_DATA = {
         {
           "title": "Create CollectablesFound",
           "where": "Player Character or chosen gameplay-state Blueprint → Variables",
-          "do": "Add an Integer to the player or an appropriate persistent gameplay class, default 0.",
+          "do": "Create an Integer variable called Counter, default 0.",
           "why": "An Integer models a count better than multiple Booleans.",
-          "see": "The value starts at zero.",
+          "see": "Counter exists on the player and starts at 0.",
           "check": "Before moving on, prove this step: The value starts at zero.",
           "troubleshoot": [
             "If the count resets unexpectedly, check whether its owner survives the situation you are testing."
@@ -1258,11 +1393,11 @@ window.UE5_TUTORIAL_DATA = {
           ]
         },
         {
-          "title": "Increment the count",
-          "where": "BP_Collectable → Box/Sphere Collision → OnComponentBeginOverlap",
-          "do": "On player overlap, Get CollectablesFound, add 1 and Set it back.",
-          "why": "Read → modify → write is the basic variable update pattern.",
-          "see": "Debug value becomes 1, 2, 3 as pickups are collected.",
+          "title": "Increment Counter on overlap",
+          "where": "BP_Collectable → Event Actor Begin Overlap",
+          "do": "When the overlapping Actor is the player, Get Counter + CollectableValue (1) → Set Counter.",
+          "why": "This matches Unreal’s standard overlap-event pattern: an overlap starts execution and updates one stored integer counter.",
+          "see": "Each valid overlap adds exactly one to Counter.",
           "check": "Before moving on, prove this step: Debug value becomes 1, 2, 3 as pickups are collected.",
           "troubleshoot": [
             "Print the old and new count once if incrementing looks wrong."
@@ -1296,31 +1431,47 @@ window.UE5_TUTORIAL_DATA = {
         "Letting the widget own the score/collectable variable."
       ],
       "makeItYours": [
-        "Add TotalCollectables and show Found / Total.",
-        "Give special pickups a Value variable worth more than 1."
+        "Rename Counter to CollectableCount once the pattern is understood, then add TotalCollectables and show Found / Total.",
+        "Give special pickups a CollectableValue worth more than 1."
       ],
       "worksWhen": [
-        "Each pickup increments exactly once.",
+        "Each pickup increments Counter exactly once.",
         "The count persists while the player continues playing.",
         "UI can display the value without becoming its owner."
       ],
       "icon": "◆",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/3c8fbaad-8f3c-4849-829b-0ece960f436f/beginoverlap.png",
+          "caption": "Official UE5.8 Event Actor Begin Overlap node.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/events-in-unreal-engine?lang=en-US",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/d6592c8e-b5d3-42cc-a025-96ee00c2a12c/beginoverlapex.png",
+          "caption": "Official UE5.8 overlap example incrementing an Integer Counter.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/events-in-unreal-engine?lang=en-US",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        }
+      ],
       "source": null,
       "prescriptive": true,
       "starterValues": [
+        "Counter: 0",
         "CollectableValue: 1",
         "Target count: 5",
         "Collision radius: 60 cm for the first build"
       ],
       "studentRecipe": [
-        "Player Character → create Collectables Integer default 0.",
-        "Create BP_Collectable with visible mesh + Trigger collision.",
-        "On player overlap → Get Collectables + 1 → Set Collectables.",
-        "Print the new count, then Destroy Actor.",
-        "Place five collectables. Compile and Play.",
-        "Collect all five. Count must read 1,2,3,4,5 exactly; if it jumps by more than one, check the overlap fires only once."
+        "Player Character → create Counter Integer default 0.",
+        "Create BP_Collectable with a visible mesh + Trigger collision and CollectableValue Integer = 1.",
+        "BP_Collectable → Event Actor Begin Overlap → confirm Other Actor is the player → Get Counter + CollectableValue → Set Counter.",
+        "Print the new Counter value → Destroy Actor so this pickup cannot count twice.",
+        "Place five collectables → Compile → Play.",
+        "Collect all five. Counter must read 1,2,3,4,5 exactly; if it jumps, fix duplicate overlap/damage logic before changing values."
       ],
       "prescriptivePass": "3.31",
       "buildingBlocks": [
@@ -1331,7 +1482,13 @@ window.UE5_TUTORIAL_DATA = {
       "recipeVisuals": [
         null,
         null,
-        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/d6592c8e-b5d3-42cc-a025-96ee00c2a12c/beginoverlapex.png",
+          "caption": "Official UE5.8 Begin Overlap example increments an Integer Counter when the expected Actor overlaps — the same pattern used by this collectable step.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/events-in-unreal-engine?lang=en-US",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null,
         null,
         null
@@ -1715,7 +1872,7 @@ window.UE5_TUTORIAL_DATA = {
       "category": "combat",
       "duration": "15 min",
       "difficulty": "Beginner",
-      "summary": "Store health on the player, subtract generic damage and trigger death at zero.",
+      "summary": "Store player Health, receive Unreal’s built-in Event AnyDamage, subtract the incoming Damage value, clamp it and branch at zero.",
       "uses": [
         "Float",
         "Event AnyDamage",
@@ -1725,50 +1882,58 @@ window.UE5_TUTORIAL_DATA = {
       "referenceLesson": "variables",
       "steps": [
         {
-          "title": "Create a Health variable on the player",
-          "where": "Player Character Blueprint → Variables",
-          "do": "Create a Float or Integer variable called Health, defaulting to a value such as 100.",
-          "why": "The player needs stored state before anything can damage them.",
-          "see": "Health exists on the Character.",
-          "check": "The variable is visible in My Blueprint."
+          "title": "Create Health and MaxHealth",
+          "where": "Player Character → Variables",
+          "do": "Create MaxHealth Float = 100 and Health Float = 100.",
+          "why": "The Character should own its current gameplay health; UI only displays it.",
+          "see": "Both variables exist and start at 100.",
+          "check": "Compile and confirm both defaults."
         },
         {
-          "title": "Make a damage event entry point",
-          "where": "Character graph or Any Damage event",
-          "do": "Use Event AnyDamage or a custom event that reduces Health.",
-          "why": "You need one clear place where incoming damage is handled.",
-          "see": "The graph contains a damage-handling event path.",
-          "check": "The event can access the current Health value."
+          "title": "Receive Unreal damage in one place",
+          "where": "Player Character → Event Graph → right-click → Event AnyDamage",
+          "do": "Add Event AnyDamage and use its Damage Float as the incoming amount.",
+          "why": "Apply Damage, projectiles and hazards can all feed the same built-in damage receiver instead of inventing a separate entry point for each source.",
+          "see": "Event AnyDamage appears with a Damage output pin.",
+          "check": "You can identify the incoming Damage pin before building the maths."
         },
         {
-          "title": "Subtract damage from Health",
-          "where": "Damage event path → Set Health",
-          "do": "Reduce Health by the incoming damage amount and store the new value.",
-          "why": "This is the core logic of taking damage.",
-          "see": "Health becomes lower after the damage event runs.",
-          "check": "Printing Health shows the new reduced value."
+          "title": "Subtract and clamp health",
+          "where": "From Event AnyDamage",
+          "do": "Health - Damage → Clamp(Float), Min 0, Max MaxHealth → Set Health.",
+          "why": "Clamping keeps Health inside the valid 0..MaxHealth range.",
+          "see": "One damage event produces one new stored Health value.",
+          "check": "A 20-damage event changes 100 to 80."
         },
         {
-          "title": "Clamp or branch for zero health",
-          "where": "After setting Health",
-          "do": "Use a Branch or Clamp so the player can detect when Health reaches zero or below.",
-          "why": "A health system needs a clear death threshold.",
-          "see": "At zero health the graph switches to death or respawn logic.",
-          "check": "Health does not keep falling indefinitely if you do not want it to."
+          "title": "Detect zero health",
+          "where": "After Set Health",
+          "do": "Compare Health <= 0 → Branch. True → Print “Player dead” for the first proof.",
+          "why": "The death decision stays downstream from the health update and is easy to replace with respawn later.",
+          "see": "The True path only runs at zero health.",
+          "check": "Health never becomes negative."
         },
         {
-          "title": "Test the full damage loop",
-          "where": "Play mode or temporary key test",
-          "do": "Trigger damage several times and watch the health value or UI.",
-          "why": "A health system must be tested across multiple hits, not just one.",
-          "see": "Health drops predictably and zero health triggers the next state.",
-          "check": "You can name exactly where to change the starting health or damage amount."
+          "title": "Send test damage",
+          "where": "Temporary test key or BP_DamageZone",
+          "do": "Use Apply Damage with Base Damage = 20 and Damaged Actor = the player.",
+          "why": "Testing through Unreal’s normal sender/receiver pair proves the real damage route.",
+          "see": "Each valid Apply Damage call reaches Event AnyDamage once.",
+          "check": "Print Health after Set Health while learning."
+        },
+        {
+          "title": "Prove the full loop",
+          "where": "Play mode",
+          "do": "Apply five 20-damage hits.",
+          "why": "Repeated testing catches double-fire and ordering errors.",
+          "see": "Health reads 100→80→60→40→20→0, then the death branch runs.",
+          "check": "If it drops faster, fix duplicate hit/damage events before changing the damage number."
         }
       ],
       "mistakes": [
-        "Subtracting from MaxHealth instead of Health.",
-        "Death check happens before damage is subtracted.",
-        "Widget stores health instead of reading player state."
+        "Creating a different custom damage entry event for every weapon or hazard when Event AnyDamage can be the common receiver.",
+        "Subtracting damage in both the source and the player, causing double damage.",
+        "Branching on the old Health value before Set Health updates it."
       ],
       "makeItYours": [
         "Add temporary invulnerability using a CanTakeDamage Boolean.",
@@ -1781,7 +1946,15 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "icon": "♥",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/c656a0f5-2fad-4106-a67e-673a5dc8019d/anydamage.png",
+          "caption": "Official UE5.8 Event AnyDamage receiver. Unreal supplies the incoming Damage Float; your Blueprint decides how that changes Health.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/events-in-unreal-engine?lang=en-US",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        }
+      ],
       "source": null,
       "prescriptive": true,
       "starterValues": [
@@ -1791,12 +1964,12 @@ window.UE5_TUTORIAL_DATA = {
         "Clamp range: 0–100"
       ],
       "studentRecipe": [
-        "Player Character → add MaxHealth Float 100 and Health Float 100.",
-        "Create Function ApplyHealthChange with input DamageAmount Float.",
-        "Inside: Health - DamageAmount → Clamp(Float) Min0 MaxMaxHealth → Set Health.",
-        "After Set Health → Branch Health <= 0. True → Print “Player dead” for first proof.",
-        "Call ApplyHealthChange with 20 from a test key/damage Actor.",
-        "Play and apply five hits: 100→80→60→40→20→0. It must never become negative."
+        "Player Character → create MaxHealth Float = 100 and Health Float = 100 → Compile.",
+        "Event Graph → add Event AnyDamage. Use the event’s Damage Float as the incoming damage amount.",
+        "Health - Damage → Clamp(Float) Min 0 Max MaxHealth → Set Health.",
+        "After Set Health → Health <= 0 → Branch → True: Print “Player dead” for the first proof.",
+        "From a temporary test key or BP_DamageZone → Apply Damage → Damaged Actor = player, Base Damage = 20.",
+        "Play and apply five hits: 100→80→60→40→20→0. Health must never go negative and the death path must fire once."
       ],
       "prescriptivePass": "3.31",
       "buildingBlocks": [
@@ -1806,7 +1979,13 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "recipeVisuals": [
         null,
-        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/c656a0f5-2fad-4106-a67e-673a5dc8019d/anydamage.png",
+          "caption": "Official UE5.8 Event AnyDamage node. The Damage Float is the incoming value used by the Hub health calculation.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/events-in-unreal-engine?lang=en-US",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null,
         null,
         null,
@@ -1839,10 +2018,10 @@ window.UE5_TUTORIAL_DATA = {
           ]
         },
         {
-          "title": "Use Event AnyDamage",
+          "title": "Receive damage with Event AnyDamage",
           "where": "Enemy Blueprint → Event Graph → Event AnyDamage",
-          "do": "Subtract incoming Damage from Health.",
-          "why": "Generic damage means the enemy works with line trace, projectile or hazards.",
+          "do": "Use Event AnyDamage and subtract its Damage Float from Health.",
+          "why": "One standard Unreal damage receiver lets line traces, projectiles and hazards damage the same enemy.",
           "see": "Both weapon types can damage the same enemy.",
           "check": "Before moving on, prove this step: Both weapon types can damage the same enemy.",
           "troubleshoot": [
@@ -1887,7 +2066,15 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "icon": "☠",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/c656a0f5-2fad-4106-a67e-673a5dc8019d/anydamage.png",
+          "caption": "Official UE5.8 Event AnyDamage receiver used by the enemy-health recipe.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/events-in-unreal-engine?lang=en-US",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        }
+      ],
       "source": null,
       "prescriptive": true,
       "starterValues": [
@@ -1898,7 +2085,7 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "studentRecipe": [
         "Enemy Blueprint → MaxHealth Float 60, Health Float 60.",
-        "Add Event AnyDamage (or your chosen damage interface/event).",
+        "Enemy Blueprint → Event Graph → add Event AnyDamage. Use the event’s Damage Float as the incoming amount.",
         "Health - Damage → Clamp 0..MaxHealth → Set Health.",
         "Branch Health <= 0 → True → Destroy Actor after a Print “Enemy defeated”.",
         "Use your test weapon with Damage 20.",
@@ -1912,7 +2099,13 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "recipeVisuals": [
         null,
-        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/c656a0f5-2fad-4106-a67e-673a5dc8019d/anydamage.png",
+          "caption": "Official UE5.8 Event AnyDamage node. Use its Damage Float as the amount to subtract from enemy Health.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/events-in-unreal-engine?lang=en-US",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null,
         null,
         null,
@@ -1958,8 +2151,8 @@ window.UE5_TUTORIAL_DATA = {
         },
         {
           "title": "Calculate new Health",
-          "where": "Overlap path → player Health/MaxHealth values → Clamp",
-          "do": "NewHealth = Clamp(Health + HealAmount, 0, MaxHealth).",
+          "where": "BP_HealthPickup → Event Graph → Event Actor Begin Overlap",
+          "do": "On Event Actor Begin Overlap, confirm Other Actor is the player, then calculate NewHealth = Min(Health + HealAmount, MaxHealth).",
           "why": "Clamping enforces the maximum health rule.",
           "see": "95 Health + 25 becomes 100, not 120.",
           "check": "Before moving on, prove this step: 95 Health + 25 becomes 100, not 120.",
@@ -1994,7 +2187,15 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "icon": "+",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/3c8fbaad-8f3c-4849-829b-0ece960f436f/beginoverlap.png",
+          "caption": "Official UE5.8 Begin Overlap event used to trigger the pickup.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/events-in-unreal-engine?lang=en-US",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        }
+      ],
       "source": null,
       "prescriptive": true,
       "starterValues": [
@@ -2005,7 +2206,7 @@ window.UE5_TUTORIAL_DATA = {
       "studentRecipe": [
         "Player must have Health/MaxHealth (100 max). Create BP_HealthPickup with Trigger collision.",
         "Add HealAmount Float = 25.",
-        "On player overlap → NewHealth = Min(Health + HealAmount, MaxHealth).",
+        "Event Actor Begin Overlap → confirm Other Actor is the player → NewHealth = Min(Health + HealAmount, MaxHealth).",
         "Set player Health = NewHealth → then Destroy pickup.",
         "Test at Health 50: pickup should produce 75.",
         "Test at Health 90: pickup should produce 100, not 115."
@@ -2019,7 +2220,13 @@ window.UE5_TUTORIAL_DATA = {
       "recipeVisuals": [
         null,
         null,
-        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/3c8fbaad-8f3c-4849-829b-0ece960f436f/beginoverlap.png",
+          "caption": "Official UE5.8 Event Actor Begin Overlap node. Use Other Actor to identify the player before applying the heal.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/events-in-unreal-engine?lang=en-US",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null,
         null,
         null
@@ -2122,7 +2329,29 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "icon": "▥",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/46b4b10b-c3d6-402e-9926-0beecb2d8e25/01-46_reloadammo.png",
+          "caption": "Official UE5.8 UMG Quick Start reload proof: R sets Ammo from MaxAmmo. The Hub extends this idea with ReserveAmmo so ammunition is transferred rather than created.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/umg-ui-designer-quick-start-guide-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/f686a87a-fb6a-4f9e-80b1-c82b697b1d23/02-25_createbindingtext.png",
+          "caption": "Official UE5.8 UMG Text binding control for an ammo display.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/umg-ui-designer-quick-start-guide-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/c5cedbf0-bcad-4815-8d20-ac86c19829de/02-26_ammoscript.png",
+          "caption": "Official UE5.8 Widget graph example reading the player Ammo value.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/umg-ui-designer-quick-start-guide-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        }
+      ],
       "source": null,
       "prescriptive": true,
       "starterValues": [
@@ -2277,59 +2506,70 @@ window.UE5_TUTORIAL_DATA = {
       "category": "player",
       "duration": "20 min",
       "difficulty": "Beginner",
-      "summary": "Track lives, respawn after death and end the run when no lives remain.",
+      "summary": "Track lives in GameMode and respawn through Unreal’s Player Start workflow, ending the run when no lives remain.",
       "uses": [
         "Lives Integer",
-        "Death",
-        "Respawn",
+        "GameMode",
+        "Player Start",
+        "Find Player Start",
+        "Restart Player at Player Start",
         "Branch"
       ],
       "referenceLesson": "framework",
       "steps": [
         {
-          "title": "Create Lives and RespawnPoint variables",
-          "where": "Player Character or GameMode variables",
-          "do": "Add an Integer Lives variable and decide how you will store the respawn location.",
-          "why": "Respawning needs both remaining lives and a place to return to.",
-          "see": "Lives exists and has a sensible starting value.",
-          "check": "You can identify where the respawn point comes from."
+          "title": "Store Lives in GameMode",
+          "where": "Your GameMode Blueprint → Variables",
+          "do": "Create Lives Integer = 3.",
+          "why": "GameMode owns rules such as whether the run continues after a death; a widget should not own remaining lives.",
+          "see": "Lives starts at 3 in the active GameMode.",
+          "check": "Confirm this is the GameMode actually used by the level."
         },
         {
-          "title": "Detect player death or failure",
-          "where": "Damage/death event or hazard overlap",
-          "do": "Choose the event that counts as “the player died”.",
-          "why": "Lives should only change in response to a clear failure event.",
-          "see": "One event path handles death/failure.",
-          "check": "You can trigger it on purpose while testing."
+          "title": "Give the respawn point a tag",
+          "where": "Level → select the Player Start → Details",
+          "do": "Set its Player Start Tag to Respawn.",
+          "why": "A tag gives GameMode a stable name it can use to find the intended respawn location.",
+          "see": "The Player Start is still placed safely in open space and is tagged Respawn.",
+          "check": "Avoid BADsize/intersection warnings at the spawn point."
         },
         {
-          "title": "Reduce Lives by one",
-          "where": "Death event path → Set Lives",
-          "do": "When the player dies, subtract 1 from Lives.",
-          "why": "Lives are a count of remaining chances.",
-          "see": "The Lives value visibly decreases after death.",
-          "check": "Two deaths reduce 3 lives to 1 in the expected way."
+          "title": "Reduce Lives and choose continue or Game Over",
+          "where": "GameMode → Custom Event PlayerDied",
+          "do": "Set Lives = Lives - 1 → Branch Lives > 0.",
+          "why": "Exactly one rule path owns the life subtraction and the continue/finish decision.",
+          "see": "True means another life remains; False means Game Over.",
+          "check": "Do not also subtract a life in the hazard or player."
         },
         {
-          "title": "Branch on whether lives remain",
-          "where": "After updating Lives → Branch",
-          "do": "If Lives > 0, respawn the player; otherwise trigger game over or a lose state.",
-          "why": "The respawn system has two possible outcomes: continue or finish.",
-          "see": "One path respawns, the other ends the run.",
-          "check": "You have tested at least one respawn and the final game-over case."
+          "title": "Find the named Player Start",
+          "where": "True branch after optional Delay 2.0",
+          "do": "Call Find Player Start with Incoming Name = Respawn.",
+          "why": "Epic’s current Player Start workflow can find a specific spawn point by its Player Start Tag.",
+          "see": "Find Player Start returns the tagged Player Start Actor.",
+          "check": "If it returns the wrong location, verify the tag text."
         },
         {
-          "title": "Move the player back to the respawn location",
-          "where": "Respawn branch",
-          "do": "Set the player location to the respawn point, or destroy and re-create them there depending on your setup.",
-          "why": "Respawn means restoring the player to a safe starting point.",
-          "see": "The player reappears at the chosen location.",
-          "check": "The player no longer respawns exactly where they died unless that is intended."
+          "title": "Restart the player there",
+          "where": "After Find Player Start",
+          "do": "Use Restart Player at Player Start with the player Controller and the returned Player Start.",
+          "why": "GameMode restarts the controlled player through Unreal’s normal spawn flow instead of manually teleporting a dead Pawn.",
+          "see": "The player is recreated/restarted at the Respawn Player Start.",
+          "check": "The zero-lives branch must not call Restart Player."
+        },
+        {
+          "title": "Test all three lives",
+          "where": "Play mode",
+          "do": "Force three deaths.",
+          "why": "The final life is where off-by-one mistakes appear.",
+          "see": "Lives 3→2 respawn, 2→1 respawn, 1→0 Game Over.",
+          "check": "Exactly one life disappears per death and zero never respawns."
         }
       ],
       "mistakes": [
-        "Subtracting a life in both the hazard and the death function.",
-        "Storing Lives only inside a widget."
+        "Subtracting a life in both the hazard/player and GameMode PlayerDied path.",
+        "Storing Lives only inside a widget.",
+        "Manually teleporting a dead Pawn when a GameMode restart through Player Start is the intended workflow."
       ],
       "makeItYours": [
         "Add temporary invulnerability after respawn.",
@@ -2337,26 +2577,41 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "worksWhen": [
         "Exactly one life is lost per death.",
-        "Respawn occurs while Lives remain.",
-        "Zero lives produces Game Over."
+        "Find Player Start resolves the Respawn tag and GameMode restarts the player there while Lives remain.",
+        "Zero lives produces Game Over and no restart."
       ],
       "icon": "♥",
       "featured": true,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/56b9e873-fe2d-4dcd-8f40-1f499f98b7c5/ue5_1-findplayerstart-node.png",
+          "caption": "Official UE5.8 Find Player Start node.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/player-start-actor-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/90d0a5b0-6b91-4c6a-8308-a1b31af54a4d/ue5_1-restart-player-at-player-start-node.png",
+          "caption": "Official UE5.8 Restart Player at Player Start node.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/player-start-actor-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        }
+      ],
       "source": null,
       "prescriptive": true,
       "starterValues": [
         "Lives: 3",
         "Respawn delay: 2.0 s",
-        "Spawn point: PlayerStart"
+        "Player Start Tag: Respawn"
       ],
       "studentRecipe": [
-        "GameMode → create Lives Integer and set Default Value to 3 for this teaching version.",
-        "Create Function/Custom Event PlayerDied. First set Lives = Lives - 1.",
-        "Branch Lives > 0. True → Delay 2.0 → respawn/restart player at PlayerStart/checkpoint.",
-        "False → show/print Game Over and do not respawn.",
-        "Test by forcing death three times.",
-        "Expected: Lives 3→2 respawn, 2→1 respawn, 1→0 Game Over."
+        "Active GameMode Blueprint → create Lives Integer = 3.",
+        "In the level select the safe Player Start → Details → set Player Start Tag = Respawn.",
+        "GameMode → Custom Event PlayerDied → Lives - 1 → Set Lives → Branch Lives > 0. False = Print/Show Game Over.",
+        "True → Delay 2.0 → Find Player Start → Incoming Name = Respawn.",
+        "Find Player Start return value → Restart Player at Player Start. Feed the player Controller into the Player input.",
+        "Play and force three deaths: 3→2 respawn, 2→1 respawn, 1→0 Game Over. One death must subtract exactly one life."
       ],
       "prescriptivePass": "3.31",
       "buildingBlocks": [
@@ -2369,8 +2624,20 @@ window.UE5_TUTORIAL_DATA = {
         null,
         null,
         null,
-        null,
-        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/56b9e873-fe2d-4dcd-8f40-1f499f98b7c5/ue5_1-findplayerstart-node.png",
+          "caption": "Official UE5.8 Find Player Start node. Incoming Name can match a Player Start Tag such as Respawn.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/player-start-actor-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/90d0a5b0-6b91-4c6a-8308-a1b31af54a4d/ue5_1-restart-player-at-player-start-node.png",
+          "caption": "Official UE5.8 Restart Player at Player Start node, designed for GameMode respawn flow.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/player-start-actor-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null
       ]
     },
@@ -2380,86 +2647,118 @@ window.UE5_TUTORIAL_DATA = {
       "category": "player",
       "duration": "18 min",
       "difficulty": "Beginner",
-      "summary": "Store a respawn transform when the player reaches a checkpoint and return there after death.",
+      "summary": "Activate a checkpoint by storing a Player Start Tag, then let GameMode find that tagged Player Start and restart the player there after death.",
       "uses": [
-        "Transform",
+        "Name",
         "Overlap",
-        "Respawn",
-        "Reference"
+        "Player Start Tag",
+        "Find Player Start",
+        "Restart Player at Player Start"
       ],
       "referenceLesson": "framework",
       "steps": [
         {
-          "title": "Create a checkpoint Actor",
-          "where": "Blueprint Class → Actor",
-          "do": "Create BP_Checkpoint with a visible marker and collision component.",
-          "why": "Checkpoint areas are usually separate reusable world Actors.",
-          "see": "The checkpoint can be placed in the level.",
-          "check": "The collision area is easy to see and adjust."
+          "title": "Place named Player Starts",
+          "where": "Level → Player Start Actors → Details",
+          "do": "Use a safe starting Player Start tagged CP_00 and place another Player Start at the checkpoint location tagged CP_01.",
+          "why": "Player Start Tags give respawn logic stable names without storing arbitrary transforms.",
+          "see": "Both Player Starts are clear of blocking geometry and have different tags.",
+          "check": "CP_00 is the fallback; CP_01 is the checkpoint destination."
         },
         {
-          "title": "Detect overlap with the player",
-          "where": "Checkpoint collision → OnComponentBeginOverlap",
-          "do": "Use the overlap event to detect when the player reaches the checkpoint.",
-          "why": "Reaching the checkpoint should happen through a clear physical trigger.",
-          "see": "Entering the area fires the overlap event.",
-          "check": "Only the player should count as activating it."
+          "title": "Store the active checkpoint tag",
+          "where": "GameMode → Variables",
+          "do": "Create ActiveCheckpointTag as a Name and set its default to CP_00.",
+          "why": "GameMode only needs to remember which named spawn point is active.",
+          "see": "ActiveCheckpointTag begins as CP_00.",
+          "check": "The variable type is Name, not a raw Transform."
         },
         {
-          "title": "Store the checkpoint location or identifier",
-          "where": "Player, GameMode or SaveGame-related variable",
-          "do": "Save the checkpoint location or a checkpoint name to the player or another appropriate owner.",
-          "why": "Respawn logic needs to know the latest safe return point.",
-          "see": "The latest checkpoint value updates when a new checkpoint is reached.",
-          "check": "Reaching a second checkpoint overwrites the first."
+          "title": "Activate CP_01 on overlap",
+          "where": "BP_Checkpoint → Event Actor Begin Overlap",
+          "do": "When Other Actor is the player, set GameMode ActiveCheckpointTag = CP_01.",
+          "why": "The reusable trigger changes one small piece of respawn state.",
+          "see": "Crossing the checkpoint changes the active tag from CP_00 to CP_01.",
+          "check": "Print “Checkpoint CP_01 active” once while learning."
         },
         {
-          "title": "Give the player feedback",
-          "where": "Same overlap event",
-          "do": "Show a message, sound or visual change so the player knows the checkpoint activated.",
-          "why": "Invisible checkpoint changes can feel unreliable.",
-          "see": "Activating the checkpoint produces clear feedback.",
-          "check": "The player can tell when a checkpoint became active."
+          "title": "Find the active Player Start on death",
+          "where": "GameMode respawn path",
+          "do": "Call Find Player Start and feed ActiveCheckpointTag into Incoming Name.",
+          "why": "Epic’s Find Player Start can resolve a Player Start by tag, which removes manual transform bookkeeping.",
+          "see": "Before CP_01, the node finds CP_00; after activation it finds CP_01.",
+          "check": "A typo in the tag will prevent the intended spawn from being found."
         },
         {
-          "title": "Test it through death and respawn",
+          "title": "Restart at the returned Player Start",
+          "where": "GameMode respawn path",
+          "do": "Feed the found Player Start into Restart Player at Player Start along with the player Controller.",
+          "why": "GameMode performs the actual restart using Unreal’s normal spawn workflow.",
+          "see": "After activation, the player restarts at CP_01.",
+          "check": "The player faces the Player Start arrow direction and is not inside geometry."
+        },
+        {
+          "title": "Prove both states",
           "where": "Play mode",
-          "do": "Reach the checkpoint, then trigger death and make sure the respawn uses the new checkpoint.",
-          "why": "A checkpoint only matters if the respawn system actually uses it.",
-          "see": "The player returns to the latest checkpoint after death.",
-          "check": "You have proven the system works end-to-end."
+          "do": "Die once before CP_01, then activate CP_01 and die again.",
+          "why": "Testing both paths proves the stored tag really controls respawn.",
+          "see": "First restart uses CP_00; second restart uses CP_01.",
+          "check": "Reaching CP_01 changes future respawns without moving or rewriting the Player Start."
         }
       ],
       "mistakes": [
-        "Using the checkpoint mesh pivot as spawn point when it places the player inside geometry.",
-        "Resetting RespawnTransform on death."
+        "Using a checkpoint mesh pivot as the spawn point when it may place the player inside geometry.",
+        "Using different spellings for the stored Name and Player Start Tag.",
+        "Resetting ActiveCheckpointTag back to CP_00 during death."
       ],
       "makeItYours": [
-        "Make checkpoints one-way ordered.",
-        "Combine with SaveGame so the checkpoint survives quitting."
+        "Add CP_02 and CP_03; the same variable and Find Player Start flow still works.",
+        "Combine ActiveCheckpointTag with SaveGame so the checkpoint survives quitting."
       ],
       "worksWhen": [
-        "Reaching a checkpoint updates the stored transform.",
-        "Feedback confirms activation.",
-        "Death uses the newest checkpoint."
+        "ActiveCheckpointTag begins at CP_00 and changes to CP_01 on checkpoint overlap.",
+        "Find Player Start resolves whichever tag is active.",
+        "Death restarts the player at the newest activated Player Start."
       ],
       "icon": "⚑",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/3c8fbaad-8f3c-4849-829b-0ece960f436f/beginoverlap.png",
+          "caption": "Official UE5.8 Begin Overlap event used for checkpoint activation.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/events-in-unreal-engine?lang=en-US",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/56b9e873-fe2d-4dcd-8f40-1f499f98b7c5/ue5_1-findplayerstart-node.png",
+          "caption": "Official UE5.8 Find Player Start node.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/player-start-actor-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/90d0a5b0-6b91-4c6a-8308-a1b31af54a4d/ue5_1-restart-player-at-player-start-node.png",
+          "caption": "Official UE5.8 Restart Player at Player Start node.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/player-start-actor-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        }
+      ],
       "source": null,
       "prescriptive": true,
       "starterValues": [
-        "Checkpoint ID: CP_01",
-        "Respawn Transform: checkpoint Actor transform",
+        "Default checkpoint tag: CP_00",
+        "New checkpoint tag: CP_01",
         "Trigger extent: 100 cm for the first build"
       ],
       "studentRecipe": [
-        "Create BP_Checkpoint with Trigger collision and ID Name CP_01.",
-        "Player/GameMode owner → store RespawnTransform (Transform) and ActiveCheckpointID.",
-        "On player overlap → set RespawnTransform = checkpoint GetActorTransform; set ID = CP_01.",
-        "Print “Checkpoint CP_01 active” once for proof.",
-        "On death, spawn/move player using RespawnTransform after your respawn delay.",
-        "Test death before and after activating checkpoint. After activation, respawn must occur at CP_01."
+        "Level → keep/place a safe Player Start tagged CP_00; place another at the checkpoint destination and set Player Start Tag = CP_01.",
+        "Active GameMode → create ActiveCheckpointTag Name default CP_00.",
+        "BP_Checkpoint with Trigger collision → Event Actor Begin Overlap → confirm Other Actor is player → set GameMode ActiveCheckpointTag = CP_01 → Print “Checkpoint CP_01 active”.",
+        "GameMode death/respawn path → Find Player Start → Incoming Name = ActiveCheckpointTag.",
+        "Find Player Start return value → Restart Player at Player Start with the player Controller.",
+        "Test death before and after activating CP_01. Before = CP_00; after = CP_01."
       ],
       "prescriptivePass": "3.31",
       "buildingBlocks": [
@@ -2471,9 +2770,27 @@ window.UE5_TUTORIAL_DATA = {
       "recipeVisuals": [
         null,
         null,
-        null,
-        null,
-        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/3c8fbaad-8f3c-4849-829b-0ece960f436f/beginoverlap.png",
+          "caption": "Official UE5.8 Event Actor Begin Overlap node used to activate the checkpoint trigger.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/events-in-unreal-engine?lang=en-US",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/56b9e873-fe2d-4dcd-8f40-1f499f98b7c5/ue5_1-findplayerstart-node.png",
+          "caption": "Official UE5.8 Find Player Start node. Incoming Name resolves a matching Player Start Tag.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/player-start-actor-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/90d0a5b0-6b91-4c6a-8308-a1b31af54a4d/ue5_1-restart-player-at-player-start-node.png",
+          "caption": "Official UE5.8 Restart Player at Player Start node used by GameMode.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/player-start-actor-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null
       ]
     },
@@ -2903,21 +3220,38 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "icon": "＋",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/d9dd4665-e3c4-4cd1-93d5-1ea50efee444/spawn1.png",
+          "caption": "Official UE5.8 Spawn Actor example: the Return Value is the exact spawned Actor reference.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/blueprint-communications-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/de30d652-526a-4654-b6b7-120bba87abfa/event9.png",
+          "caption": "Official UE5.8 Blueprint communication example showing a spawned Actor reference later flowing into Destroy Actor. The Hub keeps its own 200 cm forward spawn offset because that avoids spawning inside the player.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/blueprint-communications-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        }
+      ],
       "source": null,
       "prescriptive": true,
       "starterValues": [
-        "Spawn class: chosen test Actor",
+        "Spawn class: BP_SpawnTest",
         "Spawn offset: 200 cm forward",
-        "Life Span: 5.0 s"
+        "Initial Life Span: 5.0 s",
+        "Optional stored reference: SpawnedActor"
       ],
       "studentRecipe": [
-        "Choose/create BP_SpawnTest actor and set Initial Life Span 5.0 for the first test.",
-        "On a test input/event get owner Location + Forward Vector×200 for spawn location.",
+        "Choose/create BP_SpawnTest Actor and set Initial Life Span = 5.0 for the first cleanup test.",
+        "On a test input/event get owner Location + Forward Vector × 200 for the spawn location.",
         "Make Transform using that location and owner rotation.",
-        "Spawn Actor From Class → BP_SpawnTest → Spawn Transform.",
+        "Add Spawn Actor From Class → Class BP_SpawnTest → connect the Spawn Transform.",
+        "From Spawn Actor From Class → Return Value, choose Promote to Variable and name it SpawnedActor. Keep this reference only when you need to control that exact spawned instance later.",
         "Compile and trigger once. The Actor should appear 200 cm ahead rather than inside the player.",
-        "Wait 5 seconds and prove it destroys itself. Then decide whether real gameplay needs manual destruction instead."
+        "Wait 5 seconds and prove Initial Life Span cleans it up. For manual cleanup, use the stored SpawnedActor reference → Destroy Actor."
       ],
       "prescriptivePass": "3.31",
       "buildingBlocks": [
@@ -2930,6 +3264,13 @@ window.UE5_TUTORIAL_DATA = {
         null,
         null,
         null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/d9dd4665-e3c4-4cd1-93d5-1ea50efee444/spawn1.png",
+          "caption": "Official UE5.8 Blueprint example using the Spawn Actor Return Value as the reference to the exact Actor instance that was just created.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/blueprint-communications-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null,
         null
       ]
@@ -3080,7 +3421,7 @@ window.UE5_TUTORIAL_DATA = {
         {
           "title": "Add a Progress Bar to the widget",
           "where": "WBP_HUD → Widget Designer → Palette → Progress Bar",
-          "do": "Drag a Progress Bar into your HUD widget.",
+          "do": "Drag a Progress Bar into WBP_HUD and name it PB_Health. Epic’s reference image shows two bars; for this Hub build, use only the Health bar.",
           "why": "A Progress Bar is the standard quick visual for health.",
           "see": "The Progress Bar is visible in the designer.",
           "check": "It sits in a readable part of the screen."
@@ -3133,7 +3474,36 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "icon": "▰",
       "featured": true,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/c3885089-2e23-4ba4-b1ac-7dd39d9a402e/02-04_widgetstructure2.png",
+          "caption": "Official UE5.8 UMG layout example containing Health and Energy Progress Bars. The Hub only needs the Health bar for this tutorial.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/umg-ui-designer-quick-start-guide-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/ccc3bc02-5fd5-433d-b5a9-3fb4eae719e2/02-12_hudlayout.png",
+          "caption": "Official UE5.8 finished HUD layout showing the Health Progress Bar in context.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/umg-ui-designer-quick-start-guide-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/63191eef-1abc-4830-9348-b8353a4ee070/02-20_createbinding.png",
+          "caption": "Epic’s current UMG Quick Start shows where Percent binding is created. The Hub deliberately keeps its event-driven SetHealthDisplay approach for the practical build.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/umg-ui-designer-quick-start-guide-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/8e54cf30-1fc8-4263-9be1-a31147b66fdb/02-22_gethealth.png",
+          "caption": "Official UE5.8 Widget graph example retrieving Health from the player reference.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/umg-ui-designer-quick-start-guide-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        }
+      ],
       "source": null,
       "prescriptive": true,
       "starterValues": [
@@ -3143,7 +3513,7 @@ window.UE5_TUTORIAL_DATA = {
         "Tests: 100/100, 50/100, 0/100"
       ],
       "studentRecipe": [
-        "WBP_HUD → add Progress Bar named PB_Health.",
+        "WBP_HUD → add a Progress Bar named PB_Health. In Epic’s reference layout there are Health and Energy bars; this Hub build only needs the Health bar.",
         "Player → Health=100, MaxHealth=100.",
         "Create widget function SetHealthDisplay(CurrentHealth,MaxHealth).",
         "Inside → CurrentHealth / MaxHealth → Set Percent on PB_Health.",
@@ -3157,7 +3527,13 @@ window.UE5_TUTORIAL_DATA = {
         "functions-events-macros"
       ],
       "recipeVisuals": [
-        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/c3885089-2e23-4ba4-b1ac-7dd39d9a402e/02-04_widgetstructure2.png",
+          "caption": "Official UE5.8 Widget Designer example with Health and Energy Progress Bars. Follow the Hub wording and build only the Health bar.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/umg-ui-designer-quick-start-guide-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null,
         null,
         null,
@@ -3377,7 +3753,13 @@ window.UE5_TUTORIAL_DATA = {
       "recipeVisuals": [
         null,
         null,
-        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/70ef9720-50e4-454f-9d48-803bb190c6e8/centercenter.png",
+          "caption": "Official UE5.8 UMG Anchor preset: centre/centre. Use this for the Crosshair step that anchors the Image to the centre of the canvas.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-anchors-in-unreal-engine-ui",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null,
         null,
         null
@@ -3727,9 +4109,52 @@ window.UE5_TUTORIAL_DATA = {
       "recipeVisuals": [
         null,
         null,
-        null,
-        null,
-        null,
+        [
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/aa8b31c0-d8ee-476f-8903-69ec242d8439/ue5_1-01-bpscript-create-widget.png",
+            "caption": "Official UE5.8 Blueprint example: Create Widget followed by Add to Viewport.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/creating-widgets-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/79f1d428-9a2f-4558-b89c-a9137b1ff69d/ue5_1-03-set-input-nodes.png",
+            "caption": "Official UE5.8 Set Input Mode nodes. The pause recipe uses UI Only while paused and Game Only when resuming.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/creating-widgets-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/1d76cbcb-f064-4333-9f4e-6f637ad83dba/ue5_1-04-set-showing-cursor.png",
+            "caption": "Official UE5.8 Player Controller Show Mouse Cursor setting used when switching between gameplay and UI interaction.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/creating-widgets-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
+        ],
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/c1b79eee-41f0-4d78-ac62-d71175e644ce/ue5_1-02-bpscript-remove-widget.png",
+          "caption": "Official UE5.8 Remove from Parent Blueprint example for removing a widget from the viewport.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/creating-widgets-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        [
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/79f1d428-9a2f-4558-b89c-a9137b1ff69d/ue5_1-03-set-input-nodes.png",
+            "caption": "Official UE5.8 Set Input Mode nodes. The pause recipe uses UI Only while paused and Game Only when resuming.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/creating-widgets-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/1d76cbcb-f064-4333-9f4e-6f637ad83dba/ue5_1-04-set-showing-cursor.png",
+            "caption": "Official UE5.8 Player Controller Show Mouse Cursor setting used when switching between gameplay and UI interaction.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/creating-widgets-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
+        ],
         null
       ]
     },
@@ -4028,10 +4453,10 @@ window.UE5_TUTORIAL_DATA = {
           ]
         },
         {
-          "title": "Set overlap collision",
-          "where": "Select Box Collision → Details → Collision",
-          "do": "Overlap Pawn and Generate Overlap Events.",
-          "why": "Hazards usually detect rather than physically block.",
+          "title": "Apply damage on Begin Overlap",
+          "where": "BP_DamageZone → Event Graph → Event Actor Begin Overlap",
+          "do": "Event Actor Begin Overlap → confirm Other Actor is the player → Apply Damage with Damaged Actor = Other Actor and Base Damage = 25.",
+          "why": "A single overlap event sends one standard Unreal damage event; the player’s Event AnyDamage decides how Health changes.",
           "see": "Player entry fires Begin Overlap.",
           "check": "Before moving on, prove this step: Player entry fires Begin Overlap.",
           "troubleshoot": [
@@ -4087,7 +4512,22 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "icon": "⚠",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/3c8fbaad-8f3c-4849-829b-0ece960f436f/beginoverlap.png",
+          "caption": "Official UE5.8 Event Actor Begin Overlap trigger used by the damage zone.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/events-in-unreal-engine?lang=en-US",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/c656a0f5-2fad-4106-a67e-673a5dc8019d/anydamage.png",
+          "caption": "Official UE5.8 Event AnyDamage receiver used on the player side of the same damage loop.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/events-in-unreal-engine?lang=en-US",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        }
+      ],
       "source": null,
       "prescriptive": true,
       "starterValues": [
@@ -4097,7 +4537,7 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "studentRecipe": [
         "Create BP_DamageZone with Box Collision preset Trigger.",
-        "On player BeginOverlap → Apply Damage Base Damage 25 (single-hit version) or call your health function with 25.",
+        "Event Actor Begin Overlap → confirm Other Actor is the player → Apply Damage → Damaged Actor = Other Actor, Base Damage = 25.",
         "Print current Health after damage for proof.",
         "Test with player Health 100. One entry should produce 75.",
         "Leave/re-enter. Second entry should produce 50.",
@@ -4110,7 +4550,13 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "recipeVisuals": [
         null,
-        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/3c8fbaad-8f3c-4849-829b-0ece960f436f/beginoverlap.png",
+          "caption": "Official UE5.8 Event Actor Begin Overlap node. This is the one-shot trigger that starts the damage-zone path.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/events-in-unreal-engine?lang=en-US",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null,
         null,
         null,
@@ -4565,8 +5011,8 @@ window.UE5_TUTORIAL_DATA = {
         },
         {
           "title": "Set/clear Blackboard Target",
-          "where": "Perception event → Blackboard TargetActor set/clear",
-          "do": "If sensed, set TargetActor; if lost, clear it or store last known location.",
+          "where": "AIController → select AI Perception → Details → Events → + On Target Perception Updated",
+          "do": "Add On Target Perception Updated. Break the Stimulus / read Successfully Sensed; True sets TargetActor to Actor, False clears it.",
           "why": "Perception data feeds Behaviour Tree decisions.",
           "see": "Blackboard target changes live in debugger.",
           "check": "Before moving on, prove this step: Blackboard target changes live in debugger.",
@@ -4601,7 +5047,22 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "icon": "◉",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/3c69b6a0-618d-4acb-895b-260513693f3c/3b-click-add-event.png",
+          "caption": "Official UE5.8 AI Perception event creation.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/behavior-tree-in-unreal-engine---quick-start-guide?lang=en-US",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/823adff0-b037-40ca-95ad-2f9decad9738/behavior-tree-quick-start-step-6-8.png",
+          "caption": "Official UE5.8 Successfully Sensed decision pattern.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/behavior-tree-in-unreal-engine---quick-start-guide?lang=en-US",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        }
+      ],
       "source": null,
       "prescriptive": true,
       "starterValues": [
@@ -4614,7 +5075,7 @@ window.UE5_TUTORIAL_DATA = {
         "AIController → add AI Perception component → add Sight config.",
         "Set Sight Radius 1200, Lose Sight Radius 1500, Peripheral Vision Half Angle 60°.",
         "For the first test enable Detect Neutrals = true in the Sight configuration. Leave the other affiliation settings unchanged.",
-        "On Target Perception Updated → if Successfully Sensed True set TargetActor; False clear it.",
+        "AI Perception → Details → Events → + On Target Perception Updated. In the graph read Stimulus → Successfully Sensed: True set TargetActor = Actor; False clear TargetActor.",
         "Print sensed/forgotten target while learning.",
         "Play three tests in order: stand 800 cm directly in front of the AI; move beyond 1500 cm; then return inside 800 cm with a solid wall fully blocking line of sight. Confirm the perception event changes in each test before adding chase logic."
       ],
@@ -4625,10 +5086,46 @@ window.UE5_TUTORIAL_DATA = {
         "ai-controller-moveto"
       ],
       "recipeVisuals": [
+        [
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/85ffe041-af2e-4bea-a81d-e0355a1d89f2/2-ai-perception.png",
+            "caption": "Official UE5.8: adding the AI Perception component to the AI Controller.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/behavior-tree-in-unreal-engine---quick-start-guide?lang=en-US",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/762379df-8ac3-4f2a-8492-f39f9fa1e63c/3-perception-setup.png",
+            "caption": "Official UE5.8: AI Perception Sight configuration with Detect Neutrals enabled.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/behavior-tree-in-unreal-engine---quick-start-guide?lang=en-US",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
+        ],
         null,
-        null,
-        null,
-        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/762379df-8ac3-4f2a-8492-f39f9fa1e63c/3-perception-setup.png",
+          "caption": "Official UE5.8: AI Perception Sight configuration with Detect Neutrals enabled.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/behavior-tree-in-unreal-engine---quick-start-guide?lang=en-US",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        [
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/3c69b6a0-618d-4acb-895b-260513693f3c/3b-click-add-event.png",
+            "caption": "Official UE5.8: add On Target Perception Updated from the AI Perception component Events section.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/behavior-tree-in-unreal-engine---quick-start-guide?lang=en-US",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/823adff0-b037-40ca-95ad-2f9decad9738/behavior-tree-quick-start-step-6-8.png",
+            "caption": "Official UE5.8 perception example breaks the stimulus and branches on whether the Actor was successfully sensed.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/behavior-tree-in-unreal-engine---quick-start-guide?lang=en-US",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
+        ],
         null,
         null
       ]
@@ -5456,7 +5953,13 @@ window.UE5_TUTORIAL_DATA = {
           "kind": "epic"
         },
         null,
-        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/78846e41-72fc-4fbb-a395-4ec60974fe96/shakebp1.png",
+          "caption": "Official UE5.8 Blueprint example for starting a Camera Shake through the Player Camera Manager.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/camera-shakes-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null,
         null,
         null

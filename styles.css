@@ -791,3 +791,21 @@ button:disabled{opacity:.48;cursor:not-allowed;transform:none!important}
 .block-visual-reference{grid-column:1/-1}.block-visual-reference>.visual-flow-card{max-width:880px;margin-top:12px}.block-visual-reference>.muted{max-width:850px}
 .step-visual-wrap .visual-flow-card.epic{box-shadow:0 0 0 1px rgba(79,160,226,.08)}
 @media(max-width:800px){.block-visual-reference>.visual-flow-card{max-width:none}}
+
+/* v3.34 — exact multi-image teaching galleries */
+.step-visual-gallery,
+.block-visual-gallery.multi{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+  align-items:start;
+}
+.step-visual-gallery .zoomable-media,
+.block-visual-gallery.multi .zoomable-media{
+  margin:0;
+  min-width:0;
+}
+@media (max-width:760px){
+  .step-visual-gallery,
+  .block-visual-gallery.multi{grid-template-columns:1fr;}
+}
