@@ -530,6 +530,11 @@ const api = {
   async setProjectStatus(projectId,status){
     if(!client||!this.user)throw new Error('Sign in first.');
     if(!['active','complete'].includes(status))throw new Error('Invalid project status.');
+    if(status==='active'){
+      const {data,error}=await client.rpc('reopen_project',{p_project_id:projectId});
+      if(error)throw error;
+      return Array.isArray(data)?data[0]:data;
+    }
     const {data,error}=await client.from('projects').update({status,updated_at:new Date().toISOString()}).eq('id',projectId).select().single();
     if(error)throw error;return data;
   },

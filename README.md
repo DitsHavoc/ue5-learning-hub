@@ -157,7 +157,7 @@ Shared project does **not** mean shared authorship.
 For class-linked projects, join codes only accept students who belong to that class. A student cannot join a second project copy from the same teacher template.
 
 ### Complete / reopen
-The Project Lead can mark a project **Complete**. Completed projects become read-only at the database-policy layer. The Project Lead can later **Reopen** the project and editing resumes.
+The Project Lead can mark a project **Complete**. Completed projects lock student/team editing at the database-policy layer. Assigned class teachers remain supervisory reviewers: they can still leave feedback on completed milestone evidence, and either the Project Lead or an assigned class teacher can **Reopen** the project when more student work is needed.
 
 ## Revision quizzes
 Revision is now a proper scored quiz builder:

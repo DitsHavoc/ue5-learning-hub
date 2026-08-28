@@ -40,14 +40,14 @@ While a project is Active:
 
 ## Completed projects
 
-When the Project Lead marks a project Complete, mutation policies block:
+When the Project Lead marks a project Complete, mutation policies block student/team:
 - log creation/edit/delete
 - project screenshot metadata mutation/upload/delete
-- new comments/replies
+- teammate comments/replies
 - milestone mutation
 - member role changes/removal
 
-The Project Lead may change Complete back to Active to reopen the project.
+Assigned class teachers retain review-only feedback access on completed milestone evidence. The Project Lead or an assigned class teacher may change Complete back to Active to reopen the project.
 
 ## Project media
 

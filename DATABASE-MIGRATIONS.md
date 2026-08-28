@@ -77,6 +77,30 @@ For a new installation, apply the base schema first and then the incremental mig
 
 No database migration is required. Quick Tutorial completion is stored as `lesson_progress.lesson_id = tutorial:<tutorial-id>` and Chapter Build completion as `chapter:<path-id>`. The existing `(user_id, lesson_id)` progress key and class-scoped teacher access continue to apply.
 
+
+## V3.34.3 class join ambiguity fix
+
+File:
+`migrations/20260828_22_fix_join_class_ambiguous_conflict.sql`
+
+Fixes the student class-join RPC failing with PostgreSQL `column reference "class_id" is ambiguous`. The function now targets the existing `class_members_pkey` constraint explicitly for duplicate-safe joins.
+
+This migration was applied to the live Supabase project on 28 Aug 2026. For another installation, apply it once after the earlier migrations.
+
+## V3.34.5 teacher project supervision
+
+File:
+`migrations/20260828_23_teacher_project_supervision_and_completed_feedback.sql`
+
+Assigned class teachers are supervisory reviewers for every student project in their classes without being inserted as student Project Leads. Teachers may:
+- leave teacher feedback on milestone evidence while a project is Active or Complete
+- reopen a completed class project when the student needs to respond or continue working
+- continue to structure milestones while a project is Active
+
+Student/team editing remains locked while the project is Complete. Normal teammates still cannot add discussion comments until the project is reopened.
+
+This migration was applied to the live Supabase project on 28 Aug 2026.
+
 ## V3.20 News & Industry
 
 File:
