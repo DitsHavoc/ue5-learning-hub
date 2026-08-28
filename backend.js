@@ -349,6 +349,14 @@ const api = {
     const {data,error}=await client.from('classes').select('id,name,academic_year,archived').eq('archived',false).order('name');
     if(error)throw error;return data||[];
   },
+  async getTeachingClassCards(){
+    if(!client||!this.user||this.profile?.role!=='teacher')return [];
+    const {data,error}=await client.from('classes')
+      .select('id,teacher_id,name,academic_year,archived,join_code,join_enabled,class_members(user_id),class_teachers(teacher_id)')
+      .eq('archived',false)
+      .order('name');
+    if(error)throw error;return data||[];
+  },
   async getProjectTemplates(){
     if(!client||!this.user)return [];
     const {data:templates,error}=await client.from('project_templates').select('*').order('updated_at',{ascending:false});

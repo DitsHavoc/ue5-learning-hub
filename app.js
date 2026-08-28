@@ -395,6 +395,9 @@ function updateChrome(){
   const txt=$('#accountText');
   const mode=$('#modeBadge');
   const teacher=$('#teacherNav');
+  const classesNav=$('#classesNav');
+  const classesNavLabel=$('#classesNavLabel');
+  const classesNavSub=$('#classesNavSub');
   const dot=$('#accountButton .account-dot');
   const theme=avatarTheme(profilePrefs.theme);
 
@@ -411,11 +414,18 @@ function updateChrome(){
     btn.classList.add(BACKEND.profile?.role==='teacher'?'teacher':'cloud');
     mode.textContent=BACKEND.profile?.role==='teacher'?'• TEACHER CLOUD':'• CLOUD';
     teacher.hidden=BACKEND.profile?.role!=='teacher';
+    if(classesNav){
+      classesNav.hidden=false;
+      const staff=BACKEND.profile?.role==='teacher';
+      if(classesNavLabel)classesNavLabel.textContent=staff?'Classes':'My Class';
+      if(classesNavSub)classesNavSub.textContent=staff?'Students • codes • progress':'Teaching group • progress';
+    }
   }else{
     txt.textContent=BACKEND.mode==='cloud'?'SIGN IN':'LOCAL MODE';
     mode.textContent=BACKEND.mode==='cloud'?'• GUEST + CLOUD':'• LOCAL';
     if(BACKEND.mode==='cloud')btn.classList.add('cloud');
     teacher.hidden=true;
+    if(classesNav)classesNav.hidden=true;
   }
 }
 async function syncCloudProgress(){
@@ -1039,10 +1049,23 @@ function modelingFixPage(id){
 }
 
 
+
+function classHomeShortcut(){
+  if(!BACKEND.user)return '';
+  const teacher=isTeacher();
+  return `<section class="portal-class-shortcut ${teacher?'teacher':'student'}">
+    <div class="portal-class-shortcut-icon">🏫</div>
+    <div class="portal-class-shortcut-copy"><span class="eyebrow">${teacher?'TEACHING GROUPS':'YOUR TEACHING GROUP'}</span><h2>${teacher?'Classes':'My Class'}</h2><p>${teacher?'Jump straight to student rosters, class codes and class progress without hunting through the Teacher dashboard.':'Keep your class, progress and class projects one click away.'}</p></div>
+    <div class="portal-class-shortcut-actions"><a class="button primary" href="#/classes">${teacher?'Open Classes':'Open My Class'} →</a><a class="button ghost" href="${teacher?'#/teacher':'#/progress'}">${teacher?'Teacher dashboard':'Evidence & Progress'}</a></div>
+  </section>`;
+}
+
 function dashboard(){
   return `<section class="portal-hero portal-hero-clean">
     <div><span class="eyebrow">UE5 LEARNING HUB</span><h1>Choose a path.</h1><p>Learn systems. Design worlds. Build assets. Make projects. Keep an eye on the industry.</p></div>
   </section>
+
+  ${classHomeShortcut()}
 
   <section class="portal-path-grid" aria-label="Choose a Learning Hub area">
     <a class="portal-path-card programming" href="#/programming"><div class="portal-path-icon">⌘</div><span class="portal-kicker">BUILDING BLOCKS • SYSTEMS • BLUEPRINTS</span><h2>Unreal Learning</h2><p>Learn Unreal terms in tiny Building Blocks, understand the deeper systems, then apply them in practical tutorials and projects.</p><div class="portal-chip-row"><span>${BLOCKS.blocks.filter(b=>b.tier==='core').length} core blocks</span><span>${DATA.lessons.length} system lessons</span><span>${TOOLS.tutorials.filter(t=>!t.designModule).length}+ recipes</span></div><strong>Enter Unreal Learning →</strong></a>
@@ -1969,6 +1992,35 @@ async function renderTeacherClass(classId){
   }catch(err){box.innerHTML=`<div class="empty"><h3>Could not load this class.</h3><p>${esc(err.message)}</p></div>`}
 }
 
+
+function classesPage(){
+  if(!BACKEND.user){
+    return `<div class="page-head"><div class="breadcrumb"><a href="#/">Home</a> / Classes</div><span class="eyebrow">CLOUD ACCOUNT</span><h1>🏫 Classes</h1><p class="muted">Sign in to see your teaching group.</p></div><div class="offline-note">Use the account button at the top-right to sign in or create your Learning Hub account.</div>`;
+  }
+  const teacher=isTeacher();
+  return `<div class="page-head classes-page-head"><div class="breadcrumb"><a href="#/">Home</a> / ${teacher?'Classes':'My Class'}</div><span class="eyebrow">${teacher?'TEACHER QUICK ACCESS':'STUDENT QUICK ACCESS'}</span><h1>🏫 ${teacher?'Classes':'My Class'}</h1><p class="muted">${teacher?'Open a teaching group immediately, copy its join code or jump to the full Teacher dashboard.':'Your teaching group and the places you use most often.'}</p></div><div id="classesHubContent"><div class="empty">Loading ${teacher?'classes':'your class'}…</div></div>`;
+}
+
+async function renderClassesHub(){
+  const box=$('#classesHubContent');if(!box||!BACKEND.user)return;
+  try{
+    if(isTeacher()){
+      const active=await BACKEND.getTeachingClassCards();
+      box.innerHTML=`<section class="classes-hub-toolbar"><div><span class="eyebrow">${active.length} ACTIVE CLASS${active.length===1?'':'ES'}</span><h2>Your teaching groups</h2><p>Open the class itself for student-by-student progress and content coverage.</p></div><a class="button ghost" href="#/teacher">Full Teacher dashboard →</a></section>
+      <section class="classes-hub-grid">${active.length?active.map(c=>{
+        const members=(c.class_members||[]).length;
+        const owner=c.teacher_id===BACKEND.user.id;
+        return `<article class="classes-hub-card ${owner?'owned':'co-taught'}"><div class="classes-hub-card-top"><div><span class="eyebrow">${owner?'OWNER':'CO-TEACHER'}</span><h2>${esc(c.name)}</h2><p>${esc(c.academic_year||'Current class')}</p></div><span class="classes-hub-count"><b>${members}</b> student${members===1?'':'s'}</span></div><div class="classes-hub-code"><small>JOIN CODE</small><code>${esc(c.join_code||'Not set')}</code><span>${c.join_enabled?'Accepting joins':'Joins paused'}</span></div><div class="classes-hub-actions"><a class="button primary" href="#/teacher/class/${c.id}">Open class →</a><a class="button ghost" href="#/teacher">Manage classes</a></div></article>`;
+      }).join(''):`<div class="empty classes-hub-empty"><h3>No active classes yet.</h3><p>Create your first class from the Teacher dashboard.</p><a class="button primary" href="#/teacher">Create a class →</a></div>`}</section>`;
+      return;
+    }
+
+    const classes=await BACKEND.getMyClasses();
+    box.innerHTML=`${classes.length?`<section class="classes-hub-grid student-classes">${classes.map(c=>`<article class="classes-hub-card student"><div class="classes-hub-card-top"><div><span class="eyebrow">YOUR CLASS</span><h2>${esc(c.name)}</h2><p>${esc(c.academic_year||'Teaching group')}</p></div><span class="classes-hub-count student">🏫</span></div><p class="classes-hub-note">Use the shortcuts below for the work connected to your Learning Hub account.</p><div class="classes-hub-actions"><a class="button primary" href="#/progress">Evidence & Progress →</a><a class="button ghost" href="#/projects">Class Projects</a></div></article>`).join('')}</section>`:`<div class="empty classes-hub-empty"><h3>You are not in a class yet.</h3><p>Enter the class code your teacher gave you.</p></div>`}
+    <section class="classes-join-panel"><div><span class="eyebrow">${classes.length?'NEED ANOTHER CLASS?':'JOIN YOUR CLASS'}</span><h2>Use a class code</h2><p>Your teacher can give you the current code for the teaching group.</p></div><form class="join-class-inline" data-action-form="join-class"><input name="classCode" maxlength="20" required placeholder="CLASS CODE"><button class="button primary" type="submit">Join class</button></form></section>`;
+  }catch(err){box.innerHTML=`<div class="empty"><h3>Could not load classes.</h3><p>${esc(err.message)}</p></div>`}
+}
+
 function teacherPage(){
   if(!BACKEND.user || BACKEND.profile?.role!=='teacher'){
     return `<div class="page-head"><span class="eyebrow">Teacher dashboard</span><h1>Teacher access</h1><p class="muted">This page becomes available to a profile with the teacher role when the cloud backend is connected.</p></div><div class="offline-note">Student learning remains fully usable in local mode. Teacher overview needs Supabase because it is aggregating progress across different accounts/devices.</div>`;
@@ -2157,6 +2209,7 @@ function route(options={}){
   else if(parts[0]==='projects'&&parts[1]==='template'&&parts[2]){app.innerHTML=projectTemplatePage(parts[2]);activate('projects')}
   else if(parts[0]==='projects'&&parts[1]){app.innerHTML=projectDetailPage(parts[1]);activate('projects')}
   else if(parts[0]==='projects'){app.innerHTML=projectsPage();activate('projects')}
+  else if(parts[0]==='classes'){app.innerHTML=classesPage();activate('classes')}
   else if(parts[0]==='progress'){app.innerHTML=progressPage();activate('progress')}
   else if(parts[0]==='requests'){app.innerHTML=requestBoard();activate('requests')}
   else if(parts[0]==='challenges'){app.innerHTML=challengeBoard();activate('challenges')}
@@ -2188,6 +2241,7 @@ function route(options={}){
   if(parts[0]==='lesson'&&BACKEND.user){loadComments(parts[1]);loadEvidence(parts[1]);}
   if(parts[0]==='news') loadNewsFeed();
   if(parts[0]==='progress'&&BACKEND.user) renderProgressCloud();
+  if(parts[0]==='classes'&&BACKEND.user) renderClassesHub();
   if(parts[0]==='projects'&&!parts[1]&&BACKEND.user) renderProjects();
   if(parts[0]==='projects'&&parts[1]==='template'&&parts[2]&&BACKEND.user) renderProjectTemplate(parts[2]);
   else if(parts[0]==='projects'&&parts[1]&&BACKEND.user) renderProjectDetail(parts[1]);
@@ -2911,6 +2965,7 @@ document.addEventListener('submit',async e=>{
       e.target.reset();toast(`Joined ${joined.class_name}.`);
       if($('#authModal')&&!$('#authModal').hidden)renderAuth();
       if(location.hash==='#/progress')await renderProgressCloud();
+      if(location.hash==='#/classes')await renderClassesHub();
     }catch(err){toast(err.message)}
   }
   if(e.target.dataset.actionForm==='auth-invited-teacher'){
