@@ -266,7 +266,14 @@ const api = {
   },
   async completePendingClassJoin(){
     if(!client||!this.user)return null;
-    const pending=localStorage.getItem(PENDING_CLASS_KEY);
+    // Email confirmation can reopen the Hub in a browser context where the
+    // temporary localStorage value is missing. The signup class code is also
+    // stored in Supabase Auth user metadata, so use that as the durable
+    // fallback. join_class_by_code is idempotent, so this safely repairs old
+    // confirmed student accounts that were created but never enrolled.
+    const localCode=this.normalizeClassCode(localStorage.getItem(PENDING_CLASS_KEY));
+    const metadataCode=this.normalizeClassCode(this.user?.user_metadata?.class_code);
+    const pending=localCode||metadataCode;
     if(!pending)return null;
     try{
       const joined=await this.joinClassByCode(pending);
