@@ -647,22 +647,40 @@ const api = {
   },
   async postProjectComment(projectId,updateId,body){
     if(!client||!this.user)throw new Error('Sign in first.');
-    const clean=String(body||'').trim().slice(0,3000);
-    if(!clean)throw new Error('Write some feedback first.');
+    const overall=!updateId,maxLength=overall?8000:3000;
+    const clean=String(body||'').trim().slice(0,maxLength);
+    if(!clean)throw new Error(overall?'Write the overall project feedback first.':'Write some feedback first.');
     const {data,error}=await client.from('project_comments').insert({project_id:projectId,update_id:updateId||null,author_id:this.user.id,body:clean}).select().single();
     if(error)throw error;
-    if(this.profile?.role==='teacher'&&updateId){
-      const [{data:update},{data:project}]=await Promise.all([
-        client.from('project_updates').select('author_id').eq('id',updateId).maybeSingle(),
-        client.from('projects').select('title').eq('id',projectId).maybeSingle()
-      ]);
-      if(update?.author_id&&update.author_id!==this.user.id){
-        const {error:nErr}=await client.from('notifications').insert({
-          user_id:update.author_id,kind:'feedback',title:'New project feedback',
-          body:`Your teacher left feedback on ${project?.title||'your project'}: ${clean}`.slice(0,1000),
-          link:`#/projects/${projectId}`
-        });
-        if(nErr)console.warn('Project feedback notification',nErr.message);
+    if(this.profile?.role==='teacher'){
+      if(updateId){
+        const [{data:update},{data:project}]=await Promise.all([
+          client.from('project_updates').select('author_id').eq('id',updateId).maybeSingle(),
+          client.from('projects').select('title').eq('id',projectId).maybeSingle()
+        ]);
+        if(update?.author_id&&update.author_id!==this.user.id){
+          const {error:nErr}=await client.from('notifications').insert({
+            user_id:update.author_id,kind:'feedback',title:'New project feedback',
+            body:`Your teacher left feedback on ${project?.title||'your project'}: ${clean}`.slice(0,1000),
+            link:`#/projects/${projectId}`
+          });
+          if(nErr)console.warn('Project feedback notification',nErr.message);
+        }
+      }else{
+        const [{data:members},{data:project}]=await Promise.all([
+          client.from('project_members').select('user_id').eq('project_id',projectId),
+          client.from('projects').select('title,owner_id').eq('id',projectId).maybeSingle()
+        ]);
+        const recipients=[...new Set([...(members||[]).map(m=>m.user_id),project?.owner_id].filter(id=>id&&id!==this.user.id))];
+        if(recipients.length){
+          const rows=recipients.map(userId=>({
+            user_id:userId,kind:'feedback',title:'Overall project feedback',
+            body:`Your teacher left overall feedback on ${project?.title||'your project'}: ${clean}`.slice(0,1000),
+            link:`#/projects/${projectId}`
+          }));
+          const {error:nErr}=await client.from('notifications').insert(rows);
+          if(nErr)console.warn('Overall project feedback notification',nErr.message);
+        }
       }
     }
     return data;

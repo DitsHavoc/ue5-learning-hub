@@ -101,6 +101,15 @@ Student/team editing remains locked while the project is Complete. Normal teamma
 
 This migration was applied to the live Supabase project on 28 Aug 2026.
 
+## V3.34.6 overall project feedback
+
+File:
+`migrations/20260828_24_teacher_overall_project_feedback.sql`
+
+Adds a separate teacher-only permission for project-level feedback (`project_comments.update_id IS NULL`) on Active or Complete projects in classes the teacher supervises. Milestone feedback remains attached to a specific evidence entry.
+
+The UI uses project-level comments for the larger **Overall Project Feedback** review and keeps milestone comments optional/targeted. This migration was applied to the live Supabase project on 28 Aug 2026.
+
 ## V3.20 News & Industry
 
 File:
