@@ -1,5 +1,15 @@
 # Changelog
 
+## v3.34.9 — Class XP Leaderboards — 28 Aug 2026
+- Added class-only weekly and all-time XP leaderboards with Top 10, personal position, level and streak.
+- Added teacher per-class pause/enable control.
+- Added server-side non-farmable XP events, historical backfill and a 5 XP daily activity bonus.
+- Added project milestone evidence, milestone completion and project completion rewards.
+- Kept grades and assessment marks completely out of leaderboard scoring.
+- Synced cloud XP back into the existing student player card so personal and class XP agree.
+- Added Sculpt Playground to local-to-cloud migration/restoration.
+- Database migration: `20260828_27_class_xp_leaderboards.sql`.
+
 ## v3.32.2 — Class Detail Workspace — 27 Aug 2026
 - Added **Open class →** to every active class in the Teacher Dashboard.
 - Added a class-specific teacher route with roster, per-student progress and exact completed-content lists.

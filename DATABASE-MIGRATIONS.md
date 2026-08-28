@@ -145,3 +145,38 @@ The migration also widens the private `project-media` storage bucket to accept:
 The existing 10 MB file-size limit remains unchanged. Larger builds, videos and source projects should be stored in OneDrive/Google Drive/SharePoint or equivalent and submitted through the share-link field instead.
 
 This migration was applied to the live Supabase project on 28 Aug 2026.
+
+## V3.34.8 teacher-published projects only
+
+File:
+`migrations/20260828_26_lock_student_project_creation.sql`
+
+Removes the broad student `INSERT` policy on `projects`, so students cannot create arbitrary personal, assignment, practice or game-jam projects outside the teacher workflow.
+
+New student working projects are created only through the existing `start_project_from_template(...)` RPC. The RPC now uses `SECURITY DEFINER` and explicitly verifies:
+- the caller is a signed-in student
+- the template is published
+- the student belongs to the template's class
+- the requested Individual / Group mode is allowed by the template
+- the student has not already started that template
+
+Joining an existing authorised group project by project code remains available. Existing student-created projects are not deleted or altered.
+
+## V3.34.9 class XP leaderboards
+
+File:
+`migrations/20260828_27_class_xp_leaderboards.sql`
+
+Adds a class-scoped, server-side XP leaderboard system:
+- `classes.leaderboard_enabled` teacher control
+- private `learning_xp_events` ledger with unique activity keys to prevent XP farming
+- automatic awards from learning completions, milestone evidence, milestone completion and project completion
+- one 5 XP daily activity bonus
+- automatic historical backfill from existing real progress
+- `get_my_xp_summary()` for the signed-in student's player card
+- `get_class_leaderboard(...)` for weekly/all-time class rankings and streaks
+- `set_class_leaderboard_enabled(...)` for teachers
+
+Leaderboard access is restricted to students in that class and teachers with access to that class. Assessment grades are not part of the scoring model.
+
+This migration was applied to the live Supabase project on 28 Aug 2026.

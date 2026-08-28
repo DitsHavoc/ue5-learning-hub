@@ -553,7 +553,7 @@ begin
 
   insert into public.class_members(class_id,user_id)
   values(v_class.id,v_user)
-  on conflict(class_id,user_id) do nothing;
+  on conflict on constraint class_members_pkey do nothing;
 
   get diagnostics v_rows = row_count;
 
@@ -644,7 +644,7 @@ begin
 
   insert into public.class_members(class_id,user_id)
   values(v_class.id,v_user)
-  on conflict(class_id,user_id) do nothing;
+  on conflict on constraint class_members_pkey do nothing;
 
   get diagnostics v_rows = row_count;
 

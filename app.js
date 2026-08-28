@@ -71,6 +71,8 @@ let lessonMode = 'guided';
 let authView = 'signin';
 let revisionSession = null;
 let blocksTier = 'core';
+let leaderboardPeriod = 'week';
+let leaderboardClassId = '';
 
 function $(s,root=document){return root.querySelector(s)}
 function $$(s,root=document){return [...root.querySelectorAll(s)]}
@@ -277,13 +279,16 @@ function continueMissionCard(){
 function featuredStudentCard(){
   const i=level(),name=userDisplayName(),eq=equippedBadge(),theme=avatarTheme(profilePrefs.theme),teacher=isTeacher();
   const badgeMeta=eq?BADGE_META[eq[0]]:null;
-  return `<section class="portal-player-card compact-player-card ${teacher?'teacher-player-card':''}" style="--player-glow:${teacher?'rgba(86,215,255,.34)':theme.shadow}"><div class="player-card-identity"><div class="player-avatar-stack">${avatarMarkup('xl',name)}<span class="player-level-chip ${teacher?'teacher-max-chip':''}">${teacher?'MAX':`L${i.n}`}</span></div><div class="player-name-block"><span class="eyebrow">${teacher?'STAFF PLAYER CARD':'PLAYER CARD'}</span><h2>${esc(name)}</h2><p>${esc(userRankTitle())}${teacher?' • 🎓 Teacher':''}</p></div>${levelRingMarkup()}</div>${teacher?`<div class="teacher-max-line"><span>🎓 VERIFIED TEACHER</span><strong>LEVEL MAX</strong></div>`:`<div class="player-xp-line"><span><b>${i.xp}</b> XP</span><span>${i.left} XP to Level ${i.n+1}</span></div><div class="progress player-xp-progress"><span style="width:${i.pct}%"></span></div>`}<div class="equipped-badge ${badgeMeta?.tone||'locked'}"><span class="equipped-badge-icon">${eq?eq[4]:'?'}</span><div><small>${teacher?'STAFF BADGE':eq?'PINNED BADGE':'BADGE SLOT'}</small><strong>${eq?esc(eq[1]):'Unlock your first badge'}</strong><span>${teacher?'Teacher-only • automatically equipped':eq?esc(badgeMeta?.rarity||'Common'):'Complete a lesson to begin'}</span></div></div><div class="player-card-mini-stats"><span><b>${completedLessons().length}</b> lessons</span><span><b>${completedTutorialCount()}</b> tutorials</span><span><b>${state.chapterBuildCompleted.length}</b> chapter builds</span></div><div class="portal-player-actions"><a class="button ghost" href="#/progress">🏆 Badge cabinet</a><button class="button ghost" data-action="open-auth">✎ Customise</button></div></section>`;
+  return `<section class="portal-player-card compact-player-card ${teacher?'teacher-player-card':''}" style="--player-glow:${teacher?'rgba(86,215,255,.34)':theme.shadow}"><div class="player-card-identity"><div class="player-avatar-stack">${avatarMarkup('xl',name)}<span class="player-level-chip ${teacher?'teacher-max-chip':''}">${teacher?'MAX':`L${i.n}`}</span></div><div class="player-name-block"><span class="eyebrow">${teacher?'STAFF PLAYER CARD':'PLAYER CARD'}</span><h2>${esc(name)}</h2><p>${esc(userRankTitle())}${teacher?' • 🎓 Teacher':''}</p></div>${levelRingMarkup()}</div>${teacher?`<div class="teacher-max-line"><span>🎓 VERIFIED TEACHER</span><strong>LEVEL MAX</strong></div>`:`<div class="player-xp-line"><span><b>${i.xp}</b> XP</span><span>${i.left} XP to Level ${i.n+1}</span></div><div class="progress player-xp-progress"><span style="width:${i.pct}%"></span></div>`}<div class="equipped-badge ${badgeMeta?.tone||'locked'}"><span class="equipped-badge-icon">${eq?eq[4]:'?'}</span><div><small>${teacher?'STAFF BADGE':eq?'PINNED BADGE':'BADGE SLOT'}</small><strong>${eq?esc(eq[1]):'Unlock your first badge'}</strong><span>${teacher?'Teacher-only • automatically equipped':eq?esc(badgeMeta?.rarity||'Common'):'Complete a lesson to begin'}</span></div></div><div class="player-card-mini-stats"><span><b>${completedLessons().length}</b> lessons</span><span><b>${completedTutorialCount()}</b> tutorials</span><span><b>${state.chapterBuildCompleted.length}</b> chapter builds</span></div><div class="portal-player-actions"><a class="button ghost" href="#/leaderboard">🏆 Leaderboard</a><a class="button ghost" href="#/progress">★ Badges & progress</a><button class="button ghost" data-action="open-auth">✎ Customise</button></div></section>`;
 }
 function lesson(id){return DATA.lessons.find(x=>x.id===id)}
 function path(id){return DATA.paths.find(x=>x.id===id)}
 function mechanic(id){return PROJECT.mechanics[id]}
 function completedLessons(){return DATA.lessons.filter(l=>state.completed.includes(l.id))}
-function totalXp(){return (state.blockCompleted||[]).length*25+completedLessons().reduce((n,l)=>n+l.xp,0)+TOOLS.chapterBuilds.filter(b=>state.chapterBuildCompleted.includes(b.path)).reduce((n,b)=>n+(b.xp||0),0)+(state.designBuildCompleted||[]).length*300+(state.modelLessonCompleted||[]).length*100+(state.modelBuildCompleted||[]).length*250+(state.modelFixCompleted||[]).length*75+(state.sculptCompleted||[]).reduce((n,id)=>n+(SCULPT.practices.find(x=>x.id===id)?.xp||0),0)}
+function totalXp(){
+  if(BACKEND.user&&!isTeacher()&&BACKEND.xpSummary&&Number.isFinite(Number(BACKEND.xpSummary.all_time_xp)))return Number(BACKEND.xpSummary.all_time_xp);
+  return (state.blockCompleted||[]).length*25+(state.tutorialCompleted||[]).length*25+completedLessons().reduce((n,l)=>n+l.xp,0)+TOOLS.chapterBuilds.filter(b=>state.chapterBuildCompleted.includes(b.path)).reduce((n,b)=>n+(b.xp||0),0)+(state.designBuildCompleted||[]).length*300+(state.modelLessonCompleted||[]).length*100+(state.modelBuildCompleted||[]).length*250+(state.modelFixCompleted||[]).length*75+(state.sculptCompleted||[]).reduce((n,id)=>n+(SCULPT.practices.find(x=>x.id===id)?.xp||0),0)
+}
 function level(){
   const xp=totalXp(),n=Math.floor(xp/500)+1,into=xp%500;
   return {n,xp,into,left:500-into,pct:into/5};
@@ -442,6 +447,8 @@ async function syncCloudProgress(){
     state.modelLessonCompleted=[...new Set([...(state.modelLessonCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('model:')).map(id=>id.slice(6))])];
     state.modelBuildCompleted=[...new Set([...(state.modelBuildCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('modelbuild:')).map(id=>id.slice(11))])];
     state.modelFixCompleted=[...new Set([...(state.modelFixCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('modelfix:')).map(id=>id.slice(9))])];
+    state.sculptCompleted=[...new Set([...(state.sculptCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('sculpt:')).map(id=>id.slice(7))])];
+    await BACKEND.refreshXpSummary();
     saveState();
 
     const pRows=await BACKEND.getProjectProgress();
@@ -1484,19 +1491,12 @@ function projectsPage(){
     <section class="section"><div class="section-head"><div><h2>Your class templates</h2><p>Draft templates stay hidden from students. Publish when the brief and milestones are ready.</p></div></div><div id="projectTemplatesList"><div class="empty">Loading templates…</div></div></section>
     <section class="section"><div class="section-head"><div><h2>Class project activity</h2><p>Student project copies linked to classes you teach.</p></div></div><div id="projectsList"><div class="empty">Loading projects…</div></div></section>`;
   }
-  return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Projects</div><span class="eyebrow">Milestone evidence • written updates • feedback</span><h1>▣ Projects</h1><p class="muted">Use Projects when your learning turns into assignment, game-jam, personal or group work.</p></div>
-  <section class="section available-projects-section"><div class="section-head"><div><h2>Available Projects</h2><p>Projects published by your teachers appear here. Choose how to start when the brief allows it.</p></div></div><div id="availableProjectsList"><div class="empty">Loading available projects…</div></div></section>
+  return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Projects</div><span class="eyebrow">Teacher-set projects • milestone evidence • feedback</span><h1>▣ Projects</h1><p class="muted">Your teacher publishes the projects for your class. Start them here, then keep your evidence, files and feedback together.</p></div>
+  <section class="section available-projects-section"><div class="section-head"><div><h2>Available Projects</h2><p>Projects published by your teachers appear here. Choose Individual or Group only when the brief allows it.</p></div></div><div id="availableProjectsList"><div class="empty">Loading available projects…</div></div></section>
   <section class="section"><div class="section-head"><div><h2>Your Projects</h2><p>Your active, completed and group projects.</p></div></div><div id="projectsList"><div class="empty">Loading projects…</div></div></section>
-  <details class="project-self-create"><summary>Create or join something else</summary><div class="project-create-grid">
-    <section class="project-panel"><span class="eyebrow">Create your own</span><h2>New project</h2><form class="form-grid" data-action-form="create-project">
-      <label>Project title<input name="title" maxlength="120" required placeholder="e.g. Horror Game Jam"></label>
-      <div class="form-two"><label>Project type<select name="projectType"><option value="solo">Solo</option><option value="group">Group</option></select></label><label>Type of work<select name="projectKind"><option value="assignment">Assignment</option><option value="group_project">Group project</option><option value="game_jam">Game jam</option><option value="practice">Practice</option><option value="personal">Personal</option><option value="client">Client project</option><option value="other">Other</option></select></label></div>
-      <div class="form-two"><label>Class <small>optional</small><select name="classId" id="projectClassSelect"><option value="">No class linked</option></select></label><label>Assessment / unit <small>optional</small><input name="assessmentUnit" maxlength="160" placeholder="e.g. Unit 321"></label></div>
-      <div class="form-field"><span class="form-field-label">Brief / description</span>${projectRichEditor('description','','What are you making?',6000)}</div>
-      <button class="button primary" type="submit">Create project</button>
-    </form></section>
-    <section class="project-panel"><span class="eyebrow">Join a team</span><h2>Group project code</h2><p>The Project Lead shares the group code. If the project belongs to a class, only students in that class can join.</p><form class="form-grid" data-action-form="join-project"><label>Project code<input name="projectCode" maxlength="20" required placeholder="GRP-XXXXXXXX"></label><button class="button" type="submit">Join group project</button></form></section>
-  </div></details>`;
+  <section class="section"><div class="section-head"><div><h2>Join a Group Project</h2><p>If another student has already started the teacher-published project as a group, enter the Project Lead's code here.</p></div></div><div class="project-create-grid student-project-join-only">
+    <section class="project-panel"><span class="eyebrow">Teacher-published projects only</span><h2>Group project code</h2><p>Only students in the correct class can join. Students cannot create separate projects outside the projects published by their teacher.</p><form class="form-grid" data-action-form="join-project"><label>Project code<input name="projectCode" maxlength="20" required placeholder="GRP-XXXXXXXX"></label><button class="button" type="submit">Join group project</button></form></section>
+  </div></section>`;
 }
 
 function projectListCards(rows,emptyMessage='No projects yet.'){
@@ -1521,8 +1521,7 @@ async function renderProjects(){
       box.innerHTML=projectListCards(rows,'No student project copies yet.');
       return;
     }
-    const [rows,templates,classes]=await Promise.all([BACKEND.getProjects(),BACKEND.getProjectTemplates(),BACKEND.getMyClasses()]);
-    const select=$('#projectClassSelect');if(select)select.innerHTML='<option value="">No class linked</option>'+classes.map(c=>`<option value="${esc(c.id)}">${esc(c.name)}${c.academic_year?` • ${esc(c.academic_year)}`:''}</option>`).join('');
+    const [rows,templates]=await Promise.all([BACKEND.getProjects(),BACKEND.getProjectTemplates()]);
     const started=new Set(rows.filter(p=>p.template_id).map(p=>p.template_id));
     const available=$('#availableProjectsList');
     if(available)available.innerHTML=templates.length?`<div class="available-template-grid">${templates.map(t=>{
@@ -2036,6 +2035,54 @@ function classesPage(){
   return `<div class="page-head classes-page-head"><div class="breadcrumb"><a href="#/">Home</a> / ${teacher?'Classes':'My Class'}</div><span class="eyebrow">${teacher?'TEACHER QUICK ACCESS':'STUDENT QUICK ACCESS'}</span><h1>🏫 ${teacher?'Classes':'My Class'}</h1><p class="muted">${teacher?'Open a teaching group immediately, copy its join code or jump to the full Teacher dashboard.':'Your teaching group and the places you use most often.'}</p></div><div id="classesHubContent"><div class="empty">Loading ${teacher?'classes':'your class'}…</div></div>`;
 }
 
+
+function leaderboardPage(){
+  if(!BACKEND.user){
+    return `<div class="page-head"><div class="breadcrumb"><a href="#/">Home</a> / Leaderboard</div><span class="eyebrow">CLASS XP</span><h1>🏆 Leaderboard</h1><p class="muted">Sign in to see your class ranking, XP and streak.</p></div><div class="offline-note">Leaderboards are class-only. Sign in with your Learning Hub account to continue.</div>`;
+  }
+  return `<div class="page-head leaderboard-page-head"><div class="breadcrumb"><a href="#/">Home</a> / Leaderboard</div><span class="eyebrow">CLASS PROGRESSION</span><h1>🏆 Leaderboard</h1><p class="muted">Useful progress earns XP. Grades and assessment marks are never ranked here.</p></div><div id="leaderboardContent"><div class="empty">Loading class leaderboard…</div></div>`;
+}
+function leaderboardTitle(levelNo){
+  const n=Number(levelNo)||1;
+  if(n>=10)return 'Engine Architect';
+  if(n>=8)return 'Systems Director';
+  if(n>=6)return 'Prototype Ranger';
+  if(n>=4)return 'Blueprint Adept';
+  if(n>=2)return 'UE Explorer';
+  return 'New Recruit';
+}
+function leaderboardMedal(pos){return Number(pos)===1?'🥇':Number(pos)===2?'🥈':Number(pos)===3?'🥉':`#${pos}`}
+function leaderboardRow(row,me=false){
+  const initial=String(row.display_name||'?').trim().slice(0,1).toUpperCase()||'?';
+  return `<div class="leaderboard-row ${me?'is-you':''}"><div class="leaderboard-rank">${leaderboardMedal(row.rank_position)}</div><div class="leaderboard-person"><span class="leaderboard-avatar">${esc(initial)}</span><div><strong>${esc(row.display_name||'Student')}${me?' <span class="you-chip">YOU</span>':''}</strong><small>Level ${row.current_level} • ${esc(leaderboardTitle(row.current_level))}</small></div></div><div class="leaderboard-streak">${row.current_streak?`🔥 ${row.current_streak}`:'—'}<small>streak</small></div><div class="leaderboard-xp"><strong>${Number(row.score_xp||0).toLocaleString()}</strong><small>${leaderboardPeriod==='week'?'weekly XP':'total XP'}</small></div></div>`;
+}
+async function renderLeaderboard(){
+  const box=$('#leaderboardContent');if(!box||!BACKEND.user)return;
+  try{
+    const classes=await BACKEND.getLeaderboardClasses();
+    if(!classes.length){box.innerHTML=`<div class="empty"><h3>No class leaderboard yet.</h3><p>${isTeacher()?'Create or join a teaching class first.':'Join your class with the code from your teacher.'}</p></div>`;return}
+    if(!leaderboardClassId||!classes.some(c=>String(c.id)===String(leaderboardClassId)))leaderboardClassId=String(classes[0].id);
+    const cls=classes.find(c=>String(c.id)===String(leaderboardClassId))||classes[0];
+    const enabled=cls.leaderboard_enabled!==false;
+    if(!enabled&&!isTeacher()){
+      box.innerHTML=`<section class="leaderboard-toolbar"><label>Class<select id="leaderboardClassSelect">${classes.map(c=>`<option value="${c.id}" ${String(c.id)===String(cls.id)?'selected':''}>${esc(c.name)}</option>`).join('')}</select></label></section><div class="empty leaderboard-paused"><h3>🏆 Leaderboard paused</h3><p>Your teacher has switched the leaderboard off for this class.</p></div>`;return;
+    }
+    const rows=await BACKEND.getClassLeaderboard(cls.id,leaderboardPeriod);
+    const me=rows.find(r=>r.user_id===BACKEND.user.id)||null;
+    const top=rows.slice(0,10),podium=rows.slice(0,3);
+    const improving=[...rows].sort((a,b)=>((b.weekly_xp||0)-(b.previous_week_xp||0))-((a.weekly_xp||0)-(a.previous_week_xp||0)))[0]||null;
+    const active=[...rows].sort((a,b)=>(b.current_streak||0)-(a.current_streak||0))[0]||null;
+    box.innerHTML=`
+      <section class="leaderboard-toolbar"><label>Class<select id="leaderboardClassSelect">${classes.map(c=>`<option value="${c.id}" ${String(c.id)===String(cls.id)?'selected':''}>${esc(c.name)}${c.academic_year?' • '+esc(c.academic_year):''}</option>`).join('')}</select></label><div class="leaderboard-period-tabs"><button class="${leaderboardPeriod==='week'?'active':''}" data-action="leaderboard-period" data-period="week">This week</button><button class="${leaderboardPeriod==='all'?'active':''}" data-action="leaderboard-period" data-period="all">All time</button></div>${isTeacher()?`<button class="button ghost small" data-action="toggle-leaderboard" data-class="${cls.id}" data-enabled="${enabled?'1':'0'}">${enabled?'Pause for students':'Enable for students'}</button>`:''}</section>
+      ${isTeacher()&&!enabled?'<div class="teacher-security-banner"><b>LEADERBOARD PAUSED FOR STUDENTS</b><span>You can still preview it here. Students in this class cannot see rankings until you enable it again.</span></div>':''}
+      ${rows.length?`<section class="leaderboard-podium">${podium.map((r,i)=>`<article class="podium-card place-${i+1}"><span class="podium-medal">${leaderboardMedal(r.rank_position)}</span><span class="podium-avatar">${esc(String(r.display_name||'?').slice(0,1).toUpperCase())}</span><h3>${esc(r.display_name)}</h3><p>Level ${r.current_level} • ${esc(leaderboardTitle(r.current_level))}</p><strong>${Number(r.score_xp||0).toLocaleString()} XP</strong>${r.current_streak?`<small>🔥 ${r.current_streak} day streak</small>`:'<small>No current streak</small>'}</article>`).join('')}</section>`:''}
+      <section class="leaderboard-spotlights">${improving?`<article><span>📈</span><div><small>BIGGEST PROGRESS THIS WEEK</small><strong>${esc(improving.display_name)}</strong><p>+${Math.max(0,(improving.weekly_xp||0)-(improving.previous_week_xp||0)).toLocaleString()} XP vs last week</p></div></article>`:''}${active?`<article><span>🔥</span><div><small>CURRENT STREAK</small><strong>${esc(active.display_name)}</strong><p>${active.current_streak||0} active day${Number(active.current_streak)===1?'':'s'}</p></div></article>`:''}</section>
+      <section class="section leaderboard-board"><div class="section-head"><div><h2>${leaderboardPeriod==='week'?'This week':'All-time'} Top 10</h2><p>XP comes from genuine learning progress and project milestones. Repeating the same completion does not award it twice.</p></div><span class="sync-chip">${rows.length} student${rows.length===1?'':'s'}</span></div><div class="leaderboard-list">${top.map(r=>leaderboardRow(r,r.user_id===BACKEND.user.id)).join('')||'<div class="empty">No XP activity yet.</div>'}</div></section>
+      ${!isTeacher()&&me&&!top.some(r=>r.user_id===BACKEND.user.id)?`<section class="your-rank-card"><span class="eyebrow">YOUR POSITION</span>${leaderboardRow(me,true)}</section>`:''}
+      <section class="leaderboard-rules"><span class="eyebrow">HOW XP WORKS</span><h2>Progress, not grades.</h2><div class="leaderboard-rule-grid"><span><b>Core learning</b>Uses the XP already attached to Hub lessons and chapter builds.</span><span><b>+25 XP</b>Quick Tutorial, Building Block or first proper evidence for a milestone.</span><span><b>+40 XP</b>Project milestone completed.</span><span><b>+100 XP</b>Full project completed.</span><span><b>+5 XP</b>First genuine activity of the day.</span><span><b>No farming</b>The same lesson, milestone or evidence checkpoint can only score once.</span></div></section>`;
+  }catch(err){box.innerHTML=`<div class="empty"><h3>Could not load the leaderboard.</h3><p>${esc(err.message)}</p></div>`}
+}
+
 async function renderClassesHub(){
   const box=$('#classesHubContent');if(!box||!BACKEND.user)return;
   try{
@@ -2045,13 +2092,13 @@ async function renderClassesHub(){
       <section class="classes-hub-grid">${active.length?active.map(c=>{
         const members=(c.class_members||[]).length;
         const owner=c.teacher_id===BACKEND.user.id;
-        return `<article class="classes-hub-card ${owner?'owned':'co-taught'}"><div class="classes-hub-card-top"><div><span class="eyebrow">${owner?'OWNER':'CO-TEACHER'}</span><h2>${esc(c.name)}</h2><p>${esc(c.academic_year||'Current class')}</p></div><span class="classes-hub-count"><b>${members}</b> student${members===1?'':'s'}</span></div><div class="classes-hub-code"><small>JOIN CODE</small><code>${esc(c.join_code||'Not set')}</code><span>${c.join_enabled?'Accepting joins':'Joins paused'}</span></div><div class="classes-hub-actions"><a class="button primary" href="#/teacher/class/${c.id}">Open class →</a><a class="button ghost" href="#/teacher">Manage classes</a></div></article>`;
+        return `<article class="classes-hub-card ${owner?'owned':'co-taught'}"><div class="classes-hub-card-top"><div><span class="eyebrow">${owner?'OWNER':'CO-TEACHER'}</span><h2>${esc(c.name)}</h2><p>${esc(c.academic_year||'Current class')}</p></div><span class="classes-hub-count"><b>${members}</b> student${members===1?'':'s'}</span></div><div class="classes-hub-code"><small>JOIN CODE</small><code>${esc(c.join_code||'Not set')}</code><span>${c.join_enabled?'Accepting joins':'Joins paused'}</span></div><div class="classes-hub-actions"><a class="button primary" href="#/teacher/class/${c.id}">Open class →</a><a class="button ghost" href="#/leaderboard">🏆 Leaderboard</a><a class="button ghost" href="#/teacher">Manage classes</a></div></article>`;
       }).join(''):`<div class="empty classes-hub-empty"><h3>No active classes yet.</h3><p>Create your first class from the Teacher dashboard.</p><a class="button primary" href="#/teacher">Create a class →</a></div>`}</section>`;
       return;
     }
 
     const classes=await BACKEND.getMyClasses();
-    box.innerHTML=`${classes.length?`<section class="classes-hub-grid student-classes">${classes.map(c=>`<article class="classes-hub-card student"><div class="classes-hub-card-top"><div><span class="eyebrow">YOUR CLASS</span><h2>${esc(c.name)}</h2><p>${esc(c.academic_year||'Teaching group')}</p></div><span class="classes-hub-count student">🏫</span></div><p class="classes-hub-note">Use the shortcuts below for the work connected to your Learning Hub account.</p><div class="classes-hub-actions"><a class="button primary" href="#/progress">Evidence & Progress →</a><a class="button ghost" href="#/projects">Class Projects</a></div></article>`).join('')}</section>`:`<div class="empty classes-hub-empty"><h3>You are not in a class yet.</h3><p>Enter the class code your teacher gave you.</p></div>`}
+    box.innerHTML=`${classes.length?`<section class="classes-hub-grid student-classes">${classes.map(c=>`<article class="classes-hub-card student"><div class="classes-hub-card-top"><div><span class="eyebrow">YOUR CLASS</span><h2>${esc(c.name)}</h2><p>${esc(c.academic_year||'Teaching group')}</p></div><span class="classes-hub-count student">🏫</span></div><p class="classes-hub-note">Use the shortcuts below for the work connected to your Learning Hub account.</p><div class="classes-hub-actions"><a class="button primary" href="#/progress">Evidence & Progress →</a><a class="button ghost" href="#/leaderboard">🏆 Leaderboard</a><a class="button ghost" href="#/projects">Class Projects</a></div></article>`).join('')}</section>`:`<div class="empty classes-hub-empty"><h3>You are not in a class yet.</h3><p>Enter the class code your teacher gave you.</p></div>`}
     <section class="classes-join-panel"><div><span class="eyebrow">${classes.length?'NEED ANOTHER CLASS?':'JOIN YOUR CLASS'}</span><h2>Use a class code</h2><p>Your teacher can give you the current code for the teaching group.</p></div><form class="join-class-inline" data-action-form="join-class"><input name="classCode" maxlength="20" required placeholder="CLASS CODE"><button class="button primary" type="submit">Join class</button></form></section>`;
   }catch(err){box.innerHTML=`<div class="empty"><h3>Could not load classes.</h3><p>${esc(err.message)}</p></div>`}
 }
@@ -2245,6 +2292,7 @@ function route(options={}){
   else if(parts[0]==='projects'&&parts[1]){app.innerHTML=projectDetailPage(parts[1]);activate('projects')}
   else if(parts[0]==='projects'){app.innerHTML=projectsPage();activate('projects')}
   else if(parts[0]==='classes'){app.innerHTML=classesPage();activate('classes')}
+  else if(parts[0]==='leaderboard'){app.innerHTML=leaderboardPage();activate('leaderboard')}
   else if(parts[0]==='progress'){app.innerHTML=progressPage();activate('progress')}
   else if(parts[0]==='requests'){app.innerHTML=requestBoard();activate('requests')}
   else if(parts[0]==='challenges'){app.innerHTML=challengeBoard();activate('challenges')}
@@ -2275,6 +2323,7 @@ function route(options={}){
 
   if(parts[0]==='lesson'&&BACKEND.user){loadComments(parts[1]);loadEvidence(parts[1]);}
   if(parts[0]==='news') loadNewsFeed();
+  if(parts[0]==='leaderboard'&&BACKEND.user) renderLeaderboard();
   if(parts[0]==='progress'&&BACKEND.user) renderProgressCloud();
   if(parts[0]==='classes'&&BACKEND.user) renderClassesHub();
   if(parts[0]==='projects'&&!parts[1]&&BACKEND.user) renderProjects();
@@ -2700,6 +2749,20 @@ document.addEventListener('click',async e=>{
       try{await BACKEND.removeClassTeacher(b.dataset.class,BACKEND.user.id);await renderTeacher();toast('You left the teaching team.')}catch(err){toast(err.message)}
     }
   }
+  else if(a==='leaderboard-period'){
+    leaderboardPeriod=b.dataset.period==='all'?'all':'week';
+    await renderLeaderboard();
+  }
+  else if(a==='toggle-leaderboard'){
+    try{
+      const enable=b.dataset.enabled!=='1';
+      await BACKEND.setClassLeaderboardEnabled(b.dataset.class,enable);
+      const classes=await BACKEND.getLeaderboardClasses();
+      const current=classes.find(c=>String(c.id)===String(b.dataset.class));
+      if(current)current.leaderboard_enabled=enable;
+      await renderLeaderboard();toast(enable?'Leaderboard enabled for students.':'Leaderboard paused for students.');
+    }catch(err){toast(err.message)}
+  }
   else if(a==='toggle-class-join'){
     try{await BACKEND.setClassJoinEnabled(b.dataset.class,b.dataset.enabled!=='1');await renderTeacher();toast(b.dataset.enabled==='1'?'Class code paused.':'Class code enabled.')}catch(err){toast(err.message)}
   }
@@ -2799,6 +2862,13 @@ document.addEventListener('click',async e=>{
     }
   }
   else if(a==='signout'){await BACKEND.signOut();closeAuth();toast('Signed out. Local progress remains on this browser.');route();}
+});
+
+document.addEventListener('change',async e=>{
+  if(e.target?.id==='leaderboardClassSelect'){
+    leaderboardClassId=String(e.target.value||'');
+    await renderLeaderboard();
+  }
 });
 
 document.addEventListener('submit',async e=>{

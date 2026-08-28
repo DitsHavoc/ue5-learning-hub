@@ -42,6 +42,7 @@ const api = {
   client,
   user: null,
   profile: null,
+  xpSummary: null,
   listeners: [],
   async init(){
     if(!client){ this.emit(); return; }
@@ -51,6 +52,7 @@ const api = {
     client.auth.onAuthStateChange(async (event,session)=>{
       this.user = session?.user || null;
       this.profile = null;
+      this.xpSummary = null;
       this.recoveryMode = event === 'PASSWORD_RECOVERY';
       if(this.user) {
         await this.loadProfile();
@@ -327,7 +329,7 @@ const api = {
     if(!client||!this.user)return;
     let local=null;
     try{local=JSON.parse(localStorage.getItem('ue5hub:v2:progress')||'null')}catch(e){}
-    const ids=[...(local?.completed||[]),...(local?.tutorialCompleted||[]).map(id=>`tutorial:${id}`),...(local?.chapterBuildCompleted||[]).map(id=>`chapter:${id}`),...(local?.designBuildCompleted||[]).map(id=>`designbuild:${id}`),...(local?.modelLessonCompleted||[]).map(id=>`model:${id}`),...(local?.modelBuildCompleted||[]).map(id=>`modelbuild:${id}`),...(local?.modelFixCompleted||[]).map(id=>`modelfix:${id}`),...(local?.blockCompleted||[]).map(id=>`block:${id}`)];
+    const ids=[...(local?.completed||[]),...(local?.tutorialCompleted||[]).map(id=>`tutorial:${id}`),...(local?.chapterBuildCompleted||[]).map(id=>`chapter:${id}`),...(local?.designBuildCompleted||[]).map(id=>`designbuild:${id}`),...(local?.modelLessonCompleted||[]).map(id=>`model:${id}`),...(local?.modelBuildCompleted||[]).map(id=>`modelbuild:${id}`),...(local?.modelFixCompleted||[]).map(id=>`modelfix:${id}`),...(local?.sculptCompleted||[]).map(id=>`sculpt:${id}`),...(local?.blockCompleted||[]).map(id=>`block:${id}`)];
     if(!ids.length)return;
     const rows=[...new Set(ids)].map(id=>({user_id:this.user.id,lesson_id:id,completed:true,completed_at:new Date().toISOString()}));
     const {error}=await client.from('lesson_progress').upsert(rows,{onConflict:'user_id,lesson_id'});
@@ -342,7 +344,28 @@ const api = {
     if(!client||!this.user)return false;
     const row={user_id:this.user.id,lesson_id:lessonId,completed,completed_at:completed?new Date().toISOString():null};
     const {error}=await client.from('lesson_progress').upsert(row,{onConflict:'user_id,lesson_id'});
-    if(error)throw error;return true;
+    if(error)throw error;if(completed)await this.refreshXpSummary();return true;
+  },
+  async refreshXpSummary(){
+    if(!client||!this.user||this.profile?.role==='teacher'){this.xpSummary=null;return null}
+    const {data,error}=await client.rpc('get_my_xp_summary');
+    if(error){console.warn('XP summary',error.message);return this.xpSummary}
+    this.xpSummary=Array.isArray(data)?(data[0]||null):data;
+    return this.xpSummary;
+  },
+  async getLeaderboardClasses(){
+    if(!client||!this.user)return [];
+    return this.profile?.role==='teacher'?this.getTeachingClasses():this.getMyClasses();
+  },
+  async getClassLeaderboard(classId,period='week'){
+    if(!client||!this.user)throw new Error('Sign in to view the leaderboard.');
+    const {data,error}=await client.rpc('get_class_leaderboard',{p_class_id:classId,p_period:period==='all'?'all':'week'});
+    if(error)throw error;return data||[];
+  },
+  async setClassLeaderboardEnabled(classId,enabled){
+    if(!client||!this.user||this.profile?.role!=='teacher')throw new Error('Teacher access required.');
+    const {data,error}=await client.rpc('set_class_leaderboard_enabled',{p_class_id:classId,p_enabled:Boolean(enabled)});
+    if(error)throw error;return Array.isArray(data)?data[0]:data;
   },
   async getProjectProgress(){
     if(!client||!this.user)return [];
@@ -370,13 +393,13 @@ const api = {
   // v3.16 project templates + lightweight development logbooks
   async getTeachingClasses(){
     if(!client||!this.user||this.profile?.role!=='teacher')return [];
-    const {data,error}=await client.from('classes').select('id,name,academic_year,archived').eq('archived',false).order('name');
+    const {data,error}=await client.from('classes').select('id,name,academic_year,archived,leaderboard_enabled').eq('archived',false).order('name');
     if(error)throw error;return data||[];
   },
   async getTeachingClassCards(){
     if(!client||!this.user||this.profile?.role!=='teacher')return [];
     const {data,error}=await client.from('classes')
-      .select('id,teacher_id,name,academic_year,archived,join_code,join_enabled,class_members(user_id),class_teachers(teacher_id)')
+      .select('id,teacher_id,name,academic_year,archived,join_code,join_enabled,leaderboard_enabled,class_members(user_id),class_teachers(teacher_id)')
       .eq('archived',false)
       .order('name');
     if(error)throw error;return data||[];
@@ -522,22 +545,8 @@ const api = {
       comments:(comments||[]).filter(x=>!x.update_id).map(c=>({...c,author:profileMap[c.author_id]||null}))
     };
   },
-  async createProject(values){
-    if(!client||!this.user)throw new Error('Sign in to create a project.');
-    if(this.profile?.role==='teacher')throw new Error('Teachers create project templates; student accounts create working projects.');
-    const row={
-      owner_id:this.user.id,
-      title:String(values.title||'').trim().slice(0,120),
-      project_type:values.projectType==='group'?'group':'solo',
-      project_kind:String(values.projectKind||'assignment'),
-      description:String(values.description||'').trim().slice(0,16000),
-      class_id:values.classId||null,
-      assessment_unit:String(values.assessmentUnit||'').trim().slice(0,160),
-      status:'active'
-    };
-    if(!row.title)throw new Error('Give the project a title.');
-    const {data,error}=await client.from('projects').insert(row).select().single();
-    if(error)throw error;return data;
+  async createProject(){
+    throw new Error('Students cannot create projects directly. Start a project published by your teacher.');
   },
   async updateProject(projectId,values){
     if(!client||!this.user)throw new Error('Sign in first.');
@@ -560,7 +569,7 @@ const api = {
       return Array.isArray(data)?data[0]:data;
     }
     const {data,error}=await client.from('projects').update({status,updated_at:new Date().toISOString()}).eq('id',projectId).select().single();
-    if(error)throw error;return data;
+    if(error)throw error;if(status==='complete')await this.refreshXpSummary();return data;
   },
   async deleteProject(projectId){
     if(!client||!this.user)throw new Error('Sign in first.');
@@ -608,7 +617,7 @@ const api = {
     if(!client||!this.user)throw new Error('Sign in first.');
     const clean=status==='complete'?'complete':'not_started';
     const {data,error}=await client.from('project_milestones').update({status:clean,updated_at:new Date().toISOString()}).eq('id',milestoneId).select().single();
-    if(error)throw error;return data;
+    if(error)throw error;if(clean==='complete')await this.refreshXpSummary();return data;
   },
   async deleteProjectMilestone(milestoneId){
     if(!client||!this.user)throw new Error('Sign in first.');
@@ -621,7 +630,7 @@ const api = {
     if(!written)throw new Error('Add a short written update explaining what this evidence shows.');
     const row={project_id:projectId,author_id:this.user.id,milestone_id:milestoneId||null,entry_type:'progress',title:String(title||'').trim().slice(0,180),body:'',contribution:'',what_did:written.slice(0,4000),why:String(why||'').trim().slice(0,3000),problems:String(problems||'').trim().slice(0,3000),next_steps:String(nextSteps||'').trim().slice(0,3000),external_url:projectExternalUrl(externalUrl),external_label:String(externalLabel||'').trim().slice(0,160)};
     const {data,error}=await client.from('project_updates').insert(row).select().single();
-    if(error)throw error;return data;
+    if(error)throw error;if(row.milestone_id)await this.refreshXpSummary();return data;
   },
   async updateProjectUpdate(updateId,{title='',whatDid='',why='',problems='',nextSteps='',milestoneId=null,externalUrl='',externalLabel=''}){
     if(!client||!this.user)throw new Error('Sign in first.');
@@ -725,7 +734,7 @@ const api = {
     if(!client||!this.user)return [];
     const {data,error}=await client
       .from('class_members')
-      .select('joined_at,class:classes(id,name,academic_year,teacher_id,archived)')
+      .select('joined_at,class:classes(id,name,academic_year,teacher_id,archived,leaderboard_enabled)')
       .eq('user_id',this.user.id);
     if(error){console.warn('Classes',error.message);return []}
     return (data||[]).map(x=>x.class).filter(c=>c && !c.archived);
