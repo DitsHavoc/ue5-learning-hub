@@ -588,13 +588,17 @@ const api = {
   },
   async createProjectUpdate(projectId,{title='',whatDid='',why='',problems='',nextSteps='',milestoneId=null}){
     if(!client||!this.user)throw new Error('Sign in first.');
-    const row={project_id:projectId,author_id:this.user.id,milestone_id:milestoneId||null,entry_type:'progress',title:String(title||'').trim().slice(0,180),body:'',contribution:'',what_did:String(whatDid||'').trim().slice(0,4000),why:String(why||'').trim().slice(0,3000),problems:String(problems||'').trim().slice(0,3000),next_steps:String(nextSteps||'').trim().slice(0,3000)};
+    const written=String(whatDid||'').trim();
+    if(!written)throw new Error('Add a short written update explaining what this evidence shows.');
+    const row={project_id:projectId,author_id:this.user.id,milestone_id:milestoneId||null,entry_type:'progress',title:String(title||'').trim().slice(0,180),body:'',contribution:'',what_did:written.slice(0,4000),why:String(why||'').trim().slice(0,3000),problems:String(problems||'').trim().slice(0,3000),next_steps:String(nextSteps||'').trim().slice(0,3000)};
     const {data,error}=await client.from('project_updates').insert(row).select().single();
     if(error)throw error;return data;
   },
   async updateProjectUpdate(updateId,{title='',whatDid='',why='',problems='',nextSteps='',milestoneId=null}){
     if(!client||!this.user)throw new Error('Sign in first.');
-    const changes={title:String(title||'').trim().slice(0,180),milestone_id:milestoneId||null,what_did:String(whatDid||'').trim().slice(0,4000),why:String(why||'').trim().slice(0,3000),problems:String(problems||'').trim().slice(0,3000),next_steps:String(nextSteps||'').trim().slice(0,3000),updated_at:new Date().toISOString()};
+    const written=String(whatDid||'').trim();
+    if(!written)throw new Error('Keep a short written update explaining what this evidence shows.');
+    const changes={title:String(title||'').trim().slice(0,180),milestone_id:milestoneId||null,what_did:written.slice(0,4000),why:String(why||'').trim().slice(0,3000),problems:String(problems||'').trim().slice(0,3000),next_steps:String(nextSteps||'').trim().slice(0,3000),updated_at:new Date().toISOString()};
     const {data,error}=await client.from('project_updates').update(changes).eq('id',updateId).select().single();
     if(error)throw error;return data;
   },
@@ -638,8 +642,25 @@ const api = {
   },
   async postProjectComment(projectId,updateId,body){
     if(!client||!this.user)throw new Error('Sign in first.');
-    const {data,error}=await client.from('project_comments').insert({project_id:projectId,update_id:updateId||null,author_id:this.user.id,body:String(body||'').trim().slice(0,3000)}).select().single();
-    if(error)throw error;return data;
+    const clean=String(body||'').trim().slice(0,3000);
+    if(!clean)throw new Error('Write some feedback first.');
+    const {data,error}=await client.from('project_comments').insert({project_id:projectId,update_id:updateId||null,author_id:this.user.id,body:clean}).select().single();
+    if(error)throw error;
+    if(this.profile?.role==='teacher'&&updateId){
+      const [{data:update},{data:project}]=await Promise.all([
+        client.from('project_updates').select('author_id').eq('id',updateId).maybeSingle(),
+        client.from('projects').select('title').eq('id',projectId).maybeSingle()
+      ]);
+      if(update?.author_id&&update.author_id!==this.user.id){
+        const {error:nErr}=await client.from('notifications').insert({
+          user_id:update.author_id,kind:'feedback',title:'New project feedback',
+          body:`Your teacher left feedback on ${project?.title||'your project'}: ${clean}`.slice(0,1000),
+          link:`#/projects/${projectId}`
+        });
+        if(nErr)console.warn('Project feedback notification',nErr.message);
+      }
+    }
+    return data;
   },
   async getComments(lessonId){
     if(!client||!this.user)return [];
