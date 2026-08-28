@@ -10,6 +10,30 @@ const PENDING_TEACHER_KEY = 'ue5hub:v3:pending-teacher-code';
 const PENDING_TEACHER_INVITE_KEY = 'ue5hub:v3:pending-teacher-invite';
 const client = configured ? window.supabase.createClient(cfg.url, cfg.publishableKey) : null;
 
+
+const PROJECT_FILE_MIMES = {
+  '.png':'image/png', '.jpg':'image/jpeg', '.jpeg':'image/jpeg', '.webp':'image/webp', '.pdf':'application/pdf',
+  '.doc':'application/msword', '.docx':'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  '.ppt':'application/vnd.ms-powerpoint', '.pptx':'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  '.xls':'application/vnd.ms-excel', '.xlsx':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+};
+const PROJECT_ALLOWED_MIMES = new Set(Object.values(PROJECT_FILE_MIMES));
+function projectFileMime(file){
+  const raw=String(file?.type||'').toLowerCase();
+  if(PROJECT_ALLOWED_MIMES.has(raw))return raw;
+  const name=String(file?.name||'').toLowerCase();
+  const ext=Object.keys(PROJECT_FILE_MIMES).find(x=>name.endsWith(x));
+  return ext?PROJECT_FILE_MIMES[ext]:raw;
+}
+function projectExternalUrl(value){
+  const raw=String(value||'').trim();
+  if(!raw)return '';
+  let url;
+  try{url=new URL(raw)}catch(e){throw new Error('Use a valid http:// or https:// share link.');}
+  if(!['http:','https:'].includes(url.protocol))throw new Error('Share links must start with http:// or https://.');
+  return url.href.slice(0,2000);
+}
+
 const api = {
   mode: configured ? 'cloud' : 'local',
   microsoftEnabled,
@@ -591,19 +615,19 @@ const api = {
     const {error}=await client.from('project_milestones').delete().eq('id',milestoneId);
     if(error)throw error;return true;
   },
-  async createProjectUpdate(projectId,{title='',whatDid='',why='',problems='',nextSteps='',milestoneId=null}){
+  async createProjectUpdate(projectId,{title='',whatDid='',why='',problems='',nextSteps='',milestoneId=null,externalUrl='',externalLabel=''}){
     if(!client||!this.user)throw new Error('Sign in first.');
     const written=String(whatDid||'').trim();
     if(!written)throw new Error('Add a short written update explaining what this evidence shows.');
-    const row={project_id:projectId,author_id:this.user.id,milestone_id:milestoneId||null,entry_type:'progress',title:String(title||'').trim().slice(0,180),body:'',contribution:'',what_did:written.slice(0,4000),why:String(why||'').trim().slice(0,3000),problems:String(problems||'').trim().slice(0,3000),next_steps:String(nextSteps||'').trim().slice(0,3000)};
+    const row={project_id:projectId,author_id:this.user.id,milestone_id:milestoneId||null,entry_type:'progress',title:String(title||'').trim().slice(0,180),body:'',contribution:'',what_did:written.slice(0,4000),why:String(why||'').trim().slice(0,3000),problems:String(problems||'').trim().slice(0,3000),next_steps:String(nextSteps||'').trim().slice(0,3000),external_url:projectExternalUrl(externalUrl),external_label:String(externalLabel||'').trim().slice(0,160)};
     const {data,error}=await client.from('project_updates').insert(row).select().single();
     if(error)throw error;return data;
   },
-  async updateProjectUpdate(updateId,{title='',whatDid='',why='',problems='',nextSteps='',milestoneId=null}){
+  async updateProjectUpdate(updateId,{title='',whatDid='',why='',problems='',nextSteps='',milestoneId=null,externalUrl='',externalLabel=''}){
     if(!client||!this.user)throw new Error('Sign in first.');
     const written=String(whatDid||'').trim();
     if(!written)throw new Error('Keep a short written update explaining what this evidence shows.');
-    const changes={title:String(title||'').trim().slice(0,180),milestone_id:milestoneId||null,what_did:written.slice(0,4000),why:String(why||'').trim().slice(0,3000),problems:String(problems||'').trim().slice(0,3000),next_steps:String(nextSteps||'').trim().slice(0,3000),updated_at:new Date().toISOString()};
+    const changes={title:String(title||'').trim().slice(0,180),milestone_id:milestoneId||null,what_did:written.slice(0,4000),why:String(why||'').trim().slice(0,3000),problems:String(problems||'').trim().slice(0,3000),next_steps:String(nextSteps||'').trim().slice(0,3000),external_url:projectExternalUrl(externalUrl),external_label:String(externalLabel||'').trim().slice(0,160),updated_at:new Date().toISOString()};
     const {data,error}=await client.from('project_updates').update(changes).eq('id',updateId).select().single();
     if(error)throw error;return data;
   },
@@ -616,20 +640,19 @@ const api = {
     if(error)throw error;return true;
   },
   async uploadProjectFiles(projectId,updateId,files,captions=[]){
-    if(!client||!this.user)throw new Error('Sign in to upload project screenshots.');
+    if(!client||!this.user)throw new Error('Sign in to upload project evidence.');
     const list=Array.from(files||[]).filter(f=>f&&f.size);
-    if(list.length>6)throw new Error('Upload up to 6 screenshots per development-log entry.');
-    const allowed=['image/png','image/jpeg','image/webp'];
+    if(list.length>6)throw new Error('Upload up to 6 evidence files per milestone entry.');
     const uploaded=[];
     for(let i=0;i<list.length;i++){
-      const file=list[i];
-      if(file.size>10485760)throw new Error(`${file.name} is larger than 10 MB.`);
-      if(!allowed.includes(file.type))throw new Error('Project logs accept PNG, JPG or WebP screenshots only.');
-      const safe=(file.name||'project-image').replace(/[^a-zA-Z0-9._-]+/g,'-').slice(-100);
+      const file=list[i],mime=projectFileMime(file);
+      if(file.size>10485760)throw new Error(`${file.name} is larger than 10 MB. Upload it to OneDrive or another cloud drive and paste the share link instead.`);
+      if(!PROJECT_ALLOWED_MIMES.has(mime))throw new Error('Use PNG, JPG, WebP, PDF, Word, PowerPoint or Excel files.');
+      const safe=(file.name||'project-evidence').replace(/[^a-zA-Z0-9._-]+/g,'-').slice(-100);
       const path=`${projectId}/${this.user.id}/${updateId}/${Date.now()}-${i}-${safe}`;
-      const {error:uploadError}=await client.storage.from('project-media').upload(path,file,{upsert:false,contentType:file.type});
+      const {error:uploadError}=await client.storage.from('project-media').upload(path,file,{upsert:false,contentType:mime});
       if(uploadError)throw uploadError;
-      const {data:record,error:recordError}=await client.from('project_media').insert({project_id:projectId,update_id:updateId,uploader_id:this.user.id,storage_path:path,original_name:file.name||safe,mime_type:file.type||'',size_bytes:file.size||0,caption:String(captions[i]||'').trim().slice(0,500)}).select().single();
+      const {data:record,error:recordError}=await client.from('project_media').insert({project_id:projectId,update_id:updateId,uploader_id:this.user.id,storage_path:path,original_name:file.name||safe,mime_type:mime,size_bytes:file.size||0,caption:String(captions[i]||'').trim().slice(0,500)}).select().single();
       if(recordError){await client.storage.from('project-media').remove([path]);throw recordError;}
       uploaded.push(record);
     }

@@ -123,3 +123,25 @@ Adds the signed-in social layer for the new News & Industry area:
 - `get_news_comments(...)` for safe display-name/role lookup without opening profile visibility globally
 
 The live news feed itself is read from public RSS feeds in the browser and does not require database ingestion. This migration was applied to the current live Supabase project on 26 Aug 2026, so do **not** rerun it there. For another installation, apply it once before testing saves, votes or comments.
+
+## V3.34.7 project evidence documents and external links
+
+File:
+`migrations/20260828_25_project_evidence_documents_and_links.sql`
+
+Adds two non-null text fields to `project_updates`:
+- `external_url`
+- `external_label`
+
+These provide one optional larger-work/share link per milestone evidence entry without adding another project relation or changing existing evidence records.
+
+The migration also widens the private `project-media` storage bucket to accept:
+- PNG, JPG/JPEG, WebP
+- PDF
+- DOC / DOCX
+- PPT / PPTX
+- XLS / XLSX
+
+The existing 10 MB file-size limit remains unchanged. Larger builds, videos and source projects should be stored in OneDrive/Google Drive/SharePoint or equivalent and submitted through the share-link field instead.
+
+This migration was applied to the live Supabase project on 28 Aug 2026.
