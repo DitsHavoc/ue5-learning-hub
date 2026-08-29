@@ -1,3 +1,14 @@
+## v3.38.2 — Module 0 Visual Teaching Pass — 29 Aug 2026
+- Rebuilt all six Module 0 chapters around section-level images that directly support the adjacent theory.
+- Added 23 purposeful visual placements across 19 theory sections.
+- Added real stills from the teacher-made Max videos for Workspace, Vertex, Edge, Polygon, Primitive Parameters, Array and Materials.
+- Reused the approved Crate, Barrel, Tyre and Panel single-viewport visuals for topology, density, pivots, UV checker and modular decisions.
+- Reused the strongest supplied theory-deck UV, collision, LOD and specialist-mesh figures where they precisely match the text.
+- Added explicit `LOOK AT THE IMAGE` prompts so imagery is part of the learning task rather than decoration.
+- Rewrote Module 0 copy to be more concrete, visual and game-asset decision-led while preserving every quiz and completion ID.
+- Removed the old drawn interface-map image from `Know the Workspace Before You Model` and the Primitives / Precision lesson; both now use authentic course-video frames.
+- No database migration.
+
 ## v3.38.1 — 3ds Max Companion Video Series — 29 Aug 2026
 - Added a dedicated `#/modeling/videos` course containing all 14 teacher-made Google Drive videos in their original 0–13 order.
 - Grouped the series into Start in Max, Editable Poly Core, Modifiers & Repetition, and Mini Builds & Materials.

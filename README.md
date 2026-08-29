@@ -1,4 +1,8 @@
-# Current release — v3.38.1
+# Current release — v3.38.2
+
+**Module 0 visual teaching pass.** Every theory section now pairs its explanation with an image that directly demonstrates that exact idea: real stills from the teacher-made Max videos, approved single-stage modelling viewport images, and the strongest UV/collision/LOD figures from the supplied theory deck. The old Workspace interface-map diagram is removed from teaching and replaced with the real Max workspace from the Interface Basics video. No completion IDs or XP rules change. See `RELEASE-NOTES-v3.38.2.md` and `3D-MODELLING-FOUNDATIONS-VISUAL-QA-v3.38.2.md`.
+
+## Previous release — v3.38.1
 
 **Dits’ 3ds Max Video Series.** The 14 teacher-made Google Drive videos are now a structured companion course inside the 3D Modelling Studio. Students can open `#/modeling/videos`, watch each video inside the Hub, complete a named Max follow-along task and claim **+20 XP** once per video. Relevant videos also appear directly inside the matching 3ds Max lesson. Video completion syncs to cloud progress and appears in teacher class-progress views. The original Drive files remain external; they are not copied into the Hub ZIP. See `RELEASE-NOTES-v3.38.1.md` and `3D-MODELLING-VIDEO-SERIES-QA-v3.38.1.md`.
 

@@ -1,5 +1,5 @@
 window.UE5_MODELING_DATA = {
-  "version": "3.37.4",
+  "version": "3.38.2",
   "updated": "29 Aug 2026",
   "philosophy": "Reference first. Plan the object. Block the big forms. Add only geometry that earns its place. Inspect constantly. Make it game ready. Get another human to critique it.",
   "lessons": [
@@ -118,18 +118,11 @@ window.UE5_MODELING_DATA = {
           "note": "Current Autodesk explanation of the Create / Modify / other Command Panel tabs."
         }
       ],
-      "visual": "assets/modeling/diagrams/interface-map.svg",
-      "bookFigures": [
-        {
-          "src": "assets/modeling/book/interface-overview-p12.webp",
-          "page": 12,
-          "caption": "Broad 3ds Max interface overview. Use it to recognise the major regions of the workspace, not as an exact current-version click map.",
-          "teaches": "Interface regions and orientation"
-        }
-      ],
+      "visual": "",
+      "bookFigures": [],
       "bookTakeaways": [
-        "Learn the names and jobs of the main interface regions before trying to memorise every icon.",
-        "The book supports a broad interface map; the current Autodesk Help links remain the source of truth for the college install."
+        "Learn the few workspace regions you actually use for modelling before trying to memorise icons.",
+        "If the college version looks slightly different, the job of the viewport, Command Panel, toolbar and transform/status areas is still the important part."
       ],
       "stage": "foundation",
       "todayTools": [
@@ -182,12 +175,20 @@ window.UE5_MODELING_DATA = {
         },
         "references": [
           {
-            "src": "assets/modeling/book/interface-overview-p12.webp",
-            "sourceTitle": "Essential Guide to 3ds Max • user-supplied reference",
-            "caption": "Interface overview. Use it to recognise the workspace regions before chasing buttons."
+            "src": "assets/modeling/foundations/workspace.webp",
+            "sourceTitle": "Dits' Interface Basics video",
+            "caption": "The real Max interface used in the course. Find the five modelling zones before you start following button instructions."
           }
         ]
-      }
+      },
+      "interfaceImages": [
+        {
+          "src": "assets/modeling/foundations/workspace.webp",
+          "caption": "Your actual 3ds Max workspace from the Interface Basics video. Use this image to locate the viewports, Command Panel, main toolbar, Scene Explorer and transform/status area.",
+          "sourceTitle": "Dits' Interface Basics video",
+          "version": "course recording"
+        }
+      ]
     },
     {
       "id": "max-primitives-transforms",
@@ -319,7 +320,7 @@ window.UE5_MODELING_DATA = {
           "note": "Current location of Move/Rotate/Scale, snaps and Angle Snap."
         }
       ],
-      "visual": "assets/modeling/diagrams/interface-map.svg",
+      "visual": "",
       "stage": "foundation",
       "todayTools": [
         "Box / Cylinder / Sphere",
@@ -372,13 +373,20 @@ window.UE5_MODELING_DATA = {
         },
         "references": [
           {
-            "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Standard-plywood-shipping-crate-vol-case.jpg",
-            "sourceUrl": "https://commons.wikimedia.org/wiki/File:Standard-plywood-shipping-crate-vol-case.jpg",
-            "sourceTitle": "Wikimedia Commons • CC BY-SA reference",
-            "caption": "Real plywood shipping crates. Study the large panel, cleat thickness, runners, overlaps and how few forms actually create the read."
+            "src": "assets/modeling/foundations/primitives.webp",
+            "sourceTitle": "Dits' Basic Primitive Parameters video",
+            "caption": "Start with measured primitive forms. Judge proportion first; polygon editing comes later."
           }
         ]
-      }
+      },
+      "interfaceImages": [
+        {
+          "src": "assets/modeling/foundations/primitives.webp",
+          "caption": "Your actual Max primitive scene. Use the Modify panel to change real dimensions and the transform gizmo/type-in fields to place objects precisely.",
+          "sourceTitle": "Dits' Basic Primitive Parameters video",
+          "version": "course recording"
+        }
+      ]
     },
     {
       "id": "max-editable-poly",
