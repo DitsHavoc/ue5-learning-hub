@@ -1,4 +1,8 @@
-# Current release — v3.39.0
+# Current release — v3.39.1
+
+**Designer Evidence Pass.** All 24 primary LOOK case studies now name a specific game-design factor, explain the concrete shipped-game decision, turn the student task into analysis of that exact decision, and link to a developer interview, GDC talk, studio article or strong games-media feature rather than a store page. The generic “Three examples. Three different design jobs.” heading is gone; every discipline now tells students exactly what its three games are being compared for. No completion IDs, XP rules or database schema changed. See `RELEASE-NOTES-v3.39.1.md` and `DESIGNER-CASE-STUDY-QA-v3.39.1.md`.
+
+## Previous release — v3.39.0
 
 **Study Tools Refresh.** Revision, Glossary, Challenge Board and Homework now reflect the whole Hub rather than the older Unreal-only structure. Revision has 98 mixed Unreal / Designer / 3D questions; the Glossary has 97 filtered terms; the Challenge Board has 58 cross-discipline transfer tasks; and Homework has 56 grouped independent-study activities with Teams-ready copying. Teams remains the formal assignment/submission/grade space. Four milestone badges were added for Module 0, the Max video series, industry deep dives and Designer Studio completion. No XP, completion IDs or database schema changed. See `RELEASE-NOTES-v3.39.0.md` and `STUDY-TOOLS-QA-v3.39.0.md`.
 

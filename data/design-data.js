@@ -1,5 +1,5 @@
 window.UE5_DESIGN_DATA = {
-  "version": "3.35.4",
+  "version": "3.39.1",
   "buildDate": "29 Aug 2026",
   "modules": [
     {
@@ -15,6 +15,8 @@ window.UE5_DESIGN_DATA = {
         "Playtest behaviour, not intention"
       ],
       "intro": "Level design is player experience built out of space. You are deciding where the player looks, moves, hesitates, feels safe, gets lost and understands the next goal. This module makes you analyse real spaces first, then prove your layout works in a greybox.",
+      "lookTitle": "How Portal 2, Viewfinder and Dishonored 2 guide players through space",
+      "lookIntro": "Three different level-design problems: keeping a puzzle readable after the art pass, teaching a reality-bending rule, and preserving orientation across multiple routes. Study the exact decision each team made, then test the same principle in your own space.",
       "referenceImages": [
         {
           "src": "https://playdead.com/css/img/inside/screenshots/INSIDE_01.jpg",
@@ -170,32 +172,38 @@ window.UE5_DESIGN_DATA = {
         {
           "game": "Portal 2",
           "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/620/ss_3858536cbc0a07dfbe36e8f87b3f08bf3be45e54.1920x1080.jpg?t=1745363004",
-          "sourceUrl": "https://store.steampowered.com/app/620/Portal_2/",
-          "sourceTitle": "Valve — Portal 2",
-          "lens": "Visual language + route readability",
-          "notice": "Test chambers deliberately limit surface types, colours and object language so portalable space, hazards and goals are readable before the player moves.",
-          "steal": "Build a visual grammar where geometry and materials explain what the player can do.",
-          "task": "Identify three surfaces or objects and write what each tells the player they can — or cannot — do."
+          "sourceUrl": "https://gameinformer.com/b/features/archive/2010/03/17/thinking-with-portals-making-a-test-chamber.aspx",
+          "sourceTitle": "Game Informer — Thinking With Portals: Making a Portal 2 Test Chamber",
+          "lens": "Art pass vs puzzle readability",
+          "notice": "Valve greyboxed and playtested test chambers before the final art pass. Once richer lighting, vegetation and detail were added, the chamber went back into playtesting because visual complexity could create distractions, hide clues or accidentally suggest false solutions.",
+          "steal": "Art is allowed to enrich the space only if the puzzle read survives. If decoration creates a false affordance, pull it back or use lighting and composition to restore the intended focus.",
+          "task": "Open the Valve design feature. Find the section about the art pass, then annotate one Portal 2 chamber screenshot with: intended clue, possible visual distraction, and one lighting/composition choice that keeps the solution readable.",
+          "sourceType": "VALVE DESIGN FEATURE • GAME INFORMER",
+          "sourceWhy": "Valve explains the chamber workflow directly, including why levels return to playtesting after visual detail is added."
         },
         {
           "game": "Viewfinder",
           "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1382070/c017a42198360ea205109b69258357bdd7f8ffaa/page_bg_raw.jpg?t=1764842475",
-          "sourceUrl": "https://store.steampowered.com/app/1382070/Viewfinder/",
-          "sourceTitle": "Sad Owl Studios — Viewfinder",
-          "lens": "Perspective + spatial rules",
-          "notice": "The game constantly changes what ‘space’ means, so framing, contrast and clear state changes have to work harder than in a conventional route puzzle.",
-          "steal": "When the rule is unusual, presentation has to be unusually clear.",
-          "task": "Ignore the camera/photo gimmick for a moment. Which shapes and value changes still tell you where the next useful space is?"
+          "sourceUrl": "https://blog.playstation.com/2023/07/18/reshape-reality-with-your-perspective-in-viewfinder-out-today/",
+          "sourceTitle": "PlayStation Blog — Reshape reality with your perspective in Viewfinder",
+          "lens": "Teaching a reality-bending mechanic",
+          "notice": "Sad Owl built the game around a mechanic that is difficult to explain in words: a flat image can become 3D space. The team therefore designed puzzles around seeing the rule happen clearly, then expanded it with photocopiers, perspective tricks and rewind rather than burying the core idea under explanation.",
+          "steal": "When the mechanic breaks a familiar rule, demonstrate cause and effect visually before increasing complexity. The player should understand what changed in the world, not merely that something clever happened.",
+          "task": "Read Gwen Foster’s developer article. Pick one Viewfinder puzzle image and write three beats: what the player sees before placing the image, what visibly changes when it becomes geometry, and what new route/action becomes possible.",
+          "sourceType": "DEVELOPER ARTICLE • SAD OWL STUDIOS",
+          "sourceWhy": "Game director Gwen Foster explains how the camera mechanic shaped the puzzles and why the team kept asking how far the rule could be pushed."
         },
         {
           "game": "Dishonored 2",
           "image": "https://res.cloudinary.com/dewzjk72j/image/authenticated/s--ksy1ISeM--/c_lfill%2Cw_744/f_auto%3Aimage%2Cq_auto/v1/contentful/rporu91m20dc/1bf1f6zIoq4MISqSoCII6I/4b6d2df9e0fdd32fc9f02908a51aafc5/data.images.event.209.Dishonored2_TheOverlook_730x411.png",
-          "sourceUrl": "https://bethesda.net/en-US/news/dishonored-2-karnaca-art-gallery",
-          "sourceTitle": "Bethesda — Dishonored 2: Karnaca Art Gallery",
-          "lens": "Landmarks + multiple routes",
-          "notice": "Karnaca uses Shindaerey Peak as a natural landmark that can be seen across the city, helping players stay oriented while streets, rooftops and interiors branch.",
-          "steal": "Give open spaces an anchor that survives route choice.",
-          "task": "Draw three possible routes through the district and mark where the landmark should disappear and reappear to rebuild orientation."
+          "sourceUrl": "https://gameinformer.com/b/features/archive/2016/05/23/oppression-opulence-and-decay-inside-dishonored-2s-bold-art-direction.aspx",
+          "sourceTitle": "Game Informer — Inside Dishonored 2’s Exaggerated Art Direction",
+          "lens": "Landmarks, verticality + route choice",
+          "notice": "Arkane built Karnaca with a stronger vertical character than Dunwall and grounded its architecture in southern-European references. Distinctive large forms and skyline features give the city identity while rooftops, streets and interiors support multiple traversal routes.",
+          "steal": "Multiple routes are easier to understand when the district has a stable visual identity and strong orientation anchors. The landmark does not choose the route for the player; it helps them recover their mental map after choosing one.",
+          "task": "Open the Sébastien Mitton interview and choose one Karnaca image. Mark one skyline anchor, one vertical route opportunity and one architectural cue that tells you this is Karnaca rather than Dunwall.",
+          "sourceType": "ART DIRECTOR INTERVIEW • GAME INFORMER",
+          "sourceWhy": "Arkane art director Sébastien Mitton discusses the design pillars and visual identity used to make Karnaca distinct."
         }
       ],
       "researchMissions": [
@@ -313,6 +321,8 @@ window.UE5_DESIGN_DATA = {
         "Make wear tell you who used the space"
       ],
       "intro": "Environment art is design when every prop, surface and empty area has a reason to exist. The goal is not maximum detail. The goal is a place that feels used, readable and specific.",
+      "lookTitle": "How Firewatch, Stray and The Long Dark make places feel lived in",
+      "lookIntro": "Environment art is doing a job here: controlling exploration, selling a place from a cat’s point of view, or making sparse survival spaces meaningful. Look for the design logic behind the props and empty space, not just the art style.",
       "referenceImages": [
         {
           "src": "https://drop-assets.ea.com/images/5Cr5lTNDijF2pzIopPZduH/2009d571be74052edf094ce0a992253f/ds-gp-hallway-04-no-watermark.jpg",
@@ -475,32 +485,38 @@ window.UE5_DESIGN_DATA = {
         {
           "game": "Firewatch",
           "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/383870/589f62a8f5867c5d4966bb857e736928b7d208b2/page_bg_raw.jpg?t=1755789801",
-          "sourceUrl": "https://store.steampowered.com/app/383870/Firewatch/",
-          "sourceTitle": "Campo Santo — Firewatch",
-          "lens": "Visual economy + sense of place",
-          "notice": "A small set of strong shapes, colour families and carefully chosen props establishes the lookout, the wilderness and the people who work there without cluttering every surface.",
-          "steal": "Choose a few strong environmental signals before filling shelves.",
-          "task": "List five details that communicate job, place or time without relying on dialogue."
+          "sourceUrl": "https://www.gamedeveloper.com/design/video-designing-for-exploration-and-choice-in-i-firewatch-i-",
+          "sourceTitle": "Game Developer — Designing for Exploration and Choice in Firewatch",
+          "lens": "Exploration, gating + world structure",
+          "notice": "Campo Santo designed a hand-built wilderness around exploration without combat. The team had to control goals, gating and encounter structure while still making the space feel like somewhere the player chose to explore rather than a corridor disguised as a forest.",
+          "steal": "Good exploration design gives the player freedom inside a deliberately structured world. Gates, landmarks and story triggers should make sense in the fiction instead of feeling like invisible level-designer walls.",
+          "task": "Open the Firewatch GDC write-up. Sketch a five-node exploration map with one main goal, one optional detour and one believable gate. Label what information makes the player want to take each route.",
+          "sourceType": "GDC DESIGN TALK • CAMPO SANTO",
+          "sourceWhy": "Jake Rodkin and Nels Anderson discuss Firewatch’s world structure, goals, gating and encounter design without relying on combat."
         },
         {
           "game": "Stray",
           "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1332010/99b9936f7a078d8f2f23f232ab46e343641c42c3/page_bg_raw.jpg?t=1785424330",
-          "sourceUrl": "https://store.steampowered.com/app/1332010/Stray/",
-          "sourceTitle": "BlueTwelve Studio — Stray",
-          "lens": "Lived-in spaces + signage",
-          "notice": "Signs, cables, clutter, shop fronts and repeated urban details sell a functioning city while vertical cat-scale routes remain readable inside the mess.",
-          "steal": "Set dressing should support both fiction and movement.",
-          "task": "Find three details that tell story and three that quietly help navigation. Do any do both jobs at once?"
+          "sourceUrl": "https://www.unrealengine.com/developer-interviews/28-people-and-two-cats-inside-the-making-of-stray",
+          "sourceTitle": "Unreal Engine — 28 people and two cats: Inside the making of Stray",
+          "lens": "Environment design from a cat’s scale",
+          "notice": "BlueTwelve began with Kowloon Walled City references and realised the dense vertical environment became more interesting when explored as a cat. That decision changed level design: routes use pipes, awnings, windows and furniture, and the team iterated for years on movement that lets the cat climb quickly without turning every jump into a precision-platforming failure.",
+          "steal": "The player character changes what counts as a path. Build the environment around that body, camera height and movement vocabulary rather than designing a human route and shrinking the protagonist into it.",
+          "task": "Read the BlueTwelve interview. Find one Stray screenshot and mark three routes a human character would ignore but a cat can use. For each, name the environmental prop or architectural feature that makes the route believable.",
+          "sourceType": "DEVELOPER INTERVIEW • BLUETWELVE STUDIO",
+          "sourceWhy": "The creative/design director explains how Kowloon references, the cat protagonist and production constraints directly changed Stray’s world and level design."
         },
         {
           "game": "The Long Dark",
           "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/305620/page_bg_raw.jpg?t=1785448287",
-          "sourceUrl": "https://store.steampowered.com/app/305620/The_Long_Dark/",
-          "sourceTitle": "Hinterland — The Long Dark",
-          "lens": "Scarcity + meaningful props",
-          "notice": "Sparse survival spaces make objects feel intentional. Weathering, absence and a few surviving possessions can communicate more than a room filled with random clutter.",
-          "steal": "Empty space can carry more meaning than decorative noise.",
-          "task": "Imagine a survival room with 20 props, then remove 15. Which five must remain for the player to understand what happened there?"
+          "sourceUrl": "https://kotaku.com/inside-the-long-dark-1840052958",
+          "sourceTitle": "Kotaku — Inside The Long Dark",
+          "lens": "Empty space, time + survival tension",
+          "notice": "Raphael van Lierop describes The Long Dark as an exploration game where wilderness and the player’s own decisions are the main opposition. Long quiet journeys make a changing wind, a shelter, a wolf or a single useful item matter because time and movement are always costing the player something.",
+          "steal": "Do not fill survival spaces just to keep the player busy. Quiet distance creates value when weather, resources and shelter turn travel time into a decision.",
+          "task": "Read Kotaku’s interview with Hinterland. Design a short route between two shelters and mark where the player must decide whether to continue, turn back or spend a resource. Explain what makes the empty travel time tense rather than pointless.",
+          "sourceType": "DEVELOPER INTERVIEW • KOTAKU",
+          "sourceWhy": "Hinterland founder Raphael van Lierop explains why movement, time, quiet and bad decisions are central antagonists in the game."
         }
       ],
       "researchMissions": [
@@ -618,6 +634,8 @@ window.UE5_DESIGN_DATA = {
         "Judge materials in useful lighting"
       ],
       "intro": "Material design is visual communication. Players should read metal as metal, wet stone as wet stone and worn paint as worn paint before they inspect the node graph. Build simple physically sensible surfaces first, then add controlled variation.",
+      "lookTitle": "How Death Stranding, Teardown and The Talos Principle 2 make surfaces communicate",
+      "lookIntro": "These games use surfaces for different reasons: terrain tells you how travel will feel, breakable materials change the route you can create, and material systems have to stay readable and affordable across huge environments.",
       "referenceImages": [
         {
           "src": "https://www.kojimaproductions.jp/sites/default/files/2021-08/gr.DeathStranding_GameScreenshot6.jpg",
@@ -786,32 +804,38 @@ window.UE5_DESIGN_DATA = {
         {
           "game": "Death Stranding",
           "image": "https://www.kojimaproductions.jp/sites/default/files/2021-08/gr.DeathStranding_GameScreenshot6.jpg",
-          "sourceUrl": "https://www.kojimaproductions.jp/en/death-stranding-ps4",
-          "sourceTitle": "Kojima Productions — Death Stranding",
-          "lens": "Surface identity + traversal",
-          "notice": "Rock, moss, wet ground, metal and fabric stay visually distinct under subdued natural light, so the world communicates both material and traversal character.",
-          "steal": "Make materials readable without relying on saturated colour.",
-          "task": "Name four materials in the image and describe the roughness, normal detail and value difference you expect between them."
+          "sourceUrl": "https://gameinformer.com/interview/2019/09/16/hideo-kojima-answers-our-questions-about-death-stranding",
+          "sourceTitle": "Game Informer — Hideo Kojima Answers Our Questions About Death Stranding",
+          "lens": "Terrain as the core traversal mechanic",
+          "notice": "Hideo Kojima deliberately made walking, carrying weight, rivers and route choice into the game rather than abstracting them away. The terrain is not scenery between objectives: slope, footing and obstacles determine what equipment to carry and which line across the landscape is sensible.",
+          "steal": "If traversal is important, surface and terrain differences must predict cost before the player commits. A steep wet slope should not read the same as a safe flat path.",
+          "task": "Read Kojima’s interview, then choose one Death Stranding landscape screenshot. Draw two possible routes to the same destination and label the terrain feature, equipment choice and risk that makes each route different.",
+          "sourceType": "CREATOR INTERVIEW • GAME INFORMER",
+          "sourceWhy": "Kojima explains why carrying limits, rivers, open terrain and route selection were intentionally made part of the core play experience."
         },
         {
           "game": "Teardown",
           "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1167630/page_bg_raw.jpg?t=1781525152",
-          "sourceUrl": "https://store.steampowered.com/app/1167630/Teardown/",
-          "sourceTitle": "Tuxedo Labs — Teardown",
-          "lens": "Material = gameplay rule",
-          "notice": "Voxel materials are not merely decorative: they help the player predict what can break, burn or resist before the destruction system is tested.",
-          "steal": "If a material changes interaction, make the difference readable before the player experiments.",
-          "task": "Invent four material classes and give each one a visible property and a gameplay property."
+          "sourceUrl": "https://www.gamedeveloper.com/design/combining-bombastic-heists-with-a-fully-destructible-voxel-world-in-i-teardown-i-",
+          "sourceTitle": "Game Developer — Combining bombastic heists with a fully destructible voxel world in Teardown",
+          "lens": "Material destruction as a gameplay rule",
+          "notice": "Dennis Gustafsson says the destruction technology came first, but he did not want it to remain a visual effect. Teardown’s heist structure makes breakable walls, floors, vehicles and materials part of route planning: destruction changes the solution the player can invent.",
+          "steal": "A reactive material is useful only when the player can use its behaviour to make a decision. Destruction should change planning, access or timing rather than simply produce debris.",
+          "task": "Read the Tuxedo Labs interview. Draw three targets in a small building, then design a route twice: once with normal doors only and once with breakable walls. Mark exactly where material behaviour changes your plan.",
+          "sourceType": "DEVELOPER INTERVIEW • GAME DEVELOPER",
+          "sourceWhy": "Teardown creator Dennis Gustafsson explains why destruction had to become a problem-solving mechanic instead of a visual gimmick."
         },
         {
           "game": "The Talos Principle 2",
           "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/835960/page_bg_raw.jpg?t=1775138468",
-          "sourceUrl": "https://store.steampowered.com/app/835960/The_Talos_Principle_2/",
-          "sourceTitle": "Croteam — The Talos Principle 2",
-          "lens": "Material families + world logic",
-          "notice": "Nature, monumental stone and advanced technology retain distinct surface languages even when they share the same frame, helping the player separate age, function and system.",
-          "steal": "Give eras, systems or factions their own material family instead of a random texture collection.",
-          "task": "Design three surface families for ‘old world’, ‘active technology’ and ‘nature reclaiming’. Give each one two rules."
+          "sourceUrl": "https://www.unrealengine.com/developer-interviews/inside-croteam-s-transition-from-in-house-tech-to-ue5-for-the-talos-principle-2",
+          "sourceTitle": "Unreal Engine — Inside Croteam’s transition from in-house tech to UE5 for The Talos Principle 2",
+          "lens": "Large environments + disciplined material systems",
+          "notice": "Croteam moved from its own engine to UE5 partly so the sequel could support much larger, more varied spaces. Its environment pipeline relies heavily on Nanite and World Partition, so surface detail, foliage and texture choices have to support the scale of the world without turning every material into an expensive one-off.",
+          "steal": "A strong material family is a production system, not a folder of unrelated textures. Decide which information really needs a texture and which can come from shared parameters, geometry or lighting.",
+          "task": "Read the Croteam interview. Choose one Talos 2 environment and list three repeating surface families you would build as reusable materials. For each, name what must vary and what should stay shared.",
+          "sourceType": "DEVELOPER INTERVIEW • CROTEAM",
+          "sourceWhy": "Croteam explains how Nanite, World Partition and a much larger world changed the production approach for The Talos Principle 2."
         }
       ],
       "researchMissions": [
@@ -929,6 +953,8 @@ window.UE5_DESIGN_DATA = {
         "Change one variable at a time"
       ],
       "intro": "Lighting is not a final Instagram filter. It is gameplay information. Build depth and route readability first, then use contrast, colour and atmosphere to control emotion.",
+      "lookTitle": "How Alan Wake 2, LIMBO and Little Nightmares II use light to control attention",
+      "lookIntro": "The question is not “does the lighting look good?” It is what the lighting makes the player notice, fear, ignore or move towards. Each example below uses contrast and darkness for a specific gameplay or emotional job.",
       "referenceImages": [
         {
           "src": "https://www.alanwake.com/wp-content/uploads/2024/06/aw2-photo-mode-03-1920x1080.png",
@@ -1106,32 +1132,38 @@ window.UE5_DESIGN_DATA = {
         {
           "game": "Alan Wake 2",
           "image": "https://www.alanwake.com/wp-content/uploads/2024/06/aw2-photo-mode-03-1920x1080.png",
-          "sourceUrl": "https://www.alanwake.com/story/unleash-your-creativity-with-alan-wake-2s-new-photo-mode/",
-          "sourceTitle": "Remedy — Alan Wake 2 Photo Mode",
-          "lens": "Colour + motivated emphasis",
-          "notice": "Remedy’s imagery makes the lighting decisions easy to inspect: colour, intensity, source direction and contrast can rewrite the mood of the same geometry while still protecting the subject.",
-          "steal": "Treat light colour and intensity as deliberate design variables, not vibe sliders.",
-          "task": "Predict what changes if the strongest coloured light becomes neutral white while everything else stays fixed."
+          "sourceUrl": "https://blog.adobe.com/en/publish/2024/08/07/remedy-entertainments-environment-art-technology-workflow-alan-wake-2",
+          "sourceTitle": "Adobe / Remedy — Environment art technology and workflows in Alan Wake 2",
+          "lens": "Lighting, colour grading + atmosphere",
+          "notice": "Remedy kept environment materials grounded in realism, then pushed the final mood through strongly art-directed lighting, VFX and colour grading. Bright Falls and the Dark Place can therefore feel radically different even when individual surfaces remain physically believable.",
+          "steal": "Separate “what the surface is” from “how the scene should feel”. Let materials stay coherent, then use lighting, fog, VFX and grading deliberately to control mood and focal priority.",
+          "task": "Read the Remedy environment-art interview. Pick one Bright Falls shot and one Dark Place shot. Compare key light direction, colour temperature, brightest focal area and how wetness/reflection changes the read.",
+          "sourceType": "ENVIRONMENT ART INTERVIEW • REMEDY",
+          "sourceWhy": "Remedy’s technical environment artist explains the relationship between realistic materials and the much stronger art direction applied through lighting, VFX and colour grading."
         },
         {
           "game": "LIMBO",
           "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/48000/ss_a045f6d6329ed18bc16d34633800d638f3a57724.1920x1080.jpg?t=1761819450",
-          "sourceUrl": "https://store.steampowered.com/app/48000/LIMBO/",
-          "sourceTitle": "Playdead — LIMBO",
-          "lens": "Silhouette + negative space",
-          "notice": "A tiny tonal range still keeps the player, hazards and route legible because silhouette, motion and carefully placed negative space carry the gameplay information.",
-          "steal": "Atmosphere is not an excuse to lose gameplay readability.",
-          "task": "Reduce your own scene to greyscale and squint at it. Which three shapes must remain distinct?"
+          "sourceUrl": "https://www.gamedeveloper.com/game-platforms/gdc-europe-i-limbo-i-s-carlsen-on-making-players-your-worst-enemy-and-your-best-friend",
+          "sourceTitle": "Game Developer — GDC Europe: LIMBO’s Jeppe Carlsen on making players your worst enemy and best friend",
+          "lens": "Silhouette readability with almost no colour",
+          "notice": "Playdead strips the scene down to black, grey, light and motion. With no tutorial text and very little colour information, the player, hazards and interactive shapes have to separate through silhouette, timing and negative space.",
+          "steal": "If the player cannot read the important shape in greyscale, extra colour and post-processing will not rescue the composition. Protect the gameplay silhouette first.",
+          "task": "Read the Playdead design feature, then grab one LIMBO screenshot. Fill the player, hazard and safe route with three flat tones. If any two merge, describe the lighting or spacing change that would separate them.",
+          "sourceType": "LEVEL DESIGN TALK • PLAYDEAD",
+          "sourceWhy": "Lead level designer Jeppe Carlsen explains the game’s deliberately minimal controls, lack of tutorial text and approach to communicating through play."
         },
         {
           "game": "Little Nightmares II",
           "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/860510/page_bg_raw.jpg?t=1730127763",
-          "sourceUrl": "https://store.steampowered.com/app/860510/Little_Nightmares_II/",
-          "sourceTitle": "Tarsier Studios — Little Nightmares II",
-          "lens": "Scale + pools of safety",
-          "notice": "Practical light pools and giant shadow masses sell vulnerability while still revealing enough route information to move through threatening spaces.",
-          "steal": "Use lit islands and shadow boundaries as pacing beats rather than illuminating everything evenly.",
-          "task": "Mark three safety-to-danger transitions. What lighting cue should change at each boundary?"
+          "sourceUrl": "https://www.unrealengine.com/developer-interviews/how-little-nightmares-ii-plumbs-the-depths-of-adolescent-angst",
+          "sourceTitle": "Unreal Engine — How Little Nightmares II plumbs the depths of adolescent angst",
+          "lens": "Light/dark contrast + vulnerability",
+          "notice": "Tarsier uses oversized architecture, darkness and selective light to keep Mono and Six feeling small. The team describes light and darkness as part of the game’s unease, while outdoor and indoor spaces use different lighting setups to shape atmosphere without losing the route.",
+          "steal": "Darkness should create uncertainty around the player, not hide the basic action they need to perform. Use light pools to reveal enough information, then let the unlit space carry threat.",
+          "task": "Read the Tarsier interview and choose one Pale City screenshot. Mark the current safe/readable zone, the threatening unknown zone and the next light cue that pulls the player forward.",
+          "sourceType": "DEVELOPER INTERVIEW • TARSIER STUDIOS",
+          "sourceWhy": "Tarsier discusses its visual inspirations and specifically how light, darkness and atmosphere shape the game’s unease."
         }
       ],
       "researchMissions": [
@@ -1255,6 +1287,8 @@ window.UE5_DESIGN_DATA = {
         "Foliage must respect gameplay"
       ],
       "intro": "Terrain is level design at a huge scale. Slopes, ridges, valleys, skyline silhouettes and foliage density decide where players can travel and what they can understand from a distance.",
+      "lookTitle": "How ELDEN RING, Subnautica and Jusant turn terrain into navigation",
+      "lookIntro": "There are no random mountains here. Landmarks, biomes, depth, ledges and terrain silhouettes are doing navigation work. Compare how each game lets the player build a mental map without covering the world in arrows.",
       "referenceImages": [
         {
           "src": "https://www.kojimaproductions.jp/sites/default/files/2021-08/gr.DeathStranding_GameScreenshot3.jpg",
@@ -1427,32 +1461,38 @@ window.UE5_DESIGN_DATA = {
         {
           "game": "ELDEN RING",
           "image": "https://p325k7wa.twic.pics/high/elden-ring/elden-ring/02-screenshots/ELDENRING_01_4K.jpg?twic=v1%2Fcover%3D2160%2Fstep%3D10%2Fquality%3D80%2Foutput%3Dpreview",
-          "sourceUrl": "https://en.bandainamcoent.eu/elden-ring/elden-ring/media",
-          "sourceTitle": "Bandai Namco — ELDEN RING media gallery",
-          "lens": "Distant landmarks + layered terrain",
-          "notice": "Large landmarks and layered terrain create long-term navigation targets while hills, ruins and local silhouettes provide shorter discovery loops.",
-          "steal": "Give players something memorable to orient around beyond the next 20 metres.",
-          "task": "Identify a long-term landmark, a mid-distance landmark and a local cue. Which one would you navigate by after turning around?"
+          "sourceUrl": "https://gameinformer.com/interview/2024/06/24/from-softwares-hidetaka-miyazaki-discusses-his-approach-to-difficulty",
+          "sourceTitle": "Game Informer — Hidetaka Miyazaki on why he still designs levels himself",
+          "lens": "World landmarks + mental-map building",
+          "notice": "Hidetaka Miyazaki describes map and level design as a guide that helps players piece together the world while their understanding is still fragmented. Large silhouettes and terrain layers give the player questions and destinations without explaining the whole route.",
+          "steal": "A landmark should do more than look impressive: it should help the player orient, form a hypothesis about the world and choose what to investigate next.",
+          "task": "Read Miyazaki’s level-design comments. Pick one Elden Ring vista and mark a long-range landmark, one mid-range destination and one local route choice. Write what each scale tells the player.",
+          "sourceType": "CREATOR INTERVIEW • GAME INFORMER",
+          "sourceWhy": "Miyazaki explains that map and level design should guide players as they build a fragmented understanding of the world."
         },
         {
           "game": "Subnautica",
           "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/264710/ss_9fdfcc7572ae22b4afa21e6de3b23c962ca5bb55.1920x1080.jpg?t=1777456112",
-          "sourceUrl": "https://store.steampowered.com/app/264710/Subnautica/",
-          "sourceTitle": "Unknown Worlds — Subnautica",
-          "lens": "Biome identity + vertical navigation",
-          "notice": "Colour, plant silhouettes, depth, light and geology make underwater regions recognisable without roads or signposts, while depth itself becomes part of progression.",
-          "steal": "Give biomes navigational identity, not just different foliage.",
-          "task": "Design three biome signatures using colour/value, silhouette, density and sound. Make each readable from a distance."
+          "sourceUrl": "https://www.gdcvault.com/play/1025745/The-Design-of-Subnautica",
+          "sourceTitle": "GDC Vault — The Design of Subnautica",
+          "lens": "Biome identity + exploration without arrows",
+          "notice": "Unknown Worlds built Subnautica around exploration, discovery and the thrill of the unknown. Biomes, depth and environmental signals create curiosity, while radio messages and story beats add enough structure to a sandbox without turning exploration into a waypoint-following exercise.",
+          "steal": "A biome should tell the player where they are, what kind of risk they are entering and why they might want to go deeper. Navigation identity is part of progression.",
+          "task": "Open Charlie Cleveland’s GDC talk summary. Design three underwater biomes and give each a unique depth range, silhouette language, sound cue and discovery that tempts the player to enter.",
+          "sourceType": "GDC DESIGN TALK • UNKNOWN WORLDS",
+          "sourceWhy": "Creative director Charlie Cleveland explains Subnautica’s design pillars, exploration structure and how the team guides players without over-directing them."
         },
         {
           "game": "Jusant",
           "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1977170/page_bg_raw.jpg?t=1771331092",
-          "sourceUrl": "https://store.steampowered.com/app/1977170/Jusant/",
-          "sourceTitle": "DON’T NOD — Jusant",
-          "lens": "Terrain as traversal",
-          "notice": "Climbable faces, ledges, exposed walls and changing biomes organise a vertical route. The terrain is the mechanic rather than scenery wrapped around one.",
-          "steal": "Terrain should advertise movement verbs and route difficulty.",
-          "task": "Draw a fast, safe and secret climbing line up the scene. What terrain feature communicates each choice?"
+          "sourceUrl": "https://gameinformer.com/2023/11/29/the-challenging-climb-to-make-jusant",
+          "sourceTitle": "Game Informer — The Challenging Climb To Make Jusant",
+          "lens": "Natural traversal cues instead of painted ledges",
+          "notice": "DON’T NOD designed climbing first, then built the world around that mechanic. The art team wanted important ledges and handholds to read without resorting to obvious “climb here” paint, so natural colour and shape differences make useful terrain pop from the surrounding rock.",
+          "steal": "Traversal readability can come from believable geology, value and silhouette. The player should see a possible hold because it belongs to the world, not because the designer sprayed it yellow.",
+          "task": "Read the lead designer/art director interview. Find one Jusant climbing shot and mark three handholds. For each, identify the natural shape or colour contrast that makes it readable without UI.",
+          "sourceType": "LEAD DESIGNER + ART DIRECTOR • GAME INFORMER",
+          "sourceWhy": "DON’T NOD explains how the climbing system came first and how natural colour/shape cues replaced artificial platforming markers."
         }
       ],
       "researchMissions": [
@@ -1570,6 +1610,8 @@ window.UE5_DESIGN_DATA = {
         "Return control cleanly"
       ],
       "intro": "A cutscene is a controlled piece of player communication. Every shot should reveal, hide, emphasise or transition something. Start with the story beat, then choose the camera technique.",
+      "lookTitle": "How Journey, Edith Finch and Psychonauts 2 stage story through camera and space",
+      "lookIntro": "These games do not use the camera for the same job. One builds an emotional arc through scale, one changes interaction rules to tell short stories, and one stages wildly stylised spaces so the player can still read the action.",
       "referenceImages": [
         {
           "src": "https://www.alanwake.com/wp-content/uploads/2024/06/aw2-photo-mode-02-clean-1300x650.png",
@@ -1742,32 +1784,38 @@ window.UE5_DESIGN_DATA = {
         {
           "game": "Journey",
           "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/638230/ss_ed77e7844e32c4cb181ce585fa1a368285c66ec5.1920x1080.jpg?t=1729099361",
-          "sourceUrl": "https://store.steampowered.com/app/638230/Journey/",
-          "sourceTitle": "thatgamecompany — Journey",
-          "lens": "Camera + emotion",
-          "notice": "Wide framing repeatedly makes the traveller feel tiny against the environment, using scale and composition to communicate isolation, discovery and hope without dialogue.",
-          "steal": "Shot scale can tell the emotional job before animation or dialogue does anything.",
-          "task": "Choose wide, medium or close framing for solitude, discovery and danger. Give one reason for each choice."
+          "sourceUrl": "https://www.gdcvault.com/play/1017700/Designing119Journey",
+          "sourceTitle": "GDC Vault — Designing Journey",
+          "lens": "Camera scale + an intentional emotional arc",
+          "notice": "Thatgamecompany designed Journey around a specific emotional experience rather than a conventional power fantasy. Wide views, the distant mountain, changes in scale and the game’s pacing all support an arc from isolation and effort towards connection and release.",
+          "steal": "Choose shot scale because of the feeling and information you need to create. A huge environment with a tiny character says something different from the same beat framed close.",
+          "task": "Open Jenova Chen’s GDC design talk. Choose three moments from Journey and label the intended emotion, the camera distance and the environmental scale that supports it. Then restage one beat with the opposite framing and predict what changes.",
+          "sourceType": "GDC DESIGN TALK • THATGAMECOMPANY",
+          "sourceWhy": "Jenova Chen explains how Journey was prototyped and polished around a deliberate emotional arc."
         },
         {
           "game": "What Remains of Edith Finch",
           "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/501300/ss_77ebb61562a25dbcd0c4cc1c5090b76a76a055b2.1920x1080.jpg?t=1785424558",
-          "sourceUrl": "https://store.steampowered.com/app/501300/What_Remains_of_Edith_Finch/",
-          "sourceTitle": "Giant Sparrow — What Remains of Edith Finch",
-          "lens": "Transitions + point of view",
-          "notice": "Narrative sequences change perspective and visual language while keeping interaction tied to story intention, so transitions become part of the storytelling rather than a break from it.",
-          "steal": "A transition can carry meaning instead of merely hiding a cut or load.",
-          "task": "Outline three states: normal room → memory → return. What visual or camera rule changes at each transition?"
+          "sourceUrl": "https://blog.playstation.com/archive/2017/04/25/the-personal-stories-that-shaped-remarkable-ps4-adventure-what-remains-of-edith-finch-out-today/",
+          "sourceTitle": "PlayStation Blog — The personal stories that shaped What Remains of Edith Finch",
+          "lens": "Playable stories + changing interaction rules",
+          "notice": "Giant Sparrow built Edith Finch as a collection of playable short stories rather than one repeated interaction model. Each family story can change point of view, controls, rhythm and visual treatment because the mechanic is chosen to express that person’s memory and death.",
+          "steal": "A cinematic transition is stronger when the presentation rule changes for a story reason. Do not change camera or controls merely to look clever; make the change communicate the memory differently.",
+          "task": "Read Ian Dallas’s explanation of the project. Compare two Finch stories: write what changes in camera/controls, what emotion that rule creates, and how the game returns the player to Edith afterwards.",
+          "sourceType": "CREATIVE DIRECTOR ARTICLE • GIANT SPARROW",
+          "sourceWhy": "Creative director Ian Dallas explains the game as a set of playable short stories and the design goal behind those radically different sequences."
         },
         {
           "game": "Psychonauts 2",
           "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/607080/page_bg_raw.jpg?t=1745521663",
-          "sourceUrl": "https://store.steampowered.com/app/607080/Psychonauts_2/",
-          "sourceTitle": "Double Fine — Psychonauts 2",
-          "lens": "Stylised staging + readable action",
-          "notice": "Exaggerated shapes, colour and camera blocking allow bizarre mental worlds to stay understandable even when almost every asset is deliberately unconventional.",
-          "steal": "The stronger the stylisation, the stronger the hierarchy needs to be.",
-          "task": "Sketch one shot with a focal character, one story prop and one background idea. Make sure none of them compete for the same visual priority."
+          "sourceUrl": "https://www.doublefine.com/news/level-design-101",
+          "sourceTitle": "Double Fine — Level Design 101: Psychonauts 2",
+          "lens": "Staging surreal spaces so the player still reads them",
+          "notice": "Double Fine’s mental worlds can break normal proportions and architecture, but level designers still control pace, route and attention. The studio describes taking a concept for a brain and turning it into a playable world while using strong shapes and deliberate “wonk” to keep the style cohesive.",
+          "steal": "Stylisation can distort reality, but it cannot remove hierarchy. Decide what the player must notice first, then let the weirdness happen around that priority.",
+          "task": "Watch/read Double Fine’s level-design breakdown. Sketch a surreal room with one route, one focal story object and one optional curiosity. Distort the architecture, but annotate the three cues that preserve the order of attention.",
+          "sourceType": "STUDIO LEVEL-DESIGN BREAKDOWN • DOUBLE FINE",
+          "sourceWhy": "Senior level designer Joshua Herbert explains how a Psychonauts 2 concept becomes a playable world and how designers control pace and guidance."
         }
       ],
       "researchMissions": [
@@ -1885,6 +1933,8 @@ window.UE5_DESIGN_DATA = {
         "Test while moving, not standing still"
       ],
       "intro": "Sound design is level design you cannot see. It tells the player what is nearby, what is behind them, whether a space is safe and whether something has changed before the camera confirms it.",
+      "lookTitle": "How INSIDE, Outer Wilds and No Man’s Sky use audio as game information",
+      "lookIntro": "Sound is not background decoration in these examples. Timing, recurring motifs and procedural layers tell the player about pace, place and changing state. Listen for the system underneath the atmosphere.",
       "referenceImages": [
         {
           "src": "https://drop-assets.ea.com/images/5Cr5lTNDijF2pzIopPZduH/2009d571be74052edf094ce0a992253f/ds-gp-hallway-04-no-watermark.jpg",
@@ -2051,32 +2101,38 @@ window.UE5_DESIGN_DATA = {
         {
           "game": "INSIDE",
           "image": "https://playdead.com/css/img/inside/screenshots/INSIDE_01.jpg",
-          "sourceUrl": "https://playdead.com/games/inside/",
-          "sourceTitle": "Playdead — INSIDE",
-          "lens": "Sparse sound + focus",
-          "notice": "Sparse visual and audio language leaves room for one machine, movement or environmental event to dominate attention instead of fighting a constantly full mix.",
-          "steal": "Do not fill every second. Silence is part of the mix.",
-          "task": "Choose three moments in a tense sequence where removing ambience would make the next sound more important."
+          "sourceUrl": "https://www.gamedeveloper.com/audio/video-designing-the-audio-for-i-inside-i-a-game-that-listens",
+          "sourceTitle": "Game Developer — Designing the audio for INSIDE, a game that listens",
+          "lens": "Audio-driven pacing + silence",
+          "notice": "Martin Stig Andersen describes INSIDE as a game that can respond to its own sound. Audio is used to shape pace, suspense and release, and some gameplay timing is driven by the sound system so transitions feel continuous rather than like disconnected effects firing on cues.",
+          "steal": "Treat silence and sound timing as part of the gameplay state. The mix should know when the player is approaching, failing, repeating or escaping a beat.",
+          "task": "Open the GDC audio breakdown. Take a 20-second tense sequence and draw an audio timeline with silence, build, event and release. Mark one moment where gameplay should wait for or react to the sound rather than simply triggering it.",
+          "sourceType": "GDC AUDIO TALK • MARTIN STIG ANDERSEN",
+          "sourceWhy": "INSIDE’s audio designer explains feedback loops between gameplay and audio, including pace, suspense, release and audio-driven actions."
         },
         {
           "game": "Outer Wilds",
           "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/753640/ss_c624a6b8edca0d451605592edd927dbcc14917a8.1920x1080.jpg?t=1785424341",
-          "sourceUrl": "https://store.steampowered.com/app/753640/Outer_Wilds/",
-          "sourceTitle": "Mobius Digital — Outer Wilds",
-          "lens": "Music as state + place",
-          "notice": "Recurring musical ideas identify travellers, places and the loop’s changing state, letting audio tell the player where they are emotionally and systemically.",
-          "steal": "Use recurring motifs as game-state information, not just background music.",
-          "task": "Design three sound or musical layers for safe exploration, discovery and an imminent transition. What triggers each one?"
+          "sourceUrl": "https://www.mobiusdigitalgames.com/news/the-music-of-outer-wilds-episode-1",
+          "sourceTitle": "Mobius Digital — The Music of Outer Wilds: Episode 1",
+          "lens": "Recurring music as location + shared state",
+          "notice": "Mobius built recognisable musical identities for its travellers and planets, then lets those ideas overlap as the player moves and the loop approaches its end. The score therefore identifies place and emotional state while also connecting distant characters into one system.",
+          "steal": "A recurring motif becomes useful game information when the player can recognise what it belongs to and notice when its context changes.",
+          "task": "Read Mobius’s music post and listen to the stripped-back campfire theme. Design three versions of one motif for “safe home”, “distant discovery” and “time running out”. Write what changes and what must stay recognisable.",
+          "sourceType": "DEVELOPER AUDIO POST • MOBIUS DIGITAL",
+          "sourceWhy": "Composer Andrew Prahlow discusses the evolution of the main theme and the simple musical language that underpins the game’s score."
         },
         {
           "game": "No Man’s Sky",
           "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/275850/719b88538c75532ee595b44421e3e13bc3651aff/page_bg_raw.jpg?t=1786366888",
-          "sourceUrl": "https://store.steampowered.com/app/275850/No_Mans_Sky/",
-          "sourceTitle": "Hello Games — No Man’s Sky",
-          "lens": "Procedural ambience + scale",
-          "notice": "A huge procedural universe needs layered ambience and rules that react to environment state rather than a bespoke linear mix for every location.",
-          "steal": "Build ambience from reusable layers that enter, leave and vary with conditions.",
-          "task": "Define wind, fauna, machinery and weather layers. Write the state that makes each layer enter and exit."
+          "sourceUrl": "https://gameinformer.com/b/features/archive/2014/12/22/creating-the-infinite-soundtrack-of-no-man-s-sky.aspx",
+          "sourceTitle": "Game Informer — Creating No Man’s Sky’s Infinite Soundtrack",
+          "lens": "Procedural music for a procedural universe",
+          "notice": "Hello Games and 65daysofstatic did not write one fixed track for every planet. They built musical material that can be reassembled procedurally so the soundtrack can vary with an effectively limitless world while still sounding like No Man’s Sky.",
+          "steal": "Procedural ambience needs rules and a coherent palette. Random selection is not a system: decide which layers, motifs and intensities are allowed to combine for each state.",
+          "task": "Watch/read the audio interview. Create a four-layer music/ambience system for one procedural biome: base texture, environmental layer, discovery layer and danger layer. Write the condition that adds or removes each layer.",
+          "sourceType": "AUDIO DIRECTOR + COMPOSER INTERVIEW • GAME INFORMER",
+          "sourceWhy": "Hello Games, its audio director and 65daysofstatic explain how they approached a procedurally generated musical soundscape."
         }
       ],
       "researchMissions": [
@@ -2200,6 +2256,8 @@ window.UE5_DESIGN_DATA = {
         "Stop polishing things the player cannot read"
       ],
       "intro": "Polish is prioritisation. Fix the biggest player-facing problem first, re-test from the same camera, then decide what earns the next ten minutes. Performance and presentation are part of design quality, not separate chores.",
+      "lookTitle": "How Hi-Fi RUSH, Rift Apart and Ori keep spectacle readable",
+      "lookIntro": "Polish is not “add more effects”. These games coordinate multiple disciplines around one clear experience: rhythm, seamless transitions or readable movement. The useful question is what survives when the screen gets busy.",
       "referenceImages": [
         {
           "src": "https://www.guerrilla-games.com/media/Horizon_FW_Artblast2560x854.png",
@@ -2378,32 +2436,38 @@ window.UE5_DESIGN_DATA = {
         {
           "game": "Hi-Fi RUSH",
           "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1817230/page_bg_raw.jpg?t=1764916407",
-          "sourceUrl": "https://store.steampowered.com/app/1817230/HiFi_RUSH/",
-          "sourceTitle": "Tango Gameworks — Hi-Fi RUSH",
-          "lens": "Everything agrees",
-          "notice": "Animation, VFX, UI, audio and environmental motion reinforce the same rhythm. The finish comes from disciplines agreeing on a presentation rule, not from adding random effects.",
-          "steal": "Pick one presentation rule and let several disciplines support it.",
-          "task": "List five channels that can tell the player the same beat or action information. Which one is primary?"
+          "sourceUrl": "https://www.gameinformer.com/2023/07/25/the-life-and-career-of-hi-fi-rush-creator-john-johanas",
+          "sourceTitle": "Game Informer — The Life And Career Of Hi-Fi Rush Creator John Johanas",
+          "lens": "One rhythm rule shared by every discipline",
+          "notice": "John Johanas’s core pitch was not simply “combat to music”. Hi-Fi RUSH makes the whole world obey the beat: attacks, animation, industrial machinery, platforming, cutscenes and even small environmental movements reinforce the same internal metronome.",
+          "steal": "Polish becomes coherent when several disciplines reinforce one rule. Do not add five unrelated effects; make animation, VFX, sound, UI and environment all confirm the same player-facing event.",
+          "task": "Read the John Johanas feature. Choose one 10-second Hi-Fi RUSH clip and list every channel that exposes the beat: animation, environment, sound, VFX, UI and camera. Circle the one a player could still follow if the music were muted.",
+          "sourceType": "CREATOR INTERVIEW • GAME INFORMER",
+          "sourceWhy": "Johanas explains the early prototypes and the idea that everything from combat to the world itself should move to the music."
         },
         {
           "game": "Ratchet & Clank: Rift Apart",
           "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1895880/ss_13372af67343a2f2fc1332bc0b7a8e67db4a336b.1920x1080.jpg?t=1750956328",
-          "sourceUrl": "https://store.steampowered.com/app/1895880/Ratchet__Clank_Rift_Apart/",
-          "sourceTitle": "Insomniac Games — Ratchet & Clank: Rift Apart",
-          "lens": "Transitions + readable spectacle",
-          "notice": "Dense scenes and rapid world transitions still have to protect the character, threat and route. Spectacle only works if the player can read through it.",
-          "steal": "Protect gameplay hierarchy during your most expensive-looking moment.",
-          "task": "Imagine removing half the particles and background detail. What information absolutely must stay?"
+          "sourceUrl": "https://www.axios.com/2021/07/20/sony-ps5-insomniac-ratchet-clank",
+          "sourceTitle": "Axios — Insomniac on the graphics and instant world transitions of Rift Apart",
+          "lens": "Instant transitions without losing player orientation",
+          "notice": "Insomniac used the PS5 storage pipeline to unload one environment and load another fast enough for rift transitions to become part of the spectacle. The technical trick only works as design when the player still understands where Ratchet is, what is threatening him and what they can control after the transition.",
+          "steal": "Fast technology should not produce fast confusion. Protect character position, threat direction and the next controllable action across a dramatic transition.",
+          "task": "Read the Insomniac tech interview. Storyboard a three-shot rift transition: before, crossing, after. Keep one visual anchor or motion direction consistent so the player can re-orient immediately.",
+          "sourceType": "DEVELOPER TECH INTERVIEW • INSOMNIAC",
+          "sourceWhy": "Insomniac explains how the SSD allowed entire environments to unload/load during transitions instead of hiding loading behind travel sequences."
         },
         {
           "game": "Ori and the Will of the Wisps",
           "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1057090/ss_ef0d1606df59247a966e31931884a534a4ad8caa.1920x1080.jpg?t=1759530749",
-          "sourceUrl": "https://store.steampowered.com/app/1057090/Ori_and_the_Will_of_the_Wisps/",
-          "sourceTitle": "Moon Studios — Ori and the Will of the Wisps",
-          "lens": "VFX + silhouette readability",
-          "notice": "Particles, lighting and animated backgrounds add richness while the player silhouette and immediate hazards stay at the top of the visual hierarchy.",
-          "steal": "Polish should increase feeling without stealing readability.",
-          "task": "Rank player, enemy, hazard and background by contrast. If the order is wrong, which effect would you reduce first?"
+          "sourceUrl": "https://www.inverse.com/gaming/ori-will-of-the-wisps-interview",
+          "sourceTitle": "Inverse — How Ori and the Will of the Wisps blends art and music to perfection",
+          "lens": "Effects-rich scenes that preserve value separation",
+          "notice": "Ori’s art team layers dynamic lighting, particles, animated backgrounds and reactive set dressing around a very fast character. Art director Jeremy Gritton describes checking scenes in greyscale because colour can hide poor value separation — a practical way to test whether Ori and hazards still read through the beauty.",
+          "steal": "Polish should make motion feel richer while preserving the contrast order: player and immediate hazard first, supporting action second, background last.",
+          "task": "Read the art/music interview and use Gritton’s greyscale test on an Ori screenshot or your own scene. Rank player, hazard, enemy and background by value contrast, then name the first effect you would reduce if the order is wrong.",
+          "sourceType": "ART + MUSIC INTERVIEW • MOON STUDIOS",
+          "sourceWhy": "Art director Jeremy Gritton gives a concrete readability technique: flip scenes to greyscale to check value separation instead of trusting colour alone."
         }
       ],
       "researchMissions": [

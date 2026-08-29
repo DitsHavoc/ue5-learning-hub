@@ -1,3 +1,12 @@
+## v3.39.1 — Designer Evidence Pass — 29 Aug 2026
+- Rewrote all 24 primary Designer Studio LOOK case studies around a named, game-specific design factor rather than generic observations.
+- Replaced the generic “Three examples. Three different design jobs.” section heading with a discipline-specific comparison naming the three games and the design question being studied.
+- Reworked every case card into: DESIGN FACTOR → WHAT THE GAME ACTUALLY DOES → DESIGN PRINCIPLE → STUDENT TASK → EVIDENCE SOURCE.
+- Replaced all primary case-study store/source links with interviews, developer articles, GDC talks, studio breakdowns or strong games-media features.
+- Added source type and “why this source matters” context so students know what evidence to hunt for before opening a link.
+- Kept the 24-game diversity rule: 24 primary LOOK slots still use 24 different games.
+- No XP, completion-ID, route or database changes.
+
 ## v3.39.0 — Study Tools Refresh — 29 Aug 2026
 - Rebuilt Revision Quizzes as a cross-Hub bank: 44 existing Unreal + 30 Module 0 + 24 Designer scenario questions = 98 total.
 - Expanded Glossary from 41 Unreal terms to 97 searchable Unreal / Design / 3D terms with area filters.
