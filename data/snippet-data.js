@@ -1,163 +1,1171 @@
 window.UE5_SNIPPET_DATA = {
-  version: '3.34.16',
-  buildDate: '29 Aug 2026',
-  policy: {
-    title: 'Official Epic snippet bank',
-    body: 'The Hub does not mirror Epic\'s raw Blueprint clipboard blocks. Open the official Epic page, use Copy Full Snippet there, then paste into the named Blueprint graph or viewport. This keeps the source current and avoids turning the Hub into a copied documentation mirror.',
-    versions: 'Official Epic UE 5.6–5.8 material is acceptable when the workflow shown is still materially accurate; every source in this first bank is current UE 5.8 documentation.'
+  "version": "3.34.17",
+  "buildDate": "29 Aug 2026",
+  "policy": {
+    "title": "Official Epic paste-assist bank",
+    "body": "The Hub does not mirror Epic's raw Blueprint or level clipboard blocks. Open the official Epic page, use Copy Full Snippet there, then paste into the named Blueprint graph or viewport. This keeps the source current and avoids turning the Hub into a copied documentation mirror.",
+    "versions": "Official Epic UE 5.6–5.8 material is acceptable when the workflow shown is still materially accurate; every assist in this release is sourced from current UE 5.8 Epic documentation."
   },
-  categories: [
-    {id:'interaction',title:'Interaction',icon:'◎'},
-    {id:'ui',title:'HUD & UI',icon:'▤'},
-    {id:'world',title:'World Systems',icon:'⚙'},
-    {id:'combat',title:'Damage & Combat',icon:'✦'},
-    {id:'ai',title:'AI',icon:'◉'},
-    {id:'flow',title:'Game Flow',icon:'▶'}
+  "categories": [
+    {
+      "id": "interaction",
+      "title": "Interaction",
+      "icon": "◎"
+    },
+    {
+      "id": "ui",
+      "title": "HUD & UI",
+      "icon": "▤"
+    },
+    {
+      "id": "world",
+      "title": "World Systems",
+      "icon": "⚙"
+    },
+    {
+      "id": "combat",
+      "title": "Damage & Combat",
+      "icon": "✦"
+    },
+    {
+      "id": "ai",
+      "title": "AI",
+      "icon": "◉"
+    },
+    {
+      "id": "flow",
+      "title": "Game Flow",
+      "icon": "▶"
+    }
   ],
-  snippets: [
+  "snippets": [
     {
-      id:'epic-key-system',
-      title:'Key Pickup + Reusable Key Setup',
-      category:'interaction',
-      icon:'🔑',
-      sourceVersion:'5.8',
-      sourceTitle:'Epic — Designer 02: Create a Key',
-      sourceUrl:'https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-02-create-a-key-in-unreal-engine',
-      snippetSummary:'3 Blueprint graph snippets',
-      what:'Builds Epic\'s reusable key-data function, calls it from the Key Construction Script, and provides the key pickup behaviour.',
-      pasteInto:['BPL_FPGame → fnBPLSetKey function graph','BP_Key → Construction Script','BP_Key → Event Graph'],
-      reconnect:['For the function snippet, reconnect the function entry pins to the For Each Loop and Find nodes.','For the Construction Script snippet, reconnect fnBPLSetKey to the Construction Script node.'],
-      prerequisites:['Enum_KeyType','Struct_KeyData','BP_Key','BPL_FPGame'],
-      relatedTutorials:['key-pickup','locked-door'],
-      tags:['key','pickup','enum','struct','map','function library','construction script']
+      "id": "epic-level-blockout",
+      "title": "Hallways + Rooms: Instant Level Blockout",
+      "category": "world",
+      "icon": "▦",
+      "sourceVersion": "5.8",
+      "sourceTitle": "Epic — Designer 01: Project Setup and Level Blockout",
+      "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-01-project-setup-and-level-blockout-in-unreal-engine",
+      "sourceSection": "Copy the blockout rooms and hallways",
+      "pasteMode": "Level / viewport paste",
+      "snippetSummary": "3 large level clipboard blocks",
+      "what": "Pastes Epic’s greybox hallways and rooms directly into a level so students can study scale, routing and Outliner organisation without rebuilding the whole example by hand.",
+      "pasteInto": [
+        "Level Editor viewport / Outliner in a new Basic level"
+      ],
+      "reconnect": [
+        "Make the viewport or Outliner active before pasting.",
+        "Epic tells you to remove the default Floor and PlayerStart first for the cleanest match."
+      ],
+      "prerequisites": [
+        "A UE 5.8 project",
+        "LevelPrototyping content used by the tutorial"
+      ],
+      "relatedTutorials": [
+        "foundations-build"
+      ],
+      "tags": [
+        "blockout",
+        "greybox",
+        "level design",
+        "hallway",
+        "room",
+        "outliner",
+        "prototype"
+      ]
     },
     {
-      id:'epic-locked-door',
-      title:'Locked Door + Matching Key Check',
-      category:'interaction',
-      icon:'🚪',
-      sourceVersion:'5.8',
-      sourceTitle:'Epic — Designer 03: Open Doors with Keys',
-      sourceUrl:'https://dev.epicgames.com/documentation/unreal-engine/designer-03-open-doors-with-keys-in-unreal-engine?lang=en-US',
-      snippetSummary:'2 Blueprint graph snippets + optional level blockout paste',
-      what:'Adds door Construction Script logic and the reusable FnHasKey function used to verify whether the player owns the matching key.',
-      pasteInto:['BP_DoorFrame → Construction Script','BPL_FPGame → FnHasKey function graph'],
-      reconnect:['Add a third pin to Epic\'s existing Sequence node, then connect it to the Branch exec pin.','Reconnect the FnHasKey function entry node to the Sequence node.'],
-      prerequisites:['BP_DoorFrame','BPL_FPGame','Enum_KeyType','the key system from Designer 02'],
-      relatedTutorials:['locked-door','timeline-door'],
-      tags:['door','locked door','key','branch','sequence','function']
+      "id": "epic-key-data-function",
+      "title": "Key Data Function: fnBPLSetKey",
+      "category": "interaction",
+      "icon": "🔑",
+      "sourceVersion": "5.8",
+      "sourceTitle": "Epic — Designer 02: Create a Key",
+      "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-02-create-a-key-in-unreal-engine",
+      "sourceSection": "Build the reusable key-data function",
+      "pasteMode": "Blueprint graph",
+      "snippetSummary": "1 Blueprint function snippet",
+      "what": "Builds Epic’s reusable function for looking up key data and applying the matching material / mesh setup.",
+      "pasteInto": [
+        "BPL_FPGame → fnBPLSetKey function graph"
+      ],
+      "reconnect": [
+        "Reconnect the function entry pins to the For Each Loop and Find nodes after pasting."
+      ],
+      "prerequisites": [
+        "Enum_KeyType",
+        "Struct_KeyData",
+        "BPL_FPGame"
+      ],
+      "relatedTutorials": [
+        "key-pickup",
+        "locked-door"
+      ],
+      "tags": [
+        "key",
+        "function library",
+        "map",
+        "struct",
+        "enum",
+        "for each",
+        "find"
+      ]
     },
     {
-      id:'epic-player-hud',
-      title:'Player HUD + Key Inventory Display',
-      category:'ui',
-      icon:'🖥',
-      sourceVersion:'5.8',
-      sourceTitle:'Epic — Designer 04: Player HUD',
-      sourceUrl:'https://dev.epicgames.com/documentation/unreal-engine/designer-04-player-hud-in-unreal-engine?lang=en-US',
-      snippetSummary:'2 Blueprint graph snippets',
-      what:'Provides the Blueprint logic used to update a HUD as the player collects items and the player-side setup that displays the widget.',
-      pasteInto:['the HUD update function graph shown by Epic','BP_AdventureCharacter / corresponding player graph'],
-      reconnect:['Epic notes that the function entry pins must be reconnected to the Add Unique node after pasting.'],
-      prerequisites:['Widget Blueprint from the tutorial','player character reference','key/inventory data from the previous section'],
-      relatedTutorials:['basic-hud','collectable','objective-text','interaction-prompt'],
-      tags:['hud','widget','inventory','add unique','umg','player ui']
+      "id": "epic-key-construction",
+      "title": "Key Construction Script: Apply Key Variant",
+      "category": "interaction",
+      "icon": "🗝",
+      "sourceVersion": "5.8",
+      "sourceTitle": "Epic — Designer 02: Create a Key",
+      "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-02-create-a-key-in-unreal-engine",
+      "sourceSection": "Use fnBPLSetKey in BP_Key",
+      "pasteMode": "Blueprint graph",
+      "snippetSummary": "1 Blueprint Construction Script snippet",
+      "what": "Makes each BP_Key instance configure its visible mesh/material from the selected key type during construction.",
+      "pasteInto": [
+        "BP_Key → Construction Script"
+      ],
+      "reconnect": [
+        "Reconnect fnBPLSetKey to the Construction Script entry node."
+      ],
+      "prerequisites": [
+        "BP_Key",
+        "BPL_FPGame",
+        "KeyMap",
+        "KeyType"
+      ],
+      "relatedTutorials": [
+        "key-pickup"
+      ],
+      "tags": [
+        "key",
+        "construction script",
+        "variant",
+        "material",
+        "mesh"
+      ]
     },
     {
-      id:'epic-switch-system',
-      title:'Reusable Switch / Pressure Plate Logic',
-      category:'world',
-      icon:'🟦',
-      sourceVersion:'5.8',
-      sourceTitle:'Epic — Designer 05: Puzzles — Switches and Cubes',
-      sourceUrl:'https://dev.epicgames.com/documentation/unreal-engine/designer-05-puzzles-switches-and-cubes-in-unreal-engine?lang=en-US',
-      snippetSummary:'5 Blueprint graph snippets',
-      what:'Covers the switch Construction Script, overlap behaviour, Activate Once handling, multi-overlap safety and interaction-list logic.',
-      pasteInto:['BP_Switch → Construction Script','BP_Switch → Event Graph','the switch functions shown on Epic'],
-      reconnect:['Follow the small reconnection notes beside each Epic snippet; the page builds the system in stages, so paste only the stage you are currently using.'],
-      prerequisites:['BP_Switch','BP_Cube','BPI_Interaction for the later interaction-list stage'],
-      relatedTutorials:['pressure-plate','button-lever'],
-      tags:['switch','pressure plate','overlap','activate once','interface','cube puzzle']
+      "id": "epic-key-pickup-event",
+      "title": "Key Pickup: Add to Player + Remove World Actor",
+      "category": "interaction",
+      "icon": "✋",
+      "sourceVersion": "5.8",
+      "sourceTitle": "Epic — Designer 02: Create a Key",
+      "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-02-create-a-key-in-unreal-engine",
+      "sourceSection": "Key pickup behaviour",
+      "pasteMode": "Blueprint graph",
+      "snippetSummary": "1 Blueprint Event Graph snippet",
+      "what": "Provides the key pickup event flow so the player receives the key data and the world pickup can complete its interaction behaviour.",
+      "pasteInto": [
+        "BP_Key → Event Graph"
+      ],
+      "reconnect": [
+        "Keep the Blueprint Interface / player-key setup from Epic in place so the pasted calls resolve."
+      ],
+      "prerequisites": [
+        "BP_Key",
+        "BPI_PlayerKeys",
+        "player key interface setup"
+      ],
+      "relatedTutorials": [
+        "key-pickup",
+        "collectable"
+      ],
+      "tags": [
+        "key",
+        "pickup",
+        "collectable",
+        "interface",
+        "event graph"
+      ]
     },
     {
-      id:'epic-moving-platform',
-      title:'Moving Platform + Target Point Logic',
-      category:'world',
-      icon:'↔',
-      sourceVersion:'5.8',
-      sourceTitle:'Epic — Designer 06: Puzzles — Moving Platforms',
-      sourceUrl:'https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-06-puzzles-moving-platforms-in-unreal-engine',
-      snippetSummary:'Multiple Blueprint graph snippets + optional viewport puzzle paste',
-      what:'Builds a reusable platform that moves between its starting position and a Target Point, then extends it with switch activation and movement tuning.',
-      pasteInto:['BP_Platform → Construction Script','BP_Platform → Event Graph / movement functions','viewport only for Epic\'s optional complete puzzle layout snippet'],
-      reconnect:['For viewport snippets, click the viewport or Outliner before pasting.','Epic\'s complete-puzzle paste expects the tutorial Blueprints to have the same names and compatible assets.'],
-      prerequisites:['BP_Platform','Target Point','BP_Switch','BP_Cube'],
-      relatedTutorials:['moving-platform','pressure-plate'],
-      tags:['moving platform','timeline','lerp','target point','switch','platform']
+      "id": "epic-door-colour-construction",
+      "title": "Door Construction: Match the Required Key Colour",
+      "category": "interaction",
+      "icon": "🚪",
+      "sourceVersion": "5.8",
+      "sourceTitle": "Epic — Designer 03: Open Doors with Keys",
+      "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-03-open-doors-with-keys-in-unreal-engine",
+      "sourceSection": "Add Color-Changing Blueprint Logic",
+      "pasteMode": "Blueprint graph",
+      "snippetSummary": "1 Blueprint Construction Script snippet",
+      "what": "Checks whether the door uses keys and applies the material associated with its RequiredKey value to the two door meshes.",
+      "pasteInto": [
+        "BP_DoorFrame → Construction Script"
+      ],
+      "reconnect": [
+        "Add the extra Sequence output described by Epic, then connect that exec pin to the pasted Branch."
+      ],
+      "prerequisites": [
+        "BP_DoorFrame",
+        "UseKey",
+        "RequiredKey",
+        "KeyMap",
+        "fnBPLSetKey"
+      ],
+      "relatedTutorials": [
+        "locked-door",
+        "timeline-door"
+      ],
+      "tags": [
+        "door",
+        "key",
+        "construction script",
+        "branch",
+        "sequence",
+        "material"
+      ]
     },
     {
-      id:'epic-traps-damage',
-      title:'Traps, Damage + Elimination UI',
-      category:'combat',
-      icon:'🔥',
-      sourceVersion:'5.8',
-      sourceTitle:'Epic — Designer 07: Traps and Damage',
-      sourceUrl:'https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-07-traps-and-damage-in-unreal-engine',
-      snippetSummary:'Blueprint graph snippets + optional large room paste',
-      what:'Provides reusable trap/damage logic and the eliminated-screen logic used by Epic\'s failure loop.',
-      pasteInto:['the matching trap/damage function graphs shown on Epic','the eliminated-screen / HUD function shown on Epic','viewport only for the optional Room 2 puzzle paste'],
-      reconnect:['Epic flags a function-entry → Branch reconnection for one graph.','The UI snippet needs the function entry node reconnected to SetText and To Text.','The optional room paste only works reliably when the parent Blueprint assets, names and locations match Epic\'s sample.'],
-      prerequisites:['damage-capable player','trap Blueprint','WBP_EliminatedScreen for the UI stage'],
-      relatedTutorials:['damage-zone','player-health','lives-respawn'],
-      tags:['damage','trap','fire','health','elimination','game over','widget']
+      "id": "epic-door-has-key",
+      "title": "Door Check: FnHasKey",
+      "category": "interaction",
+      "icon": "🔐",
+      "sourceVersion": "5.8",
+      "sourceTitle": "Epic — Designer 03: Open Doors with Keys",
+      "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-03-open-doors-with-keys-in-unreal-engine",
+      "sourceSection": "Check if the player has the required key",
+      "pasteMode": "Blueprint graph",
+      "snippetSummary": "1 Blueprint function snippet",
+      "what": "Builds the reusable key-check function that compares the player’s held keys against the door’s RequiredKey before allowing progression.",
+      "pasteInto": [
+        "BPL_FPGame → FnHasKey function graph"
+      ],
+      "reconnect": [
+        "Reconnect the function entry node to the Sequence node as Epic instructs."
+      ],
+      "prerequisites": [
+        "BPL_FPGame",
+        "BPI_PlayerKeys",
+        "HeldKeys / key data from Designer 02"
+      ],
+      "relatedTutorials": [
+        "locked-door"
+      ],
+      "tags": [
+        "door",
+        "locked",
+        "has key",
+        "function",
+        "branch",
+        "inventory"
+      ]
     },
     {
-      id:'epic-enemy',
-      title:'Enemy Detection, Chase + Attack Logic',
-      category:'ai',
-      icon:'👁',
-      sourceVersion:'5.8',
-      sourceTitle:'Epic — Designer 08: Create an Enemy',
-      sourceUrl:'https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-08-create-an-enemy-in-unreal-engine',
-      snippetSummary:'6 Blueprint graph snippets',
-      what:'Covers the enemy\'s receive-damage logic, player detection, MoveToPlayer behaviour, Event Tick control and attack/damage stages.',
-      pasteInto:['BP_Enemy → the matching functions and Event Graph sections shown on Epic'],
-      reconnect:['For the MoveToPlayer function snippet, reconnect the function entry Exec and Player Reference pins to the Is Valid node.','Keep function input names aligned with Epic\'s sample or some clipboard references may not resolve cleanly.'],
-      prerequisites:['BP_Enemy','Nav Mesh Bounds Volume','player reference','damage logic from the previous section'],
-      relatedTutorials:['ai-chase','ai-attack-range','enemy-health'],
-      tags:['enemy','ai','navmesh','chase','move to','attack','line trace','damage']
+      "id": "epic-hud-key-update",
+      "title": "HUD Function: Add a Collected Key to the Display",
+      "category": "ui",
+      "icon": "▤",
+      "sourceVersion": "5.8",
+      "sourceTitle": "Epic — Designer 04: Player HUD",
+      "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-04-player-hud-in-unreal-engine",
+      "sourceSection": "Build the HUD key-update function",
+      "pasteMode": "Blueprint graph",
+      "snippetSummary": "1 Blueprint function snippet",
+      "what": "Updates the player HUD when a key is collected, building the displayed key list from the stored key data.",
+      "pasteInto": [
+        "WBP_PlayerHUD → key update function graph"
+      ],
+      "reconnect": [
+        "Reconnect the function entry pins to the Add Unique node after pasting."
+      ],
+      "prerequisites": [
+        "WBP_PlayerHUD",
+        "key array / enum data",
+        "TxtKeys widget"
+      ],
+      "relatedTutorials": [
+        "basic-hud",
+        "collectable",
+        "objective-text"
+      ],
+      "tags": [
+        "hud",
+        "widget",
+        "inventory",
+        "key",
+        "add unique",
+        "umg"
+      ]
     },
     {
-      id:'epic-level-transition',
-      title:'Win Condition + Level Transition',
-      category:'flow',
-      icon:'🏁',
-      sourceVersion:'5.8',
-      sourceTitle:'Epic — Designer 10: Complete the Level',
-      sourceUrl:'https://dev.epicgames.com/documentation/unreal-engine/designer-10-complete-the-level-in-unreal-engine?lang=en-US',
-      snippetSummary:'1 large Blueprint graph snippet + optional blockout paste',
-      what:'Builds the end-of-level flow: overlap, win-condition check, input lock, win-screen display, delay and loading the next level.',
-      pasteInto:['BP_LevelTransition → Event Graph','viewport only for Epic\'s optional platform blockout snippet'],
-      reconnect:['Create the variables/components described immediately before the snippet so the pasted graph has the references it expects.'],
-      prerequisites:['BP_LevelTransition','WBP_WinScreen','win-condition data','Next Level variable'],
-      relatedTutorials:['win-lose-state','objective-text','gameinstance-state'],
-      tags:['win','level complete','transition','open level','widget','disable input','game flow']
+      "id": "epic-hud-player-setup",
+      "title": "Player HUD: Create, Store + Display the Widget",
+      "category": "ui",
+      "icon": "🖥",
+      "sourceVersion": "5.8",
+      "sourceTitle": "Epic — Designer 04: Player HUD",
+      "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-04-player-hud-in-unreal-engine",
+      "sourceSection": "Display the HUD from the player character",
+      "pasteMode": "Blueprint graph",
+      "snippetSummary": "1 Blueprint Event Graph snippet",
+      "what": "Creates the HUD for the possessed player, stores the widget reference, adds it to the viewport and lets later pickup events update it.",
+      "pasteInto": [
+        "BP_AdventureCharacter → Event Graph"
+      ],
+      "reconnect": [
+        "Keep the variable and widget names aligned with Epic’s setup so pasted references resolve cleanly."
+      ],
+      "prerequisites": [
+        "WBP_PlayerHUD",
+        "HUD variable on the character",
+        "BP_AdventureCharacter"
+      ],
+      "relatedTutorials": [
+        "basic-hud",
+        "interaction-prompt",
+        "objective-text"
+      ],
+      "tags": [
+        "hud",
+        "create widget",
+        "add to viewport",
+        "possessed",
+        "player"
+      ]
     },
     {
-      id:'epic-cube-spawner',
-      title:'Limited Spawner + Cooldown + Oldest-Actor Cleanup',
-      category:'world',
-      icon:'📦',
-      sourceVersion:'5.8',
-      sourceTitle:'Epic — Designer 11: Bonus — Spawn New Cubes',
-      sourceUrl:'https://dev.epicgames.com/documentation/unreal-engine/designer-11-spawn-new-cubes-mechanic-in-unreal-engine',
-      snippetSummary:'1 complete Blueprint graph snippet',
-      what:'Combines max-count checking, Destroy Actor, array cleanup, Spawn Actor from Class, stored references and a cooldown timer into one practical spawner.',
-      pasteInto:['BP_CubeSpawn → Event Graph'],
-      reconnect:['Build the variables and BPI_Interaction setup described by Epic before using the finished graph snippet.'],
-      prerequisites:['BP_CubeSpawn','BP_Cube','BPI_Interaction','BP_Switch'],
-      relatedTutorials:['spawn-destroy','random-spawner'],
-      tags:['spawn','destroy actor','array','cooldown','max count','cube','interface']
+      "id": "epic-switch-construction",
+      "title": "Switch Construction: Default Off Material",
+      "category": "world",
+      "icon": "⬛",
+      "sourceVersion": "5.8",
+      "sourceTitle": "Epic — Designer 05: Switches and Cubes",
+      "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-05-puzzles-switches-and-cubes-in-unreal-engine",
+      "sourceSection": "Implement Your Logic — Construction Script",
+      "pasteMode": "Blueprint graph",
+      "snippetSummary": "1 Blueprint Construction Script snippet",
+      "what": "Sets the switch mesh to its OffMaterial when the actor is constructed.",
+      "pasteInto": [
+        "BP_Switch → Construction Script"
+      ],
+      "reconnect": [
+        "Connect the Construction Script entry node if the pasted block does not retain the entry link."
+      ],
+      "prerequisites": [
+        "BP_Switch",
+        "Switch mesh component",
+        "OffMaterial"
+      ],
+      "relatedTutorials": [
+        "pressure-plate",
+        "button-lever"
+      ],
+      "tags": [
+        "switch",
+        "pressure plate",
+        "construction script",
+        "material"
+      ]
+    },
+    {
+      "id": "epic-switch-overlap",
+      "title": "Switch Overlap: Turn On / Turn Off",
+      "category": "world",
+      "icon": "🟦",
+      "sourceVersion": "5.8",
+      "sourceTitle": "Epic — Designer 05: Switches and Cubes",
+      "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-05-puzzles-switches-and-cubes-in-unreal-engine",
+      "sourceSection": "Implement Your Logic — Event Graph",
+      "pasteMode": "Blueprint graph",
+      "snippetSummary": "1 Blueprint Event Graph snippet",
+      "what": "Uses Trigger begin/end overlap events to swap the switch between OnMaterial and OffMaterial.",
+      "pasteInto": [
+        "BP_Switch → Event Graph"
+      ],
+      "reconnect": [
+        "Make sure the Trigger component and OnMaterial / OffMaterial variables use the names expected by the pasted graph."
+      ],
+      "prerequisites": [
+        "BP_Switch",
+        "Trigger box collision",
+        "OnMaterial",
+        "OffMaterial"
+      ],
+      "relatedTutorials": [
+        "pressure-plate",
+        "button-lever"
+      ],
+      "tags": [
+        "switch",
+        "overlap",
+        "pressure plate",
+        "material",
+        "begin overlap",
+        "end overlap"
+      ]
+    },
+    {
+      "id": "epic-switch-activate-once",
+      "title": "Switch: Activate Once",
+      "category": "world",
+      "icon": "1×",
+      "sourceVersion": "5.8",
+      "sourceTitle": "Epic — Designer 05: Switches and Cubes",
+      "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-05-puzzles-switches-and-cubes-in-unreal-engine",
+      "sourceSection": "Create Single and Multiple Activations",
+      "pasteMode": "Blueprint graph",
+      "snippetSummary": "1 Blueprint Event Graph snippet",
+      "what": "Adds an instance-editable ActivateOnce boolean and Branch so a switch can remain active after its first valid trigger.",
+      "pasteInto": [
+        "BP_Switch → Event Graph"
+      ],
+      "reconnect": [
+        "Use the existing overlap/material logic from the previous stage; this snippet extends it rather than replacing the whole Blueprint concept."
+      ],
+      "prerequisites": [
+        "BP_Switch",
+        "ActivateOnce bool",
+        "existing overlap graph"
+      ],
+      "relatedTutorials": [
+        "pressure-plate",
+        "button-lever"
+      ],
+      "tags": [
+        "switch",
+        "activate once",
+        "boolean",
+        "branch",
+        "one shot"
+      ]
+    },
+    {
+      "id": "epic-switch-overlap-safety",
+      "title": "Switch Fix: Multiple Overlap Safety",
+      "category": "world",
+      "icon": "✓",
+      "sourceVersion": "5.8",
+      "sourceTitle": "Epic — Designer 05: Switches and Cubes",
+      "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-05-puzzles-switches-and-cubes-in-unreal-engine",
+      "sourceSection": "Debug — keep the switch active while anything still overlaps",
+      "pasteMode": "Blueprint graph",
+      "snippetSummary": "1 Blueprint Event Graph snippet",
+      "what": "Fixes the classic pressure-plate bug where one actor leaving turns the switch off even though another actor is still standing on it.",
+      "pasteInto": [
+        "BP_Switch → Event Graph"
+      ],
+      "reconnect": [
+        "Keep the Trigger component reference intact; Epic’s fix checks Get Overlapping Actors → Is Empty before switching off."
+      ],
+      "prerequisites": [
+        "BP_Switch",
+        "Trigger",
+        "existing ActivateOnce / overlap logic"
+      ],
+      "relatedTutorials": [
+        "pressure-plate"
+      ],
+      "tags": [
+        "switch",
+        "debug",
+        "overlap",
+        "array",
+        "is empty",
+        "multiple actors"
+      ]
+    },
+    {
+      "id": "epic-switch-interaction-list",
+      "title": "Switch: Activate a List of Other Actors",
+      "category": "world",
+      "icon": "☷",
+      "sourceVersion": "5.8",
+      "sourceTitle": "Epic — Designer 05: Switches and Cubes",
+      "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-05-puzzles-switches-and-cubes-in-unreal-engine",
+      "sourceSection": "Create an Interaction List",
+      "pasteMode": "Blueprint graph",
+      "snippetSummary": "1 Blueprint Event Graph snippet",
+      "what": "Uses an instance-editable actor array, For Each Loop and BPI_Interaction calls so one switch can control multiple platforms, traps or other interactables.",
+      "pasteInto": [
+        "BP_Switch → Event Graph"
+      ],
+      "reconnect": [
+        "Create BPI_Interaction and the InteractObjectList array first so the interface calls and array references can resolve."
+      ],
+      "prerequisites": [
+        "BPI_Interaction",
+        "InteractObjectList Actor array",
+        "BP_Switch"
+      ],
+      "relatedTutorials": [
+        "pressure-plate",
+        "button-lever",
+        "moving-platform"
+      ],
+      "tags": [
+        "switch",
+        "interface",
+        "for each loop",
+        "array",
+        "multiple objects",
+        "interaction"
+      ]
+    },
+    {
+      "id": "epic-platform-scale",
+      "title": "Moving Platform: Construction Scale Setup",
+      "category": "world",
+      "icon": "↔",
+      "sourceVersion": "5.8",
+      "sourceTitle": "Epic — Designer 06: Moving Platforms",
+      "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-06-puzzles-moving-platforms-in-unreal-engine",
+      "sourceSection": "Set Up a Blueprint Class — PlatformScale",
+      "pasteMode": "Blueprint graph",
+      "snippetSummary": "1 Blueprint Construction Script snippet",
+      "what": "Uses an instance-editable PlatformScale vector to size the platform mesh cleanly from the Construction Script.",
+      "pasteInto": [
+        "BP_Platform → Construction Script"
+      ],
+      "reconnect": [
+        "Reconnect the Construction Script entry node to Set World Scale 3D after pasting."
+      ],
+      "prerequisites": [
+        "BP_Platform",
+        "Platform mesh component",
+        "PlatformScale vector"
+      ],
+      "relatedTutorials": [
+        "moving-platform"
+      ],
+      "tags": [
+        "moving platform",
+        "construction script",
+        "scale",
+        "vector"
+      ]
+    },
+    {
+      "id": "epic-platform-start-end",
+      "title": "Moving Platform: Cache Start + Target Locations",
+      "category": "world",
+      "icon": "A→B",
+      "sourceVersion": "5.8",
+      "sourceTitle": "Epic — Designer 06: Moving Platforms",
+      "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-06-puzzles-moving-platforms-in-unreal-engine",
+      "sourceSection": "Set Start and End Locations",
+      "pasteMode": "Blueprint graph",
+      "snippetSummary": "1 Blueprint Event Graph snippet",
+      "what": "Captures the platform’s starting location and a TargetPoint location so later movement logic has two reliable endpoints.",
+      "pasteInto": [
+        "BP_Platform → Event Graph"
+      ],
+      "reconnect": [
+        "Create the StartLocation, EndLocation and TargetPoint variables described by Epic before pasting."
+      ],
+      "prerequisites": [
+        "BP_Platform",
+        "TargetPoint reference",
+        "StartLocation",
+        "EndLocation"
+      ],
+      "relatedTutorials": [
+        "moving-platform"
+      ],
+      "tags": [
+        "moving platform",
+        "target point",
+        "start location",
+        "end location",
+        "begin play"
+      ]
+    },
+    {
+      "id": "epic-platform-lerp",
+      "title": "Moving Platform: Timeline + Lerp Movement",
+      "category": "world",
+      "icon": "⇆",
+      "sourceVersion": "5.8",
+      "sourceTitle": "Epic — Designer 06: Moving Platforms",
+      "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-06-puzzles-moving-platforms-in-unreal-engine",
+      "sourceSection": "Create Movement with a Timeline and Lerp",
+      "pasteMode": "Blueprint graph",
+      "snippetSummary": "1 Blueprint Event Graph snippet",
+      "what": "Uses a Timeline alpha and Lerp(Vector) to move the actor smoothly between StartLocation and EndLocation.",
+      "pasteInto": [
+        "BP_Platform → Event Graph"
+      ],
+      "reconnect": [
+        "Create the TM_MovePlatform timeline and its float track first so the pasted graph has the timeline reference it expects."
+      ],
+      "prerequisites": [
+        "TM_MovePlatform timeline",
+        "StartLocation",
+        "EndLocation"
+      ],
+      "relatedTutorials": [
+        "moving-platform"
+      ],
+      "tags": [
+        "moving platform",
+        "timeline",
+        "lerp",
+        "set actor location",
+        "interpolation"
+      ]
+    },
+    {
+      "id": "epic-platform-delay",
+      "title": "Moving Platform: Reverse + Wait Delay",
+      "category": "world",
+      "icon": "⏱",
+      "sourceVersion": "5.8",
+      "sourceTitle": "Epic — Designer 06: Moving Platforms",
+      "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-06-puzzles-moving-platforms-in-unreal-engine",
+      "sourceSection": "Add a Wait Duration",
+      "pasteMode": "Blueprint graph",
+      "snippetSummary": "1 Blueprint Event Graph snippet",
+      "what": "Adds a configurable WaitDuration before the platform changes direction, making a reusable back-and-forth platform loop.",
+      "pasteInto": [
+        "BP_Platform → Event Graph"
+      ],
+      "reconnect": [
+        "Keep the existing TM_MovePlatform movement chain; the delay extends the Finished path."
+      ],
+      "prerequisites": [
+        "TM_MovePlatform timeline",
+        "WaitDuration float",
+        "existing movement graph"
+      ],
+      "relatedTutorials": [
+        "moving-platform",
+        "countdown-timer"
+      ],
+      "tags": [
+        "moving platform",
+        "delay",
+        "reverse",
+        "timeline",
+        "wait"
+      ]
+    },
+    {
+      "id": "epic-platform-puzzle-paste",
+      "title": "Moving Platform Puzzle: Paste the Platforms + Switches",
+      "category": "world",
+      "icon": "▦",
+      "sourceVersion": "5.8",
+      "sourceTitle": "Epic — Designer 06: Moving Platforms",
+      "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-06-puzzles-moving-platforms-in-unreal-engine",
+      "sourceSection": "Build the Sample Puzzle",
+      "pasteMode": "Level / viewport paste",
+      "snippetSummary": "2 level / viewport paste blocks",
+      "what": "Pastes Epic’s arranged platform and switch obstacles into the level so students can inspect a complete puzzle layout and its actor relationships.",
+      "pasteInto": [
+        "Level Editor viewport / Outliner"
+      ],
+      "reconnect": [
+        "Reconnect each pasted platform to its matching TargetPoint.",
+        "Check switch InteractObjectList references after pasting."
+      ],
+      "prerequisites": [
+        "BP_Platform",
+        "BP_Switch",
+        "Target Points",
+        "matching asset names / paths"
+      ],
+      "relatedTutorials": [
+        "moving-platform",
+        "pressure-plate",
+        "foundations-build"
+      ],
+      "tags": [
+        "moving platform",
+        "puzzle",
+        "level paste",
+        "switch",
+        "target point"
+      ]
+    },
+    {
+      "id": "epic-trap-damage-loop",
+      "title": "Trap Function: Damage Every Overlapping Target",
+      "category": "combat",
+      "icon": "🔥",
+      "sourceVersion": "5.8",
+      "sourceTitle": "Epic — Designer 07: Traps and Damage",
+      "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-07-traps-and-damage-in-unreal-engine",
+      "sourceSection": "Create a Function to Apply Damage",
+      "pasteMode": "Blueprint graph",
+      "snippetSummary": "1 Blueprint function snippet",
+      "what": "Builds fnApplyDamageToTargets: check Active, loop overlapping actors, and Apply Damage using the trap’s BaseDamage value.",
+      "pasteInto": [
+        "BP_TrapBase → fnApplyDamageToTargets function graph"
+      ],
+      "reconnect": [
+        "Reconnect the function entry node to the Branch node after pasting."
+      ],
+      "prerequisites": [
+        "BP_TrapBase",
+        "Active bool",
+        "BaseDamage",
+        "TrapTrigger / overlap targets"
+      ],
+      "relatedTutorials": [
+        "damage-zone",
+        "player-health"
+      ],
+      "tags": [
+        "trap",
+        "damage",
+        "apply damage",
+        "for each loop",
+        "overlap",
+        "function"
+      ]
+    },
+    {
+      "id": "epic-hud-health-text",
+      "title": "HUD Function: Update Health Text",
+      "category": "ui",
+      "icon": "♥",
+      "sourceVersion": "5.8",
+      "sourceTitle": "Epic — Designer 07: Traps and Damage",
+      "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-07-traps-and-damage-in-unreal-engine",
+      "sourceSection": "Update the Player HUD — fnSetHP",
+      "pasteMode": "Blueprint graph",
+      "snippetSummary": "1 Blueprint function snippet",
+      "what": "Creates a tiny reusable fnSetHP function that converts a numeric HP value to text and pushes it into the HUD text widget.",
+      "pasteInto": [
+        "WBP_PlayerHUD → fnSetHP function graph"
+      ],
+      "reconnect": [
+        "Reconnect the function entry node to SetText and To Text after pasting."
+      ],
+      "prerequisites": [
+        "WBP_PlayerHUD",
+        "txtHP Text widget",
+        "NewHP float input"
+      ],
+      "relatedTutorials": [
+        "player-health",
+        "health-bar",
+        "basic-hud"
+      ],
+      "tags": [
+        "health",
+        "hud",
+        "set text",
+        "to text",
+        "widget",
+        "hp"
+      ]
+    },
+    {
+      "id": "epic-player-damage-death",
+      "title": "Player Damage + Game-Over Loop",
+      "category": "combat",
+      "icon": "☠",
+      "sourceVersion": "5.8",
+      "sourceTitle": "Epic — Designer 07: Traps and Damage",
+      "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-07-traps-and-damage-in-unreal-engine",
+      "sourceSection": "Update Player HP / Handle Elimination",
+      "pasteMode": "Blueprint graph",
+      "snippetSummary": "1 Blueprint Event Graph snippet",
+      "what": "Extends the player’s AnyDamage handling to update HP, disable input at zero health, show the eliminated screen, wait, then reload the level.",
+      "pasteInto": [
+        "BP_AdventureCharacter → Event Graph"
+      ],
+      "reconnect": [
+        "Preserve the existing Event AnyDamage / Branch section Epic tells you to keep before inserting the new logic."
+      ],
+      "prerequisites": [
+        "Health variable",
+        "HUD reference",
+        "WBP_EliminatedScreen",
+        "player damage handling"
+      ],
+      "relatedTutorials": [
+        "player-health",
+        "lives-respawn",
+        "win-lose-state"
+      ],
+      "tags": [
+        "player health",
+        "any damage",
+        "game over",
+        "disable input",
+        "create widget",
+        "open level"
+      ]
+    },
+    {
+      "id": "epic-room2-trap-paste",
+      "title": "Trap Room: Paste a Full Switch + Fire-Trap Puzzle",
+      "category": "world",
+      "icon": "🔥▦",
+      "sourceVersion": "5.8",
+      "sourceTitle": "Epic — Designer 07: Traps and Damage",
+      "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-07-traps-and-damage-in-unreal-engine",
+      "sourceSection": "Room 2’s Switches, Traps, and Key",
+      "pasteMode": "Level / viewport paste",
+      "snippetSummary": "1 large level / viewport paste block",
+      "what": "Pastes the tutorial’s Room 2 trap puzzle actors into the level, including switches, traps and a key, for deconstruction or rapid prototyping.",
+      "pasteInto": [
+        "Level Editor viewport / Outliner"
+      ],
+      "reconnect": [
+        "Epic warns parent Blueprint assets, names and paths must match.",
+        "Re-check each switch InteractObjectList and reconnect its labelled fire traps if needed."
+      ],
+      "prerequisites": [
+        "matching BP_Switch / trap / key assets",
+        "matching asset names and paths"
+      ],
+      "relatedTutorials": [
+        "damage-zone",
+        "pressure-plate",
+        "foundations-build"
+      ],
+      "tags": [
+        "trap room",
+        "fire trap",
+        "switch",
+        "key",
+        "level paste",
+        "puzzle"
+      ]
+    },
+    {
+      "id": "epic-enemy-beginplay",
+      "title": "Enemy Initialise: Speed, HP + Player Reference",
+      "category": "ai",
+      "icon": "◉",
+      "sourceVersion": "5.8",
+      "sourceTitle": "Epic — Designer 08: Create an Enemy",
+      "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-08-create-an-enemy-in-unreal-engine",
+      "sourceSection": "Final Event BeginPlay logic",
+      "pasteMode": "Blueprint graph",
+      "snippetSummary": "1 Blueprint Event Graph snippet",
+      "what": "Initialises the enemy’s movement speed and CurrentHP, then stores the player character reference ready for later detection and attack logic.",
+      "pasteInto": [
+        "BP_Enemy → Event Graph"
+      ],
+      "reconnect": [
+        "Keep variable names aligned with Epic’s sample before pasting."
+      ],
+      "prerequisites": [
+        "BP_Enemy",
+        "MaxSpeed",
+        "TotalHP",
+        "CurrentHP",
+        "PlayerRef"
+      ],
+      "relatedTutorials": [
+        "ai-chase",
+        "enemy-health"
+      ],
+      "tags": [
+        "enemy",
+        "begin play",
+        "player reference",
+        "health",
+        "movement speed"
+      ]
+    },
+    {
+      "id": "epic-enemy-contact-damage",
+      "title": "Enemy Contact Attack: Damage Once + Self-Destruct",
+      "category": "combat",
+      "icon": "💥",
+      "sourceVersion": "5.8",
+      "sourceTitle": "Epic — Designer 08: Create an Enemy",
+      "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-08-create-an-enemy-in-unreal-engine",
+      "sourceSection": "Deal Damage to the Player",
+      "pasteMode": "Blueprint graph",
+      "snippetSummary": "1 Blueprint Event Graph snippet",
+      "what": "Checks CapsuleComponent hits against PlayerRef, applies one hit of damage, marks the enemy eliminated and removes it after the attack.",
+      "pasteInto": [
+        "BP_Enemy → Event Graph"
+      ],
+      "reconnect": [
+        "Create the BaseDamage and Eliminated variables first so the pasted references resolve."
+      ],
+      "prerequisites": [
+        "BP_Enemy",
+        "PlayerRef",
+        "BaseDamage",
+        "Eliminated"
+      ],
+      "relatedTutorials": [
+        "ai-attack-range",
+        "player-health"
+      ],
+      "tags": [
+        "enemy",
+        "attack",
+        "apply damage",
+        "component hit",
+        "do once",
+        "destroy actor"
+      ]
+    },
+    {
+      "id": "epic-enemy-find-player",
+      "title": "Enemy Detection: Line Trace + Distance Check",
+      "category": "ai",
+      "icon": "👁",
+      "sourceVersion": "5.8",
+      "sourceTitle": "Epic — Designer 08: Create an Enemy",
+      "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-08-create-an-enemy-in-unreal-engine",
+      "sourceSection": "Find the Player — fnBPLFindPlayer",
+      "pasteMode": "Blueprint graph",
+      "snippetSummary": "1 large Blueprint function snippet",
+      "what": "Uses a line trace, Hit Actor comparison and distance test to return whether the player is visible and close enough to be considered found.",
+      "pasteInto": [
+        "BPL_FPGame → fnBPLFindPlayer function graph"
+      ],
+      "reconnect": [
+        "Reconnect the function entry Exec and Player Reference pins to the Is Valid node.",
+        "Function input names need to match Epic’s sample for clipboard references to resolve cleanly."
+      ],
+      "prerequisites": [
+        "BPL_FPGame",
+        "Player Reference input",
+        "Max Detection Distance input",
+        "Debug input"
+      ],
+      "relatedTutorials": [
+        "ai-chase",
+        "ai-perception",
+        "line-trace-interact"
+      ],
+      "tags": [
+        "enemy",
+        "ai",
+        "line trace",
+        "distance",
+        "line of sight",
+        "detection",
+        "debug"
+      ]
+    },
+    {
+      "id": "epic-enemy-move-to-player",
+      "title": "Enemy Movement: AI Move To Player",
+      "category": "ai",
+      "icon": "➜",
+      "sourceVersion": "5.8",
+      "sourceTitle": "Epic — Designer 08: Create an Enemy",
+      "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-08-create-an-enemy-in-unreal-engine",
+      "sourceSection": "MoveToPlayer logic",
+      "pasteMode": "Blueprint graph",
+      "snippetSummary": "1 Blueprint graph snippet",
+      "what": "Packages the enemy’s move-to-player behaviour so the AI moves towards PlayerRef while respecting the Found state and movement settings.",
+      "pasteInto": [
+        "BP_Enemy → MoveToPlayer logic / Event Graph"
+      ],
+      "reconnect": [
+        "Keep PlayerRef and Found variable names aligned with Epic’s sample."
+      ],
+      "prerequisites": [
+        "BP_Enemy",
+        "PlayerRef",
+        "Found",
+        "Nav Mesh Bounds Volume"
+      ],
+      "relatedTutorials": [
+        "ai-chase",
+        "ai-attack-range"
+      ],
+      "tags": [
+        "enemy",
+        "ai move to",
+        "navmesh",
+        "move to player",
+        "chase"
+      ]
+    },
+    {
+      "id": "epic-enemy-chase-tick",
+      "title": "Enemy Chase Controller: Detect → Move / Stop",
+      "category": "ai",
+      "icon": "↻",
+      "sourceVersion": "5.8",
+      "sourceTitle": "Epic — Designer 08: Create an Enemy",
+      "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-08-create-an-enemy-in-unreal-engine",
+      "sourceSection": "Final Event Tick logic",
+      "pasteMode": "Blueprint graph",
+      "snippetSummary": "1 Blueprint Event Graph snippet",
+      "what": "Runs player detection each frame, promotes the Found result, sets Max Walk Speed and only calls MoveToPlayer while the player is detected.",
+      "pasteInto": [
+        "BP_Enemy → Event Graph"
+      ],
+      "reconnect": [
+        "Keep the MaxSpeed, Found and movement component references named as expected by Epic."
+      ],
+      "prerequisites": [
+        "BP_Enemy",
+        "fnBPLFindPlayer",
+        "Found",
+        "MaxSpeed",
+        "Character Movement"
+      ],
+      "relatedTutorials": [
+        "ai-chase",
+        "ai-perception"
+      ],
+      "tags": [
+        "enemy",
+        "event tick",
+        "found",
+        "max walk speed",
+        "chase",
+        "detection"
+      ]
+    },
+    {
+      "id": "epic-enemy-receive-damage",
+      "title": "Enemy Health: AnyDamage → HP → Eliminate",
+      "category": "combat",
+      "icon": "♥",
+      "sourceVersion": "5.8",
+      "sourceTitle": "Epic — Designer 08: Create an Enemy",
+      "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-08-create-an-enemy-in-unreal-engine",
+      "sourceSection": "Allow Enemies to Receive Damage",
+      "pasteMode": "Blueprint graph",
+      "snippetSummary": "1 Blueprint Event Graph snippet",
+      "what": "Subtracts Event AnyDamage from CurrentHP, checks for zero health, marks the enemy eliminated, delays, then destroys the actor.",
+      "pasteInto": [
+        "BP_Enemy → Event Graph"
+      ],
+      "reconnect": [
+        "Create CurrentHP and Eliminated exactly as described before pasting."
+      ],
+      "prerequisites": [
+        "BP_Enemy",
+        "CurrentHP",
+        "Eliminated"
+      ],
+      "relatedTutorials": [
+        "enemy-health"
+      ],
+      "tags": [
+        "enemy health",
+        "any damage",
+        "subtract",
+        "branch",
+        "destroy actor",
+        "delay"
+      ]
+    },
+    {
+      "id": "epic-level-transition",
+      "title": "Win Condition: Keys → Win Screen → Next Level",
+      "category": "flow",
+      "icon": "🏁",
+      "sourceVersion": "5.8",
+      "sourceTitle": "Epic — Designer 10: Complete the Level",
+      "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-10-complete-the-level-in-unreal-engine",
+      "sourceSection": "Final BP_LevelTransition EventGraph",
+      "pasteMode": "Blueprint graph",
+      "snippetSummary": "1 large Blueprint Event Graph snippet",
+      "what": "Checks overlap, verifies the required keys, disables player input, displays the win screen, delays and opens the configured next level.",
+      "pasteInto": [
+        "BP_LevelTransition → Event Graph"
+      ],
+      "reconnect": [
+        "Create the variables/components described immediately before the final graph so the pasted references have matching targets."
+      ],
+      "prerequisites": [
+        "BP_LevelTransition",
+        "WBP_WinScreen",
+        "RequiredKeys / HeldKeys",
+        "NextLevel",
+        "LevelLoadDelay"
+      ],
+      "relatedTutorials": [
+        "win-lose-state",
+        "objective-text",
+        "gameinstance-state"
+      ],
+      "tags": [
+        "win",
+        "level complete",
+        "open level",
+        "widget",
+        "disable input",
+        "keys",
+        "game flow"
+      ]
+    },
+    {
+      "id": "epic-end-platform-paste",
+      "title": "End Platform: Instant Greybox + Jump-Pad Area",
+      "category": "world",
+      "icon": "▦",
+      "sourceVersion": "5.8",
+      "sourceTitle": "Epic — Designer 10: Complete the Level",
+      "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-10-complete-the-level-in-unreal-engine",
+      "sourceSection": "Build the end-of-level platform",
+      "pasteMode": "Level / viewport paste",
+      "snippetSummary": "1 level / viewport paste block",
+      "what": "Pastes Epic’s raised end platform blockout so students can focus on the completion loop and jump-pad tuning instead of manually placing the greybox pieces.",
+      "pasteInto": [
+        "Level Editor viewport / Outliner"
+      ],
+      "reconnect": [
+        "Make the viewport / Outliner active before pasting.",
+        "Add and tune BP_JumpPad separately as described by Epic."
+      ],
+      "prerequisites": [
+        "LevelPrototyping meshes",
+        "BP_JumpPad for the follow-up stage"
+      ],
+      "relatedTutorials": [
+        "foundations-build",
+        "win-lose-state"
+      ],
+      "tags": [
+        "level complete",
+        "platform",
+        "jump pad",
+        "blockout",
+        "level paste"
+      ]
+    },
+    {
+      "id": "epic-cube-spawner",
+      "title": "Spawner: Limit Count + Destroy Oldest + Cooldown",
+      "category": "world",
+      "icon": "📦",
+      "sourceVersion": "5.8",
+      "sourceTitle": "Epic — Designer 11: Spawn New Cubes",
+      "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-11-spawn-new-cubes-mechanic-in-unreal-engine",
+      "sourceSection": "Complete BP_CubeSpawn graph",
+      "pasteMode": "Blueprint graph",
+      "snippetSummary": "1 complete Blueprint Event Graph snippet",
+      "what": "Combines max-count checking, oldest-actor cleanup, Spawn Actor from Class, stored references and a cooldown timer into one reusable spawner.",
+      "pasteInto": [
+        "BP_CubeSpawn → Event Graph"
+      ],
+      "reconnect": [
+        "Build the variables and BPI_Interaction setup described by Epic before using the finished graph snippet."
+      ],
+      "prerequisites": [
+        "BP_CubeSpawn",
+        "BP_Cube",
+        "BPI_Interaction",
+        "SpawnedCubes array / limit variables"
+      ],
+      "relatedTutorials": [
+        "spawn-destroy",
+        "random-spawner",
+        "countdown-timer"
+      ],
+      "tags": [
+        "spawn",
+        "destroy actor",
+        "array",
+        "cooldown",
+        "max count",
+        "spawner",
+        "interface"
+      ]
     }
   ]
 };

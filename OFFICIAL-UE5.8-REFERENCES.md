@@ -171,3 +171,19 @@ The Hub now exposes a curated source-first Snippet Bank. Raw Epic clipboard payl
 - Designer 08 — Create an Enemy: https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-08-create-an-enemy-in-unreal-engine
 - Designer 10 — Complete the Level: https://dev.epicgames.com/documentation/unreal-engine/designer-10-complete-the-level-in-unreal-engine?lang=en-US
 - Designer 11 — Bonus: Spawn New Cubes: https://dev.epicgames.com/documentation/unreal-engine/designer-11-spawn-new-cubes-mechanic-in-unreal-engine
+
+## v3.34.17 — Snippet Bank deep expansion
+
+The Snippet Bank now indexes 31 mechanic-level paste assists from the same official Designer Track source family, including the additional Designer 01 blockout page. Raw clipboard payloads are not mirrored; cards point students back to Epic's Copy Full Snippet controls.
+
+- https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-01-project-setup-and-level-blockout-in-unreal-engine
+- https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-02-create-a-key-in-unreal-engine
+- https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-03-open-doors-with-keys-in-unreal-engine
+- https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-04-player-hud-in-unreal-engine
+- https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-05-puzzles-switches-and-cubes-in-unreal-engine
+- https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-06-puzzles-moving-platforms-in-unreal-engine
+- https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-07-traps-and-damage-in-unreal-engine
+- https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-08-create-an-enemy-in-unreal-engine
+- https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-10-complete-the-level-in-unreal-engine
+- https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-11-spawn-new-cubes-mechanic-in-unreal-engine
+

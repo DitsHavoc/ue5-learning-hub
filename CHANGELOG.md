@@ -1,3 +1,12 @@
+## v3.34.17 — Blueprint Snippet Bank Deep Expansion
+
+- Expanded the Snippet Bank from 9 broad source cards to 31 targeted paste assists from 10 unique official Epic UE5.8 pages.
+- Split multi-snippet Epic tutorials into searchable mechanic-level assists for keys, doors, HUD, switches, platforms, traps, enemies, win states and spawning.
+- Added 4 explicitly labelled Level Editor / viewport paste assists alongside 27 Blueprint graph assists.
+- Added source-section and paste-mode metadata to Snippet Bank search/cards and corrected count wording from sources to paste assists.
+- Raw Epic clipboard payloads remain on Epic; the Hub stores instructions, prerequisites, reconnection notes and official links only.
+- Teacher capture count remains 76. No Supabase changes.
+
 # Changelog
 
 ## v3.34.15 — Quick Tutorials Search Hotfix — 29 Aug 2026

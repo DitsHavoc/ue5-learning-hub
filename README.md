@@ -224,6 +224,10 @@ Microsoft SSO remains optional and disabled.
 
 This release completes the prescriptive teaching pass: all 20 core guided lessons, all 47 Programming Quick Tutorials, all 47 Designer Studio recipes and all eight Studio Builds now support richer instruction. See `RELEASE-NOTES-v3.24.0.md` and `CHANGELOG.md`.
 
+### v3.34.17: Blueprint Snippet Bank Deep Expansion
+
+The official Epic clipboard bank now exposes 31 targeted paste assists from 10 unique UE5.8 source pages. Large Epic tutorials are indexed by the actual mechanic being pasted rather than represented by one oversized source card, and Level Editor / viewport pastes are labelled separately from Blueprint graph pastes.
+
 ### v3.34.16: Blueprint Snippet Bank
 
 Unreal Learning now includes a curated **Blueprint Snippet Bank**. It points students at pasteable Blueprint clipboard blocks on official Epic documentation, tells them which graph/viewport to paste into, and records the small reconnections Epic still expects. The Hub intentionally does not mirror the raw clipboard payloads.

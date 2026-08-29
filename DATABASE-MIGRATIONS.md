@@ -209,3 +209,8 @@ No database migration is required. This release restores client-side Quick Tutor
 ## v3.34.16 — Official Blueprint Snippet Bank
 
 No database migration is required. The Snippet Bank is static curriculum/source metadata (`data/snippet-data.js`) and client-side rendering only.
+
+## v3.34.17 — Blueprint Snippet Bank Deep Expansion
+
+No database migration required. This release changes static Snippet Bank data, rendering/search metadata and documentation only.
+
