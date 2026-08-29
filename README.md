@@ -1,5 +1,8 @@
-# Current release — v3.35.0
+# Current release — v3.35.1
 
+Designer Studio now adds a **HEAR THE DESIGNERS** stage between real-game analysis and field research. Across the eight disciplines students get **24 curated developer deep dives** — one click-to-load video and two further talks/interviews/articles per discipline — with active viewing prompts and a small task so the material feeds back into their own design work. Internal browser Back navigation also restores the previous Hub route's scroll position instead of returning students to the top. No database migration is required and existing progress/completion IDs are unchanged. See `RELEASE-NOTES-v3.35.1.md` and `DESIGNER-STUDIO-DEEP-DIVES-v3.35.1.md`.
+
+## Previous release — v3.35.0
 Designer Studio has been rebuilt around an explicit **LOOK → STEAL THE PRINCIPLE → RESEARCH → BUILD → BREAK + TEST → IMPROVE** learning loop. The eight disciplines and all 47 Designer-owned recipes are retained, but students now work through **24 real-game case studies, 16 field-research missions, 24 constraint challenges, Design Roulette, clearer Studio Builds and 8 hidden Black Box briefs** that unlock after the existing Studio Build completion. All 47 Designer-owned recipes now carry at least one useful design-target reference where appropriate. No database migration is required and existing completion IDs are preserved. See `RELEASE-NOTES-v3.35.0.md` and `DESIGNER-STUDIO-REVAMP-v3.35.0.md`.
 
 # UE5 Learning Hub v3.32.2 — Class Detail Workspace

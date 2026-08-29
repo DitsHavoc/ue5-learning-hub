@@ -1,3 +1,12 @@
+## v3.35.1 — Designer Deep Dives + Scroll Restore — 29 Aug 2026
+
+- Fixed internal browser Back navigation so returning to a previous Hub route restores that route's saved scroll position rather than jumping to the top.
+- Added a **HEAR THE DESIGNERS** stage to the Designer Studio learning loop.
+- Added 24 curated industry deep dives across the 8 Designer disciplines: one click-to-load video plus two talks/interviews/articles per discipline.
+- Added Noclip, GDC, developer/publisher and specialist postmortem sources, each with **WHY THIS MATTERS**, **WATCH / READ FOR**, and **DO SOMETHING WITH IT** prompts.
+- YouTube videos load only after a student clicks Watch and use privacy-enhanced `youtube-nocookie.com` embeds; every item retains an original-source link.
+- No database migration and no completion/progress IDs changed.
+
 ## v3.35.0 — Designer Studio Rebuild — 29 Aug 2026
 - Rebuilt Designer Studio around **LOOK → STEAL THE PRINCIPLE → RESEARCH → BUILD → BREAK + TEST → IMPROVE** rather than treating UE5 recipes as the curriculum.
 - Retained all 8 Designer disciplines and all 47 Designer-owned Quick Tutorials with their existing IDs/completion state; Lighting also continues to reuse the shared Silent Hill fog recipe.

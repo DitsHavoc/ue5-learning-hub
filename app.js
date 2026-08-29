@@ -84,6 +84,14 @@ function safeUrl(value){
     return ['http:','https:'].includes(u.protocol)?u.href:'';
   }catch(e){return ''}
 }
+function safeVideoEmbed(value){
+  try{
+    const u=new URL(String(value||''));
+    if(u.origin==='https://dev.epicgames.com')return u.href;
+    if(u.origin==='https://www.youtube-nocookie.com'&&/^\/embed\/[A-Za-z0-9_-]{6,}/.test(u.pathname))return u.href;
+    return '';
+  }catch(e){return ''}
+}
 
 // Project briefs are teacher/student-authored rich text. Keep the format deliberately small,
 // sanitise again every time it is rendered, and leave legacy plain-text briefs readable.
@@ -901,6 +909,12 @@ function designCaseStudyCard(c,i){
 function designResearchCard(r,i){
   return `<article class="designer-research-card"><div class="designer-research-top"><span class="designer-research-num">${String(i+1).padStart(2,'0')}</span><div><span class="eyebrow">FIELD RESEARCH • ${esc(r.duration)}</span><h3>${esc(r.title)}</h3></div></div><p>${esc(r.brief)}</p><ol>${(r.steps||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ol><div class="designer-research-evidence"><b>BRING BACK</b><span>${esc(r.evidence)}</span></div></article>`;
 }
+function designIndustryDeepDiveCard(d,i){
+  const url=safeUrl(d.url),videoId=String(d.youtubeId||'').replace(/[^A-Za-z0-9_-]/g,''),isVideo=!!videoId;
+  const embed=isVideo?`https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1`:'';
+  const media=isVideo?`<div class="designer-industry-video" data-video-shell><img src="https://i.ytimg.com/vi/${videoId}/hqdefault.jpg" alt="${esc(d.title)} video preview" loading="lazy"><button class="designer-video-play" data-action="load-video" data-embed="${esc(embed)}" data-title="${esc(d.title)}"><span>▶</span><b>Watch here</b><small>${esc(d.duration||'Video')}</small></button></div>`:'';
+  return `<article class="designer-industry-card ${isVideo?'video':''}">${media}<div class="designer-industry-body"><div class="designer-industry-head"><span class="designer-industry-num">${String(i+1).padStart(2,'0')}</span><div><span class="eyebrow">${esc(String(d.type||'deep dive').toUpperCase())} • ${esc(d.source||'INDUSTRY SOURCE')}</span><h3>${esc(d.title)}</h3></div></div><div class="designer-industry-focus"><b>WHY THIS MATTERS</b><p>${esc(d.focus||'Study how a shipped game solved the same design problem.')}</p></div><div class="designer-industry-watch"><b>WATCH / READ FOR</b><p>${esc(d.watchFor||'Identify the decision, the constraint and the trade-off.')}</p></div><div class="designer-industry-task"><b>DO SOMETHING WITH IT</b><p>${esc(d.task||'Write down one principle you can test in your own project.')}</p></div>${url?`<a class="button ghost small" href="${esc(url)}" target="_blank" rel="noopener">Open original source ↗</a>`:''}</div></article>`;
+}
 function designChallengeCard(c,i){
   return `<article class="designer-constraint-card"><span class="designer-challenge-mark">${['◆','◈','✦'][i%3]}</span><span class="eyebrow">CONSTRAINT CHALLENGE</span><h3>${esc(c.title)}</h3><div><b>RULE</b><p>${esc(c.constraint)}</p></div><div><b>WIN CONDITION</b><p>${esc(c.goal)}</p></div></article>`;
 }
@@ -917,8 +931,8 @@ function designPage(){
   const researchCount=DESIGN.modules.reduce((n,m)=>n+(m.researchMissions||[]).length,0),challengeCount=(DESIGN.roulette||[]).length;
   const featured=['decision-point-test','story-vignette','material-cost-check','lumen-mood-pass','silent-hill-fog','pcg-safe-route','cine-lens-language','audio-offscreen-story','profile-fix-retest'].map(tutorial).filter(Boolean);
   return `<div class="page-head designer-page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Designer Studio</div><span class="eyebrow">LEVEL DESIGN • ENVIRONMENT • LIGHT • AUDIO • CINEMATICS</span><h1>✦ Designer Studio</h1><p class="muted">Stop treating design as “make it look nicer”. Study real games, reverse-engineer the decisions, research your own examples, build a small version, break it on purpose, then improve it from evidence.</p><div class="designer-stats"><div><strong>${DESIGN.modules.length}</strong><span>design disciplines</span></div><div><strong>${DESIGN.tutorials.length}</strong><span>practical recipes</span></div><div><strong>${researchCount}</strong><span>research missions</span></div><div><strong>${builds}/${DESIGN.modules.length}</strong><span>studio builds</span></div></div></div>
-  <section class="designer-manifesto designer-manifesto-v2"><div><span class="deep-label">THE DESIGN LOOP</span><h2>Look → steal → research → build → break → improve.</h2><p>Every discipline now starts with real game examples and ends by making you test an idea rather than merely finish a pretty scene. “I like it” is not evidence. A route that a stranger can read, a story they can infer, or a mood they can identify is evidence.</p></div><div class="designer-rule-stack"><span>01 • Name the design job</span><span>02 • Copy the principle, not the screenshot</span><span>03 • Research before you decorate</span><span>04 • Test with another human</span><span>05 • Make one evidence-based revision</span></div></section>
-  <section class="section designer-loop-section"><div class="section-head"><div><span class="eyebrow">HOW EVERY MODULE WORKS</span><h2>Six moves. No waffle.</h2><p>The Unreal recipes are still there, but they now sit inside a proper design process rather than pretending tool knowledge is design knowledge.</p></div></div>${designLoopCards()}</section>
+  <section class="designer-manifesto designer-manifesto-v2"><div><span class="deep-label">THE DESIGN LOOP</span><h2>Look → steal → hear → research → build → break → improve.</h2><p>Every discipline now starts with real game examples, then lets you hear directly from developers before you research and test the idea yourself. “I like it” is not evidence. A route that a stranger can read, a story they can infer, or a mood they can identify is evidence.</p></div><div class="designer-rule-stack"><span>01 • Name the design job</span><span>02 • Copy the principle, not the screenshot</span><span>03 • Hear the people who shipped it</span><span>04 • Research before you decorate</span><span>05 • Test with another human</span><span>06 • Make one evidence-based revision</span></div></section>
+  <section class="section designer-loop-section"><div class="section-head"><div><span class="eyebrow">HOW EVERY MODULE WORKS</span><h2>Seven moves. No waffle.</h2><p>The Unreal recipes are still there, but each module now adds real developer commentary, interviews or talks so students can compare the theory with decisions made on shipped games.</p></div></div>${designLoopCards()}</section>
   <section class="designer-roulette"><div><span class="deep-label">🎲 DESIGN ROULETTE</span><h2>Need a five-minute challenge?</h2><p>Pull a constraint from any discipline and see what your current project can survive.</p><button class="button primary" data-action="design-roulette">Give me a random challenge</button></div><div id="designRouletteResult" class="designer-roulette-result"><span>?</span><div><b>${challengeCount} challenges loaded</b><p>Hit the button. No rerolls because you got one you don't like. 😈</p></div></div></section>
   <section class="modeling-studio-bridge"><div><span class="deep-label">3D MODELLING • 3DS MAX</span><h2>Need to build the asset as well?</h2><p>Designer Studio is about player experience. The 3D Modelling Studio handles topology, UVs, modular kits, Substance handoff and UE5 export when the asset itself becomes the learning goal.</p></div><a class="button primary" href="#/modeling">⬡ Open 3D Modelling Studio →</a></section>
   <section class="section"><div class="section-head"><div><span class="eyebrow">8 DISCIPLINES • REAL GAME CASE STUDIES</span><h2>Choose the design problem you are trying to solve</h2><p>Each path now contains game-specific analysis, two field-research missions, six UE5 recipes, three constraint challenges, a Studio Build and a hidden Black Box brief.</p></div></div><div class="designer-module-grid">${DESIGN.modules.map(designModuleCard).join('')}</div></section>
@@ -932,16 +946,17 @@ function designModulePage(id){
   const pro=(m.proHabits||[]).map(x=>`<li>${esc(x)}</li>`).join('');
   const critique=(m.critiqueQuestions||['What should the player notice first?','Can they understand the intended route without you talking?','What part feels generic or randomly placed?','What could be removed without losing anything?','What single change would improve the experience most?']).map(x=>`<li>${esc(x)}</li>`).join('');
   return `<div class="breadcrumb"><a href="#/">Dashboard</a> / <a href="#/design">Designer Studio</a> / ${esc(m.title)}</div>
-  <section class="designer-module-hero"><div><span class="eyebrow">DESIGN DISCIPLINE • ${tried}/${ts.length} RECIPES TRIED</span><h1>${m.icon} ${esc(m.title)}</h1><p>${esc(m.intro)}</p><div class="designer-module-flow"><span>LOOK</span><i>→</i><span>RESEARCH</span><i>→</i><span>BUILD</span><i>→</i><span>TEST</span><i>→</i><span>IMPROVE</span></div></div><div class="designer-principles"><span class="deep-label">DESIGN RULES</span>${m.principles.map((x,i)=>`<div><b>${String(i+1).padStart(2,'0')}</b><span>${esc(x)}</span></div>`).join('')}</div></section>
+  <section class="designer-module-hero"><div><span class="eyebrow">DESIGN DISCIPLINE • ${tried}/${ts.length} RECIPES TRIED</span><h1>${m.icon} ${esc(m.title)}</h1><p>${esc(m.intro)}</p><div class="designer-module-flow"><span>LOOK</span><i>→</i><span>HEAR THE TEAM</span><i>→</i><span>RESEARCH</span><i>→</i><span>BUILD</span><i>→</i><span>TEST</span><i>→</i><span>IMPROVE</span></div></div><div class="designer-principles"><span class="deep-label">DESIGN RULES</span>${m.principles.map((x,i)=>`<div><b>${String(i+1).padStart(2,'0')}</b><span>${esc(x)}</span></div>`).join('')}</div></section>
   <section class="section designer-case-section"><div class="section-head"><div><span class="eyebrow">01 • LOOK AT REAL GAMES</span><h2>Three examples. Three different design jobs.</h2><p>Read the decision first. The image is not there to make the page look pretty.</p></div></div><div class="designer-case-grid">${(m.caseStudies||[]).map(designCaseStudyCard).join('')}</div></section>
-  <section class="section designer-research-section"><div class="section-head"><div><span class="eyebrow">02 • FIELD RESEARCH</span><h2>Go find evidence yourself</h2><p>Do one of these before the Studio Build. They are deliberately short, game-focused and easy to discuss with another student.</p></div></div><div class="designer-research-grid">${(m.researchMissions||[]).map(designResearchCard).join('')}</div></section>
-  ${deep?`<section class="section designer-learning-section"><div class="section-head"><div><span class="eyebrow">03 • UNDERSTAND THE PRINCIPLE</span><h2>What transfers to your own project?</h2><p>These are the bits worth remembering after the Unreal buttons have moved again.</p></div></div><div class="designer-deep-grid">${deep}</div></section>`:''}
+  ${(m.industryDeepDives||[]).length?`<section class="section designer-industry-section"><div class="section-head"><div><span class="eyebrow">02 • DESIGNERS EXPLAIN IT</span><h2>Hear the decisions from the people who shipped the game</h2><p>Documentaries, talks and interviews are part of the lesson now. Do not watch them passively: each source gives you something specific to hunt for and a tiny design task to bring back into Unreal.</p></div></div><div class="designer-industry-grid">${m.industryDeepDives.map(designIndustryDeepDiveCard).join('')}</div></section>`:''}
+  <section class="section designer-research-section"><div class="section-head"><div><span class="eyebrow">03 • FIELD RESEARCH</span><h2>Go find evidence yourself</h2><p>Do one of these before the Studio Build. They are deliberately short, game-focused and easy to discuss with another student.</p></div></div><div class="designer-research-grid">${(m.researchMissions||[]).map(designResearchCard).join('')}</div></section>
+  ${deep?`<section class="section designer-learning-section"><div class="section-head"><div><span class="eyebrow">04 • UNDERSTAND THE PRINCIPLE</span><h2>What transfers to your own project?</h2><p>These are the bits worth remembering after the Unreal buttons have moved again.</p></div></div><div class="designer-deep-grid">${deep}</div></section>`:''}
   ${designBookReferenceGrid(m.referenceImages)}
   <section class="designer-professional-row"><div class="content-card designer-pro-habits"><span class="eyebrow">PRODUCTION HABITS</span><h2>Habits that stop design work becoming guesswork</h2><ul>${pro}</ul></div><div class="content-card designer-engine-check"><span class="eyebrow">UE5.8 REALITY CHECK</span><h2>Current engine context</h2><p>${esc(m.engineNote||'Use current Epic documentation to verify engine-specific workflows.')}</p>${m.engineUrl?`<a class="button ghost small" href="${esc(m.engineUrl)}" target="_blank" rel="noopener">Current Epic UE5.8 reference ↗</a>`:''}</div></section>
   ${(m.resources||[]).length?`<section class="section designer-pro-reading"><div class="section-head"><div><span class="eyebrow">PROFESSIONAL BREAKDOWNS</span><h2>See how designers actually talk about the problem</h2><p>These are optional rabbit holes, not required reading. Pick one when the topic grabs you.</p></div></div><div class="designer-pro-resource-grid">${m.resources.map(designProResourceCard).join('')}</div></section>`:''}
-  <section class="section"><div class="section-head"><div><span class="eyebrow">04 • BUILD THE TECHNIQUE</span><h2>UE5 recipes</h2><p>Use these when you know what design problem you are solving. Try the first version, then deliberately alter one decision.</p></div></div><div class="quick-tutorial-grid">${ts.map(tutorialCard).join('')}</div></section>
-  <section class="section designer-challenge-section"><div class="section-head"><div><span class="eyebrow">05 • BREAK THE EASY VERSION</span><h2>Pick one constraint challenge</h2><p>Constraints force design decisions to become visible. If the idea only works with every crutch enabled, it probably is not robust yet.</p></div></div><div class="designer-challenge-grid">${(m.challenges||[]).map(designChallengeCard).join('')}</div></section>
-  <section class="designer-studio-build ${done?'done':''}"><div class="designer-studio-title"><span class="eyebrow">06 • STUDIO BUILD • ${esc(b.duration)} • +300 XP</span><h2>🎨 ${esc(b.title)}</h2><p>${esc(b.brief)}</p><div class="tutorial-rich-note"><b>Build → test → revise:</b> finishing the phases is not the finish line. The evidence must show another human could read the experience you designed.</div></div><div class="designer-build-phases rich">${(b.phaseDetails||b.phases.map((x,i)=>({title:`Phase ${i+1}`,do:x}))).map((x,i)=>`<article class="designer-build-phase-rich"><span class="designer-build-phase-num">${String(i+1).padStart(2,'0')}</span><div><h3>${esc(x.title||`Phase ${i+1}`)}</h3>${x.where?`<div class="guided-where"><span>WHERE TO WORK</span><div>${renderRichText(x.where,false)}</div></div>`:''}<div class="guided-do"><span>DO THIS</span><div>${renderRichText(x.do||x,false)}</div></div>${x.check?`<div class="guided-check"><span>PROVE IT</span><div>${renderRichText(x.check,false)}</div></div>`:''}${x.troubleshoot?.length?`<div class="guided-fix"><span>IF IT'S WEAK</span><div>${renderRichText(x.troubleshoot,false)}</div></div>`:''}</div></article>`).join('')}</div><div class="designer-evidence"><h3>Show that it works</h3>${requirements(b.evidence)}<button class="button ${done?'success':'primary'}" data-action="complete-design-build" data-design-module="${m.id}">${done?'✓ Studio Build complete':'Mark Studio Build complete • +300 XP'}</button></div></section>
+  <section class="section"><div class="section-head"><div><span class="eyebrow">05 • BUILD THE TECHNIQUE</span><h2>UE5 recipes</h2><p>Use these when you know what design problem you are solving. Try the first version, then deliberately alter one decision.</p></div></div><div class="quick-tutorial-grid">${ts.map(tutorialCard).join('')}</div></section>
+  <section class="section designer-challenge-section"><div class="section-head"><div><span class="eyebrow">06 • BREAK THE EASY VERSION</span><h2>Pick one constraint challenge</h2><p>Constraints force design decisions to become visible. If the idea only works with every crutch enabled, it probably is not robust yet.</p></div></div><div class="designer-challenge-grid">${(m.challenges||[]).map(designChallengeCard).join('')}</div></section>
+  <section class="designer-studio-build ${done?'done':''}"><div class="designer-studio-title"><span class="eyebrow">07 • STUDIO BUILD • ${esc(b.duration)} • +300 XP</span><h2>🎨 ${esc(b.title)}</h2><p>${esc(b.brief)}</p><div class="tutorial-rich-note"><b>Build → test → revise:</b> finishing the phases is not the finish line. The evidence must show another human could read the experience you designed.</div></div><div class="designer-build-phases rich">${(b.phaseDetails||b.phases.map((x,i)=>({title:`Phase ${i+1}`,do:x}))).map((x,i)=>`<article class="designer-build-phase-rich"><span class="designer-build-phase-num">${String(i+1).padStart(2,'0')}</span><div><h3>${esc(x.title||`Phase ${i+1}`)}</h3>${x.where?`<div class="guided-where"><span>WHERE TO WORK</span><div>${renderRichText(x.where,false)}</div></div>`:''}<div class="guided-do"><span>DO THIS</span><div>${renderRichText(x.do||x,false)}</div></div>${x.check?`<div class="guided-check"><span>PROVE IT</span><div>${renderRichText(x.check,false)}</div></div>`:''}${x.troubleshoot?.length?`<div class="guided-fix"><span>IF IT'S WEAK</span><div>${renderRichText(x.troubleshoot,false)}</div></div>`:''}</div></article>`).join('')}</div><div class="designer-evidence"><h3>Show that it works</h3>${requirements(b.evidence)}<button class="button ${done?'success':'primary'}" data-action="complete-design-build" data-design-module="${m.id}">${done?'✓ Studio Build complete':'Mark Studio Build complete • +300 XP'}</button></div></section>
   ${designBlackBox(m,done)}
   <section class="content-card designer-critique"><span class="eyebrow">LAST THING • IMPROVE IT</span><h2>Critique your decision, not your effort</h2><ol>${critique}</ol><p class="muted">Pick the answer you like least. That is probably the next useful change.</p></section>`;
 }
@@ -2348,10 +2363,18 @@ async function loadComments(id){
   }).join('');
 }
 
+function rememberCurrentRouteScroll(){
+  const hash=location.hash||'#/';
+  if(!hash.startsWith('#/'))return;
+  try{history.replaceState({...history.state,hubRoute:hash,hubScrollY:window.scrollY},'');}catch(e){}
+}
 function route(options={}){
   const preserveScroll=options===true||options?.preserveScroll===true;
   const previousScroll=window.scrollY;
-  const parts=(location.hash||'#/').replace(/^#\//,'').split('/').filter(Boolean),app=$('#app');
+  const currentHash=location.hash||'#/';
+  const savedState=history.state||{};
+  const restoreHistoryScroll=!preserveScroll&&savedState.hubRoute===currentHash&&Number.isFinite(savedState.hubScrollY);
+  const parts=currentHash.replace(/^#\//,'').split('/').filter(Boolean),app=$('#app');
   $$('.nav a').forEach(a=>a.classList.remove('active'));
   if(!parts.length){app.innerHTML=dashboard();activate('home')}
   else if(parts[0]==='programming'){app.innerHTML=programmingPage();activate('programming')}
@@ -2392,7 +2415,9 @@ function route(options={}){
   updateChrome();
   refreshNotificationCount();
   if(preserveScroll)requestAnimationFrame(()=>window.scrollTo({top:previousScroll,left:0,behavior:'auto'}));
+  else if(restoreHistoryScroll)requestAnimationFrame(()=>window.scrollTo({top:Math.max(0,savedState.hubScrollY||0),left:0,behavior:'auto'}));
   else window.scrollTo(0,0);
+  try{history.replaceState({...history.state,hubRoute:currentHash,hubScrollY:restoreHistoryScroll?(savedState.hubScrollY||0):0},'');}catch(e){}
   app.focus({preventScroll:true});
   $('#sidebar').classList.remove('open');
 
@@ -2765,6 +2790,12 @@ function closeImageLightbox(){
   modal.hidden=true;document.body.classList.remove('lightbox-open');
   const img=$('#lightboxImage');if(img)img.removeAttribute('src');
 }
+document.addEventListener('click',e=>{
+  const link=e.target.closest?.('a[href^="#/"]');
+  if(!link||e.defaultPrevented||e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey||link.target==='_blank')return;
+  if(link.getAttribute('href')===(location.hash||'#/'))return;
+  rememberCurrentRouteScroll();
+},{capture:true});
 document.addEventListener('mousedown',e=>{
   if(e.target.closest?.('[data-action="rich-command"]'))e.preventDefault();
 });
@@ -2798,8 +2829,8 @@ document.addEventListener('click',async e=>{
   else if(a==='load-video'){
     const shell=b.closest('[data-video-shell]');
     if(!shell)return;
-    const src=b.dataset.embed||'';
-    if(!src.startsWith('https://dev.epicgames.com/')){toast('Video source was blocked for safety.');return}
+    const src=safeVideoEmbed(b.dataset.embed||'');
+    if(!src){toast('Video source was blocked for safety.');return}
     const iframe=document.createElement('iframe');
     iframe.className='epic-motion-iframe';
     iframe.src=src;
@@ -3450,6 +3481,8 @@ document.addEventListener('error',e=>{
   if(img?.classList?.contains('remote-reference-image'))img.closest('.visual-flow-card')?.classList.add('image-failed');
 },true);
 $('#imageLightbox')?.addEventListener('click',e=>{if(e.target===$('#imageLightbox'))closeImageLightbox()});
+try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}
+window.addEventListener('beforeunload',rememberCurrentRouteScroll);
 window.addEventListener('hashchange',route);
 
 BACKEND.onChange(async ()=>{

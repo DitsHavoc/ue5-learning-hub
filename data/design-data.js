@@ -1,5 +1,5 @@
 window.UE5_DESIGN_DATA = {
-  "version": "3.35.0",
+  "version": "3.35.1",
   "buildDate": "29 Aug 2026",
   "modules": [
     {
@@ -265,7 +265,40 @@ window.UE5_DESIGN_DATA = {
         ],
         "improve": "Compare both versions. Which guidance method felt more natural and which was more reliable?",
         "evidence": "Two before/after screenshots + one tester quote."
-      }
+      },
+      "industryDeepDives": [
+        {
+          "type": "video",
+          "title": "DOOM — Designing a First Impression",
+          "source": "Noclip • id Software",
+          "url": "https://www.youtube.com/watch?v=vsoVQWnSOfM",
+          "youtubeId": "vsoVQWnSOfM",
+          "duration": "24 min",
+          "focus": "Opening level, implicit tutorial, arena flow and how a level teaches the player what kind of game they are in.",
+          "watchFor": "Jump to roughly 11:25. What does the opening space teach before any explicit tutorial box says it?",
+          "task": "Write down three things the level teaches through layout, enemy placement or pacing rather than text."
+        },
+        {
+          "type": "article",
+          "title": "Paths and Possibilities: The Art of Level Design",
+          "source": "CD PROJEKT RED • AnsweRED Podcast transcript",
+          "url": "https://www.cdprojektred.com/en/blog/188/answered-podcast-episode-30-paths-and-possibilities-the-art-of-level-design-transcript-included",
+          "duration": "15–20 min read",
+          "focus": "Level design vs environment art, POI density, world planning and how the discipline changed from The Witcher 3 into later projects.",
+          "watchFor": "Look for the moments where the designers describe handing work between design and environment art.",
+          "task": "Write one sentence defining where you think level design stops and environment art starts — then defend it."
+        },
+        {
+          "type": "talk",
+          "title": "Invisible Intuition: Guiding Players Without Waypoints",
+          "source": "GDC • David Shaver + Robert Yang",
+          "url": "https://www.gdcvault.com/play/1025179/Level-Design-Workshop-Invisible-Intuition",
+          "duration": "Conference talk",
+          "focus": "Blockmesh, lighting, environment art, FX, audio and scripting as a shared language for natural player guidance.",
+          "watchFor": "Notice how many guidance techniques work before final art exists.",
+          "task": "Choose one area in your project and remove a HUD/arrow cue. Replace it with two world-based cues."
+        }
+      ]
     },
     {
       "id": "environment",
@@ -537,7 +570,40 @@ window.UE5_DESIGN_DATA = {
         ],
         "improve": "Ask a tester what happened here before telling them your intended story.",
         "evidence": "Before/after wide shots + tester interpretation."
-      }
+      },
+      "industryDeepDives": [
+        {
+          "type": "video",
+          "title": "Designing the World of The Witcher 3",
+          "source": "Noclip • CD PROJEKT RED",
+          "url": "https://www.youtube.com/watch?v=oSS5T4od-GQ",
+          "youtubeId": "oSS5T4od-GQ",
+          "duration": "25 min",
+          "focus": "Environmental rationale, settlement logic, interiors, dark forests and the famous “rule of 30 seconds”.",
+          "watchFor": "At 10:24, listen for why believable spaces need an internal reason for being there.",
+          "task": "Pick one location in your project. Write its job, who uses it, what they need there, and what should therefore exist in the space."
+        },
+        {
+          "type": "article",
+          "title": "From Worldbuilding to Immersion: Crafting Universes in Games",
+          "source": "CD PROJEKT RED • Environment Art Director + Engineering Production Manager",
+          "url": "https://www.cdprojektred.com/en/blog/137/answered-podcast-episode-16-from-worldbuilding-to-immersion-crafting-universes-in-games",
+          "duration": "Podcast / article",
+          "focus": "How art, engineering, environmental storytelling and production combine to make a world feel coherent rather than assembled.",
+          "watchFor": "Find one example where believability comes from collaboration rather than a single artist making a prettier asset.",
+          "task": "Add one prop cluster that exists because of what happened in the space, not because the corner looked empty."
+        },
+        {
+          "type": "interview",
+          "title": "What an Environment Artist Actually Does",
+          "source": "Guerrilla • Myriam Dufrier",
+          "url": "https://www.guerrilla-games.com/read/guerrilla-spotlight-Myriam-Dufrier",
+          "duration": "8 min read",
+          "focus": "Narrative requirements, technical requirements and environment art as purposeful spatial dressing rather than random decoration.",
+          "watchFor": "Note the inputs an environment artist receives before they start making the scene attractive.",
+          "task": "Create a four-line environment brief: narrative beat, player action, technical constraint, visual priority."
+        }
+      ]
     },
     {
       "id": "materials",
@@ -815,7 +881,40 @@ window.UE5_DESIGN_DATA = {
         ],
         "improve": "Fix the surface with the most incorrect guesses using only two parameter changes.",
         "evidence": "Guess sheet + before/after of the weakest surface."
-      }
+      },
+      "industryDeepDives": [
+        {
+          "type": "video",
+          "title": "How Supergiant Creates Art & Music for Hades",
+          "source": "Noclip • Supergiant Games",
+          "url": "https://www.youtube.com/watch?v=oQPk9J7spw0",
+          "youtubeId": "oQPk9J7spw0",
+          "duration": "29 min",
+          "focus": "Art direction under constant iteration — how a strong style survives production changes rather than depending on one perfect asset.",
+          "watchFor": "Look for decisions that create consistency across many different pieces of content.",
+          "task": "Define three surface rules for your own project — e.g. roughness range, wear language, colour family — and apply them to three unrelated assets."
+        },
+        {
+          "type": "interview",
+          "title": "Alan Wake 2 — Environment Art Technology and Workflows",
+          "source": "Adobe + Remedy • Benjamin Lindquist",
+          "url": "https://blog.adobe.com/en/publish/2024/08/07/remedy-entertainments-environment-art-technology-workflow-alan-wake-2",
+          "duration": "12–15 min read",
+          "focus": "Scan data, material reuse, wetness, art direction and how technical environment art supports a huge amount of believable content.",
+          "watchFor": "Notice why “realistic material” does not mean “no art direction”.",
+          "task": "Take one realistic material and create two controlled variants using roughness/wetness/age rather than replacing the whole texture set."
+        },
+        {
+          "type": "interview",
+          "title": "Benefits of Procedural Materials",
+          "source": "80 Level • Bradford Smith (Naughty Dog)",
+          "url": "https://80.lv/articles/benefits-of-procedural-materials",
+          "duration": "10 min read",
+          "focus": "Why reusable procedural material thinking matters in production, and where authored variation still has to take over.",
+          "watchFor": "Separate what should be reusable from what should stay unique.",
+          "task": "Identify one material in your scene that should become a reusable master and one that deserves bespoke treatment."
+        }
+      ]
     },
     {
       "id": "lighting",
@@ -1108,7 +1207,40 @@ window.UE5_DESIGN_DATA = {
         ],
         "improve": "Ask two testers to choose from “safe / lonely / threatening / heroic” without telling them the target.",
         "evidence": "A/B screenshots + tester responses."
-      }
+      },
+      "industryDeepDives": [
+        {
+          "type": "video",
+          "title": "Alan Wake 2 — Fighting the Darkness",
+          "source": "Remedy Entertainment",
+          "url": "https://www.youtube.com/watch?v=2yxyy_UY-k4",
+          "youtubeId": "2yxyy_UY-k4",
+          "duration": "6 min",
+          "focus": "Light as gameplay language: navigation, safety, threat, transformation and combat — not simply “mood”.",
+          "watchFor": "Listen to Teemu Huhtiniemi explain how changing light physically changes routes in the Dark Place.",
+          "task": "Name three jobs your main light source performs. If all three answers are “looks atmospheric”, redesign one."
+        },
+        {
+          "type": "talk",
+          "title": "Lighting Design for Level Designers",
+          "source": "GDC • Robert Yang",
+          "url": "https://www.gdcvault.com/play/1016450/Lighting-Design-for-Level",
+          "duration": "Conference talk",
+          "focus": "A shared theory language for level designers and lighting artists: readability, behaviour, mood and architectural emphasis.",
+          "watchFor": "Treat lighting as a player-behaviour tool. What is the player more likely to look at or walk toward because of the light?",
+          "task": "Make two lighting versions of the same greybox: safe/welcoming and dangerous/uncertain. Change no geometry."
+        },
+        {
+          "type": "article",
+          "title": "Naughty Dog at SIGGRAPH 2020",
+          "source": "Naughty Dog • The Last of Us Part II",
+          "url": "https://www.naughtydog.com/blog/naughty_dog_at_siggraph_2020",
+          "duration": "Talks + slides",
+          "focus": "Ambient lighting, fog, surfaces and performance budgets — useful proof that lighting choices are always artistic and technical at the same time.",
+          "watchFor": "Look for the compromises required to keep the intended look within a fixed frame-rate and memory budget.",
+          "task": "Choose one expensive lighting/effect choice in your scene. Describe the visual job it does before deciding whether to cut it."
+        }
+      ]
     },
     {
       "id": "landscape",
@@ -1390,7 +1522,40 @@ window.UE5_DESIGN_DATA = {
         ],
         "improve": "Explain what the tester saw in the terrain that you did not.",
         "evidence": "Original plan + actual tester path + revised path map."
-      }
+      },
+      "industryDeepDives": [
+        {
+          "type": "video",
+          "title": "The Making of Horizon Zero Dawn",
+          "source": "Noclip • Guerrilla",
+          "url": "https://www.youtube.com/watch?v=h9tLcD1r-6w",
+          "youtubeId": "h9tLcD1r-6w",
+          "duration": "67 min",
+          "focus": "How a studio moved from linear shooters to open-world design: world scale, quests, machine ecology, memory and recognisable sound.",
+          "watchFor": "Use the chapter markers. Focus on 33:55 Quest Design and the sections on building a believable machine ecology.",
+          "task": "Draw one landscape loop where terrain, encounter and reward all reinforce each other instead of existing as separate layers."
+        },
+        {
+          "type": "interview",
+          "title": "Alan Wake 2: Seeing the Forest for the Trees",
+          "source": "Creative Bloq • Remedy art team",
+          "url": "https://www.creativebloq.com/features/alan-wake-2-art-team-interview",
+          "duration": "12 min read",
+          "focus": "Real ecological research, species density, moisture, altitude and using actual environmental logic to make fictional forests convincing.",
+          "watchFor": "Notice how the team converts scientific research into a usable art reference instead of copying nature blindly.",
+          "task": "Research one real biome for ten minutes. Write five placement rules your foliage should obey."
+        },
+        {
+          "type": "breakdown",
+          "title": "Relic Ruins: Creating Environmental Puzzles",
+          "source": "Guerrilla • Horizon Forbidden West",
+          "url": "https://www.guerrilla-games.com/read/relic-ruins-creating-environmental-puzzles-for-horizon-forbidden-west",
+          "duration": "Developer breakdown",
+          "focus": "Concept, blockout, interdisciplinary iteration and how landscape/architecture supports readable traversal puzzles.",
+          "watchFor": "Look at when the team tests the puzzle relative to the art pass.",
+          "task": "Block a traversal puzzle using only terrain/primitive shapes. Do not decorate it until another player understands the route."
+        }
+      ]
     },
     {
       "id": "cinematics",
@@ -1672,7 +1837,40 @@ window.UE5_DESIGN_DATA = {
         ],
         "improve": "Show both versions to a tester and ask what they understood from the camera alone.",
         "evidence": "Shot list + tester summary."
-      }
+      },
+      "industryDeepDives": [
+        {
+          "type": "video",
+          "title": "The Cinematography of God of War",
+          "source": "GDC • Dori Arazi, Santa Monica Studio",
+          "url": "https://www.youtube.com/watch?v=z0-ddTqz0XE",
+          "youtubeId": "z0-ddTqz0XE",
+          "duration": "62 min",
+          "focus": "Visual language, emotional framing, virtual camera work and the constraints created by God of War’s no-cut presentation.",
+          "watchFor": "Notice how a strong limitation — no cuts — forces staging, choreography and camera language to become more deliberate.",
+          "task": "Shoot the same 20-second scene twice: once with cuts, once as a single continuous shot. Compare what each version makes easier or harder."
+        },
+        {
+          "type": "article",
+          "title": "The Art of the Scene: Cinematic Challenges in God of War",
+          "source": "PlayStation Blog • Dori Arazi",
+          "url": "https://blog.playstation.com/2018/09/28/the-art-of-the-scene-cinematic-challenges-in-god-of-war/",
+          "duration": "10 min read",
+          "focus": "Concrete scene problems: staging, scale, pre-planning, virtual camera tools and maintaining a consistent visual language.",
+          "watchFor": "Look for moments where cinematics require solutions from animation, camera, design and technology together.",
+          "task": "Storyboard one scene with a production constraint written under every shot: player control, actor scale, collision, continuity or timing."
+        },
+        {
+          "type": "podcast",
+          "title": "Worlds Collide — The No Cut Camera",
+          "source": "Santa Monica Studio / PlayStation",
+          "url": "https://blog.playstation.com/?p=220456",
+          "duration": "Developer podcast",
+          "focus": "Director of Photography, gameplay camera design and programming discussing the same feature from different disciplines.",
+          "watchFor": "Listen for disagreements or competing needs between film language and gameplay control.",
+          "task": "Write one rule for when your cutscene may take camera control away from the player — and one rule for when it must not."
+        }
+      ]
     },
     {
       "id": "audio",
@@ -1954,7 +2152,40 @@ window.UE5_DESIGN_DATA = {
         ],
         "improve": "Ask a tester what they think is happening before they see it.",
         "evidence": "Audio cue timeline + tester prediction."
-      }
+      },
+      "industryDeepDives": [
+        {
+          "type": "video",
+          "title": "Dead Space — The Sound of Fear Reimagined",
+          "source": "EA Motive • Audio Developer Livestream",
+          "url": "https://www.ea.com/ea-studios/motive/news/focus-on-deadspace-audio-design",
+          "youtubeId": "yMQOkpZO5eM",
+          "duration": "~50 min",
+          "focus": "A.L.I.V.E. breathing/dialogue, audio occlusion, weapon sound and environmental atmosphere as gameplay systems.",
+          "watchFor": "Notice how the audio team talks about systems and player state rather than just collecting scary noises.",
+          "task": "Choose one gameplay variable — health, stamina, danger, proximity — and design an audio response that changes before the HUD does."
+        },
+        {
+          "type": "interview",
+          "title": "Dead Space — Andrew Lackey Interview",
+          "source": "Designing Sound • Sound Designer Andrew Lackey",
+          "url": "https://designingsound.org/2009/12/16/andrew-lackey-dead-space-exclusive-interview/",
+          "duration": "12 min read",
+          "focus": "Audio tells, ambience, psychological layers, foley and examples where the sound team helped design the experience itself.",
+          "watchFor": "Find the section on “audio tells” in boss fights. Sound is giving gameplay information, not merely adding atmosphere.",
+          "task": "Add one audio tell to a mechanic in your project and test whether a player reacts before seeing the visual cue."
+        },
+        {
+          "type": "interview",
+          "title": "Behind the Haunting Sound of Alan Wake 2",
+          "source": "A Sound Effect • Remedy audio team",
+          "url": "https://www.asoundeffect.com/alan-wake-2-game-audio/",
+          "duration": "Deep interview",
+          "focus": "Iteration, grounded source recording, coherent sonic language, light/darkness and reality-shift systems.",
+          "watchFor": "Look for examples where the first dramatic idea was rejected because it did not communicate the mechanic clearly enough.",
+          "task": "Take one over-designed sound in your project and make a simpler version from a real-world source. A/B test which communicates the action better."
+        }
+      ]
     },
     {
       "id": "polish",
@@ -2242,7 +2473,40 @@ window.UE5_DESIGN_DATA = {
         ],
         "improve": "Rank the fixes by player impact. Which one was not worth the time?",
         "evidence": "Priority list + three locked-camera A/B comparisons."
-      }
+      },
+      "industryDeepDives": [
+        {
+          "type": "video",
+          "title": "Inside Alan Wake 2: How Remedy Delivered a Visual Masterpiece",
+          "source": "Digital Foundry • Remedy technical interview",
+          "url": "https://www.youtube.com/watch?v=ZTW7bDdHC6g",
+          "youtubeId": "ZTW7bDdHC6g",
+          "duration": "50 min",
+          "focus": "Mesh shaders, ray tracing, streaming, memory, platform scaling and the decisions behind shipping an ambitious visual target.",
+          "watchFor": "The useful question is not “how fancy is it?” — it is “what did the team change to keep the intended experience on different hardware?”",
+          "task": "Pick one visual feature in your project. Define its minimum acceptable version before you optimise it."
+        },
+        {
+          "type": "talk",
+          "title": "Naughty Dog at SIGGRAPH 2020",
+          "source": "Naughty Dog • The Last of Us Part II",
+          "url": "https://www.naughtydog.com/blog/naughty_dog_at_siggraph_2020",
+          "duration": "Talks + slides",
+          "focus": "Technical art, low-level optimisation, volumetrics and lighting while maintaining a demanding visual target on PS4.",
+          "watchFor": "Look at optimisation as diagnosis: identify the expensive part, understand why it matters, then change the smallest thing that solves the cost.",
+          "task": "Profile one scene, make one targeted change, profile again and record the before/after number."
+        },
+        {
+          "type": "breakdown",
+          "title": "Remedy’s Public Alan Wake 2 GDC Talks",
+          "source": "Remedy Entertainment",
+          "url": "https://www.remedygames.com/article/explore-remedys-gdc2024-talks-on-creating-alan-wake-2",
+          "duration": "Presentation collection",
+          "focus": "Programming, visual arts, audio and environment-art talks from the same shipped game — useful for seeing polish as a cross-discipline process.",
+          "watchFor": "Pick two talks from different disciplines and find one place where their constraints affect each other.",
+          "task": "Write a tiny “ship checklist” for your current build: one design risk, one visual risk, one audio risk and one performance risk."
+        }
+      ]
     }
   ],
   "resources": [
@@ -8165,21 +8429,26 @@ window.UE5_DESIGN_DATA = {
     },
     {
       "n": "03",
+      "title": "HEAR THE DESIGNERS",
+      "text": "Watch or read the people who built shipped games explain the problem, trade-offs and iteration."
+    },
+    {
+      "n": "04",
       "title": "RESEARCH",
       "text": "Collect your own evidence: screenshots, maps, sound notes, shot counts or references."
     },
     {
-      "n": "04",
+      "n": "05",
       "title": "BUILD",
       "text": "Use the focused UE5 recipes to construct one small, testable version."
     },
     {
-      "n": "05",
+      "n": "06",
       "title": "BREAK + TEST",
       "text": "Change a constraint, remove a crutch, or give it to another player without explaining."
     },
     {
-      "n": "06",
+      "n": "07",
       "title": "IMPROVE",
       "text": "Make one evidence-based revision and explain what changed for the player."
     }

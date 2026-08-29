@@ -1,5 +1,9 @@
 # Database migration history
 
+## V3.35.1 Designer Deep Dives + Scroll Restore
+
+No database migration is required. v3.35.1 changes Designer Studio content/presentation and client-side navigation scroll restoration only. Existing lesson, tutorial, Designer Studio Build and progress IDs are unchanged.
+
 The live Supabase project is upgraded incrementally. Production data is not rebuilt or wiped when features are added.
 
 ## V3.35.0 Designer Studio Rebuild
