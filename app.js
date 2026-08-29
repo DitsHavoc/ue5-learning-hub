@@ -13,6 +13,7 @@ const MODEL = window.UE5_MODELING_DATA;
 const MODEL_FOUNDATIONS = window.UE5_MODELING_FOUNDATIONS;
 const MODEL_VIDEOS = window.UE5_MODELING_VIDEOS;
 const SCULPT = window.UE5_SCULPT_DATA;
+const STUDY = window.UE5_STUDY_DATA;
 const BACKEND = window.UE5_BACKEND;
 
 // V3.19 deepens Designer Studio using the same Quick Tutorial recipe system so students can
@@ -27,7 +28,7 @@ DESIGN.tutorials.forEach(t=>{if(!knownTutorials.has(t.id))TOOLS.tutorials.push(t
 DESIGN.modules.forEach(m=>m.tutorials.forEach(id=>{const t=TOOLS.tutorials.find(x=>x.id===id);if(t&&!t.designModule)t.designModule=m.id}));
 
 
-if (!DATA || !BLOCKS || !PROJECT || !TOOLS || !SNIPPETS || !DESIGN || !NEWS || !MODEL || !MODEL_FOUNDATIONS || !MODEL_VIDEOS || !SCULPT || !BACKEND) {
+if (!DATA || !BLOCKS || !PROJECT || !TOOLS || !SNIPPETS || !DESIGN || !NEWS || !MODEL || !MODEL_FOUNDATIONS || !MODEL_VIDEOS || !SCULPT || !STUDY || !BACKEND) {
   const e = document.querySelector('#bootError');
   if (e) e.hidden = false;
   return;
@@ -54,6 +55,10 @@ const BADGE_META={
   'first-mesh':{rarity:'Common',tone:'common',hint:'Complete your first 3D Modelling lesson.'},
   'mesh-doctor':{rarity:'Rare',tone:'rare',hint:'Complete the Topology Clinic lesson and one Fix This Model clinic.'},
   'asset-pipeline':{rarity:'Epic',tone:'epic',hint:'Complete all 12 3D Modelling lessons and export a Build X asset.'},
+  'foundations-ready':{rarity:'Rare',tone:'rare',hint:'Pass Module 0 and Model Doctor.'},
+  'max-apprentice':{rarity:'Uncommon',tone:'uncommon',hint:"Complete all 14 videos in Dits' Max series."},
+  'industry-eye':{rarity:'Rare',tone:'rare',hint:'Complete at least one industry deep dive in every Designer discipline.'},
+  'design-thinker':{rarity:'Epic',tone:'epic',hint:'Complete all eight Designer Studio builds.'},
   'digital-clay':{rarity:'Uncommon',tone:'uncommon',hint:'Complete all six Sculpt Playground exercises.'},
   'teacher':{rarity:'Staff',tone:'staff',hint:'Exclusive to verified Learning Hub teacher accounts.'}
 };
@@ -1953,6 +1958,10 @@ function achievementData(approvedCount=0,requestCount=0){
     ['first-mesh','First Mesh','Complete your first 3D Modelling Studio lesson.',modelDone>=1,'⬡'],
     ['mesh-doctor','Mesh Doctor','Complete Topology Clinic and one Fix This Model clinic.',(state.modelLessonCompleted||[]).includes('max-topology-clinic')&&modelFixes>=1,'⚕'],
     ['asset-pipeline','Game Asset Ready','Complete all 3D Modelling lessons and one Build X project.',modelDone>=MODEL.lessons.length&&modelBuilds>=1,'◆'],
+    ['foundations-ready','Game-Ready Foundations','Pass Module 0 and Model Doctor.',!!state.modelFoundationFinal,'🩺'],
+    ['max-apprentice','Max Apprentice',"Complete all 14 videos in Dits' Max series.",(state.modelVideoCompleted||[]).length>=MODEL_VIDEOS.videos.length,'▶'],
+    ['industry-eye','Industry Eye','Complete at least one industry deep dive in every Designer discipline.',DESIGN.modules.every(m=>(m.industryDeepDives||[]).some((_,i)=>(state.designSourceCompleted||[]).includes(designSourceKey(m,i)))),'👁'],
+    ['design-thinker','Design Thinker','Complete all eight Designer Studio builds.',(state.designBuildCompleted||[]).length>=DESIGN.modules.length,'✦'],
     ['digital-clay','Digital Clay','Complete all six Sculpt Playground exercises.',sculptDoneCount>=SCULPT.practices.length,'🗿']
   ];
   if(isTeacher())rows.unshift(['teacher','Unreal Instructor','Verified Learning Hub teacher account. Staff-only badge; students cannot unlock it.',true,'🎓']);
@@ -2138,56 +2147,111 @@ async function renderRequests(){
   }catch(err){box.innerHTML=`<div class="offline-note">${esc(err.message)}</div>`}
 }
 
+function challengeItems(){
+  const items=[];
+  DATA.lessons.forEach(l=>items.push({
+    id:`ue:${l.id}`,area:'unreal',areaLabel:'Unreal Learning',icon:'⌘',title:l.challenge.title,
+    task:l.challenge.task,requirements:l.challenge.requirements||[],meta:l.projectTask?.name||path(l.path)?.title||'Unreal',
+    href:`#/lesson/${l.id}`,linkLabel:'Open supporting lesson →'
+  }));
+  DESIGN.modules.forEach(m=>(m.challenges||[]).forEach((c,i)=>items.push({
+    id:`design:${m.id}:${i}`,area:'design',areaLabel:'Designer Studio',icon:m.icon||'✦',title:c.title,
+    task:c.constraint,requirements:[`Win condition: ${c.goal}`],meta:m.title,href:`#/design/${m.id}`,linkLabel:'Open design module →'
+  })));
+  (MODEL.builds||[]).forEach(b=>items.push({
+    id:`model:${b.id}`,area:'modeling',areaLabel:'3D Modelling',icon:b.icon||'⬡',title:`${b.title} — make it yours`,
+    task:b.variation||'Change one construction or proportion decision while preserving the skill this build teaches.',
+    requirements:(b.qualityGates||[]).slice(0,3),meta:`Build X • ${b.difficulty}`,href:`#/modeling/build/${b.id}`,linkLabel:'Open Build X →'
+  }));
+  (SCULPT.practices||[]).forEach(x=>items.push({
+    id:`sculpt:${x.id}`,area:'sculpt',areaLabel:'Sculpt Playground',icon:x.icon||'🗿',title:`${x.title} — make it yours`,
+    task:x.challenge,requirements:[`Use the ${x.newSkill} skill rather than adding random detail.`],meta:`Exercise ${String(x.order).padStart(2,'0')} • ${x.time}`,href:`#/sculpt/${x.id}`,linkLabel:'Open Sculpt exercise →'
+  }));
+  return items;
+}
 function challengeBoard(){
-  return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Challenges</div><span class="eyebrow">Independent practice</span><h1>🔥 Challenge Board</h1><p class="muted">No complete walkthroughs. Transfer each skill to a fresh problem, then put the main mechanic into your game.</p></div><div class="board-grid">${DATA.lessons.map(l=>`<div class="board-card"><span class="eyebrow">${esc(path(l.path).title)}</span><h3>${esc(l.challenge.title)}</h3><p>${esc(l.challenge.task)}</p>${requirements(l.challenge.requirements)}<div class="button-row"><a class="button small" href="#/lesson/${l.id}">Open lesson →</a><span class="sync-chip">${esc(l.projectTask?.name||'Game mechanic')}</span></div></div>`).join('')}</div>`;
+  const items=challengeItems(),areas=[['unreal','⌘','Unreal',items.filter(x=>x.area==='unreal').length],['design','✦','Design',items.filter(x=>x.area==='design').length],['modeling','⬡','3D Modelling',items.filter(x=>x.area==='modeling').length],['sculpt','🗿','Sculpt',items.filter(x=>x.area==='sculpt').length]];
+  const section=(area,title,desc,open=false)=>{const rows=items.filter(x=>x.area===area);return `<details class="study-board-section" data-study-section ${open?'open':''}><summary><span>${areas.find(a=>a[0]===area)?.[1]||'◆'}</span><div><strong>${esc(title)}</strong><small>${esc(desc)}</small></div><b>${rows.length}</b></summary><div class="board-grid study-board-grid">${rows.map(x=>`<article class="board-card study-board-card" data-study-card data-area="${x.area}" data-search="${esc((x.title+' '+x.task+' '+x.meta+' '+x.requirements.join(' ')).toLowerCase())}"><span class="eyebrow">${esc(x.areaLabel)} • ${esc(x.meta)}</span><h3>${esc(x.title)}</h3><p>${esc(x.task)}</p>${requirements(x.requirements)}<div class="button-row"><a class="button small" href="${x.href}">${esc(x.linkLabel)}</a></div></article>`).join('')}</div></details>`};
+  return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Challenges</div><span class="eyebrow">${items.length} transfer challenges across the Hub</span><h1>🔥 Challenge Board</h1><p class="muted">The old board only covered Unreal lessons. This one pulls together programming, design, modelling and sculpting so you can practise the skill without following another walkthrough.</p></div>
+  <section class="study-tool-intro"><div><strong>Choose a skill you already know.</strong><span>Then solve a fresh problem with less scaffolding.</span></div><div><strong>Do not clone the example.</strong><span>The challenge only counts as useful practice if you make decisions yourself.</span></div><div><strong>Get another human to test it.</strong><span>Use the Critique Board when the result needs a second pair of eyes.</span></div></section>
+  <div class="study-toolbar"><input id="challengeSearch" type="search" enterkeyhint="search" placeholder="Search challenges…"><div class="filter-row"><button class="filter active" data-challenge-filter="all">All <b>${items.length}</b></button>${areas.map(a=>`<button class="filter" data-challenge-filter="${a[0]}">${a[1]} ${a[2]} <b>${a[3]}</b></button>`).join('')}</div></div>
+  <div id="challengeBoardSections">${section('unreal','Unreal transfer challenges','Take a Blueprint/system skill and make it solve a different gameplay problem.',true)}${section('design','Designer constraints','Remove a crutch and prove the design principle still communicates.',true)}${section('modeling','Build X variations','Change the brief while preserving clean construction and game-ready judgement.')}${section('sculpt','Sculpt variations','Use form, silhouette and observation instead of adding noise.')}</div>
+  <div class="empty" id="challengeSearchEmpty" hidden><h2>No challenges match.</h2><p>Try a shorter search or switch back to All.</p></div>`;
+}
+function homeworkItems(){
+  const items=[];
+  DATA.lessons.forEach(l=>items.push({id:`ue:${l.id}`,legacyId:l.id,area:'unreal',areaLabel:'Unreal Learning',title:l.homework.title,task:l.homework.task,evidence:l.homework.evidence,stretch:l.homework.stretch,meta:l.title,href:`#/lesson/${l.id}`,linkLabel:'View lesson'}));
+  DESIGN.modules.forEach(m=>(m.researchMissions||[]).forEach((r,i)=>items.push({id:`design:${m.id}:${i}`,area:'design',areaLabel:'Designer field research',title:r.title,task:r.brief,evidence:r.evidence,stretch:'Apply one finding to your own current scene/build and note what changed.',meta:`${m.title} • ${r.duration}`,steps:r.steps||[],href:`#/design/${m.id}`,linkLabel:'Open module'})));
+  MODEL_FOUNDATIONS.chapters.forEach(ch=>{const h=STUDY.modelHomework[ch.id];if(h)items.push({id:`model:${ch.id}`,area:'modeling',areaLabel:'3D Foundations',title:h.title,task:h.task,evidence:h.evidence,stretch:h.stretch,meta:ch.title,href:`#/modeling/foundations/${ch.id}`,linkLabel:'Open chapter'})});
+  (MODEL_VIDEOS.videos||[]).forEach(v=>items.push({id:`video:${v.id}`,area:'video',areaLabel:"Dits' Max series",title:`Watch + practise: ${v.title}`,task:v.task,evidence:'Show the result you made in Max and be ready to explain the move without replaying the video.',stretch:'Use the same tool or idea on a different object so it becomes a transferable skill.',meta:`Video ${String(v.order).padStart(2,'0')} • +${MODEL_VIDEOS.xp||20} XP when completed in the video series`,href:'#/modeling/videos',linkLabel:'Open video series'}));
+  return items;
 }
 function homeworkBoard(){
-  return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Homework</div><span class="eyebrow">Play • Watch • Analyse • Design</span><h1>⌂ Homework Board</h1><p class="muted">Homework broadens the thinking around the mechanic rather than simply adding more node-copying.</p></div><div class="board-grid">${DATA.lessons.map(l=>`<div class="board-card"><span class="eyebrow">${esc(l.title)}</span><h3>${esc(l.homework.title)}</h3><p>${esc(l.homework.task)}</p><div class="button-row"><button class="button small" data-action="copy-homework" data-lesson="${l.id}">Copy for Teams</button><a class="button small ghost" href="#/lesson/${l.id}">View lesson</a></div></div>`).join('')}</div>`;
+  const items=homeworkItems(),areas=[['unreal','⌘','Unreal',items.filter(x=>x.area==='unreal').length],['design','✦','Design research',items.filter(x=>x.area==='design').length],['modeling','⬡','3D theory',items.filter(x=>x.area==='modeling').length],['video','▶','Max videos',items.filter(x=>x.area==='video').length]];
+  const section=(area,title,desc,open=false)=>{const rows=items.filter(x=>x.area===area);return `<details class="study-board-section homework-section" data-study-section ${open?'open':''}><summary><span>${areas.find(a=>a[0]===area)?.[1]||'⌂'}</span><div><strong>${esc(title)}</strong><small>${esc(desc)}</small></div><b>${rows.length}</b></summary><div class="board-grid study-board-grid">${rows.map(x=>`<article class="board-card study-board-card homework-study-card" data-study-card data-area="${x.area}" data-search="${esc((x.title+' '+x.task+' '+x.evidence+' '+x.stretch+' '+x.meta).toLowerCase())}"><span class="eyebrow">${esc(x.areaLabel)} • ${esc(x.meta)}</span><h3>${esc(x.title)}</h3><p>${esc(x.task)}</p><div class="study-evidence"><b>Evidence</b><span>${esc(x.evidence)}</span></div><div class="study-stretch"><b>Stretch</b><span>${esc(x.stretch)}</span></div><div class="button-row"><button class="button small" data-action="copy-homework" data-study-homework="${esc(x.id)}">Copy for Teams</button><a class="button small ghost" href="${x.href}">${esc(x.linkLabel)}</a></div></article>`).join('')}</div></details>`};
+  return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Homework</div><span class="eyebrow">Independent study • not another assignment system</span><h1>⌂ Homework & Independent Study</h1><p class="muted">Short tasks that extend what students are already learning. The Hub supplies the activity and reference; Teams remains the place for formal assignment briefs, deadlines and submission.</p></div>
+  <section class="study-tool-intro"><div><strong>Play / watch / inspect.</strong><span>Start with something real rather than another page of notes.</span></div><div><strong>Produce small evidence.</strong><span>A screenshot, annotation, map, comparison or short explanation is enough.</span></div><div><strong>Bring it back into the work.</strong><span>Every task should change a decision in the next build.</span></div></section>
+  <div class="study-toolbar"><input id="homeworkSearch" type="search" enterkeyhint="search" placeholder="Search independent study…"><div class="filter-row"><button class="filter active" data-homework-filter="all">All <b>${items.length}</b></button>${areas.map(a=>`<button class="filter" data-homework-filter="${a[0]}">${a[1]} ${a[2]} <b>${a[3]}</b></button>`).join('')}</div></div>
+  <div id="homeworkBoardSections">${section('unreal','Unreal independent learning','Broaden the thinking around a mechanic instead of doing more node-copying.',true)}${section('design','Designer field research','Observe games, spaces and players; then bring the principle back to your own work.',true)}${section('modeling','3D foundations study','Small modelling decisions that reinforce Module 0 before or between practical sessions.')}${section('video',"Dits' Max follow-along practice",'Watch the demonstration, reproduce the move, then apply it somewhere else.')}</div>
+  <div class="empty" id="homeworkSearchEmpty" hidden><h2>No homework tasks match.</h2><p>Try a shorter search or switch back to All.</p></div>`;
+}
+function hubGlossary(){
+  const base=(DATA.glossary||[]).map(([term,definition])=>[term,definition,'Unreal Engine']);
+  return [...base,...(STUDY.glossary||[])].sort((a,b)=>a[0].localeCompare(b[0]));
 }
 function glossary(){
-  return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Glossary</div><span class="eyebrow">${DATA.glossary.length} starter terms</span><h1>? UE5 Glossary</h1><p class="muted">Short definitions for terms students meet while building.</p></div><input id="glossarySearch" type="search" enterkeyhint="search" placeholder="Filter glossary…" style="width:min(430px,100%);background:#0b121b;border:1px solid var(--line);color:#fff;border-radius:9px;padding:10px;margin-bottom:12px"><div class="glossary-grid" id="glossaryGrid">${DATA.glossary.map(([t,d])=>`<div class="glossary-item" data-search="${esc((t+' '+d).toLowerCase())}"><strong>${esc(t)}</strong><p>${esc(d)}</p></div>`).join('')}</div><div class="empty" id="glossarySearchEmpty" hidden><h2>No glossary terms match.</h2><p>Try a shorter term or clear the search.</p></div>`;
+  const terms=hubGlossary(),counts=Object.fromEntries(['Unreal Engine','Game Design','3D Modelling'].map(a=>[a,terms.filter(x=>x[2]===a).length]));
+  return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Glossary</div><span class="eyebrow">${terms.length} useful terms across the Hub</span><h1>? Games Development Glossary</h1><p class="muted">Unreal, game design and 3D modelling terminology in one searchable reference. Short enough to use while building; specific enough to stop the words becoming mush.</p></div><div class="study-toolbar glossary-toolbar"><input id="glossarySearch" type="search" enterkeyhint="search" placeholder="Search a term, tool or idea…"><div class="filter-row"><button class="filter active" data-glossary-filter="all">All <b>${terms.length}</b></button><button class="filter" data-glossary-filter="Unreal Engine">⌘ Unreal <b>${counts['Unreal Engine']||0}</b></button><button class="filter" data-glossary-filter="Game Design">✦ Design <b>${counts['Game Design']||0}</b></button><button class="filter" data-glossary-filter="3D Modelling">⬡ 3D <b>${counts['3D Modelling']||0}</b></button></div><span class="study-result-count" id="glossaryResultCount">${terms.length} terms</span></div><div class="glossary-grid" id="glossaryGrid">${terms.map(([t,d,a])=>`<article class="glossary-item" data-area="${esc(a)}" data-search="${esc((t+' '+d+' '+a).toLowerCase())}"><span class="glossary-area">${esc(a)}</span><strong>${esc(t)}</strong><p>${esc(d)}</p></article>`).join('')}</div><div class="empty" id="glossarySearchEmpty" hidden><h2>No glossary terms match.</h2><p>Try a shorter term or switch back to All.</p></div>`;
 }
-function revisionQuestionBank(lessonIds=null){
-  const selected=Array.isArray(lessonIds)&&lessonIds.length?new Set(lessonIds):null;
-  return DATA.lessons.filter(l=>!selected||selected.has(l.id)).flatMap(l=>l.quiz.map((q,qi)=>({lessonId:l.id,lessonTitle:l.title,pathId:l.path,question:q[0],options:q[1],correct:Array.isArray(q[2])?q[2]:[q[2]],feedback:q[3],key:`${l.id}-${qi}`})));
+function revisionTopics(){
+  const topics=[];
+  DATA.lessons.forEach(l=>topics.push({id:`ue:${l.id}`,areaId:'unreal',areaTitle:'Unreal Learning',icon:path(l.path)?.icon||'⌘',title:l.title,meta:path(l.path)?.title||'Unreal',href:`#/lesson/${l.id}`,sourceLabel:`Open ${l.title}`,questions:(l.quiz||[]).map((q,qi)=>({question:q[0],options:q[1],correct:Array.isArray(q[2])?q[2]:[q[2]],feedback:q[3],key:`ue:${l.id}:${qi}`}))}));
+  MODEL_FOUNDATIONS.chapters.forEach(ch=>topics.push({id:`3d:${ch.id}`,areaId:'modeling',areaTitle:'3D Foundations',icon:ch.icon||'⬡',title:ch.title,meta:'Module 0',href:`#/modeling/foundations/${ch.id}`,sourceLabel:`Open ${ch.title}`,questions:(ch.quiz||[]).map((q,qi)=>({question:q.q,options:q.options,correct:[q.correct],feedback:q.feedback,key:`3d:${ch.id}:${qi}`}))}));
+  DESIGN.modules.forEach(m=>topics.push({id:`design:${m.id}`,areaId:'design',areaTitle:'Designer Studio',icon:m.icon||'✦',title:m.title,meta:'Design judgement',href:`#/design/${m.id}`,sourceLabel:`Open ${m.title}`,questions:(STUDY.designRevision[m.id]||[]).map((q,qi)=>({question:q[0],options:q[1],correct:Array.isArray(q[2])?q[2]:[q[2]],feedback:q[3],key:`design:${m.id}:${qi}`}))}));
+  return topics;
+}
+function revisionQuestionBank(topicIds=null){
+  const selected=Array.isArray(topicIds)&&topicIds.length?new Set(topicIds):null;
+  return revisionTopics().filter(t=>!selected||selected.has(t.id)).flatMap(t=>t.questions.map(q=>({...q,topicId:t.id,topicTitle:t.title,areaId:t.areaId,areaTitle:t.areaTitle,sourceHref:t.href,sourceLabel:t.sourceLabel})));
 }
 function shuffled(list){const a=[...list];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function loadRevisionResults(){try{return JSON.parse(localStorage.getItem(REVISION_STORE)||'[]')}catch(e){return []}}
 function saveRevisionResult(result){const rows=[result,...loadRevisionResults()].slice(0,12);localStorage.setItem(REVISION_STORE,JSON.stringify(rows))}
-function revisionSelectionLabel(lessonIds){
-  if(!lessonIds?.length)return 'Random mixed';
-  if(lessonIds.length===1)return lesson(lessonIds[0])?.title||'Focused topic';
-  const pathIds=[...new Set(lessonIds.map(id=>lesson(id)?.path).filter(Boolean))];
-  for(const pid of pathIds){const ids=DATA.lessons.filter(l=>l.path===pid).map(l=>l.id);if(ids.length===lessonIds.length&&ids.every(id=>lessonIds.includes(id)))return path(pid)?.title||'Learning path'}
-  return `${lessonIds.length} selected topics`;
+function revisionSelectionLabel(topicIds){
+  if(!topicIds?.length)return 'Random mixed';
+  const topics=revisionTopics(),selected=topics.filter(t=>topicIds.includes(t.id));
+  if(selected.length===1)return selected[0].title;
+  for(const area of ['unreal','design','modeling']){const all=topics.filter(t=>t.areaId===area);if(all.length===selected.length&&all.every(t=>topicIds.includes(t.id)))return all[0]?.areaTitle||'Focused area'}
+  return `${selected.length} selected topics`;
 }
-function startRevisionQuiz(lessonIds=null,count=10,label=null){
-  const bank=shuffled(revisionQuestionBank(lessonIds));
+function startRevisionQuiz(topicIds=null,count=10,label=null){
+  const bank=shuffled(revisionQuestionBank(topicIds));
   if(!bank.length){toast('Choose at least one topic with revision questions.');return}
   const wanted=[10,20,30].includes(Number(count))?Number(count):10,used=Math.min(wanted,bank.length);
-  revisionSession={lessonIds:Array.isArray(lessonIds)?[...lessonIds]:null,topicLabel:label||revisionSelectionLabel(lessonIds),requestedCount:wanted,questions:bank.slice(0,used),index:0,answers:[],finished:false};
+  revisionSession={topicIds:Array.isArray(topicIds)?[...topicIds]:null,topicLabel:label||revisionSelectionLabel(topicIds),requestedCount:wanted,questions:bank.slice(0,used),index:0,answers:[],finished:false};
   route();if(used<wanted)toast(`This selection has ${used} question${used===1?'':'s'}, so the quiz uses all of them.`);
 }
 function revisionScore(session){
   let correct=0;session.answers.forEach((ans,i)=>{const expected=session.questions[i].correct.slice().sort().join(','),got=[...ans].sort().join(',');if(expected===got)correct++});
   return {correct,total:session.questions.length,pct:session.questions.length?Math.round(correct/session.questions.length*100):0};
 }
+function revisionAreaPicker(areaId,icon,title,subtitle){
+  const topics=revisionTopics().filter(t=>t.areaId===areaId),count=topics.reduce((n,t)=>n+t.questions.length,0);
+  return `<fieldset class="revision-path-picker revision-area-picker" data-revision-group="${areaId}"><legend><span>${icon}</span>${esc(title)}</legend><p>${esc(subtitle)}</p><label class="revision-select-path"><input type="checkbox" data-revision-group-toggle="${areaId}"> Select whole area • ${count} questions</label><div class="revision-lesson-options">${topics.map(t=>`<label><input type="checkbox" name="topicIds" value="${esc(t.id)}" data-revision-topic data-area="${areaId}"><span><strong>${esc(t.title)}</strong><small>${esc(t.meta)} • ${t.questions.length} question${t.questions.length===1?'':'s'}</small></span></label>`).join('')}</div></fieldset>`;
+}
 function revision(){
   if(revisionSession?.finished){
     const score=revisionScore(revisionSession);
-    return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Revision</div><span class="eyebrow">Quiz complete • ${esc(revisionSession.topicLabel)}</span><h1>↻ ${score.pct}%</h1><p class="muted">${score.correct} correct out of ${score.total}. Use the misses to choose what to revisit.</p></div><div class="revision-result-hero"><div class="revision-score-ring"><strong>${score.pct}%</strong><span>${score.correct}/${score.total}</span></div><div><h2>${score.pct>=80?'Strong work.':score.pct>=60?'Getting there.':'Use the review below to target the gaps.'}</h2><div class="button-row"><button class="button primary" data-action="revision-restart">Choose another quiz</button><button class="button ghost" data-action="revision-repeat">Repeat same topics</button></div></div></div><section class="section"><div class="section-head"><div><h2>Answer review</h2><p>Your answer, the correct answer and the reason.</p></div></div><div class="revision-review-list">${revisionSession.questions.map((q,i)=>{const selected=revisionSession.answers[i]||[],ok=q.correct.slice().sort().join(',')===[...selected].sort().join(',');return `<article class="revision-review ${ok?'correct':'wrong'}"><span>${ok?'✓ Correct':'× Review'}</span><h3>${esc(q.question)}</h3><p><b>Your answer:</b> ${esc(selected.map(x=>q.options[x]).join(', ')||'No answer')}</p><p><b>Correct answer:</b> ${esc(q.correct.map(x=>q.options[x]).join(', '))}</p><div class="callout ${ok?'good':''}">${esc(q.feedback)}</div><a class="link-button" href="#/lesson/${q.lessonId}">Open ${esc(q.lessonTitle)} →</a></article>`}).join('')}</div></section>`;
+    return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Revision</div><span class="eyebrow">Quiz complete • ${esc(revisionSession.topicLabel)}</span><h1>↻ ${score.pct}%</h1><p class="muted">${score.correct} correct out of ${score.total}. Use the misses to choose what to revisit.</p></div><div class="revision-result-hero"><div class="revision-score-ring"><strong>${score.pct}%</strong><span>${score.correct}/${score.total}</span></div><div><h2>${score.pct>=80?'Strong work.':score.pct>=60?'Getting there.':'Use the review below to target the gaps.'}</h2><div class="button-row"><button class="button primary" data-action="revision-restart">Choose another quiz</button><button class="button ghost" data-action="revision-repeat">Repeat same topics</button></div></div></div><section class="section"><div class="section-head"><div><h2>Answer review</h2><p>Your answer, the correct answer and the reason.</p></div></div><div class="revision-review-list">${revisionSession.questions.map((q,i)=>{const selected=revisionSession.answers[i]||[],ok=q.correct.slice().sort().join(',')===[...selected].sort().join(',');return `<article class="revision-review ${ok?'correct':'wrong'}"><span>${ok?'✓ Correct':'× Review'} • ${esc(q.areaTitle)}</span><h3>${esc(q.question)}</h3><p><b>Your answer:</b> ${esc(selected.map(x=>q.options[x]).join(', ')||'No answer')}</p><p><b>Correct answer:</b> ${esc(q.correct.map(x=>q.options[x]).join(', '))}</p><div class="callout ${ok?'good':''}">${esc(q.feedback)}</div><a class="link-button" href="${q.sourceHref}">${esc(q.sourceLabel)} →</a></article>`}).join('')}</div></section>`;
   }
   if(revisionSession){
     const q=revisionSession.questions[revisionSession.index],n=revisionSession.index+1,multiple=q.correct.length>1;
-    return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Revision</div><span class="eyebrow">${esc(revisionSession.topicLabel)}</span><h1>Question ${n} of ${revisionSession.questions.length}</h1><div class="revision-progress"><span style="width:${Math.round((revisionSession.index/revisionSession.questions.length)*100)}%"></span></div></div><section class="revision-quiz-card"><span class="eyebrow">${esc(path(q.pathId)?.title||'UE5')} • ${esc(q.lessonTitle)}</span><h2>${esc(q.question)}</h2><p class="muted">${multiple?'Select every answer that applies.':'Choose the best answer.'}</p><form data-action-form="revision-answer" class="revision-answer-form">${q.options.map((o,i)=>`<label class="revision-choice"><input type="${multiple?'checkbox':'radio'}" name="answer" value="${i}" ${multiple?'':'required'}><span>${esc(o)}</span></label>`).join('')}<div class="button-row"><button class="button primary" type="submit">${n===revisionSession.questions.length?'Finish quiz':'Next question →'}</button><button class="button ghost" type="button" data-action="revision-abandon">Quit quiz</button></div></form></section>`;
+    return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Revision</div><span class="eyebrow">${esc(revisionSession.topicLabel)}</span><h1>Question ${n} of ${revisionSession.questions.length}</h1><div class="revision-progress"><span style="width:${Math.round((revisionSession.index/revisionSession.questions.length)*100)}%"></span></div></div><section class="revision-quiz-card"><span class="eyebrow">${esc(q.areaTitle)} • ${esc(q.topicTitle)}</span><h2>${esc(q.question)}</h2><p class="muted">${multiple?'Select every answer that applies.':'Choose the best answer.'}</p><form data-action-form="revision-answer" class="revision-answer-form">${q.options.map((o,i)=>`<label class="revision-choice"><input type="${multiple?'checkbox':'radio'}" name="answer" value="${i}" ${multiple?'':'required'}><span>${esc(o)}</span></label>`).join('')}<div class="button-row"><button class="button primary" type="submit">${n===revisionSession.questions.length?'Finish quiz':'Next question →'}</button><button class="button ghost" type="button" data-action="revision-abandon">Quit quiz</button></div></form></section>`;
   }
-  const results=loadRevisionResults(),total=revisionQuestionBank().length;
-  return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Revision</div><span class="eyebrow">Scored retrieval practice</span><h1>↻ Revision Quizzes</h1><p class="muted">Choose 10, 20 or 30 questions. Mix the whole course or build a focused quiz from one lesson, a full learning path or several topics.</p></div>
-  <div class="revision-start-grid">
-    <section class="project-panel revision-random"><span class="eyebrow">Random quiz</span><h2>Mix everything</h2><p>${total} course questions are shuffled each time.</p><form data-action-form="revision-random-start"><label>Number of questions<select name="count"><option value="10" selected>10 — quick revision</option><option value="20">20 — solid session</option><option value="30">30 — full workout</option></select></label><button class="button primary" type="submit">Start random quiz →</button></form></section>
-    <section class="project-panel revision-focus-intro"><span class="eyebrow">Focused quiz</span><h2>Choose your topics</h2><p>Select one lesson, tick a whole learning path, or mix several lessons together. If your selection contains fewer questions than the size you choose, the quiz simply uses all available questions.</p><div class="callout good"><b>Useful for:</b> revising tomorrow's lesson, fixing a weak area, or mixing related Blueprint topics before an assessment.</div></section>
-  </div>
-  <section class="section revision-builder"><div class="section-head"><div><h2>Build a focused quiz</h2><p id="revisionSelectionSummary">Choose at least one topic.</p></div></div><form data-action-form="revision-focused-start" id="revisionFocusedForm"><div class="revision-path-picker-grid">${DATA.paths.map(p=>{const lessons=DATA.lessons.filter(l=>l.path===p.id);return `<fieldset class="revision-path-picker" data-revision-path="${p.id}"><legend><span>${p.icon}</span>${esc(p.title)}</legend><label class="revision-select-path"><input type="checkbox" data-revision-path-toggle="${p.id}"> Select whole path</label><div class="revision-lesson-options">${lessons.map(l=>`<label><input type="checkbox" name="lessonIds" value="${l.id}" data-revision-lesson data-path="${p.id}"><span><strong>${esc(l.title)}</strong><small>${l.quiz.length} question${l.quiz.length===1?'':'s'}</small></span></label>`).join('')}</div></fieldset>`}).join('')}</div><div class="revision-builder-footer"><label>Number of questions<select name="count"><option value="10" selected>10</option><option value="20">20</option><option value="30">30</option></select></label><button class="button primary" type="submit">Start focused quiz →</button></div></form></section>
+  const results=loadRevisionResults(),total=revisionQuestionBank().length,topicTotal=revisionTopics().length;
+  return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Revision</div><span class="eyebrow">Scored retrieval + design judgement</span><h1>↻ Revision Quizzes</h1><p class="muted">Revision now covers the Hub instead of only the old Unreal lesson bank: Blueprint systems, Module 0 game-art theory and Designer Studio decisions.</p></div>
+  <div class="revision-start-grid"><section class="project-panel revision-random"><span class="eyebrow">Random quiz</span><h2>Mix the whole Hub</h2><p><b>${total}</b> questions across <b>${topicTotal}</b> topics are shuffled each time.</p><form data-action-form="revision-random-start"><label>Number of questions<select name="count"><option value="10" selected>10 — quick revision</option><option value="20">20 — solid session</option><option value="30">30 — full workout</option></select></label><button class="button primary" type="submit">Start mixed quiz →</button></form></section><section class="project-panel revision-focus-intro"><span class="eyebrow">Focused quiz</span><h2>Choose what you actually need</h2><p>Pick a whole area or individual topics. Use Unreal for technical recall, 3D Foundations for game-art decisions, or Designer Studio for scenario-based judgement.</p><div class="callout good"><b>Best use:</b> revise a weak area, prepare for the next practical session, then follow the review links straight back to the content you missed.</div></section></div>
+  <section class="section revision-builder"><div class="section-head"><div><h2>Build a focused quiz</h2><p id="revisionSelectionSummary">Choose at least one topic.</p></div></div><form data-action-form="revision-focused-start" id="revisionFocusedForm"><div class="revision-path-picker-grid revision-area-picker-grid">${revisionAreaPicker('unreal','⌘','Unreal Learning','Core Blueprint/system knowledge from the existing course quizzes.')}${revisionAreaPicker('design','✦','Designer Studio','Scenario questions: choose the design decision that best solves the problem.')}${revisionAreaPicker('modeling','⬡','3D Foundations','Mesh, views, geometry, pivots, UVs, PBR and game-ready decisions.')}</div><div class="revision-builder-footer"><label>Number of questions<select name="count"><option value="10" selected>10</option><option value="20">20</option><option value="30">30</option></select></label><button class="button primary" type="submit">Start focused quiz →</button></div></form></section>
   ${results.length?`<section class="section"><div class="section-head"><div><h2>Recent scores</h2><p>Stored on this browser for quick progress checks.</p></div></div><div class="recent-quiz-results">${results.slice(0,6).map(r=>`<div><strong>${r.pct}%</strong><span>${esc(r.topicLabel)} • ${r.correct}/${r.total}</span><small>${new Date(r.at).toLocaleString()}</small></div>`).join('')}</div></section>`:''}`;
 }
 
@@ -2664,14 +2728,27 @@ function activate(key){
 }
 function bindRevisionBuilder(){
   const form=$('#revisionFocusedForm');if(!form)return;
-  const lessons=()=>Array.from(form.querySelectorAll('[data-revision-lesson]'));
+  const topics=()=>Array.from(form.querySelectorAll('[data-revision-topic]'));
   const update=()=>{
-    const checked=lessons().filter(x=>x.checked),ids=checked.map(x=>x.value),available=revisionQuestionBank(ids).length;
+    const checked=topics().filter(x=>x.checked),ids=checked.map(x=>x.value),available=revisionQuestionBank(ids).length;
     const summary=$('#revisionSelectionSummary');if(summary)summary.textContent=ids.length?`${ids.length} topic${ids.length===1?'':'s'} selected • ${available} question${available===1?'':'s'} available`:'Choose at least one topic.';
-    form.querySelectorAll('[data-revision-path-toggle]').forEach(toggle=>{const items=lessons().filter(x=>x.dataset.path===toggle.dataset.revisionPathToggle),n=items.filter(x=>x.checked).length;toggle.checked=n===items.length&&items.length>0;toggle.indeterminate=n>0&&n<items.length;});
+    form.querySelectorAll('[data-revision-group-toggle]').forEach(toggle=>{const items=topics().filter(x=>x.dataset.area===toggle.dataset.revisionGroupToggle),n=items.filter(x=>x.checked).length;toggle.checked=n===items.length&&items.length>0;toggle.indeterminate=n>0&&n<items.length;});
   };
-  form.querySelectorAll('[data-revision-path-toggle]').forEach(toggle=>toggle.addEventListener('change',()=>{lessons().filter(x=>x.dataset.path===toggle.dataset.revisionPathToggle).forEach(x=>x.checked=toggle.checked);update();}));
-  lessons().forEach(x=>x.addEventListener('change',update));update();
+  form.querySelectorAll('[data-revision-group-toggle]').forEach(toggle=>toggle.addEventListener('change',()=>{topics().filter(x=>x.dataset.area===toggle.dataset.revisionGroupToggle).forEach(x=>x.checked=toggle.checked);update();}));
+  topics().forEach(x=>x.addEventListener('change',update));update();
+}
+function bindStudyBoard(searchId,buttonAttr,emptyId){
+  const search=$(`#${searchId}`);if(!search)return;
+  let area='all';
+  const cards=()=>$$('[data-study-card]');
+  const apply=()=>{
+    const tokens=search.value.toLowerCase().trim().split(/\s+/).filter(Boolean);let visible=0;
+    cards().forEach(card=>{const hay=card.dataset.search||'',okText=!tokens.length||tokens.every(t=>hay.includes(t)),okArea=area==='all'||card.dataset.area===area,ok=okText&&okArea;card.style.display=ok?'':'none';if(ok)visible++;});
+    $$('[data-study-section]').forEach(section=>{const any=$$('[data-study-card]',section).some(c=>c.style.display!=='none');section.hidden=!any;if(any&&tokens.length)section.open=true;});
+    const empty=$(`#${emptyId}`);if(empty)empty.hidden=visible!==0;
+  };
+  bindEmbeddedSearchInput(search,apply,()=>firstVisible('[data-study-card]')?.scrollIntoView({block:'center',behavior:'smooth'}));
+  $$(`[${buttonAttr}]`).forEach(btn=>btn.addEventListener('click',()=>{$$(`[${buttonAttr}]`).forEach(x=>x.classList.remove('active'));btn.classList.add('active');area=btn.getAttribute(buttonAttr)||'all';apply();}));
 }
 function bindEmbeddedSearchInput(input,apply,onEnter){
   if(!input)return;
@@ -2730,23 +2807,32 @@ function bindNewsPage(){
 function bindPageInputs(){
   const gs=$('#glossarySearch');
   if(gs){
+    let area='all';
     const apply=()=>{
       const q=gs.value.toLowerCase().trim(),tokens=q.split(/\s+/).filter(Boolean);let visible=0;
-      $$('.glossary-item').forEach(x=>{const hay=x.dataset.search||'',ok=!tokens.length||tokens.every(t=>hay.includes(t));x.style.display=ok?'':'none';if(ok)visible++;});
+      $$('.glossary-item').forEach(x=>{const hay=x.dataset.search||'',okText=!tokens.length||tokens.every(t=>hay.includes(t)),okArea=area==='all'||x.dataset.area===area,ok=okText&&okArea;x.style.display=ok?'':'none';if(ok)visible++;});
+      const out=$('#glossaryResultCount');if(out)out.textContent=`${visible} term${visible===1?'':'s'}`;
       const empty=$('#glossarySearchEmpty');if(empty)empty.hidden=visible!==0;
     };
     bindEmbeddedSearchInput(gs,apply,()=>firstVisible('.glossary-item')?.scrollIntoView({block:'center',behavior:'smooth'}));
+    $$('[data-glossary-filter]').forEach(btn=>btn.addEventListener('click',()=>{$$('[data-glossary-filter]').forEach(x=>x.classList.remove('active'));btn.classList.add('active');area=btn.dataset.glossaryFilter||'all';apply();}));
   }
+  bindStudyBoard('challengeSearch','data-challenge-filter','challengeSearchEmpty');
+  bindStudyBoard('homeworkSearch','data-homework-filter','homeworkSearchEmpty');
   bindRevisionBuilder();
   bindTutorialLibrary();
   bindSnippetBank();
   bindNewsPage();
 }
 async function copyHomework(id){
-  const l=lesson(id);if(!l)return;
-  const text=`${l.homework.title}\n\nTask:\n${l.homework.task}\n\nEvidence:\n${l.homework.evidence}\n\nStretch:\n${l.homework.stretch}\n\nRelated UE5 lesson: ${l.title}\nMain game mechanic: ${l.projectTask?.name||''}`;
-  try{await navigator.clipboard.writeText(text);toast('Homework copied — ready for Teams.')}catch(e){toast('Clipboard blocked by browser.')}
+  let item=homeworkItems().find(x=>x.id===id);
+  if(!item){const l=lesson(id);if(l)item=homeworkItems().find(x=>x.legacyId===id)}
+  if(!item)return;
+  const steps=item.steps?.length?`\n\nSuggested steps:\n${item.steps.map((x,i)=>`${i+1}. ${x}`).join('\n')}`:'';
+  const text=`${item.title}\n\nTask:\n${item.task}${steps}\n\nEvidence:\n${item.evidence}\n\nStretch:\n${item.stretch}\n\nRelated Hub area: ${item.areaLabel}\nReference: ${item.meta}`;
+  try{await navigator.clipboard.writeText(text);toast('Independent-study task copied — ready for Teams.')}catch(e){toast('Clipboard blocked by browser.')}
 }
+
 function localUnlockedBadgeIds(){return new Set(achievementData(0,0).filter(a=>a[3]).map(a=>a[0]))}
 function badgeUnlockAfter(before,fallback){
   const after=achievementData(0,0).filter(a=>a[3]);
@@ -2788,22 +2874,22 @@ async function setChapterBuildComplete(pathId){
   if(was)toast('Chapter Build marked incomplete.');else badgeUnlockAfter(before,`Chapter Build complete! +${b.xp} XP`);finishInlineUpdate(!was);
 }
 async function setDesignBuildComplete(id){
-  const m=designModule(id);if(!m)return;const was=designBuildDone(id);
+  const m=designModule(id);if(!m)return;const was=designBuildDone(id),before=localUnlockedBadgeIds();
   state.designBuildCompleted=was?state.designBuildCompleted.filter(x=>x!==id):[...new Set([...state.designBuildCompleted,id])];saveState();
   if(BACKEND.user){try{await BACKEND.setLessonComplete(`designbuild:${id}`,!was)}catch(e){toast('Saved locally; cloud sync failed.')}}
-  toast(was?'Studio Build marked incomplete.':'Studio Build complete • +300 XP');finishInlineUpdate(!was);
+  if(was)toast('Studio Build marked incomplete.');else badgeUnlockAfter(before,'Studio Build complete • +300 XP');finishInlineUpdate(!was);
 }
 async function setDesignSourceComplete(key){
-  const clean=String(key||'').trim();if(!clean||(state.designSourceCompleted||[]).includes(clean))return;
+  const clean=String(key||'').trim();if(!clean||(state.designSourceCompleted||[]).includes(clean))return;const before=localUnlockedBadgeIds();
   state.designSourceCompleted=[...new Set([...(state.designSourceCompleted||[]),clean])];saveState();
   if(BACKEND.user){try{await BACKEND.setLessonComplete(`designsource:${clean}`,true)}catch(e){toast('Saved locally; cloud sync failed.')}}
-  toast('Industry source task complete • +20 XP');finishInlineUpdate(true);
+  badgeUnlockAfter(before,'Industry source task complete • +20 XP');finishInlineUpdate(true);
 }
 async function setModelVideoComplete(id){
-  const v=modelVideo(id);if(!v||modelVideoDone(id))return;
+  const v=modelVideo(id);if(!v||modelVideoDone(id))return;const before=localUnlockedBadgeIds();
   state.modelVideoCompleted=[...new Set([...(state.modelVideoCompleted||[]),id])];saveState();
   if(BACKEND.user){try{await BACKEND.setLessonComplete(`modelvideo:${id}`,true)}catch(e){toast('Saved locally; cloud sync failed.')}}
-  toast(`Video task complete • +${MODEL_VIDEOS.xp} XP`);finishInlineUpdate(true);
+  badgeUnlockAfter(before,`Video task complete • +${MODEL_VIDEOS.xp} XP`);finishInlineUpdate(true);
 }
 async function setModelLessonComplete(id){
   const l=modelLesson(id);if(!l)return;const was=modelLessonDone(id),before=localUnlockedBadgeIds();
@@ -3105,7 +3191,7 @@ document.addEventListener('click',async e=>{
     if(h)h.classList.add('show');
     if(!$$('.hint',wrap).some(x=>!x.classList.contains('show')))b.textContent='All hints revealed';
   }
-  else if(a==='copy-homework') await copyHomework(b.dataset.lesson);
+  else if(a==='copy-homework') await copyHomework(b.dataset.studyHomework||b.dataset.lesson);
   else if(a==='mode'){lessonMode=b.dataset.mode;route();}
   else if(a==='avatar-glyph'){profilePrefs.glyph=b.dataset.glyph||'⌘';saveProfilePrefs();renderAuth();}
   else if(a==='avatar-theme'){profilePrefs.theme=b.dataset.theme||'violet';saveProfilePrefs();renderAuth();}
@@ -3228,7 +3314,7 @@ document.addEventListener('click',async e=>{
     }
   }
   else if(a==='revision-restart'){revisionSession=null;route()}
-  else if(a==='revision-repeat'){const ids=revisionSession?.lessonIds?[...revisionSession.lessonIds]:null,label=revisionSession?.topicLabel||'Random mixed',count=revisionSession?.requestedCount||10;revisionSession=null;startRevisionQuiz(ids,count,label)}
+  else if(a==='revision-repeat'){const ids=revisionSession?.topicIds?[...revisionSession.topicIds]:null,label=revisionSession?.topicLabel||'Random mixed',count=revisionSession?.requestedCount||10;revisionSession=null;startRevisionQuiz(ids,count,label)}
   else if(a==='revision-abandon'){revisionSession=null;route()}
   else if(a==='start-template-project'){try{const row=await BACKEND.startProjectFromTemplate(b.dataset.template,b.dataset.mode);location.hash=`#/projects/${row.project_id}`;toast(b.dataset.mode==='group'?'Group project started — share the join code with your teammates.':'Individual project started.')}catch(err){toast(err.message)}}
   else if(a==='delete-template-milestone'){if(confirm('Delete this template milestone? Student projects already started will not be changed.')){try{await BACKEND.deleteTemplateMilestone(b.dataset.milestone);await renderProjectTemplate(b.dataset.template);toast('Template milestone deleted.')}catch(err){toast(err.message)}}}
@@ -3297,11 +3383,11 @@ document.addEventListener('submit',async e=>{
     e.preventDefault();if(modelFoundationChaptersDone()<MODEL_FOUNDATIONS.chapters.length&&!isTeacher()){toast('Pass all six chapters first.');return}
     const qs=MODEL_FOUNDATIONS.finalQuiz,fd=new FormData(e.target),answers=qs.map((_,i)=>{const v=fd.get(`q${i}`);return v===null?NaN:Number(v)});
     if(answers.some(Number.isNaN)){toast('Answer every question first.');return}
-    const correct=qs.reduce((n,q,i)=>n+(answers[i]===q.correct?1:0),0),total=qs.length,pct=Math.round(correct/total*100),old=modelTheoryScore('final'),bestPct=Math.max(old?.bestPct||old?.pct||0,pct),passed=pct>=MODEL_FOUNDATIONS.passPercent,firstPass=passed&&!modelFoundationDone();
+    const correct=qs.reduce((n,q,i)=>n+(answers[i]===q.correct?1:0),0),total=qs.length,pct=Math.round(correct/total*100),old=modelTheoryScore('final'),bestPct=Math.max(old?.bestPct||old?.pct||0,pct),passed=pct>=MODEL_FOUNDATIONS.passPercent,firstPass=passed&&!modelFoundationDone(),before=firstPass?localUnlockedBadgeIds():null;
     state.modelTheoryScores={...(state.modelTheoryScores||{}),final:{answers,correct,total,pct,bestPct,at:new Date().toISOString()}};
     if(firstPass)state.modelFoundationFinal=true;saveState();
     if(firstPass&&BACKEND.user){try{await BACKEND.setLessonComplete('modelfoundation:final',true)}catch(err){toast('Passed locally; cloud sync failed.')}}
-    toast(passed?(firstPass?`Model Doctor passed • +${MODEL_FOUNDATIONS.finalXp} XP • Build X completion unlocked`:'Model Doctor passed again — XP was already awarded.'):`${pct}% — use the review and have another go.`);route({preserveScroll:true});return;
+    if(firstPass)badgeUnlockAfter(before,`Model Doctor passed • +${MODEL_FOUNDATIONS.finalXp} XP • Build X completion unlocked`);else toast(passed?'Model Doctor passed again — XP was already awarded.':`${pct}% — use the review and have another go.`);route({preserveScroll:true});return;
   }
   if(e.target.dataset.actionForm==='critique-post'){
     e.preventDefault();const fd=new FormData(e.target),file=e.target.elements.file?.files?.[0];
@@ -3324,7 +3410,7 @@ document.addEventListener('submit',async e=>{
     e.preventDefault();const fd=new FormData(e.target);startRevisionQuiz(null,Number(fd.get('count')||10),'Random mixed');return;
   }
   if(e.target.dataset.actionForm==='revision-focused-start'){
-    e.preventDefault();const fd=new FormData(e.target),ids=fd.getAll('lessonIds').map(String);if(!ids.length){toast('Choose at least one revision topic.');return}startRevisionQuiz(ids,Number(fd.get('count')||10),revisionSelectionLabel(ids));return;
+    e.preventDefault();const fd=new FormData(e.target),ids=fd.getAll('topicIds').map(String);if(!ids.length){toast('Choose at least one revision topic.');return}startRevisionQuiz(ids,Number(fd.get('count')||10),revisionSelectionLabel(ids));return;
   }
   if(e.target.dataset.actionForm==='revision-answer'){
     e.preventDefault();if(!revisionSession)return;
@@ -3697,8 +3783,8 @@ function buildGlobalSearchIndex(){
   (SNIPPETS.snippets||[]).forEach(x=>{const l=lesson((x.relatedLessons||[])[0]);add({
     title:x.title,meta:`Official Epic paste assist • ${l?`inside ${l.title}`:`UE ${x.sourceVersion||'5'}`}`,href:l?`#/lesson/${l.id}`:'#/snippets',icon:'⚡',kind:'snippet',data:deepSearchText(x)
   })});
-  (DATA.glossary||[]).forEach(g=>add({
-    title:g[0],meta:g[1],href:'#/glossary',icon:'?',kind:'glossary',data:g.join(' ')
+  hubGlossary().forEach(g=>add({
+    title:g[0],meta:`${g[2]} glossary • ${g[1]}`,href:'#/glossary',icon:'?',kind:'glossary',data:g.join(' ')
   }));
 
   [
@@ -3710,9 +3796,9 @@ function buildGlobalSearchIndex(){
     ['Resource Library','Free assets, CC0 textures, HDRIs, sound libraries, level explorers, UI reference, documentaries and professional talks','#/resources','🧰'],
     ['3D Modelling Studio','3ds Max modelling lessons, builds, video series and topology repair','#/modeling','⬡'],
     ["Dits' 3ds Max Video Series",'14 follow-along videos covering interface, primitives, Editable Poly, modifiers, Array, mini builds and materials','#/modeling/videos','🎬'],
-    ['Glossary','Unreal Engine and games development terminology','#/glossary','?'],
-    ['Revision Quizzes','Knowledge checks and revision questions','#/revision','↻'],
-    ['Homework','Independent learning and practice tasks','#/homework','⌂']
+    ['Glossary','Unreal Engine, game design and 3D modelling terminology','#/glossary','?'],
+    ['Revision Quizzes','Mixed Unreal, Designer Studio and 3D Foundations knowledge checks','#/revision','↻'],
+    ['Homework','Independent study across Unreal, design and 3D with Teams-ready task copy','#/homework','⌂']
   ].forEach(([title,data,href,icon])=>add({title,meta:'Hub area',href,icon,kind:'area',data}));
   return entries;
 }

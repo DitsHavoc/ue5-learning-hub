@@ -1,3 +1,13 @@
+## v3.39.0 — Study Tools Refresh — 29 Aug 2026
+- Rebuilt Revision Quizzes as a cross-Hub bank: 44 existing Unreal + 30 Module 0 + 24 Designer scenario questions = 98 total.
+- Expanded Glossary from 41 Unreal terms to 97 searchable Unreal / Design / 3D terms with area filters.
+- Expanded Challenge Board from 20 Unreal challenges to 58 across Unreal, Designer Studio, Build X and Sculpt.
+- Expanded Homework to 56 grouped independent-study tasks across Unreal, Designer field research, 3D Foundations and the 14 Max videos.
+- Kept Copy for Teams and explicitly kept formal assignment/submission/grade workflow in Teams.
+- Added Study tools navigation grouping and `data/study-data.js`.
+- Added four milestone badges: Game-Ready Foundations, Max Apprentice, Industry Eye and Design Thinker.
+- No XP changes, completion-ID changes or database migration.
+
 ## v3.38.2 — Module 0 Visual Teaching Pass — 29 Aug 2026
 - Rebuilt all six Module 0 chapters around section-level images that directly support the adjacent theory.
 - Added 23 purposeful visual placements across 19 theory sections.

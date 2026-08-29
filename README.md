@@ -1,4 +1,8 @@
-# Current release — v3.38.2
+# Current release — v3.39.0
+
+**Study Tools Refresh.** Revision, Glossary, Challenge Board and Homework now reflect the whole Hub rather than the older Unreal-only structure. Revision has 98 mixed Unreal / Designer / 3D questions; the Glossary has 97 filtered terms; the Challenge Board has 58 cross-discipline transfer tasks; and Homework has 56 grouped independent-study activities with Teams-ready copying. Teams remains the formal assignment/submission/grade space. Four milestone badges were added for Module 0, the Max video series, industry deep dives and Designer Studio completion. No XP, completion IDs or database schema changed. See `RELEASE-NOTES-v3.39.0.md` and `STUDY-TOOLS-QA-v3.39.0.md`.
+
+## Previous release — v3.38.2
 
 **Module 0 visual teaching pass.** Every theory section now pairs its explanation with an image that directly demonstrates that exact idea: real stills from the teacher-made Max videos, approved single-stage modelling viewport images, and the strongest UV/collision/LOD figures from the supplied theory deck. The old Workspace interface-map diagram is removed from teaching and replaced with the real Max workspace from the Interface Basics video. No completion IDs or XP rules change. See `RELEASE-NOTES-v3.38.2.md` and `3D-MODELLING-FOUNDATIONS-VISUAL-QA-v3.38.2.md`.
 
