@@ -1,5 +1,5 @@
 window.UE5_TUTORIAL_DATA = {
-  "version": "3.34.21",
+  "version": "3.34.22",
   "buildDate": "29 Aug 2026",
   "categories": [
     {
@@ -1257,14 +1257,26 @@ window.UE5_TUTORIAL_DATA = {
           }
         ],
         {
-          "src": "https://dev.epicgames.com/community/api/documentation/image/cd144c2d-621f-48e8-87c4-0fe02d8bb0bf?resizing_type=fit",
-          "caption": "Official UE5.8 completed key-gated door Event Graph. The Hub uses a simpler HasKey Boolean but the decision pattern is the same.",
+          "src": "https://dev.epicgames.com/community/api/documentation/image/e313562c-35a2-4382-a292-e4db858aa14e?resizing_type=fit",
+          "caption": "Official UE5.8 door decision/Branch logic. The Hub simplifies the key system to HasKey Boolean, but the decision pattern is the same.",
           "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/designer-03-open-doors-with-keys-in-unreal-engine",
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
         },
-        null,
-        null,
+        {
+          "src": "https://dev.epicgames.com/community/api/documentation/image/9cfde287-a6b8-4f77-9e9e-b97b81ebaf97?resizing_type=fit",
+          "caption": "Official UE5.8 completed door Blueprint logic. Use the Hub’s simpler HasKey and 0→90 Timeline values written beside it.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/designer-03-open-doors-with-keys-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://dev.epicgames.com/community/api/documentation/image/9f921fc3-8ce3-48e8-aab9-5031a0dbe2c5?resizing_type=fit",
+          "caption": "Official UE5.8 key/door Blueprint connections. Test both locked and unlocked cases as the Hub asks.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/designer-03-open-doors-with-keys-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null
       ],
       "familyId": "keys-locked-doors",
@@ -5836,23 +5848,41 @@ window.UE5_TUTORIAL_DATA = {
         "object-class-references"
       ],
       "recipeVisuals": [
-        null,
         {
-          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/b6953df1-c9fc-4716-83fd-7a18fd635340/behavior-tree-quick-start-step-6-13.png",
-          "caption": "Official UE5.8 Blackboard value-setting pattern. Use the Hub’s TargetActor/Blackboard key names.",
-          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/behavior-tree-in-unreal-engine---quick-start-guide",
+          "src": "https://dev.epicgames.com/community/api/documentation/image/40c49512-b622-4af3-9249-46223601747a?resizing_type=fit",
+          "caption": "Official UE5.8 enemy PlayerRef/target variable setup.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-08-create-an-enemy-in-unreal-engine",
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
         },
         {
-          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/fccc3f17-4a64-4262-989e-dddb80d139e2/basic-npc-ai-moveto.png",
-          "caption": "Official UE5.8 Blueprint example using AI Move To to send an AI-controlled Pawn towards a destination.",
-          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/basic-navigation-in-unreal-engine",
+          "src": "https://dev.epicgames.com/community/api/documentation/image/8657b742-15a2-45ab-9eec-49a52a6e6cc3?resizing_type=fit",
+          "caption": "Official UE5.8 target-reference setup for the enemy Blueprint.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-08-create-an-enemy-in-unreal-engine",
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
         },
-        null,
-        null,
+        {
+          "src": "https://dev.epicgames.com/community/api/documentation/image/b3880a9d-b3cb-4d86-9b5f-61528df4d8e4?resizing_type=fit",
+          "caption": "Official UE5.8 enemy movement/chase Blueprint reference. Keep the Hub Acceptance Radius value in the text.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-08-create-an-enemy-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://dev.epicgames.com/community/api/documentation/image/f7980e0e-1440-495a-afa0-f52c6f5a2f3d?resizing_type=fit",
+          "caption": "Official UE5.8 detection/Branch control used to decide whether the enemy should chase.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-08-create-an-enemy-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://dev.epicgames.com/community/api/documentation/image/de03dd81-9833-4668-8621-ceda028f0e8c?resizing_type=fit",
+          "caption": "Official UE5.8 movement control reference. The Hub’s lost-distance threshold and return-to-patrol values remain written in the step.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-08-create-an-enemy-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null
       ],
       "familyId": "enemy-ai",
@@ -6155,11 +6185,23 @@ window.UE5_TUTORIAL_DATA = {
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
         },
-        null,
-        null,
+        {
+          "src": "https://dev.epicgames.com/community/api/documentation/image/54ae4825-e1eb-4670-83f9-f4b78eeddc69?resizing_type=fit",
+          "caption": "Official UE5.8 enemy detection/distance logic reference. Use AttackRange 200 from the Hub step.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-08-create-an-enemy-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://dev.epicgames.com/community/api/documentation/image/f7980e0e-1440-495a-afa0-f52c6f5a2f3d?resizing_type=fit",
+          "caption": "Official UE5.8 Branch-based enemy decision logic. The Hub adds AttackRange and CanAttack as written.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-08-create-an-enemy-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         {
           "src": "https://dev.epicgames.com/community/api/documentation/image/235ef302-058b-472f-9fb9-a0248e2a75ed?resizing_type=fit",
-          "caption": "Official UE5.8 enemy Apply Damage graph from Epic’s current enemy tutorial.",
+          "caption": "Official UE5.8 enemy Apply Damage graph. Use the Hub damage/cooldown values beside the image.",
           "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-08-create-an-enemy-in-unreal-engine",
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"

@@ -1,5 +1,5 @@
 window.UE5_DESIGN_DATA = {
-  "version": "3.34.11",
+  "version": "3.34.22",
   "buildDate": "29 Aug 2026",
   "modules": [
     {
@@ -2461,7 +2461,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://dev.epicgames.com/community/api/documentation/image/32410e7c-51a7-4151-bd40-af08757b2f3f?resizing_type=fit",
+            "caption": "Official UE5.8 Artist tutorial: parameterised parent Material graph.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/artist-03-create-materials-and-material-instances",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Parameterise roughness",
@@ -2473,7 +2479,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://dev.epicgames.com/community/api/documentation/image/df6153e2-eb41-4a12-bc78-2f3eee3b5ae9?resizing_type=fit",
+            "caption": "Official UE5.8 Artist tutorial: Roughness exposed as a parameter. Exact Hub naming stays in the step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/artist-03-create-materials-and-material-instances",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Create MI_Surface_A",
@@ -2486,9 +2498,9 @@ window.UE5_DESIGN_DATA = {
             "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
           ],
           "visual": {
-            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/990457fc-5f41-4d37-87b4-ce7abf387b7c/details-panel.png",
-            "caption": "Official UE5.8 Material Instance Editor Details panel. Exposed parent parameters appear here for fast variation.",
-            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/unreal-engine-material-instance-editor-ui",
+            "src": "https://dev.epicgames.com/community/api/documentation/image/de909896-ce3a-4382-a62b-e4d4d445157f?resizing_type=fit",
+            "caption": "Official UE5.8 Material Instance Editor with exposed parent parameters.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/artist-03-create-materials-and-material-instances",
             "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
             "kind": "epic"
           }
@@ -2541,8 +2553,8 @@ window.UE5_DESIGN_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": {
-        "title": "Epic — Material Instances",
-        "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/creating-and-using-material-instances-in-unreal-engine"
+        "title": "Epic UE5.8 — Artist 03: Materials & Material Instances",
+        "url": "https://dev.epicgames.com/documentation/unreal-engine/artist-03-create-materials-and-material-instances"
       },
       "prescriptive": true
     },
@@ -2608,7 +2620,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://dev.epicgames.com/community/api/documentation/image/95d351aa-c3af-4724-a8ad-8dd6cdb540ae?resizing_type=fit",
+            "caption": "Official UE5.8 Artist tutorial: colour Lerp for dry/wet material variation.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/artist-04-expanded-material-instances",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Keep variation",
@@ -2620,7 +2638,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://dev.epicgames.com/community/api/documentation/image/b2600807-eca4-4303-b8dd-07ed36896437?resizing_type=fit",
+            "caption": "Official UE5.8 Artist tutorial: scalar Lerp used to blend dry/wet roughness. A mask can drive the same Alpha for patchy wetness.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/artist-04-expanded-material-instances",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Test under grazing light",
@@ -2632,7 +2656,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Keep the camera, route or test condition consistent so the comparison means something."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://dev.epicgames.com/community/api/documentation/image/6ddb623e-bada-4dbe-9732-918f24a9993c?resizing_type=fit",
+            "caption": "Official UE5.8 Artist tutorial: completed Blueprint/Timeline-driven wet material wiring.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/artist-04-expanded-material-instances",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         }
       ],
       "mistakes": [
@@ -2652,8 +2682,8 @@ window.UE5_DESIGN_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": {
-        "title": "Epic — Physically Based Materials",
-        "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/physically-based-materials-in-unreal-engine"
+        "title": "Epic UE5.8 — Artist 04: Expanded Material Instances",
+        "url": "https://dev.epicgames.com/documentation/unreal-engine/artist-04-expanded-material-instances"
       },
       "prescriptive": true
     },
@@ -3022,7 +3052,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://dev.epicgames.com/community/api/documentation/image/613d3965-279b-4d62-8cde-f696aaa5d3b6?height=335&resizing_type=fill&width=1920",
+            "caption": "Current UE5.8 Post Process tutorial. The walkthrough explicitly shows PPV_Global and Infinite Extent (Unbound); follow the Details-panel values in the Hub step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/add-post-process-volumes",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Stabilise exposure",
@@ -3034,7 +3070,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://dev.epicgames.com/community/api/documentation/image/613d3965-279b-4d62-8cde-f696aaa5d3b6?height=335&resizing_type=fill&width=1920",
+            "caption": "Current UE5.8 Post Process tutorial. The walkthrough explicitly shows PPV_Global and Infinite Extent (Unbound); follow the Details-panel values in the Hub step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/add-post-process-volumes",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Adjust colour gently",
@@ -3090,8 +3132,8 @@ window.UE5_DESIGN_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": {
-        "title": "Epic — Post Process",
-        "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/post-process-effects-in-unreal-engine"
+        "title": "Epic UE5.8 — Add Post Process Volumes",
+        "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/add-post-process-volumes"
       },
       "prescriptive": true
     },
@@ -3139,7 +3181,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://img.edc-cdn.net/imgproxy/WhJevtNTVxIUT55gW9wM3-sl1hwqk0EEexbt5n9VtQc/filename%3A04-new-landscape-tool.png/resizing_type%3Afit/width%3A0/height%3A0/aHR0cHM6Ly9kMWl2N2RiNDR5aGd4bi5jbG91ZGZyb250Lm5ldC9kb2N1bWVudGF0aW9uL2ltYWdlcy80ZGIwODM4YS0yYmFhLTRmYzItYTNiNi1jNjBkNTJjOGVkM2MvMDQtbmV3LWxhbmRzY2FwZS10b29sLnBuZw",
+            "caption": "Official Landscape Create/Manage tool context. Choose the modest Hub size written in the step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/landscape-quick-start-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Create and save",
@@ -3151,7 +3199,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://img.edc-cdn.net/imgproxy/WhJevtNTVxIUT55gW9wM3-sl1hwqk0EEexbt5n9VtQc/filename%3A04-new-landscape-tool.png/resizing_type%3Afit/width%3A0/height%3A0/aHR0cHM6Ly9kMWl2N2RiNDR5aGd4bi5jbG91ZGZyb250Lm5ldC9kb2N1bWVudGF0aW9uL2ltYWdlcy80ZGIwODM4YS0yYmFhLTRmYzItYTNiNi1jNjBkNTJjOGVkM2MvMDQtbmV3LWxhbmRzY2FwZS10b29sLnBuZw",
+            "caption": "Official Landscape Create/Manage tool context. Choose the modest Hub size written in the step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/landscape-quick-start-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Switch tools",
@@ -3197,7 +3251,7 @@ window.UE5_DESIGN_DATA = {
         }
       ],
       "source": {
-        "title": "Epic — Landscape Quick Start",
+        "title": "Epic UE5.8 — Landscape Quick Start",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/landscape-quick-start-guide-in-unreal-engine"
       },
       "prescriptive": true
@@ -3258,7 +3312,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://img.edc-cdn.net/imgproxy/WhJevtNTVxIUT55gW9wM3-sl1hwqk0EEexbt5n9VtQc/filename%3A04-new-landscape-tool.png/resizing_type%3Afit/width%3A0/height%3A0/aHR0cHM6Ly9kMWl2N2RiNDR5aGd4bi5jbG91ZGZyb250Lm5ldC9kb2N1bWVudGF0aW9uL2ltYWdlcy80ZGIwODM4YS0yYmFhLTRmYzItYTNiNi1jNjBkNTJjOGVkM2MvMDQtbmV3LWxhbmRzY2FwZS10b29sLnBuZw",
+            "caption": "Official UE Landscape tool context. Epic’s current Quick Start explicitly demonstrates Smooth and Flatten; use the Hub’s playable-route goal rather than copying Epic terrain literally.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/landscape-quick-start-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Add secondary variation",
@@ -3302,8 +3362,8 @@ window.UE5_DESIGN_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": {
-        "title": "Epic — Landscape Sculpt",
-        "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/landscape-sculpt-mode-in-unreal-engine"
+        "title": "Epic UE5.8 — Landscape Quick Start",
+        "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/landscape-quick-start-guide-in-unreal-engine"
       },
       "prescriptive": true
     },
@@ -3345,7 +3405,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://img.edc-cdn.net/imgproxy/WhJevtNTVxIUT55gW9wM3-sl1hwqk0EEexbt5n9VtQc/filename%3A04-new-landscape-tool.png/resizing_type%3Afit/width%3A0/height%3A0/aHR0cHM6Ly9kMWl2N2RiNDR5aGd4bi5jbG91ZGZyb250Lm5ldC9kb2N1bWVudGF0aW9uL2ltYWdlcy80ZGIwODM4YS0yYmFhLTRmYzItYTNiNi1jNjBkNTJjOGVkM2MvMDQtbmV3LWxhbmRzY2FwZS10b29sLnBuZw",
+            "caption": "Official UE Landscape Paint context. Epic’s current Quick Start walks through Target Layers and creating Layer Info objects.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/landscape-quick-start-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Paint by rule",
@@ -3407,8 +3473,8 @@ window.UE5_DESIGN_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": {
-        "title": "Epic — Landscape Materials",
-        "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/landscape-materials-in-unreal-engine"
+        "title": "Epic UE5.8 — Landscape Quick Start",
+        "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/landscape-quick-start-guide-in-unreal-engine"
       },
       "prescriptive": true
     },
@@ -3438,7 +3504,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://dev.epicgames.com/community/api/documentation/image/d79dc3c6-ea82-4342-a92b-4aabda4e6535?height=335&resizing_type=fill&width=1920",
+            "caption": "Current UE5.8 Foliage Mode reference. Epic’s page shows Paint, Brush Options, Paint Density, radius and scale variation; keep the path/readability judgement from the Hub.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/foliage-mode-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Build large clusters",
@@ -3462,7 +3534,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://dev.epicgames.com/community/api/documentation/image/d79dc3c6-ea82-4342-a92b-4aabda4e6535?height=335&resizing_type=fill&width=1920",
+            "caption": "Current UE5.8 Foliage Mode reference. Epic’s page shows Paint, Brush Options, Paint Density, radius and scale variation; keep the path/readability judgement from the Hub.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/foliage-mode-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Vary scale carefully",
@@ -3474,7 +3552,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://dev.epicgames.com/community/api/documentation/image/d79dc3c6-ea82-4342-a92b-4aabda4e6535?height=335&resizing_type=fill&width=1920",
+            "caption": "Current UE5.8 Foliage Mode reference. Epic’s page shows Paint, Brush Options, Paint Density, radius and scale variation; keep the path/readability judgement from the Hub.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/foliage-mode-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Trim sightlines",
@@ -3506,8 +3590,8 @@ window.UE5_DESIGN_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": {
-        "title": "Epic — Foliage Tool",
-        "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/foliage-tool-in-unreal-engine"
+        "title": "Epic UE5.8 — Foliage Mode",
+        "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/foliage-mode-in-unreal-engine"
       },
       "prescriptive": true
     },
@@ -3938,22 +4022,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
           ],
-          "visual": [
-            {
-              "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/10712277-55f5-405e-95dd-00fea5e9eda4/trigger12.png",
-              "caption": "Official UE5.8 Play (SequencePlayer) node created from a Level Sequence reference.",
-              "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/play-cinematics-from-blueprints-in-unreal-engine",
-              "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-              "kind": "epic"
-            },
-            {
-              "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/7b328802-eb9b-4d13-ac6f-67b35dbe7d5c/trigger13.png",
-              "caption": "Official UE5.8 OnActorBeginOverlap wired to play a Level Sequence.",
-              "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/play-cinematics-from-blueprints-in-unreal-engine",
-              "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-              "kind": "epic"
-            }
-          ]
+          "visual": {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/10712277-55f5-405e-95dd-00fea5e9eda4/trigger12.png",
+            "caption": "Official UE5.8 Level Blueprint: play a Level Sequence from a gameplay trigger.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/play-cinematics-from-blueprints-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Handle player control",
@@ -3965,7 +4040,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/14be747e-49f5-4ddb-8a17-e514b9603a14/trigger17.png",
+            "caption": "Official UE5.8 cinematic control graph showing Branch/Is Playing and a controlled skip path. The Hub’s player-control handling can use the same gameplay-boundary idea.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/play-cinematics-from-blueprints-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Restore state",
@@ -3977,7 +4058,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/a4650bca-064d-4ecc-9ead-90c63ced3e36/trigger15.png",
+            "caption": "Official UE5.8 sequence replay/state workflow. Restore gameplay state deliberately after the sequence rather than leaving control ambiguous.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/play-cinematics-from-blueprints-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         }
       ],
       "mistakes": [
@@ -3997,8 +4084,8 @@ window.UE5_DESIGN_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": {
-        "title": "Epic — Cinematics and Sequencer",
-        "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/cinematics-and-sequencer-in-unreal-engine"
+        "title": "Epic UE5.8 — Triggering Sequences from Gameplay",
+        "url": "https://dev.epicgames.com/documentation/unreal-engine/play-cinematics-from-blueprints-in-unreal-engine"
       },
       "prescriptive": true
     },
@@ -4739,7 +4826,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Change one targeted cause, then return to the same test view before deciding whether it was an improvement."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://dev.epicgames.com/community/api/documentation/image/6b21c833-a42c-4614-85a4-cafef96f2270?height=335&resizing_type=fill&width=1920",
+            "caption": "Current UE5.8 Static Mesh Editor reference. The Details panel contains LOD and mesh-reduction options; Nanite settings are inspected on the mesh asset.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/static-mesh-editor-ui-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Test distance",
@@ -4751,7 +4844,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Keep the camera, route or test condition consistent so the comparison means something."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://dev.epicgames.com/community/api/documentation/image/6b21c833-a42c-4614-85a4-cafef96f2270?height=335&resizing_type=fill&width=1920",
+            "caption": "Current UE5.8 Static Mesh Editor reference. The Details panel contains LOD and mesh-reduction options; Nanite settings are inspected on the mesh asset.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/static-mesh-editor-ui-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Keep silhouette priority",
@@ -4795,8 +4894,8 @@ window.UE5_DESIGN_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": {
-        "title": "Epic — Nanite",
-        "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/nanite-virtualized-geometry-in-unreal-engine"
+        "title": "Epic UE5.8 — Static Mesh Editor UI / Nanite",
+        "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/static-mesh-editor-ui-in-unreal-engine"
       },
       "prescriptive": true
     },
@@ -6114,7 +6213,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/f71f4d3e-8707-4d18-b398-fca822b66bdd/branch_example.png",
+            "caption": "Official UE5 Branch node reference. Use your Boolean condition to choose between the two outcome sequences.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/flow-control-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Branch to the outcome",
@@ -6126,7 +6231,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/10712277-55f5-405e-95dd-00fea5e9eda4/trigger12.png",
+            "caption": "Official UE5.8 Level Sequence Play graph. Put one Play path on each Branch outcome for the Hub’s two-outcome mini system.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/play-cinematics-from-blueprints-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Return cleanly",
@@ -6138,7 +6249,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/14be747e-49f5-4ddb-8a17-e514b9603a14/trigger17.png",
+            "caption": "Official UE5.8 sequence control example. Both outcomes should return cleanly to gameplay.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/play-cinematics-from-blueprints-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         }
       ],
       "mistakes": [
@@ -6158,8 +6275,8 @@ window.UE5_DESIGN_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": {
-        "title": "Epic UE5.8 — Sequencer",
-        "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/sequencer-cinematic-editor-unreal-engine"
+        "title": "Epic UE5.8 — Triggering Sequences from Gameplay",
+        "url": "https://dev.epicgames.com/documentation/unreal-engine/play-cinematics-from-blueprints-in-unreal-engine"
       },
       "prescriptive": true
     },
@@ -6319,7 +6436,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Judge the sound while moving through the space; a source that sounds fine while stationary may fade or spatialise badly in play."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/adc32ff4-6d81-4159-9222-b85765445c78/pawn_speed_input.png",
+            "caption": "Official UE5.8 wind MetaSound from Epic’s MetaSounds Quick Start. The tutorial builds an ambient wind graph and exposes a PawnSpeed input.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/metasounds-quick-start",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Add subtle variation",
@@ -6331,7 +6454,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Judge the sound while moving through the space; a source that sounds fine while stationary may fade or spatialise badly in play."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/adc32ff4-6d81-4159-9222-b85765445c78/pawn_speed_input.png",
+            "caption": "Official UE5.8 wind MetaSound from Epic’s MetaSounds Quick Start. The tutorial builds an ambient wind graph and exposes a PawnSpeed input.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/metasounds-quick-start",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Add sparse gust behaviour",
@@ -6343,7 +6472,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Judge the sound while moving through the space; a source that sounds fine while stationary may fade or spatialise badly in play."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/adc32ff4-6d81-4159-9222-b85765445c78/pawn_speed_input.png",
+            "caption": "Official UE5.8 wind MetaSound from Epic’s MetaSounds Quick Start. The tutorial builds an ambient wind graph and exposes a PawnSpeed input.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/metasounds-quick-start",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Test in context",
@@ -6375,7 +6510,7 @@ window.UE5_DESIGN_DATA = {
       "featured": false,
       "referenceImages": [],
       "source": {
-        "title": "Epic UE5.8 — MetaSounds Quick Start",
+        "title": "Epic UE5.8 — MetaSounds Quick Start (ambient wind)",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/metasounds-quick-start"
       },
       "prescriptive": true
@@ -6568,7 +6703,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Change one targeted cause, then return to the same test view before deciding whether it was an improvement."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://dev.epicgames.com/community/api/documentation/image/735ea5ed-7ae8-44e2-9d31-d257694acada?height=335&resizing_type=fill&width=1920",
+            "caption": "Current UE5.8 Reference Viewer reference. Inspect dependencies before deleting/moving assets; use Fix Up Redirectors from Unreal rather than Explorer.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/reference-viewer-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Remove or quarantine unused junk",
@@ -6580,7 +6721,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Change one targeted cause, then return to the same test view before deciding whether it was an improvement."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/187b2b57-12e8-4ae3-976d-bc3bf0985558/ue5_1-referenced-asset.png",
+            "caption": "Official UE5.8 referenced-asset example. Use Reference Viewer before deciding that an asset is safe to remove.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/reference-viewer-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Teammate test",
@@ -6619,8 +6766,8 @@ window.UE5_DESIGN_DATA = {
         }
       ],
       "source": {
-        "title": "Epic UE5.8 — World Partition HLOD",
-        "url": "https://dev.epicgames.com/documentation/unreal-engine/world-partition---hierarchical-level-of-detail-in-unreal-engine?lang=en-US"
+        "title": "Epic UE5.8 — Reference Viewer / Project Cleanup",
+        "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/reference-viewer-in-unreal-engine"
       },
       "prescriptive": true
     }

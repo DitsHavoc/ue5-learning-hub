@@ -1,6 +1,6 @@
 window.UE5_BUILDING_BLOCK_DATA = {
-  "version": "3.34.12",
-  "buildDate": "28 Aug 2026",
+  "version": "3.34.22",
+  "buildDate": "29 Aug 2026",
   "tiers": {
     "core": {
       "title": "CORE",
@@ -133,7 +133,14 @@ window.UE5_BUILDING_BLOCK_DATA = {
           "T_",
           "Texture"
         ]
-      ]
+      ],
+      "visual": {
+        "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/846ba685-3440-4abb-b515-7fc74402a95a/contentbrowserdropdown.png",
+        "caption": "Official UE5.8 Content Browser Add menu. Use the Hub prefixes to name the different asset types you create.",
+        "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+        "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+        "kind": "epic"
+      }
     },
     {
       "id": "actors-components",
@@ -1311,7 +1318,14 @@ window.UE5_BUILDING_BLOCK_DATA = {
         "tag"
       ],
       "tutorials": [],
-      "lessons": []
+      "lessons": [],
+      "visual": {
+        "src": "https://dev.epicgames.com/community/api/documentation/image/fbd88076-8465-498a-a42c-543e4aeafb68?height=335&resizing_type=fill&width=1920",
+        "caption": "Current UE5.8 Gameplay Tags reference. Epic’s walkthrough uses Project Settings → Gameplay Tags → Manage Gameplay Tags; create State.Stunned as written in the Hub.",
+        "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/using-gameplay-tags-in-unreal-engine",
+        "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+        "kind": "epic"
+      }
     },
     {
       "id": "data-assets",

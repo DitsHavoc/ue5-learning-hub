@@ -1,3 +1,15 @@
+## v3.34.22 — Official Tutorial Imagery Exhaustion Pass — 29 Aug 2026
+
+- Re-audited the former 76-image teacher capture queue against current UE5.6–5.8 Epic tutorial pages rather than exact-value screenshot matching.
+- Retired the 76 required-capture figure: **0 new teacher screenshots are required before launch**; exact classroom captures are now optional polish gathered naturally during teaching.
+- Integrated the supplied classroom Maps & Modes screenshot as a truthful Game Instance Class location reference; the Hub text still instructs students to select `GI_Learning`.
+- Added more current Epic Designer 03/08 imagery to door, Timeline and AI teaching.
+- Added current Artist 03/04 visuals to Material Instance and wet-surface recipes.
+- Added current Epic Post Process, Landscape, Foliage, Sequencer gameplay-trigger, MetaSound wind, Static Mesh/LOD, Gameplay Tags and Reference Viewer references to the relevant practical teaching.
+- Reused authentic existing classroom Data Table captures while keeping the Hub's exact item values in text.
+- Added v3.34.22 capture/Design Studio imagery audit documents.
+- No Supabase/database migration.
+
 ## v3.34.21 — Embedded Page Search Repair — 29 Aug 2026
 
 - Fixed embedded page search behaviour in Quick Tutorials and Epic Paste Assists.

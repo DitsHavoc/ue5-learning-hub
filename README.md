@@ -1,6 +1,6 @@
-# Current release — v3.34.21
+# Current release — v3.34.22
 
-Unreal Learning has been consolidated so similar practical builds no longer compete as separate top-level destinations. The 47 Programming Quick Tutorials are preserved as **26 recipe families + 3 Core-Lesson applications**, and all **39 Epic paste assists** now surface contextually inside **15 relevant Core Lessons** as well as recipe families. The standalone paste-assist bank remains available as a secondary Reference shelf. Site-wide search from v3.34.19 remains in place. No database migration is required.
+The remaining Unreal imagery queue has been re-audited against the actual current Epic Designer/Artist/tutorial pages rather than requiring bespoke screenshots for every Hub-specific value. Current first-party UE5.8 workflow imagery is now reused more aggressively across Core Lessons, Programming recipes, Building Blocks and Designer Studio, while exact classroom values remain in the written steps. The previous **76 teacher-capture** figure is retired: **0 new teacher screenshots are required before launch**. The supplied Maps & Modes screenshot is retained as an authentic classroom location reference. No database migration is required.
 
 # UE5 Learning Hub v3.32.2 — Class Detail Workspace
 

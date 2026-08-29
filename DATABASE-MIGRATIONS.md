@@ -229,3 +229,8 @@ No database migration required. This release changes static tutorial/snippet cur
 ## v3.34.21 — Embedded Page Search Repair
 
 No database migration is required. This release changes client-side embedded search event handling and UI feedback only. Supabase schema, RLS, RPCs, classes, projects, evidence, XP and permissions are unchanged.
+
+
+## v3.34.22 — Official Tutorial Imagery Exhaustion Pass
+
+No database migration is required. This release changes static UE learning/design/building-block visual mappings, local image assets, cache/version metadata and imagery-audit documentation only. Supabase schema, RLS, RPCs, classes, projects, evidence, XP and permissions are unchanged.

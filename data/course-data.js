@@ -1,5 +1,5 @@
 window.UE5_COURSE_DATA = {
-  "version": "3.34.15",
+  "version": "3.34.22",
   "buildDate": "29 Aug 2026",
   "paths": [
     {
@@ -3605,7 +3605,12 @@ window.UE5_COURSE_DATA = {
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
         },
-        null,
+        {
+          "src": "assets/ue5/current/UE5-lesson-framework-logic.png",
+          "caption": "Current classroom UE5 Maps & Modes location for Game Instance Class. This capture shows the stock GameInstance list; follow the Hub step and select GI_Learning.",
+          "sourceTitle": "East Norfolk classroom capture — UE5",
+          "kind": "classroom"
+        },
         null,
         null,
         null
@@ -5841,8 +5846,20 @@ window.UE5_COURSE_DATA = {
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
         },
-        null,
-        null,
+        {
+          "src": "https://dev.epicgames.com/community/api/documentation/image/9cfde287-a6b8-4f77-9e9e-b97b81ebaf97?resizing_type=fit",
+          "caption": "Official UE5.8 Designer door Blueprint logic. Use it as a graph-layout reference; keep the Hub Timeline/Lerp values written in this step.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/designer-03-open-doors-with-keys-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://dev.epicgames.com/community/api/documentation/image/9cfde287-a6b8-4f77-9e9e-b97b81ebaf97?resizing_type=fit",
+          "caption": "Official UE5.8 Designer door Blueprint logic. Use it as a graph-layout reference; keep the Hub Timeline/Lerp values written in this step.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/designer-03-open-doors-with-keys-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null,
         null,
         null
@@ -7103,8 +7120,18 @@ window.UE5_COURSE_DATA = {
             "kind": "epic"
           }
         ],
-        null,
-        null,
+        {
+          "src": "assets/ue5/current/datatable-real.webp",
+          "caption": "Authentic UE5 Data Table editor showing named rows and structured fields. Your table uses ST_ItemData and the TrainingSword values written in the Hub step.",
+          "sourceTitle": "Classroom UE5 capture",
+          "kind": "classroom"
+        },
+        {
+          "src": "assets/ue5/current/datatable-rows-closeup.webp",
+          "caption": "Authentic UE5 Data Table row view. Use the Hub values for TrainingSword, HeavySword and Medkit; the image is a workflow/location reference.",
+          "sourceTitle": "Classroom UE5 capture",
+          "kind": "classroom"
+        },
         null,
         null,
         null
@@ -7549,7 +7576,13 @@ window.UE5_COURSE_DATA = {
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
         },
-        null,
+        {
+          "src": "https://dev.epicgames.com/community/api/documentation/image/8657b742-15a2-45ab-9eec-49a52a6e6cc3?resizing_type=fit",
+          "caption": "Official UE5.8 enemy Blueprint target-reference setup. The Hub uses Patrol_A first; follow the written TargetPoint value.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-08-create-an-enemy-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         {
           "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/fccc3f17-4a64-4262-989e-dddb80d139e2/basic-npc-ai-moveto.png",
           "caption": "Official UE5.8 Blueprint example using AI Move To to send an AI-controlled Pawn toward a destination.",
@@ -7558,7 +7591,13 @@ window.UE5_COURSE_DATA = {
           "kind": "epic"
         },
         null,
-        null,
+        {
+          "src": "https://dev.epicgames.com/community/api/documentation/image/de03dd81-9833-4668-8621-ceda028f0e8c?resizing_type=fit",
+          "caption": "Official UE5.8 enemy movement/chase control logic. The Hub’s two-point patrol uses the same move/decision pattern with its own 2.0 s wait and targets.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-08-create-an-enemy-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null
       ]
     },

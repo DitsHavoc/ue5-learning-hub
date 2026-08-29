@@ -196,3 +196,22 @@ The exhaustion pass added the last two high-confidence current UE5.8 first-party
 
 Repeated 5.6–5.8 searches across input, UMG, SaveGame, communication, interfaces, dispatchers, arrays/data, projectiles, AI/navigation, audio, Niagara and camera material produced no further high-confidence first-party Blueprint clipboard families. API/C++ `Copy Full Snippet` blocks and community-authored snippets are not classified as Blueprint paste assists.
 
+
+
+## v3.34.22 official tutorial imagery pass
+
+- Designer 03 — Open Doors with Keys: https://dev.epicgames.com/documentation/unreal-engine/designer-03-open-doors-with-keys-in-unreal-engine
+- Designer 06 — Puzzles: Moving Platforms: https://dev.epicgames.com/documentation/unreal-engine/designer-06-puzzles-moving-platforms-in-unreal-engine
+- Designer 08 — Create an Enemy: https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-08-create-an-enemy-in-unreal-engine
+- Artist 03 — Create Materials and Material Instances: https://dev.epicgames.com/documentation/unreal-engine/artist-03-create-materials-and-material-instances
+- Artist 04 — Expanded Material Instances: https://dev.epicgames.com/documentation/unreal-engine/artist-04-expanded-material-instances
+- Add Post Process Volumes: https://dev.epicgames.com/documentation/en-us/unreal-engine/add-post-process-volumes
+- Landscape Quick Start Guide: https://dev.epicgames.com/documentation/en-us/unreal-engine/landscape-quick-start-guide-in-unreal-engine
+- Foliage Mode: https://dev.epicgames.com/documentation/en-us/unreal-engine/foliage-mode-in-unreal-engine
+- Static Mesh Editor UI: https://dev.epicgames.com/documentation/en-us/unreal-engine/static-mesh-editor-ui-in-unreal-engine
+- Shader Complexity / Viewport Modes: https://dev.epicgames.com/documentation/unreal-engine/viewport-modes-in-unreal-engine
+- Triggering Sequences from Gameplay: https://dev.epicgames.com/documentation/unreal-engine/play-cinematics-from-blueprints-in-unreal-engine
+- MetaSounds Quick Start: https://dev.epicgames.com/documentation/en-us/unreal-engine/metasounds-quick-start
+- Gameplay Tags: https://dev.epicgames.com/documentation/unreal-engine/using-gameplay-tags-in-unreal-engine
+- Reference Viewer: https://dev.epicgames.com/documentation/en-us/unreal-engine/reference-viewer-in-unreal-engine
+- Saving and Loading Your Game: https://dev.epicgames.com/documentation/en-us/unreal-engine/saving-and-loading-your-game-in-unreal-engine
