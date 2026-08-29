@@ -2,7 +2,7 @@
 
 These links are used inside the Learning Hub as the current Unreal Engine source of truth.
 
-**Official documentation imagery is used selectively as remote, source-linked classroom reference material.** Current classroom-owned UE screenshots remain preferred where available; Epic UE5.8 documentation is the current technical source of truth.
+**Official documentation imagery is used selectively as remote, source-linked classroom reference material.** Epic UE5.8 documentation remains the current technical source of truth for instructions and factual checks. For **imagery only**, official Epic UE5.6, UE5.7 and UE5.8 screenshots are acceptable when the workflow, node, panel and control layout shown are still materially accurate in the current classroom build. If the older visual would teach a moved/renamed control or an obsolete workflow, it is rejected.
 
 ## 1. Unreal Editor: Find, Select & Control
 

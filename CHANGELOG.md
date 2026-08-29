@@ -1,5 +1,14 @@
 # Changelog
 
+## v3.34.14 — UE5.6–5.8 Official Source Expansion — 29 Aug 2026
+- Widened acceptable official Epic imagery to UE5.6, UE5.7 and UE5.8 when the shown workflow/UI remains materially accurate; UE5.8 remains the technical source of truth.
+- Added Epic's exact Break Hit Result visual to the Niagara impact recipe and removed 1 bespoke teacher capture.
+- Added Epic's Niagara Editor UI reference to the Niagara Systems Building Block and narrowed its remaining teacher capture to only the Hub-specific spawn graph.
+- Added Epic's Make Transform → Spawn Actor visual to the Spawn and Destroy Actors recipe while retaining the custom owner-transform capture.
+- Corrected Stack O Bot to an accepted UE5.6 Epic sample-capture source and re-audited the wider official source pool without counting topic overlap as an image replacement.
+- Reduced genuine teacher screenshot groups from 77 to 76: 8 Core, 49 Programming, 5 Building Block recognition and 14 Design Studio technical captures.
+- No database migration.
+
 ## v3.34.13 — Exact Trace Source Alignment — 29 Aug 2026
 - Added exact current Epic UE5.8 visuals for Line Trace forward-vector maths, Break Hit Result / Hit Actor flow and Branch decisions.
 - Split the interaction and hitscan Line Trace recipes so each operation has the correct adjacent visual.

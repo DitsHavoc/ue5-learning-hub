@@ -502,7 +502,7 @@ function conceptVisuals(l){
 function docVisuals(l,slot){
   const xs=(l.docVisuals||[]).filter(v=>(v.slot||'concept')===slot);
   if(!xs.length)return '';
-  return `<div class="inline-visual-story epic"><div class="visual-story-head"><span class="deep-label">OFFICIAL UE5.8 SCREENSHOT${xs.length>1?'S':''}</span><h3>See the real Unreal interface</h3><p>Official Epic documentation imagery placed beside the concept it explains.</p></div><div class="visual-story-grid">${xs.map((v,i)=>zoomableImage({src:v.src,alt:`${l.title} official Unreal Engine screenshot ${i+1}`,caption:v.caption||'',sourceUrl:v.sourceUrl||'',sourceTitle:v.sourceTitle||'',kind:'epic',eager:false})).join('')}</div></div>`;
+  return `<div class="inline-visual-story epic"><div class="visual-story-head"><span class="deep-label">OFFICIAL UE5.6–5.8 SCREENSHOT${xs.length>1?'S':''}</span><h3>See the real Unreal interface</h3><p>Official Epic documentation imagery placed beside the concept it explains.</p></div><div class="visual-story-grid">${xs.map((v,i)=>zoomableImage({src:v.src,alt:`${l.title} official Unreal Engine screenshot ${i+1}`,caption:v.caption||'',sourceUrl:v.sourceUrl||'',sourceTitle:v.sourceTitle||'',kind:'epic',eager:false})).join('')}</div></div>`;
 }
 
 function motionMedia(l,slot){
@@ -785,7 +785,7 @@ function blockVisual(b){
   const visuals=(Array.isArray(b?.visual)?b.visual:[b?.visual]).filter(v=>v?.src);
   if(!visuals.length)return '';
   const allEpic=visuals.every(v=>v.kind==='epic');
-  const exact=allEpic?'OFFICIAL UE5.8 REFERENCE':'CURRENT CLASSROOM / OFFICIAL REFERENCE';
+  const exact=allEpic?'OFFICIAL UE5.6–5.8 REFERENCE':'CURRENT CLASSROOM / OFFICIAL REFERENCE';
   return `<section class="content-card block-visual-reference"><span class="eyebrow">${exact}</span><h2>See the real thing</h2><p class="muted">Every visual below is here because it directly explains part of this Building Block. The Hub does not use vaguely related screenshots to fill space.</p><div class="block-visual-gallery ${visuals.length>1?'multi':''}">${visuals.map((v,i)=>zoomableImage({src:v.src,alt:`${b.title} reference${visuals.length>1?` — view ${i+1}`:''}`,caption:v.caption||'',sourceUrl:v.sourceUrl||'',sourceTitle:v.sourceTitle||'',kind:v.kind||'reference',eager:false})).join('')}</div></section>`;
 }
 function blocksPage(){
@@ -827,7 +827,7 @@ function tutorialReferenceVisuals(t){
   const books=own.filter(isBookVisual),epic=own.filter(v=>!isBookVisual(v)&&v.kind==='epic'),targets=own.filter(v=>!isBookVisual(v)&&v.kind!=='epic');
   const blocks=[];
   if(targets.length)blocks.push(`<div class="tutorial-reference-story target-reference-story"><div class="visual-story-head"><span class="deep-label">GAME / DESIGN TARGET</span><h2>See the result you are aiming for</h2><p>This is inspiration for the outcome, not a screenshot of the Unreal step. Build the principle rather than copying the picture.</p></div><div class="visual-story-grid">${targets.map((v,i)=>zoomableImage({src:v.src,alt:`${t.title} design reference ${i+1}`,caption:v.caption||'',sourceUrl:v.sourceUrl||'',sourceTitle:v.sourceTitle||'',kind:v.kind||'reference',eager:i===0})).join('')}</div></div>`);
-  if(epic.length)blocks.push(`<div class="tutorial-reference-story epic-reference-story"><div class="visual-story-head"><span class="deep-label">OFFICIAL UE5.8 REFERENCE</span><h2>See the real Unreal interface</h2><p>These are official Epic documentation visuals. They are shown only where they genuinely match the Unreal feature being discussed.</p></div><div class="visual-story-grid">${epic.map((v,i)=>zoomableImage({src:v.src,alt:`${t.title} official Unreal Engine reference ${i+1}`,caption:v.caption||'',sourceUrl:v.sourceUrl||'',sourceTitle:v.sourceTitle||'',kind:'epic',eager:targets.length===0&&i===0})).join('')}</div></div>`);
+  if(epic.length)blocks.push(`<div class="tutorial-reference-story epic-reference-story"><div class="visual-story-head"><span class="deep-label">OFFICIAL UE5.6–5.8 REFERENCE</span><h2>See the real Unreal interface</h2><p>These are official Epic documentation visuals. They are shown only where they genuinely match the Unreal feature being discussed.</p></div><div class="visual-story-grid">${epic.map((v,i)=>zoomableImage({src:v.src,alt:`${t.title} official Unreal Engine reference ${i+1}`,caption:v.caption||'',sourceUrl:v.sourceUrl||'',sourceTitle:v.sourceTitle||'',kind:'epic',eager:targets.length===0&&i===0})).join('')}</div></div>`);
   if(books.length)blocks.push(`<div class="tutorial-reference-story book-figure-strip"><div class="visual-story-head"><span class="deep-label">LICENSED BOOK VISUALS</span><h2>See the principle in practice</h2><p>Selected figures from the college's licensed copy of <em>Unreal Engine 5 Best Practices</em>. Current UE5.8 references remain the technical source of truth.</p></div><div class="visual-story-grid book-figure-grid count-${Math.min(books.length,4)}">${books.map((v,i)=>zoomableImage({src:v.src,alt:`${t.title} book figure ${i+1}`,caption:v.caption||'',sourceTitle:v.sourceTitle||'',kind:'book',eager:false})).join('')}</div></div>`);
   return blocks.join('');
 }

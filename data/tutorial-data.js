@@ -1,5 +1,5 @@
 window.UE5_TUTORIAL_DATA = {
-  "version": "3.34.13",
+  "version": "3.34.14",
   "buildDate": "29 Aug 2026",
   "categories": [
     {
@@ -3759,7 +3759,13 @@ window.UE5_TUTORIAL_DATA = {
           }
         ],
         null,
-        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/9f15099c-ca5f-4562-a78f-e2716690348c/5-0-130-add-make-transform-node.png",
+          "caption": "Official UE5.8 Blueprint example showing Make Transform feeding Spawn Actor. Use the Hub's calculated location and owner rotation rather than copying Datasmith-specific values.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/using-datasmith-at-runtime-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         {
           "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/d9dd4665-e3c4-4cd1-93d5-1ea50efee444/spawn1.png",
           "caption": "Official UE5.8 Spawn Actor example. The Return Value is the exact Actor instance that was created.",
@@ -6694,8 +6700,20 @@ window.UE5_TUTORIAL_DATA = {
         "transforms-units"
       ],
       "recipeVisuals": [
-        null,
-        null,
+        {
+          "src": "https://dev.epicgames.com/community/api/documentation/image/761eae95-3d8a-4af3-b6f0-e9772aff456c?height=335&resizing_type=fill&width=1920",
+          "caption": "Official UE5.8 Niagara Editor reference. Use it to recognise the Preview, System Overview and emitter/stack areas before opening your chosen one-shot system.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/editor-ui-reference-for-niagara-effects-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/4989daba-35b5-4100-9227-7ea749c7f69e/guide-how-to-2b-9.png",
+          "caption": "Official UE5.8 Break Hit Result example. Impact Point and Impact Normal are exposed on this node; use the values from the same trace/projectile hit that triggered your effect.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/using-a-single-line-trace-raycast-by-channel-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null,
         null,
         null,

@@ -1957,6 +1957,13 @@ window.UE5_BUILDING_BLOCK_DATA = {
         "vfx",
         "particle"
       ],
+      "visual": {
+        "src": "https://dev.epicgames.com/community/api/documentation/image/761eae95-3d8a-4af3-b6f0-e9772aff456c?height=335&resizing_type=fill&width=1920",
+        "caption": "Official UE5.8 Niagara Editor UI reference. The labelled layout identifies the Preview, Parameters, System Overview and Selection/Stack areas used by a Niagara System and its emitters.",
+        "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/editor-ui-reference-for-niagara-effects-in-unreal-engine",
+        "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+        "kind": "epic"
+      },
       "tutorials": [],
       "lessons": []
     },
