@@ -1,5 +1,5 @@
 window.UE5_MODELING_DATA = {
-  "version": "3.37.1",
+  "version": "3.37.2",
   "updated": "29 Aug 2026",
   "philosophy": "Reference first. Plan the object. Block the big forms. Add only geometry that earns its place. Inspect constantly. Make it game ready. Get another human to critique it.",
   "lessons": [
@@ -2271,9 +2271,10 @@ window.UE5_MODELING_DATA = {
       ],
       "studentRecipe": [
         "Create Box exactly 80×60×45 cm. Name Crate_WORK; duplicate Crate_SAFE. Save Crate_01_Blockout.max.",
-        "Convert only Crate_WORK. Front polygon → Inset 5 cm → STOP. Centre polygon → Extrude -3 cm → STOP.",
-        "Add only the edge loops needed to support large forms. Do not add decorative density.",
-        "Chamfer selected outer highlight edges: start Amount 1.5 cm, Segments 2. Compare against Segments 1 before keeping it.",
+        "Convert only Crate_WORK. Add only the main cuts/loops that define the outer frame and lid. Keep the large flat faces simple.",
+        "Front polygon → Inset 5 cm → STOP. Centre polygon → Extrude -3 cm → STOP. Repeat only on the faces that genuinely need a recessed panel.",
+        "Add only the support loops needed around the main corners and recesses. Do not add evenly spaced loops across flat areas.",
+        "Chamfer selected outer highlight edges: start Amount 1.5 cm, Segments 1. Compare against Segments 2 and keep the lowest count that gives the highlight you need.",
         "UV with 1024 checker. Fix stretching → match shell scale → pack with sensible padding.",
         "Choose a useful base/corner pivot location, place that point at world 0,0,0, Export Selected, import to UE5 at scale 1.0 and compare beside a 100 cm reference."
       ],
@@ -2325,61 +2326,35 @@ window.UE5_MODELING_DATA = {
         ]
       },
       "topologyGuide": {
-        "title": "Read the crate mesh before Step 1",
-        "intro": "The wireframe is not decoration. Every blue edge below has a job: protect the silhouette, hold the recessed panel, or create a deliberate light-catching bevel.",
+        "title": "See the whole crate build before Step 1",
+        "intro": "Use this as the roadmap, not a polygon target. The important idea is how slowly the mesh grows: box first, then the few cuts that define construction, then panel depth, support edges and a restrained final low-poly result.",
         "legend": [
-          "BLUE = geometry that earns its place",
-          "GREY = existing/base topology",
-          "PINK DASH = tempting extra loops you should avoid"
+          "SHADED + EDGED FACES = read the form and the topology together",
+          "ADD GEOMETRY ONLY WHEN IT CHANGES THE FORM OR HOLDS AN EDGE",
+          "FLAT AREAS SHOULD STAY BORING"
         ],
         "rules": [
-          "Large flat faces are allowed to stay large and flat.",
-          "The inset border already gives the recessed face its structure; do not grid-fill the centre.",
-          "Support loops belong near silhouette/highlight edges, not evenly across the face.",
-          "Nails, scratches, grain and labels belong in texture/detail work, not the base mesh."
+          "Start with the simplest box that has the correct proportion.",
+          "Add main cuts before inset/extrude so you know what each region is for.",
+          "Support loops belong near corners and recesses, not sprayed across the whole asset.",
+          "The final crate is still a simple prop. Texture detail will do far more work than extra loops."
         ],
         "images": [
           {
-            "src": "assets/modeling/topology/crate-03-support-loops.svg",
-            "caption": "Topology map • support the outer form and panel border; leave the flat centre alone."
-          },
-          {
-            "src": "assets/modeling/topology/crate-04-chamfer.svg",
-            "caption": "Highlight map • chamfer the edges that should visibly catch light, not every edge."
+            "src": "assets/modeling/stages/crate-overview.png",
+            "caption": "FULL BUILD ROADMAP • Box → main cuts → shaped panels → support loops → final low-poly crate. Open this large, then use the matching stage image beside each step.",
+            "kind": "local"
           }
         ]
       },
       "recipeVisuals": [
-        {
-          "src": "assets/modeling/topology/crate-01-blockout.svg",
-          "caption": "STEP VISUAL • Start with a measured blockout. No detail until the silhouette/proportion is right.",
-          "kind": "local"
-        },
-        {
-          "src": "assets/modeling/topology/crate-02-inset.svg",
-          "caption": "STEP VISUAL • Inset the front face to create the large panel border, then recess the centre.",
-          "kind": "local"
-        },
-        {
-          "src": "assets/modeling/topology/crate-03-support-loops.svg",
-          "caption": "WIREFRAME • Add support loops only where the form needs control. The pink lines are deliberately unnecessary.",
-          "kind": "local"
-        },
-        {
-          "src": "assets/modeling/topology/crate-04-chamfer.svg",
-          "caption": "WIREFRAME • Chamfer the silhouette/highlight edges; keep the panel border tighter.",
-          "kind": "local"
-        },
-        {
-          "src": "assets/modeling/topology/crate-05-uv.svg",
-          "caption": "UV CHECK • Square, evenly sized checkers prove the unwrap before painting starts.",
-          "kind": "local"
-        },
-        {
-          "src": "assets/modeling/topology/crate-06-pivot.svg",
-          "caption": "EXPORT CHECK • Put the pivot at a useful base/corner point and move that point to world origin for export.",
-          "kind": "local"
-        }
+        {"src":"assets/modeling/stages/crate-stage-01.png","caption":"STEP 1 • BLOCKOUT • One simple Box. Get size and proportion right before adding a single cut.","kind":"local"},
+        {"src":"assets/modeling/stages/crate-stage-02.png","caption":"STEP 2 • MAIN CUTS • Add only the loops that establish the outer frame/lid. Large flat faces stay simple.","kind":"local"},
+        {"src":"assets/modeling/stages/crate-stage-03.png","caption":"STEP 3 • SHAPE THE PANELS • Inset/extrude the large recessed areas. Do not add tiny decorative geometry.","kind":"local"},
+        {"src":"assets/modeling/stages/crate-stage-04.png","caption":"STEP 4 • SUPPORT LOOPS • Add loops only where corners/recesses need to hold their shape.","kind":"local"},
+        {"src":"assets/modeling/stages/crate-stage-05.png","caption":"STEP 5 • FINAL LOW-POLY FORM • Use the lowest bevel/chamfer density that gives the highlight you need.","kind":"local"},
+        {"src":"assets/modeling/topology/crate-05-uv.svg","caption":"STEP 6 • UV CHECK • Keep logical shells, even checker scale and useful padding.","kind":"local"},
+        {"src":"assets/modeling/topology/crate-06-pivot.svg","caption":"STEP 7 • PIVOT + EXPORT • Put a useful placement point at world 0,0,0 before export and prove it in Unreal.","kind":"local"}
       ]
     },
     {
@@ -2512,61 +2487,30 @@ window.UE5_MODELING_DATA = {
         ]
       },
       "topologyGuide": {
-        "title": "Read the barrel mesh before Step 1",
-        "intro": "Curved objects tempt beginners into adding loops everywhere. The barrel needs enough radial sides to hold the silhouette, then only a few horizontal loops where the profile actually changes.",
+        "title": "See the barrel grow from the cheapest useful cylinder",
+        "intro": "The barrel should earn its density. Start with the lowest radial side count that holds the silhouette, then add horizontal loops only where the profile changes.",
         "legend": [
-          "BLUE = profile/support loops with a clear job",
-          "GREY = cylinder sides/base topology",
-          "PINK DASH = density that adds cost without changing the form"
+          "START LOW = choose sides from gameplay distance",
+          "PROFILE LOOPS = rim, bands and base only",
+          "STRAIGHT BODY = no decorative loop ladder"
         ],
         "rules": [
-          "Choose radial sides from camera distance, not from fear of seeing facets.",
-          "Horizontal loops belong at the rim, bands and base where the profile changes.",
-          "The straight body does not need evenly spaced support loops.",
-          "If one chamfer segment reads the same as two in game, keep one."
+          "The first decision is silhouette: how many cylinder sides are actually visible from the intended camera distance?",
+          "Add loops where the radius changes, not at equal intervals because the empty space feels wrong.",
+          "Bands/rims can carry a light bevel, while the straight body stays clean.",
+          "If two segment counts look the same in Unreal, keep the cheaper one."
         ],
         "images": [
-          {
-            "src": "assets/modeling/topology/barrel-01-segments.svg",
-            "caption": "Segment budget • compare silhouettes first; 24 sides is the starting test, not a law."
-          },
-          {
-            "src": "assets/modeling/topology/barrel-02-profile-loops.svg",
-            "caption": "Profile map • horizontal loops mark real changes in rim, band and base shape."
-          }
+          {"src":"assets/modeling/stages/barrel-overview.png","caption":"FULL BUILD ROADMAP • Primitive cylinder → essential profile loops → main bands → finished low-poly barrel. The matching stage appears beside each modelling step.","kind":"local"}
         ]
       },
       "recipeVisuals": [
-        {
-          "src": "assets/modeling/topology/barrel-01-segments.svg",
-          "caption": "SEGMENT TEST • Compare 16 / 24 / 32 sides and keep the lowest count that still reads round.",
-          "kind": "local"
-        },
-        {
-          "src": "assets/modeling/topology/barrel-02-profile-loops.svg",
-          "caption": "WIREFRAME • Add loops only where the cylinder profile changes: rim, bands and base.",
-          "kind": "local"
-        },
-        {
-          "src": "assets/modeling/topology/barrel-03-chamfer.svg",
-          "caption": "WIREFRAME • Chamfer only the rolled rim/band edges that need a highlight.",
-          "kind": "local"
-        },
-        {
-          "src": "assets/modeling/topology/barrel-04-seam.svg",
-          "caption": "UV MAP • Use one logical vertical seam and split the caps cleanly.",
-          "kind": "local"
-        },
-        {
-          "src": "assets/modeling/topology/barrel-05-export.svg",
-          "caption": "ENGINE SCALE • Prove the barrel against a known 100 cm reference in Unreal.",
-          "kind": "local"
-        },
-        {
-          "src": "assets/modeling/topology/barrel-06-distance.svg",
-          "caption": "FINAL WIREFRAME • The body stays clean; extra horizontal loops with no job are a warning sign.",
-          "kind": "local"
-        }
+        {"src":"assets/modeling/stages/barrel-stage-01.png","caption":"STEP 1 • CYLINDER PRIMITIVE • Compare side counts and keep the lowest one that still reads round from the target distance.","kind":"local"},
+        {"src":"assets/modeling/stages/barrel-stage-02.png","caption":"STEP 2 • ESSENTIAL LOOPS • Add only the profile loops needed for the rim, body break and base.","kind":"local"},
+        {"src":"assets/modeling/stages/barrel-stage-03.png","caption":"STEP 3 • SHAPE + BANDS • Build the recognisable barrel profile without filling the straight body with extra loops.","kind":"local"},
+        {"src":"assets/modeling/stages/barrel-stage-04.png","caption":"STEP 4 • CLEAN BEVELS • Finish the game-ready form with restrained edge highlights and readable topology.","kind":"local"},
+        {"src":"assets/modeling/topology/barrel-04-seam.svg","caption":"STEP 5 • UV SEAM • One logical vertical seam plus clean cap shells is easier to control and checker-test.","kind":"local"},
+        {"src":"assets/modeling/topology/barrel-05-export.svg","caption":"STEP 6 • ENGINE SCALE • Export and prove the drum beside a known-size reference in Unreal.","kind":"local"}
       ]
     },
     {
@@ -2819,62 +2763,30 @@ window.UE5_MODELING_DATA = {
         ]
       },
       "topologyGuide": {
-        "title": "Read the wall-panel mesh before Step 1",
-        "intro": "Hard-surface work becomes noise when every empty patch gets cut up. Build a hierarchy: one large idea, one supporting form, then a small functional detail.",
+        "title": "See the panel build from blank slab to readable hierarchy",
+        "intro": "The panel gets interesting by organising large, medium and small forms—not by cutting every empty patch. Watch the base stay simple while only the functional regions gain edges.",
         "legend": [
-          "BLUE = primary geometry / strongest read",
-          "GREEN = secondary or focal form",
-          "GREY = supporting/base topology",
-          "PINK DASH = random greeble density to resist"
+          "BIG FIRST = the main frame/recess does most of the reading",
+          "MEDIUM SECOND = support the focal area",
+          "SMALL LAST = only functional detail that survives game distance"
         ],
         "rules": [
-          "Primary recesses can be deeper because they define the panel at distance.",
-          "Secondary forms should be shallower and quieter.",
-          "Small detail needs a believable function: access, venting, control, joining or protection.",
-          "Keep the wall module dimensions/snap edges clean even while the face becomes more complex."
+          "Keep the original wall/module boundary simple so it still snaps and tiles cleanly.",
+          "Establish the biggest recess before you create secondary panels.",
+          "Support edges sit close to the forms they hold; they do not need to cross unrelated flat areas.",
+          "Stop adding detail when the panel already communicates its job from gameplay distance."
         ],
         "images": [
-          {
-            "src": "assets/modeling/topology/panel-01-regions.svg",
-            "caption": "Hierarchy map • design the big and medium regions before you make a single tiny cut."
-          },
-          {
-            "src": "assets/modeling/topology/panel-06-wireframe-check.svg",
-            "caption": "Final topology read • most edges should support big/medium forms; tiny repeat detail stays restrained."
-          }
+          {"src":"assets/modeling/stages/panel-overview.png","caption":"FULL BUILD ROADMAP • Base slab → main forms → key cuts/support edges → finished low-poly panel. Open it large, then follow the matching images in the guide.","kind":"local"}
         ]
       },
       "recipeVisuals": [
-        {
-          "src": "assets/modeling/topology/panel-01-regions.svg",
-          "caption": "DESIGN MAP • Divide the panel into 2–3 large regions before modelling detail.",
-          "kind": "local"
-        },
-        {
-          "src": "assets/modeling/topology/panel-02-primary-inset.svg",
-          "caption": "WIREFRAME • The primary recess gets the clearest inset and deepest depth change.",
-          "kind": "local"
-        },
-        {
-          "src": "assets/modeling/topology/panel-03-secondary.svg",
-          "caption": "WIREFRAME • Secondary recess stays shallower so it supports rather than competes.",
-          "kind": "local"
-        },
-        {
-          "src": "assets/modeling/topology/panel-04-focal-detail.svg",
-          "caption": "FUNCTIONAL DETAIL • Add one focal feature only after the large forms work.",
-          "kind": "local"
-        },
-        {
-          "src": "assets/modeling/topology/panel-05-chamfer.svg",
-          "caption": "WIREFRAME • Chamfer only the outer/module and major recess edges that need highlights.",
-          "kind": "local"
-        },
-        {
-          "src": "assets/modeling/topology/panel-06-wireframe-check.svg",
-          "caption": "FINAL WIREFRAME • Zoom out and check that detail density follows the visual hierarchy.",
-          "kind": "local"
-        }
+        {"src":"assets/modeling/stages/panel-stage-01.png","caption":"STEP 1 • BASE SHAPE • Begin with the clean wall/panel module and correct dimensions. No greebles.","kind":"local"},
+        {"src":"assets/modeling/stages/panel-stage-02.png","caption":"STEP 2 • PRIMARY FORMS • Establish the main frame and dominant recess first.","kind":"local"},
+        {"src":"assets/modeling/stages/panel-stage-03.png","caption":"STEP 3 • SECONDARY FORM • Add the supporting inset and only the edges required to hold it.","kind":"local"},
+        {"src":"assets/modeling/stages/panel-stage-04.png","caption":"STEP 4 • FOCAL DETAIL • Add one restrained functional detail only after the hierarchy works.","kind":"local"},
+        {"src":"assets/modeling/stages/panel-stage-04.png","caption":"STEP 5 • CHAMFER CHECK • Inspect the finished wireframe and bevel only the major edges that need a highlight.","kind":"local"},
+        {"src":"assets/modeling/stages/panel-stage-04.png","caption":"STEP 6 • GAME-DISTANCE CHECK • This is the target density. If a detail disappears at gameplay distance, consider removing it rather than adding more.","kind":"local"}
       ]
     },
     {

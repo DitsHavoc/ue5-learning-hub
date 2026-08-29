@@ -1,3 +1,14 @@
+## v3.37.2 — Split Viewport Step Visuals — 29 Aug 2026
+
+- Replaced the three prototype Build X topology infographic sequences with the approved Max-style low-poly modelling renders.
+- Added full workflow roadmaps for Crate, Barrel / Canister and Sci-fi Wall Panel.
+- Split those workflow renders into isolated per-step images and placed them directly inside the matching modelling steps.
+- Crate now explicitly separates **main cuts** from **panel shaping**, giving students an earlier low-density stage before support loops/chamfers.
+- Kept UV/export support visuals where the viewport progression stops being the right teaching image.
+- Removed the colour-coded diagram legend language from these three pages; guidance now focuses on shaded + Edged Faces, form changes and justified geometry.
+- Preserved all 12 modelling lesson IDs, 8 Build X IDs and 6 Fix This Model IDs.
+- No database migration.
+
 ## v3.37.1 — Topology Step Mockups — 29 Aug 2026
 
 - Prototyped full visual topology teaching on Crate, Barrel / Canister and Sci-fi Wall Panel.

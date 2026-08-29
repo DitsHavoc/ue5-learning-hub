@@ -285,3 +285,8 @@ No database migration is required. This release changes static modelling curricu
 ## v3.37.1 — Topology Step Mockups
 
 No database migration required. This release changes only the 3D Modelling Studio presentation/data and adds local instructional SVGs. Existing progress/completion IDs are unchanged.
+
+
+## v3.37.2 — Split Viewport Step Visuals
+
+No database migration. This release changes modelling content, local visual assets, guide rendering/layout and release documentation only.
