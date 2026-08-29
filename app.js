@@ -885,7 +885,8 @@ function designModulePage(id){
 
 function tutorialCard(t){
   const done=tutorialDone(t.id),c=tutorialCategory(t.category);
-  return `<a class="quick-tutorial-card ${done?'done':''}" href="#/tutorial/${t.id}"><div class="quick-tutorial-icon">${t.icon}</div><div><span class="eyebrow">${esc(c?.title||t.category)} • ${esc(t.duration)} • ${esc(t.difficulty)}</span><h3>${esc(t.title)}</h3><p>${esc(t.summary)}</p><div class="tutorial-tag-row">${t.uses.slice(0,3).map(x=>`<span>${esc(x)}</span>`).join('')}</div>${t.prescriptive?'<div class="tutorial-card-detail-badge">Detailed walkthrough</div>':''}</div><span class="tutorial-card-status">${done?'✓ Tried it':'Open →'}</span></a>`
+  const searchText=[t.title,t.summary,...(t.uses||[]),c?.title||t.category,t.difficulty].filter(Boolean).join(' ').toLowerCase();
+  return `<a class="quick-tutorial-card ${done?'done':''}" href="#/tutorial/${t.id}" data-tutorial-card data-category="${esc(t.category)}" data-search="${esc(searchText)}"><div class="quick-tutorial-icon">${t.icon}</div><div><span class="eyebrow">${esc(c?.title||t.category)} • ${esc(t.duration)} • ${esc(t.difficulty)}</span><h3>${esc(t.title)}</h3><p>${esc(t.summary)}</p><div class="tutorial-tag-row">${t.uses.slice(0,3).map(x=>`<span>${esc(x)}</span>`).join('')}</div>${t.prescriptive?'<div class="tutorial-card-detail-badge">Detailed walkthrough</div>':''}</div><span class="tutorial-card-status">${done?'✓ Tried it':'Open →'}</span></a>`
 }
 
 function chapterBuildCard(b,{compact=false}={}){

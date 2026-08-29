@@ -1,5 +1,12 @@
 # Changelog
 
+## v3.34.15 — Quick Tutorials Search Hotfix — 29 Aug 2026
+- Restored Quick Tutorials live search and category filtering by restoring the card metadata consumed by the existing filter handler.
+- Search now matches tutorial title, summary, uses/tags, category and difficulty.
+- Bumped the `app.js` cache key so deployed browsers receive the hotfix instead of retaining an older cached application script.
+- No tutorial content, capture counts, Supabase schema or permissions changed.
+- No database migration.
+
 ## v3.34.14 — UE5.6–5.8 Official Source Expansion — 29 Aug 2026
 - Widened acceptable official Epic imagery to UE5.6, UE5.7 and UE5.8 when the shown workflow/UI remains materially accurate; UE5.8 remains the technical source of truth.
 - Added Epic's exact Break Hit Result visual to the Niagara impact recipe and removed 1 bespoke teacher capture.

@@ -201,3 +201,7 @@ No database migration is required. This release changes UE tutorial visual mappi
 ## V3.34.14 UE5.6–5.8 official source expansion
 
 No database migration is required. This release changes UE tutorial/building-block visual mappings, accepted visual-source policy, cache/version metadata and capture/source-audit documentation only. Supabase schema, RLS policies, RPCs, XP/leaderboard logic, classes, projects, evidence and production permissions are unchanged.
+
+## V3.34.15 Quick Tutorials search hotfix
+
+No database migration is required. This release restores client-side Quick Tutorials search/filter metadata and updates cache/version metadata only. Supabase schema, RLS policies, RPCs, XP/leaderboard logic, classes, projects, evidence and production permissions are unchanged.
