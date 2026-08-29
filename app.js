@@ -74,6 +74,9 @@ let revisionSession = null;
 let blocksTier = 'core';
 let leaderboardPeriod = 'week';
 let leaderboardClassId = '';
+let critiqueClassId = '';
+let critiqueFilter = 'all';
+let critiquePostsCache = [];
 
 function $(s,root=document){return root.querySelector(s)}
 function $$(s,root=document){return [...root.querySelectorAll(s)]}
@@ -175,7 +178,7 @@ function syncProjectRichEditors(root=document){
 }
 
 function loadState(){
-  const clean={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[],blockCompleted:[]};
+  const clean={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],designSourceCompleted:[],modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[],blockCompleted:[]};
   try{
     const current=JSON.parse(localStorage.getItem(STORE)||'null');
     if(current) return {...clean,...current};
@@ -296,7 +299,7 @@ function mechanic(id){return PROJECT.mechanics[id]}
 function completedLessons(){return DATA.lessons.filter(l=>state.completed.includes(l.id))}
 function totalXp(){
   if(BACKEND.user&&!isTeacher()&&BACKEND.xpSummary&&Number.isFinite(Number(BACKEND.xpSummary.all_time_xp)))return Number(BACKEND.xpSummary.all_time_xp);
-  return (state.blockCompleted||[]).length*25+(state.tutorialCompleted||[]).length*25+completedLessons().reduce((n,l)=>n+l.xp,0)+TOOLS.chapterBuilds.filter(b=>state.chapterBuildCompleted.includes(b.path)).reduce((n,b)=>n+(b.xp||0),0)+(state.designBuildCompleted||[]).length*300+(state.modelLessonCompleted||[]).length*100+(state.modelBuildCompleted||[]).length*250+(state.modelFixCompleted||[]).length*75+(state.sculptCompleted||[]).reduce((n,id)=>n+(SCULPT.practices.find(x=>x.id===id)?.xp||0),0)
+  return (state.blockCompleted||[]).length*25+(state.tutorialCompleted||[]).length*25+completedLessons().reduce((n,l)=>n+l.xp,0)+TOOLS.chapterBuilds.filter(b=>state.chapterBuildCompleted.includes(b.path)).reduce((n,b)=>n+(b.xp||0),0)+(state.designBuildCompleted||[]).length*300+(state.designSourceCompleted||[]).length*20+(state.modelLessonCompleted||[]).length*100+(state.modelBuildCompleted||[]).length*250+(state.modelFixCompleted||[]).length*75+(state.sculptCompleted||[]).reduce((n,id)=>n+(SCULPT.practices.find(x=>x.id===id)?.xp||0),0)
 }
 function level(){
   const xp=totalXp(),n=Math.floor(xp/500)+1,into=xp%500;
@@ -453,6 +456,7 @@ async function syncCloudProgress(){
     state.blockCompleted=[...new Set([...(state.blockCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('block:')).map(id=>id.slice(6))])];
     state.chapterBuildCompleted=[...new Set([...(state.chapterBuildCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('chapter:')).map(id=>id.slice(8))])];
     state.designBuildCompleted=[...new Set([...(state.designBuildCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('designbuild:')).map(id=>id.slice(12))])];
+    state.designSourceCompleted=[...new Set([...(state.designSourceCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('designsource:')).map(id=>id.slice(13))])];
     state.modelLessonCompleted=[...new Set([...(state.modelLessonCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('model:')).map(id=>id.slice(6))])];
     state.modelBuildCompleted=[...new Set([...(state.modelBuildCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('modelbuild:')).map(id=>id.slice(11))])];
     state.modelFixCompleted=[...new Set([...(state.modelFixCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('modelfix:')).map(id=>id.slice(9))])];
@@ -879,6 +883,10 @@ function tutorialReferenceVisuals(t){
 
 function designModule(id){return DESIGN.modules.find(m=>m.id===id)}
 function designBuildDone(id){return (state.designBuildCompleted||[]).includes(id)}
+function designSourceKey(m,i){return `${m.id}:${String(i+1).padStart(2,'0')}`}
+function designSourceDone(m,i){return (state.designSourceCompleted||[]).includes(designSourceKey(m,i))}
+function designSourceCount(m){return (m.industryDeepDives||[]).filter((_,i)=>designSourceDone(m,i)).length}
+function designSourceItems(){return DESIGN.modules.flatMap(m=>(m.industryDeepDives||[]).map((d,i)=>({id:designSourceKey(m,i),title:`${m.title}: ${d.title}`,duration:d.duration||''})))}
 function designTutorialCount(m){return m.tutorials.filter(id=>tutorialDone(id)).length}
 function designReferenceGrid(images,title){
   const other=(images||[]).filter(v=>!isBookVisual(v));
@@ -919,11 +927,11 @@ function designCaseStudyCard(c,i){
 function designResearchCard(r,i){
   return `<article class="designer-research-card"><div class="designer-research-top"><span class="designer-research-num">${String(i+1).padStart(2,'0')}</span><div><span class="eyebrow">FIELD RESEARCH • ${esc(r.duration)}</span><h3>${esc(r.title)}</h3></div></div><p>${esc(r.brief)}</p><ol>${(r.steps||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ol><div class="designer-research-evidence"><b>BRING BACK</b><span>${esc(r.evidence)}</span></div></article>`;
 }
-function designIndustryDeepDiveCard(d,i){
-  const url=safeUrl(d.url),videoId=String(d.youtubeId||'').replace(/[^A-Za-z0-9_-]/g,''),isVideo=!!videoId;
+function designIndustryDeepDiveCard(m,d,i){
+  const url=safeUrl(d.url),videoId=String(d.youtubeId||'').replace(/[^A-Za-z0-9_-]/g,''),isVideo=!!videoId,done=designSourceDone(m,i),key=designSourceKey(m,i);
   const embed=isVideo?`https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1`:'';
   const media=isVideo?`<div class="designer-industry-video" data-video-shell><img src="https://i.ytimg.com/vi/${videoId}/hqdefault.jpg" alt="${esc(d.title)} video preview" loading="lazy"><button class="designer-video-play" data-action="load-video" data-embed="${esc(embed)}" data-title="${esc(d.title)}"><span>▶</span><b>Watch here</b><small>${esc(d.duration||'Video')}</small></button></div>`:'';
-  return `<article class="designer-industry-card ${isVideo?'video':''}">${media}<div class="designer-industry-body"><div class="designer-industry-head"><span class="designer-industry-num">${String(i+1).padStart(2,'0')}</span><div><span class="eyebrow">${esc(String(d.type||'deep dive').toUpperCase())} • ${esc(d.source||'INDUSTRY SOURCE')}</span><h3>${esc(d.title)}</h3></div></div><div class="designer-industry-focus"><b>WHY THIS MATTERS</b><p>${esc(d.focus||'Study how a shipped game solved the same design problem.')}</p></div><div class="designer-industry-watch"><b>WATCH / READ FOR</b><p>${esc(d.watchFor||'Identify the decision, the constraint and the trade-off.')}</p></div><div class="designer-industry-task"><b>DO SOMETHING WITH IT</b><p>${esc(d.task||'Write down one principle you can test in your own project.')}</p></div>${url?`<a class="button ghost small" href="${esc(url)}" target="_blank" rel="noopener">Open original source ↗</a>`:''}</div></article>`;
+  return `<article class="designer-industry-card ${isVideo?'video':''} ${done?'source-complete':''}">${media}<div class="designer-industry-body"><div class="designer-industry-head"><span class="designer-industry-num">${done?'✓':String(i+1).padStart(2,'0')}</span><div><span class="eyebrow">${esc(String(d.type||'deep dive').toUpperCase())} • ${esc(d.source||'INDUSTRY SOURCE')}</span><h3>${esc(d.title)}</h3></div></div><div class="designer-industry-focus"><b>WHY THIS MATTERS</b><p>${esc(d.focus||'Study how a shipped game solved the same design problem.')}</p></div><div class="designer-industry-watch"><b>WATCH / READ FOR</b><p>${esc(d.watchFor||'Identify the decision, the constraint and the trade-off.')}</p></div><div class="designer-industry-task"><b>DO SOMETHING WITH IT</b><p>${esc(d.task||'Write down one principle you can test in your own project.')}</p></div><div class="designer-source-actions">${url?`<a class="button ghost small" href="${esc(url)}" target="_blank" rel="noopener">Open original source ↗</a>`:''}${done?`<span class="source-xp-complete">✓ Source task complete • +20 XP</span>`:`<button class="button small source-xp-button" data-action="complete-design-source" data-source-key="${esc(key)}">✓ Watched/read + did the task • +20 XP</button>`}</div></div></article>`;
 }
 function designChallengeCard(c,i){
   return `<article class="designer-constraint-card"><span class="designer-challenge-mark">${['◆','◈','✦'][i%3]}</span><span class="eyebrow">CONSTRAINT CHALLENGE</span><h3>${esc(c.title)}</h3><div><b>RULE</b><p>${esc(c.constraint)}</p></div><div><b>WIN CONDITION</b><p>${esc(c.goal)}</p></div></article>`;
@@ -955,7 +963,7 @@ function designModulePage(id){
   return `<div class="breadcrumb"><a href="#/">Dashboard</a> / <a href="#/design">Designer Studio</a> / ${esc(m.title)}</div>
   <section class="designer-module-hero"><div><span class="eyebrow">DESIGN DISCIPLINE • ${tried}/${ts.length} RECIPES TRIED</span><h1>${m.icon} ${esc(m.title)}</h1><p>${esc(m.intro)}</p><div class="designer-module-flow"><span>LOOK</span><i>→</i><span>HEAR THE TEAM</span><i>→</i><span>RESEARCH</span><i>→</i><span>BUILD</span><i>→</i><span>TEST</span><i>→</i><span>IMPROVE</span></div></div><div class="designer-principles"><span class="deep-label">DESIGN RULES</span>${m.principles.map((x,i)=>`<div><b>${String(i+1).padStart(2,'0')}</b><span>${esc(x)}</span></div>`).join('')}</div></section>
   <section class="section designer-case-section"><div class="section-head"><div><span class="eyebrow">01 • LOOK AT REAL GAMES</span><h2>Three examples. Three different design jobs.</h2><p>Read the decision first. The image is not there to make the page look pretty.</p></div></div><div class="designer-case-grid">${(m.caseStudies||[]).map(designCaseStudyCard).join('')}</div></section>
-  ${(m.industryDeepDives||[]).length?`<section class="section designer-industry-section"><div class="section-head"><div><span class="eyebrow">02 • DESIGNERS EXPLAIN IT</span><h2>Hear the decisions from the people who shipped the game</h2><p>Documentaries, talks and interviews are part of the lesson now. Do not watch them passively: each source gives you something specific to hunt for and a tiny design task to bring back into Unreal.</p></div></div><div class="designer-industry-grid">${m.industryDeepDives.map(designIndustryDeepDiveCard).join('')}</div></section>`:''}
+  ${(m.industryDeepDives||[]).length?`<section class="section designer-industry-section"><div class="section-head"><div><span class="eyebrow">02 • DESIGNERS EXPLAIN IT</span><h2>Hear the decisions from the people who shipped the game</h2><p>Documentaries, talks and interviews are part of the lesson now. Do not watch them passively: each source gives you something specific to hunt for and a tiny design task to bring back into Unreal.</p></div><span class="sync-chip source-progress-chip">${designSourceCount(m)}/${m.industryDeepDives.length} complete • ${designSourceCount(m)*20} XP</span></div><div class="designer-industry-grid">${m.industryDeepDives.map((d,i)=>designIndustryDeepDiveCard(m,d,i)).join('')}</div></section>`:''}
   <section class="section designer-research-section"><div class="section-head"><div><span class="eyebrow">03 • FIELD RESEARCH</span><h2>Go find evidence yourself</h2><p>Do one of these before the Studio Build. They are deliberately short, game-focused and easy to discuss with another student.</p></div></div><div class="designer-research-grid">${(m.researchMissions||[]).map(designResearchCard).join('')}</div></section>
   ${deep?`<section class="section designer-learning-section"><div class="section-head"><div><span class="eyebrow">04 • UNDERSTAND THE PRINCIPLE</span><h2>What transfers to your own project?</h2><p>These are the bits worth remembering after the Unreal buttons have moved again.</p></div></div><div class="designer-deep-grid">${deep}</div></section>`:''}
   ${designBookReferenceGrid(m.referenceImages)}
@@ -965,7 +973,7 @@ function designModulePage(id){
   <section class="section designer-challenge-section"><div class="section-head"><div><span class="eyebrow">06 • BREAK THE EASY VERSION</span><h2>Pick one constraint challenge</h2><p>Constraints force design decisions to become visible. If the idea only works with every crutch enabled, it probably is not robust yet.</p></div></div><div class="designer-challenge-grid">${(m.challenges||[]).map(designChallengeCard).join('')}</div></section>
   <section class="designer-studio-build ${done?'done':''}"><div class="designer-studio-title"><span class="eyebrow">07 • STUDIO BUILD • ${esc(b.duration)} • +300 XP</span><h2>🎨 ${esc(b.title)}</h2><p>${esc(b.brief)}</p><div class="tutorial-rich-note"><b>Build → test → revise:</b> finishing the phases is not the finish line. The evidence must show another human could read the experience you designed.</div></div><div class="designer-build-phases rich">${(b.phaseDetails||b.phases.map((x,i)=>({title:`Phase ${i+1}`,do:x}))).map((x,i)=>`<article class="designer-build-phase-rich"><span class="designer-build-phase-num">${String(i+1).padStart(2,'0')}</span><div><h3>${esc(x.title||`Phase ${i+1}`)}</h3>${x.where?`<div class="guided-where"><span>WHERE TO WORK</span><div>${renderRichText(x.where,false)}</div></div>`:''}<div class="guided-do"><span>DO THIS</span><div>${renderRichText(x.do||x,false)}</div></div>${x.check?`<div class="guided-check"><span>PROVE IT</span><div>${renderRichText(x.check,false)}</div></div>`:''}${x.troubleshoot?.length?`<div class="guided-fix"><span>IF IT'S WEAK</span><div>${renderRichText(x.troubleshoot,false)}</div></div>`:''}</div></article>`).join('')}</div><div class="designer-evidence"><h3>Show that it works</h3>${requirements(b.evidence)}<button class="button ${done?'success':'primary'}" data-action="complete-design-build" data-design-module="${m.id}">${done?'✓ Studio Build complete':'Mark Studio Build complete • +300 XP'}</button></div></section>
   ${designBlackBox(m,done)}
-  <section class="content-card designer-critique"><span class="eyebrow">LAST THING • IMPROVE IT</span><h2>Critique your decision, not your effort</h2><ol>${critique}</ol><p class="muted">Pick the answer you like least. That is probably the next useful change.</p></section>`;
+  <section class="content-card designer-critique"><span class="eyebrow">LAST THING • IMPROVE IT</span><h2>Critique your decision, not your effort</h2><ol>${critique}</ol><p class="muted">Pick the answer you like least. That is probably the next useful change.</p><div class="designer-critique-board-link"><a class="button primary" href="#/critique">💬 Post a screenshot for class critique →</a><span>Ask a specific design question, get structured peer feedback, then upload your improved version.</span></div></section>`;
 }
 
 function tutorialCard(t){
@@ -2055,12 +2063,13 @@ function classProgressRows(o,memberIds,items,prefix='',titleKey=x=>x.title){
 function studentCompletedContent(o,userId){
   const completed=new Set(o.progress.filter(p=>p.user_id===userId&&p.completed).map(p=>p.lesson_id));
   const list=(items,prefix='')=>items.filter(x=>completed.has(prefix+x.id)).map(x=>`<li>${esc(x.title)}</li>`).join('');
-  const core=list(DATA.lessons),blocks=list(BLOCKS.blocks,'block:'),tutorials=list(TOOLS.tutorials,'tutorial:'),model=list(MODEL.lessons,'model:'),sculpt=list(SCULPT.practices,'sculpt:'),design=list(DESIGN.modules.map(m=>({id:m.id,title:m.build?.title||m.title})),'designbuild:'),modelBuild=list(MODEL.builds||[],'modelbuild:'),modelFix=list(MODEL.fixes||[],'modelfix:'),chapters=TOOLS.chapterBuilds.filter(x=>completed.has(`chapter:${x.path}`)).map(x=>`<li>${esc(x.title)}</li>`).join('');
+  const core=list(DATA.lessons),blocks=list(BLOCKS.blocks,'block:'),tutorials=list(TOOLS.tutorials,'tutorial:'),model=list(MODEL.lessons,'model:'),sculpt=list(SCULPT.practices,'sculpt:'),design=list(DESIGN.modules.map(m=>({id:m.id,title:m.build?.title||m.title})),'designbuild:'),designSources=list(designSourceItems(),'designsource:'),modelBuild=list(MODEL.builds||[],'modelbuild:'),modelFix=list(MODEL.fixes||[],'modelfix:'),chapters=TOOLS.chapterBuilds.filter(x=>completed.has(`chapter:${x.path}`)).map(x=>`<li>${esc(x.title)}</li>`).join('');
   return `<div class="student-content-detail">
     <div><strong>Building Blocks</strong><ul>${blocks||'<li class="muted">None completed yet.</li>'}</ul></div>
     <div><strong>Core lessons</strong><ul>${core||'<li class="muted">None completed yet.</li>'}</ul></div>
     <div><strong>Practical builds</strong><ul>${tutorials||'<li class="muted">None completed yet.</li>'}</ul></div>
     <div><strong>Designer Studio</strong><ul>${design||'<li class="muted">None completed yet.</li>'}</ul></div>
+    <div><strong>Designer industry sources</strong><ul>${designSources||'<li class="muted">None completed yet.</li>'}</ul></div>
     <div><strong>3D / Sculpt</strong><ul>${model+modelBuild+modelFix+sculpt||'<li class="muted">None completed yet.</li>'}</ul></div>
     <div><strong>Chapter Builds</strong><ul>${chapters||'<li class="muted">None completed yet.</li>'}</ul></div>
   </div>`;
@@ -2114,6 +2123,7 @@ async function renderTeacherClass(classId){
         <details open class="class-content-group"><summary>🧠 Core System Lessons <span>${DATA.lessons.length} lessons</span></summary><div>${classProgressRows(o,memberIds,DATA.lessons)}</div></details>
         <details class="class-content-group"><summary>🛠 Practical builds <span>${TOOLS.tutorials.length} outcomes</span></summary><div>${classProgressRows(o,memberIds,TOOLS.tutorials,'tutorial:')}</div></details>
         <details class="class-content-group"><summary>🎨 Designer Studio Builds <span>${DESIGN.modules.length} builds</span></summary><div>${classProgressRows(o,memberIds,DESIGN.modules.map(m=>({id:m.id,title:m.build?.title||m.title})),'designbuild:')}</div></details>
+        <details class="class-content-group"><summary>🎬 Designer Industry Sources <span>${designSourceItems().length} source tasks</span></summary><div>${classProgressRows(o,memberIds,designSourceItems(),'designsource:')}</div></details>
         <details class="class-content-group"><summary>⬡ 3D Modelling <span>${MODEL.lessons.length} lessons</span></summary><div>${classProgressRows(o,memberIds,MODEL.lessons,'model:')}</div></details>
         ${(MODEL.builds||[]).length?`<details class="class-content-group"><summary>🔧 3D Build X <span>${MODEL.builds.length} builds</span></summary><div>${classProgressRows(o,memberIds,MODEL.builds,'modelbuild:')}</div></details>`:''}
         ${(MODEL.fixes||[]).length?`<details class="class-content-group"><summary>🩹 Fix This Model <span>${MODEL.fixes.length} clinics</span></summary><div>${classProgressRows(o,memberIds,MODEL.fixes,'modelfix:')}</div></details>`:''}
@@ -2130,6 +2140,58 @@ function classesPage(){
   }
   const teacher=isTeacher();
   return `<div class="page-head classes-page-head"><div class="breadcrumb"><a href="#/">Home</a> / ${teacher?'Classes':'My Class'}</div><span class="eyebrow">${teacher?'TEACHER QUICK ACCESS':'STUDENT QUICK ACCESS'}</span><h1>🏫 ${teacher?'Classes':'My Class'}</h1><p class="muted">${teacher?'Open a teaching group immediately, copy its join code or jump to the full Teacher dashboard.':'Your teaching group and the places you use most often.'}</p></div><div id="classesHubContent"><div class="empty">Loading ${teacher?'classes':'your class'}…</div></div>`;
+}
+
+
+function critiquePage(){
+  if(!BACKEND.user){
+    return `<div class="page-head critique-page-head"><div class="breadcrumb"><a href="#/">Home</a> / Critique Board</div><span class="eyebrow">CLASS STUDIO WALL</span><h1>💬 Critique Board</h1><p class="muted">Share work in progress, ask a specific design question and help classmates improve theirs.</p></div><div class="offline-note">The Critique Board is private to your class. Sign in with your Learning Hub account to continue.</div>`;
+  }
+  return `<div class="page-head critique-page-head"><div class="breadcrumb"><a href="#/">Home</a> / Critique Board</div><span class="eyebrow">SHARE WORK • GIVE FEEDBACK • IMPROVE</span><h1>💬 Critique Board</h1><p class="muted">A class-only studio wall for work in progress. This is not an assignment hand-in: post a screenshot, ask one useful question, then help somebody else.</p></div><div id="critiqueContent"><div class="empty">Loading your class Critique Board…</div></div>`;
+}
+function critiqueLondonDay(value){
+  try{return new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/London',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(value))}catch(e){return ''}
+}
+function critiqueFeedbackMarkup(f,post){
+  const staff=f.author_role==='teacher',canDelete=isTeacher();
+  return `<article class="critique-feedback ${staff?'teacher-feedback':''}"><div class="critique-feedback-head"><div><strong>${esc(f.author_name||'Classmate')}${staff?' <span class="staff-role-pill compact">🎓 TEACHER</span>':''}</strong><small>${new Date(f.created_at).toLocaleString()}${f.xp_awarded?' • +15 XP rewarded':''}</small></div>${canDelete?`<button class="link-button danger-link" data-action="delete-critique-feedback" data-feedback="${f.id}">Delete</button>`:''}</div><div class="critique-feedback-grid"><div><b>✓ WHAT WORKS</b><p>${esc(f.works_well)}</p></div><div><b>?</b><span>WHAT COULD BE CLEARER</span><p>${esc(f.clearer)}</p></div><div><b>→</b><span>ONE CHANGE I’D TRY</span><p>${esc(f.change_try)}</p></div></div></article>`;
+}
+function critiquePostCard(post){
+  const mine=post.author_id===BACKEND.user?.id,feedback=post.feedback||[],already=feedback.some(f=>f.author_id===BACKEND.user?.id),needs=!mine&&feedback.length<2,staff=post.author_role==='teacher';
+  const canDelete=mine||isTeacher(),after=post.improved_url;
+  return `<article class="critique-post-card ${needs?'needs-feedback':''} ${mine?'my-critique-post':''}" id="critique-post-${post.id}" data-critique-post data-post="${post.id}" data-mine="${mine?'1':'0'}" data-needs="${needs?'1':'0'}"><div class="critique-post-meta"><div><span class="critique-area">${esc(post.area||'General')}</span>${needs?'<span class="critique-needs-chip">NEEDS FEEDBACK</span>':''}${after?'<span class="critique-improved-chip">IMPROVED VERSION</span>':''}</div><small>${esc(post.author_name||'Student')}${staff?' • Teacher':''} • ${new Date(post.created_at).toLocaleString()}</small></div>${post.title?`<h2>${esc(post.title)}</h2>`:''}<div class="critique-question"><span>THE QUESTION</span><p>${esc(post.prompt)}</p></div><div class="critique-image-stage ${after?'before-after':''}"><figure><span>${after?'BEFORE':'WORK IN PROGRESS'}</span>${post.image_url?`<button class="zoomable-image" data-action="open-image"><img src="${esc(post.image_url)}" alt="${esc(post.title||post.prompt)} critique screenshot" loading="lazy"><small>Open image</small></button>`:'<div class="critique-image-missing">Screenshot unavailable</div>'}</figure>${after?`<figure><span>AFTER</span><button class="zoomable-image" data-action="open-image"><img src="${esc(after)}" alt="Improved version of ${esc(post.title||'critique work')}" loading="lazy"><small>Open image</small></button></figure>`:''}</div>${mine?`<div class="critique-owner-tools"><form data-action-form="critique-improved" data-post="${post.id}" data-class="${post.class_id}"><label><span>${after?'Replace improved version':'Show what changed'}</span><input name="file" type="file" accept="image/png,image/jpeg,image/webp" required></label><button class="button ghost small" type="submit">${after?'Replace After image':'Upload improved version →'}</button></form>${canDelete?`<button class="link-button danger-link" data-action="delete-critique-post" data-post="${post.id}">Delete post</button>`:''}</div>`:canDelete?`<div class="critique-owner-tools teacher"><button class="link-button danger-link" data-action="delete-critique-post" data-post="${post.id}">Remove post</button></div>`:''}<section class="critique-feedback-zone"><div class="critique-feedback-title"><div><span class="eyebrow">PEER CRITIQUE</span><h3>${feedback.length} response${feedback.length===1?'':'s'}</h3></div>${needs?'<small>Two useful responses get this off the “needs feedback” list.</small>':''}</div>${feedback.length?`<div class="critique-feedback-list">${feedback.map(f=>critiqueFeedbackMarkup(f,post)).join('')}</div>`:'<div class="critique-no-feedback">No critique yet. Be the first useful human.</div>'}${!mine&&!already?`<form class="critique-feedback-form" data-action-form="critique-feedback" data-post="${post.id}"><div class="critique-feedback-form-head"><strong>Give structured feedback</strong><span>${isTeacher()?'Teacher feedback • no XP':'+15 XP for up to 3 meaningful critiques per day'}</span></div><label><span>What works?</span><textarea name="worksWell" minlength="12" maxlength="600" rows="2" placeholder="What already reads clearly or feels strong?" required></textarea></label><label><span>What could be clearer?</span><textarea name="clearer" minlength="12" maxlength="600" rows="2" placeholder="Where did your eye go, or what confused you?" required></textarea></label><label><span>One change I’d try…</span><textarea name="changeTry" minlength="12" maxlength="600" rows="2" placeholder="Give one specific, testable suggestion." required></textarea></label><button class="button primary small" type="submit">Post critique${isTeacher()?'':' • +15 XP if rewarded'}</button></form>`:already?'<div class="critique-already">✓ You have already given this person feedback.</div>':''}</section></article>`;
+}
+function applyCritiqueFilter(){
+  const cards=$$('[data-critique-post]');let shown=0;
+  cards.forEach(card=>{const show=critiqueFilter==='all'||(critiqueFilter==='needs'&&card.dataset.needs==='1')||(critiqueFilter==='mine'&&card.dataset.mine==='1');card.hidden=!show;if(show)shown++;});
+  $$('[data-action="critique-filter"]').forEach(b=>b.classList.toggle('active',b.dataset.filter===critiqueFilter));
+  const count=$('#critiqueVisibleCount');if(count)count.textContent=`${shown} post${shown===1?'':'s'} shown`;
+}
+async function refreshCritiqueNav(){
+  const badge=$('#critiqueNavCount');if(!badge)return;
+  if(!BACKEND.user){badge.textContent='Share • feedback • improve';return}
+  try{const n=await BACKEND.getCritiqueAttentionCount();badge.textContent=n?`${n} need${n===1?'s':''} feedback`:'Class studio wall';badge.parentElement?.classList.toggle('has-attention',n>0)}catch(e){badge.textContent='Class studio wall'}
+}
+async function renderCritiqueBoard(){
+  const box=$('#critiqueContent');if(!box||!BACKEND.user)return;
+  try{
+    const classes=await BACKEND.getCritiqueClasses();
+    if(!classes.length){box.innerHTML=`<div class="empty"><h3>No class Critique Board yet.</h3><p>${isTeacher()?'Create or join a teaching class first.':'Join your class with the code from your teacher.'}</p></div>`;return}
+    if(!critiqueClassId||!classes.some(c=>String(c.id)===String(critiqueClassId)))critiqueClassId=String(classes[0].id);
+    const cls=classes.find(c=>String(c.id)===String(critiqueClassId))||classes[0];
+    const [posts,rewarded]=await Promise.all([BACKEND.getCritiquePosts(cls.id),BACKEND.getCritiqueRewardCountToday()]);critiquePostsCache=posts;
+    const mine=posts.filter(p=>p.author_id===BACKEND.user.id).length,needs=posts.filter(p=>p.author_id!==BACKEND.user.id&&(p.feedback||[]).length<2).length;
+    box.innerHTML=`<section class="critique-toolbar"><label>Class<select id="critiqueClassSelect">${classes.map(c=>`<option value="${c.id}" ${String(c.id)===String(cls.id)?'selected':''}>${esc(c.name)}${c.academic_year?' • '+esc(c.academic_year):''}</option>`).join('')}</select></label><button class="button primary" data-action="random-critique">🎲 Give me something to critique</button></section><section class="critique-stats"><div><strong>${posts.length}</strong><span>class posts</span></div><div><strong>${needs}</strong><span>need feedback</span></div><div><strong>${mine}</strong><span>your posts</span></div>${isTeacher()?'<div><strong>MOD</strong><span>teacher view</span></div>':`<div><strong>${Math.min(rewarded,3)}/3</strong><span>rewarded critiques today</span></div>`}</section><section class="critique-post-composer"><div><span class="deep-label">POST WORK IN PROGRESS</span><h2>Ask one useful question.</h2><p>Do not just post “thoughts?”. Tell classmates what you are trying to communicate so they can test whether it actually reads.</p></div><form data-action-form="critique-post" data-class="${cls.id}"><div class="critique-compose-grid"><label><span>Design area</span><select name="area"><option>Level Design</option><option>Environment</option><option>Materials</option><option>Lighting</option><option>Terrain / World</option><option>Cinematics</option><option>Audio</option><option>Polish</option><option>3D Modelling</option><option>Other</option></select></label><label><span>Short title <small>optional</small></span><input name="title" maxlength="120" placeholder="e.g. Corridor lighting pass"></label></div><label><span>What do you want classmates to judge?</span><textarea name="prompt" minlength="8" maxlength="600" rows="3" placeholder="I’m trying to make the player notice the doorway first. Does it work?" required></textarea></label><label class="critique-file-pick"><span>Screenshot</span><input name="file" type="file" accept="image/png,image/jpeg,image/webp" required><small>PNG, JPG or WebP • maximum 8 MB</small></label><button class="button primary" type="submit">💬 Post for critique</button></form></section><section class="section critique-feed-section"><div class="section-head"><div><span class="eyebrow">CLASS STUDIO WALL</span><h2>Give useful feedback while people are still building</h2><p>Structured critique rewards the first three meaningful responses you give each day. You can keep helping after that; the XP just stops.</p></div><span class="sync-chip" id="critiqueVisibleCount">${posts.length} posts shown</span></div><div class="critique-filter-row"><button class="tutorial-filter ${critiqueFilter==='all'?'active':''}" data-action="critique-filter" data-filter="all">All</button><button class="tutorial-filter ${critiqueFilter==='needs'?'active':''}" data-action="critique-filter" data-filter="needs">Needs feedback ${needs?`(${needs})`:''}</button><button class="tutorial-filter ${critiqueFilter==='mine'?'active':''}" data-action="critique-filter" data-filter="mine">My work ${mine?`(${mine})`:''}</button></div><div class="critique-feed">${posts.length?posts.map(critiquePostCard).join(''):'<div class="empty"><h3>The studio wall is empty.</h3><p>Post the first screenshot and ask something specific.</p></div>'}</div></section>`;
+    applyCritiqueFilter();refreshCritiqueNav();
+  }catch(err){box.innerHTML=`<div class="empty"><h3>Could not load the Critique Board.</h3><p>${esc(err.message)}</p></div>`}
+}
+function randomCritiquePost(){
+  const candidates=critiquePostsCache.filter(p=>p.author_id!==BACKEND.user?.id&&!(p.feedback||[]).some(f=>f.author_id===BACKEND.user?.id));
+  if(!candidates.length){toast('You have already critiqued everything currently available. Heroic.');return}
+  const min=Math.min(...candidates.map(p=>(p.feedback||[]).length)),pool=candidates.filter(p=>(p.feedback||[]).length===min),pick=pool[Math.floor(Math.random()*pool.length)];
+  critiqueFilter='all';applyCritiqueFilter();
+  const card=document.getElementById(`critique-post-${pick.id}`);if(!card)return;
+  card.scrollIntoView({behavior:'smooth',block:'center'});card.classList.add('critique-spotlight');setTimeout(()=>card.classList.remove('critique-spotlight'),1800);
 }
 
 
@@ -2176,7 +2238,7 @@ async function renderLeaderboard(){
       <section class="leaderboard-spotlights">${improving?`<article><span>📈</span><div><small>BIGGEST PROGRESS THIS WEEK</small><strong>${esc(improving.display_name)}</strong><p>+${Math.max(0,(improving.weekly_xp||0)-(improving.previous_week_xp||0)).toLocaleString()} XP vs last week</p></div></article>`:''}${active?`<article><span>🔥</span><div><small>CURRENT STREAK</small><strong>${esc(active.display_name)}</strong><p>${active.current_streak||0} active day${Number(active.current_streak)===1?'':'s'}</p></div></article>`:''}</section>
       <section class="section leaderboard-board"><div class="section-head"><div><h2>${leaderboardPeriod==='week'?'This week':'All-time'} Top 10</h2><p>XP comes from genuine learning progress and project milestones. Repeating the same completion does not award it twice.</p></div><span class="sync-chip">${rows.length} student${rows.length===1?'':'s'}</span></div><div class="leaderboard-list">${top.map(r=>leaderboardRow(r,r.user_id===BACKEND.user.id)).join('')||'<div class="empty">No XP activity yet.</div>'}</div></section>
       ${!isTeacher()&&me&&!top.some(r=>r.user_id===BACKEND.user.id)?`<section class="your-rank-card"><span class="eyebrow">YOUR POSITION</span>${leaderboardRow(me,true)}</section>`:''}
-      <section class="leaderboard-rules"><span class="eyebrow">HOW XP WORKS</span><h2>Progress, not grades.</h2><div class="leaderboard-rule-grid"><span><b>Core learning</b>Uses the XP already attached to Hub lessons and chapter builds.</span><span><b>+25 XP</b>Quick Tutorial, Building Block or first proper evidence for a milestone.</span><span><b>+40 XP</b>Project milestone completed.</span><span><b>+100 XP</b>Full project completed.</span><span><b>+5 XP</b>First genuine activity of the day.</span><span><b>No farming</b>The same lesson, milestone or evidence checkpoint can only score once.</span></div></section>`;
+      <section class="leaderboard-rules"><span class="eyebrow">HOW XP WORKS</span><h2>Progress, not grades.</h2><div class="leaderboard-rule-grid"><span><b>Core learning</b>Uses the XP already attached to Hub lessons and chapter builds.</span><span><b>+20 XP</b>Complete an industry video/article source task in Designer Studio.</span><span><b>+15 XP</b>Meaningful structured peer critique — first 3 rewarded each day.</span><span><b>+25 XP</b>Quick Tutorial, Building Block or first proper evidence for a milestone.</span><span><b>+40 XP</b>Project milestone completed.</span><span><b>+100 XP</b>Full project completed.</span><span><b>+5 XP</b>First genuine activity of the day.</span><span><b>No farming</b>One reward per source/post; critique XP has a daily cap.</span></div></section>`;
   }catch(err){box.innerHTML=`<div class="empty"><h3>Could not load the leaderboard.</h3><p>${esc(err.message)}</p></div>`}
 }
 
@@ -2398,6 +2460,7 @@ function route(options={}){
   else if(parts[0]==='projects'){app.innerHTML=projectsPage();activate('projects')}
   else if(parts[0]==='classes'){app.innerHTML=classesPage();activate('classes')}
   else if(parts[0]==='leaderboard'){app.innerHTML=leaderboardPage();activate('leaderboard')}
+  else if(parts[0]==='critique'){app.innerHTML=critiquePage();activate('critique')}
   else if(parts[0]==='progress'){app.innerHTML=progressPage();activate('progress')}
   else if(parts[0]==='requests'){app.innerHTML=requestBoard();activate('requests')}
   else if(parts[0]==='challenges'){app.innerHTML=challengeBoard();activate('challenges')}
@@ -2434,6 +2497,7 @@ function route(options={}){
   if(parts[0]==='lesson'&&BACKEND.user){loadComments(parts[1]);loadEvidence(parts[1]);}
   if(parts[0]==='news') loadNewsFeed();
   if(parts[0]==='leaderboard'&&BACKEND.user) renderLeaderboard();
+  if(parts[0]==='critique'&&BACKEND.user) renderCritiqueBoard();
   if(parts[0]==='progress'&&BACKEND.user) renderProgressCloud();
   if(parts[0]==='classes'&&BACKEND.user) renderClassesHub();
   if(parts[0]==='projects'&&!parts[1]&&BACKEND.user) renderProjects();
@@ -2576,6 +2640,12 @@ async function setDesignBuildComplete(id){
   state.designBuildCompleted=was?state.designBuildCompleted.filter(x=>x!==id):[...new Set([...state.designBuildCompleted,id])];saveState();
   if(BACKEND.user){try{await BACKEND.setLessonComplete(`designbuild:${id}`,!was)}catch(e){toast('Saved locally; cloud sync failed.')}}
   toast(was?'Studio Build marked incomplete.':'Studio Build complete • +300 XP');finishInlineUpdate(!was);
+}
+async function setDesignSourceComplete(key){
+  const clean=String(key||'').trim();if(!clean||(state.designSourceCompleted||[]).includes(clean))return;
+  state.designSourceCompleted=[...new Set([...(state.designSourceCompleted||[]),clean])];saveState();
+  if(BACKEND.user){try{await BACKEND.setLessonComplete(`designsource:${clean}`,true)}catch(e){toast('Saved locally; cloud sync failed.')}}
+  toast('Industry source task complete • +20 XP');finishInlineUpdate(true);
 }
 async function setModelLessonComplete(id){
   const l=modelLesson(id);if(!l)return;const was=modelLessonDone(id),before=localUnlockedBadgeIds();
@@ -2859,6 +2929,7 @@ document.addEventListener('click',async e=>{
   else if(a==='complete-tutorial') await setTutorialComplete(b.dataset.tutorial);
   else if(a==='complete-chapter-build') await setChapterBuildComplete(b.dataset.path);
   else if(a==='complete-design-build') await setDesignBuildComplete(b.dataset.designModule);
+  else if(a==='complete-design-source') await setDesignSourceComplete(b.dataset.sourceKey);
   else if(a==='complete-model-lesson') await setModelLessonComplete(b.dataset.modelLesson);
   else if(a==='complete-model-build') await setModelBuildComplete(b.dataset.modelBuild);
   else if(a==='complete-model-fix') await setModelFixComplete(b.dataset.modelFix);
@@ -2947,6 +3018,18 @@ document.addEventListener('click',async e=>{
   else if(a==='microsoft-login'){
     try{await BACKEND.signInMicrosoft()}catch(err){toast(err.message)}
   }
+  else if(a==='critique-filter'){critiqueFilter=b.dataset.filter||'all';applyCritiqueFilter();}
+  else if(a==='random-critique'){randomCritiquePost();}
+  else if(a==='delete-critique-post'){
+    if(confirm('Delete this Critique Board post and its feedback?')){
+      try{await BACKEND.deleteCritiquePost(b.dataset.post);await renderCritiqueBoard();toast('Critique post deleted.')}catch(err){toast(err.message)}
+    }
+  }
+  else if(a==='delete-critique-feedback'){
+    if(confirm('Delete this critique feedback?')){
+      try{await BACKEND.deleteCritiqueFeedback(b.dataset.feedback);await renderCritiqueBoard();toast('Feedback removed.')}catch(err){toast(err.message)}
+    }
+  }
   else if(a==='request-vote'){
     try{
       const voted=b.dataset.voted==='1';
@@ -3027,6 +3110,11 @@ document.addEventListener('change',async e=>{
     leaderboardClassId=String(e.target.value||'');
     await renderLeaderboard();
   }
+  if(e.target?.id==='critiqueClassSelect'){
+    critiqueClassId=String(e.target.value||'');
+    critiqueFilter='all';
+    await renderCritiqueBoard();
+  }
 });
 
 document.addEventListener('submit',async e=>{
@@ -3034,6 +3122,18 @@ document.addEventListener('submit',async e=>{
     e.preventDefault();
     toast('That brief is over the 6,000 character limit. Shorten it before saving.');
     return;
+  }
+  if(e.target.dataset.actionForm==='critique-post'){
+    e.preventDefault();const fd=new FormData(e.target),file=e.target.elements.file?.files?.[0];
+    try{await BACKEND.createCritiquePost({classId:e.target.dataset.class,area:fd.get('area'),title:fd.get('title'),prompt:fd.get('prompt'),file});e.target.reset();await renderCritiqueBoard();toast('Posted to your class Critique Board.');}catch(err){toast(err.message)}return;
+  }
+  if(e.target.dataset.actionForm==='critique-improved'){
+    e.preventDefault();const file=e.target.elements.file?.files?.[0];
+    try{await BACKEND.addCritiqueImprovedImage(e.target.dataset.post,e.target.dataset.class,file);await renderCritiqueBoard();toast('Improved version added — nice.');}catch(err){toast(err.message)}return;
+  }
+  if(e.target.dataset.actionForm==='critique-feedback'){
+    e.preventDefault();const fd=new FormData(e.target);
+    try{const row=await BACKEND.postCritiqueFeedback(e.target.dataset.post,{worksWell:fd.get('worksWell'),clearer:fd.get('clearer'),changeTry:fd.get('changeTry')});await renderCritiqueBoard();toast(row?.xp_awarded?'Useful critique posted • +15 XP':'Critique posted. Daily XP cap reached, but the feedback still counts.');}catch(err){toast(err.message)}return;
   }
   if(e.target.dataset.actionForm==='news-comment'){
     e.preventDefault();const key=e.target.dataset.story,story=newsStoryByKey(key);if(!story)return;
@@ -3421,6 +3521,7 @@ function buildGlobalSearchIndex(){
     ['Blueprint Snippet Bank','Official Epic paste assists and reusable Blueprint graph helpers','#/snippets','⚡'],
     ['Quick Tutorials','Recipe families and practical UE5 build outcomes','#/tutorials','🛠'],
     ['Designer Studio','Level design, lighting, materials, terrain, cinematic and environment design','#/design','◆'],
+    ['Critique Board','Class studio wall, screenshots, peer feedback, structured critique and improvement','#/critique','💬'],
     ['Resource Library','Free assets, CC0 textures, HDRIs, sound libraries, level explorers, UI reference, documentaries and professional talks','#/resources','🧰'],
     ['3D Modelling Studio','3ds Max modelling lessons, builds and topology repair','#/modeling','⬡'],
     ['Glossary','Unreal Engine and games development terminology','#/glossary','?'],
@@ -3476,7 +3577,7 @@ function setupSearch(){
 $('#menuButton').addEventListener('click',()=>$('#sidebar').classList.toggle('open'));
 $('#resetProgress').addEventListener('click',()=>{
   if(confirm('Reset all locally saved lesson progress, XP and game-project status on this browser?')){
-    state={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[],blockCompleted:[]};
+    state={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],designSourceCompleted:[],modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[],blockCompleted:[]};
     projectState={project_title:'Signal Lost',theme:PROJECT.themes[0],pitch:'',mechanics:{}};
     saveState();saveProjectState();route();toast('Local progress reset.');
   }
@@ -3494,6 +3595,7 @@ window.addEventListener('hashchange',route);
 BACKEND.onChange(async ()=>{
   updateChrome();
   if(BACKEND.user){await syncCloudProgress()}
+  refreshCritiqueNav();
   route();
   if(BACKEND.recoveryMode){
     authView='recovery';
@@ -3505,6 +3607,7 @@ BACKEND.onChange(async ()=>{
   setupSearch();
   setupKonamiCode();
   updateChrome();
+  refreshCritiqueNav();
   route();
   await BACKEND.init();
 })();

@@ -1,3 +1,18 @@
+## v3.36.0 — Critique Board + Learning XP — 29 Aug 2026
+
+- Added a dedicated class-scoped **Critique Board** at `#/critique` plus a persistent sidebar entry with an actionable “needs feedback” count.
+- Students can post PNG/JPG/WebP screenshots with a focused design question, then add an improved **After** image without turning the Hub into an assignment hand-in system.
+- Peer responses use three structured prompts: **What works?**, **What could be clearer?**, and **One change I’d try…**.
+- Added **Give me something to critique** random routing that prioritises posts with the fewest responses and skips work the current student has already reviewed.
+- Added teacher moderation for posts and feedback while keeping boards private to classes the signed-in account can access.
+- Added **+15 XP** for meaningful structured student critique, capped server-side at the first three rewarded critiques per Europe/London day. Further critique remains available without XP.
+- Added **+20 XP** self-declared completion for all 24 Designer Studio industry source tasks after the student has watched/read the source and done its attached task.
+- Added Designer industry-source completion to teacher class-progress views.
+- Added a private `critique-media` Supabase Storage bucket (8 MB; PNG/JPEG/WebP) with class/author path policies.
+- Added `critique_posts`, `critique_feedback`, class-scoped feed/count RPCs, feedback notification trigger and server-side XP anti-farming logic.
+- Applied live migrations `critique_board_and_learning_xp`, `critique_rpc_anon_hardening` and `critique_feedback_quality_floor` on 29 Aug 2026.
+- No existing completion IDs, projects, assignment workflows or Teams usage were replaced.
+
 ## v3.35.4 — Designer Resource Bridge Cleanup — 29 Aug 2026
 
 - Removed the large **Free Assets • Sound • Professional Reference** bridge from the Designer Studio landing page beneath “Seven moves. No waffle.”

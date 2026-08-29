@@ -254,3 +254,25 @@ No database migration is required. This release changes client-side embedded sea
 ## v3.34.22 — Official Tutorial Imagery Exhaustion Pass
 
 No database migration is required. This release changes static UE learning/design/building-block visual mappings, local image assets, cache/version metadata and imagery-audit documentation only. Supabase schema, RLS, RPCs, classes, projects, evidence, XP and permissions are unchanged.
+
+## v3.36.0 — Critique Board + Learning XP
+
+Files:
+- `migrations/20260829_28_critique_board_and_learning_xp.sql`
+- `migrations/20260829_29_critique_rpc_anon_hardening.sql`
+- `migrations/20260829_30_critique_feedback_quality_floor.sql`
+
+Adds the formative class Critique Board without changing project/assignment submission workflows:
+- `critique_posts` and `critique_feedback` with class-scoped RLS
+- private `critique-media` bucket, 8 MB, PNG/JPEG/WebP only
+- screenshot paths constrained to `class_id/user_id/post_id/...`
+- class-authorised signed-image access and author/teacher cleanup policies
+- `get_critique_feed(...)`, actionable attention count and the signed-in student's daily critique-reward count
+- structured peer-critique XP: 15 points, one reward per post/student, maximum 3 rewards per Europe/London day, concurrent-cap protection
+- feedback notifications to the post author
+- `designsource:*` lesson-progress completions worth 20 XP while preserving all previous XP mappings
+- explicit anon EXECUTE removal on the three new SECURITY DEFINER RPCs after Supabase's default function grants were detected by the security advisor
+- server-side 12-character minimum on each structured critique field, matching the client-side meaningful-feedback floor
+
+All three migrations were applied to the live UE5 Learning Hub Supabase project on 29 Aug 2026. The new authenticated RPC warnings reported by Supabase are expected because those RPCs are deliberately callable by signed-in users and perform their own class/auth checks; the follow-up hardening removed the corresponding anonymous-access warnings.
+

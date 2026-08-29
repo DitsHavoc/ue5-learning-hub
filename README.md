@@ -1,6 +1,9 @@
-# Current release — v3.35.4
+# Current release — v3.36.0
 
-Designer Studio landing-page trim: removed the large **Resource Library bridge** beneath “Seven moves. No waffle.” because the Resource Library already has direct navigation, Home-page promotion and site-wide search. The standalone `#/resources` area and all 18 curated resources remain untouched. The Designer landing now moves straight from the learning loop into the eight design disciplines. No database migration or progress/completion ID changes are required. See `RELEASE-NOTES-v3.35.4.md`.
+**Critique Board + Learning XP.** Signed-in students now have a private class studio wall at `#/critique` for screenshot-based work-in-progress critique. Posts stay class-scoped, classmates answer three structured prompts, under-reviewed work is surfaced first, authors can add an improved **After** image, and teachers can moderate. Meaningful peer critique awards **15 XP for the first three rewarded critiques per Europe/London day**; students can keep helping after the cap. Designer Studio's 24 industry videos/articles now have a self-declared **Watched/read + did the task** completion worth **20 XP** each. These source completions also appear in teacher class-progress views. Teams remains the formal assignment/submission/grade space; Critique Board is intentionally formative. The live Supabase migrations were applied on 29 Aug 2026. See `RELEASE-NOTES-v3.36.0.md` and `CRITIQUE-BOARD-QA-v3.36.0.md`.
+
+## Previous release — v3.35.4
+Designer Studio landing-page trim removed the large **Resource Library bridge** beneath “Seven moves. No waffle.” The standalone `#/resources` area and all 18 curated resources remain untouched. See `RELEASE-NOTES-v3.35.4.md`.
 
 ## Previous release — v3.35.3
 Designer Studio landing-page cleanup removed the redundant **Design Roulette** panel and the **3D Modelling Studio** detour panel. Module-level constraint challenges remain exactly where they are useful, while 3D Modelling is still available through its dedicated navigation. See `RELEASE-NOTES-v3.35.3.md`.

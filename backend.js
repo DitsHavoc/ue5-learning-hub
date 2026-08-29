@@ -18,6 +18,16 @@ const PROJECT_FILE_MIMES = {
   '.xls':'application/vnd.ms-excel', '.xlsx':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 };
 const PROJECT_ALLOWED_MIMES = new Set(Object.values(PROJECT_FILE_MIMES));
+const CRITIQUE_ALLOWED_MIMES = new Set(['image/png','image/jpeg','image/webp']);
+function critiqueImageMime(file){
+  const raw=String(file?.type||'').toLowerCase();
+  if(CRITIQUE_ALLOWED_MIMES.has(raw))return raw;
+  const name=String(file?.name||'').toLowerCase();
+  if(name.endsWith('.png'))return 'image/png';
+  if(name.endsWith('.jpg')||name.endsWith('.jpeg'))return 'image/jpeg';
+  if(name.endsWith('.webp'))return 'image/webp';
+  return raw;
+}
 function projectFileMime(file){
   const raw=String(file?.type||'').toLowerCase();
   if(PROJECT_ALLOWED_MIMES.has(raw))return raw;
@@ -329,7 +339,7 @@ const api = {
     if(!client||!this.user)return;
     let local=null;
     try{local=JSON.parse(localStorage.getItem('ue5hub:v2:progress')||'null')}catch(e){}
-    const ids=[...(local?.completed||[]),...(local?.tutorialCompleted||[]).map(id=>`tutorial:${id}`),...(local?.chapterBuildCompleted||[]).map(id=>`chapter:${id}`),...(local?.designBuildCompleted||[]).map(id=>`designbuild:${id}`),...(local?.modelLessonCompleted||[]).map(id=>`model:${id}`),...(local?.modelBuildCompleted||[]).map(id=>`modelbuild:${id}`),...(local?.modelFixCompleted||[]).map(id=>`modelfix:${id}`),...(local?.sculptCompleted||[]).map(id=>`sculpt:${id}`),...(local?.blockCompleted||[]).map(id=>`block:${id}`)];
+    const ids=[...(local?.completed||[]),...(local?.tutorialCompleted||[]).map(id=>`tutorial:${id}`),...(local?.chapterBuildCompleted||[]).map(id=>`chapter:${id}`),...(local?.designBuildCompleted||[]).map(id=>`designbuild:${id}`),...(local?.designSourceCompleted||[]).map(id=>`designsource:${id}`),...(local?.modelLessonCompleted||[]).map(id=>`model:${id}`),...(local?.modelBuildCompleted||[]).map(id=>`modelbuild:${id}`),...(local?.modelFixCompleted||[]).map(id=>`modelfix:${id}`),...(local?.sculptCompleted||[]).map(id=>`sculpt:${id}`),...(local?.blockCompleted||[]).map(id=>`block:${id}`)];
     if(!ids.length)return;
     const rows=[...new Set(ids)].map(id=>({user_id:this.user.id,lesson_id:id,completed:true,completed_at:new Date().toISOString()}));
     const {error}=await client.from('lesson_progress').upsert(rows,{onConflict:'user_id,lesson_id'});
@@ -366,6 +376,110 @@ const api = {
     if(!client||!this.user||this.profile?.role!=='teacher')throw new Error('Teacher access required.');
     const {data,error}=await client.rpc('set_class_leaderboard_enabled',{p_class_id:classId,p_enabled:Boolean(enabled)});
     if(error)throw error;return Array.isArray(data)?data[0]:data;
+  },
+
+  // v3.36.0 class-scoped Critique Board
+  async getCritiqueClasses(){
+    if(!client||!this.user)return [];
+    return this.profile?.role==='teacher'?this.getTeachingClasses():this.getMyClasses();
+  },
+  async getCritiqueAttentionCount(){
+    if(!client||!this.user)return 0;
+    const {data,error}=await client.rpc('get_critique_attention_count');
+    if(error){
+      if(error.code==='42883'||error.code==='42P01')return 0;
+      console.warn('Critique attention count',error.message);return 0;
+    }
+    return Number(data||0);
+  },
+  async getCritiqueRewardCountToday(){
+    if(!client||!this.user||this.profile?.role==='teacher')return 0;
+    const {data,error}=await client.rpc('get_my_critique_reward_count_today');
+    if(error){
+      if(error.code==='42883'||error.code==='42P01')return 0;
+      console.warn('Critique reward count',error.message);return 0;
+    }
+    return Number(data||0);
+  },
+  async getCritiquePosts(classId){
+    if(!client||!this.user)throw new Error('Sign in to open the Critique Board.');
+    const {data,error}=await client.rpc('get_critique_feed',{p_class_id:classId});
+    if(error){
+      if(error.code==='42883'||error.code==='42P01')throw new Error('Critique Board needs the v3.36.0 database migration.');
+      throw error;
+    }
+    const rows=(data||[]).map(r=>({...r,feedback:Array.isArray(r.feedback)?r.feedback:[]}));
+    const paths=[];
+    rows.forEach(r=>{if(r.storage_path)paths.push(r.storage_path);if(r.improved_storage_path)paths.push(r.improved_storage_path)});
+    const urlMap={};
+    if(paths.length){
+      const {data:signed,error:sErr}=await client.storage.from('critique-media').createSignedUrls([...new Set(paths)],900);
+      if(sErr)console.warn('Critique signed URLs',sErr.message);
+      (signed||[]).forEach(x=>{if(x.path&&x.signedUrl)urlMap[x.path]=x.signedUrl});
+    }
+    return rows.map(r=>({...r,image_url:urlMap[r.storage_path]||'',improved_url:urlMap[r.improved_storage_path]||''}));
+  },
+  async createCritiquePost({classId,area='General',title='',prompt='',file}){
+    if(!client||!this.user)throw new Error('Sign in to post work for critique.');
+    if(!classId)throw new Error('Choose your class first.');
+    const cleanPrompt=String(prompt||'').trim().slice(0,600);
+    if(cleanPrompt.length<8)throw new Error('Add a specific question so classmates know what to critique.');
+    if(!file||!file.size)throw new Error('Choose a screenshot to share.');
+    const mime=critiqueImageMime(file);
+    if(!CRITIQUE_ALLOWED_MIMES.has(mime))throw new Error('Use a PNG, JPG or WebP screenshot.');
+    if(file.size>8388608)throw new Error('Keep Critique Board screenshots under 8 MB.');
+    const postId=crypto.randomUUID(),safe=(file.name||'critique-image').replace(/[^a-zA-Z0-9._-]+/g,'-').slice(-100);
+    const path=`${classId}/${this.user.id}/${postId}/original-${Date.now()}-${safe}`;
+    const {error:uploadError}=await client.storage.from('critique-media').upload(path,file,{upsert:false,contentType:mime});
+    if(uploadError){
+      if(uploadError.message?.toLowerCase().includes('bucket'))throw new Error('Critique Board needs the v3.36.0 database migration.');
+      throw uploadError;
+    }
+    const {data:row,error:insertError}=await client.from('critique_posts').insert({
+      id:postId,class_id:classId,author_id:this.user.id,area:String(area||'General').trim().slice(0,40),title:String(title||'').trim().slice(0,120),prompt:cleanPrompt,storage_path:path,original_name:file.name||safe
+    }).select().single();
+    if(insertError){await client.storage.from('critique-media').remove([path]);throw insertError;}
+    return row;
+  },
+  async addCritiqueImprovedImage(postId,classId,file){
+    if(!client||!this.user)throw new Error('Sign in first.');
+    if(!file||!file.size)throw new Error('Choose the improved screenshot first.');
+    const mime=critiqueImageMime(file);
+    if(!CRITIQUE_ALLOWED_MIMES.has(mime))throw new Error('Use a PNG, JPG or WebP screenshot.');
+    if(file.size>8388608)throw new Error('Keep Critique Board screenshots under 8 MB.');
+    const {data:existing,error:readError}=await client.from('critique_posts').select('improved_storage_path').eq('id',postId).single();
+    if(readError)throw readError;
+    const safe=(file.name||'improved-critique').replace(/[^a-zA-Z0-9._-]+/g,'-').slice(-100),path=`${classId}/${this.user.id}/${postId}/improved-${Date.now()}-${safe}`;
+    const {error:uploadError}=await client.storage.from('critique-media').upload(path,file,{upsert:false,contentType:mime});
+    if(uploadError)throw uploadError;
+    const {data:row,error:updateError}=await client.from('critique_posts').update({improved_storage_path:path,improved_name:file.name||safe,updated_at:new Date().toISOString()}).eq('id',postId).select().single();
+    if(updateError){await client.storage.from('critique-media').remove([path]);throw updateError;}
+    if(existing?.improved_storage_path)await client.storage.from('critique-media').remove([existing.improved_storage_path]);
+    return row;
+  },
+  async postCritiqueFeedback(postId,{worksWell='',clearer='',changeTry=''}){
+    if(!client||!this.user)throw new Error('Sign in to leave critique.');
+    const fields=[String(worksWell||'').trim(),String(clearer||'').trim(),String(changeTry||'').trim()];
+    if(fields.some(x=>x.length<12))throw new Error('Give a little more detail in all three boxes — at least 12 characters each.');
+    const {data,error}=await client.from('critique_feedback').insert({post_id:postId,author_id:this.user.id,works_well:fields[0].slice(0,600),clearer:fields[1].slice(0,600),change_try:fields[2].slice(0,600)}).select().single();
+    if(error){if(error.code==='23505')throw new Error('You already critiqued this post.');throw error;}
+    if(data?.xp_awarded)await this.refreshXpSummary();
+    return data;
+  },
+  async deleteCritiqueFeedback(feedbackId){
+    if(!client||!this.user)throw new Error('Sign in first.');
+    const {error}=await client.from('critique_feedback').delete().eq('id',feedbackId);
+    if(error)throw error;return true;
+  },
+  async deleteCritiquePost(postId){
+    if(!client||!this.user)throw new Error('Sign in first.');
+    const {data:post,error:readError}=await client.from('critique_posts').select('storage_path,improved_storage_path').eq('id',postId).single();
+    if(readError)throw readError;
+    const paths=[post.storage_path,post.improved_storage_path].filter(Boolean);
+    const {error}=await client.from('critique_posts').delete().eq('id',postId);
+    if(error)throw error;
+    if(paths.length){const {error:sErr}=await client.storage.from('critique-media').remove(paths);if(sErr)console.warn('Critique media cleanup',sErr.message);}
+    return true;
   },
   async getProjectProgress(){
     if(!client||!this.user)return [];
