@@ -6,6 +6,7 @@ const DATA = window.UE5_COURSE_DATA;
 const BLOCKS = window.UE5_BUILDING_BLOCK_DATA;
 const PROJECT = window.UE5_PROJECT_DATA;
 const TOOLS = window.UE5_TUTORIAL_DATA;
+const SNIPPETS = window.UE5_SNIPPET_DATA;
 const DESIGN = window.UE5_DESIGN_DATA;
 const NEWS = window.UE5_NEWS_DATA;
 const MODEL = window.UE5_MODELING_DATA;
@@ -24,7 +25,7 @@ DESIGN.tutorials.forEach(t=>{if(!knownTutorials.has(t.id))TOOLS.tutorials.push(t
 DESIGN.modules.forEach(m=>m.tutorials.forEach(id=>{const t=TOOLS.tutorials.find(x=>x.id===id);if(t&&!t.designModule)t.designModule=m.id}));
 
 
-if (!DATA || !BLOCKS || !PROJECT || !TOOLS || !DESIGN || !NEWS || !MODEL || !SCULPT || !BACKEND) {
+if (!DATA || !BLOCKS || !PROJECT || !TOOLS || !SNIPPETS || !DESIGN || !NEWS || !MODEL || !SCULPT || !BACKEND) {
   const e = document.querySelector('#bootError');
   if (e) e.hidden = false;
   return;
@@ -808,6 +809,24 @@ function blockPage(id){
 
 function tutorial(id){return TOOLS.tutorials.find(x=>x.id===id)}
 function tutorialCategory(id){return TOOLS.categories.find(x=>x.id===id)}
+function snippetCategory(id){return SNIPPETS.categories.find(x=>x.id===id)}
+function snippetsForTutorial(id){return SNIPPETS.snippets.filter(x=>(x.relatedTutorials||[]).includes(id))}
+function snippetSearchText(s){return [s.title,s.what,s.snippetSummary,...(s.tags||[]),...(s.prerequisites||[]),snippetCategory(s.category)?.title||s.category].filter(Boolean).join(' ').toLowerCase()}
+function snippetCard(s,{compact=false}={}){
+  const c=snippetCategory(s.category),related=(s.relatedTutorials||[]).map(tutorial).filter(Boolean),url=safeUrl(s.sourceUrl);
+  return `<article class="snippet-card ${compact?'compact':''}" data-snippet-card data-category="${esc(s.category)}" data-search="${esc(snippetSearchText(s))}"><div class="snippet-card-top"><span class="snippet-icon">${s.icon||'⌘'}</span><div><span class="eyebrow">OFFICIAL EPIC UE ${esc(s.sourceVersion)} • ${esc(c?.title||s.category)}</span><h3>${esc(s.title)}</h3></div><span class="snippet-copy-pill">COPYABLE</span></div><p>${esc(s.what)}</p><div class="snippet-meta"><span>⌘ ${esc(s.snippetSummary)}</span><span>📍 ${esc((s.pasteInto||[])[0]||'Matching Blueprint graph')}</span></div>${compact?'':`<div class="snippet-detail-grid"><div><b>PASTE INTO</b><ul>${(s.pasteInto||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><div><b>AFTER PASTING</b><ul>${(s.reconnect||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div></div><div class="snippet-prereqs"><b>Have these first:</b> ${(s.prerequisites||[]).map(x=>`<span>${esc(x)}</span>`).join('')}</div>`}<div class="snippet-card-actions">${url?`<a class="button primary small" href="${esc(url)}" target="_blank" rel="noopener">Open Epic + Copy Full Snippet ↗</a>`:''}${related[0]?`<a class="button ghost small" href="#/tutorial/${related[0].id}">Hub: ${esc(related[0].title)} →</a>`:''}</div></article>`;
+}
+function tutorialSnippetBridge(t){
+  const xs=snippetsForTutorial(t.id);if(!xs.length)return '';
+  return `<section class="tutorial-snippet-bridge"><div><span class="eyebrow">⚡ OFFICIAL EPIC CLIPBOARD ASSIST</span><h2>${xs.length===1?'Epic has a pasteable Blueprint for this':'Epic has pasteable Blueprints for this'}</h2><p>Open Epic, use <b>Copy Full Snippet</b>, paste into the named graph, then make the small reconnections shown. The Hub does not mirror the raw clipboard block.</p></div><div class="snippet-bridge-list">${xs.slice(0,2).map(x=>snippetCard(x,{compact:true})).join('')}</div><a class="button ghost" href="#/snippets">Browse the full Snippet Bank →</a></section>`;
+}
+function snippetBankPage(){
+  return `<div class="page-head snippet-bank-head"><div class="breadcrumb"><a href="#/">Home</a> / <a href="#/programming">Unreal Learning</a> / Blueprint Snippet Bank</div><span class="eyebrow">${SNIPPETS.snippets.length} CURATED OFFICIAL EPIC PASTE SOURCES</span><h1>⚡ Blueprint Snippet Bank</h1><p class="muted">Why rebuild a graph node-by-node when Epic already gives you a real clipboard block? Use the official source, paste it into Unreal, reconnect the few pins the page tells you about, then study what you pasted.</p></div>
+  <section class="snippet-policy"><div><span class="deep-label">COPY FROM EPIC • LEARN IN THE HUB</span><h2>${esc(SNIPPETS.policy.title)}</h2><p>${esc(SNIPPETS.policy.body)}</p><small>${esc(SNIPPETS.policy.versions)}</small></div><div class="snippet-policy-steps"><span><b>1</b> Open Epic</span><span><b>2</b> Copy Full Snippet</span><span><b>3</b> Paste in the named graph</span><span><b>4</b> Reconnect + test</span></div></section>
+  <section class="snippet-bank-tools"><div class="tutorial-search-box"><span>⌕</span><input id="snippetSearch" type="search" placeholder="Try: door, enemy, HUD, spawn, damage…"></div><div class="tutorial-filter-row"><button class="tutorial-filter active" data-snippet-filter="all">All</button>${SNIPPETS.categories.map(c=>`<button class="tutorial-filter" data-snippet-filter="${esc(c.id)}">${c.icon} ${esc(c.title)}</button>`).join('')}</div><div class="tutorial-library-count"><strong id="snippetResultCount">${SNIPPETS.snippets.length}</strong><span>Epic sources</span></div></section>
+  <section class="section"><div class="section-head"><div><h2>Pasteable systems worth stealing time from</h2><p>These cards describe what Epic provides, where it belongs and what still needs reconnecting. The raw snippet stays on Epic.</p></div></div><div class="snippet-bank-grid" id="snippetGrid">${SNIPPETS.snippets.map(x=>snippetCard(x)).join('')}</div></section>
+  <section class="content-card snippet-learning-rule"><span class="eyebrow">IMPORTANT</span><h2>Paste it, then prove you understand it.</h2><p>A pasted graph is a starting point, not evidence of learning. Run it, identify the event/data flow, change at least one value or behaviour, and be able to explain why the mechanic still works.</p></section>`;
+}
 function chapterBuild(pathId){return TOOLS.chapterBuilds.find(x=>x.path===pathId)}
 function tutorialDone(id){return state.tutorialCompleted.includes(id)}
 function chapterBuildDone(pathId){return state.chapterBuildCompleted.includes(pathId)}
@@ -898,6 +917,7 @@ function tutorialLibrary(){
   const featured=TOOLS.tutorials.filter(t=>t.featured),done=completedTutorialCount();
   return `<div class="page-head tutorial-library-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Quick Tutorials</div><span class="eyebrow">${TOOLS.tutorials.length} short practical recipes</span><h1>🛠 Quick Tutorials</h1><p class="muted">Need one mechanic for a prototype or assignment? Find it, build it, test it, then change it. These are deliberately shorter than full lessons.</p></div>
   <section class="tutorial-blocks-bridge"><div><span class="deep-label">SEE A TERM YOU DON'T KNOW?</span><h2>Don't abandon the tutorial.</h2><p>Each programming recipe now shows the Building Blocks it uses. Open the unfamiliar one for a 3–8 minute explanation, then come straight back.</p></div><a class="button ghost" href="#/blocks">🧱 Browse Building Blocks</a></section>
+  <section class="snippet-programming-cta"><div><span class="eyebrow">⚡ WANT THE REAL GRAPH FASTER?</span><h2>Epic Blueprint Snippet Bank</h2><p>For selected systems, Epic supplies actual Blueprint clipboard data. Copy it from the official page, paste into Unreal, reconnect the marked pins, then test it.</p></div><a class="button primary" href="#/snippets">Browse ${SNIPPETS.snippets.length} snippet sources →</a></section>
   <section class="tutorial-library-tools"><div class="tutorial-search-box"><span>⌕</span><input id="tutorialSearch" type="search" placeholder="Try: gun, door, fog, health, AI, HUD…"></div><div class="tutorial-filter-row"><button class="tutorial-filter active" data-tutorial-filter="all">All</button>${TOOLS.categories.map(c=>`<button class="tutorial-filter" data-tutorial-filter="${c.id}">${c.icon} ${esc(c.title)}</button>`).join('')}</div><div class="tutorial-library-count"><strong>${done}/${TOOLS.tutorials.length}</strong><span>tutorials tried</span></div></section>
   <section class="section"><div class="section-head"><div><h2>Start with something useful</h2><p>Common mechanics students reach for constantly.</p></div></div><div class="quick-tutorial-grid featured">${featured.map(tutorialCard).join('')}</div></section>
   <section class="section"><div class="section-head"><div><h2>All Quick Tutorials</h2><p id="tutorialResultCount">${TOOLS.tutorials.length} tutorials</p></div></div><div class="quick-tutorial-grid" id="tutorialGrid">${TOOLS.tutorials.map(tutorialCard).join('')}</div></section>
@@ -917,6 +937,7 @@ function tutorialPage(id){
   <article class="tutorial-detail">
     <section class="content-card tutorial-result"><span class="eyebrow">01 • What we are making</span><h2>A small working mechanic</h2><p>${esc(t.summary)}</p><div class="callout good"><b>Use this tutorial when:</b> you need this mechanic in a prototype, Chapter Build or assignment and want a short reliable route to a first working version.</div></section>
     ${tutorialBuildingBlocks(t)}
+    ${tutorialSnippetBridge(t)}
     <section class="content-card practical-first-card"><span class="eyebrow">02 • BUILD IT</span><h2>${t.studentRecipe?.length?'Start at Step 1':'Follow the practical steps'}</h2>${t.studentRecipe?.length?renderSingleClearGuide(t.starterValues,t.studentRecipe,t.steps||[],{title:'Build the working version',intro:'Follow the steps in order. Each step tells you exactly what to make or click, the value to use, why you are doing it and how to check it worked.',recipeVisuals:t.recipeVisuals||null}):`<div class="tutorial-step-list">${t.steps.map((s,i)=>renderTutorialStep(s,i)).join('')}</div>`}</section>
   ${tutorialReferenceVisuals(t)}
     <section class="tutorial-three-col"><div class="content-card"><span class="eyebrow">03 • Common mistakes</span><h2>If it doesn\'t work</h2><ul>${t.mistakes.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><div class="content-card"><span class="eyebrow">04 • Make it yours</span><h2>Change something</h2><ul>${t.makeItYours.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><div class="content-card"><span class="eyebrow">05 • Definition of done</span><h2>It works when…</h2>${requirements(t.worksWhen)}</div></section>
@@ -1097,6 +1118,7 @@ function programmingPage(){
   return `<div class="page-head programming-page-head"><div class="breadcrumb"><a href="#/">Home</a> / Unreal Learning</div><span class="eyebrow">UNDERSTAND THE ENGINE • BUILD SYSTEMS • APPLY THEM</span><h1>⌘ Unreal Learning</h1><p class="muted">You do not need to memorise Unreal before making games. Learn a small Building Block, use it in a system, then meet it again in tutorials and projects.</p></div>
   <section class="unreal-learning-ladder"><a href="#/blocks"><span>01</span><div><small>3–8 MINUTE MICRO-LEARNING</small><h2>🧱 Building Blocks</h2><p>What does IA, BPI, Struct, AnimBP, NavMesh or Skeletal Mesh actually mean? Learn the term once with a tiny proof exercise.</p><strong>${coreDone}/${coreBlocks.length} Core learned →</strong></div></a><a href="#/path/${n.path}"><span>02</span><div><small>DEEPER SYSTEM UNDERSTANDING</small><h2>⌘ Core System Lessons</h2><p>Understand why systems work, build them carefully, debug them and apply them in a larger mechanic.</p><strong>${completedLessons().length}/${DATA.lessons.length} lessons complete →</strong></div></a><a href="#/tutorials"><span>03</span><div><small>JUST-IN-TIME BUILDING</small><h2>🛠 Quick Tutorials</h2><p>Need sprint, a locked door, a health bar or AI patrol? Build the exact thing and jump to a Building Block only when a term is new.</p><strong>${completedTutorialCount()} tried →</strong></div></a><a href="#/challenges"><span>04</span><div><small>REMOVE THE TRAINING WHEELS</small><h2>🔥 Challenges & Projects</h2><p>Combine systems without every node being handed to you. This is where copying becomes understanding.</p><strong>Prove it →</strong></div></a></section>
   <section class="programming-continue"><div><span class="eyebrow">CONTINUE CORE SYSTEMS • ${esc(path(n.path).title)}</span><h2>${esc(n.title)}</h2><p>${esc(n.short)}</p><div class="path-meta"><span>${n.duration} • ${n.xp} XP</span><span>${np.pct}% path complete</span></div><div class="progress"><span style="width:${np.pct}%"></span></div></div><div class="programming-continue-actions"><a class="button primary" href="${pb?`#/chapter-build/${pb.path}`:`#/lesson/${n.id}`}">${pb?`🎮 Build: ${esc(pb.title)}`:'▶ Continue core lesson'}</a><a class="button ghost" href="#/blocks">🧱 Building Blocks</a></div></section>
+  <section class="snippet-programming-cta"><div><span class="eyebrow">⚡ NEW • OFFICIAL EPIC CLIPBOARD BLOCKS</span><h2>Blueprint Snippet Bank</h2><p>Keys, locked doors, HUDs, switches, platforms, traps, enemies, win states and spawners — copied from Epic into Unreal instead of rebuilt by hand.</p></div><a class="button primary" href="#/snippets">Open Snippet Bank →</a></section>
   <div class="stat-grid programming-stats"><div class="stat"><small>Building Blocks</small><strong>${blocksDone}/${BLOCKS.blocks.length}</strong></div><div class="stat"><small>Core lessons</small><strong>${completedLessons().length}/${DATA.lessons.length}</strong></div><div class="stat"><small>Quick Tutorials</small><strong>${completedTutorialCount()}</strong></div><div class="stat"><small>Total XP</small><strong>${i.xp}</strong></div></div>
   <section class="section"><div class="section-head"><div><span class="eyebrow">WHEN YOU WANT THE DEEPER VERSION</span><h2>Core System Lessons</h2><p>These are not prerequisites for every tutorial. Follow them in order as a course, or open the system your project needs.</p></div></div><div class="path-grid">${DATA.paths.map(p=>{const x=pathProgress(p.id);return `<a class="path-card" href="#/path/${p.id}"><div class="path-icon">${p.icon}</div><h3>${esc(p.title)}</h3><p>${esc(p.description)}</p><div class="path-meta"><span>${x.done}/${x.total} lessons</span><span>${x.pct}%</span></div><div class="progress"><span style="width:${x.pct}%"></span></div></a>`}).join('')}</div></section>
   <section class="blocks-mini-cta"><div><span class="deep-label">DON'T KNOW A TERM?</span><h2>Search the Building Blocks, not YouTube roulette.</h2><p>${BLOCKS.blocks.length} concise Unreal concepts are organised into Core, Common and Later. Only ${coreBlocks.length} are suggested early; the rest appear when tutorials need them.</p></div><a class="button primary" href="#/blocks">Open Building Blocks →</a></section>
@@ -2306,6 +2328,7 @@ function route(options={}){
   else if(parts[0]==='design'&&parts[1]){app.innerHTML=designModulePage(parts[1]);activate('design')}
   else if(parts[0]==='design'){app.innerHTML=designPage();activate('design')}
   else if(parts[0]==='tutorials'){app.innerHTML=tutorialLibrary();activate('tutorials')}
+  else if(parts[0]==='snippets'){app.innerHTML=snippetBankPage();activate('snippets')}
   else if(parts[0]==='tutorial'&&parts[1]){app.innerHTML=tutorialPage(parts[1]);activate('tutorials')}
   else if(parts[0]==='chapter-build'&&parts[1]){app.innerHTML=chapterBuildPage(parts[1]);activate('tutorials')}
   else if(parts[0]==='revision'){app.innerHTML=revision();activate('revision')}
@@ -2356,6 +2379,14 @@ function bindTutorialLibrary(){
   search.addEventListener('input',apply);
   $$('.tutorial-filter').forEach(btn=>btn.addEventListener('click',()=>{$$('.tutorial-filter').forEach(x=>x.classList.remove('active'));btn.classList.add('active');category=btn.dataset.tutorialFilter||'all';apply();}));
 }
+function bindSnippetBank(){
+  const search=$('#snippetSearch');if(!search)return;
+  let category='all';
+  const cards=()=>$$('[data-snippet-card]','#snippetGrid');
+  const apply=()=>{const q=search.value.toLowerCase().trim();let visible=0;cards().forEach(card=>{const okText=!q||card.dataset.search.includes(q),okCat=category==='all'||card.dataset.category===category;card.style.display=okText&&okCat?'':'none';if(okText&&okCat)visible++;});const out=$('#snippetResultCount');if(out)out.textContent=visible;};
+  search.addEventListener('input',apply);
+  $$('[data-snippet-filter]').forEach(btn=>btn.addEventListener('click',()=>{$$('[data-snippet-filter]').forEach(x=>x.classList.remove('active'));btn.classList.add('active');category=btn.dataset.snippetFilter||'all';apply();}));
+}
 function bindNewsPage(){
   const search=$('#newsSearch');if(!search)return;
   newsCategory='all';newsSearch='';
@@ -2373,6 +2404,7 @@ function bindPageInputs(){
   });
   bindRevisionBuilder();
   bindTutorialLibrary();
+  bindSnippetBank();
   bindNewsPage();
 }
 async function copyHomework(id){
@@ -3212,6 +3244,7 @@ function setupSearch(){
     const mfs=MODEL.fixes.filter(x=>[x.title,x.symptom,...x.diagnose,...x.repair].join(' ').toLowerCase().includes(q)).slice(0,3);
     const sps=SCULPT.practices.filter(x=>[x.title,x.aim,x.newSkill,...x.tools].join(' ').toLowerCase().includes(q)).slice(0,4);
     const bs=BLOCKS.blocks.filter(b=>[b.title,b.short,b.prefix,...(b.aliases||[])].join(' ').toLowerCase().includes(q)).slice(0,5);
+    const ss=SNIPPETS.snippets.filter(x=>snippetSearchText(x).includes(q)).slice(0,5);
     const gs=DATA.glossary.filter(x=>x.join(' ').toLowerCase().includes(q)).slice(0,4);
     panel.innerHTML=[
       ...ls.map(l=>`<a class="search-result" href="#/lesson/${l.id}"><strong>${esc(l.title)}</strong><small>Lesson • ${esc(l.projectTask?.name||path(l.path).title)}</small></a>`),
@@ -3223,6 +3256,7 @@ function setupSearch(){
       ...sps.map(p=>`<a class="search-result" href="#/sculpt/${p.id}"><strong>🗿 ${esc(p.title)}</strong><small>Sculpt Playground • ${esc(p.time)}</small></a>`),
       ...rs.map(r=>`<a class="search-result" href="#/design"><strong>${esc(r.icon||'🎁')} ${esc(r.title)}</strong><small>Free resource • ${esc(r.type)}</small></a>`),
       ...bs.map(b=>`<a class="search-result" href="#/block/${b.id}"><strong>🧱 ${esc(b.title)}</strong><small>${BLOCKS.tiers[b.tier].title} Building Block • ${b.minutes} min</small></a>`),
+      ...ss.map(x=>`<a class="search-result" href="#/snippets"><strong>⚡ ${esc(x.title)}</strong><small>Official Epic Blueprint snippet • UE ${esc(x.sourceVersion)}</small></a>`),
       ...gs.map(g=>`<a class="search-result" href="#/glossary"><strong>${esc(g[0])}</strong><small>${esc(g[1])}</small></a>`)
     ].join('')||'<div class="search-result"><strong>No results</strong><small>Try a broader UE5 / 3ds Max term.</small></div>';
     panel.hidden=false;

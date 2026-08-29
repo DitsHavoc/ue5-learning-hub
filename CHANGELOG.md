@@ -269,3 +269,13 @@
 
 ### Database
 - No migration required.
+
+## v3.34.16 — Official Blueprint Snippet Bank
+
+- Added a dedicated Blueprint Snippet Bank with 9 curated official Epic UE5.8 paste sources.
+- Added search/category filtering and global-search integration.
+- Added per-tutorial Epic Clipboard Assist cards where a Quick Tutorial overlaps an official snippet source.
+- Added sidebar and Unreal Learning / Quick Tutorials entry points.
+- Raw Epic clipboard payloads are deliberately not mirrored; students copy directly from Epic and paste into Unreal.
+- Teacher capture audit remains 76; snippet availability is treated as workload reduction, not a fake capture elimination.
+- No database changes.

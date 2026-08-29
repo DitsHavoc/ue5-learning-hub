@@ -157,3 +157,17 @@ The v3.34 visual pass explicitly checks Blueprint-focused variants and current B
 ### Exactness rule used for these sources
 
 A current Epic page can be technically correct without its screenshot being an exact match for a Hub step. For example, Epic's current Sprint walkthrough uses its own key mapping, asset names and movement values. Those images are useful **support references**, but they are not placed directly beside a Hub step that specifies different values. The Hub only attaches an Epic image to a practical step when the relevant UI/action shown in that image genuinely matches the instruction beside it.
+
+## v3.34.16 — Official Blueprint Snippet Bank sources
+
+The Hub now exposes a curated source-first Snippet Bank. Raw Epic clipboard payloads are not mirrored; students open the official Epic page and use **Copy Full Snippet** there.
+
+- Designer 02 — Create a Key: https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-02-create-a-key-in-unreal-engine
+- Designer 03 — Open Doors with Keys: https://dev.epicgames.com/documentation/unreal-engine/designer-03-open-doors-with-keys-in-unreal-engine?lang=en-US
+- Designer 04 — Player HUD: https://dev.epicgames.com/documentation/unreal-engine/designer-04-player-hud-in-unreal-engine?lang=en-US
+- Designer 05 — Puzzles: Switches and Cubes: https://dev.epicgames.com/documentation/unreal-engine/designer-05-puzzles-switches-and-cubes-in-unreal-engine?lang=en-US
+- Designer 06 — Puzzles: Moving Platforms: https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-06-puzzles-moving-platforms-in-unreal-engine
+- Designer 07 — Traps and Damage: https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-07-traps-and-damage-in-unreal-engine
+- Designer 08 — Create an Enemy: https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-08-create-an-enemy-in-unreal-engine
+- Designer 10 — Complete the Level: https://dev.epicgames.com/documentation/unreal-engine/designer-10-complete-the-level-in-unreal-engine?lang=en-US
+- Designer 11 — Bonus: Spawn New Cubes: https://dev.epicgames.com/documentation/unreal-engine/designer-11-spawn-new-cubes-mechanic-in-unreal-engine
