@@ -1,3 +1,19 @@
+## v3.37.0 — 3D Modelling Studio Rebuild — 29 Aug 2026
+
+- Rebuilt 3D Modelling Studio around **REFERENCE → PLAN → BLOCK → MODEL → INSPECT → GAME READY → CRITIQUE** rather than a button-first Max course.
+- Preserved all 12 modelling lesson IDs, all 8 Build X IDs and all 6 Fix This Model IDs so existing student progress remains valid.
+- Added a visual modelling manifesto, seven-stage asset loop and stronger production-first landing page.
+- Every lesson now begins with **LOOK • THINK • PLAN**: a big modelling question, three observation prompts, three planning prompts and an explicit judgement decision before Max opens.
+- Surfaced a useful reference image in every core lesson, including selected user-supplied book figures for interface, topology, subdivision and UV judgement.
+- Kept the actual Max teaching highly explicit: where to click, what to do, what should be true before continuing, why the step exists and what to inspect if the result differs.
+- Rebuilt all 8 Build X tasks as mini production briefs with role/context, real-world reference boards, planning questions, step-by-step checkpoints, a required design variation and production quality gates.
+- Guidance still fades from the fully guided crate through to the independent Hero Prop.
+- Added 6 professional artist/workflow studies, including 3ds Max, Substance and Unreal environment/prop production breakdowns.
+- Connected lessons/builds to the class Critique Board with focused modelling critique questions and a before/after improvement loop.
+- Retained the bad-model clinics for poly bombs, boolean abuse, bad UVs, pivots, one-mesh rooms and destructive smoothing.
+- Current vendor references remain Autodesk 3ds Max, Adobe Substance 3D Painter and Epic UE5.8. Unreal FBX guidance remains aligned to Epic's current FBX 2020.2 pipeline documentation.
+- No Supabase/database migration.
+
 ## v3.36.0 — Critique Board + Learning XP — 29 Aug 2026
 
 - Added a dedicated class-scoped **Critique Board** at `#/critique` plus a persistent sidebar entry with an actionable “needs feedback” count.

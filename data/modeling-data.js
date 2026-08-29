@@ -1,7 +1,7 @@
 window.UE5_MODELING_DATA = {
-  "version": "3.32.2",
-  "updated": "26 Aug 2026",
-  "philosophy": "Slow, methodical, visual and cumulative. Learn one operation, prove it is correct, reuse it, then add the next. Build correctly before building quickly.",
+  "version": "3.37.0",
+  "updated": "29 Aug 2026",
+  "philosophy": "Reference first. Plan the object. Block the big forms. Add only geometry that earns its place. Inspect constantly. Make it game ready. Get another human to critique it.",
   "lessons": [
     {
       "id": "max-orientation",
@@ -163,7 +163,31 @@ window.UE5_MODELING_DATA = {
         "File → Save As → Max_Practice_v002.max.",
         "STOP: no Editable Poly, Boolean, TurboSmooth or detail modelling yet."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "thinking": {
+        "bigQuestion": "Can you control the workspace well enough that Max stops getting in the way of the modelling?",
+        "observe": [
+          "Which panel creates an object and which panel edits the selected object?",
+          "Where can you read exact transform values instead of guessing?",
+          "What visual clues tell you the wrong viewport or Auto Key is active?"
+        ],
+        "plan": [
+          "Make a practice folder before opening an assessment file.",
+          "Decide a naming/version pattern you will use all unit: AssetName_v001.max, v002, v003.",
+          "Write the five interface zones on paper or a note; every later instruction will refer to these addresses."
+        ],
+        "decision": {
+          "title": "Speed or control?",
+          "prompt": "A shortcut is only useful when you know what state it leaves Max in. Practise W/E/R and Alt+W, but always visually confirm the active tool/viewport."
+        },
+        "references": [
+          {
+            "src": "assets/modeling/book/interface-overview-p12.webp",
+            "sourceTitle": "Essential Guide to 3ds Max • user-supplied reference",
+            "caption": "Interface overview. Use it to recognise the workspace regions before chasing buttons."
+          }
+        ]
+      }
     },
     {
       "id": "max-primitives-transforms",
@@ -329,7 +353,32 @@ window.UE5_MODELING_DATA = {
         "Turn Snaps off when finished. Inspect Front and Top for zero gaps.",
         "Build a tiny desk/room corner using primitives only. Use exact dimensions and 90° rotations; no detail."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "thinking": {
+        "bigQuestion": "Can you prove proportion and scale before you are allowed to hide mistakes under detail?",
+        "observe": [
+          "Look at any real object near you: what three primitives approximate 80% of its volume?",
+          "Which dimensions actually control its silhouette?",
+          "Where would exact 90° rotations or grid snapping matter if this became a modular asset?"
+        ],
+        "plan": [
+          "Pick a real object and estimate its width/depth/height in centimetres.",
+          "Reduce it to 3–5 primitive masses.",
+          "Choose one clean world origin or snap point before arranging the blockout."
+        ],
+        "decision": {
+          "title": "Change parameters or Scale?",
+          "prompt": "If a Box is still a parametric Box, change Length/Width/Height. Use transform Scale deliberately, not as a panic button."
+        },
+        "references": [
+          {
+            "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Standard-plywood-shipping-crate-vol-case.jpg",
+            "sourceUrl": "https://commons.wikimedia.org/wiki/File:Standard-plywood-shipping-crate-vol-case.jpg",
+            "sourceTitle": "Wikimedia Commons • CC BY-SA reference",
+            "caption": "Real plywood shipping crates. Study the large panel, cleat thickness, runners, overlaps and how few forms actually create the read."
+          }
+        ]
+      }
     },
     {
       "id": "max-editable-poly",
@@ -499,7 +548,31 @@ window.UE5_MODELING_DATA = {
         "Exit sub-object mode. The whole object should select again.",
         "Save Max_EditPoly_v001.max before learning geometry-creating tools."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "thinking": {
+        "bigQuestion": "Do you know exactly WHAT part of the mesh you are editing before you change it?",
+        "observe": [
+          "Vertex changes a point; Edge changes a connection; Polygon changes a face; Element changes a connected chunk.",
+          "F4/Edged Faces exposes geometry the shaded view can hide.",
+          "Most beginner disasters start with the wrong sub-object selection."
+        ],
+        "plan": [
+          "Before each edit, say the sub-object level out loud or in your head.",
+          "Orbit once before changing geometry so you know what is actually selected.",
+          "Keep the first exercise disposable: learning selection is the outcome, not making a pretty prop."
+        ],
+        "decision": {
+          "title": "Which sub-object level earns the edit?",
+          "prompt": "Choose the smallest selection level that solves the form change. If you only need a face, do not move the whole Element."
+        },
+        "references": [
+          {
+            "src": "assets/modeling/book/topology-rounded-prop-p31.webp",
+            "sourceTitle": "Essential Guide to 3ds Max • user-supplied reference",
+            "caption": "Wireframe and surface together. Read how vertices, edges and polygons describe one rounded hard-surface form."
+          }
+        ]
+      }
     },
     {
       "id": "max-extrude-inset",
@@ -646,7 +719,32 @@ window.UE5_MODELING_DATA = {
         "Repeat one controlled panel operation on one side only. Do not decorate every face.",
         "Save Crate_02_PrimaryForms.max."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "thinking": {
+        "bigQuestion": "Can two simple operations create believable construction instead of random panel noise?",
+        "observe": [
+          "Inset creates a border/inner face relationship; Extrude creates depth.",
+          "Real manufactured objects usually have thickness, lips, panels and recesses for functional reasons.",
+          "Uniform tiny insets everywhere create visual noise, not design."
+        ],
+        "plan": [
+          "On your crate reference, mark where a panel sits inside a frame.",
+          "Decide which direction depth should move before dragging.",
+          "Save a clean version before your first destructive poly edit."
+        ],
+        "decision": {
+          "title": "Extrude geometry or fake detail later?",
+          "prompt": "If a feature changes silhouette or creates meaningful depth, geometry may be justified. If it is a tiny groove/scratch, plan to texture it."
+        },
+        "references": [
+          {
+            "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Standard-plywood-shipping-crate-vol-case.jpg",
+            "sourceUrl": "https://commons.wikimedia.org/wiki/File:Standard-plywood-shipping-crate-vol-case.jpg",
+            "sourceTitle": "Wikimedia Commons • CC BY-SA reference",
+            "caption": "Real plywood shipping crates. Study the large panel, cleat thickness, runners, overlaps and how few forms actually create the read."
+          }
+        ]
+      }
     },
     {
       "id": "max-edge-control",
@@ -808,7 +906,31 @@ window.UE5_MODELING_DATA = {
         "Do not add loops “for detail”. Every added edge needs a job.",
         "Save a clean version before Chamfer work."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "thinking": {
+        "bigQuestion": "Can you add edges only where the form needs more control?",
+        "observe": [
+          "A loop follows connected topology; a ring crosses parallel edges.",
+          "Connect is valuable when it creates a controlled line for shape/support — not because empty polygons feel scary.",
+          "Density should increase where form changes, not everywhere equally."
+        ],
+        "plan": [
+          "Find the exact silhouette or surface change you are trying to control before adding a loop.",
+          "Predict where the loop/ring should travel around the mesh.",
+          "If you cannot explain the edge’s job, do not add it yet."
+        ],
+        "decision": {
+          "title": "Does this edge have a job?",
+          "prompt": "Keep it if it controls silhouette, deformation, shading/support, material/UV separation or construction. Otherwise question it."
+        },
+        "references": [
+          {
+            "src": "assets/modeling/book/topology-rounded-prop-p31.webp",
+            "sourceTitle": "Essential Guide to 3ds Max • user-supplied reference",
+            "caption": "Look at where support geometry follows a form and where the broad flat areas stay comparatively simple."
+          }
+        ]
+      }
     },
     {
       "id": "max-chamfer-smoothing",
@@ -937,7 +1059,32 @@ window.UE5_MODELING_DATA = {
         "Keep the cheaper version if the visual difference is negligible.",
         "Turn F4 on and verify chamfer did not create accidental dense areas or collapse thin faces."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "thinking": {
+        "bigQuestion": "How much edge softness does this object need at the distance the player will see it?",
+        "observe": [
+          "Perfectly razor-sharp CG edges often look fake because real manufactured edges catch light.",
+          "Chamfer width changes the apparent scale/material of an object.",
+          "Too many segments can waste geometry without improving the gameplay view."
+        ],
+        "plan": [
+          "Pick one target viewing distance.",
+          "Identify only the edges that should catch a highlight.",
+          "Start with a tiny amount and low segment count; judge in shaded AND Edged Faces view."
+        ],
+        "decision": {
+          "title": "Tiny, medium or hero chamfer?",
+          "prompt": "The same bevel is wrong for a phone, a shipping crate and a metre-wide concrete block. Match edge width to object scale and material."
+        },
+        "references": [
+          {
+            "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Electrical%20panel.jpg",
+            "sourceUrl": "https://commons.wikimedia.org/wiki/File:Electrical%20panel.jpg",
+            "sourceTitle": "Wikimedia Commons reference",
+            "caption": "Real control panel. Study functional grouping, spacing, fasteners, access areas and repeated controls before stylising it."
+          }
+        ]
+      }
     },
     {
       "id": "max-modifier-stack",
@@ -1091,7 +1238,31 @@ window.UE5_MODELING_DATA = {
         "Add a temporary Chamfer above/below as demonstrated and toggle modifier lightbulbs to see stack order effects.",
         "Do NOT Collapse Stack. Save ModifierStack_v001.max with the stack intact."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "thinking": {
+        "bigQuestion": "Can you keep useful decisions editable instead of collapsing everything the moment it looks right?",
+        "observe": [
+          "Modifiers record operations in an order; changing the order can change the result.",
+          "Symmetry is more reliable than hand-matching two halves.",
+          "TurboSmooth multiplies geometry quickly and can magnify bad support topology."
+        ],
+        "plan": [
+          "Name the base object before stacking modifiers.",
+          "Write which operation should happen first and why.",
+          "Save a version before collapsing anything that might need to be changed later."
+        ],
+        "decision": {
+          "title": "Collapse now or keep it live?",
+          "prompt": "Keep the stack editable while proportions/design are still changing. Collapse only when there is a clear production reason."
+        },
+        "references": [
+          {
+            "src": "assets/modeling/book/subdivision-progression-p35.webp",
+            "sourceTitle": "Essential Guide to 3ds Max • user-supplied reference",
+            "caption": "Subdivision progression. More divisions rapidly multiply geometry; judge whether the visible result earns the cost."
+          }
+        ]
+      }
     },
     {
       "id": "max-topology-clinic",
@@ -1259,7 +1430,31 @@ window.UE5_MODELING_DATA = {
         "Repair ONE identified issue, then re-check. Do not run random cleanup tools across the whole asset.",
         "Compare shaded view AND F4 before calling the repair successful."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "thinking": {
+        "bigQuestion": "Can you diagnose WHY a mesh is bad rather than blindly adding or deleting polygons?",
+        "observe": [
+          "Topology density should follow curvature and detail.",
+          "A 96,000-poly crate can still have a worse silhouette than a clean low-density one.",
+          "Pinching, doubled edges, long thin faces and random density are clues, not just ugliness."
+        ],
+        "plan": [
+          "Inspect shaded, Edged Faces and silhouette views separately.",
+          "Find the first place where geometry stops serving the form.",
+          "Repair one cause at a time and compare against the saved clean version."
+        ],
+        "decision": {
+          "title": "12, 24 or 48 sides?",
+          "prompt": "Use the lowest radial count that holds the silhouette at the target camera distance. “More” is not automatically more professional."
+        },
+        "references": [
+          {
+            "src": "assets/modeling/book/topology-car-wireframe-p31.webp",
+            "sourceTitle": "Essential Guide to 3ds Max • user-supplied reference",
+            "caption": "Advanced wireframe example. Density changes with curvature and detail rather than being spread evenly everywhere."
+          }
+        ]
+      }
     },
     {
       "id": "max-modular-kit",
@@ -1409,7 +1604,32 @@ window.UE5_MODELING_DATA = {
         "Build a second layout from the same pieces WITHOUT non-uniform scaling.",
         "If a piece needs scaling to fit, repair the source dimensions instead."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "thinking": {
+        "bigQuestion": "Can one small set of pieces create many believable layouts?",
+        "observe": [
+          "Modular design depends on shared dimensions and connection rules.",
+          "A kit is successful when somebody else can use it without asking you how.",
+          "Unique one-off fixes are often evidence that the kit grammar is incomplete."
+        ],
+        "plan": [
+          "Choose a grid increment first.",
+          "Draw at least two layouts before modelling the pieces.",
+          "List the minimum reusable parts required for both layouts."
+        ],
+        "decision": {
+          "title": "New piece or smarter reuse?",
+          "prompt": "Before creating another unique asset, ask whether rotation, mirroring, trim, decal or a better connector can solve the problem."
+        },
+        "references": [
+          {
+            "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/2015%20London-Woolwich,%20Arsenal%20Way,%20warehouse.JPG",
+            "sourceUrl": "https://commons.wikimedia.org/wiki/File:2015%20London-Woolwich,%20Arsenal%20Way,%20warehouse.JPG",
+            "sourceTitle": "Wikimedia Commons reference",
+            "caption": "Look for structural repetition: bays, columns, wall spans, roof rhythm and openings. A modular kit is a grammar, not a jigsaw of one room."
+          }
+        ]
+      }
     },
     {
       "id": "max-uvs",
@@ -1581,7 +1801,31 @@ window.UE5_MODELING_DATA = {
         "Pack shells into 0–1 space with an 8 px padding target at 1024 wherever the pack tool exposes pixel padding.",
         "Capture UV layout + checker-on-model proof before texturing."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "thinking": {
+        "bigQuestion": "Can you unwrap the model so a checker proves the texture will behave before you ever paint it?",
+        "observe": [
+          "Stretching is visible immediately with a checker.",
+          "Seams should hide or follow believable construction where possible.",
+          "Large important surfaces need sensible texel density; tiny hidden surfaces do not deserve half the sheet."
+        ],
+        "plan": [
+          "Predict seam locations before pressing automatic tools.",
+          "Decide which repeated/symmetrical parts may share or stack space.",
+          "Use the checker as a test, not decoration."
+        ],
+        "decision": {
+          "title": "Pretty pack or useful pack?",
+          "prompt": "A beautiful tight pack is worthless if shells are stretched, wildly different in scale or impossible to paint cleanly."
+        },
+        "references": [
+          {
+            "src": "assets/modeling/book/uv-checker-p61.webp",
+            "sourceTitle": "Essential Guide to 3ds Max • user-supplied reference",
+            "caption": "Checker distortion makes UV stretching visible before textures hide the problem."
+          }
+        ]
+      }
     },
     {
       "id": "max-materials-substance",
@@ -1676,9 +1920,14 @@ window.UE5_MODELING_DATA = {
       ],
       "officialRefs": [
         {
-          "title": "Autodesk Learning Catalogue — materials and UVs",
-          "url": "https://www.autodesk.com/learn/catalog/max",
-          "note": "Official Autodesk learning catalogue includes current materials, UV and pipeline tutorials."
+          "title": "Adobe Substance 3D Painter — Create a Project",
+          "url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/getting-started/project-creation",
+          "note": "Current Adobe project/import settings reference for bringing a mesh into Painter."
+        },
+        {
+          "title": "Adobe Substance 3D Painter — Bake Mesh Maps",
+          "url": "https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/baking/how-to-bake-mesh-maps",
+          "note": "Adobe reference for mesh-map baking and geometry-driven maps used by Painter materials/generators."
         }
       ],
       "visual": "assets/modeling/diagrams/pipeline.svg",
@@ -1713,7 +1962,32 @@ window.UE5_MODELING_DATA = {
         "In Painter verify the mesh imports at expected scale, UVs are present and material sets are sensible before painting.",
         "If Painter shows stretching or unexpected material sets, return to Max and repair the source instead of painting around the problem."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "thinking": {
+        "bigQuestion": "Have you modelled enough — and stopped before modelling details that belong in materials?",
+        "observe": [
+          "Substance mesh maps depend on clean geometry and UVs.",
+          "Material IDs / texture sets should follow meaningful material or production groups.",
+          "Wear belongs where an object is handled, struck, exposed or assembled — not sprayed randomly over everything."
+        ],
+        "plan": [
+          "List the real materials in the asset: painted metal, bare metal, rubber, plastic, wood etc.",
+          "Mark which tiny details can be height/normal information instead of geometry.",
+          "Check names and UVs before exporting to Painter."
+        ],
+        "decision": {
+          "title": "Geometry, normal/height or colour/roughness?",
+          "prompt": "Put detail in the cheapest representation that survives the intended camera distance and still communicates the material/form."
+        },
+        "references": [
+          {
+            "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sony%20SLV-N71%20VCR%20(Front).jpg",
+            "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sony%20SLV-N71%20VCR%20(Front).jpg",
+            "sourceTitle": "Wikimedia Commons • CC BY-SA reference",
+            "caption": "Starter idea: electronics. Strong panel hierarchy, vents, buttons, seams, text and different material zones."
+          }
+        ]
+      }
     },
     {
       "id": "max-ue5-export",
@@ -1738,11 +2012,11 @@ window.UE5_MODELING_DATA = {
       "steps": [
         {
           "title": "Place and test the pivot",
-          "where": "3ds Max → Hierarchy → Pivot → Affect Pivot Only",
-          "do": "Put the pivot where the asset should rotate/snap in Unreal. For a modular floor/wall, a corner/base pivot is often useful. Turn Affect Pivot Only off.",
+          "where": "3ds Max → Hierarchy → Pivot / Transform Type-In",
+          "do": "Decide where the asset should rotate/snap in Unreal. For a modular floor/wall, a base corner is often useful. Position the mesh so that intended pivot location sits at world origin 0,0,0 before export; Epic’s Static Mesh FBX guidance uses the export origin as the Unreal pivot. If you use Affect Pivot Only while inspecting/adjusting the pivot, turn it off again before continuing.",
           "see": "The gizmo sits at the intended pivot and normal transforms affect the object again.",
-          "check": "Rotate the object in Max to prove the pivot behaves correctly, then undo the rotation.",
-          "why": "Unreal uses the imported pivot for transforms and placement.",
+          "check": "Read the world coordinates and confirm the intended pivot point is at 0,0,0. Rotate a temporary copy around that point if needed, then undo/delete the test.",
+          "why": "A deliberate origin/pivot makes placement, rotation and grid snapping predictable in Unreal. Epic’s current FBX Static Mesh documentation states that the exported pivot is at the origin.",
           "stuck": [],
           "warning": "",
           "visual": ""
@@ -1867,14 +2141,39 @@ window.UE5_MODELING_DATA = {
       ],
       "studentRecipe": [
         "Select only the finished static mesh asset. Confirm dimensions in centimetres and naming SM_AssetName.",
-        "Set pivot to the intended base/corner/hinge location, then TURN Affect Pivot Only off.",
+        "Decide the intended base/corner/hinge pivot, then position the asset so that intended pivot location sits at world 0,0,0 for export. If you use Affect Pivot Only while checking the pivot, turn it off again.",
         "Use Export Selected → FBX. Keep Animation off for a static mesh and use the current college/Epic preset.",
         "In UE5 import as Static Mesh at scale 1.0. Do not “fix” a wrong Max scale with random Unreal import scale.",
         "Open Static Mesh Editor. Check dimensions, pivot/origin behaviour, normals/shading, UV channels and collision expectation.",
         "Place three copies in the level on a 100 cm / 1 m reference. Rotate/move them to prove snapping and pivot behaviour.",
         "If any source issue is wrong, fix the Max file and re-export/reimport. Do not fork a broken “UE-fixed” version unless there is a deliberate reason."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "thinking": {
+        "bigQuestion": "Does the asset behave like a game asset after it leaves Max?",
+        "observe": [
+          "Scale, pivot and orientation are production decisions, not export-dialog trivia.",
+          "A mesh that looks fine in Max can still fail through bad pivot, units, normals, collision or material setup.",
+          "The Unreal Static Mesh Editor is where you prove the pipeline worked."
+        ],
+        "plan": [
+          "Write the intended pivot behaviour before exporting.",
+          "Check world scale against a known real dimension.",
+          "Export a clean named test version before the “final final” file."
+        ],
+        "decision": {
+          "title": "Fix it in Unreal or fix the source?",
+          "prompt": "If the problem comes from the mesh, pivot, UVs, normals or scale, repair the source asset and re-export. Do not build a pile of compensating engine fixes."
+        },
+        "references": [
+          {
+            "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Fire%20extinguisher%20in%20wall%20mount.jpg",
+            "sourceUrl": "https://commons.wikimedia.org/wiki/File:Fire%20extinguisher%20in%20wall%20mount.jpg",
+            "sourceTitle": "Wikimedia Commons • CC BY reference",
+            "caption": "Starter idea: extinguisher. Clear cylinder forms, handle mechanism, hose, bracket and mixed materials."
+          }
+        ]
+      }
     }
   ],
   "builds": [
@@ -1951,10 +2250,10 @@ window.UE5_MODELING_DATA = {
         },
         {
           "name": "Game ready",
-          "brief": "Set pivot, export selected and verify in UE5.",
+          "brief": "Choose the export origin/pivot deliberately, export selected and verify in UE5.",
           "proof": "UE5 screenshot with three copies placed at consistent scale.",
           "steps": [
-            "Place the pivot at a useful base/corner position and turn Affect Pivot Only off.",
+            "Choose a useful base/corner pivot location and position that point at world 0,0,0 for export. If you used Affect Pivot Only, turn it off again.",
             "Verify dimensions and naming, then Export Selected as FBX using the college preset/current Epic guidance.",
             "Import as a Static Mesh in UE5 and open the Static Mesh Editor.",
             "Place three copies. If scale/pivot/UV is wrong, fix Max source and re-export."
@@ -1976,9 +2275,55 @@ window.UE5_MODELING_DATA = {
         "Add only the edge loops needed to support large forms. Do not add decorative density.",
         "Chamfer selected outer highlight edges: start Amount 1.5 cm, Segments 2. Compare against Segments 1 before keeping it.",
         "UV with 1024 checker. Fix stretching → match shell scale → pack with sensible padding.",
-        "Place pivot at useful base/corner, Export Selected, import to UE5 at scale 1.0 and compare beside a 100 cm reference."
+        "Choose a useful base/corner pivot location, place that point at world 0,0,0, Export Selected, import to UE5 at scale 1.0 and compare beside a 100 cm reference."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "brief": {
+        "role": "Junior prop artist",
+        "context": "Create a believable reusable shipping crate for a game environment. It must read from several metres away and survive close inspection without silly geometry density.",
+        "designTarget": "Strong construction logic, readable cleats/planks, controlled chamfers and a clean game-ready source mesh.",
+        "constraint": "Do not model nails, scratches or wood grain as geometry."
+      },
+      "references": [
+        {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Standard-plywood-shipping-crate-vol-case.jpg",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Standard-plywood-shipping-crate-vol-case.jpg",
+          "sourceTitle": "Wikimedia Commons • CC BY-SA reference",
+          "caption": "Real plywood shipping crates. Study the large panel, cleat thickness, runners, overlaps and how few forms actually create the read."
+        },
+        {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/1950s%20sugar%20cube%20wooden%20shipping%20crate%20by%20Swedish%20company%20Svenska%20sockerfabriks%20aktiebolaget.jpg",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:1950s%20sugar%20cube%20wooden%20shipping%20crate%20by%20Swedish%20company%20Svenska%20sockerfabriks%20aktiebolaget.jpg",
+          "sourceTitle": "Wikimedia Commons reference",
+          "caption": "A second construction style. Compare frame thickness, panel proportions and where the silhouette changes."
+        }
+      ],
+      "plan": [
+        "Write down an approximate real-world width, depth and height before opening Max.",
+        "Mark the three biggest shapes in the reference: body, frame/cleats and base runners.",
+        "Circle details that should be textures instead of geometry: grain, labels, scratches and tiny fasteners.",
+        "Decide which pieces repeat so you can duplicate rather than remodel them."
+      ],
+      "variation": "Change ONE construction decision from the walkthrough: cleat layout, lid structure, runner shape or proportions. It should still look structurally believable.",
+      "qualityGates": [
+        "From 5 metres away the silhouette reads as a crate without relying on textures.",
+        "No face or edge exists purely because “more polys = better”.",
+        "Chamfers catch light but do not turn every edge into a soft toy.",
+        "The pivot, scale and orientation make sense for placement in a level."
+      ],
+      "critique": "Does the crate look constructed from believable pieces, or does anything feel like decoration stuck onto a box?",
+      "proStudy": {
+        "title": "Hard-Surface Prop Production for Games",
+        "source": "80 Level • Jack Williams",
+        "url": "https://80.lv/articles/001agt-002mrs-004adk-hard-surface-prop-production-for-games",
+        "why": "A complete example of reference gathering, blockout, silhouette control, UV thinking, baking and presentation.",
+        "lookFor": [
+          "How reference is gathered to answer specific questions",
+          "Why blockout focuses on silhouette before detail",
+          "Where repeating geometry shares UV space",
+          "How texture detail replaces unnecessary geometry"
+        ]
+      }
     },
     {
       "id": "build-barrel",
@@ -2062,7 +2407,53 @@ window.UE5_MODELING_DATA = {
         "Create one logical vertical UV seam + separate cap shells. Checker-test.",
         "Export to UE5 and compare scale beside the 80×60×45 crate."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "brief": {
+        "role": "Environment prop artist",
+        "context": "Build a metal drum/canister that can be reused as clutter in an industrial level.",
+        "designTarget": "Round silhouette at the intended camera distance, readable rolled rims and construction bands, without wasting radial segments.",
+        "constraint": "The barrel must still look round when viewed in Unreal from the intended gameplay distance."
+      },
+      "references": [
+        {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/BNO%20Drum.jpg",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:BNO%20Drum.jpg",
+          "sourceTitle": "Wikimedia Commons reference",
+          "caption": "Real steel drum. Ignore the sticker first: study cylinder proportions, rim construction, band placement and where highlights break."
+        },
+        {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Steel%20barrels.jpg",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Steel%20barrels.jpg",
+          "sourceTitle": "Wikimedia Commons reference",
+          "caption": "Compare repeated drums. Notice how the same basic asset can vary through material and surface treatment rather than geometry."
+        }
+      ],
+      "plan": [
+        "Choose a gameplay camera distance: close prop, room clutter or background object.",
+        "Test 12 / 24 / 48 cylinder sides and pick the LOWEST count that holds the silhouette for that distance.",
+        "Identify which rings change the silhouette and which can be normal/height detail later.",
+        "Decide whether the top needs to be seen; do not build hidden detail automatically."
+      ],
+      "variation": "Create a second version by changing only proportions and top/rim design. Reuse as much clean geometry as possible.",
+      "qualityGates": [
+        "The cylinder does not visibly facet at the intended distance.",
+        "Radial density is justified rather than maxed out.",
+        "Rims and bands are clean loops, not lumpy hand-moved vertices.",
+        "The asset can be duplicated without strange scale or pivot behaviour."
+      ],
+      "critique": "At the intended gameplay distance, which geometry actually improves the barrel and which detail could be removed?",
+      "proStudy": {
+        "title": "Creating Realistic Vehicles in 3ds Max & Substance 3D Painter",
+        "source": "80 Level • Miguel Sanchez Woodvine",
+        "url": "https://80.lv/articles/creating-realistic-vehicles-in-3ds-max-substance-3d-painter",
+        "why": "Useful for seeing how a professional uses lots of real reference and carries an asset from modelling through believable materials.",
+        "lookFor": [
+          "Reference density",
+          "Large forms versus detail",
+          "How wear follows real use",
+          "What is modelled versus textured"
+        ]
+      }
     },
     {
       "id": "build-tyre",
@@ -2154,7 +2545,53 @@ window.UE5_MODELING_DATA = {
         "Chamfer only edges that remain unnaturally razor sharp. F4 check for density spikes/open borders.",
         "Save Tyre_04_Clean.max before UVs."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "brief": {
+        "role": "Vehicle/prop artist",
+        "context": "Build a simple game tyre that teaches radial modelling and repeated tread without turning into a million-polygon sculpture.",
+        "designTarget": "Correct tyre profile, readable tread rhythm and controlled repetition.",
+        "constraint": "Tread must be built from a repeatable strategy, not individually placed by eye around the entire tyre."
+      },
+      "references": [
+        {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Car%20tire%20closeup%201%202019-01-15.jpg",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Car%20tire%20closeup%201%202019-01-15.jpg",
+          "sourceTitle": "Wikimedia Commons reference",
+          "caption": "Read the tyre as layered forms: sidewall, shoulder, tread band and groove rhythm."
+        },
+        {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Tire%20tread.jpg",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Tire%20tread.jpg",
+          "sourceTitle": "Wikimedia Commons reference",
+          "caption": "Tread close-up. Look for a repeat unit before you think about placing individual blocks."
+        }
+      ],
+      "plan": [
+        "Draw the tyre cross-section as a simple profile before modelling.",
+        "Mark the tread repeat unit: what is the smallest chunk that can be duplicated?",
+        "Pick a side count based on silhouette, not habit.",
+        "Decide what is geometry and what can be texture/normal detail."
+      ],
+      "variation": "Design your own simple tread repeat using no more than three distinct block shapes.",
+      "qualityGates": [
+        "Sidewall profile looks inflated rather than like a flat torus.",
+        "Tread spacing is regular and follows the circumference cleanly.",
+        "No accidental doubled vertices or overlapping tread pieces.",
+        "Silhouette remains clean in shaded and Edged Faces views."
+      ],
+      "critique": "Does the tread feel designed as a repeatable manufacturing pattern, or like random blocks placed around a ring?",
+      "proStudy": {
+        "title": "Creating Realistic Vehicles in 3ds Max & Substance 3D Painter",
+        "source": "80 Level • Miguel Sanchez Woodvine",
+        "url": "https://80.lv/articles/creating-realistic-vehicles-in-3ds-max-substance-3d-painter",
+        "why": "Useful for seeing how a professional uses lots of real reference and carries an asset from modelling through believable materials.",
+        "lookFor": [
+          "Reference density",
+          "Large forms versus detail",
+          "How wear follows real use",
+          "What is modelled versus textured"
+        ]
+      }
     },
     {
       "id": "build-wall-panel",
@@ -2226,7 +2663,47 @@ window.UE5_MODELING_DATA = {
         "Chamfer the selected hard edges with Amount 1 cm and Segments 2. Preserve the broad flat surfaces.",
         "F4 + shaded check from game distance. If tiny detail disappears, remove it."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "brief": {
+        "role": "Hard-surface environment artist",
+        "context": "Turn a flat wall module into a sci-fi/industrial panel that reads through hierarchy, not random greebles.",
+        "designTarget": "One primary panel shape, a clear secondary structure and restrained tertiary detail.",
+        "constraint": "You are allowed a maximum of THREE detail scales: big, medium and small."
+      },
+      "references": [
+        {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Electrical%20panel.jpg",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Electrical%20panel.jpg",
+          "sourceTitle": "Wikimedia Commons reference",
+          "caption": "Real control panel. Study functional grouping, spacing, fasteners, access areas and repeated controls before stylising it."
+        }
+      ],
+      "plan": [
+        "Write the panel’s fictional job in one sentence: power, access, ventilation, data or machinery control.",
+        "Choose one dominant feature that communicates that job.",
+        "Divide detail into BIG / MEDIUM / SMALL and remove anything that does not belong to one group.",
+        "Mark repeated elements before modelling them so they are instances/duplicates, not redrawn copies."
+      ],
+      "variation": "Make the panel belong to one of three fictional manufacturers: clean corporate, battered industrial or chunky military. Change proportion and detail language, not just colour.",
+      "qualityGates": [
+        "The panel has a clear focal feature instead of uniform noise.",
+        "Details look attached for a reason: access, venting, joining, control or protection.",
+        "Repeated parts align and share dimensions.",
+        "The base wall module still snaps cleanly to a grid."
+      ],
+      "critique": "Can someone guess what this panel does from its forms alone? Which detail feels least believable?",
+      "proStudy": {
+        "title": "Making a Sci-Fi Modular Environment in 3ds Max & Unreal",
+        "source": "80 Level • Pavel Inozemtsev",
+        "url": "https://80.lv/articles/making-a-sci-fi-modular-environment-in-3ds-max-ue4",
+        "why": "A very direct professional example of modular kit thinking in 3ds Max rather than modelling one giant room.",
+        "lookFor": [
+          "Which pieces repeat",
+          "How a kit creates many combinations",
+          "Where trims/decals do work instead of unique geometry",
+          "How the final environment hides repetition"
+        ]
+      }
     },
     {
       "id": "build-scifi-door",
@@ -2308,7 +2785,48 @@ window.UE5_MODELING_DATA = {
         "Test exact 90° rotation (hinge) or exact 130 cm translation (slide) in Max, then Undo.",
         "Export frame/slab deliberately. UE5 import at scale1 and test movement in an empty level before materials/VFX."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "brief": {
+        "role": "Environment artist",
+        "context": "Create a game door that communicates how it opens and where the player should interact without needing a floating arrow.",
+        "designTarget": "Readable frame, moving panel/leaf, handle/control zone and believable clearance.",
+        "constraint": "The pivot and moving pieces must actually support the opening direction you design."
+      },
+      "references": [
+        {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Metal%20door.jpg",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Metal%20door.jpg",
+          "sourceTitle": "Wikimedia Commons • public-domain reference",
+          "caption": "Start with real construction: frame, leaf, hinges/clearance, handle zone and material thickness. Stylise only after the structure makes sense."
+        }
+      ],
+      "plan": [
+        "Sketch arrows showing HOW the door opens before modelling it.",
+        "Separate static frame pieces from moving pieces.",
+        "Mark the player interaction zone and make it readable through shape hierarchy.",
+        "Decide the correct pivot location before detail work begins."
+      ],
+      "variation": "Choose one opening type: hinged, sliding, split, vertical shutter. Your geometry and pivot must prove the choice.",
+      "qualityGates": [
+        "The opening mechanism is understandable with materials disabled.",
+        "The moving section has believable clearance from the frame.",
+        "Pivot is at the hinge/slide origin you actually need in Unreal.",
+        "The door can sit inside a modular wall without breaking the grid.",
+        "The intended Unreal pivot/origin has been tested deliberately; the export point is positioned at world 0,0,0 rather than fixed later with a random engine transform."
+      ],
+      "critique": "Without explaining it, can another student correctly predict how the door opens and where they would interact?",
+      "proStudy": {
+        "title": "Making a Sci-Fi Modular Environment in 3ds Max & Unreal",
+        "source": "80 Level • Pavel Inozemtsev",
+        "url": "https://80.lv/articles/making-a-sci-fi-modular-environment-in-3ds-max-ue4",
+        "why": "A very direct professional example of modular kit thinking in 3ds Max rather than modelling one giant room.",
+        "lookFor": [
+          "Which pieces repeat",
+          "How a kit creates many combinations",
+          "Where trims/decals do work instead of unique geometry",
+          "How the final environment hides repetition"
+        ]
+      }
     },
     {
       "id": "build-pipe-kit",
@@ -2379,7 +2897,48 @@ window.UE5_MODELING_DATA = {
         "Assemble layout A and layout B using duplicates and 90° rotations only.",
         "If a join needs non-uniform scaling, stop and repair the source kit."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "brief": {
+        "role": "Modular environment artist",
+        "context": "Create a tiny pipe kit that can route around a room without unique modelling every time.",
+        "designTarget": "Straight, bend, junction and end/valve pieces that share diameter, pivot logic and snap length.",
+        "constraint": "Every piece must solve at least two layout situations."
+      },
+      "references": [
+        {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Close-up%20view%20of%20a%20red%20valve%20on%20a%20metallic%20pipe%20system%20with%20a%20pressure%20gauge%20in%20an%20industrial%20setting.jpg",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Close-up%20view%20of%20a%20red%20valve%20on%20a%20metallic%20pipe%20system%20with%20a%20pressure%20gauge%20in%20an%20industrial%20setting.jpg",
+          "sourceTitle": "Wikimedia Commons • CC BY reference",
+          "caption": "Study how real systems use repeated diameters, connectors, flanges, valves and gauges. The interesting part is the system, not one fancy pipe."
+        }
+      ],
+      "plan": [
+        "Pick ONE pipe diameter and ONE grid increment for the whole kit.",
+        "Draw four layouts the kit must be able to build before you create geometry.",
+        "List the minimum pieces needed to make those layouts.",
+        "Choose pivots so pieces rotate and snap predictably."
+      ],
+      "variation": "Use the same kit to make two visibly different pipe runs. If you need a unique emergency piece, improve the kit instead.",
+      "qualityGates": [
+        "Every connection meets without a gap or overlap.",
+        "All pieces use the same diameter and connector standard.",
+        "Bends have enough segments to read cleanly but are not absurdly dense.",
+        "Pivots make 90-degree rotations and snapping painless.",
+        "The intended Unreal pivot/origin has been tested deliberately; the export point is positioned at world 0,0,0 rather than fixed later with a random engine transform."
+      ],
+      "critique": "Could somebody who did not build the kit make a new pipe route with it in five minutes?",
+      "proStudy": {
+        "title": "Modelling and Texturing Assets for a Detailed 3D Scene",
+        "source": "80 Level • Elie Paquiet",
+        "url": "https://80.lv/articles/modeling-and-texturing-assets-and-foliage-for-a-detailed-3d-environment",
+        "why": "A current 2026 environment-art breakdown that uses measured modular scales and production-minded asset planning.",
+        "lookFor": [
+          "3 m / 4.5 m / 6 m modular thinking",
+          "Reference before production",
+          "Reuse versus unique assets",
+          "How materials and geometry divide the workload"
+        ]
+      }
     },
     {
       "id": "build-modular-room",
@@ -2464,7 +3023,48 @@ window.UE5_MODELING_DATA = {
         "Build room B from same pieces without scaling any instance.",
         "Export Selected and assemble two UE5 layouts. Any unique scale correction means the Max source needs repair."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "brief": {
+        "role": "Environment production artist",
+        "context": "Build a small reusable room kit rather than one giant “finished room” mesh.",
+        "designTarget": "A tiny family of wall, corner, floor/ceiling, doorway and trim pieces that can make more than one layout.",
+        "constraint": "No single mesh is allowed to contain the entire room."
+      },
+      "references": [
+        {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/2015%20London-Woolwich,%20Arsenal%20Way,%20warehouse.JPG",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:2015%20London-Woolwich,%20Arsenal%20Way,%20warehouse.JPG",
+          "sourceTitle": "Wikimedia Commons reference",
+          "caption": "Look for structural repetition: bays, columns, wall spans, roof rhythm and openings. A modular kit is a grammar, not a jigsaw of one room."
+        }
+      ],
+      "plan": [
+        "Choose a grid module and write it at the top of your page before modelling.",
+        "Break the room into repeatable structural units, not decorative chunks.",
+        "Draw at least TWO different room layouts that the same kit can create.",
+        "Identify where a trim/decal/material can replace unique geometry."
+      ],
+      "variation": "Build a second layout from the same kit without creating a new wall or floor mesh.",
+      "qualityGates": [
+        "Pieces snap cleanly on the chosen grid.",
+        "Corners, doorways and plain walls share dimensions logically.",
+        "The kit can build at least two different layouts.",
+        "No giant one-off mesh is hiding bad modular thinking.",
+        "The intended Unreal pivot/origin has been tested deliberately; the export point is positioned at world 0,0,0 rather than fixed later with a random engine transform."
+      ],
+      "critique": "Does this feel like a reusable kit or a room that has merely been chopped into pieces after the fact?",
+      "proStudy": {
+        "title": "Making a Sci-Fi Modular Environment in 3ds Max & Unreal",
+        "source": "80 Level • Pavel Inozemtsev",
+        "url": "https://80.lv/articles/making-a-sci-fi-modular-environment-in-3ds-max-ue4",
+        "why": "A very direct professional example of modular kit thinking in 3ds Max rather than modelling one giant room.",
+        "lookFor": [
+          "Which pieces repeat",
+          "How a kit creates many combinations",
+          "Where trims/decals do work instead of unique geometry",
+          "How the final environment hides repetition"
+        ]
+      }
     },
     {
       "id": "build-hero-prop",
@@ -2548,7 +3148,62 @@ window.UE5_MODELING_DATA = {
         "Run topology + shading checkpoint before UVs. Fix source problems now.",
         "UV/checker → texture in agreed workflow → UE5 verification. Capture final shaded, F4 wireframe, UV and engine proof."
       ],
-      "prescriptivePass": "3.31"
+      "prescriptivePass": "3.31",
+      "brief": {
+        "role": "Independent prop artist",
+        "context": "Choose a real object with enough construction and material variety to make a strong game-ready hero prop.",
+        "designTarget": "A recognisable, well-researched asset with intentional silhouette, topology, UVs, materials and presentation.",
+        "constraint": "You must be able to explain every major modelling decision using reference, function or game-use — “it looked cool” is not enough on its own."
+      },
+      "references": [
+        {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sony%20SLV-N71%20VCR%20(Front).jpg",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sony%20SLV-N71%20VCR%20(Front).jpg",
+          "sourceTitle": "Wikimedia Commons • CC BY-SA reference",
+          "caption": "Starter idea: electronics. Strong panel hierarchy, vents, buttons, seams, text and different material zones."
+        },
+        {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Fire%20extinguisher%20in%20wall%20mount.jpg",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Fire%20extinguisher%20in%20wall%20mount.jpg",
+          "sourceTitle": "Wikimedia Commons • CC BY reference",
+          "caption": "Starter idea: extinguisher. Clear cylinder forms, handle mechanism, hose, bracket and mixed materials."
+        },
+        {
+          "src": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Vending%20Machine.jpg",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Vending%20Machine.jpg",
+          "sourceTitle": "Wikimedia Commons • CC0 reference",
+          "caption": "Starter idea: vending machine. Big box form, inset display, repeated controls, openings, branding and material breakup."
+        }
+      ],
+      "plan": [
+        "Gather at least SIX references that answer different questions: overall shape, side/back, construction, close detail, materials and scale.",
+        "Write the asset’s real dimensions or a justified estimate.",
+        "Create a 10–15 minute primitive blockout and compare it against reference BEFORE detail.",
+        "Make a geometry budget plan: silhouette geometry, functional geometry, texture/normal detail.",
+        "Choose one thing that makes YOUR version intentional: age, context, manufacturer, damage state or game role."
+      ],
+      "variation": "There is no copy-this outcome. Your prop choice and one intentional narrative/use decision make the result yours.",
+      "qualityGates": [
+        "The asset is recognisable in flat grey material from silhouette and proportion alone.",
+        "Topology density follows shape change and camera distance.",
+        "UVs have sensible seams, scale and packing with a clean checker.",
+        "Materials show believable construction and use rather than uniform random grunge.",
+        "It imports to Unreal at the correct scale, orientation and pivot.",
+        "The intended Unreal pivot/origin has been tested deliberately; the export point is positioned at world 0,0,0 rather than fixed later with a random engine transform."
+      ],
+      "critique": "What reads first, what feels least believable, and which single change would improve the asset most?",
+      "proStudy": {
+        "title": "Designing Appealing Textures for a 3D Prop",
+        "source": "80 Level • Daniel Elsworth",
+        "url": "https://80.lv/articles/designing-appealing-textures-for-a-3d-prop-in-substance-3d-painter",
+        "why": "A strong reminder that modelling does not end when the mesh is finished: UVs, bake quality and material decisions change the final read.",
+        "lookFor": [
+          "Material reference",
+          "Edge wear logic",
+          "Bake checks",
+          "Presentation choices"
+        ]
+      }
     }
   ],
   "fixes": [
@@ -2769,6 +3424,126 @@ window.UE5_MODELING_DATA = {
       "title": "Autodesk 3ds Max 2023 Bible",
       "author": "Seyi Sunday O.",
       "use": "Curriculum sequencing, scaffold-task ideas and interface-capture planning only. Screenshots/pages are not reproduced in this release."
+    }
+  ],
+  "studioLoop": [
+    {
+      "step": "LOOK",
+      "title": "Collect useful reference",
+      "text": "Find front, side, detail, material and construction views. A pretty image that answers no modelling question is not useful reference."
+    },
+    {
+      "step": "PLAN",
+      "title": "Decide what the asset needs",
+      "text": "What is its scale, silhouette, function, material breakup, repeated geometry and likely camera distance?"
+    },
+    {
+      "step": "BLOCK",
+      "title": "Prove the big shapes",
+      "text": "Use primitives and low segment counts. If the silhouette is wrong now, detail will not rescue it."
+    },
+    {
+      "step": "MODEL",
+      "title": "Build with intent",
+      "text": "Extrude, inset, chamfer, connect and modifiers only when they solve a visible form problem."
+    },
+    {
+      "step": "INSPECT",
+      "title": "Check the mesh, not just the render",
+      "text": "Orbit it. Use Edged Faces. Look for waste, pinching, accidental doubles, shading problems and weak silhouette."
+    },
+    {
+      "step": "GAME READY",
+      "title": "UV, texture and export",
+      "text": "Checker first, then material logic, Substance, pivot, scale and Unreal verification."
+    },
+    {
+      "step": "CRITIQUE",
+      "title": "Show somebody else",
+      "text": "Ask a precise question, collect feedback, change one thing, then compare before and after."
+    }
+  ],
+  "studioPrinciples": [
+    "Reference answers questions. Collect it before modelling.",
+    "Silhouette and proportion beat tiny detail.",
+    "Every polygon needs a reason to exist.",
+    "Booleans are a tool, not an escape hatch from understanding topology.",
+    "Model for the camera distance and purpose of the asset.",
+    "A clean source mesh saves pain in UVs, Substance and Unreal.",
+    "The first version is allowed to be wrong. The important skill is knowing why."
+  ],
+  "industryStudies": [
+    {
+      "title": "Hard-Surface Prop Production for Games",
+      "source": "80 Level • Jack Williams",
+      "url": "https://80.lv/articles/001agt-002mrs-004adk-hard-surface-prop-production-for-games",
+      "why": "A complete example of reference gathering, blockout, silhouette control, UV thinking, baking and presentation.",
+      "lookFor": [
+        "How reference is gathered to answer specific questions",
+        "Why blockout focuses on silhouette before detail",
+        "Where repeating geometry shares UV space",
+        "How texture detail replaces unnecessary geometry"
+      ]
+    },
+    {
+      "title": "Making a Sci-Fi Modular Environment in 3ds Max & Unreal",
+      "source": "80 Level • Pavel Inozemtsev",
+      "url": "https://80.lv/articles/making-a-sci-fi-modular-environment-in-3ds-max-ue4",
+      "why": "A very direct professional example of modular kit thinking in 3ds Max rather than modelling one giant room.",
+      "lookFor": [
+        "Which pieces repeat",
+        "How a kit creates many combinations",
+        "Where trims/decals do work instead of unique geometry",
+        "How the final environment hides repetition"
+      ]
+    },
+    {
+      "title": "Creating Realistic Vehicles in 3ds Max & Substance 3D Painter",
+      "source": "80 Level • Miguel Sanchez Woodvine",
+      "url": "https://80.lv/articles/creating-realistic-vehicles-in-3ds-max-substance-3d-painter",
+      "why": "Useful for seeing how a professional uses lots of real reference and carries an asset from modelling through believable materials.",
+      "lookFor": [
+        "Reference density",
+        "Large forms versus detail",
+        "How wear follows real use",
+        "What is modelled versus textured"
+      ]
+    },
+    {
+      "title": "Recreating Death Stranding’s Delivery Bot",
+      "source": "80 Level • Jérôme Bussat",
+      "url": "https://80.lv/articles/recreating-death-stranding-s-delivery-bot-in-3ds-max-substance-3d-painter/",
+      "why": "Shows silhouette, detail ratio and colour/material thinking on a recognisable shipped-game-inspired hard-surface subject.",
+      "lookFor": [
+        "Big shape read",
+        "Mechanical hierarchy",
+        "Detail density",
+        "Material and damage placement"
+      ]
+    },
+    {
+      "title": "Designing Appealing Textures for a 3D Prop",
+      "source": "80 Level • Daniel Elsworth",
+      "url": "https://80.lv/articles/designing-appealing-textures-for-a-3d-prop-in-substance-3d-painter",
+      "why": "A strong reminder that modelling does not end when the mesh is finished: UVs, bake quality and material decisions change the final read.",
+      "lookFor": [
+        "Material reference",
+        "Edge wear logic",
+        "Bake checks",
+        "Presentation choices"
+      ]
+    },
+    {
+      "title": "Modelling and Texturing Assets for a Detailed 3D Scene",
+      "source": "80 Level • Elie Paquiet",
+      "url": "https://80.lv/articles/modeling-and-texturing-assets-and-foliage-for-a-detailed-3d-environment",
+      "why": "A current 2026 environment-art breakdown that uses measured modular scales and production-minded asset planning.",
+      "lookFor": [
+        "3 m / 4.5 m / 6 m modular thinking",
+        "Reference before production",
+        "Reuse versus unique assets",
+        "How materials and geometry divide the workload"
+      ]
     }
   ]
 };
