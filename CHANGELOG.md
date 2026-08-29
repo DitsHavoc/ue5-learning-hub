@@ -1,3 +1,12 @@
+## v3.34.19 — Site-wide Search Repair
+
+- Replaced the brittle collection-by-collection topbar search with one startup-built global search index.
+- Site-wide search now indexes nested lesson/tutorial instructions, mechanics, nodes, snippet prerequisites, modelling repair guidance, Building Blocks, Designer Studio, Sculpt Playground and glossary content rather than only a few headline fields.
+- Added token-based matching and title-weighted ranking so multi-word searches such as `break hit result`, `save checkpoint` and `animation blueprint` work reliably.
+- Added a visible result count/status header, raised the search panel above page content and made focus/search events rerun the active query.
+- Added safe guards so missing optional data fields cannot kill the whole search handler.
+- No curriculum, capture-count, Supabase schema or permission changes.
+
 ## v3.34.18 — Snippet Well Exhaustion Pass
 
 - Expanded the Snippet Bank from 31 to 39 targeted paste assists across 12 unique official Epic UE5.8 documentation pages.

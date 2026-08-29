@@ -866,3 +866,8 @@ button:disabled{opacity:.48;cursor:not-allowed;transform:none!important}
 .snippet-learning-rule{margin-top:25px;border-color:rgba(255,213,101,.28)}.snippet-learning-rule h2{color:#fff}
 @media(max-width:1080px){.snippet-bank-tools{grid-template-columns:1fr}.snippet-bank-grid{grid-template-columns:1fr}.snippet-policy{grid-template-columns:1fr}.snippet-bridge-list{grid-template-columns:1fr}}
 @media(max-width:760px){.snippet-programming-cta{grid-template-columns:1fr}.snippet-detail-grid{grid-template-columns:1fr}.snippet-card-top{grid-template-columns:auto minmax(0,1fr)}.snippet-copy-pill{grid-column:2;justify-self:start}.snippet-policy-steps{grid-template-columns:1fr}.snippet-bank-tools .tutorial-filter-row{overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px}.snippet-bank-tools .tutorial-filter{white-space:nowrap}}
+.search-panel{z-index:60}
+.search-panel-head{position:sticky;top:0;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 13px;background:#0a1119;border-bottom:1px solid #1d2a3a;color:#dce8f4}
+.search-panel-head strong{font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:var(--blue)}
+.search-panel-head small{font-size:9px;color:#74879a;text-align:right}
+.search-empty{cursor:default}

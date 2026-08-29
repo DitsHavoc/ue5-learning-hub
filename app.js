@@ -3228,43 +3228,118 @@ function setupKonamiCode(){
   $('#konamiEgg')?.addEventListener('click',()=>{$('#konamiEgg').hidden=true;document.body.classList.remove('konami-open')});
 }
 
+function normaliseSearchText(value){
+  return String(value??'')
+    .normalize('NFKD').replace(/[\u0300-\u036f]/g,'')
+    .toLowerCase().replace(/[^a-z0-9+#.]+/g,' ').replace(/\s+/g,' ').trim();
+}
+function deepSearchText(value,seen=new WeakSet()){
+  if(value==null)return '';
+  if(['string','number','boolean'].includes(typeof value))return String(value);
+  if(typeof value!=='object')return '';
+  if(seen.has(value))return '';
+  seen.add(value);
+  if(Array.isArray(value))return value.map(x=>deepSearchText(x,seen)).join(' ');
+  return Object.entries(value)
+    .filter(([k])=>!['src','url','sourceUrl','image','images','referenceImages','visuals'].includes(k))
+    .map(([k,v])=>`${k} ${deepSearchText(v,seen)}`).join(' ');
+}
+function makeSearchEntry({title,meta,href,icon='',data='',kind=''}){
+  const titleText=normaliseSearchText(title);
+  return {title,meta,href,icon,kind,titleText,text:normaliseSearchText(`${title} ${meta} ${data}`)};
+}
+function buildGlobalSearchIndex(){
+  const entries=[];
+  const add=e=>{if(e?.title&&e?.href)entries.push(makeSearchEntry(e))};
+
+  (DATA.lessons||[]).forEach(l=>add({
+    title:l.title,meta:`Unreal Learning • ${l.projectTask?.name||path(l.path)?.title||'Core lesson'}`,
+    href:`#/lesson/${l.id}`,icon:'◇',kind:'lesson',data:deepSearchText(l)
+  }));
+  (TOOLS.tutorials||[]).forEach(t=>add({
+    title:t.title,meta:`Quick Tutorial • ${t.duration||''} • ${tutorialCategory(t.category)?.title||'UE5'}`,
+    href:`#/tutorial/${t.id}`,icon:'🛠',kind:'tutorial',data:deepSearchText(t)
+  }));
+  (DESIGN.modules||[]).forEach(m=>add({
+    title:m.title,meta:'Designer Studio • Discipline',href:`#/design/${m.id}`,icon:m.icon||'◆',kind:'design',data:deepSearchText(m)
+  }));
+  (DESIGN.resources||[]).forEach(r=>add({
+    title:r.title,meta:`Free resource • ${r.type||'Resource'}`,href:'#/design',icon:r.icon||'🎁',kind:'resource',data:deepSearchText(r)
+  }));
+  (MODEL.lessons||[]).forEach(l=>add({
+    title:l.title,meta:`3D Modelling Studio • Lesson ${l.order||''}`,href:`#/modeling/lesson/${l.id}`,icon:'⬡',kind:'model-lesson',data:deepSearchText(l)
+  }));
+  (MODEL.builds||[]).forEach(b=>add({
+    title:`How to build: ${b.title}`,meta:'3D Modelling Studio • Build',href:`#/modeling/build/${b.id}`,icon:b.icon||'⬡',kind:'model-build',data:deepSearchText(b)
+  }));
+  (MODEL.fixes||[]).forEach(f=>add({
+    title:f.title,meta:'3D Modelling Studio • Fix This Model',href:`#/modeling/fix/${f.id}`,icon:f.icon||'⚕',kind:'model-fix',data:deepSearchText(f)
+  }));
+  (SCULPT.practices||[]).forEach(p=>add({
+    title:p.title,meta:`Sculpt Playground • ${p.time||''}`,href:`#/sculpt/${p.id}`,icon:'🗿',kind:'sculpt',data:deepSearchText(p)
+  }));
+  (BLOCKS.blocks||[]).forEach(b=>add({
+    title:b.title,meta:`${BLOCKS.tiers?.[b.tier]?.title||'UE5'} Building Block • ${b.minutes||''} min`,href:`#/block/${b.id}`,icon:'🧱',kind:'block',data:deepSearchText(b)
+  }));
+  (SNIPPETS.snippets||[]).forEach(x=>add({
+    title:x.title,meta:`Official Epic paste assist • UE ${x.sourceVersion||'5'}`,href:'#/snippets',icon:'⚡',kind:'snippet',data:deepSearchText(x)
+  }));
+  (DATA.glossary||[]).forEach(g=>add({
+    title:g[0],meta:g[1],href:'#/glossary',icon:'?',kind:'glossary',data:g.join(' ')
+  }));
+
+  [
+    ['Unreal Learning','Core lessons, learning paths and practical Unreal Engine progression','#/programming','◇'],
+    ['Blueprint Snippet Bank','Official Epic paste assists and reusable Blueprint graph helpers','#/snippets','⚡'],
+    ['Quick Tutorials','Practical UE5 recipes, mechanics and prototype systems','#/tutorials','🛠'],
+    ['Designer Studio','Level design, lighting, materials, terrain, cinematic and environment design','#/design','◆'],
+    ['3D Modelling Studio','3ds Max modelling lessons, builds and topology repair','#/modeling','⬡'],
+    ['Glossary','Unreal Engine and games development terminology','#/glossary','?'],
+    ['Revision Quizzes','Knowledge checks and revision questions','#/revision','↻'],
+    ['Homework','Independent learning and practice tasks','#/homework','⌂']
+  ].forEach(([title,data,href,icon])=>add({title,meta:'Hub area',href,icon,kind:'area',data}));
+  return entries;
+}
+function scoreSearchEntry(entry,q,tokens){
+  if(!tokens.every(t=>entry.text.includes(t)))return -1;
+  let score=0;
+  if(entry.titleText===q)score+=120;
+  if(entry.titleText.startsWith(q))score+=70;
+  if(entry.titleText.includes(q))score+=45;
+  tokens.forEach(t=>{
+    if(entry.titleText===t)score+=30;
+    else if(entry.titleText.startsWith(t))score+=18;
+    else if(entry.titleText.includes(t))score+=10;
+    else score+=2;
+  });
+  if(entry.kind==='lesson'||entry.kind==='tutorial')score+=3;
+  return score;
+}
 function setupSearch(){
   const input=$('#globalSearch'),panel=$('#searchPanel');
-  input.addEventListener('input',()=>{
-    const q=input.value.toLowerCase().trim();
+  if(!input||!panel)return;
+  const index=buildGlobalSearchIndex();
+  const render=()=>{
+    const q=normaliseSearchText(input.value);
     if(!q){panel.hidden=true;panel.innerHTML='';return}
-    const ls=DATA.lessons.filter(l=>[
-      l.title,l.short,l.aim,...l.goals,...l.concepts.flat(),
-      l.projectTask?.name,l.projectTask?.mission,l.projectTask?.build
-    ].join(' ').toLowerCase().includes(q)).slice(0,7);
-    const ts=TOOLS.tutorials.filter(t=>[t.title,t.summary,...t.uses,tutorialCategory(t.category)?.title||''].join(' ').toLowerCase().includes(q)).slice(0,6);
-    const ds=DESIGN.modules.filter(m=>[m.title,m.description,m.intro,...m.principles].join(' ').toLowerCase().includes(q)).slice(0,4);
-    const rs=DESIGN.resources.filter(r=>[r.title,r.note,r.type].join(' ').toLowerCase().includes(q)).slice(0,3);
-    const ms=MODEL.lessons.filter(x=>[x.title,x.aim,x.intro,x.newSkill,...x.priorSkills,...x.reuseNext].join(' ').toLowerCase().includes(q)).slice(0,5);
-    const mbs=MODEL.builds.filter(x=>[x.title,x.summary,...x.teaches].join(' ').toLowerCase().includes(q)).slice(0,3);
-    const mfs=MODEL.fixes.filter(x=>[x.title,x.symptom,...x.diagnose,...x.repair].join(' ').toLowerCase().includes(q)).slice(0,3);
-    const sps=SCULPT.practices.filter(x=>[x.title,x.aim,x.newSkill,...x.tools].join(' ').toLowerCase().includes(q)).slice(0,4);
-    const bs=BLOCKS.blocks.filter(b=>[b.title,b.short,b.prefix,...(b.aliases||[])].join(' ').toLowerCase().includes(q)).slice(0,5);
-    const ss=SNIPPETS.snippets.filter(x=>snippetSearchText(x).includes(q)).slice(0,5);
-    const gs=DATA.glossary.filter(x=>x.join(' ').toLowerCase().includes(q)).slice(0,4);
-    panel.innerHTML=[
-      ...ls.map(l=>`<a class="search-result" href="#/lesson/${l.id}"><strong>${esc(l.title)}</strong><small>Lesson • ${esc(l.projectTask?.name||path(l.path).title)}</small></a>`),
-      ...ds.map(m=>`<a class="search-result" href="#/design/${m.id}"><strong>${esc(m.icon)} ${esc(m.title)}</strong><small>Designer Studio • Discipline</small></a>`),
-      ...ts.map(t=>`<a class="search-result" href="#/tutorial/${t.id}"><strong>🛠 ${esc(t.title)}</strong><small>Quick Tutorial • ${esc(t.duration)} • ${esc(tutorialCategory(t.category)?.title||'UE5')}</small></a>`),
-      ...ms.map(l=>`<a class="search-result" href="#/modeling/lesson/${l.id}"><strong>⬡ ${esc(l.title)}</strong><small>3D Modelling Studio • Lesson ${l.order}</small></a>`),
-      ...mbs.map(b=>`<a class="search-result" href="#/modeling/build/${b.id}"><strong>${esc(b.icon)} How to build: ${esc(b.title)}</strong><small>3D Modelling Studio • Build X</small></a>`),
-      ...mfs.map(f=>`<a class="search-result" href="#/modeling/fix/${f.id}"><strong>${esc(f.icon)} ${esc(f.title)}</strong><small>3D Modelling Studio • Fix This Model</small></a>`),
-      ...sps.map(p=>`<a class="search-result" href="#/sculpt/${p.id}"><strong>🗿 ${esc(p.title)}</strong><small>Sculpt Playground • ${esc(p.time)}</small></a>`),
-      ...rs.map(r=>`<a class="search-result" href="#/design"><strong>${esc(r.icon||'🎁')} ${esc(r.title)}</strong><small>Free resource • ${esc(r.type)}</small></a>`),
-      ...bs.map(b=>`<a class="search-result" href="#/block/${b.id}"><strong>🧱 ${esc(b.title)}</strong><small>${BLOCKS.tiers[b.tier].title} Building Block • ${b.minutes} min</small></a>`),
-      ...ss.map(x=>`<a class="search-result" href="#/snippets"><strong>⚡ ${esc(x.title)}</strong><small>Official Epic paste assist • UE ${esc(x.sourceVersion)}</small></a>`),
-      ...gs.map(g=>`<a class="search-result" href="#/glossary"><strong>${esc(g[0])}</strong><small>${esc(g[1])}</small></a>`)
-    ].join('')||'<div class="search-result"><strong>No results</strong><small>Try a broader UE5 / 3ds Max term.</small></div>';
+    const tokens=q.split(' ').filter(Boolean);
+    const rows=index
+      .map(entry=>({entry,score:scoreSearchEntry(entry,q,tokens)}))
+      .filter(x=>x.score>=0)
+      .sort((a,b)=>b.score-a.score||a.entry.title.localeCompare(b.entry.title))
+      .slice(0,24);
+    panel.innerHTML=rows.length
+      ?`<div class="search-panel-head"><strong>${rows.length}${rows.length===24?'+' : ''} results</strong><small>Searches the full Hub content, not just page titles.</small></div>${rows.map(({entry})=>`<a class="search-result" href="${esc(entry.href)}"><strong>${esc(entry.icon)} ${esc(entry.title)}</strong><small>${esc(entry.meta)}</small></a>`).join('')}`
+      :'<div class="search-result search-empty"><strong>No results</strong><small>Try a broader term, node name, mechanic or workflow.</small></div>';
     panel.hidden=false;
-  });
+  };
+  input.addEventListener('input',render);
+  input.addEventListener('search',render);
+  input.addEventListener('focus',()=>{if(input.value.trim())render()});
+  panel.addEventListener('click',e=>{if(e.target.closest('a'))panel.hidden=true});
   document.addEventListener('click',e=>{if(!e.target.closest('.global-search'))panel.hidden=true});
   document.addEventListener('keydown',e=>{
-    if(e.key==='/'&&document.activeElement!==input){e.preventDefault();input.focus()}
+    if(e.key==='/'&&document.activeElement!==input&&!e.target?.matches?.('input,textarea,select,[contenteditable="true"]')){e.preventDefault();input.focus();input.select()}
     if(e.key==='Escape'){input.blur();panel.hidden=true;closeAuth();closeImageLightbox()}
   });
 }

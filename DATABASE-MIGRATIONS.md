@@ -217,3 +217,7 @@ No database migration required. This release changes static Snippet Bank data, r
 
 No database migration required. This release changes static Snippet Bank data, client-side wording/version metadata and source-audit documentation only.
 
+## v3.34.19 — Site-wide Search Repair
+
+No database migration required. This release changes only client-side search indexing/rendering, CSS layering, cache/version metadata and QA documentation. Supabase schema, RLS policies, RPCs, XP/leaderboard logic, classes, projects and evidence are unchanged.
+
