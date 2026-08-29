@@ -189,7 +189,3 @@ No database migration is required. This release changes tutorial/design data and
 ## V3.34.11 UE5 visual source completion
 
 No database migration is required. This release changes tutorial/design visual mappings and audit/capture documentation only. Supabase schema, RLS policies, RPCs, leaderboard logic, classes, projects, evidence and production permissions are unchanged.
-
-## V3.34.12 deep official source mining
-
-No database migration is required. This release changes UE tutorial visual mappings, cache/version metadata and capture/source-audit documentation only. Supabase schema, RLS policies, RPCs, XP/leaderboard logic, classes, projects, evidence and production permissions are unchanged.

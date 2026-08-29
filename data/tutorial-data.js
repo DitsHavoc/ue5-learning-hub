@@ -1,5 +1,5 @@
 window.UE5_TUTORIAL_DATA = {
-  "version": "3.34.12",
+  "version": "3.34.11",
   "buildDate": "29 Aug 2026",
   "categories": [
     {
@@ -689,13 +689,7 @@ window.UE5_TUTORIAL_DATA = {
           "kind": "epic"
         },
         null,
-        {
-          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/c29a9a3f-0559-4618-818e-e2886d3ba992/mod-smart-link-blueprint-launch-character-1.png",
-          "caption": "Official UE5.8 Launch Character node/pin reference. For this Hub dash, connect the scaled forward vector to Launch Velocity, enable XY Override and leave Z Override OFF; Epic’s pictured example uses different settings.",
-          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/overview-of-how-to-modify-the-navigation-mesh-in-unreal-engine",
-          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-          "kind": "epic"
-        },
+        null,
         null,
         null
       ]

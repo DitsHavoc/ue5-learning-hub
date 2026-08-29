@@ -1,5 +1,5 @@
 window.UE5_COURSE_DATA = {
-  "version": "3.34.12",
+  "version": "3.34.11",
   "buildDate": "29 Aug 2026",
   "paths": [
     {
@@ -1402,20 +1402,8 @@ window.UE5_COURSE_DATA = {
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
         },
-        {
-          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/4aa6eba5-d064-4154-999e-8920f70f904a/ht23.png",
-          "caption": "Official UE5.8 placed-Blueprint Details example showing an exposed Instance Editable variable. Use the Hub values: Block_A = A, Block_B = B and Block_C = C.",
-          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-variables-in-unreal-engine",
-          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-          "kind": "epic"
-        },
-        {
-          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/32c0d35b-3d57-480c-adaf-f6f9c9109ef4/draganddropbp.png",
-          "caption": "Official UE5.8 placed Blueprint instance. Move the three Hub instances to visibly different positions; the exact positions are your choice.",
-          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
-          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-          "kind": "epic"
-        },
+        null,
+        null,
         {
           "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/67a54191-1b18-4e82-abb2-4f8ff258ee55/add_new_component_list.png",
           "caption": "Official UE5.8 Add Component menu. Search this menu for the component named in the Hub step.",
@@ -4473,31 +4461,9 @@ window.UE5_COURSE_DATA = {
             "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
             "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
             "kind": "epic"
-          },
-          {
-            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/72320e42-d888-41eb-bc3f-3cf82d74743b/implemented-interfaces.png",
-            "caption": "Official UE5.8 Class Settings → Implemented Interfaces panel. Add BPI_Interact here, then Compile.",
-            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/implementing-blueprint-interfaces-in-unreal-engine",
-            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-            "kind": "epic"
           }
         ],
-        [
-          {
-            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/f9b06694-565b-4d66-b54e-f54bc94b8083/open-graph.png",
-            "caption": "Official UE5.8 implemented Interface function in My Blueprint. Open the Interface function graph here.",
-            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/implementing-blueprint-interfaces-in-unreal-engine",
-            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-            "kind": "epic"
-          },
-          {
-            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/4f015ed8-7a52-46c9-83bc-da0fe7e009a3/implementable-function.png",
-            "caption": "Official UE5.8 Interface implementation graph. In the Hub build, connect the Interact implementation to Print String ‘Door interacted’.",
-            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/implementing-blueprint-interfaces-in-unreal-engine",
-            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-            "kind": "epic"
-          }
-        ],
+        null,
         {
           "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/7e12bfb2-7b3e-43bc-ad16-28b87c6b522d/interface6.png",
           "caption": "Official UE5.8 Interface Message call. The receiver responds only if it implements the Interface.",
@@ -4929,13 +4895,7 @@ window.UE5_COURSE_DATA = {
             "kind": "epic"
           }
         ],
-        {
-          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/c3005610-2245-4da2-b222-571a1d260012/bpqs_2_step9.png",
-          "caption": "Official UE5.8 Box Collision sizing example. Use Shape → Box Extent and enter the Hub values X 100, Y 100, Z 100; Epic’s example values differ.",
-          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/quick-start-guide-for-blueprints-visual-scripting-in-unreal-engine",
-          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-          "kind": "epic"
-        },
+        null,
         {
           "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/10c10808-3c0e-4637-bfee-e931a8b5e308/col_collidenoevent_sphere.png",
           "caption": "Official UE5.8 collision response settings showing Block, Overlap and Ignore. Use this panel to check the trigger response.",
@@ -4952,13 +4912,7 @@ window.UE5_COURSE_DATA = {
         },
         null,
         null,
-        {
-          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/cf38f415-5e01-4b57-ae5b-57bc13babcfc/bpqs_5_step5.png",
-          "caption": "Official UE5.8 Other Actor comparison using Equal (Object). For the Hub exercise, compare Other Actor with Get Player Character as instructed.",
-          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/quick-start-guide-for-blueprints-visual-scripting-in-unreal-engine",
-          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-          "kind": "epic"
-        },
+        null,
         null
       ]
     },
@@ -7947,13 +7901,7 @@ window.UE5_COURSE_DATA = {
       ],
       "prescriptivePass": "3.31",
       "recipeVisuals": [
-        {
-          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/b0b1376f-9705-492e-b28d-6c8a372dd1e3/fulleventgraph.png",
-          "caption": "Official UE5.8 Animation Blueprint Event Graph reference showing the standard movement-variable update pattern.",
-          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/how-to-get-animation-variables-in-animation-blueprints-in-unreal-engine",
-          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-          "kind": "epic"
-        },
+        null,
         {
           "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/e984b7d9-6b40-4d9c-bf0c-f4ac40c0fc4b/myblueprint_variable.png",
           "caption": "Official UE5.8 My Blueprint variable control. Create the variable, then use the Hub name, type and default value.",
@@ -7961,20 +7909,8 @@ window.UE5_COURSE_DATA = {
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
         },
-        {
-          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/030886dc-1438-4576-82c7-968cbe74d00f/speed.png",
-          "caption": "Official UE5.8 Speed calculation in an Animation Blueprint: Velocity → Vector Length XY → Speed.",
-          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/how-to-get-animation-variables-in-animation-blueprints-in-unreal-engine",
-          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-          "kind": "epic"
-        },
-        {
-          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/1716bf87-cc24-4512-8b9f-4242b5dc6128/image_19.png",
-          "caption": "Official UE5.8 Is Falling setup in an Animation Blueprint. Store the result in the Hub’s IsInAir Boolean.",
-          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/how-to-get-animation-variables-in-animation-blueprints-in-unreal-engine",
-          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-          "kind": "epic"
-        },
+        null,
+        null,
         {
           "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/85ec3324-7fcd-4767-8d6a-e075928e5301/state2.png",
           "caption": "Official UE5.8 State Machine with connected animation states and transition rules.",

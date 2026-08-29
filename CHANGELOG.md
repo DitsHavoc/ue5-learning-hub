@@ -1,14 +1,5 @@
 # Changelog
 
-## v3.34.12 — Deep Official Source Mining — 29 Aug 2026
-- Continued the strict official Epic UE5.8 source-mining pass before requesting bespoke classroom screenshots.
-- Added exact official visuals for placed Instance Editable Blueprint values, Blueprint Interface implementation, collision sizing/object comparison, Animation Blueprint Speed/Is Falling, Launch Character and Data Assets.
-- Removed additional teacher captures where existing current Epic visuals already teach the repeated operation and the Hub text carries the exact names/values.
-- Reduced genuine teacher screenshot groups from 90 to 80: 9 Core, 52 Programming, 5 Building Block recognition and 14 Design Studio technical captures.
-- This is 131 fewer teacher screenshots than the original 211-capture audit.
-- Added refreshed v3.34.12 capture, Design Studio plan and deep-source audit documents.
-- No database migration.
-
 ## v3.34.11 — UE5 Visual Source Completion — 29 Aug 2026
 - Expanded the current Epic UE5.8 visual-source pass across Core Lessons, Programming Quick Tutorials and Design Studio.
 - Reused exact official editor visuals for standard repeatable actions instead of requiring bespoke classroom screenshots.
