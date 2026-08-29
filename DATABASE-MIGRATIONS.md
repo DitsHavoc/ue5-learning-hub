@@ -309,3 +309,12 @@ Updates the existing private learning-XP mapping only. It adds `modeltheory:*` c
 
 Applied successfully to the live UE5 Learning Hub Supabase project on 29 Aug 2026 as migration `model_foundations_xp`; post-migration SQL verified 20 XP for a theory chapter, 100 XP for Model Doctor and 250 XP for existing Build X.
 
+
+
+## v3.38.1 — 3ds Max Companion Video XP
+
+File: `migrations/20260829_32_model_video_xp.sql`
+
+Updates only the private learning-XP mapping. `modelvideo:*` lesson-progress completions are worth 20 XP once, preserving all existing values for Module 0 chapters, Model Doctor, Modelling lessons, Build X, Fix Clinics, Designer sources, Unreal learning and Sculpt. No tables, buckets, RLS policies, class/project/evidence schema or assignment workflow are added.
+
+Applied successfully to the live UE5 Learning Hub Supabase project on 29 Aug 2026 as migration `model_video_xp`; verification returned 20 XP for `modelvideo:interface-basics`, 20 XP for `modeltheory:read-the-mesh` and 250 XP for `modelbuild:build-crate`.

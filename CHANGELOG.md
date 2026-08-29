@@ -1,3 +1,13 @@
+## v3.38.1 — 3ds Max Companion Video Series — 29 Aug 2026
+- Added a dedicated `#/modeling/videos` course containing all 14 teacher-made Google Drive videos in their original 0–13 order.
+- Grouped the series into Start in Max, Editable Poly Core, Modifiers & Repetition, and Mini Builds & Materials.
+- Added lazy click-to-load Google Drive preview embeds; videos are not copied into the Hub package.
+- Mapped each video to the relevant Modelling Studio lesson(s), where compact companion cards now appear beside the written guide.
+- Every video has a **WATCH FOR** prompt and a **DO IT IN MAX** follow-along task so completion means practice, not passive playback.
+- Added one-time `modelvideo:*` completions worth +20 XP each (280 XP across the series), cloud sync, student progress, teacher class progress and global search.
+- Added migration `20260829_32_model_video_xp.sql`; applied live as `model_video_xp` and verified at 20 XP without changing existing theory or Build X values.
+- Google Drive source files were detected as private at integration time; sharing must be changed before student browsers can play them.
+
 ## v3.38.0 — Game-Ready 3D Foundations — 29 Aug 2026
 - Replaced the old 3D Modelling `Modeller Mindset` / photo-collage landing block with a purpose-built Module 0 progress/learning panel.
 - Added 6 sequential theory chapters: Read the Mesh; Work in 3D Space; Spend Geometry Wisely; Transforms & Pivots; UVs & PBR Materials; Make It Game Ready.

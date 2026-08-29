@@ -11,6 +11,7 @@ const DESIGN = window.UE5_DESIGN_DATA;
 const NEWS = window.UE5_NEWS_DATA;
 const MODEL = window.UE5_MODELING_DATA;
 const MODEL_FOUNDATIONS = window.UE5_MODELING_FOUNDATIONS;
+const MODEL_VIDEOS = window.UE5_MODELING_VIDEOS;
 const SCULPT = window.UE5_SCULPT_DATA;
 const BACKEND = window.UE5_BACKEND;
 
@@ -26,7 +27,7 @@ DESIGN.tutorials.forEach(t=>{if(!knownTutorials.has(t.id))TOOLS.tutorials.push(t
 DESIGN.modules.forEach(m=>m.tutorials.forEach(id=>{const t=TOOLS.tutorials.find(x=>x.id===id);if(t&&!t.designModule)t.designModule=m.id}));
 
 
-if (!DATA || !BLOCKS || !PROJECT || !TOOLS || !SNIPPETS || !DESIGN || !NEWS || !MODEL || !MODEL_FOUNDATIONS || !SCULPT || !BACKEND) {
+if (!DATA || !BLOCKS || !PROJECT || !TOOLS || !SNIPPETS || !DESIGN || !NEWS || !MODEL || !MODEL_FOUNDATIONS || !MODEL_VIDEOS || !SCULPT || !BACKEND) {
   const e = document.querySelector('#bootError');
   if (e) e.hidden = false;
   return;
@@ -93,6 +94,7 @@ function safeVideoEmbed(value){
     const u=new URL(String(value||''));
     if(u.origin==='https://dev.epicgames.com')return u.href;
     if(u.origin==='https://www.youtube-nocookie.com'&&/^\/embed\/[A-Za-z0-9_-]{6,}/.test(u.pathname))return u.href;
+    if(u.origin==='https://drive.google.com'&&/^\/file\/d\/[A-Za-z0-9_-]+\/preview$/.test(u.pathname))return u.href;
     return '';
   }catch(e){return ''}
 }
@@ -179,7 +181,7 @@ function syncProjectRichEditors(root=document){
 }
 
 function loadState(){
-  const clean={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],designSourceCompleted:[],modelTheoryCompleted:[],modelTheoryScores:{},modelFoundationFinal:false,modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[],blockCompleted:[]};
+  const clean={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],designSourceCompleted:[],modelVideoCompleted:[],modelTheoryCompleted:[],modelTheoryScores:{},modelFoundationFinal:false,modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[],blockCompleted:[]};
   try{
     const current=JSON.parse(localStorage.getItem(STORE)||'null');
     if(current) return {...clean,...current};
@@ -300,7 +302,7 @@ function mechanic(id){return PROJECT.mechanics[id]}
 function completedLessons(){return DATA.lessons.filter(l=>state.completed.includes(l.id))}
 function totalXp(){
   if(BACKEND.user&&!isTeacher()&&BACKEND.xpSummary&&Number.isFinite(Number(BACKEND.xpSummary.all_time_xp)))return Number(BACKEND.xpSummary.all_time_xp);
-  return (state.blockCompleted||[]).length*25+(state.tutorialCompleted||[]).length*25+completedLessons().reduce((n,l)=>n+l.xp,0)+TOOLS.chapterBuilds.filter(b=>state.chapterBuildCompleted.includes(b.path)).reduce((n,b)=>n+(b.xp||0),0)+(state.designBuildCompleted||[]).length*300+(state.designSourceCompleted||[]).length*20+(state.modelTheoryCompleted||[]).length*(MODEL_FOUNDATIONS.chapterXp||20)+(state.modelFoundationFinal?(MODEL_FOUNDATIONS.finalXp||100):0)+(state.modelLessonCompleted||[]).length*100+(state.modelBuildCompleted||[]).length*250+(state.modelFixCompleted||[]).length*75+(state.sculptCompleted||[]).reduce((n,id)=>n+(SCULPT.practices.find(x=>x.id===id)?.xp||0),0)
+  return (state.blockCompleted||[]).length*25+(state.tutorialCompleted||[]).length*25+completedLessons().reduce((n,l)=>n+l.xp,0)+TOOLS.chapterBuilds.filter(b=>state.chapterBuildCompleted.includes(b.path)).reduce((n,b)=>n+(b.xp||0),0)+(state.designBuildCompleted||[]).length*300+(state.designSourceCompleted||[]).length*20+(state.modelVideoCompleted||[]).length*(MODEL_VIDEOS.xp||20)+(state.modelTheoryCompleted||[]).length*(MODEL_FOUNDATIONS.chapterXp||20)+(state.modelFoundationFinal?(MODEL_FOUNDATIONS.finalXp||100):0)+(state.modelLessonCompleted||[]).length*100+(state.modelBuildCompleted||[]).length*250+(state.modelFixCompleted||[]).length*75+(state.sculptCompleted||[]).reduce((n,id)=>n+(SCULPT.practices.find(x=>x.id===id)?.xp||0),0)
 }
 function level(){
   const xp=totalXp(),n=Math.floor(xp/500)+1,into=xp%500;
@@ -458,6 +460,7 @@ async function syncCloudProgress(){
     state.chapterBuildCompleted=[...new Set([...(state.chapterBuildCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('chapter:')).map(id=>id.slice(8))])];
     state.designBuildCompleted=[...new Set([...(state.designBuildCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('designbuild:')).map(id=>id.slice(12))])];
     state.designSourceCompleted=[...new Set([...(state.designSourceCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('designsource:')).map(id=>id.slice(13))])];
+    state.modelVideoCompleted=[...new Set([...(state.modelVideoCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('modelvideo:')).map(id=>id.slice(11))])];
     state.modelTheoryCompleted=[...new Set([...(state.modelTheoryCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('modeltheory:')).map(id=>id.slice(12))])];
     state.modelFoundationFinal=state.modelFoundationFinal||cloudCompleted.includes('modelfoundation:final');
     state.modelLessonCompleted=[...new Set([...(state.modelLessonCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('model:')).map(id=>id.slice(6))])];
@@ -1213,10 +1216,33 @@ function modelToolBoundaries(l){
   if(!today.length&&!later.length)return '';
   return `<section class="model-tool-boundaries"><div><span class="deep-label">TOOLS YOU MAY USE TODAY</span><div class="model-tool-chips allowed">${today.map(x=>`<span>✓ ${esc(x)}</span>`).join('')}</div></div><div><span class="deep-label">LEAVE THESE ALONE FOR NOW</span><div class="model-tool-chips locked">${later.map(x=>`<span>⛔ ${esc(x)}</span>`).join('')}</div></div></section>`;
 }
+function modelVideo(id){return MODEL_VIDEOS.videos.find(x=>x.id===id)}
+function modelVideoDone(id){return (state.modelVideoCompleted||[]).includes(id)}
+function modelVideoItems(){return MODEL_VIDEOS.videos.map(v=>({id:v.id,title:`${String(v.order).padStart(2,'0')} • ${v.title}`}))}
+function modelVideoProgress(){const done=MODEL_VIDEOS.videos.filter(v=>modelVideoDone(v.id)).length,total=MODEL_VIDEOS.videos.length;return {done,total,pct:total?Math.round(done/total*100):0}}
+function relatedModelVideos(lessonId){return MODEL_VIDEOS.videos.filter(v=>(v.relatedLessons||[]).includes(lessonId))}
+function modelVideoCard(v,{compact=false}={}){
+  const done=modelVideoDone(v.id),lessonNames=(v.relatedLessons||[]).map(id=>modelLesson(id)?.title).filter(Boolean);
+  return `<article class="model-video-card ${done?'done':''} ${compact?'compact':''}"><div class="model-video-player" data-video-shell><div class="model-video-placeholder"><span class="model-video-number">${done?'✓':String(v.order).padStart(2,'0')}</span><div class="model-video-playmark">▶</div><strong>${esc(v.title)}</strong><button class="button small primary" type="button" data-action="load-video" data-embed="${esc(v.embed)}" data-title="${esc(v.title)}">▶ Watch in Hub</button></div></div><div class="model-video-body"><span class="eyebrow">DITS' MAX SERIES${lessonNames.length?' • '+esc(lessonNames[0]):''}</span><h3>${esc(v.title)}</h3><div class="model-video-focus"><b>WATCH FOR</b><p>${esc(v.watchFor)}</p></div><div class="model-video-task"><b>DO IT IN MAX</b><p>${esc(v.task)}</p></div><div class="model-video-actions"><a class="button ghost small" href="${esc(v.url)}" target="_blank" rel="noopener">Open in Drive ↗</a>${done?`<span class="source-xp-complete">✓ Video task complete • +${MODEL_VIDEOS.xp} XP</span>`:`<button class="button small source-xp-button" data-action="complete-model-video" data-model-video="${esc(v.id)}">✓ Watched + did the task • +${MODEL_VIDEOS.xp} XP</button>`}</div></div></article>`;
+}
+function modelVideoCourseLaunch(){
+  const p=modelVideoProgress(),next=MODEL_VIDEOS.videos.find(v=>!modelVideoDone(v.id))||MODEL_VIDEOS.videos[0];
+  return `<section class="model-video-course-launch"><div><span class="deep-label">🎬 FOLLOW ALONG WITH YOUR TEACHER</span><h2>${esc(MODEL_VIDEOS.title)}</h2><p>${esc(MODEL_VIDEOS.short)}</p><div class="model-video-launch-stats"><span><b>${p.done}/${p.total}</b> video tasks</span><span><b>${p.done*MODEL_VIDEOS.xp}</b> XP earned</span><span><b>${p.total*MODEL_VIDEOS.xp}</b> XP available</span></div><div class="progress"><span style="width:${p.pct}%"></span></div><div class="button-row"><a class="button primary" href="#/modeling/videos">${p.done?'▶ Continue video series':'▶ Start video series'} →</a><a class="button ghost" href="${esc(MODEL_VIDEOS.folderUrl)}" target="_blank" rel="noopener">Open Drive folder ↗</a></div></div><div class="model-video-next"><span>${String(next.order).padStart(2,'0')}</span><small>NEXT VIDEO</small><strong>${esc(next.title)}</strong><p>${esc(next.task)}</p></div></section>`;
+}
+function modelLessonVideoBridge(l){
+  const vids=relatedModelVideos(l.id);if(!vids.length)return '';
+  return `<section class="section model-lesson-video-section"><div class="section-head"><div><span class="eyebrow">WATCH DITS DO IT</span><h2>${vids.length===1?'One video sits right beside this skill.':`${vids.length} videos support this lesson.`}</h2><p>Watch with Max open. Then reproduce the move yourself before claiming the video XP.</p></div><a class="button ghost" href="#/modeling/videos">All ${MODEL_VIDEOS.videos.length} videos →</a></div><div class="model-video-grid lesson">${vids.map(v=>modelVideoCard(v,{compact:true})).join('')}</div></section>`;
+}
+function modelingVideosPage(){
+  const p=modelVideoProgress();
+  const groups=MODEL_VIDEOS.groups.map(g=>{const vids=MODEL_VIDEOS.videos.filter(v=>v.group===g.id),done=vids.filter(v=>modelVideoDone(v.id)).length;return `<section class="section model-video-group"><div class="section-head"><div><span class="eyebrow">${esc(g.kicker)}</span><h2>${esc(g.title)}</h2><p>${esc(g.note)}</p></div><span class="sync-chip source-progress-chip">${done}/${vids.length} complete</span></div><div class="model-video-grid">${vids.map(v=>modelVideoCard(v)).join('')}</div></section>`}).join('');
+  return `<div class="breadcrumb"><a href="#/">Home</a> / <a href="#/modeling">3D Modelling Studio</a> / Video Series</div><section class="model-video-page-hero"><div><span class="eyebrow">🎬 14 FOLLOW-ALONG VIDEOS • +${MODEL_VIDEOS.xp} XP EACH</span><h1>${esc(MODEL_VIDEOS.title)}</h1><p>${esc(MODEL_VIDEOS.short)}</p><div class="model-video-launch-stats"><span><b>${p.done}/${p.total}</b> complete</span><span><b>${p.pct}%</b> watched + practised</span><span><b>${p.done*MODEL_VIDEOS.xp}</b> XP earned</span></div><div class="progress"><span style="width:${p.pct}%"></span></div></div><div class="model-video-course-rule"><b>THE RULE</b><p>Playing the video is not the finish line. Pause it, do the named task in Max, compare your result, then claim the XP.</p><a class="button ghost small" href="${esc(MODEL_VIDEOS.folderUrl)}" target="_blank" rel="noopener">Open original Drive folder ↗</a></div></section>${groups}`;
+}
 function modelingPage(){
   const p=modelProgress(),n=nextModelLesson();
   return `<div class="page-head model-page-head revamped"><div class="breadcrumb"><a href="#/">Home</a> / 3D Modelling Studio</div><span class="eyebrow">REFERENCE • 3DS MAX • GAME ASSETS • SUBSTANCE • UE5</span><h1>⬡ 3D Modelling Studio</h1><p class="muted">Stop making random boxes with details stuck on them. Learn to <b>look at an object, plan it, block the important forms, model cleanly, judge the mesh and prove it works in game.</b></p><div class="designer-stats"><div><strong>${MODEL.lessons.length}</strong><span>step-by-step lessons</span></div><div><strong>${MODEL.builds.length}</strong><span>production briefs</span></div><div><strong>${MODEL.fixes.length}</strong><span>bad-model clinics</span></div><div><strong>${p.done}/${p.total}</strong><span>lessons complete</span></div></div></div>
   ${modelFoundationsLaunch()}
+  ${modelVideoCourseLaunch()}
   ${modelStudioLoop()}
   <section class="model-continue revamped"><div><span class="eyebrow">PICK UP WHERE YOU LEFT OFF • ${p.pct}% COMPLETE</span><h2>${n.icon} ${esc(n.title)}</h2><p>${esc(n.aim)}</p><div class="progress"><span style="width:${p.pct}%"></span></div></div><a class="button primary" href="#/modeling/lesson/${n.id}">▶ Continue modelling</a></section>
   <section class="section model-build-section first"><div class="section-head"><div><span class="eyebrow">MAKE SOMETHING REAL</span><h2>Eight briefs. Guidance fades as you improve.</h2><p>Every build now starts with real reference and planning questions, then walks through production checkpoints. The final Hero Prop stops telling you what to make.</p></div></div><div class="model-build-grid revamped">${MODEL.builds.map(modelBuildCard).join('')}</div></section>
@@ -1234,6 +1260,7 @@ function modelingLessonPage(id){
   const l=modelLesson(id);if(!l)return notFound();const done=modelLessonDone(id),prev=MODEL.lessons.find(x=>x.order===l.order-1),next=MODEL.lessons.find(x=>x.order===l.order+1);
   return `<div class="breadcrumb"><a href="#/">Home</a> / <a href="#/modeling">3D Modelling Studio</a> / ${esc(l.title)}</div>
   <section class="model-lesson-hero revamped"><div><span class="eyebrow">LESSON ${String(l.order).padStart(2,'0')} • ${esc(l.duration)} • +100 XP</span><h1>${l.icon} ${esc(l.title)}</h1><p>${esc(l.aim)}</p><div class="model-skill-map"><div><small>NEW TODAY</small><strong>${esc(l.newSkill)}</strong></div><div><small>YOU ALREADY KNOW</small><strong>${l.priorSkills.length?esc(l.priorSkills.join(' • ')):'Nothing assumed'}</strong></div><div><small>YOU'LL USE THIS AGAIN IN</small><strong>${esc(l.reuseNext.join(' • '))}</strong></div></div></div><div class="model-complete-box"><strong>${done?'✓ Lesson checked off':'Accuracy first'}</strong><p>${done?'Revisit it when a later asset exposes a gap.':'A finished-looking object is not proof. Pass the checkpoints.'}</p><button class="button ${done?'success':'primary'}" data-action="complete-model-lesson" data-model-lesson="${l.id}">${done?'✓ Modelling lesson complete':'Mark lesson complete • +100 XP'}</button></div></section>
+  ${modelLessonVideoBridge(l)}
   ${modelThinkingBlock(l)}
   <section class="model-safety-card"><span>⚠ PRODUCTION HABIT</span><strong>${esc(l.safety)}</strong></section>
   ${modelToolBoundaries(l)}
@@ -2175,14 +2202,14 @@ function classProgressRows(o,memberIds,items,prefix='',titleKey=x=>x.title){
 function studentCompletedContent(o,userId){
   const completed=new Set(o.progress.filter(p=>p.user_id===userId&&p.completed).map(p=>p.lesson_id));
   const list=(items,prefix='')=>items.filter(x=>completed.has(prefix+x.id)).map(x=>`<li>${esc(x.title)}</li>`).join('');
-  const core=list(DATA.lessons),blocks=list(BLOCKS.blocks,'block:'),tutorials=list(TOOLS.tutorials,'tutorial:'),modelTheory=list(MODEL_FOUNDATIONS.chapters,'modeltheory:')+(completed.has('modelfoundation:final')?'<li>Model Doctor</li>':''),model=list(MODEL.lessons,'model:'),sculpt=list(SCULPT.practices,'sculpt:'),design=list(DESIGN.modules.map(m=>({id:m.id,title:m.build?.title||m.title})),'designbuild:'),designSources=list(designSourceItems(),'designsource:'),modelBuild=list(MODEL.builds||[],'modelbuild:'),modelFix=list(MODEL.fixes||[],'modelfix:'),chapters=TOOLS.chapterBuilds.filter(x=>completed.has(`chapter:${x.path}`)).map(x=>`<li>${esc(x.title)}</li>`).join('');
+  const core=list(DATA.lessons),blocks=list(BLOCKS.blocks,'block:'),tutorials=list(TOOLS.tutorials,'tutorial:'),modelTheory=list(MODEL_FOUNDATIONS.chapters,'modeltheory:')+(completed.has('modelfoundation:final')?'<li>Model Doctor</li>':''),model=list(MODEL.lessons,'model:'),sculpt=list(SCULPT.practices,'sculpt:'),design=list(DESIGN.modules.map(m=>({id:m.id,title:m.build?.title||m.title})),'designbuild:'),designSources=list(designSourceItems(),'designsource:'),modelVideos=list(modelVideoItems(),'modelvideo:'),modelBuild=list(MODEL.builds||[],'modelbuild:'),modelFix=list(MODEL.fixes||[],'modelfix:'),chapters=TOOLS.chapterBuilds.filter(x=>completed.has(`chapter:${x.path}`)).map(x=>`<li>${esc(x.title)}</li>`).join('');
   return `<div class="student-content-detail">
     <div><strong>Building Blocks</strong><ul>${blocks||'<li class="muted">None completed yet.</li>'}</ul></div>
     <div><strong>Core lessons</strong><ul>${core||'<li class="muted">None completed yet.</li>'}</ul></div>
     <div><strong>Practical builds</strong><ul>${tutorials||'<li class="muted">None completed yet.</li>'}</ul></div>
     <div><strong>Designer Studio</strong><ul>${design||'<li class="muted">None completed yet.</li>'}</ul></div>
     <div><strong>Designer industry sources</strong><ul>${designSources||'<li class="muted">None completed yet.</li>'}</ul></div>
-    <div><strong>3D Foundations</strong><ul>${modelTheory||'<li class="muted">None completed yet.</li>'}</ul></div><div><strong>3D / Sculpt</strong><ul>${model+modelBuild+modelFix+sculpt||'<li class="muted">None completed yet.</li>'}</ul></div>
+    <div><strong>3D Foundations</strong><ul>${modelTheory||'<li class="muted">None completed yet.</li>'}</ul></div><div><strong>3D Videos</strong><ul>${modelVideos||'<li class="muted">None completed yet.</li>'}</ul></div><div><strong>3D / Sculpt</strong><ul>${model+modelBuild+modelFix+sculpt||'<li class="muted">None completed yet.</li>'}</ul></div>
     <div><strong>Chapter Builds</strong><ul>${chapters||'<li class="muted">None completed yet.</li>'}</ul></div>
   </div>`;
 }
@@ -2236,6 +2263,7 @@ async function renderTeacherClass(classId){
         <details class="class-content-group"><summary>🛠 Practical builds <span>${TOOLS.tutorials.length} outcomes</span></summary><div>${classProgressRows(o,memberIds,TOOLS.tutorials,'tutorial:')}</div></details>
         <details class="class-content-group"><summary>🎨 Designer Studio Builds <span>${DESIGN.modules.length} builds</span></summary><div>${classProgressRows(o,memberIds,DESIGN.modules.map(m=>({id:m.id,title:m.build?.title||m.title})),'designbuild:')}</div></details>
         <details class="class-content-group"><summary>🎬 Designer Industry Sources <span>${designSourceItems().length} source tasks</span></summary><div>${classProgressRows(o,memberIds,designSourceItems(),'designsource:')}</div></details>
+        <details class="class-content-group"><summary>🎥 3ds Max Video Series <span>${MODEL_VIDEOS.videos.length} follow-alongs</span></summary><div>${classProgressRows(o,memberIds,modelVideoItems(),'modelvideo:')}</div></details>
         <details class="class-content-group"><summary>🧠 3D Foundations <span>${MODEL_FOUNDATIONS.chapters.length} chapters + final</span></summary><div>${classProgressRows(o,memberIds,MODEL_FOUNDATIONS.chapters,'modeltheory:')}${classProgressRows(o,memberIds,[{id:'final',title:'Model Doctor'}],'modelfoundation:')}</div></details>
         <details class="class-content-group"><summary>⬡ 3D Modelling <span>${MODEL.lessons.length} lessons</span></summary><div>${classProgressRows(o,memberIds,MODEL.lessons,'model:')}</div></details>
         ${(MODEL.builds||[]).length?`<details class="class-content-group"><summary>🔧 3D Build X <span>${MODEL.builds.length} builds</span></summary><div>${classProgressRows(o,memberIds,MODEL.builds,'modelbuild:')}</div></details>`:''}
@@ -2579,6 +2607,7 @@ function route(options={}){
   else if(parts[0]==='challenges'){app.innerHTML=challengeBoard();activate('challenges')}
   else if(parts[0]==='homework'){app.innerHTML=homeworkBoard();activate('homework')}
   else if(parts[0]==='sculpt'){app.innerHTML=sculptPage(parts[1]);activate('sculpt')}
+  else if(parts[0]==='modeling'&&parts[1]==='videos'){app.innerHTML=modelingVideosPage();activate('modeling')}
   else if(parts[0]==='modeling'&&parts[1]==='foundations'&&parts[2]==='final'){app.innerHTML=modelingFoundationFinalPage();activate('modeling')}
   else if(parts[0]==='modeling'&&parts[1]==='foundations'&&parts[2]){app.innerHTML=modelingFoundationChapterPage(parts[2]);activate('modeling')}
   else if(parts[0]==='modeling'&&parts[1]==='foundations'){app.innerHTML=modelingFoundationsPage();activate('modeling')}
@@ -2762,6 +2791,12 @@ async function setDesignSourceComplete(key){
   state.designSourceCompleted=[...new Set([...(state.designSourceCompleted||[]),clean])];saveState();
   if(BACKEND.user){try{await BACKEND.setLessonComplete(`designsource:${clean}`,true)}catch(e){toast('Saved locally; cloud sync failed.')}}
   toast('Industry source task complete • +20 XP');finishInlineUpdate(true);
+}
+async function setModelVideoComplete(id){
+  const v=modelVideo(id);if(!v||modelVideoDone(id))return;
+  state.modelVideoCompleted=[...new Set([...(state.modelVideoCompleted||[]),id])];saveState();
+  if(BACKEND.user){try{await BACKEND.setLessonComplete(`modelvideo:${id}`,true)}catch(e){toast('Saved locally; cloud sync failed.')}}
+  toast(`Video task complete • +${MODEL_VIDEOS.xp} XP`);finishInlineUpdate(true);
 }
 async function setModelLessonComplete(id){
   const l=modelLesson(id);if(!l)return;const was=modelLessonDone(id),before=localUnlockedBadgeIds();
@@ -3047,6 +3082,7 @@ document.addEventListener('click',async e=>{
   else if(a==='complete-chapter-build') await setChapterBuildComplete(b.dataset.path);
   else if(a==='complete-design-build') await setDesignBuildComplete(b.dataset.designModule);
   else if(a==='complete-design-source') await setDesignSourceComplete(b.dataset.sourceKey);
+  else if(a==='complete-model-video') await setModelVideoComplete(b.dataset.modelVideo);
   else if(a==='complete-model-lesson') await setModelLessonComplete(b.dataset.modelLesson);
   else if(a==='complete-model-build') await setModelBuildComplete(b.dataset.modelBuild);
   else if(a==='complete-model-fix') await setModelFixComplete(b.dataset.modelFix);
@@ -3635,6 +3671,7 @@ function buildGlobalSearchIndex(){
     title:ch.title,meta:`3D Modelling Studio • Foundations Chapter ${ch.order}`,href:`#/modeling/foundations/${ch.id}`,icon:ch.icon||'⬡',kind:'model-theory',data:deepSearchText(ch)
   }));
   add({title:'Model Doctor',meta:'3D Modelling Studio • Foundations final check',href:'#/modeling/foundations/final',icon:'🩺',kind:'model-theory',data:deepSearchText(MODEL_FOUNDATIONS.finalQuiz||[])});
+  (MODEL_VIDEOS.videos||[]).forEach(v=>add({title:v.title,meta:`3D Modelling Studio • Dits' Max Video ${v.order}`,href:'#/modeling/videos',icon:'🎬',kind:'model-video',data:deepSearchText(v)}));
   (MODEL.lessons||[]).forEach(l=>add({
     title:l.title,meta:`3D Modelling Studio • Lesson ${l.order||''}`,href:`#/modeling/lesson/${l.id}`,icon:'⬡',kind:'model-lesson',data:deepSearchText(l)
   }));
@@ -3664,7 +3701,8 @@ function buildGlobalSearchIndex(){
     ['Designer Studio','Level design, lighting, materials, terrain, cinematic and environment design','#/design','◆'],
     ['Critique Board','Class studio wall, screenshots, peer feedback, structured critique and improvement','#/critique','💬'],
     ['Resource Library','Free assets, CC0 textures, HDRIs, sound libraries, level explorers, UI reference, documentaries and professional talks','#/resources','🧰'],
-    ['3D Modelling Studio','3ds Max modelling lessons, builds and topology repair','#/modeling','⬡'],
+    ['3D Modelling Studio','3ds Max modelling lessons, builds, video series and topology repair','#/modeling','⬡'],
+    ["Dits' 3ds Max Video Series",'14 follow-along videos covering interface, primitives, Editable Poly, modifiers, Array, mini builds and materials','#/modeling/videos','🎬'],
     ['Glossary','Unreal Engine and games development terminology','#/glossary','?'],
     ['Revision Quizzes','Knowledge checks and revision questions','#/revision','↻'],
     ['Homework','Independent learning and practice tasks','#/homework','⌂']
@@ -3718,7 +3756,7 @@ function setupSearch(){
 $('#menuButton').addEventListener('click',()=>$('#sidebar').classList.toggle('open'));
 $('#resetProgress').addEventListener('click',()=>{
   if(confirm('Reset all locally saved lesson progress, XP and game-project status on this browser?')){
-    state={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],designSourceCompleted:[],modelTheoryCompleted:[],modelTheoryScores:{},modelFoundationFinal:false,modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[],blockCompleted:[]};
+    state={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],designSourceCompleted:[],modelVideoCompleted:[],modelTheoryCompleted:[],modelTheoryScores:{},modelFoundationFinal:false,modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[],blockCompleted:[]};
     projectState={project_title:'Signal Lost',theme:PROJECT.themes[0],pitch:'',mechanics:{}};
     saveState();saveProjectState();route();toast('Local progress reset.');
   }

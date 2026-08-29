@@ -1,4 +1,8 @@
-# Current release — v3.38.0
+# Current release — v3.38.1
+
+**Dits’ 3ds Max Video Series.** The 14 teacher-made Google Drive videos are now a structured companion course inside the 3D Modelling Studio. Students can open `#/modeling/videos`, watch each video inside the Hub, complete a named Max follow-along task and claim **+20 XP** once per video. Relevant videos also appear directly inside the matching 3ds Max lesson. Video completion syncs to cloud progress and appears in teacher class-progress views. The original Drive files remain external; they are not copied into the Hub ZIP. See `RELEASE-NOTES-v3.38.1.md` and `3D-MODELLING-VIDEO-SERIES-QA-v3.38.1.md`.
+
+## Previous release — v3.38.0
 
 **Game-Ready 3D Foundations.** The old Modeller Mindset/photo-collage block is replaced by a required six-chapter Module 0 with applied theory, a five-question quiz after every chapter, 20 XP per first pass, and a 12-question **Model Doctor** final worth 100 XP. Students may preview/practise Build X at any time, but new Build X completion unlocks after the final pass. Theory is rebuilt from the college 3D Modelling Theory deck and modernised around current game-art decisions. Existing 3D Modelling lesson/Build/Fix IDs are preserved. See `RELEASE-NOTES-v3.38.0.md` and `3D-MODELLING-FOUNDATIONS-QA-v3.38.0.md`.
 
