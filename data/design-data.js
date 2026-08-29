@@ -1,5 +1,5 @@
 window.UE5_DESIGN_DATA = {
-  "version": "3.35.1",
+  "version": "3.35.2",
   "buildDate": "29 Aug 2026",
   "modules": [
     {
@@ -168,34 +168,34 @@ window.UE5_DESIGN_DATA = {
       "engineUrl": "https://dev.epicgames.com/documentation/unreal-engine/modeling-mode-quick-start-in-unreal-engine?lang=en-US",
       "caseStudies": [
         {
-          "game": "INSIDE",
-          "image": "https://playdead.com/css/img/inside/screenshots/INSIDE_01.jpg",
-          "sourceUrl": "https://playdead.com/games/inside/",
-          "sourceTitle": "Playdead — INSIDE",
-          "lens": "Contrast + route readability",
-          "notice": "The player is tiny, but the playable route is readable because the brightest ground plane and strongest silhouette carry the eye forward.",
-          "steal": "Make the valid route easier to read than the background before you add UI.",
-          "task": "Cover the character with your hand. Can you still predict the route? Mark the three strongest spatial cues."
+          "game": "Portal 2",
+          "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/620/ss_3858536cbc0a07dfbe36e8f87b3f08bf3be45e54.1920x1080.jpg?t=1745363004",
+          "sourceUrl": "https://store.steampowered.com/app/620/Portal_2/",
+          "sourceTitle": "Valve — Portal 2",
+          "lens": "Visual language + route readability",
+          "notice": "Test chambers deliberately limit surface types, colours and object language so portalable space, hazards and goals are readable before the player moves.",
+          "steal": "Build a visual grammar where geometry and materials explain what the player can do.",
+          "task": "Identify three surfaces or objects and write what each tells the player they can — or cannot — do."
         },
         {
-          "game": "CONTROL",
-          "image": "https://cdn.prod.website-files.com/64630b03551142e3347ae3da/6492c4ad955ffc88abcd7409_CONTROL_Blast_Furnace_169.webp",
-          "sourceUrl": "https://www.remedygames.com/games/control",
-          "sourceTitle": "Remedy — CONTROL",
-          "lens": "Scale + landmarks",
-          "notice": "Huge architectural masses, repeated structural rhythm and one dominant destination make the Oldest House memorable even when routes branch.",
-          "steal": "Use one shape or landmark that survives from several viewpoints.",
-          "task": "Sketch the scene as only five big shapes. Circle the one you would navigate toward."
+          "game": "Viewfinder",
+          "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1382070/c017a42198360ea205109b69258357bdd7f8ffaa/page_bg_raw.jpg?t=1764842475",
+          "sourceUrl": "https://store.steampowered.com/app/1382070/Viewfinder/",
+          "sourceTitle": "Sad Owl Studios — Viewfinder",
+          "lens": "Perspective + spatial rules",
+          "notice": "The game constantly changes what ‘space’ means, so framing, contrast and clear state changes have to work harder than in a conventional route puzzle.",
+          "steal": "When the rule is unusual, presentation has to be unusually clear.",
+          "task": "Ignore the camera/photo gimmick for a moment. Which shapes and value changes still tell you where the next useful space is?"
         },
         {
-          "game": "Horizon Forbidden West",
-          "image": "https://www.guerrilla-games.com/media/News/HFW_SCREEN_LEGAL_GLIDER_4K_RGB_20210512.webp",
-          "sourceUrl": "https://www.guerrilla-games.com/read/15-minutes-of-new-gameplay-for-horizon-forbidden-west",
-          "sourceTitle": "Guerrilla — Horizon Forbidden West",
-          "lens": "Traversal affordance",
-          "notice": "Terrain, climbable structures and height changes do more than look natural: they advertise possible movement and reward.",
-          "steal": "Shape terrain around traversal decisions, not just pretty silhouettes.",
-          "task": "Draw two possible routes through the image: safe and fast. What makes each route readable?"
+          "game": "Dishonored 2",
+          "image": "https://res.cloudinary.com/dewzjk72j/image/authenticated/s--ksy1ISeM--/c_lfill%2Cw_744/f_auto%3Aimage%2Cq_auto/v1/contentful/rporu91m20dc/1bf1f6zIoq4MISqSoCII6I/4b6d2df9e0fdd32fc9f02908a51aafc5/data.images.event.209.Dishonored2_TheOverlook_730x411.png",
+          "sourceUrl": "https://bethesda.net/en-US/news/dishonored-2-karnaca-art-gallery",
+          "sourceTitle": "Bethesda — Dishonored 2: Karnaca Art Gallery",
+          "lens": "Landmarks + multiple routes",
+          "notice": "Karnaca uses Shindaerey Peak as a natural landmark that can be seen across the city, helping players stay oriented while streets, rooftops and interiors branch.",
+          "steal": "Give open spaces an anchor that survives route choice.",
+          "task": "Draw three possible routes through the district and mark where the landmark should disappear and reappear to rebuild orientation."
         }
       ],
       "researchMissions": [
@@ -473,34 +473,34 @@ window.UE5_DESIGN_DATA = {
       "engineUrl": "https://dev.epicgames.com/documentation/unreal-engine/modeling-mode-in-unreal-engine?lang=en-US",
       "caseStudies": [
         {
-          "game": "Dead Space",
-          "image": "https://drop-assets.ea.com/images/5Cr5lTNDijF2pzIopPZduH/2009d571be74052edf094ce0a992253f/ds-gp-hallway-04-no-watermark.jpg",
-          "sourceUrl": "https://www.ea.com/games/dead-space/dead-space",
-          "sourceTitle": "EA / Motive — Dead Space",
-          "lens": "Lived-in world + threat",
-          "notice": "Industrial structure, emergency lighting, damage and clutter all reinforce the fiction of a working ship that has gone catastrophically wrong.",
-          "steal": "Every prop cluster should imply a job, routine or event.",
-          "task": "List five visible clues and separate “normal ship life” from “something went wrong”."
+          "game": "Firewatch",
+          "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/383870/589f62a8f5867c5d4966bb857e736928b7d208b2/page_bg_raw.jpg?t=1755789801",
+          "sourceUrl": "https://store.steampowered.com/app/383870/Firewatch/",
+          "sourceTitle": "Campo Santo — Firewatch",
+          "lens": "Visual economy + sense of place",
+          "notice": "A small set of strong shapes, colour families and carefully chosen props establishes the lookout, the wilderness and the people who work there without cluttering every surface.",
+          "steal": "Choose a few strong environmental signals before filling shelves.",
+          "task": "List five details that communicate job, place or time without relying on dialogue."
         },
         {
-          "game": "Horizon Forbidden West",
-          "image": "https://www.guerrilla-games.com/media/Horizon_FW_Artblast2560x854.png",
-          "sourceUrl": "https://www.guerrilla-games.com/read/horizon-forbidden-west-art-blast-on-artstation",
-          "sourceTitle": "Guerrilla — Horizon Art Blast",
-          "lens": "Reference + visual language",
-          "notice": "Distinct cultures and locations are built from repeated shape, material and prop families rather than random asset variety.",
-          "steal": "Choose a small visual language and repeat it intentionally.",
-          "task": "Invent a 4-item visual-language rule set for a tribe, faction or workplace."
+          "game": "Stray",
+          "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1332010/99b9936f7a078d8f2f23f232ab46e343641c42c3/page_bg_raw.jpg?t=1785424330",
+          "sourceUrl": "https://store.steampowered.com/app/1332010/Stray/",
+          "sourceTitle": "BlueTwelve Studio — Stray",
+          "lens": "Lived-in spaces + signage",
+          "notice": "Signs, cables, clutter, shop fronts and repeated urban details sell a functioning city while vertical cat-scale routes remain readable inside the mess.",
+          "steal": "Set dressing should support both fiction and movement.",
+          "task": "Find three details that tell story and three that quietly help navigation. Do any do both jobs at once?"
         },
         {
-          "game": "CONTROL",
-          "image": "https://cdn.prod.website-files.com/64630b03551142e3347ae3da/6492c4ab2445934a3c76c839_control_pm_det_005.webp",
-          "sourceUrl": "https://www.remedygames.com/games/control",
-          "sourceTitle": "Remedy — CONTROL",
-          "lens": "Repetition + interruption",
-          "notice": "Office repetition establishes normality; unusual geometry, debris or colour breaks that pattern and becomes meaningful.",
-          "steal": "Repetition makes the exception readable.",
-          "task": "Find one repeated element and one deliberate break. What does the break communicate?"
+          "game": "The Long Dark",
+          "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/305620/page_bg_raw.jpg?t=1785448287",
+          "sourceUrl": "https://store.steampowered.com/app/305620/The_Long_Dark/",
+          "sourceTitle": "Hinterland — The Long Dark",
+          "lens": "Scarcity + meaningful props",
+          "notice": "Sparse survival spaces make objects feel intentional. Weathering, absence and a few surviving possessions can communicate more than a room filled with random clutter.",
+          "steal": "Empty space can carry more meaning than decorative noise.",
+          "task": "Imagine a survival room with 20 props, then remove 15. Which five must remain for the player to understand what happened there?"
         }
       ],
       "researchMissions": [
@@ -788,30 +788,30 @@ window.UE5_DESIGN_DATA = {
           "image": "https://www.kojimaproductions.jp/sites/default/files/2021-08/gr.DeathStranding_GameScreenshot6.jpg",
           "sourceUrl": "https://www.kojimaproductions.jp/en/death-stranding-ps4",
           "sourceTitle": "Kojima Productions — Death Stranding",
-          "lens": "Surface identity",
-          "notice": "Rock, moss, metal ladder and fabric remain visually distinct even under subdued natural light because their roughness, normal detail and value ranges differ.",
+          "lens": "Surface identity + traversal",
+          "notice": "Rock, moss, wet ground, metal and fabric stay visually distinct under subdued natural light, so the world communicates both material and traversal character.",
           "steal": "Make materials readable without relying on saturated colour.",
-          "task": "Name four materials in the image and describe the roughness difference you expect between them."
+          "task": "Name four materials in the image and describe the roughness, normal detail and value difference you expect between them."
         },
         {
-          "game": "Dead Space",
-          "image": "https://drop-assets.ea.com/images/qKm8m5buUQRNr4WIsBTcd/2d8953c4fd3f1e4acd5a78bbc9a16b30/DEAD-SPACE_Media_SLIDE-02-USP-02.jpg",
-          "sourceUrl": "https://www.ea.com/games/dead-space/dead-space",
-          "sourceTitle": "EA / Motive — Dead Space",
-          "lens": "Wear + material story",
-          "notice": "Industrial metals, grime, fog and damaged surfaces work together to communicate age, maintenance failure and danger.",
-          "steal": "Wear belongs where use, impact, water or neglect would actually cause it.",
-          "task": "Find three wear zones and propose a physical cause for each."
+          "game": "Teardown",
+          "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1167630/page_bg_raw.jpg?t=1781525152",
+          "sourceUrl": "https://store.steampowered.com/app/1167630/Teardown/",
+          "sourceTitle": "Tuxedo Labs — Teardown",
+          "lens": "Material = gameplay rule",
+          "notice": "Voxel materials are not merely decorative: they help the player predict what can break, burn or resist before the destruction system is tested.",
+          "steal": "If a material changes interaction, make the difference readable before the player experiments.",
+          "task": "Invent four material classes and give each one a visible property and a gameplay property."
         },
         {
-          "game": "CONTROL",
-          "image": "https://cdn.prod.website-files.com/64630b03551142e3347ae3da/6492c4ad955ffc88abcd7409_CONTROL_Blast_Furnace_169.webp",
-          "sourceUrl": "https://www.remedygames.com/games/control",
-          "sourceTitle": "Remedy — CONTROL",
-          "lens": "Material families",
-          "notice": "Concrete, painted metal and hot industrial areas repeat consistently enough that the player learns the building’s material vocabulary.",
-          "steal": "Build a small reusable surface family rather than 30 unrelated materials.",
-          "task": "Create a three-material palette for a location and write one rule for when each appears."
+          "game": "The Talos Principle 2",
+          "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/835960/page_bg_raw.jpg?t=1775138468",
+          "sourceUrl": "https://store.steampowered.com/app/835960/The_Talos_Principle_2/",
+          "sourceTitle": "Croteam — The Talos Principle 2",
+          "lens": "Material families + world logic",
+          "notice": "Nature, monumental stone and advanced technology retain distinct surface languages even when they share the same frame, helping the player separate age, function and system.",
+          "steal": "Give eras, systems or factions their own material family instead of a random texture collection.",
+          "task": "Design three surface families for ‘old world’, ‘active technology’ and ‘nature reclaiming’. Give each one two rules."
         }
       ],
       "researchMissions": [
@@ -1109,29 +1109,29 @@ window.UE5_DESIGN_DATA = {
           "sourceUrl": "https://www.alanwake.com/story/unleash-your-creativity-with-alan-wake-2s-new-photo-mode/",
           "sourceTitle": "Remedy — Alan Wake 2 Photo Mode",
           "lens": "Colour + motivated emphasis",
-          "notice": "The photo-mode lighting tools make the design decision obvious: colour, intensity, source type and field of view can completely rewrite the mood of the same geometry.",
-          "steal": "Treat light colour/intensity as a deliberate variable, not a vibe slider.",
-          "task": "Predict how the shot changes if the red light becomes white but every other setting stays fixed."
+          "notice": "Remedy’s imagery makes the lighting decisions easy to inspect: colour, intensity, source direction and contrast can rewrite the mood of the same geometry while still protecting the subject.",
+          "steal": "Treat light colour and intensity as deliberate design variables, not vibe sliders.",
+          "task": "Predict what changes if the strongest coloured light becomes neutral white while everything else stays fixed."
         },
         {
-          "game": "INSIDE",
-          "image": "https://playdead.com/css/img/inside/screenshots/INSIDE_01.jpg",
-          "sourceUrl": "https://playdead.com/games/inside/",
-          "sourceTitle": "Playdead — INSIDE",
+          "game": "LIMBO",
+          "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/48000/ss_a045f6d6329ed18bc16d34633800d638f3a57724.1920x1080.jpg?t=1761819450",
+          "sourceUrl": "https://store.steampowered.com/app/48000/LIMBO/",
+          "sourceTitle": "Playdead — LIMBO",
           "lens": "Silhouette + negative space",
-          "notice": "Large dark masses simplify the frame while a controlled light pool separates the player and route.",
-          "steal": "Darkness is useful only when the important information remains readable.",
-          "task": "Identify the minimum area that must stay lit for this scene to remain playable."
+          "notice": "A tiny tonal range still keeps the player, hazards and route legible because silhouette, motion and carefully placed negative space carry the gameplay information.",
+          "steal": "Atmosphere is not an excuse to lose gameplay readability.",
+          "task": "Reduce your own scene to greyscale and squint at it. Which three shapes must remain distinct?"
         },
         {
-          "game": "Dead Space",
-          "image": "https://drop-assets.ea.com/images/5Cr5lTNDijF2pzIopPZduH/2009d571be74052edf094ce0a992253f/ds-gp-hallway-04-no-watermark.jpg",
-          "sourceUrl": "https://www.ea.com/games/dead-space/dead-space",
-          "sourceTitle": "EA / Motive — Dead Space",
-          "lens": "Safe pool → dangerous shadow",
-          "notice": "Motive explicitly uses light/shadow, dynamic failures and limited lit zones to control tension on the Ishimura.",
-          "steal": "Lighting can create a rhythm of safety and uncertainty.",
-          "task": "Mark where you would slow down as a player and explain what the light is doing to cause it."
+          "game": "Little Nightmares II",
+          "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/860510/page_bg_raw.jpg?t=1730127763",
+          "sourceUrl": "https://store.steampowered.com/app/860510/Little_Nightmares_II/",
+          "sourceTitle": "Tarsier Studios — Little Nightmares II",
+          "lens": "Scale + pools of safety",
+          "notice": "Practical light pools and giant shadow masses sell vulnerability while still revealing enough route information to move through threatening spaces.",
+          "steal": "Use lit islands and shadow boundaries as pacing beats rather than illuminating everything evenly.",
+          "task": "Mark three safety-to-danger transitions. What lighting cue should change at each boundary?"
         }
       ],
       "researchMissions": [
@@ -1425,34 +1425,34 @@ window.UE5_DESIGN_DATA = {
       "engineUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/procedural-content-generation-framework-in-unreal-engine",
       "caseStudies": [
         {
-          "game": "Death Stranding",
-          "image": "https://www.kojimaproductions.jp/sites/default/files/2021-08/gr.DeathStranding_GameScreenshot3.jpg",
-          "sourceUrl": "https://www.kojimaproductions.jp/en/death-stranding-ps4",
-          "sourceTitle": "Kojima Productions — Death Stranding",
-          "lens": "Terrain as mechanic",
-          "notice": "Slope, rock density, river placement and distant relief make traversal itself the challenge. The landscape is not background; it is the system.",
-          "steal": "Give terrain meaningful travel costs and choices.",
-          "task": "Draw the fastest, safest and most scenic routes from foreground to the distant ridge."
-        },
-        {
-          "game": "Death Stranding",
-          "image": "https://www.kojimaproductions.jp/sites/default/files/2021-08/gr.DeathStranding_GameScreenshot5.jpg",
-          "sourceUrl": "https://www.kojimaproductions.jp/en/death-stranding-ps4",
-          "sourceTitle": "Kojima Productions — Death Stranding",
-          "lens": "Silhouette + difficulty",
-          "notice": "The mountain silhouette communicates destination and danger before the player knows the exact route.",
-          "steal": "Let large terrain forms preview the difficulty ahead.",
-          "task": "Reduce the image to black/white silhouette. What still communicates the challenge?"
-        },
-        {
           "game": "ELDEN RING",
           "image": "https://p325k7wa.twic.pics/high/elden-ring/elden-ring/02-screenshots/ELDENRING_01_4K.jpg?twic=v1%2Fcover%3D2160%2Fstep%3D10%2Fquality%3D80%2Foutput%3Dpreview",
           "sourceUrl": "https://en.bandainamcoent.eu/elden-ring/elden-ring/media",
           "sourceTitle": "Bandai Namco — ELDEN RING media gallery",
-          "lens": "Distant attraction",
-          "notice": "Large landmarks and layered terrain create long-term navigation targets while allowing local discovery.",
+          "lens": "Distant landmarks + layered terrain",
+          "notice": "Large landmarks and layered terrain create long-term navigation targets while hills, ruins and local silhouettes provide shorter discovery loops.",
           "steal": "Give players something memorable to orient around beyond the next 20 metres.",
-          "task": "Identify a long-term landmark, a mid-distance landmark and a local cue."
+          "task": "Identify a long-term landmark, a mid-distance landmark and a local cue. Which one would you navigate by after turning around?"
+        },
+        {
+          "game": "Subnautica",
+          "image": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/264710/ss_9fdfcc7572ae22b4afa21e6de3b23c962ca5bb55.1920x1080.jpg?t=1777456112",
+          "sourceUrl": "https://store.steampowered.com/app/264710/Subnautica/",
+          "sourceTitle": "Unknown Worlds — Subnautica",
+          "lens": "Biome identity + vertical navigation",
+          "notice": "Colour, plant silhouettes, depth, light and geology make underwater regions recognisable without roads or signposts, while depth itself becomes part of progression.",
+          "steal": "Give biomes navigational identity, not just different foliage.",
+          "task": "Design three biome signatures using colour/value, silhouette, density and sound. Make each readable from a distance."
+        },
+        {
+          "game": "Jusant",
+          "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1977170/page_bg_raw.jpg?t=1771331092",
+          "sourceUrl": "https://store.steampowered.com/app/1977170/Jusant/",
+          "sourceTitle": "DON’T NOD — Jusant",
+          "lens": "Terrain as traversal",
+          "notice": "Climbable faces, ledges, exposed walls and changing biomes organise a vertical route. The terrain is the mechanic rather than scenery wrapped around one.",
+          "steal": "Terrain should advertise movement verbs and route difficulty.",
+          "task": "Draw a fast, safe and secret climbing line up the scene. What terrain feature communicates each choice?"
         }
       ],
       "researchMissions": [
@@ -1740,34 +1740,34 @@ window.UE5_DESIGN_DATA = {
       "engineUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/sequencer-cinematic-editor-unreal-engine",
       "caseStudies": [
         {
-          "game": "Alan Wake 2",
-          "image": "https://www.alanwake.com/wp-content/uploads/2024/06/aw2-photo-mode-02-clean-1300x650.png",
-          "sourceUrl": "https://www.alanwake.com/story/unleash-your-creativity-with-alan-wake-2s-new-photo-mode/",
-          "sourceTitle": "Remedy — Alan Wake 2 Photo Mode",
-          "lens": "Focal length + framing",
-          "notice": "Photo-mode controls expose the same decisions a cinematic designer makes: lens, focus, exposure, framing and whether a character is even present.",
-          "steal": "Choose the camera based on the information/emotion the shot must deliver.",
-          "task": "Crop the image three ways: establishing, character, clue. What changes in meaning?"
+          "game": "Journey",
+          "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/638230/ss_ed77e7844e32c4cb181ce585fa1a368285c66ec5.1920x1080.jpg?t=1729099361",
+          "sourceUrl": "https://store.steampowered.com/app/638230/Journey/",
+          "sourceTitle": "thatgamecompany — Journey",
+          "lens": "Camera + emotion",
+          "notice": "Wide framing repeatedly makes the traveller feel tiny against the environment, using scale and composition to communicate isolation, discovery and hope without dialogue.",
+          "steal": "Shot scale can tell the emotional job before animation or dialogue does anything.",
+          "task": "Choose wide, medium or close framing for solitude, discovery and danger. Give one reason for each choice."
         },
         {
-          "game": "Horizon Forbidden West",
-          "image": "https://www.guerrilla-games.com/media/News/HFW_SCREEN_LEGAL_GLIDER_4K_RGB_20210512.webp",
-          "sourceUrl": "https://www.guerrilla-games.com/read/15-minutes-of-new-gameplay-for-horizon-forbidden-west",
-          "sourceTitle": "Guerrilla — Horizon Forbidden West",
-          "lens": "Action geography",
-          "notice": "Wide framing establishes height, route and danger before tighter action. The player needs spatial understanding before spectacle.",
-          "steal": "Establish geography before rapid cuts or close action.",
-          "task": "Write a three-shot sequence: establish location → reveal threat → return to player goal."
+          "game": "What Remains of Edith Finch",
+          "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/501300/ss_77ebb61562a25dbcd0c4cc1c5090b76a76a055b2.1920x1080.jpg?t=1785424558",
+          "sourceUrl": "https://store.steampowered.com/app/501300/What_Remains_of_Edith_Finch/",
+          "sourceTitle": "Giant Sparrow — What Remains of Edith Finch",
+          "lens": "Transitions + point of view",
+          "notice": "Narrative sequences change perspective and visual language while keeping interaction tied to story intention, so transitions become part of the storytelling rather than a break from it.",
+          "steal": "A transition can carry meaning instead of merely hiding a cut or load.",
+          "task": "Outline three states: normal room → memory → return. What visual or camera rule changes at each transition?"
         },
         {
-          "game": "CONTROL",
-          "image": "https://cdn.prod.website-files.com/64630b03551142e3347ae3da/6492c4abe40138d6dc791368_control_pm_det_027.webp",
-          "sourceUrl": "https://www.remedygames.com/games/control",
-          "sourceTitle": "Remedy — CONTROL",
-          "lens": "Architecture as frame",
-          "notice": "Strong architectural lines and scale can frame characters and reveal spaces without requiring complicated camera movement.",
-          "steal": "Let the environment compose the shot for you.",
-          "task": "Choose a static camera position that tells the same story as a moving camera. What do you gain/lose?"
+          "game": "Psychonauts 2",
+          "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/607080/page_bg_raw.jpg?t=1745521663",
+          "sourceUrl": "https://store.steampowered.com/app/607080/Psychonauts_2/",
+          "sourceTitle": "Double Fine — Psychonauts 2",
+          "lens": "Stylised staging + readable action",
+          "notice": "Exaggerated shapes, colour and camera blocking allow bizarre mental worlds to stay understandable even when almost every asset is deliberately unconventional.",
+          "steal": "The stronger the stylisation, the stronger the hierarchy needs to be.",
+          "task": "Sketch one shot with a focal character, one story prop and one background idea. Make sure none of them compete for the same visual priority."
         }
       ],
       "researchMissions": [
@@ -2049,34 +2049,34 @@ window.UE5_DESIGN_DATA = {
       "engineUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/sound-attenuation-in-unreal-engine",
       "caseStudies": [
         {
-          "game": "Dead Space",
-          "image": "https://drop-assets.ea.com/images/5Cr5lTNDijF2pzIopPZduH/2009d571be74052edf094ce0a992253f/ds-gp-hallway-04-no-watermark.jpg",
-          "sourceUrl": "https://www.ea.com/games/dead-space/dead-space",
-          "sourceTitle": "EA / Motive — Dead Space",
-          "lens": "Occlusion + projected sound",
-          "notice": "Motive’s audio work explicitly considers material occlusion and projecting sound down hallways, turning unseen space into readable threat.",
-          "steal": "Use sound to tell the player about spaces outside the camera.",
-          "task": "Place three imagined sound sources in this corridor: machine, threat, safe destination. Explain how each should change with distance."
-        },
-        {
           "game": "INSIDE",
           "image": "https://playdead.com/css/img/inside/screenshots/INSIDE_01.jpg",
           "sourceUrl": "https://playdead.com/games/inside/",
           "sourceTitle": "Playdead — INSIDE",
           "lens": "Sparse sound + focus",
-          "notice": "Minimal visual information pairs naturally with selective sound; when the mix is sparse, one mechanical or environmental event can dominate attention.",
-          "steal": "Do not fill every second. Leave room for important sounds to become events.",
-          "task": "List three moments where silence would make the next sound stronger."
+          "notice": "Sparse visual and audio language leaves room for one machine, movement or environmental event to dominate attention instead of fighting a constantly full mix.",
+          "steal": "Do not fill every second. Silence is part of the mix.",
+          "task": "Choose three moments in a tense sequence where removing ambience would make the next sound more important."
         },
         {
-          "game": "Alan Wake 2",
-          "image": "https://www.alanwake.com/wp-content/uploads/2024/06/aw2-photo-mode-03-1920x1080.png",
-          "sourceUrl": "https://www.alanwake.com/story/unleash-your-creativity-with-alan-wake-2s-new-photo-mode/",
-          "sourceTitle": "Remedy — Alan Wake 2",
-          "lens": "Atmosphere + state change",
-          "notice": "Strong visual states suggest matching audio states: rain, electrical hum, distant city noise, threat layers and sudden absence can all signal a change before gameplay explains it.",
-          "steal": "Design ambience as layers that can enter/leave with game state.",
-          "task": "Write a four-layer ambience stack and decide which layer disappears when danger begins."
+          "game": "Outer Wilds",
+          "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/753640/ss_c624a6b8edca0d451605592edd927dbcc14917a8.1920x1080.jpg?t=1785424341",
+          "sourceUrl": "https://store.steampowered.com/app/753640/Outer_Wilds/",
+          "sourceTitle": "Mobius Digital — Outer Wilds",
+          "lens": "Music as state + place",
+          "notice": "Recurring musical ideas identify travellers, places and the loop’s changing state, letting audio tell the player where they are emotionally and systemically.",
+          "steal": "Use recurring motifs as game-state information, not just background music.",
+          "task": "Design three sound or musical layers for safe exploration, discovery and an imminent transition. What triggers each one?"
+        },
+        {
+          "game": "No Man’s Sky",
+          "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/275850/719b88538c75532ee595b44421e3e13bc3651aff/page_bg_raw.jpg?t=1786366888",
+          "sourceUrl": "https://store.steampowered.com/app/275850/No_Mans_Sky/",
+          "sourceTitle": "Hello Games — No Man’s Sky",
+          "lens": "Procedural ambience + scale",
+          "notice": "A huge procedural universe needs layered ambience and rules that react to environment state rather than a bespoke linear mix for every location.",
+          "steal": "Build ambience from reusable layers that enter, leave and vary with conditions.",
+          "task": "Define wind, fauna, machinery and weather layers. Write the state that makes each layer enter and exit."
         }
       ],
       "researchMissions": [
@@ -2376,34 +2376,34 @@ window.UE5_DESIGN_DATA = {
       "engineUrl": "https://dev.epicgames.com/documentation/unreal-engine/guidelines-for-optimizing-rendering-for-real-time-in-unreal-engine",
       "caseStudies": [
         {
-          "game": "Horizon Forbidden West",
-          "image": "https://www.guerrilla-games.com/media/Horizon_FW_Artblast2560x854.png",
-          "sourceUrl": "https://www.guerrilla-games.com/read/horizon-forbidden-west-art-blast-on-artstation",
-          "sourceTitle": "Guerrilla — Horizon Art Blast",
-          "lens": "Production finish",
-          "notice": "Final quality comes from many disciplines resolving around the same visual language and player experience, not one magic “polish” effect.",
-          "steal": "Polish the hierarchy between systems, art, lighting and presentation — not individual details in isolation.",
-          "task": "Choose the three things in the image doing the most work. What would you protect if you had to cut 50% of the detail?"
+          "game": "Hi-Fi RUSH",
+          "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1817230/page_bg_raw.jpg?t=1764916407",
+          "sourceUrl": "https://store.steampowered.com/app/1817230/HiFi_RUSH/",
+          "sourceTitle": "Tango Gameworks — Hi-Fi RUSH",
+          "lens": "Everything agrees",
+          "notice": "Animation, VFX, UI, audio and environmental motion reinforce the same rhythm. The finish comes from disciplines agreeing on a presentation rule, not from adding random effects.",
+          "steal": "Pick one presentation rule and let several disciplines support it.",
+          "task": "List five channels that can tell the player the same beat or action information. Which one is primary?"
         },
         {
-          "game": "CONTROL",
-          "image": "https://cdn.prod.website-files.com/64630b03551142e3347ae3da/6492c4ab2445934a3c76c839_control_pm_det_005.webp",
-          "sourceUrl": "https://www.remedygames.com/games/control",
-          "sourceTitle": "Remedy — CONTROL",
-          "lens": "Strong read at a glance",
-          "notice": "A memorable scene can still be built from controlled values, repeated forms and one clear interruption. More detail is not automatically more finished.",
-          "steal": "Make the first three seconds of the scene readable.",
-          "task": "Write the first three things you notice, in order. Is that the order the designer probably wants?"
+          "game": "Ratchet & Clank: Rift Apart",
+          "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1895880/ss_13372af67343a2f2fc1332bc0b7a8e67db4a336b.1920x1080.jpg?t=1750956328",
+          "sourceUrl": "https://store.steampowered.com/app/1895880/Ratchet__Clank_Rift_Apart/",
+          "sourceTitle": "Insomniac Games — Ratchet & Clank: Rift Apart",
+          "lens": "Transitions + readable spectacle",
+          "notice": "Dense scenes and rapid world transitions still have to protect the character, threat and route. Spectacle only works if the player can read through it.",
+          "steal": "Protect gameplay hierarchy during your most expensive-looking moment.",
+          "task": "Imagine removing half the particles and background detail. What information absolutely must stay?"
         },
         {
-          "game": "Dead Space",
-          "image": "https://drop-assets.ea.com/images/qKm8m5buUQRNr4WIsBTcd/2d8953c4fd3f1e4acd5a78bbc9a16b30/DEAD-SPACE_Media_SLIDE-02-USP-02.jpg",
-          "sourceUrl": "https://www.ea.com/games/dead-space/dead-space",
-          "sourceTitle": "EA / Motive — Dead Space",
-          "lens": "Atmosphere + readability + performance",
-          "notice": "Fog, lighting, VFX, materials and sound all add atmosphere, but the player still needs readable navigation and threat information.",
-          "steal": "Every expensive effect must earn a player-facing job.",
-          "task": "Pick one effect you would reduce for performance. What design information must remain intact?"
+          "game": "Ori and the Will of the Wisps",
+          "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1057090/ss_ef0d1606df59247a966e31931884a534a4ad8caa.1920x1080.jpg?t=1759530749",
+          "sourceUrl": "https://store.steampowered.com/app/1057090/Ori_and_the_Will_of_the_Wisps/",
+          "sourceTitle": "Moon Studios — Ori and the Will of the Wisps",
+          "lens": "VFX + silhouette readability",
+          "notice": "Particles, lighting and animated backgrounds add richness while the player silhouette and immediate hazards stay at the top of the visual hierarchy.",
+          "steal": "Polish should increase feeling without stealing readability.",
+          "task": "Rank player, enemy, hazard and background by contrast. If the order is wrong, which effect would you reduce first?"
         }
       ],
       "researchMissions": [
@@ -2513,57 +2513,200 @@ window.UE5_DESIGN_DATA = {
     {
       "id": "fab-free",
       "title": "Fab — Free Unreal Engine Assets",
-      "type": "3D • Materials • VFX • Audio",
+      "type": "UE-ready assets",
+      "category": "assets",
       "url": "https://www.fab.com/channels/unreal-engine?is_free=1",
-      "note": "Use the Free filter. Check the licence shown on each listing before redistributing anything.",
+      "note": "Free Unreal Engine listings across 3D, materials, VFX and audio. Use the Free filter and check the licence on the individual listing.",
+      "license": "LISTING-SPECIFIC",
+      "bestFor": "UE-ready placeholders and production assets",
       "icon": "F"
     },
     {
       "id": "fab-samples",
       "title": "Epic Samples on Fab",
       "type": "Sample projects",
+      "category": "assets",
       "url": "https://www.fab.com/channels/unreal-engine?is_free=true",
-      "note": "Useful for studying how Epic builds environments, animation systems and example content. Content Examples and Game Animation Sample are particularly useful.",
+      "note": "Study how Epic builds environments, animation systems and example content. Treat sample projects as things to inspect and learn from, not a finished project to hand in.",
+      "license": "EPIC / LISTING TERMS",
+      "bestFor": "Learning from complete Unreal projects",
       "icon": "E"
+    },
+    {
+      "id": "ambientcg",
+      "title": "ambientCG",
+      "type": "PBR • HDRIs • 3D models",
+      "category": "assets",
+      "url": "https://ambientcg.com/",
+      "note": "A huge library of PBR materials, HDRIs and models. Assets are CC0, so they are especially easy to use for student materials, lighting and environment work.",
+      "license": "CC0",
+      "bestFor": "Textures, material studies, HDRI lighting",
+      "icon": "A"
     },
     {
       "id": "polyhaven",
       "title": "Poly Haven",
       "type": "HDRIs • Textures • 3D models",
+      "category": "assets",
       "url": "https://polyhaven.com/",
-      "note": "CC0 assets with no account required. Excellent for lighting tests, materials and environment dressing.",
+      "note": "High-quality CC0 assets with no attribution requirement. Excellent for lighting tests, materials, environments and look-development.",
+      "license": "CC0",
+      "bestFor": "HDRIs, scanned materials and hero placeholders",
       "icon": "P"
+    },
+    {
+      "id": "kenney",
+      "title": "Kenney",
+      "type": "2D • UI • Low-poly • Prototypes",
+      "category": "assets",
+      "url": "https://kenney.nl/assets",
+      "note": "Massive collection of public-domain CC0 game assets. Particularly useful when the lesson is design and students need readable placeholder art immediately.",
+      "license": "CC0",
+      "bestFor": "Greybox-to-playable prototypes, UI and simple art",
+      "icon": "K"
+    },
+    {
+      "id": "quaternius",
+      "title": "Quaternius",
+      "type": "Low-poly 3D • Characters • Props",
+      "category": "assets",
+      "url": "https://quaternius.com/",
+      "note": "Free low-poly game assets for personal, educational and commercial projects. The current Quaternius Asset License allows use and modification but not standalone asset redistribution.",
+      "license": "QAL — CHECK TERMS",
+      "bestFor": "Fast 3D prototypes, characters and environment kits",
+      "icon": "Q"
     },
     {
       "id": "mixamo",
       "title": "Adobe Mixamo",
       "type": "Characters • Animation",
+      "category": "assets",
       "url": "https://www.mixamo.com/",
-      "note": "Free with an Adobe ID. Great for placeholder characters and animation when the lesson is about design rather than character production.",
+      "note": "Fast placeholder characters and animations when the design lesson is about movement, staging or gameplay rather than making the character from scratch.",
+      "license": "ADOBE TERMS",
+      "bestFor": "Prototype animation and character motion",
       "icon": "M"
+    },
+    {
+      "id": "sonniss-gdc",
+      "title": "Sonniss #GameAudioGDC",
+      "type": "Professional SFX archive",
+      "category": "audio",
+      "url": "https://sonniss.com/gameaudiogdc/",
+      "note": "Years of professional game-audio giveaway bundles. The current archive is royalty-free and commercially usable with no attribution; raw redistribution and AI/ML training are restricted.",
+      "license": "ROYALTY-FREE",
+      "bestFor": "High-quality SFX, ambience and audio design",
+      "icon": "♪"
     },
     {
       "id": "freesound",
       "title": "Freesound",
       "type": "Sound effects • Ambience",
+      "category": "audio",
       "url": "https://freesound.org/",
-      "note": "Huge sound library. Licences vary by sound — students must check CC0 / attribution / non-commercial terms before use.",
+      "note": "Huge community sound library. Licences vary by individual sound, so check CC0 / attribution / non-commercial terms before using anything.",
+      "license": "VARIES — CHECK ITEM",
+      "bestFor": "Specific one-off sounds and ambience",
       "icon": "S"
+    },
+    {
+      "id": "noclip-levels",
+      "title": "noclip.website — Level Explorer",
+      "type": "Interactive game-level museum",
+      "category": "study",
+      "url": "https://noclip.website/",
+      "note": "Fly a free camera around extracted game levels and study layout, scale, sightlines, landmarks and encounter spaces from angles the normal game camera never gives you.",
+      "license": "REFERENCE / STUDY",
+      "bestFor": "Level-design reverse engineering",
+      "icon": "N"
+    },
+    {
+      "id": "interface-in-game",
+      "title": "Interface In Game",
+      "type": "UI screenshot + video library",
+      "category": "study",
+      "url": "https://interfaceingame.com/",
+      "note": "A large searchable collection of game interfaces. Useful for comparing HUDs, menus, inventories, maps, prompts and visual hierarchy across genres.",
+      "license": "REFERENCE / STUDY",
+      "bestFor": "UI research and comparison boards",
+      "icon": "UI"
+    },
+    {
+      "id": "level-design-book",
+      "title": "The Level Design Book",
+      "type": "Open level-design reference",
+      "category": "study",
+      "url": "https://book.leveldesignbook.com/",
+      "note": "A practical, critical level-design reference covering process, culture, studies, tools and teaching. Its resources section is also an excellent starting point for student asset hunting.",
+      "license": "READ / REFERENCE",
+      "bestFor": "Level-design theory, process and research",
+      "icon": "▤"
+    },
+    {
+      "id": "noclip-docs",
+      "title": "Noclip Documentaries",
+      "type": "Developer documentaries",
+      "category": "professional",
+      "url": "https://www.noclip.video/doclist",
+      "note": "Free documentaries about how games are actually made, with developers discussing design decisions, production constraints and iteration on shipped games.",
+      "license": "WATCH / REFERENCE",
+      "bestFor": "Developer voices and production context",
+      "icon": "▶"
+    },
+    {
+      "id": "gdc-vault",
+      "title": "GDC Vault",
+      "type": "Industry talks + slides",
+      "category": "professional",
+      "url": "https://gdcvault.com/browse/GD%20Talks",
+      "note": "Search talks by Design, Audio, Visual Arts, Educators and more. Many sessions are available freely; some content requires GDC Vault access.",
+      "license": "REFERENCE / ACCESS VARIES",
+      "bestFor": "Professional talks, postmortems and specialist practice",
+      "icon": "G"
+    },
+    {
+      "id": "game-dev-postmortems",
+      "title": "Game Developer — Postmortems",
+      "type": "Classic + current postmortems",
+      "category": "professional",
+      "url": "https://www.gamedeveloper.com/keyword/postmortems",
+      "note": "Postmortems written by developers about what worked, what failed and what they would change. Excellent antidote to pretending shipped games appeared fully formed.",
+      "license": "READ / REFERENCE",
+      "bestFor": "Production reflection and design decision evidence",
+      "icon": "GD"
+    },
+    {
+      "id": "accessibility-guidelines",
+      "title": "Game Accessibility Guidelines",
+      "type": "Inclusive design reference",
+      "category": "professional",
+      "url": "https://gameaccessibilityguidelines.com/",
+      "note": "Developer-friendly Basic, Intermediate and Advanced guidance for avoiding unnecessary barriers and designing for a wider range of players.",
+      "license": "REFERENCE",
+      "bestFor": "Accessibility checks and design QA",
+      "icon": "◎"
     },
     {
       "id": "epic-docs",
       "title": "Epic UE5.8 Documentation",
       "type": "Current engine reference",
+      "category": "engine",
       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/unreal-engine-5-8-documentation",
       "note": "Use this when an editor option or workflow has changed. The Hub teaches the task; Epic remains the current technical reference.",
+      "license": "OFFICIAL DOCUMENTATION",
+      "bestFor": "Checking current Unreal workflow and terminology",
       "icon": "U"
     },
     {
+      "id": "packt-best-practices",
       "title": "Unreal Engine 5 Best Practices (Packt, 2025)",
       "type": "College licensed reference",
-      "icon": "▤",
+      "category": "engine",
       "url": "https://www.packtpub.com/en-us/product/unreal-engine-5-best-practices-9781836205654",
-      "note": "Licensed college reference for lighting, atmosphere, environment design, cinematics, performance and production habits. The Hub paraphrases concepts; it does not redistribute book pages."
+      "note": "Licensed college reference for lighting, atmosphere, environment design, cinematics, performance and production habits. The Hub paraphrases concepts; it does not redistribute book pages.",
+      "license": "COLLEGE LICENSED",
+      "bestFor": "Long-form Unreal production practice",
+      "icon": "▤"
     }
   ],
   "tutorials": [
@@ -8451,6 +8594,43 @@ window.UE5_DESIGN_DATA = {
       "n": "07",
       "title": "IMPROVE",
       "text": "Make one evidence-based revision and explain what changed for the player."
+    }
+  ],
+  "resourceCategories": [
+    {
+      "id": "assets",
+      "title": "Build fast",
+      "icon": "⬢",
+      "kicker": "FREE ASSETS • MATERIALS • PLACEHOLDERS",
+      "description": "Get something readable into Unreal quickly so the design lesson stays about design."
+    },
+    {
+      "id": "audio",
+      "title": "Sound library",
+      "icon": "♪",
+      "kicker": "SFX • AMBIENCE • AUDIO",
+      "description": "Find sounds you can actually use, then check the licence before they enter a submitted project."
+    },
+    {
+      "id": "study",
+      "title": "Study games",
+      "icon": "⌖",
+      "kicker": "LEVELS • UI • DESIGN REFERENCE",
+      "description": "Pull games apart, inspect spaces and compare how shipped work solves the same design problem."
+    },
+    {
+      "id": "professional",
+      "title": "Hear the professionals",
+      "icon": "▶",
+      "kicker": "DOCUMENTARIES • TALKS • POSTMORTEMS",
+      "description": "Go beyond screenshots and hear developers explain constraints, failures and decisions in their own words."
+    },
+    {
+      "id": "engine",
+      "title": "Engine + college reference",
+      "icon": "U",
+      "kicker": "UE5.8 • LICENSED REFERENCE",
+      "description": "Use current Epic documentation for engine truth and the college library for deeper production reading."
     }
   ]
 };

@@ -1,5 +1,9 @@
 # Database migration history
 
+## V3.35.2 Game Diversity + Resource Library
+
+No database migration is required. v3.35.2 changes Designer Studio case-study/reference content and adds a client-side Resource Library route only. Existing lesson, tutorial, Designer Studio Build and progress IDs are unchanged.
+
 ## V3.35.1 Designer Deep Dives + Scroll Restore
 
 No database migration is required. v3.35.1 changes Designer Studio content/presentation and client-side navigation scroll restoration only. Existing lesson, tutorial, Designer Studio Build and progress IDs are unchanged.

@@ -1,3 +1,14 @@
+## v3.35.2 — Game Diversity + Resource Library — 29 Aug 2026
+
+- Expanded Designer Studio's 24 LOOK case-study placements from 7 repeated titles to **24 distinct games**, with no repeat game in the top case-study layer.
+- Added Portal 2, Viewfinder, Dishonored 2, Firewatch, Stray, The Long Dark, Teardown, The Talos Principle 2, LIMBO, Little Nightmares II, Subnautica, Jusant, Journey, What Remains of Edith Finch, Psychonauts 2, Outer Wilds, No Man's Sky, Hi-Fi RUSH, Ratchet & Clank: Rift Apart and Ori and the Will of the Wisps while retaining the strongest existing examples in one primary discipline each.
+- Promoted the buried Designer resource strip into a dedicated **Resource Library** route with a sidebar entry, Home landing card and prominent Designer Studio bridge.
+- Expanded the resource collection to 18 curated sources across assets, audio, game study, professional reference and engine/college reference.
+- Added ambientCG, Kenney, Quaternius, Sonniss #GameAudioGDC, noclip.website, Interface In Game, The Level Design Book, Noclip Documentaries, GDC Vault, Game Developer Postmortems and Game Accessibility Guidelines.
+- Added visible licence/reference labels and best-use guidance to resource cards; explicitly distinguished CC0, provider/listing terms and reference-only use.
+- Site-wide search now routes resource results to `#/resources`.
+- No database migration and no progress/completion IDs changed.
+
 ## v3.35.1 — Designer Deep Dives + Scroll Restore — 29 Aug 2026
 
 - Fixed internal browser Back navigation so returning to a previous Hub route restores that route's saved scroll position rather than jumping to the top.

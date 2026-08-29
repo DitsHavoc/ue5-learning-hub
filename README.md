@@ -1,6 +1,9 @@
-# Current release — v3.35.1
+# Current release — v3.35.2
 
-Designer Studio now adds a **HEAR THE DESIGNERS** stage between real-game analysis and field research. Across the eight disciplines students get **24 curated developer deep dives** — one click-to-load video and two further talks/interviews/articles per discipline — with active viewing prompts and a small task so the material feeds back into their own design work. Internal browser Back navigation also restores the previous Hub route's scroll position instead of returning students to the top. No database migration is required and existing progress/completion IDs are unchanged. See `RELEASE-NOTES-v3.35.1.md` and `DESIGNER-STUDIO-DEEP-DIVES-v3.35.1.md`.
+Designer Studio now uses **24 different games across its 24 primary case studies** rather than repeatedly leaning on the same small set of titles. The old buried free-assets/reference strip has also become a dedicated **Resource Library** with 18 curated sources, clear licence/reference labels, a sidebar link, Home landing card and Designer Studio bridge. v3.35.1 scroll restoration and all existing progress/completion IDs are retained. No database migration is required. See `RELEASE-NOTES-v3.35.2.md`, `DESIGNER-STUDIO-GAME-DIVERSITY-v3.35.2.md` and `RESOURCE-LIBRARY-QA-v3.35.2.md`.
+
+## Previous release — v3.35.1
+Designer Studio added a **HEAR THE DESIGNERS** stage with 24 curated industry deep dives and 8 click-to-load videos. Internal browser Back navigation also gained route scroll restoration. See `RELEASE-NOTES-v3.35.1.md` and `DESIGNER-STUDIO-DEEP-DIVES-v3.35.1.md`.
 
 ## Previous release — v3.35.0
 Designer Studio has been rebuilt around an explicit **LOOK → STEAL THE PRINCIPLE → RESEARCH → BUILD → BREAK + TEST → IMPROVE** learning loop. The eight disciplines and all 47 Designer-owned recipes are retained, but students now work through **24 real-game case studies, 16 field-research missions, 24 constraint challenges, Design Roulette, clearer Studio Builds and 8 hidden Black Box briefs** that unlock after the existing Studio Build completion. All 47 Designer-owned recipes now carry at least one useful design-target reference where appropriate. No database migration is required and existing completion IDs are preserved. See `RELEASE-NOTES-v3.35.0.md` and `DESIGNER-STUDIO-REVAMP-v3.35.0.md`.
