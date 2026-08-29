@@ -224,3 +224,8 @@ No database migration required. This release changes client-side search/index re
 ## v3.34.20 — Unreal Learning Consolidation
 
 No database migration required. This release changes static tutorial/snippet curriculum metadata and client-side navigation/rendering only. Existing tutorial IDs and completion records are preserved. Supabase schema, RLS policies, RPCs, XP/leaderboard logic, classes, projects and evidence are unchanged.
+
+
+## v3.34.21 — Embedded Page Search Repair
+
+No database migration is required. This release changes client-side embedded search event handling and UI feedback only. Supabase schema, RLS, RPCs, classes, projects, evidence, XP and permissions are unchanged.

@@ -1,4 +1,4 @@
-# Current release — v3.34.20
+# Current release — v3.34.21
 
 Unreal Learning has been consolidated so similar practical builds no longer compete as separate top-level destinations. The 47 Programming Quick Tutorials are preserved as **26 recipe families + 3 Core-Lesson applications**, and all **39 Epic paste assists** now surface contextually inside **15 relevant Core Lessons** as well as recipe families. The standalone paste-assist bank remains available as a secondary Reference shelf. Site-wide search from v3.34.19 remains in place. No database migration is required.
 

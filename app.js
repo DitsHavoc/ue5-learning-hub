@@ -840,8 +840,8 @@ function snippetBankPage(){
   const sourcePages=new Set(SNIPPETS.snippets.map(x=>x.sourceUrl)).size;
   return `<div class="page-head snippet-bank-head"><div class="breadcrumb"><a href="#/">Home</a> / <a href="#/programming">Unreal Learning</a> / Epic Paste Assists</div><span class="eyebrow">${SNIPPETS.snippets.length} PASTE ASSISTS • ${sourcePages} OFFICIAL EPIC PAGES</span><h1>⚡ Epic Paste Assists</h1><p class="muted">This is the searchable reference shelf. Relevant assists also appear automatically inside Unreal Learning lessons and recipe families, so you normally do not need to browse here first. Why rebuild a graph node-by-node when Epic already gives you a real clipboard block? Use the official source, paste it into Unreal, reconnect the few pins the page tells you about, then study what you pasted.</p></div>
   <section class="snippet-policy"><div><span class="deep-label">COPY FROM EPIC • LEARN IN THE HUB</span><h2>${esc(SNIPPETS.policy.title)}</h2><p>${esc(SNIPPETS.policy.body)}</p><small>${esc(SNIPPETS.policy.versions)}</small></div><div class="snippet-policy-steps"><span><b>1</b> Open Epic</span><span><b>2</b> Copy Full Snippet</span><span><b>3</b> Paste in the named graph</span><span><b>4</b> Reconnect + test</span></div></section>
-  <section class="snippet-bank-tools"><div class="tutorial-search-box"><span>⌕</span><input id="snippetSearch" type="search" placeholder="Try: door, enemy, HUD, spawn, animation, stamina…"></div><div class="tutorial-filter-row"><button class="tutorial-filter active" data-snippet-filter="all">All</button>${SNIPPETS.categories.map(c=>`<button class="tutorial-filter" data-snippet-filter="${esc(c.id)}">${c.icon} ${esc(c.title)}</button>`).join('')}</div><div class="tutorial-library-count"><strong id="snippetResultCount">${SNIPPETS.snippets.length}</strong><span>paste assists</span></div></section>
-  <section class="section"><div class="section-head"><div><h2>Pasteable systems worth stealing time from</h2><p>These cards describe what Epic provides, where it belongs and what still needs reconnecting. The raw snippet stays on Epic.</p></div></div><div class="snippet-bank-grid" id="snippetGrid">${SNIPPETS.snippets.map(x=>snippetCard(x)).join('')}</div></section>
+  <section class="snippet-bank-tools"><div class="tutorial-search-box"><span>⌕</span><input id="snippetSearch" type="search" enterkeyhint="search" placeholder="Try: door, enemy, HUD, spawn, animation, stamina…"></div><div class="tutorial-filter-row"><button class="tutorial-filter active" data-snippet-filter="all">All</button>${SNIPPETS.categories.map(c=>`<button class="tutorial-filter" data-snippet-filter="${esc(c.id)}">${c.icon} ${esc(c.title)}</button>`).join('')}</div><div class="tutorial-library-count"><strong id="snippetResultCount">${SNIPPETS.snippets.length}</strong><span>paste assists</span></div></section>
+  <section class="section"><div class="section-head"><div><h2>Pasteable systems worth stealing time from</h2><p>These cards describe what Epic provides, where it belongs and what still needs reconnecting. The raw snippet stays on Epic.</p></div></div><div class="snippet-bank-grid" id="snippetGrid">${SNIPPETS.snippets.map(x=>snippetCard(x)).join('')}</div><div class="empty" id="snippetSearchEmpty" hidden><h2>No paste assists match that search.</h2><p>Try a broader mechanic, node, system or category.</p></div></section>
   <section class="content-card snippet-learning-rule"><span class="eyebrow">IMPORTANT</span><h2>Paste it, then prove you understand it.</h2><p>A pasted graph is a starting point, not evidence of learning. Run it, identify the event/data flow, change at least one value or behaviour, and be able to explain why the mechanic still works.</p></section>`;
 }
 function chapterBuild(pathId){return TOOLS.chapterBuilds.find(x=>x.path===pathId)}
@@ -940,7 +940,7 @@ function chapterBuildCard(b,{compact=false}={}){
 }
 function tutorialLibrary(){
   const families=TOOLS.families||[],featured=families.filter(f=>f.featured),visibleTutorials=TOOLS.tutorials.filter(t=>!t.libraryHidden),done=visibleTutorials.filter(t=>tutorialDone(t.id)).length;
-  return `<div class="page-head tutorial-library-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Quick Tutorials</div><span class="eyebrow">${families.length} recipe families • ${visibleTutorials.length} practical builds</span><h1>🛠 Quick Tutorials</h1><p class="muted">Find the kind of system you need first, then choose the exact outcome. Similar builds now live together so you do not have to wade through several near-duplicate cards.</p></div><section class="tutorial-blocks-bridge"><div><span class="deep-label">SEE A TERM YOU DON'T KNOW?</span><h2>Don't abandon the build.</h2><p>Each recipe still shows the Building Blocks it uses. Open an unfamiliar term for a short explanation, then come straight back.</p></div><a class="button ghost" href="#/blocks">🧱 Browse Building Blocks</a></section><section class="tutorial-blocks-bridge snippet-reference-bridge"><div><span class="deep-label">⚡ EPIC PASTE ASSISTS ARE NOW EMBEDDED</span><h2>Use the snippet where you learn the system.</h2><p>The relevant Epic clipboard assists now appear inside Unreal Learning lessons and recipe families. The standalone bank remains as a searchable reference shelf.</p></div><a class="button ghost" href="#/snippets">Search all ${SNIPPETS.snippets.length} assists →</a></section><section class="tutorial-library-tools"><div class="tutorial-search-box"><span>⌕</span><input id="tutorialSearch" type="search" placeholder="Try: dash, locked door, fog, health, AI, HUD…"></div><div class="tutorial-filter-row"><button class="tutorial-filter active" data-tutorial-filter="all">All</button>${TOOLS.categories.map(c=>`<button class="tutorial-filter" data-tutorial-filter="${c.id}">${c.icon} ${esc(c.title)}</button>`).join('')}</div><div class="tutorial-library-count"><strong>${done}/${visibleTutorials.length}</strong><span>practical builds tried</span></div></section><section class="section"><div class="section-head"><div><h2>Start with something useful</h2><p>Common system families students reach for constantly.</p></div></div><div class="quick-tutorial-grid featured">${featured.map(tutorialFamilyCard).join('')}</div></section><section class="section"><div class="section-head"><div><h2>All recipe families</h2><p id="tutorialResultCount">${families.length} recipe families</p></div></div><div class="quick-tutorial-grid" id="tutorialGrid">${families.map(tutorialFamilyCard).join('')}</div></section><section class="lesson-application-note"><span>⌘</span><div><strong>Three duplicate builds moved into the lesson that teaches them.</strong><p>Smooth Timeline Door now sits with <a href="#/lesson/timelines">Timelines & Lerp</a>, Save a Checkpoint Between Sessions with <a href="#/lesson/savegame">SaveGame</a>, and Struct + Data Table with <a href="#/lesson/data">Data Structures & Data Tables</a>. The practical builds are preserved and site-wide search still finds them directly.</p></div></section><section class="section chapter-build-library"><div class="section-head"><div><span class="eyebrow">BIGGER APPLICATION TASKS</span><h2>🎮 Chapter Builds</h2><p>Finish a learning path and a new guided mini-game/system unlocks. The tutorial can still be step-by-step — you must test it and prove it works.</p></div></div><div class="chapter-build-grid">${TOOLS.chapterBuilds.map(b=>chapterBuildCard(b)).join('')}</div></section>`;
+  return `<div class="page-head tutorial-library-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Quick Tutorials</div><span class="eyebrow">${families.length} recipe families • ${visibleTutorials.length} practical builds</span><h1>🛠 Quick Tutorials</h1><p class="muted">Find the kind of system you need first, then choose the exact outcome. Similar builds now live together so you do not have to wade through several near-duplicate cards.</p></div><section class="tutorial-blocks-bridge"><div><span class="deep-label">SEE A TERM YOU DON'T KNOW?</span><h2>Don't abandon the build.</h2><p>Each recipe still shows the Building Blocks it uses. Open an unfamiliar term for a short explanation, then come straight back.</p></div><a class="button ghost" href="#/blocks">🧱 Browse Building Blocks</a></section><section class="tutorial-blocks-bridge snippet-reference-bridge"><div><span class="deep-label">⚡ EPIC PASTE ASSISTS ARE NOW EMBEDDED</span><h2>Use the snippet where you learn the system.</h2><p>The relevant Epic clipboard assists now appear inside Unreal Learning lessons and recipe families. The standalone bank remains as a searchable reference shelf.</p></div><a class="button ghost" href="#/snippets">Search all ${SNIPPETS.snippets.length} assists →</a></section><section class="tutorial-library-tools"><div class="tutorial-search-box"><span>⌕</span><input id="tutorialSearch" type="search" enterkeyhint="search" placeholder="Try: dash, locked door, fog, health, AI, HUD…"></div><div class="tutorial-filter-row"><button class="tutorial-filter active" data-tutorial-filter="all">All</button>${TOOLS.categories.map(c=>`<button class="tutorial-filter" data-tutorial-filter="${c.id}">${c.icon} ${esc(c.title)}</button>`).join('')}</div><div class="tutorial-library-count"><strong>${done}/${visibleTutorials.length}</strong><span>practical builds tried</span></div></section><section class="section" id="tutorialFeaturedSection"><div class="section-head"><div><h2>Start with something useful</h2><p>Common system families students reach for constantly.</p></div></div><div class="quick-tutorial-grid featured">${featured.map(tutorialFamilyCard).join('')}</div></section><section class="section"><div class="section-head"><div><h2>All recipe families</h2><p id="tutorialResultCount">${families.length} recipe families</p></div></div><div class="quick-tutorial-grid" id="tutorialGrid">${families.map(tutorialFamilyCard).join('')}</div><div class="empty" id="tutorialSearchEmpty" hidden><h2>No recipe families match that search.</h2><p>Try a broader term, mechanic, node or clear the category filter.</p></div></section><section class="lesson-application-note"><span>⌘</span><div><strong>Three duplicate builds moved into the lesson that teaches them.</strong><p>Smooth Timeline Door now sits with <a href="#/lesson/timelines">Timelines & Lerp</a>, Save a Checkpoint Between Sessions with <a href="#/lesson/savegame">SaveGame</a>, and Struct + Data Table with <a href="#/lesson/data">Data Structures & Data Tables</a>. The practical builds are preserved and site-wide search still finds them directly.</p></div></section><section class="section chapter-build-library"><div class="section-head"><div><span class="eyebrow">BIGGER APPLICATION TASKS</span><h2>🎮 Chapter Builds</h2><p>Finish a learning path and a new guided mini-game/system unlocks. The tutorial can still be step-by-step — you must test it and prove it works.</p></div></div><div class="chapter-build-grid">${TOOLS.chapterBuilds.map(b=>chapterBuildCard(b)).join('')}</div></section>`;
 }
 
 function renderTutorialStep(step,i){
@@ -1284,7 +1284,7 @@ function renderNewsFeed(){
 }
 function newsPage(){
   return `<div class="page-head news-page-head"><div class="breadcrumb"><a href="#/">Home</a> / News & Industry</div><span class="eyebrow">LIVE GAMES • DEVELOPMENT • INDUSTRY • WATCH & LISTEN</span><h1>◉ News & Industry</h1><p class="muted">A student-friendly window into what is happening now. Headlines and short excerpts come from the original publishers; open the source for the full story, episode or video.</p><div class="news-live-row"><span class="live-dot"></span><strong id="newsLiveStatus">Loading live feeds…</strong><button class="link-button" data-action="news-refresh">Refresh</button></div></div>
-  <section class="news-toolbar"><div class="news-filter-row">${NEWS.categories.map(c=>`<button class="news-filter ${c.id==='all'?'active':''}" data-news-filter="${esc(c.id)}">${c.icon} ${esc(c.label)}</button>`).join('')}</div><div class="news-search-wrap"><span>⌕</span><input id="newsSearch" type="search" placeholder="Search the live feed…"><small id="newsResultCount">0 stories</small></div></section>
+  <section class="news-toolbar"><div class="news-filter-row">${NEWS.categories.map(c=>`<button class="news-filter ${c.id==='all'?'active':''}" data-news-filter="${esc(c.id)}">${c.icon} ${esc(c.label)}</button>`).join('')}</div><div class="news-search-wrap"><span>⌕</span><input id="newsSearch" type="search" enterkeyhint="search" placeholder="Search the live feed…"><small id="newsResultCount">0 stories</small></div></section>
   <section class="news-source-note"><div><b>Live sources</b><span>${NEWS.sources.map(s=>esc(s.name)).join(' • ')}</span></div><p>Save, vote and discussion features require a signed-in Learning Hub account. The Hub stores your interaction with a story, not a copy of the publisher's article.</p></section>
   <section id="newsFeed"><div class="news-loading"><span class="news-pulse"></span><div><strong>Checking the feeds…</strong><p>Pulling current stories from games and development sources.</p></div></div></section>`;
 }
@@ -1940,7 +1940,7 @@ function homeworkBoard(){
   return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Homework</div><span class="eyebrow">Play • Watch • Analyse • Design</span><h1>⌂ Homework Board</h1><p class="muted">Homework broadens the thinking around the mechanic rather than simply adding more node-copying.</p></div><div class="board-grid">${DATA.lessons.map(l=>`<div class="board-card"><span class="eyebrow">${esc(l.title)}</span><h3>${esc(l.homework.title)}</h3><p>${esc(l.homework.task)}</p><div class="button-row"><button class="button small" data-action="copy-homework" data-lesson="${l.id}">Copy for Teams</button><a class="button small ghost" href="#/lesson/${l.id}">View lesson</a></div></div>`).join('')}</div>`;
 }
 function glossary(){
-  return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Glossary</div><span class="eyebrow">${DATA.glossary.length} starter terms</span><h1>? UE5 Glossary</h1><p class="muted">Short definitions for terms students meet while building.</p></div><input id="glossarySearch" type="search" placeholder="Filter glossary…" style="width:min(430px,100%);background:#0b121b;border:1px solid var(--line);color:#fff;border-radius:9px;padding:10px;margin-bottom:12px"><div class="glossary-grid" id="glossaryGrid">${DATA.glossary.map(([t,d])=>`<div class="glossary-item" data-search="${esc((t+' '+d).toLowerCase())}"><strong>${esc(t)}</strong><p>${esc(d)}</p></div>`).join('')}</div>`;
+  return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Glossary</div><span class="eyebrow">${DATA.glossary.length} starter terms</span><h1>? UE5 Glossary</h1><p class="muted">Short definitions for terms students meet while building.</p></div><input id="glossarySearch" type="search" enterkeyhint="search" placeholder="Filter glossary…" style="width:min(430px,100%);background:#0b121b;border:1px solid var(--line);color:#fff;border-radius:9px;padding:10px;margin-bottom:12px"><div class="glossary-grid" id="glossaryGrid">${DATA.glossary.map(([t,d])=>`<div class="glossary-item" data-search="${esc((t+' '+d).toLowerCase())}"><strong>${esc(t)}</strong><p>${esc(d)}</p></div>`).join('')}</div><div class="empty" id="glossarySearchEmpty" hidden><h2>No glossary terms match.</h2><p>Try a shorter term or clear the search.</p></div>`;
 }
 function revisionQuestionBank(lessonIds=null){
   const selected=Array.isArray(lessonIds)&&lessonIds.length?new Set(lessonIds):null;
@@ -2395,26 +2395,55 @@ function bindRevisionBuilder(){
   form.querySelectorAll('[data-revision-path-toggle]').forEach(toggle=>toggle.addEventListener('change',()=>{lessons().filter(x=>x.dataset.path===toggle.dataset.revisionPathToggle).forEach(x=>x.checked=toggle.checked);update();}));
   lessons().forEach(x=>x.addEventListener('change',update));update();
 }
+function bindEmbeddedSearchInput(input,apply,onEnter){
+  if(!input)return;
+  const run=()=>apply();
+  input.addEventListener('input',run);
+  input.addEventListener('search',run);
+  input.addEventListener('change',run);
+  input.addEventListener('compositionend',run);
+  input.addEventListener('keydown',e=>{
+    if(e.key!=='Enter')return;
+    e.preventDefault();
+    run();
+    if(onEnter)requestAnimationFrame(onEnter);
+  });
+}
+function firstVisible(selector,root=document){
+  return $$(selector,root).find(x=>x.style.display!=='none'&&!x.hidden);
+}
 function bindTutorialLibrary(){
   const search=$('#tutorialSearch');if(!search)return;
   let category='all';
-  const cards=()=>$$('[data-tutorial-card]','#tutorialGrid');
-  const apply=()=>{const q=search.value.toLowerCase().trim(),tokens=q.split(/\s+/).filter(Boolean);let visible=0;cards().forEach(card=>{const hay=card.dataset.search||'',okText=!tokens.length||tokens.every(t=>hay.includes(t)),okCat=category==='all'||card.dataset.category===category;card.style.display=okText&&okCat?'':'none';if(okText&&okCat)visible++;});const out=$('#tutorialResultCount');if(out)out.textContent=`${visible} recipe famil${visible===1?'y':'ies'}`;};
-  search.addEventListener('input',apply);
-  $$('.tutorial-filter').forEach(btn=>btn.addEventListener('click',()=>{$$('.tutorial-filter').forEach(x=>x.classList.remove('active'));btn.classList.add('active');category=btn.dataset.tutorialFilter||'all';apply();}));
+  const grid=$('#tutorialGrid'),cards=()=>grid?$$('[data-tutorial-card]',grid):[];
+  const apply=()=>{
+    const q=search.value.toLowerCase().trim(),tokens=q.split(/\s+/).filter(Boolean);let visible=0;
+    cards().forEach(card=>{const hay=card.dataset.search||'',okText=!tokens.length||tokens.every(t=>hay.includes(t)),okCat=category==='all'||card.dataset.category===category;card.style.display=okText&&okCat?'':'none';if(okText&&okCat)visible++;});
+    const out=$('#tutorialResultCount');if(out)out.textContent=`${visible} recipe famil${visible===1?'y':'ies'}`;
+    const featured=$('#tutorialFeaturedSection');if(featured)featured.hidden=!!tokens.length||category!=='all';
+    const empty=$('#tutorialSearchEmpty');if(empty)empty.hidden=visible!==0;
+  };
+  bindEmbeddedSearchInput(search,apply,()=>firstVisible('[data-tutorial-card]',grid)?.scrollIntoView({block:'center',behavior:'smooth'}));
+  $$('[data-tutorial-filter]').forEach(btn=>btn.addEventListener('click',()=>{$$('[data-tutorial-filter]').forEach(x=>x.classList.remove('active'));btn.classList.add('active');category=btn.dataset.tutorialFilter||'all';apply();}));
 }
 function bindSnippetBank(){
   const search=$('#snippetSearch');if(!search)return;
   let category='all';
-  const cards=()=>$$('[data-snippet-card]','#snippetGrid');
-  const apply=()=>{const q=search.value.toLowerCase().trim();let visible=0;cards().forEach(card=>{const okText=!q||card.dataset.search.includes(q),okCat=category==='all'||card.dataset.category===category;card.style.display=okText&&okCat?'':'none';if(okText&&okCat)visible++;});const out=$('#snippetResultCount');if(out)out.textContent=visible;};
-  search.addEventListener('input',apply);
+  const grid=$('#snippetGrid'),cards=()=>grid?$$('[data-snippet-card]',grid):[];
+  const apply=()=>{
+    const q=search.value.toLowerCase().trim(),tokens=q.split(/\s+/).filter(Boolean);let visible=0;
+    cards().forEach(card=>{const hay=card.dataset.search||'',okText=!tokens.length||tokens.every(t=>hay.includes(t)),okCat=category==='all'||card.dataset.category===category;card.style.display=okText&&okCat?'':'none';if(okText&&okCat)visible++;});
+    const out=$('#snippetResultCount');if(out)out.textContent=visible;
+    const empty=$('#snippetSearchEmpty');if(empty)empty.hidden=visible!==0;
+  };
+  bindEmbeddedSearchInput(search,apply,()=>firstVisible('[data-snippet-card]',grid)?.scrollIntoView({block:'center',behavior:'smooth'}));
   $$('[data-snippet-filter]').forEach(btn=>btn.addEventListener('click',()=>{$$('[data-snippet-filter]').forEach(x=>x.classList.remove('active'));btn.classList.add('active');category=btn.dataset.snippetFilter||'all';apply();}));
 }
 function bindNewsPage(){
   const search=$('#newsSearch');if(!search)return;
   newsCategory='all';newsSearch='';
-  search.addEventListener('input',()=>{newsSearch=search.value.trim();renderNewsFeed()});
+  const apply=()=>{newsSearch=search.value.trim();renderNewsFeed()};
+  bindEmbeddedSearchInput(search,apply,()=>$('#newsFeed')?.scrollIntoView({block:'start',behavior:'smooth'}));
   $$('[data-news-filter]').forEach(btn=>btn.addEventListener('click',()=>{
     $$('[data-news-filter]').forEach(x=>x.classList.remove('active'));btn.classList.add('active');
     newsCategory=btn.dataset.newsFilter||'all';renderNewsFeed();
@@ -2422,10 +2451,14 @@ function bindNewsPage(){
 }
 function bindPageInputs(){
   const gs=$('#glossarySearch');
-  if(gs)gs.addEventListener('input',()=>{
-    const q=gs.value.toLowerCase().trim();
-    $$('.glossary-item').forEach(x=>x.style.display=x.dataset.search.includes(q)?'':'none');
-  });
+  if(gs){
+    const apply=()=>{
+      const q=gs.value.toLowerCase().trim(),tokens=q.split(/\s+/).filter(Boolean);let visible=0;
+      $$('.glossary-item').forEach(x=>{const hay=x.dataset.search||'',ok=!tokens.length||tokens.every(t=>hay.includes(t));x.style.display=ok?'':'none';if(ok)visible++;});
+      const empty=$('#glossarySearchEmpty');if(empty)empty.hidden=visible!==0;
+    };
+    bindEmbeddedSearchInput(gs,apply,()=>firstVisible('.glossary-item')?.scrollIntoView({block:'center',behavior:'smooth'}));
+  }
   bindRevisionBuilder();
   bindTutorialLibrary();
   bindSnippetBank();

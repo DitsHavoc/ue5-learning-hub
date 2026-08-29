@@ -1,3 +1,15 @@
+## v3.34.21 — Embedded Page Search Repair — 29 Aug 2026
+
+- Fixed embedded page search behaviour in Quick Tutorials and Epic Paste Assists.
+- Embedded search fields now respond to live input, the browser search event, change/composition completion and explicit Enter/Search-key submission.
+- Quick Tutorials now hides the unchanged Featured section while a query/category filter is active, so filtered results are immediately visible.
+- Added multi-word token matching to Epic Paste Assists and Glossary searches.
+- Added clear zero-result states for Quick Tutorials, Epic Paste Assists and Glossary.
+- News search now uses the same robust embedded-search event handling.
+- Added `enterkeyhint="search"` for mobile keyboards.
+- Top-bar global search remains unchanged from v3.34.19.
+- No Supabase/database migration.
+
 ## v3.34.20 — Unreal Learning Consolidation — 29 Aug 2026
 - Consolidated 47 equal top-level Programming Quick Tutorials into 26 recipe families while preserving all 47 practical builds and their existing IDs/completion state.
 - Moved Smooth Timeline Door, persistent checkpoint saving and Struct/Data Table builds into their matching Core Lessons instead of duplicating the same teaching as separate top-level recipes.
