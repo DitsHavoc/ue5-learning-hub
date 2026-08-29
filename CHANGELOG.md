@@ -1,3 +1,13 @@
+## v3.34.18 — Snippet Well Exhaustion Pass
+
+- Expanded the Snippet Bank from 31 to 39 targeted paste assists across 12 unique official Epic UE5.8 documentation pages.
+- Added a complete Anim Blueprint state-update assist plus Idle/Run/Jump transition-rule assists from Epic's current Adding Character Animation tutorial.
+- Added Epic's pasteable EnergyCheck macro as a reusable energy/stamina gate and bridged it to Sprint, Dash and Double Jump.
+- Added an Animation filter category and widened Snippet Bank search wording.
+- Cleaned four stale `foundations-build` pseudo-links from earlier level-paste cards so every remaining Quick Tutorial bridge points to a real tutorial ID.
+- Completed a 5.6–5.8 first-party exhaustion pass; remaining hits were C++/API snippets, prose/screenshots, duplicates or community-authored material rather than useful Blueprint clipboard graphs.
+- Teacher capture count remains 76. No Supabase changes.
+
 ## v3.34.17 — Blueprint Snippet Bank Deep Expansion
 
 - Expanded the Snippet Bank from 9 broad source cards to 31 targeted paste assists from 10 unique official Epic UE5.8 pages.

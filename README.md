@@ -1,3 +1,7 @@
+# Current release — v3.34.18
+
+The Blueprint Snippet Bank now contains **39 paste assists from 12 official Epic UE5.8 documentation pages**, including the new Character Animation state-machine graphs and the reusable EnergyCheck macro. The 5.6–5.8 first-party clipboard-source exhaustion pass is documented in `UE5-BLUEPRINT-SNIPPET-BANK-v3.34.18.md`. No database migration is required.
+
 # UE5 Learning Hub v3.32.2 — Class Detail Workspace
 
 ## Current release — v3.32.2

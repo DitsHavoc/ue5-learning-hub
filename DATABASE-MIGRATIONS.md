@@ -213,4 +213,7 @@ No database migration is required. The Snippet Bank is static curriculum/source 
 ## v3.34.17 — Blueprint Snippet Bank Deep Expansion
 
 No database migration required. This release changes static Snippet Bank data, rendering/search metadata and documentation only.
+## v3.34.18 — Snippet Well Exhaustion Pass
+
+No database migration required. This release changes static Snippet Bank data, client-side wording/version metadata and source-audit documentation only.
 

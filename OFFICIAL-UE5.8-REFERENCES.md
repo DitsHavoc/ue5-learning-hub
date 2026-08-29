@@ -187,3 +187,12 @@ The Snippet Bank now indexes 31 mechanic-level paste assists from the same offic
 - https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-10-complete-the-level-in-unreal-engine
 - https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-11-spawn-new-cubes-mechanic-in-unreal-engine
 
+## v3.34.18 — Final first-party Blueprint clipboard sources
+
+The exhaustion pass added the last two high-confidence current UE5.8 first-party source families found outside the Designer Track:
+
+- [Adding Character Animation](https://dev.epicgames.com/documentation/en-us/unreal-engine/adding-character-animation-in-unreal-engine) — genuine `context_graph` blocks for the Animation Blueprint Event Graph and Idle/Run/Jump transition rules.
+- [Making Macros](https://dev.epicgames.com/documentation/en-us/unreal-engine/making-macros-in-unreal-engine) — genuine Blueprint clipboard blocks for the reusable `EnergyCheck` macro.
+
+Repeated 5.6–5.8 searches across input, UMG, SaveGame, communication, interfaces, dispatchers, arrays/data, projectiles, AI/navigation, audio, Niagara and camera material produced no further high-confidence first-party Blueprint clipboard families. API/C++ `Copy Full Snippet` blocks and community-authored snippets are not classified as Blueprint paste assists.
+

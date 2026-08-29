@@ -1,5 +1,5 @@
 window.UE5_SNIPPET_DATA = {
-  "version": "3.34.17",
+  "version": "3.34.18",
   "buildDate": "29 Aug 2026",
   "policy": {
     "title": "Official Epic paste-assist bank",
@@ -36,6 +36,11 @@ window.UE5_SNIPPET_DATA = {
       "id": "flow",
       "title": "Game Flow",
       "icon": "▶"
+    },
+    {
+      "id": "animation",
+      "title": "Animation",
+      "icon": "◆"
     }
   ],
   "snippets": [
@@ -62,9 +67,7 @@ window.UE5_SNIPPET_DATA = {
         "A UE 5.8 project",
         "LevelPrototyping content used by the tutorial"
       ],
-      "relatedTutorials": [
-        "foundations-build"
-      ],
+      "relatedTutorials": [],
       "tags": [
         "blockout",
         "greybox",
@@ -670,8 +673,7 @@ window.UE5_SNIPPET_DATA = {
       ],
       "relatedTutorials": [
         "moving-platform",
-        "pressure-plate",
-        "foundations-build"
+        "pressure-plate"
       ],
       "tags": [
         "moving platform",
@@ -818,8 +820,7 @@ window.UE5_SNIPPET_DATA = {
       ],
       "relatedTutorials": [
         "damage-zone",
-        "pressure-plate",
-        "foundations-build"
+        "pressure-plate"
       ],
       "tags": [
         "trap room",
@@ -1117,7 +1118,6 @@ window.UE5_SNIPPET_DATA = {
         "BP_JumpPad for the follow-up stage"
       ],
       "relatedTutorials": [
-        "foundations-build",
         "win-lose-state"
       ],
       "tags": [
@@ -1165,6 +1165,292 @@ window.UE5_SNIPPET_DATA = {
         "max count",
         "spawner",
         "interface"
+      ]
+    },
+    {
+      "id": "epic-anim-eventgraph-state-flags",
+      "title": "Anim Blueprint: Update Running + Falling State",
+      "category": "animation",
+      "icon": "◆",
+      "sourceVersion": "5.8",
+      "sourceTitle": "Epic — Adding Character Animation",
+      "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/adding-character-animation-in-unreal-engine",
+      "sourceSection": "4.2 — Setting up your Event Graph",
+      "pasteMode": "Blueprint graph",
+      "snippetSummary": "1 complete Animation Blueprint Event Graph paste block",
+      "what": "Builds the animation update chain that gets the owning pawn, casts to Character, reads movement mode and velocity, then updates IsFalling and IsRunning every animation tick.",
+      "pasteInto": [
+        "Arms_AnimBP → EventGraph"
+      ],
+      "reconnect": [
+        "Create the IsRunning and IsFalling Boolean variables first.",
+        "Use an Animation Blueprint based on the matching character skeleton, as Epic sets up immediately before this section."
+      ],
+      "prerequisites": [
+        "Animation Blueprint",
+        "IsRunning Boolean",
+        "IsFalling Boolean",
+        "Character using CharacterMovement"
+      ],
+      "relatedTutorials": [],
+      "tags": [
+        "animation blueprint",
+        "anim bp",
+        "event graph",
+        "is running",
+        "is falling",
+        "velocity",
+        "movement mode",
+        "state machine"
+      ]
+    },
+    {
+      "id": "epic-anim-idle-run-transitions",
+      "title": "Anim State Machine: Idle ↔ Run Rules",
+      "category": "animation",
+      "icon": "↔",
+      "sourceVersion": "5.8",
+      "sourceTitle": "Epic — Adding Character Animation",
+      "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/adding-character-animation-in-unreal-engine",
+      "sourceSection": "4.4.1 — Add Idle to/from Run Transitions",
+      "pasteMode": "Blueprint graph",
+      "snippetSummary": "2 transition-rule Blueprint paste blocks",
+      "what": "Uses IsRunning directly for Idle → Run and NOT IsRunning for Run → Idle, giving students both directions of a basic locomotion transition.",
+      "pasteInto": [
+        "Arms_AnimBP → Idle to Run transition rule",
+        "Arms_AnimBP → Run to Idle transition rule"
+      ],
+      "reconnect": [
+        "Create the Idle and Run states and their transition arrows first.",
+        "Make sure IsRunning is being updated in the Animation Blueprint Event Graph."
+      ],
+      "prerequisites": [
+        "Arms State Machine",
+        "Idle state",
+        "Run state",
+        "IsRunning Boolean"
+      ],
+      "relatedTutorials": [],
+      "tags": [
+        "animation",
+        "state machine",
+        "idle",
+        "run",
+        "transition",
+        "isrunning",
+        "not boolean"
+      ]
+    },
+    {
+      "id": "epic-anim-idle-jumpstart",
+      "title": "Anim Transition: Idle → Jump Start",
+      "category": "animation",
+      "icon": "↗",
+      "sourceVersion": "5.8",
+      "sourceTitle": "Epic — Adding Character Animation",
+      "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/adding-character-animation-in-unreal-engine",
+      "sourceSection": "4.4.2 — Add Idle to Jump Start Transition",
+      "pasteMode": "Blueprint graph",
+      "snippetSummary": "1 transition-rule Blueprint paste block",
+      "what": "Uses IsFalling as the Can Enter Transition rule for moving from Idle into JumpStart.",
+      "pasteInto": [
+        "Arms_AnimBP → Idle to JumpStart transition rule"
+      ],
+      "reconnect": [
+        "Create the Idle and JumpStart states and transition arrow first.",
+        "Make sure IsFalling is being updated in the Animation Blueprint Event Graph."
+      ],
+      "prerequisites": [
+        "Arms State Machine",
+        "Idle state",
+        "JumpStart state",
+        "IsFalling Boolean"
+      ],
+      "relatedTutorials": [],
+      "tags": [
+        "animation",
+        "jump",
+        "idle",
+        "jump start",
+        "transition",
+        "isfalling"
+      ]
+    },
+    {
+      "id": "epic-anim-run-jumpstart",
+      "title": "Anim Transition: Run → Jump Start",
+      "category": "animation",
+      "icon": "↗",
+      "sourceVersion": "5.8",
+      "sourceTitle": "Epic — Adding Character Animation",
+      "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/adding-character-animation-in-unreal-engine",
+      "sourceSection": "4.4.3 — Add Run to Jump Start Transition",
+      "pasteMode": "Blueprint graph",
+      "snippetSummary": "1 transition-rule Blueprint paste block",
+      "what": "Uses IsFalling as the Can Enter Transition rule for moving from Run into JumpStart.",
+      "pasteInto": [
+        "Arms_AnimBP → Run to JumpStart transition rule"
+      ],
+      "reconnect": [
+        "Create the Run and JumpStart states and transition arrow first.",
+        "Make sure IsFalling is being updated in the Animation Blueprint Event Graph."
+      ],
+      "prerequisites": [
+        "Arms State Machine",
+        "Run state",
+        "JumpStart state",
+        "IsFalling Boolean"
+      ],
+      "relatedTutorials": [],
+      "tags": [
+        "animation",
+        "jump",
+        "run",
+        "jump start",
+        "transition",
+        "isfalling"
+      ]
+    },
+    {
+      "id": "epic-anim-jumpstart-loop",
+      "title": "Anim Transition: Jump Start → Jump Loop",
+      "category": "animation",
+      "icon": "⟳",
+      "sourceVersion": "5.8",
+      "sourceTitle": "Epic — Adding Character Animation",
+      "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/adding-character-animation-in-unreal-engine",
+      "sourceSection": "4.4.4 — Add Jump Start to Jump Loop Transition",
+      "pasteMode": "Blueprint graph",
+      "snippetSummary": "1 transition-rule Blueprint paste block",
+      "what": "Uses Time Remaining on the JumpStart animation and a ≤ 0.1 comparison to move cleanly into the looping airborne animation.",
+      "pasteInto": [
+        "Arms_AnimBP → JumpStart to JumpLoop transition rule"
+      ],
+      "reconnect": [
+        "The JumpStart state must use the FPP_JumpStart sequence so the Time Remaining getter can resolve correctly."
+      ],
+      "prerequisites": [
+        "JumpStart state",
+        "JumpLoop state",
+        "FPP_JumpStart sequence player"
+      ],
+      "relatedTutorials": [],
+      "tags": [
+        "animation",
+        "jump",
+        "time remaining",
+        "jump loop",
+        "transition",
+        "state machine"
+      ]
+    },
+    {
+      "id": "epic-anim-jumploop-end",
+      "title": "Anim Transition: Jump Loop → Jump End",
+      "category": "animation",
+      "icon": "↓",
+      "sourceVersion": "5.8",
+      "sourceTitle": "Epic — Adding Character Animation",
+      "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/adding-character-animation-in-unreal-engine",
+      "sourceSection": "4.4.5 — Add Jump Loop to Jump End Transition",
+      "pasteMode": "Blueprint graph",
+      "snippetSummary": "1 transition-rule Blueprint paste block",
+      "what": "Uses NOT IsFalling to detect landing and leave the airborne loop for the landing animation.",
+      "pasteInto": [
+        "Arms_AnimBP → JumpLoop to JumpEnd transition rule"
+      ],
+      "reconnect": [
+        "Make sure IsFalling is being updated in the Animation Blueprint Event Graph."
+      ],
+      "prerequisites": [
+        "JumpLoop state",
+        "JumpEnd state",
+        "IsFalling Boolean"
+      ],
+      "relatedTutorials": [],
+      "tags": [
+        "animation",
+        "jump loop",
+        "landing",
+        "jump end",
+        "not boolean",
+        "isfalling",
+        "transition"
+      ]
+    },
+    {
+      "id": "epic-anim-jumpend-idle",
+      "title": "Anim Transition: Jump End → Idle",
+      "category": "animation",
+      "icon": "⌛",
+      "sourceVersion": "5.8",
+      "sourceTitle": "Epic — Adding Character Animation",
+      "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/adding-character-animation-in-unreal-engine",
+      "sourceSection": "4.4.6 — Add Jump End to Idle Transition",
+      "pasteMode": "Blueprint graph",
+      "snippetSummary": "1 transition-rule Blueprint paste block",
+      "what": "Uses Time Remaining on the JumpEnd animation and a ≤ 0.1 comparison to return to Idle after the landing animation finishes.",
+      "pasteInto": [
+        "Arms_AnimBP → JumpEnd to Idle transition rule"
+      ],
+      "reconnect": [
+        "The JumpEnd state must use the FPP_JumpEnd sequence so the Time Remaining getter can resolve correctly."
+      ],
+      "prerequisites": [
+        "JumpEnd state",
+        "Idle state",
+        "FPP_JumpEnd sequence player"
+      ],
+      "relatedTutorials": [],
+      "tags": [
+        "animation",
+        "landing",
+        "jump end",
+        "idle",
+        "time remaining",
+        "transition"
+      ]
+    },
+    {
+      "id": "epic-energy-check-macro",
+      "title": "Reusable Energy / Stamina Gate Macro",
+      "category": "flow",
+      "icon": "⚡",
+      "sourceVersion": "5.8",
+      "sourceTitle": "Epic — Making Macros",
+      "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/making-macros-in-unreal-engine",
+      "sourceSection": "Creating Macros — EnergyCheck",
+      "pasteMode": "Blueprint graph",
+      "snippetSummary": "1 finished macro graph plus an earlier macro-tunnel/Branch paste block",
+      "what": "Creates a reusable EnergyCheck gate: test Energy, subtract a cost when available, route HasEnergy / NoEnergy exec outputs and give feedback. It is a clean base for stamina-limited jump, sprint or dash mechanics.",
+      "pasteInto": [
+        "BP_ThirdPersonCharacter → EnergyCheck Macro graph"
+      ],
+      "reconnect": [
+        "Create the Energy float and the BeginCheck / HasEnergy / NoEnergy exec pins first, following Epic’s setup.",
+        "Wire the EnergyCheck macro into the action you want to gate after pasting; Epic demonstrates it on Jump."
+      ],
+      "prerequisites": [
+        "Character Blueprint",
+        "Energy float",
+        "EnergyCheck Macro",
+        "BeginCheck / HasEnergy / NoEnergy exec pins"
+      ],
+      "relatedTutorials": [
+        "sprint",
+        "dash",
+        "double-jump"
+      ],
+      "tags": [
+        "macro",
+        "energy",
+        "stamina",
+        "resource",
+        "branch",
+        "jump",
+        "sprint",
+        "dash",
+        "reusable logic"
       ]
     }
   ]
