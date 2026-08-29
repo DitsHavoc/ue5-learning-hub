@@ -1,5 +1,5 @@
 window.UE5_DESIGN_DATA = {
-  "version": "3.39.1",
+  "version": "3.39.2",
   "buildDate": "29 Aug 2026",
   "modules": [
     {
@@ -321,8 +321,8 @@ window.UE5_DESIGN_DATA = {
         "Make wear tell you who used the space"
       ],
       "intro": "Environment art is design when every prop, surface and empty area has a reason to exist. The goal is not maximum detail. The goal is a place that feels used, readable and specific.",
-      "lookTitle": "How Firewatch, Stray and The Long Dark make places feel lived in",
-      "lookIntro": "Environment art is doing a job here: controlling exploration, selling a place from a cat’s point of view, or making sparse survival spaces meaningful. Look for the design logic behind the props and empty space, not just the art style.",
+      "lookTitle": "How Dead Space, The Last of Us Part II and Control make environment art carry story",
+      "lookIntro": "Three environment-art jobs: make a working place feel used, make personal spaces reveal character, and establish a visual language that can be broken for effect. Study props, signage, wear, repetition and empty space — not just whether the screenshot looks impressive.",
       "referenceImages": [
         {
           "src": "https://drop-assets.ea.com/images/5Cr5lTNDijF2pzIopPZduH/2009d571be74052edf094ce0a992253f/ds-gp-hallway-04-no-watermark.jpg",
@@ -483,40 +483,40 @@ window.UE5_DESIGN_DATA = {
       "engineUrl": "https://dev.epicgames.com/documentation/unreal-engine/modeling-mode-in-unreal-engine?lang=en-US",
       "caseStudies": [
         {
-          "game": "Firewatch",
-          "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/383870/589f62a8f5867c5d4966bb857e736928b7d208b2/page_bg_raw.jpg?t=1755789801",
-          "sourceUrl": "https://www.gamedeveloper.com/design/video-designing-for-exploration-and-choice-in-i-firewatch-i-",
-          "sourceTitle": "Game Developer — Designing for Exploration and Choice in Firewatch",
-          "lens": "Exploration, gating + world structure",
-          "notice": "Campo Santo designed a hand-built wilderness around exploration without combat. The team had to control goals, gating and encounter structure while still making the space feel like somewhere the player chose to explore rather than a corridor disguised as a forest.",
-          "steal": "Good exploration design gives the player freedom inside a deliberately structured world. Gates, landmarks and story triggers should make sense in the fiction instead of feeling like invisible level-designer walls.",
-          "task": "Open the Firewatch GDC write-up. Sketch a five-node exploration map with one main goal, one optional detour and one believable gate. Label what information makes the player want to take each route.",
-          "sourceType": "GDC DESIGN TALK • CAMPO SANTO",
-          "sourceWhy": "Jake Rodkin and Nels Anderson discuss Firewatch’s world structure, goals, gating and encounter design without relying on combat."
+          "game": "Dead Space",
+          "image": "https://drop-assets.ea.com/images/5Cr5lTNDijF2pzIopPZduH/2009d571be74052edf094ce0a992253f/ds-gp-hallway-04-no-watermark.jpg",
+          "sourceUrl": "https://www.frostbite.com/ea-studios/motive/news/inside-dead-space-3-aboard-the-ishimura",
+          "sourceTitle": "EA / Motive — Inside Dead Space #3: Aboard the Ishimura",
+          "lens": "Functional dressing + a lived-in workplace",
+          "notice": "Motive treated the Ishimura as a working ship before treating it as a horror set. A simple customs area is dressed with safety warnings, declarations, scanning stations, branding and practical equipment so the player can understand what the space was for before the disaster. Those ordinary details make the later damage and horror more believable.",
+          "steal": "Dress from function first. Decide what job happened in the room, who used it and what routine took place there. Then add the props, signage, wear and damage that would logically result from that use.",
+          "task": "Read Motive’s Aboard the Ishimura article. Take one plain room or corridor in your project and write its normal job in one sentence. Add exactly five dressing choices that prove that job: one piece of equipment, one sign/label, one storage choice, one wear clue and one object left by a person. Annotate a screenshot to explain each choice.",
+          "sourceType": "DEVELOPER ARTICLE • MOTIVE / EA",
+          "sourceWhy": "Motive’s art and level-design team explain how practical room functions, signage, branding and small story details were used to make the Ishimura feel like a real lived-in workplace."
         },
         {
-          "game": "Stray",
-          "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1332010/99b9936f7a078d8f2f23f232ab46e343641c42c3/page_bg_raw.jpg?t=1785424330",
-          "sourceUrl": "https://www.unrealengine.com/developer-interviews/28-people-and-two-cats-inside-the-making-of-stray",
-          "sourceTitle": "Unreal Engine — 28 people and two cats: Inside the making of Stray",
-          "lens": "Environment design from a cat’s scale",
-          "notice": "BlueTwelve began with Kowloon Walled City references and realised the dense vertical environment became more interesting when explored as a cat. That decision changed level design: routes use pipes, awnings, windows and furniture, and the team iterated for years on movement that lets the cat climb quickly without turning every jump into a precision-platforming failure.",
-          "steal": "The player character changes what counts as a path. Build the environment around that body, camera height and movement vocabulary rather than designing a human route and shrinking the protagonist into it.",
-          "task": "Read the BlueTwelve interview. Find one Stray screenshot and mark three routes a human character would ignore but a cat can use. For each, name the environmental prop or architectural feature that makes the route believable.",
-          "sourceType": "DEVELOPER INTERVIEW • BLUETWELVE STUDIO",
-          "sourceWhy": "The creative/design director explains how Kowloon references, the cat protagonist and production constraints directly changed Stray’s world and level design."
+          "game": "The Last of Us Part II",
+          "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2531310/page_bg_raw.jpg",
+          "sourceUrl": "https://80.lv/articles/how-naughty-dog-created-the-immersive-world-of-the-last-of-us-part-ii",
+          "sourceTitle": "80 Level — How Naughty Dog Created the Immersive World of The Last of Us Part II",
+          "lens": "Character storytelling through rooms + props",
+          "notice": "Naughty Dog’s environment artists describe story-heavy spaces as places where decoration has to make sense for the people who lived there. Joel’s house is built from specific evidence about him — guitars, vinyl, wood carvings and his background — while later empty spaces use absence itself to reflect what has changed.",
+          "steal": "A personal space should reveal a person, activity or event. Do not use generic “post-apocalypse clutter” when a smaller number of specific objects can tell the player who lived here and what mattered to them.",
+          "task": "Read the section on story-driven environments and Joel’s house. Design a room for a character without showing the character. Use a maximum of seven props. For each prop, write one thing it tells the player about the person, their routine or what changed. Delete any prop whose explanation is only “it makes the room look detailed”.",
+          "sourceType": "DEVELOPER INTERVIEW • NAUGHTY DOG / 80 LEVEL",
+          "sourceWhy": "Naughty Dog environment artists explain how character history, story beats, prop libraries and deliberate environmental storytelling shaped spaces such as Joel’s house and Seattle."
         },
         {
-          "game": "The Long Dark",
-          "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/305620/page_bg_raw.jpg?t=1785448287",
-          "sourceUrl": "https://kotaku.com/inside-the-long-dark-1840052958",
-          "sourceTitle": "Kotaku — Inside The Long Dark",
-          "lens": "Empty space, time + survival tension",
-          "notice": "Raphael van Lierop describes The Long Dark as an exploration game where wilderness and the player’s own decisions are the main opposition. Long quiet journeys make a changing wind, a shelter, a wolf or a single useful item matter because time and movement are always costing the player something.",
-          "steal": "Do not fill survival spaces just to keep the player busy. Quiet distance creates value when weather, resources and shelter turn travel time into a decision.",
-          "task": "Read Kotaku’s interview with Hinterland. Design a short route between two shelters and mark where the player must decide whether to continue, turn back or spend a resource. Explain what makes the empty travel time tense rather than pointless.",
-          "sourceType": "DEVELOPER INTERVIEW • KOTAKU",
-          "sourceWhy": "Hinterland founder Raphael van Lierop explains why movement, time, quiet and bad decisions are central antagonists in the game."
+          "game": "Control",
+          "image": "https://cdn.prod.website-files.com/64630b03551142e3347ae3da/6492c4ab2445934a3c76c839_control_pm_det_005.webp",
+          "sourceUrl": "https://gameinformer.com/2019/03/15/uncovering-the-mysteries-of-controls-the-oldest-house",
+          "sourceTitle": "Game Informer — Uncovering The Mysteries Of Control’s The Oldest House",
+          "lens": "Repetition, architecture + the power of the exception",
+          "notice": "The Oldest House establishes a strict baseline of Brutalist concrete, bureaucracy and functional office design. That clean, heavy visual language gives Remedy something strong to disrupt: when the Hiss bends spaces, floods an area with red or breaks the building’s normal rules, the change reads immediately because the player already understands what “normal” looks like.",
+          "steal": "Repetition is useful when it creates a rule the player can learn. Establish a small family of shapes, materials, signs and prop types first; then make the important story beat or supernatural change break that rule on purpose.",
+          "task": "Read Game Informer’s Oldest House feature. Make two quick versions of the same small office space: NORMAL and DISRUPTED. In NORMAL, repeat three visual rules such as concrete form, signage, desk layout or colour. In DISRUPTED, break only one of those rules. Ask a classmate which change they notice first and why.",
+          "sourceType": "REMEDY INTERVIEW • GAME INFORMER",
+          "sourceWhy": "Game Informer’s visit to Remedy explains the Oldest House’s Brutalist baseline, bureaucratic identity and the contrast created when supernatural forces transform it."
         }
       ],
       "researchMissions": [
@@ -634,8 +634,8 @@ window.UE5_DESIGN_DATA = {
         "Judge materials in useful lighting"
       ],
       "intro": "Material design is visual communication. Players should read metal as metal, wet stone as wet stone and worn paint as worn paint before they inspect the node graph. Build simple physically sensible surfaces first, then add controlled variation.",
-      "lookTitle": "How Death Stranding, Teardown and The Talos Principle 2 make surfaces communicate",
-      "lookIntro": "These games use surfaces for different reasons: terrain tells you how travel will feel, breakable materials change the route you can create, and material systems have to stay readable and affordable across huge environments.",
+      "lookTitle": "How Horizon Forbidden West, Cyberpunk 2077 and God of War Ragnarök build materials for real production",
+      "lookIntro": "Three material jobs: create a reusable texturing system for complex machines, scale a shared material library across an enormous city, and make physically based surfaces still carry a strong art style. Look for what is reused, what stays unique and which material decisions actually serve the game.",
       "referenceImages": [
         {
           "src": "https://www.kojimaproductions.jp/sites/default/files/2021-08/gr.DeathStranding_GameScreenshot6.jpg",
@@ -802,40 +802,40 @@ window.UE5_DESIGN_DATA = {
       "engineUrl": "https://dev.epicgames.com/documentation/unreal-engine/guidelines-for-optimizing-rendering-for-real-time-in-unreal-engine",
       "caseStudies": [
         {
-          "game": "Death Stranding",
-          "image": "https://www.kojimaproductions.jp/sites/default/files/2021-08/gr.DeathStranding_GameScreenshot6.jpg",
-          "sourceUrl": "https://gameinformer.com/interview/2019/09/16/hideo-kojima-answers-our-questions-about-death-stranding",
-          "sourceTitle": "Game Informer — Hideo Kojima Answers Our Questions About Death Stranding",
-          "lens": "Terrain as the core traversal mechanic",
-          "notice": "Hideo Kojima deliberately made walking, carrying weight, rivers and route choice into the game rather than abstracting them away. The terrain is not scenery between objectives: slope, footing and obstacles determine what equipment to carry and which line across the landscape is sensible.",
-          "steal": "If traversal is important, surface and terrain differences must predict cost before the player commits. A steep wet slope should not read the same as a safe flat path.",
-          "task": "Read Kojima’s interview, then choose one Death Stranding landscape screenshot. Draw two possible routes to the same destination and label the terrain feature, equipment choice and risk that makes each route different.",
-          "sourceType": "CREATOR INTERVIEW • GAME INFORMER",
-          "sourceWhy": "Kojima explains why carrying limits, rivers, open terrain and route selection were intentionally made part of the core play experience."
+          "game": "Horizon Forbidden West",
+          "image": "https://www.guerrilla-games.com/media/Horizon_FW_Artblast2560x854.png",
+          "sourceUrl": "https://www.gdcvault.com/play/1029327/Taking-a-Procedural-Approach-to",
+          "sourceTitle": "GDC Vault — Taking a Procedural Approach to Texturing the Machines of Horizon Forbidden West",
+          "lens": "Procedural texturing for a huge machine family",
+          "notice": "Guerrilla’s machine team needed to texture increasingly complex assets without rebuilding the same material work every time. Tom Delboo’s GDC talk explains a procedural texturing and shading workflow designed to stay flexible enough for Game Design, Art Direction and Production while cutting months from the process.",
+          "steal": "Reuse rules, not finished-looking noise. Build a material language for repeated surface families, then spend unique masks and authored detail only where an asset needs identity, damage or gameplay information.",
+          "task": "Open the GDC session overview, then choose one Horizon machine image. Identify three surface families that could be procedural or shared and two areas that deserve unique treatment. For each family, list the parameters you would expose in a reusable material or Substance setup.",
+          "sourceType": "GDC TALK • GUERRILLA",
+          "sourceWhy": "Guerrilla’s Senior Technical Asset Artist explains the procedural workflow built specifically to speed up texturing and shading for Horizon Forbidden West’s complex machines."
         },
         {
-          "game": "Teardown",
-          "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1167630/page_bg_raw.jpg?t=1781525152",
-          "sourceUrl": "https://www.gamedeveloper.com/design/combining-bombastic-heists-with-a-fully-destructible-voxel-world-in-i-teardown-i-",
-          "sourceTitle": "Game Developer — Combining bombastic heists with a fully destructible voxel world in Teardown",
-          "lens": "Material destruction as a gameplay rule",
-          "notice": "Dennis Gustafsson says the destruction technology came first, but he did not want it to remain a visual effect. Teardown’s heist structure makes breakable walls, floors, vehicles and materials part of route planning: destruction changes the solution the player can invent.",
-          "steal": "A reactive material is useful only when the player can use its behaviour to make a decision. Destruction should change planning, access or timing rather than simply produce debris.",
-          "task": "Read the Tuxedo Labs interview. Draw three targets in a small building, then design a route twice: once with normal doors only and once with breakable walls. Mark exactly where material behaviour changes your plan.",
-          "sourceType": "DEVELOPER INTERVIEW • GAME DEVELOPER",
-          "sourceWhy": "Teardown creator Dennis Gustafsson explains why destruction had to become a problem-solving mechanic instead of a visual gimmick."
+          "game": "Cyberpunk 2077",
+          "image": "https://www.adobe.com/products/substance3d/magazine/media_1c6226a7bb690560667a71dd096d15fa67b612a39.jpg?format=jpg&optimize=medium&width=750",
+          "sourceUrl": "https://www.adobe.com/products/substance3d/magazine/cyberpunk-2077-a-world-full-of-substance.html",
+          "sourceTitle": "Adobe Substance 3D — Cyberpunk 2077: A World Full of Substance",
+          "lens": "A shared material library at city scale",
+          "notice": "CD PROJEKT RED could not afford a unique full texture set for every object in dense Night City. The team built a library of common tileable materials and blended them at runtime using much smaller unique masks. That gave thousands of assets high surface detail while reducing storage and making the art pipeline faster to iterate.",
+          "steal": "Do not duplicate a complete material every time an asset changes. Share the expensive/common information, then use compact masks and parameters for the part that actually needs to be unique.",
+          "task": "Read the section explaining CD PROJEKT RED’s multilayer material system. Pick one Night City street image. List four surfaces that could come from a shared material library and two details that need a unique mask. Sketch a simple parent-material plan showing what is shared and what varies per asset.",
+          "sourceType": "TECH ART INTERVIEW • CD PROJEKT RED / ADOBE",
+          "sourceWhy": "CD PROJEKT RED’s Technical Art Director explains why Night City required a layered material library, how shared materials reduced texture data and how Substance tools fitted into the pipeline."
         },
         {
-          "game": "The Talos Principle 2",
-          "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/835960/page_bg_raw.jpg?t=1775138468",
-          "sourceUrl": "https://www.unrealengine.com/developer-interviews/inside-croteam-s-transition-from-in-house-tech-to-ue5-for-the-talos-principle-2",
-          "sourceTitle": "Unreal Engine — Inside Croteam’s transition from in-house tech to UE5 for The Talos Principle 2",
-          "lens": "Large environments + disciplined material systems",
-          "notice": "Croteam moved from its own engine to UE5 partly so the sequel could support much larger, more varied spaces. Its environment pipeline relies heavily on Nanite and World Partition, so surface detail, foliage and texture choices have to support the scale of the world without turning every material into an expensive one-off.",
-          "steal": "A strong material family is a production system, not a folder of unrelated textures. Decide which information really needs a texture and which can come from shared parameters, geometry or lighting.",
-          "task": "Read the Croteam interview. Choose one Talos 2 environment and list three repeating surface families you would build as reusable materials. For each, name what must vary and what should stay shared.",
-          "sourceType": "DEVELOPER INTERVIEW • CROTEAM",
-          "sourceWhy": "Croteam explains how Nanite, World Partition and a much larger world changed the production approach for The Talos Principle 2."
+          "game": "God of War Ragnarök",
+          "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2322010/page_bg_raw.jpg",
+          "sourceUrl": "https://80.lv/articles/creating-buildings-materials-for-god-of-war-ragnar-k-s-asgard",
+          "sourceTitle": "80 Level — Creating Buildings & Materials for God of War Ragnarök’s Asgard",
+          "lens": "Making reusable materials carry an art style",
+          "notice": "Sony Santa Monica environment artist Jon Arellano describes building Asgard with reusable kits while keeping the surfaces sculptural and specific to God of War. He created shapes in ZBrush, converted them to height information for Substance Designer, and sometimes turned material patterns back into geometry so the tiling surfaces and the model language reinforced each other.",
+          "steal": "Physically based does not mean generic. A reusable material can still carry shape language, sculpted motifs and authored wear — the trick is deciding which style information belongs in the shared material and which belongs in unique geometry or dressing.",
+          "task": "Read Arellano’s material-workflow section. Choose one Asgard wall, floor or building surface. Break it into four jobs: base material, sculpted motif, roughness/wear and reusable tiling. Then plan how the same material could support three different modular pieces without making them look copied and pasted.",
+          "sourceType": "ENVIRONMENT ARTIST INTERVIEW • SONY SANTA MONICA / 80 LEVEL",
+          "sourceWhy": "A God of War Ragnarök environment artist explains the actual ZBrush-to-Substance material workflow used on Asgard and how reusable kits, sculpted forms and materials were developed together."
         }
       ],
       "researchMissions": [
@@ -908,15 +908,14 @@ window.UE5_DESIGN_DATA = {
       },
       "industryDeepDives": [
         {
-          "type": "video",
-          "title": "How Supergiant Creates Art & Music for Hades",
-          "source": "Noclip • Supergiant Games",
-          "url": "https://www.youtube.com/watch?v=oQPk9J7spw0",
-          "youtubeId": "oQPk9J7spw0",
-          "duration": "29 min",
-          "focus": "Art direction under constant iteration — how a strong style survives production changes rather than depending on one perfect asset.",
-          "watchFor": "Look for decisions that create consistency across many different pieces of content.",
-          "task": "Define three surface rules for your own project — e.g. roughness range, wear language, colour family — and apply them to three unrelated assets."
+          "type": "interview",
+          "title": "CONTROL — Environment and Material Creation",
+          "source": "Remedy • Miro Vesterinen / Substance",
+          "url": "https://mirbobo.artstation.com/projects/KalENr?album_id=1725915",
+          "duration": "Talk / breakdown",
+          "focus": "Tiling materials, procedural variation and how Control built a huge amount of Brutalist concrete without every surface becoming an obvious repeated texture.",
+          "watchFor": "Notice how material systems, lighting and architecture work together. A technically reusable material still needs enough controlled variation to avoid looking tiled or artificial.",
+          "task": "Choose one large repeated surface in your project. Define the shared base material, then list three controlled sources of variation — for example cracks, roughness breakup, staining or edge damage — that can stop repetition without creating a new material for every wall."
         },
         {
           "type": "interview",

@@ -1,5 +1,5 @@
 window.UE5_COURSE_DATA = {
-  "version": "3.35.0",
+  "version": "3.39.2",
   "buildDate": "29 Aug 2026",
   "paths": [
     {
@@ -183,7 +183,7 @@ window.UE5_COURSE_DATA = {
       },
       "deepDive": {
         "find": {
-          "title": "Where do I find/use Know Your Unreal Editor?",
+          "title": "Where to find it in Unreal",
           "steps": [
             "The Viewport fills the centre of the main Level Editor.",
             "Open the Content Drawer with the button at the bottom of the Editor or its shortcut.",
@@ -634,7 +634,7 @@ window.UE5_COURSE_DATA = {
       },
       "deepDive": {
         "find": {
-          "title": "Where do I find/use Actors & Components?",
+          "title": "Where to find it in Unreal",
           "steps": [
             "Create or open an Actor Blueprint.",
             "Use the Components panel in the Blueprint Editor to add Components.",
@@ -1125,7 +1125,7 @@ window.UE5_COURSE_DATA = {
       },
       "deepDive": {
         "find": {
-          "title": "Where do I find/use Blueprint Classes & Instances?",
+          "title": "Where to find it in Unreal",
           "steps": [
             "In the Content Drawer, choose Add/New → Blueprint Class.",
             "Pick the parent class that best matches the object you are creating.",
@@ -1568,7 +1568,7 @@ window.UE5_COURSE_DATA = {
       },
       "deepDive": {
         "find": {
-          "title": "Where do I find/use Events & Execution?",
+          "title": "Where to find it in Unreal",
           "steps": [
             "Open any Blueprint Event Graph.",
             "Right-click and search for events available to that Blueprint.",
@@ -2014,7 +2014,7 @@ window.UE5_COURSE_DATA = {
       },
       "deepDive": {
         "find": {
-          "title": "Where do I find/use Variables & Data Types?",
+          "title": "Where to find it in Unreal",
           "steps": [
             "Open a Blueprint and use the Variables section of My Blueprint.",
             "Click + to create a variable and name it before choosing its type.",
@@ -2886,7 +2886,7 @@ window.UE5_COURSE_DATA = {
       },
       "deepDive": {
         "find": {
-          "title": "Where do I find/use Functions & Macros?",
+          "title": "Where to find it in Unreal",
           "steps": [
             "In My Blueprint, click + beside Functions or use the add menu.",
             "Name the Function after one clear job.",
@@ -3326,7 +3326,7 @@ window.UE5_COURSE_DATA = {
       },
       "deepDive": {
         "find": {
-          "title": "Where do I find/use Gameplay Framework?",
+          "title": "Where to find it in Unreal",
           "steps": [
             "Open the Third Person Character to inspect a Character/Pawn in context.",
             "Open Project Settings/Maps & Modes or the active GameMode settings to see default framework classes.",
@@ -3759,7 +3759,7 @@ window.UE5_COURSE_DATA = {
       },
       "deepDive": {
         "find": {
-          "title": "Where do I find/use References & Casting?",
+          "title": "Where to find it in Unreal",
           "steps": [
             "References commonly come from event outputs such as Other Actor/Hit Actor, Spawn Actor return values, stored variables or framework getter nodes.",
             "Drag from an existing reference pin and search for Cast To <Class> when you genuinely need a specific type check.",
@@ -4193,7 +4193,7 @@ window.UE5_COURSE_DATA = {
       },
       "deepDive": {
         "find": {
-          "title": "Where do I find/use Interfaces & Event Dispatchers?",
+          "title": "Where to find it in Unreal",
           "steps": [
             "Create a Blueprint Interface from the Content Drawer and add function/message signatures in it.",
             "In an implementing Blueprint, add the Interface under Class Settings → Implemented Interfaces.",
@@ -4672,7 +4672,7 @@ window.UE5_COURSE_DATA = {
       },
       "deepDive": {
         "find": {
-          "title": "Where do I find/use Collision & Overlaps?",
+          "title": "Where to find it in Unreal",
           "steps": [
             "Select an Actor/Component and inspect Collision settings in Details.",
             "Use primitive Collision Components such as Box, Sphere or Capsule for deliberate gameplay volumes.",
@@ -5112,7 +5112,7 @@ window.UE5_COURSE_DATA = {
       },
       "deepDive": {
         "find": {
-          "title": "Where do I find/use Line Traces & Interaction Detection?",
+          "title": "Where to find it in Unreal",
           "steps": [
             "In a Blueprint graph, search for Line Trace By Channel.",
             "Get the camera/world Start location and a forward direction.",
@@ -5562,7 +5562,7 @@ window.UE5_COURSE_DATA = {
       },
       "deepDive": {
         "find": {
-          "title": "Where do I find/use Timelines & Smooth Doors?",
+          "title": "Where to find it in Unreal",
           "steps": [
             "Inside an Actor Blueprint Event Graph, right-click and add a Timeline.",
             "Double-click the Timeline node to edit tracks and keyframes.",
@@ -6009,7 +6009,7 @@ window.UE5_COURSE_DATA = {
       },
       "deepDive": {
         "find": {
-          "title": "Where do I find/use UMG & Gameplay UI?",
+          "title": "Where to find it in Unreal",
           "steps": [
             "Create a Widget Blueprint from the Content Drawer/User Interface menu.",
             "Use the Designer tab to place and anchor UI elements.",
@@ -6456,7 +6456,7 @@ window.UE5_COURSE_DATA = {
       },
       "deepDive": {
         "find": {
-          "title": "Where do I find/use SaveGame & Persistent Progress?",
+          "title": "Where to find it in Unreal",
           "steps": [
             "Create a Blueprint Class derived from SaveGame.",
             "Add only data that genuinely needs disk persistence.",
@@ -6864,7 +6864,7 @@ window.UE5_COURSE_DATA = {
       },
       "deepDive": {
         "find": {
-          "title": "Where do I find/use Arrays, Maps, Enums, Structs & Data Tables?",
+          "title": "Where to find it in Unreal",
           "steps": [
             "Create Arrays/Sets/Maps by changing a variable's Container Type in Details.",
             "Create an Enumeration asset from the Content Drawer for named finite choices.",
@@ -7281,7 +7281,7 @@ window.UE5_COURSE_DATA = {
       },
       "deepDive": {
         "find": {
-          "title": "Where do I find/use AI: NavMesh, Blackboard & Behaviour Trees?",
+          "title": "Where to find it in Unreal",
           "steps": [
             "Place a Nav Mesh Bounds Volume around walkable AI space and press P to visualise navigation.",
             "Create/inspect an AIController Class and assign it to the AI Pawn/Character as appropriate.",
@@ -7745,7 +7745,7 @@ window.UE5_COURSE_DATA = {
       },
       "deepDive": {
         "find": {
-          "title": "Where do I find/use Animation Blueprints & State Machines?",
+          "title": "Where to find it in Unreal",
           "steps": [
             "Create/open an Animation Blueprint assigned to a Skeletal Mesh.",
             "Use the EventGraph to gather gameplay/movement data.",
@@ -8185,7 +8185,7 @@ window.UE5_COURSE_DATA = {
       },
       "deepDive": {
         "find": {
-          "title": "Where do I find/use Blueprint Responsibility?",
+          "title": "Where to find it in Unreal",
           "steps": [
             "There is no single 'responsibility' node; inspect which Blueprint owns each variable and behaviour.",
             "Use Find References and graph navigation to locate where state is changed.",
@@ -8547,7 +8547,7 @@ window.UE5_COURSE_DATA = {
       },
       "deepDive": {
         "find": {
-          "title": "Where do I find/use Stop Blueprint Spaghetti?",
+          "title": "Where to find it in Unreal",
           "steps": [
             "Use Functions, Macros and Collapse Nodes from graph context menus/My Blueprint when abstraction is justified.",
             "Use comment boxes to label intent.",

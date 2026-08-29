@@ -1,3 +1,9 @@
+
+## v3.39.2 — Editorial Correction Pass
+- Corrected Environment Art and Materials primary case studies to teach the actual discipline.
+- Replaced generic/development-history copy with direct student-facing instructions.
+- Cleaned project/assessment wording and Unreal deep-dive headings.
+- No database change.
 ## v3.39.1 — Designer Evidence Pass — 29 Aug 2026
 - Rewrote all 24 primary Designer Studio LOOK case studies around a named, game-specific design factor rather than generic observations.
 - Replaced the generic “Three examples. Three different design jobs.” section heading with a discipline-specific comparison naming the three games and the design question being studied.

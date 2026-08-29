@@ -1,6 +1,10 @@
-# Current release — v3.39.1
+# Current release — v3.39.2
 
-**Designer Evidence Pass.** All 24 primary LOOK case studies now name a specific game-design factor, explain the concrete shipped-game decision, turn the student task into analysis of that exact decision, and link to a developer interview, GDC talk, studio article or strong games-media feature rather than a store page. The generic “Three examples. Three different design jobs.” heading is gone; every discipline now tells students exactly what its three games are being compared for. No completion IDs, XP rules or database schema changed. See `RELEASE-NOTES-v3.39.1.md` and `DESIGNER-CASE-STUDY-QA-v3.39.1.md`.
+**Editorial Correction Pass.** The Hub copy was audited for student clarity without rewriting content that was already working. Environment Art & Set Dressing and Materials & Surfaces now use six discipline-specific primary case studies backed by developer/GDC/interview evidence; generic development-history copy has been removed from live student pages; Core Unreal deep-dive headings and project/assessment wording have been cleaned up. No IDs, XP rules or database schema changed. See `RELEASE-NOTES-v3.39.2.md` and `EDITORIAL-CORRECTION-QA-v3.39.2.md`.
+
+## Previous release — v3.39.1
+
+**Designer Evidence Pass.** All 24 primary LOOK case studies name a specific game-design factor, explain the concrete shipped-game decision, turn the student task into analysis of that exact decision, and link to a developer interview, GDC talk, studio article or strong games-media feature rather than a store page. No completion IDs, XP rules or database schema changed. See `RELEASE-NOTES-v3.39.1.md` and `DESIGNER-CASE-STUDY-QA-v3.39.1.md`.
 
 ## Previous release — v3.39.0
 

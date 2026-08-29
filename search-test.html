@@ -11,7 +11,7 @@
   <link rel="icon" type="image/png" sizes="16x16" href="assets/brand/favicon-16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="assets/brand/apple-touch-icon.png">
   <link rel="manifest" href="site.webmanifest">
-  <link rel="stylesheet" href="styles.css?v=3.31.0">
+  <link rel="stylesheet" href="styles.css?v=3.34.18">
 </head>
 <body>
   <div id="bootError" class="boot-error" hidden>
@@ -28,30 +28,26 @@
 
       <nav class="nav" id="mainNav">
         <a href="#/" data-route="home">⌂ <span>Home</span></a>
+        <a href="#/classes" data-route="classes" id="classesNav" class="classes-nav" hidden>🏫 <span id="classesNavLabel">Classes</span><small id="classesNavSub">Students • codes • progress</small></a>
         <div class="nav-heading">Main areas</div>
-        <a href="#/programming" data-route="programming" class="programming-nav">⌘ <span>Programming</span><small>Blueprints • systems • logic</small></a>
+        <a href="#/programming" data-route="programming" class="programming-nav">⌘ <span>Unreal Learning</span><small>building blocks • systems • tutorials</small></a>
         <a href="#/design" data-route="design" class="design-nav">✦ <span>Designer Studio</span><small>Levels • art • lighting • audio</small></a>
         <a href="#/modeling" data-route="modeling" class="modeling-nav">⬡ <span>3D Modelling Studio</span><small>3ds Max • UVs • game assets</small></a>
         <a href="#/sculpt" data-route="sculpt" class="sculpt-nav">🗿 <span>Sculpt Playground</span><small>Digital clay • form • silhouette</small></a>
         <a href="#/projects" data-route="projects" class="project-nav">▣ <span>Projects</span><small>Solo • group • development logs</small></a>
         <a href="#/news" data-route="news" class="news-nav">◉ <span>News & Industry</span><small>Live stories • podcasts • trailers</small></a>
 
-        <div class="nav-heading">Programming paths</div>
-        <a href="#/path/foundations" data-route="foundations">◫ <span>Unreal Foundations</span></a>
-        <a href="#/path/blueprints" data-route="blueprints">◇ <span>Blueprint Core</span></a>
-        <a href="#/path/framework" data-route="framework">↔ <span>Framework & Communication</span></a>
-        <a href="#/path/gameplay" data-route="gameplay">⚙ <span>Gameplay Systems</span></a>
-        <a href="#/path/advanced" data-route="advanced">⌘ <span>Data, AI & Animation</span></a>
-        <a href="#/path/practice" data-route="practice">✓ <span>Professional Practice</span></a>
-
-        <div class="nav-heading">Practise & revise</div>
-        <a href="#/tutorials" data-route="tutorials">🛠 <span>Quick Tutorials</span><small>Short practical recipes</small></a>
+        <div class="nav-heading">Unreal learning</div>
+        <a href="#/blocks" data-route="blocks">🧱 <span>Building Blocks</span><small>What Unreal terms actually mean</small></a>
+        <a href="#/tutorials" data-route="tutorials">🛠 <span>Quick Tutorials</span><small>Build a mechanic step by step</small></a>
+        <a href="#/snippets" data-route="snippets" class="snippet-nav">⚡ <span>Blueprint Snippet Bank</span><small>Epic clipboard graphs • paste & learn</small></a>
         <a href="#/challenges" data-route="challenges">🔥 <span>Challenge Board</span></a>
         <a href="#/homework" data-route="homework">⌂ <span>Homework</span></a>
         <a href="#/revision" data-route="revision">↻ <span>Revision Quizzes</span></a>
         <a href="#/glossary" data-route="glossary">? <span>Glossary</span></a>
 
         <div class="nav-heading">Projects & community</div>
+        <a href="#/leaderboard" data-route="leaderboard" class="leaderboard-nav">🏆 <span>Leaderboard</span><small>Class XP • weekly • streaks</small></a>
         <a href="#/progress" data-route="progress" class="project-nav">◎ <span>Evidence & Progress</span><small>Feedback & proof</small></a>
         <a href="#/requests" data-route="requests" class="project-nav">✦ <span>Feature Requests</span><small>Ideas & teacher replies</small></a>
         <a href="#/teacher" data-route="teacher" id="teacherNav" hidden>▣ <span>Teacher</span></a>
@@ -75,7 +71,7 @@
         </div>
         <div class="top-status">
           <span><b id="topDone">0</b> complete</span>
-          <span><b id="topXp">0</b> XP</span>
+          <span><b id="topXp">0</b> <span id="topXpUnit">XP</span></span>
         </div>
         <button class="notification-button" id="notificationButton" data-action="open-progress" title="Notifications">🔔 <b id="notificationCount" hidden>0</b></button>
         <button class="account-button" id="accountButton" data-action="open-auth">
@@ -86,7 +82,7 @@
       <main id="app" tabindex="-1"></main>
 
       <footer>
-        <span>Choose a path → learn programming → design worlds → build projects → stay current with the games industry</span><small class="epic-disclaimer">Portions of the materials used are trademarks and/or copyrighted works of Epic Games, Inc. All rights reserved by Epic. This material is not official and is not endorsed by Epic.</small><small class="epic-disclaimer">Selected game screenshots are used as visual references for educational analysis and remain copyright of their respective owners. UE5 Learning Hub is unofficial and is not endorsed by the referenced game publishers.</small>
+        <span>Learn Unreal → design worlds → build assets → make projects → stay current with the games industry</span><small class="epic-disclaimer">Portions of the materials used are trademarks and/or copyrighted works of Epic Games, Inc. All rights reserved by Epic. This material is not official and is not endorsed by Epic.</small><small class="epic-disclaimer">Selected game screenshots are used as visual references for educational analysis and remain copyright of their respective owners. UE5 Learning Hub is unofficial and is not endorsed by the referenced game publishers.</small>
         <button id="resetProgress" class="link-button">Reset local progress</button>
       </footer>
     </div>
@@ -94,7 +90,7 @@
 
   <div class="version-badge" title="Build version">
     <span class="version-dot"></span>
-    UE5 HUB <b>v3.32.2</b> <span id="modeBadge">• LOCAL</span>
+    UE5 HUB <b>v3.34.18</b> <span id="modeBadge">• LOCAL</span>
   </div>
 
   <div class="modal-backdrop" id="authModal" hidden>
@@ -123,15 +119,18 @@
   <div class="toast" id="toast" aria-live="polite"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="data/course-data.js?v=3.31.0"></script>
-  <script src="data/tutorial-data.js?v=3.31.0"></script>
-  <script src="data/design-data.js?v=3.31.0"></script>
-  <script src="data/project-data.js?v=3.31.0"></script>
-  <script src="data/news-data.js?v=3.31.0"></script>
-  <script src="data/modeling-data.js?v=3.31.0"></script>
-  <script src="data/sculpt-data.js?v=3.31.0"></script>
-  <script src="data/supabase-config.js?v=3.31.0"></script>
-  <script src="backend.js?v=3.31.0"></script>
-  <script src="app.js?v=3.31.0"></script>
+  <script src="data/course-data.js?v=3.34.15"></script>
+  <script src="data/building-block-data.js?v=3.34.12"></script>
+  <script src="data/tutorial-data.js?v=3.34.15"></script>
+  <script src="data/snippet-data.js?v=3.34.18"></script>
+  <script src="data/design-data.js?v=3.34.11"></script>
+  <script src="data/project-data.js?v=3.32.2"></script>
+  <script src="data/news-data.js?v=3.33.1"></script>
+  <script src="data/modeling-data.js?v=3.32.2"></script>
+  <script src="data/sculpt-data.js?v=3.32.2"></script>
+  <script src="data/supabase-config.js?v=3.32.2"></script>
+  <script src="backend.js?v=3.34.9"></script>
+  <script src="app.js?v=3.34.18"></script>
+<script>setTimeout(()=>{const i=document.getElementById('globalSearch'); if(i){i.value='door';i.dispatchEvent(new Event('input',{bubbles:true}));document.body.dataset.searchProbe='ran';}},800);</script>
 </body>
 </html>
