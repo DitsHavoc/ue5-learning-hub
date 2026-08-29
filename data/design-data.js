@@ -1,33 +1,40 @@
 window.UE5_DESIGN_DATA = {
-  "version": "3.34.22",
+  "version": "3.35.0",
   "buildDate": "29 Aug 2026",
   "modules": [
     {
       "id": "world-design",
       "title": "Level Design Foundations",
       "icon": "◇",
-      "description": "Build spaces that communicate routes, goals, danger and pacing before art polish hides the problems.",
+      "description": "Design routes, choices, landmarks, reveals and pacing that still work when the art is stripped away.",
       "principles": [
-        "Block out before dressing",
-        "Design around player metrics",
-        "Use landmarks and sightlines",
-        "Control pacing with spatial rhythm",
-        "Playtest without explaining"
+        "Give every space a player purpose",
+        "Metrics before decoration",
+        "Wayfinding is movement, not magic arrows",
+        "Use landmarks to build a mental map",
+        "Playtest behaviour, not intention"
       ],
-      "intro": "A good level tells the player where they can go, what matters and what kind of behaviour the space supports. Start with collision, scale and route logic; art comes later.",
+      "intro": "Level design is player experience built out of space. You are deciding where the player looks, moves, hesitates, feels safe, gets lost and understands the next goal. This module makes you analyse real spaces first, then prove your layout works in a greybox.",
       "referenceImages": [
         {
-          "src": "https://pbs.twimg.com/media/EKuSnv7WwAA5P2W.jpg",
-          "caption": "CONTROL — brutalist geometry, repeated ceiling lights and strong vertical scale turn a simple route into a memorable space.",
-          "sourceUrl": "https://www.remedygames.com/games/control",
-          "sourceTitle": "Remedy Entertainment — CONTROL",
+          "src": "https://playdead.com/css/img/inside/screenshots/INSIDE_01.jpg",
+          "caption": "INSIDE — Contrast + route readability. Make the valid route easier to read than the background before you add UI.",
+          "sourceUrl": "https://playdead.com/games/inside/",
+          "sourceTitle": "Playdead — INSIDE",
           "kind": "reference"
         },
         {
-          "src": "https://www.playdead.com/css/img/inside/screenshots/INSIDE_01.jpg",
-          "caption": "INSIDE — a tiny character silhouette, one strong pool of light and huge negative space create immediate hierarchy and tension.",
-          "sourceUrl": "https://playdead.com/games/inside/",
-          "sourceTitle": "Playdead — INSIDE",
+          "src": "https://cdn.prod.website-files.com/64630b03551142e3347ae3da/6492c4ad955ffc88abcd7409_CONTROL_Blast_Furnace_169.webp",
+          "caption": "CONTROL — Scale + landmarks. Use one shape or landmark that survives from several viewpoints.",
+          "sourceUrl": "https://www.remedygames.com/games/control",
+          "sourceTitle": "Remedy — CONTROL",
+          "kind": "reference"
+        },
+        {
+          "src": "https://www.guerrilla-games.com/media/News/HFW_SCREEN_LEGAL_GLIDER_4K_RGB_20210512.webp",
+          "caption": "Horizon Forbidden West — Traversal affordance. Shape terrain around traversal decisions, not just pretty silhouettes.",
+          "sourceUrl": "https://www.guerrilla-games.com/read/15-minutes-of-new-gameplay-for-horizon-forbidden-west",
+          "sourceTitle": "Guerrilla — Horizon Forbidden West",
           "kind": "reference"
         },
         {
@@ -71,57 +78,57 @@ window.UE5_DESIGN_DATA = {
         ],
         "phaseDetails": [
           {
-            "title": "Phase 1",
-            "where": "Level Editor → Add (+) → Shapes / Content Drawer → build in Viewport → Play-test from player height",
-            "do": "Block out three rooms with different proportions.",
-            "check": "A silent player can navigate or read the spatial intention without explanation.",
+            "title": "Phase 1 — Shape the journey",
+            "where": "Level Editor → Add (+) → Shapes → Cube → build three connected spaces in plain grey",
+            "do": "Block out three rooms with deliberately different proportions: compressed start, decision space, larger payoff space. Keep the Third Person character in the level for scale.",
+            "check": "From player height, each room feels recognisably different before any material or prop is added.",
             "troubleshoot": [
-              "If you need to explain the route verbally, simplify the space or strengthen the spatial cue before adding decoration."
+              "If every room feels the same, change ceiling height, width or elevation before touching art."
             ]
           },
           {
-            "title": "Phase 2",
-            "where": "Level Editor → Add (+) → Shapes / Content Drawer → build in Viewport → Play-test from player height",
-            "do": "Create one obvious primary route and one optional route/reward.",
-            "check": "A silent player can navigate or read the spatial intention without explanation.",
+            "title": "Phase 2 — Make the choice readable",
+            "where": "Viewport → duplicate/move blockout geometry → Play from the room before the fork",
+            "do": "Create one obvious main route and one optional route with a visible reason to explore it: height, opening, reward space or landmark glimpse.",
+            "check": "A tester can point to the likely main route and also notices there is another option.",
             "troubleshoot": [
-              "If you need to explain the route verbally, simplify the space or strengthen the spatial cue before adding decoration."
+              "If both routes look equally important, strengthen hierarchy: width, visibility or destination value — not an arrow."
             ]
           },
           {
-            "title": "Phase 3",
-            "where": "Level Editor → Add (+) → Shapes / Content Drawer → build in Viewport → Play-test from player height",
-            "do": "Place a landmark visible from at least two spaces.",
-            "check": "A silent player can navigate or read the spatial intention without explanation.",
+            "title": "Phase 3 — Give the player a memory anchor",
+            "where": "Viewport → place one large primitive / placeholder landmark → check it from at least two rooms",
+            "do": "Add a landmark with a unique silhouette or scale that can be seen from two different positions.",
+            "check": "A tester can describe where they are relative to the landmark after moving between rooms.",
             "troubleshoot": [
-              "If you need to explain the route verbally, simplify the space or strengthen the spatial cue before adding decoration."
+              "If the landmark disappears immediately, reposition openings or height so it helps build a mental map."
             ]
           },
           {
-            "title": "Phase 4",
-            "where": "Level Editor → Add (+) → Shapes / Content Drawer → build in Viewport → Play-test from player height",
-            "do": "Use lighting or colour only after the route works in plain grey.",
-            "check": "A silent player can navigate or read the spatial intention without explanation.",
+            "title": "Phase 4 — Add guidance after the geometry works",
+            "where": "Viewport → add one simple material colour or one light cue; keep most geometry grey",
+            "do": "Use one controlled visual cue to reinforce the route that already works: light pool, colour family or contrast.",
+            "check": "Turning the cue off makes guidance slightly weaker, but the level is still understandable.",
             "troubleshoot": [
-              "If you need to explain the route verbally, simplify the space or strengthen the spatial cue before adding decoration."
+              "If turning the cue off destroys the route, the blockout is doing too little. Fix space first."
             ]
           },
           {
-            "title": "Phase 5",
-            "where": "Use the relevant Unreal editor panel for this phase, then test it immediately before continuing.",
-            "do": "Ask another student to play without guidance and record one change.",
-            "check": "A silent player can navigate or read the spatial intention without explanation.",
+            "title": "Phase 5 — Silent playtest",
+            "where": "Play → hand keyboard/controller to another student → you do not speak",
+            "do": "Watch one full run. Record: first pause, first wrong turn, first place they look for help. Do not explain your intention.",
+            "check": "You have three observed behaviours, not “they said it was good”.",
             "troubleshoot": [
-              "If you need to explain the route verbally, simplify the space or strengthen the spatial cue before adding decoration."
+              "If they ask what to do, write down the moment before answering. That moment is the useful evidence."
             ]
           },
           {
-            "title": "Phase 6",
-            "where": "Use the relevant Unreal editor panel for this phase, then test it immediately before continuing.",
-            "do": "Run a silent playtest: do not explain anything; record the first hesitation or wrong turn and revise it.",
-            "check": "A silent player can navigate or read the spatial intention without explanation.",
+            "title": "Phase 6 — One evidence-based revision",
+            "where": "Return to the blockout → change one spatial cue only → run the same start position again",
+            "do": "Fix the clearest playtest problem with one targeted edit, then re-test from the same start.",
+            "check": "The second tester/run shows less hesitation at the specific problem you targeted.",
             "troubleshoot": [
-              "If you need to explain the route verbally, simplify the space or strengthen the spatial cue before adding decoration."
+              "If you changed five things, undo and isolate the most important cause so you know what actually helped."
             ]
           }
         ]
@@ -158,34 +165,141 @@ window.UE5_DESIGN_DATA = {
         "Does the layout still work with materials and fancy lighting turned off?"
       ],
       "engineNote": "UE5.8 still supports rapid in-editor blockout and Modeling Mode workflows, but the design test remains engine-agnostic: make the space readable before investing in detail.",
-      "engineUrl": "https://dev.epicgames.com/documentation/unreal-engine/modeling-mode-quick-start-in-unreal-engine?lang=en-US"
+      "engineUrl": "https://dev.epicgames.com/documentation/unreal-engine/modeling-mode-quick-start-in-unreal-engine?lang=en-US",
+      "caseStudies": [
+        {
+          "game": "INSIDE",
+          "image": "https://playdead.com/css/img/inside/screenshots/INSIDE_01.jpg",
+          "sourceUrl": "https://playdead.com/games/inside/",
+          "sourceTitle": "Playdead — INSIDE",
+          "lens": "Contrast + route readability",
+          "notice": "The player is tiny, but the playable route is readable because the brightest ground plane and strongest silhouette carry the eye forward.",
+          "steal": "Make the valid route easier to read than the background before you add UI.",
+          "task": "Cover the character with your hand. Can you still predict the route? Mark the three strongest spatial cues."
+        },
+        {
+          "game": "CONTROL",
+          "image": "https://cdn.prod.website-files.com/64630b03551142e3347ae3da/6492c4ad955ffc88abcd7409_CONTROL_Blast_Furnace_169.webp",
+          "sourceUrl": "https://www.remedygames.com/games/control",
+          "sourceTitle": "Remedy — CONTROL",
+          "lens": "Scale + landmarks",
+          "notice": "Huge architectural masses, repeated structural rhythm and one dominant destination make the Oldest House memorable even when routes branch.",
+          "steal": "Use one shape or landmark that survives from several viewpoints.",
+          "task": "Sketch the scene as only five big shapes. Circle the one you would navigate toward."
+        },
+        {
+          "game": "Horizon Forbidden West",
+          "image": "https://www.guerrilla-games.com/media/News/HFW_SCREEN_LEGAL_GLIDER_4K_RGB_20210512.webp",
+          "sourceUrl": "https://www.guerrilla-games.com/read/15-minutes-of-new-gameplay-for-horizon-forbidden-west",
+          "sourceTitle": "Guerrilla — Horizon Forbidden West",
+          "lens": "Traversal affordance",
+          "notice": "Terrain, climbable structures and height changes do more than look natural: they advertise possible movement and reward.",
+          "steal": "Shape terrain around traversal decisions, not just pretty silhouettes.",
+          "task": "Draw two possible routes through the image: safe and fast. What makes each route readable?"
+        }
+      ],
+      "researchMissions": [
+        {
+          "title": "Map From Memory",
+          "duration": "10–15 min",
+          "brief": "Play or watch ten minutes of a game with a navigable space. Close it, then draw the route from memory.",
+          "steps": [
+            "Mark the start and goal.",
+            "Add every landmark you remember.",
+            "Circle where you hesitated or turned around.",
+            "Compare your sketch with the real space."
+          ],
+          "evidence": "One memory map + three sentences explaining why some locations stuck in your head."
+        },
+        {
+          "title": "Screenshot Autopsy",
+          "duration": "15 min",
+          "brief": "Collect three screenshots from one game and annotate how each one communicates a route or decision.",
+          "steps": [
+            "Mark entrances/exits.",
+            "Mark blocked or dangerous space.",
+            "Mark the strongest landmark.",
+            "Write what the player is being asked to decide."
+          ],
+          "evidence": "Three annotated screenshots. No “it looks cool” answers — name the design job."
+        }
+      ],
+      "challenges": [
+        {
+          "title": "No Arrows Allowed",
+          "constraint": "No objective marker, waypoint beam or text sign.",
+          "goal": "Guide a fresh player to the exit using only space, landmarks, light and route shape."
+        },
+        {
+          "title": "Thirty-Second Fork",
+          "constraint": "One room, two routes, one optional reward.",
+          "goal": "Make players understand the main route within 30 seconds but still notice the optional path."
+        },
+        {
+          "title": "Bad Level Surgery",
+          "constraint": "Start from one intentionally confusing greybox.",
+          "goal": "Fix it with only three edits. You must explain why each edit changes player behaviour."
+        }
+      ],
+      "resources": [
+        {
+          "title": "The Level Design Book — Blockout",
+          "type": "Free design reading",
+          "url": "https://book.leveldesignbook.com/process/blockout",
+          "why": "Metrics, wayfinding and playtesting without pretending level design is just pretty composition."
+        },
+        {
+          "title": "Guerrilla — Relic Ruins",
+          "type": "Developer breakdown",
+          "url": "https://www.guerrilla-games.com/read/relic-ruins-creating-environmental-puzzles-for-horizon-forbidden-west",
+          "why": "A real designer explains concept, blockout, interdisciplinary work, playtesting and iteration."
+        }
+      ],
+      "afterBuild": {
+        "title": "BLACK BOX: The Lost Player",
+        "brief": "Take your finished Three-Room Journey and deliberately remove the strongest guidance cue. Make the route readable again using a different design language.",
+        "constraints": [
+          "Do not restore the removed cue.",
+          "No new UI or text arrows.",
+          "A tester must reach the goal without help."
+        ],
+        "improve": "Compare both versions. Which guidance method felt more natural and which was more reliable?",
+        "evidence": "Two before/after screenshots + one tester quote."
+      }
     },
     {
       "id": "environment",
       "title": "Environment Art & Set Dressing",
       "icon": "▦",
-      "description": "Turn a functional blockout into a believable place without burying gameplay under clutter.",
+      "description": "Build believable places with prop logic, visual storytelling, hierarchy and controlled clutter.",
       "principles": [
-        "Reference before decoration",
-        "Build big → medium → small",
-        "Repeat assets intentionally",
-        "Use wear where people/worlds would cause it",
-        "Protect gameplay readability"
+        "Reference a real logic for the place",
+        "Big story beats before tiny props",
+        "Cluster objects by purpose",
+        "Leave deliberate empty space",
+        "Make wear tell you who used the space"
       ],
-      "intro": "Environment art is not 'fill every empty surface'. Strong scenes use controlled density, believable prop logic and visual storytelling to support the level.",
+      "intro": "Environment art is design when every prop, surface and empty area has a reason to exist. The goal is not maximum detail. The goal is a place that feels used, readable and specific.",
       "referenceImages": [
         {
-          "src": "https://pbs.twimg.com/media/EKuSnv7WwAA5P2W.jpg",
-          "caption": "CONTROL — brutalist geometry, repeated ceiling lights and strong vertical scale turn a simple route into a memorable space.",
-          "sourceUrl": "https://www.remedygames.com/games/control",
-          "sourceTitle": "Remedy Entertainment — CONTROL",
+          "src": "https://drop-assets.ea.com/images/5Cr5lTNDijF2pzIopPZduH/2009d571be74052edf094ce0a992253f/ds-gp-hallway-04-no-watermark.jpg",
+          "caption": "Dead Space — Lived-in world + threat. Every prop cluster should imply a job, routine or event.",
+          "sourceUrl": "https://www.ea.com/games/dead-space/dead-space",
+          "sourceTitle": "EA / Motive — Dead Space",
           "kind": "reference"
         },
         {
-          "src": "https://www.playdead.com/css/img/inside/screenshots/INSIDE_01.jpg",
-          "caption": "INSIDE — a tiny character silhouette, one strong pool of light and huge negative space create immediate hierarchy and tension.",
-          "sourceUrl": "https://playdead.com/games/inside/",
-          "sourceTitle": "Playdead — INSIDE",
+          "src": "https://www.guerrilla-games.com/media/Horizon_FW_Artblast2560x854.png",
+          "caption": "Horizon Forbidden West — Reference + visual language. Choose a small visual language and repeat it intentionally.",
+          "sourceUrl": "https://www.guerrilla-games.com/read/horizon-forbidden-west-art-blast-on-artstation",
+          "sourceTitle": "Guerrilla — Horizon Art Blast",
+          "kind": "reference"
+        },
+        {
+          "src": "https://cdn.prod.website-files.com/64630b03551142e3347ae3da/6492c4ab2445934a3c76c839_control_pm_det_005.webp",
+          "caption": "CONTROL — Repetition + interruption. Repetition makes the exception readable.",
+          "sourceUrl": "https://www.remedygames.com/games/control",
+          "sourceTitle": "Remedy — CONTROL",
           "kind": "reference"
         },
         {
@@ -236,57 +350,57 @@ window.UE5_DESIGN_DATA = {
         ],
         "phaseDetails": [
           {
-            "title": "Phase 1",
-            "where": "Use the relevant Unreal editor panel for this phase, then test it immediately before continuing.",
-            "do": "Choose one short story: rushed evacuation, accident, break-in or long abandonment.",
-            "check": "The dressing supports movement, composition and story rather than random clutter.",
+            "title": "Phase 1 — Write the room story",
+            "where": "Before Unreal: notes / reference board",
+            "do": "Choose one event — rushed evacuation, accident, break-in or long abandonment — and write: who used the room, what normally happened here, what changed.",
+            "check": "You can explain the room in one sentence without mentioning props yet.",
             "troubleshoot": [
-              "If the scene becomes noisier, delete or regroup props before adding anything else."
+              "If the story is “abandoned room”, make it more specific: abandoned by whom, doing what, and why?"
             ]
           },
           {
-            "title": "Phase 2",
-            "where": "Content Drawer → environment assets → drag into Viewport → organise in Outliner and Transform in Details",
-            "do": "Dress structural/big forms first, then furniture, then small props.",
-            "check": "The dressing supports movement, composition and story rather than random clutter.",
+            "title": "Phase 2 — Dress big → medium → small",
+            "where": "Content Drawer → place structural props/furniture first → then secondary props → small detail last",
+            "do": "Fill the room in three passes. Stop after each pass and check route width and focal point.",
+            "check": "The room reads at a distance before small props are visible.",
             "troubleshoot": [
-              "If the scene becomes noisier, delete or regroup props before adding anything else."
+              "If you start placing bottles before furniture/structure works, stop and move back up a scale."
             ]
           },
           {
-            "title": "Phase 3",
-            "where": "Content Drawer → environment assets → drag into Viewport → organise in Outliner and Transform in Details",
-            "do": "Create 3 prop clusters with clear purpose rather than random scatter.",
-            "check": "The dressing supports movement, composition and story rather than random clutter.",
+            "title": "Phase 3 — Build purposeful clusters",
+            "where": "Viewport + Outliner → group props by activity",
+            "do": "Make three clusters that imply a human action: repair station, meal, emergency response, packing, investigation, etc.",
+            "check": "A tester can guess what each cluster was used for.",
             "troubleshoot": [
-              "If the scene becomes noisier, delete or regroup props before adding anything else."
+              "If a cluster could be moved anywhere in the room with no loss of meaning, it is probably random decoration."
             ]
           },
           {
-            "title": "Phase 4",
-            "where": "Use the relevant Unreal editor panel for this phase, then test it immediately before continuing.",
-            "do": "Use decals/wear to reinforce use and age.",
-            "check": "The dressing supports movement, composition and story rather than random clutter.",
+            "title": "Phase 4 — Put wear where life caused it",
+            "where": "Decal Material / decal actor or existing wear assets → place at contact, traffic or damage zones",
+            "do": "Add a small number of wear clues tied to physical causes: foot traffic, leaks, impacts, heat, hands or neglected corners.",
+            "check": "Every wear mark has a believable cause you can name.",
             "troubleshoot": [
-              "If the scene becomes noisier, delete or regroup props before adding anything else."
+              "If grime is evenly sprayed everywhere, remove most of it and concentrate it where use would create it."
             ]
           },
           {
-            "title": "Phase 5",
-            "where": "Content Drawer → environment assets → drag into Viewport → organise in Outliner and Transform in Details",
-            "do": "Remove 20% of the props and keep only the ones helping composition/story.",
-            "check": "The dressing supports movement, composition and story rather than random clutter.",
+            "title": "Phase 5 — Delete 20%",
+            "where": "Outliner → select low-value props → hide/delete → compare from the same gameplay camera",
+            "do": "Remove at least one fifth of the dressing. Keep only props that support navigation, story, composition or material scale.",
+            "check": "The scene becomes clearer without losing its story.",
             "troubleshoot": [
-              "If the scene becomes noisier, delete or regroup props before adding anything else."
+              "If you cannot choose anything to delete, ask a classmate to identify the noisiest area and start there."
             ]
           },
           {
-            "title": "Phase 6",
-            "where": "Content Drawer → environment assets → drag into Viewport → organise in Outliner and Transform in Details",
-            "do": "Create one deliberate story vignette and one unique hero detail that breaks modular repetition.",
-            "check": "The dressing supports movement, composition and story rather than random clutter.",
+            "title": "Phase 6 — Create the memorable beat",
+            "where": "Viewport → build one story vignette + one hero detail",
+            "do": "Create one small scene a player could remember — overturned chair facing a broken terminal, packed bag by an exit, emergency tools left mid-job — plus one unique object that breaks modular repetition.",
+            "check": "A tester notices the vignette and can infer a plausible event from it.",
             "troubleshoot": [
-              "If the scene becomes noisier, delete or regroup props before adding anything else."
+              "If the hero asset only looks expensive but tells nothing, give it a relationship to the story or gameplay."
             ]
           }
         ]
@@ -323,34 +437,141 @@ window.UE5_DESIGN_DATA = {
         "Is visual density helping the route or obscuring it?"
       ],
       "engineNote": "UE5.8 Modeling Mode can create/edit geometry, UVs, collision and baked textures in-editor. It is useful for rapid environment iteration, but clean modular planning still matters.",
-      "engineUrl": "https://dev.epicgames.com/documentation/unreal-engine/modeling-mode-in-unreal-engine?lang=en-US"
+      "engineUrl": "https://dev.epicgames.com/documentation/unreal-engine/modeling-mode-in-unreal-engine?lang=en-US",
+      "caseStudies": [
+        {
+          "game": "Dead Space",
+          "image": "https://drop-assets.ea.com/images/5Cr5lTNDijF2pzIopPZduH/2009d571be74052edf094ce0a992253f/ds-gp-hallway-04-no-watermark.jpg",
+          "sourceUrl": "https://www.ea.com/games/dead-space/dead-space",
+          "sourceTitle": "EA / Motive — Dead Space",
+          "lens": "Lived-in world + threat",
+          "notice": "Industrial structure, emergency lighting, damage and clutter all reinforce the fiction of a working ship that has gone catastrophically wrong.",
+          "steal": "Every prop cluster should imply a job, routine or event.",
+          "task": "List five visible clues and separate “normal ship life” from “something went wrong”."
+        },
+        {
+          "game": "Horizon Forbidden West",
+          "image": "https://www.guerrilla-games.com/media/Horizon_FW_Artblast2560x854.png",
+          "sourceUrl": "https://www.guerrilla-games.com/read/horizon-forbidden-west-art-blast-on-artstation",
+          "sourceTitle": "Guerrilla — Horizon Art Blast",
+          "lens": "Reference + visual language",
+          "notice": "Distinct cultures and locations are built from repeated shape, material and prop families rather than random asset variety.",
+          "steal": "Choose a small visual language and repeat it intentionally.",
+          "task": "Invent a 4-item visual-language rule set for a tribe, faction or workplace."
+        },
+        {
+          "game": "CONTROL",
+          "image": "https://cdn.prod.website-files.com/64630b03551142e3347ae3da/6492c4ab2445934a3c76c839_control_pm_det_005.webp",
+          "sourceUrl": "https://www.remedygames.com/games/control",
+          "sourceTitle": "Remedy — CONTROL",
+          "lens": "Repetition + interruption",
+          "notice": "Office repetition establishes normality; unusual geometry, debris or colour breaks that pattern and becomes meaningful.",
+          "steal": "Repetition makes the exception readable.",
+          "task": "Find one repeated element and one deliberate break. What does the break communicate?"
+        }
+      ],
+      "researchMissions": [
+        {
+          "title": "Five-Prop Story",
+          "duration": "10 min",
+          "brief": "Find one game room that tells a story without a cutscene.",
+          "steps": [
+            "Pick exactly five props.",
+            "For each, write what it tells you.",
+            "Delete any clue that repeats another clue.",
+            "Write the story in one sentence."
+          ],
+          "evidence": "One screenshot + a five-row prop/story table."
+        },
+        {
+          "title": "Clutter Audit",
+          "duration": "15 min",
+          "brief": "Take a busy environment screenshot and classify what is actually doing work.",
+          "steps": [
+            "Mark gameplay-critical objects.",
+            "Mark story objects.",
+            "Mark atmosphere-only objects.",
+            "Circle anything you could remove without losing the scene."
+          ],
+          "evidence": "Annotated screenshot showing at least one thing you would delete."
+        }
+      ],
+      "challenges": [
+        {
+          "title": "Seven Props, One Story",
+          "constraint": "Maximum seven movable props.",
+          "goal": "Tell a clear before-the-player-arrived story."
+        },
+        {
+          "title": "The 30% Cut",
+          "constraint": "Remove 30% of your dressing after you think it is finished.",
+          "goal": "Make the scene clearer, not emptier."
+        },
+        {
+          "title": "Hero Asset Breakout",
+          "constraint": "Everything except one object comes from the same modular kit.",
+          "goal": "Use one unique object to create identity and narrative focus."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Guerrilla — Horizon Art Blast",
+          "type": "Developer art reference",
+          "url": "https://www.guerrilla-games.com/read/horizon-forbidden-west-art-blast-on-artstation",
+          "why": "Production art, environment work and developer portfolios from the team."
+        },
+        {
+          "title": "Motive — Dead Space Art Developer Livestream",
+          "type": "Developer breakdown",
+          "url": "https://www.ea.com/ea-studios/motive/news/art-developer-livestream",
+          "why": "The team discusses immersive environments, lighting and the “lived-in world” art pillar."
+        }
+      ],
+      "afterBuild": {
+        "title": "BLACK BOX: Change the Story",
+        "brief": "Keep the room geometry exactly the same. Change the implied story completely using no more than seven prop/decal swaps.",
+        "constraints": [
+          "No geometry changes.",
+          "No written lore logs.",
+          "Keep the player route equally readable."
+        ],
+        "improve": "Ask a tester what happened here before telling them your intended story.",
+        "evidence": "Before/after wide shots + tester interpretation."
+      }
     },
     {
       "id": "materials",
       "title": "Materials & Surfaces",
       "icon": "◫",
-      "description": "Learn the material language that makes metal feel like metal, paint feel coated and surfaces respond correctly to light.",
+      "description": "Make surfaces communicate age, use, weather and material type instead of becoming a pile of flashy shaders.",
       "principles": [
-        "Think physically: base colour, roughness, metallic, normal",
-        "Use Material Instances for variation",
-        "Break repetition with masks/decals",
-        "Keep graphs readable",
-        "Judge materials under neutral light"
+        "Roughness carries more story than colour",
+        "Reference real surfaces",
+        "One master, many controlled variants",
+        "Variation needs a cause",
+        "Judge materials in useful lighting"
       ],
-      "intro": "Materials define surface response. The aim is not giant node graphs; it is believable values, reusable parameters and variation that survives different lighting.",
+      "intro": "Material design is visual communication. Players should read metal as metal, wet stone as wet stone and worn paint as worn paint before they inspect the node graph. Build simple physically sensible surfaces first, then add controlled variation.",
       "referenceImages": [
         {
-          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/b61c2e7b-8c11-4b70-b966-97b91ec1f4ef/materialeditorui.png",
-          "caption": "Unreal Material Editor — material graphs control how a surface reacts to light rather than simply placing a flat colour on a mesh.",
-          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/unreal-engine-material-editor-ui",
-          "sourceTitle": "Epic Games — Material Editor UI",
-          "kind": "epic"
+          "src": "https://www.kojimaproductions.jp/sites/default/files/2021-08/gr.DeathStranding_GameScreenshot6.jpg",
+          "caption": "Death Stranding — Surface identity. Make materials readable without relying on saturated colour.",
+          "sourceUrl": "https://www.kojimaproductions.jp/en/death-stranding-ps4",
+          "sourceTitle": "Kojima Productions — Death Stranding",
+          "kind": "reference"
         },
         {
-          "src": "https://pbs.twimg.com/media/EKuSnv7WwAA5P2W.jpg",
-          "caption": "CONTROL — brutalist geometry, repeated ceiling lights and strong vertical scale turn a simple route into a memorable space.",
+          "src": "https://drop-assets.ea.com/images/qKm8m5buUQRNr4WIsBTcd/2d8953c4fd3f1e4acd5a78bbc9a16b30/DEAD-SPACE_Media_SLIDE-02-USP-02.jpg",
+          "caption": "Dead Space — Wear + material story. Wear belongs where use, impact, water or neglect would actually cause it.",
+          "sourceUrl": "https://www.ea.com/games/dead-space/dead-space",
+          "sourceTitle": "EA / Motive — Dead Space",
+          "kind": "reference"
+        },
+        {
+          "src": "https://cdn.prod.website-files.com/64630b03551142e3347ae3da/6492c4ad955ffc88abcd7409_CONTROL_Blast_Furnace_169.webp",
+          "caption": "CONTROL — Material families. Build a small reusable surface family rather than 30 unrelated materials.",
           "sourceUrl": "https://www.remedygames.com/games/control",
-          "sourceTitle": "Remedy Entertainment — CONTROL",
+          "sourceTitle": "Remedy — CONTROL",
           "kind": "reference"
         },
         {
@@ -407,57 +628,57 @@ window.UE5_DESIGN_DATA = {
         ],
         "phaseDetails": [
           {
-            "title": "Phase 1",
-            "where": "Content Drawer → Material / Material Instance → Material Editor or Instance Details → inspect in the same level view",
-            "do": "Create a clean base material with texture/colour parameters.",
-            "check": "The surface change is visible under the same lighting and the parent graph remains reusable.",
+            "title": "Phase 1 — Build one honest base",
+            "where": "Content Drawer → Material → Material Editor → assign to a test mesh under neutral light",
+            "do": "Create a simple reusable parent with Base Color, Roughness and Normal inputs/parameters. Start physically believable rather than flashy.",
+            "check": "Stone, metal, plastic or painted surface reads correctly before extra effects.",
             "troubleshoot": [
-              "If the material only works in one light angle, check roughness/normal response before adding more graph complexity."
+              "If material identity depends mainly on colour, inspect roughness and normal response first."
             ]
           },
           {
-            "title": "Phase 2",
-            "where": "Content Drawer → Material / Material Instance → Material Editor or Instance Details → inspect in the same level view",
-            "do": "Expose roughness/metallic/tint controls.",
-            "check": "The surface change is visible under the same lighting and the parent graph remains reusable.",
+            "title": "Phase 2 — Expose useful controls",
+            "where": "Material Editor → convert selected values/textures to parameters → group them clearly",
+            "do": "Expose only controls a designer would genuinely vary: tint, roughness, metallic where appropriate, normal strength and tiling.",
+            "check": "A Material Instance can change the surface meaningfully without opening the parent graph.",
             "troubleshoot": [
-              "If the material only works in one light angle, check roughness/normal response before adding more graph complexity."
+              "If the instance has 25 mystery sliders, remove parameters that do not support a real art/design decision."
             ]
           },
           {
-            "title": "Phase 3",
-            "where": "Content Drawer → Material / Material Instance → Material Editor or Instance Details → inspect in the same level view",
-            "do": "Build four Material Instances without duplicating the parent graph.",
-            "check": "The surface change is visible under the same lighting and the parent graph remains reusable.",
+            "title": "Phase 3 — Make four instances",
+            "where": "Content Drawer → Create Material Instance four times → name by purpose/state",
+            "do": "Build four variants from the parent: e.g. clean, worn, damp and damaged — without duplicating the material graph.",
+            "check": "All four are recognisably related but communicate different conditions.",
             "troubleshoot": [
-              "If the material only works in one light angle, check roughness/normal response before adding more graph complexity."
+              "If variants look like different random materials, reduce the number of changing parameters and preserve the shared family."
             ]
           },
           {
-            "title": "Phase 4",
-            "where": "Use the relevant Unreal editor panel for this phase, then test it immediately before continuing.",
-            "do": "Add one controlled variation method such as grime mask or vertex colour.",
-            "check": "The surface change is visible under the same lighting and the parent graph remains reusable.",
+            "title": "Phase 4 — Add variation with a cause",
+            "where": "Material Editor → add one mask / vertex colour / world-space variation method",
+            "do": "Add one controlled variation method for dirt, dampness or wear and define where it is allowed to appear.",
+            "check": "Variation breaks repetition without looking like noise pasted everywhere.",
             "troubleshoot": [
-              "If the material only works in one light angle, check roughness/normal response before adding more graph complexity."
+              "If the mask has no physical logic, simplify it and tie it to edges, height, contact or a painted control."
             ]
           },
           {
-            "title": "Phase 5",
-            "where": "Level Editor → Lights / Post Process Volume / Exponential Height Fog → tune in Details from the locked comparison camera",
-            "do": "Test all four under the same neutral light, then under your scene lighting.",
-            "check": "The surface change is visible under the same lighting and the parent graph remains reusable.",
+            "title": "Phase 5 — Neutral vs scene light test",
+            "where": "Level Editor → save one neutral test light/camera → compare again in the final scene light",
+            "do": "Inspect all instances under neutral light, then under the actual scene lighting without changing material values between views.",
+            "check": "Material identity survives both tests; scene lighting enhances rather than hides it.",
             "troubleshoot": [
-              "If the material only works in one light angle, check roughness/normal response before adding more graph complexity."
+              "If it only works under dramatic scene light, correct the material response before grading the scene."
             ]
           },
           {
-            "title": "Phase 6",
-            "where": "Content Drawer → Material / Material Instance → Material Editor or Instance Details → inspect in the same level view",
-            "do": "Use Shader Complexity / Material Stats to inspect one material and make one evidence-based cost decision.",
-            "check": "The surface change is visible under the same lighting and the parent graph remains reusable.",
+            "title": "Phase 6 — Cost check",
+            "where": "Material Editor → Window/Stats where available + Viewport → Shader Complexity / relevant optimisation view",
+            "do": "Inspect the most complex material and identify one cost you can justify, simplify or remove.",
+            "check": "You can name one expensive feature and explain why it stays or what you changed.",
             "troubleshoot": [
-              "If the material only works in one light angle, check roughness/normal response before adding more graph complexity."
+              "Do not optimise by superstition. Compare the same surface before/after and keep the visible result acceptable."
             ]
           }
         ]
@@ -494,42 +715,142 @@ window.UE5_DESIGN_DATA = {
         "Can you make the same visual point with a cheaper shader?"
       ],
       "engineNote": "Epic’s UE5.8 guidance still recommends using Material Stats/Shader Complexity to verify material cost; stacked translucency and expensive per-pixel work can become major GPU costs.",
-      "engineUrl": "https://dev.epicgames.com/documentation/unreal-engine/guidelines-for-optimizing-rendering-for-real-time-in-unreal-engine"
+      "engineUrl": "https://dev.epicgames.com/documentation/unreal-engine/guidelines-for-optimizing-rendering-for-real-time-in-unreal-engine",
+      "caseStudies": [
+        {
+          "game": "Death Stranding",
+          "image": "https://www.kojimaproductions.jp/sites/default/files/2021-08/gr.DeathStranding_GameScreenshot6.jpg",
+          "sourceUrl": "https://www.kojimaproductions.jp/en/death-stranding-ps4",
+          "sourceTitle": "Kojima Productions — Death Stranding",
+          "lens": "Surface identity",
+          "notice": "Rock, moss, metal ladder and fabric remain visually distinct even under subdued natural light because their roughness, normal detail and value ranges differ.",
+          "steal": "Make materials readable without relying on saturated colour.",
+          "task": "Name four materials in the image and describe the roughness difference you expect between them."
+        },
+        {
+          "game": "Dead Space",
+          "image": "https://drop-assets.ea.com/images/qKm8m5buUQRNr4WIsBTcd/2d8953c4fd3f1e4acd5a78bbc9a16b30/DEAD-SPACE_Media_SLIDE-02-USP-02.jpg",
+          "sourceUrl": "https://www.ea.com/games/dead-space/dead-space",
+          "sourceTitle": "EA / Motive — Dead Space",
+          "lens": "Wear + material story",
+          "notice": "Industrial metals, grime, fog and damaged surfaces work together to communicate age, maintenance failure and danger.",
+          "steal": "Wear belongs where use, impact, water or neglect would actually cause it.",
+          "task": "Find three wear zones and propose a physical cause for each."
+        },
+        {
+          "game": "CONTROL",
+          "image": "https://cdn.prod.website-files.com/64630b03551142e3347ae3da/6492c4ad955ffc88abcd7409_CONTROL_Blast_Furnace_169.webp",
+          "sourceUrl": "https://www.remedygames.com/games/control",
+          "sourceTitle": "Remedy — CONTROL",
+          "lens": "Material families",
+          "notice": "Concrete, painted metal and hot industrial areas repeat consistently enough that the player learns the building’s material vocabulary.",
+          "steal": "Build a small reusable surface family rather than 30 unrelated materials.",
+          "task": "Create a three-material palette for a location and write one rule for when each appears."
+        }
+      ],
+      "researchMissions": [
+        {
+          "title": "Real-World Material Hunt",
+          "duration": "15 min",
+          "brief": "Photograph or find six real surfaces around college/home.",
+          "steps": [
+            "Name the material.",
+            "Predict roughness: low / medium / high.",
+            "Identify large, medium and small surface detail.",
+            "Mark one area of wear and explain its cause."
+          ],
+          "evidence": "Six-image contact sheet with short notes."
+        },
+        {
+          "title": "Same Object, Different History",
+          "duration": "10 min",
+          "brief": "Find three versions of the same material state: clean, wet/dirty, damaged/aged.",
+          "steps": [
+            "Compare colour shift.",
+            "Compare roughness.",
+            "Compare edge wear.",
+            "Compare where dirt collects."
+          ],
+          "evidence": "Three references + a list of parameters you would expose in a master material."
+        }
+      ],
+      "challenges": [
+        {
+          "title": "One Master, Three Worlds",
+          "constraint": "One master material only.",
+          "goal": "Create clean, abandoned and rain-soaked variants using instances."
+        },
+        {
+          "title": "No Colour Crutch",
+          "constraint": "Temporarily desaturate the viewport.",
+          "goal": "Keep metal, plastic, stone and wetness readable through value/roughness/normal response."
+        },
+        {
+          "title": "Cause Before Grunge",
+          "constraint": "Every stain or wear mark needs a physical reason.",
+          "goal": "Delete decorative dirt that cannot be explained."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Guerrilla GDC — Procedural Texturing",
+          "type": "Developer trail",
+          "url": "https://www.guerrilla-games.com/read/guerrilla-gdc-2023",
+          "why": "A route into how a major studio scales texturing and asset production."
+        },
+        {
+          "title": "Motive — Dead Space Art Developer Livestream",
+          "type": "Developer breakdown",
+          "url": "https://www.ea.com/ea-studios/motive/news/art-developer-livestream",
+          "why": "Good reference for material, lighting and environment art working together."
+        }
+      ],
+      "afterBuild": {
+        "title": "BLACK BOX: Material Identity Test",
+        "brief": "Give another student screenshots of your surfaces with the labels removed. Can they correctly identify the material and condition?",
+        "constraints": [
+          "No labels.",
+          "Neutral-ish test lighting.",
+          "At least four surfaces."
+        ],
+        "improve": "Fix the surface with the most incorrect guesses using only two parameter changes.",
+        "evidence": "Guess sheet + before/after of the weakest surface."
+      }
     },
     {
       "id": "lighting",
       "title": "Lighting & Atmosphere",
       "icon": "☼",
-      "description": "Use light, shadow, exposure, fog and post process to control mood while keeping the player able to read the space.",
+      "description": "Use light for readability, mood, depth and player guidance — then prove the scene still works when the mood changes.",
       "principles": [
-        "Light for hierarchy, not brightness",
-        "Motivate light sources",
-        "Use contrast to guide attention",
-        "Fog controls information distance",
-        "Lock exposure before judging mood"
+        "Light gameplay information first",
+        "Motivate important sources",
+        "Control contrast deliberately",
+        "Lock exposure while judging",
+        "Change one variable at a time"
       ],
-      "intro": "Lighting is design. It tells the player where to look, what is safe, what is hidden and how a place should feel. Mood only works when navigation still reads.",
+      "intro": "Lighting is not a final Instagram filter. It is gameplay information. Build depth and route readability first, then use contrast, colour and atmosphere to control emotion.",
       "referenceImages": [
         {
-          "src": "https://www.playdead.com/css/img/inside/screenshots/INSIDE_01.jpg",
-          "caption": "INSIDE — a tiny character silhouette, one strong pool of light and huge negative space create immediate hierarchy and tension.",
+          "src": "https://www.alanwake.com/wp-content/uploads/2024/06/aw2-photo-mode-03-1920x1080.png",
+          "caption": "Alan Wake 2 — Colour + motivated emphasis. Treat light colour/intensity as a deliberate variable, not a vibe slider.",
+          "sourceUrl": "https://www.alanwake.com/story/unleash-your-creativity-with-alan-wake-2s-new-photo-mode/",
+          "sourceTitle": "Remedy — Alan Wake 2 Photo Mode",
+          "kind": "reference"
+        },
+        {
+          "src": "https://playdead.com/css/img/inside/screenshots/INSIDE_01.jpg",
+          "caption": "INSIDE — Silhouette + negative space. Darkness is useful only when the important information remains readable.",
           "sourceUrl": "https://playdead.com/games/inside/",
           "sourceTitle": "Playdead — INSIDE",
           "kind": "reference"
         },
         {
-          "src": "https://www.konami.com/products_master/eu_publish/silenthill2r/eu/en/images/sh2_3.png",
-          "caption": "SILENT HILL 2 — nearby forms stay readable while distance disappears, making fog both atmosphere and level-design control.",
-          "sourceUrl": "https://www.konami.com/games/eu/en/products/silenthill2r/",
-          "sourceTitle": "KONAMI — SILENT HILL 2",
+          "src": "https://drop-assets.ea.com/images/5Cr5lTNDijF2pzIopPZduH/2009d571be74052edf094ce0a992253f/ds-gp-hallway-04-no-watermark.jpg",
+          "caption": "Dead Space — Safe pool → dangerous shadow. Lighting can create a rhythm of safety and uncertainty.",
+          "sourceUrl": "https://www.ea.com/games/dead-space/dead-space",
+          "sourceTitle": "EA / Motive — Dead Space",
           "kind": "reference"
-        },
-        {
-          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/384ec87a-79c8-47ee-9dca-c664802cc995/volumetricfog.png",
-          "caption": "Unreal Volumetric Fog — local lights can scatter through participating media and create readable depth.",
-          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/exponential-height-fog-in-unreal-engine",
-          "sourceTitle": "Epic Games — Exponential Height Fog",
-          "kind": "epic"
         },
         {
           "src": "assets/book/best-practices/lumen-gi-comparison.webp",
@@ -585,66 +906,66 @@ window.UE5_DESIGN_DATA = {
         ],
         "phaseDetails": [
           {
-            "title": "Phase 1",
-            "where": "Level Editor → Lights / Post Process Volume / Exponential Height Fog → tune in Details from the locked comparison camera",
-            "do": "Lock camera/exposure so comparisons are fair.",
-            "check": "The mood changes while the route/focal point remains readable from the locked camera.",
+            "title": "Phase 1 — Lock the comparison",
+            "where": "Create a fixed gameplay/Cine Camera → Post Process Volume → stabilise exposure for the test",
+            "do": "Choose one camera and stop moving it. Stabilise exposure so the three versions can be compared fairly.",
+            "check": "A screenshot taken twice with unchanged lights looks effectively identical in exposure/composition.",
             "troubleshoot": [
-              "If auto-exposure changes the comparison, stabilise exposure before judging the mood pass."
+              "If auto exposure keeps changing the read, fix exposure before touching mood."
             ]
           },
           {
-            "title": "Phase 2",
-            "where": "Use the relevant Unreal editor panel for this phase, then test it immediately before continuing.",
-            "do": "Create a readable neutral baseline.",
-            "check": "The mood changes while the route/focal point remains readable from the locked camera.",
+            "title": "Phase 2 — Neutral readability pass",
+            "where": "Level Editor → global light / skylight / practicals → no dramatic colour grade yet",
+            "do": "Light the room so route, player silhouette and focal object are clear in a neutral version.",
+            "check": "A tester can identify route and focal point without being told what mood you intend.",
             "troubleshoot": [
-              "If auto-exposure changes the comparison, stabilise exposure before judging the mood pass."
+              "If the neutral version is already crushed or blown out, you have no stable base for mood comparisons."
             ]
           },
           {
-            "title": "Phase 3",
-            "where": "Level Editor → Lights / Post Process Volume / Exponential Height Fog → tune in Details from the locked comparison camera",
-            "do": "Make a Safe version using softer fill and warmer/clearer focal light.",
-            "check": "The mood changes while the route/focal point remains readable from the locked camera.",
+            "title": "Phase 3 — Safe",
+            "where": "Duplicate/save lighting state → adjust key/fill/practical balance",
+            "do": "Create a “safe” version using clearer visibility, softer contrast and a believable warmer or calmer focal cue.",
+            "check": "Two testers independently choose “safe/calm/welcoming” more often than the other labels.",
             "troubleshoot": [
-              "If auto-exposure changes the comparison, stabilise exposure before judging the mood pass."
+              "If it just becomes orange, change contrast and visibility as well as hue."
             ]
           },
           {
-            "title": "Phase 4",
-            "where": "Use the relevant Unreal editor panel for this phase, then test it immediately before continuing.",
-            "do": "Make a Threatening version using stronger contrast and controlled colour.",
-            "check": "The mood changes while the route/focal point remains readable from the locked camera.",
+            "title": "Phase 4 — Threatening",
+            "where": "Duplicate/save state → increase selective contrast / shadow uncertainty / colour tension",
+            "do": "Make the same room threatening without changing geometry or camera. Keep the critical route readable.",
+            "check": "Testers identify danger/tension while still knowing where they could move next.",
             "troubleshoot": [
-              "If auto-exposure changes the comparison, stabilise exposure before judging the mood pass."
+              "If everything is simply black, restore the gameplay information and concentrate darkness around uncertainty."
             ]
           },
           {
-            "title": "Phase 5",
-            "where": "Level Editor → Lights / Post Process Volume / Exponential Height Fog → tune in Details from the locked comparison camera",
-            "do": "Make an Uncertain version using fog/occlusion and partial information.",
-            "check": "The mood changes while the route/focal point remains readable from the locked camera.",
+            "title": "Phase 5 — Uncertain",
+            "where": "Exponential Height Fog / volumetric light / selective occlusion → same locked camera",
+            "do": "Make an “uncertain” version that withholds some information using fog, partial light or depth — without destroying silhouettes.",
+            "check": "The viewer can describe what is unclear and what remains intentionally readable.",
             "troubleshoot": [
-              "If auto-exposure changes the comparison, stabilise exposure before judging the mood pass."
+              "If fog flattens the whole frame equally, reduce it or use local light/contrast to rebuild depth."
             ]
           },
           {
-            "title": "Phase 6",
-            "where": "Level Editor → Cinematics → Level Sequence → Sequencer / Cine Camera tracks",
-            "do": "Ask someone which mood each shot communicates before showing labels.",
-            "check": "The mood changes while the route/focal point remains readable from the locked camera.",
+            "title": "Phase 6 — Blind mood test",
+            "where": "Export/capture the three locked-camera images → randomise their order for another student",
+            "do": "Show the three versions without labels and ask for one-word mood + first focal point.",
+            "check": "You collect mood/focal responses before revealing your intended labels.",
             "troubleshoot": [
-              "If auto-exposure changes the comparison, stabilise exposure before judging the mood pass."
+              "If all three get the same answer, your changes are cosmetic rather than experiential."
             ]
           },
           {
-            "title": "Phase 7",
-            "where": "Use the relevant Unreal editor panel for this phase, then test it immediately before continuing.",
-            "do": "Compare at least two scalability/quality settings and protect the focal point/readability in both.",
-            "check": "The mood changes while the route/focal point remains readable from the locked camera.",
+            "title": "Phase 7 — Quality reality check",
+            "where": "Engine Scalability Settings → compare at least two presets from the same camera",
+            "do": "Check whether lower shadow/fog/effects quality destroys your focal hierarchy or route cues.",
+            "check": "The scene remains playable/readable at both tested quality levels.",
             "troubleshoot": [
-              "If auto-exposure changes the comparison, stabilise exposure before judging the mood pass."
+              "If a critical cue exists only in one expensive effect, add a cheaper supporting cue."
             ]
           }
         ]
@@ -681,35 +1002,148 @@ window.UE5_DESIGN_DATA = {
         "Does the mood survive on the hardware students will actually use?"
       ],
       "engineNote": "UE5.8 adds a Medium Lumen quality tier aimed at lower-end PCs/handhelds. Current Epic guidance emphasises scalability budgets rather than assuming one high-end lighting setup fits every target.",
-      "engineUrl": "https://dev.epicgames.com/documentation/unreal-engine/lumen-performance-guide-for-unreal-engine"
+      "engineUrl": "https://dev.epicgames.com/documentation/unreal-engine/lumen-performance-guide-for-unreal-engine",
+      "caseStudies": [
+        {
+          "game": "Alan Wake 2",
+          "image": "https://www.alanwake.com/wp-content/uploads/2024/06/aw2-photo-mode-03-1920x1080.png",
+          "sourceUrl": "https://www.alanwake.com/story/unleash-your-creativity-with-alan-wake-2s-new-photo-mode/",
+          "sourceTitle": "Remedy — Alan Wake 2 Photo Mode",
+          "lens": "Colour + motivated emphasis",
+          "notice": "The photo-mode lighting tools make the design decision obvious: colour, intensity, source type and field of view can completely rewrite the mood of the same geometry.",
+          "steal": "Treat light colour/intensity as a deliberate variable, not a vibe slider.",
+          "task": "Predict how the shot changes if the red light becomes white but every other setting stays fixed."
+        },
+        {
+          "game": "INSIDE",
+          "image": "https://playdead.com/css/img/inside/screenshots/INSIDE_01.jpg",
+          "sourceUrl": "https://playdead.com/games/inside/",
+          "sourceTitle": "Playdead — INSIDE",
+          "lens": "Silhouette + negative space",
+          "notice": "Large dark masses simplify the frame while a controlled light pool separates the player and route.",
+          "steal": "Darkness is useful only when the important information remains readable.",
+          "task": "Identify the minimum area that must stay lit for this scene to remain playable."
+        },
+        {
+          "game": "Dead Space",
+          "image": "https://drop-assets.ea.com/images/5Cr5lTNDijF2pzIopPZduH/2009d571be74052edf094ce0a992253f/ds-gp-hallway-04-no-watermark.jpg",
+          "sourceUrl": "https://www.ea.com/games/dead-space/dead-space",
+          "sourceTitle": "EA / Motive — Dead Space",
+          "lens": "Safe pool → dangerous shadow",
+          "notice": "Motive explicitly uses light/shadow, dynamic failures and limited lit zones to control tension on the Ishimura.",
+          "steal": "Lighting can create a rhythm of safety and uncertainty.",
+          "task": "Mark where you would slow down as a player and explain what the light is doing to cause it."
+        }
+      ],
+      "researchMissions": [
+        {
+          "title": "One Scene, Three Reads",
+          "duration": "15 min",
+          "brief": "Find one location that appears under different lighting or weather states.",
+          "steps": [
+            "Capture/collect three versions.",
+            "Name the focal point in each.",
+            "Name the dominant contrast.",
+            "Write how player behaviour or emotion changes."
+          ],
+          "evidence": "Three images + one paragraph comparing the reads."
+        },
+        {
+          "title": "Motivated Light Hunt",
+          "duration": "10 min",
+          "brief": "Collect five game lights and decide whether the visible source justifies them.",
+          "steps": [
+            "Mark the visible source.",
+            "Classify motivated / unmotivated.",
+            "Explain the gameplay job.",
+            "Choose one light you would remove."
+          ],
+          "evidence": "Five mini-captures with one-line verdicts."
+        }
+      ],
+      "challenges": [
+        {
+          "title": "One Light Horror",
+          "constraint": "One movable key light plus ambient/global light.",
+          "goal": "Create readable tension without filling the room with point lights."
+        },
+        {
+          "title": "Mood Swap",
+          "constraint": "Same geometry, camera and materials.",
+          "goal": "Make “safe” and “dangerous” versions using only lighting/atmosphere."
+        },
+        {
+          "title": "No Post Process Rescue",
+          "constraint": "Disable the Post Process Volume while judging.",
+          "goal": "Make the base lighting work before grading."
+        }
+      ],
+      "resources": [
+        {
+          "title": "The Level Design Book — Lighting",
+          "type": "Free design reading",
+          "url": "https://book.leveldesignbook.com/process/lighting",
+          "why": "Separates global, wayfinding, gameplay and detail/mood lighting passes."
+        },
+        {
+          "title": "Alan Wake 2 — Photo Mode Lighting",
+          "type": "Developer feature breakdown",
+          "url": "https://www.alanwake.com/story/unleash-your-creativity-with-alan-wake-2s-new-photo-mode/",
+          "why": "A clear demonstration of how controllable lighting changes mood and framing."
+        },
+        {
+          "title": "Dead Space — Intensity Director",
+          "type": "Developer breakdown",
+          "url": "https://www.ea.com/ea-play/news/inside-dead-space-4-the-intensity-director",
+          "why": "Shows lighting, audio and atmosphere being treated as dynamic player-experience systems."
+        }
+      ],
+      "afterBuild": {
+        "title": "BLACK BOX: Emotional Re-Light",
+        "brief": "Swap the emotional meaning of your strongest lighting setup without moving the camera or geometry.",
+        "constraints": [
+          "No geometry changes.",
+          "Maximum three light edits plus one atmosphere edit.",
+          "Keep the route equally readable."
+        ],
+        "improve": "Ask two testers to choose from “safe / lonely / threatening / heroic” without telling them the target.",
+        "evidence": "A/B screenshots + tester responses."
+      }
     },
     {
       "id": "landscape",
       "title": "Landscape, Terrain & Foliage",
       "icon": "≈",
-      "description": "Shape outdoor spaces as playable routes first, then use terrain materials, foliage and landmarks to sell scale.",
+      "description": "Shape terrain around traversal, landmarks, routes and encounter space rather than sculpting random mountains.",
       "principles": [
-        "Terrain must support movement",
-        "Large landforms before noise",
-        "Paths need readable silhouettes",
-        "Foliage forms clusters, not uniform carpet",
-        "Distant landmarks orient the player"
+        "Design routes before noise",
+        "Use skyline landmarks",
+        "Give terrain traversal cost",
+        "Protect readable silhouettes",
+        "Foliage must respect gameplay"
       ],
-      "intro": "Landscape tools can create enormous worlds quickly, which makes bad decisions enormous too. Work from route and silhouette outward rather than sculpting random noise.",
+      "intro": "Terrain is level design at a huge scale. Slopes, ridges, valleys, skyline silhouettes and foliage density decide where players can travel and what they can understand from a distance.",
       "referenceImages": [
         {
-          "src": "https://cdn.wccftech.com/wp-content/uploads/2020/07/DeathStranding_Screenshot_01-scaled.jpg",
-          "caption": "DEATH STRANDING — landscape scale, route readability and distant silhouettes make terrain itself part of the experience.",
+          "src": "https://www.kojimaproductions.jp/sites/default/files/2021-08/gr.DeathStranding_GameScreenshot3.jpg",
+          "caption": "Death Stranding — Terrain as mechanic. Give terrain meaningful travel costs and choices.",
           "sourceUrl": "https://www.kojimaproductions.jp/en/death-stranding-ps4",
-          "sourceTitle": "KOJIMA PRODUCTIONS — DEATH STRANDING",
+          "sourceTitle": "Kojima Productions — Death Stranding",
           "kind": "reference"
         },
         {
-          "src": "https://img.edc-cdn.net/imgproxy/WhJevtNTVxIUT55gW9wM3-sl1hwqk0EEexbt5n9VtQc/filename%3A04-new-landscape-tool.png/resizing_type%3Afit/width%3A0/height%3A0/aHR0cHM6Ly9kMWl2N2RiNDR5aGd4bi5jbG91ZGZyb250Lm5ldC9kb2N1bWVudGF0aW9uL2ltYWdlcy80ZGIwODM4YS0yYmFhLTRmYzItYTNiNi1jNjBkNTJjOGVkM2MvMDQtbmV3LWxhbmRzY2FwZS10b29sLnBuZw",
-          "caption": "Unreal Landscape tools — Manage creates the landscape, Sculpt shapes it and Paint applies landscape material layers.",
-          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/landscape-quick-start-guide-in-unreal-engine",
-          "sourceTitle": "Epic Games — Landscape Quick Start",
-          "kind": "epic"
+          "src": "https://www.kojimaproductions.jp/sites/default/files/2021-08/gr.DeathStranding_GameScreenshot5.jpg",
+          "caption": "Death Stranding — Silhouette + difficulty. Let large terrain forms preview the difficulty ahead.",
+          "sourceUrl": "https://www.kojimaproductions.jp/en/death-stranding-ps4",
+          "sourceTitle": "Kojima Productions — Death Stranding",
+          "kind": "reference"
+        },
+        {
+          "src": "https://p325k7wa.twic.pics/high/elden-ring/elden-ring/02-screenshots/ELDENRING_01_4K.jpg?twic=v1%2Fcover%3D2160%2Fstep%3D10%2Fquality%3D80%2Foutput%3Dpreview",
+          "caption": "ELDEN RING — Distant attraction. Give players something memorable to orient around beyond the next 20 metres.",
+          "sourceUrl": "https://en.bandainamcoent.eu/elden-ring/elden-ring/media",
+          "sourceTitle": "Bandai Namco — ELDEN RING media gallery",
+          "kind": "reference"
         },
         {
           "src": "assets/book/best-practices/outdoor-lighting-example.webp",
@@ -760,66 +1194,66 @@ window.UE5_DESIGN_DATA = {
         ],
         "phaseDetails": [
           {
-            "title": "Phase 1",
-            "where": "Level Editor → Add (+) → Shapes / Content Drawer → build in Viewport → Play-test from player height",
-            "do": "Draw the route on paper before sculpting.",
-            "check": "The player can traverse the intended route and still read the landmark/sightline.",
+            "title": "Phase 1 — Plan the experience",
+            "where": "Paper / image editor / screenshot annotation before Landscape mode",
+            "do": "Draw start, goal, landmark and three route beats before sculpting. Mark where the player should see the goal and where it can disappear.",
+            "check": "You can explain the route and pacing without referring to terrain brush settings.",
             "troubleshoot": [
-              "If the route works only from the editor camera, test at player height and remove terrain/foliage snags."
+              "If the plan is “walk through valley”, add at least one choice, reveal, obstacle or reward beat."
             ]
           },
           {
-            "title": "Phase 2",
-            "where": "Modes → Landscape / Foliage → edit in Viewport → Play-test the route",
-            "do": "Sculpt large valley/ridge shapes with broad brushes.",
-            "check": "The player can traverse the intended route and still read the landmark/sightline.",
+            "title": "Phase 2 — Sculpt only the big forms",
+            "where": "Modes → Landscape → Sculpt → large brush, low/controlled strength",
+            "do": "Create valley, ridge and horizon forms using broad passes. Avoid noisy detail.",
+            "check": "At distance, the terrain silhouette already supports your route and landmark.",
             "troubleshoot": [
-              "If the route works only from the editor camera, test at player height and remove terrain/foliage snags."
+              "If it looks like lumpy porridge, increase brush scale and simplify the number of forms."
             ]
           },
           {
-            "title": "Phase 3",
-            "where": "Use the relevant Unreal editor panel for this phase, then test it immediately before continuing.",
-            "do": "Ensure the player can traverse the intended path without snagging.",
-            "check": "The player can traverse the intended route and still read the landmark/sightline.",
+            "title": "Phase 3 — Walk it",
+            "where": "Play from the intended start → traverse entire route at player speed",
+            "do": "Test slope, camera, jump/traversal width and collision. Fix terrain snags before art.",
+            "check": "The player reaches the goal without accidental steep blockers or awkward zig-zagging.",
             "troubleshoot": [
-              "If the route works only from the editor camera, test at player height and remove terrain/foliage snags."
+              "If you need editor fly mode to understand the route, it is not yet designed for the player."
             ]
           },
           {
-            "title": "Phase 4",
-            "where": "Modes → Landscape / Foliage → edit in Viewport → Play-test the route",
-            "do": "Paint at least three landscape layers based on slope/use.",
-            "check": "The player can traverse the intended route and still read the landmark/sightline.",
+            "title": "Phase 4 — Paint by physical logic",
+            "where": "Landscape → Paint → three layers with Layer Info assets",
+            "do": "Use at least three layers based on terrain/use: path/soil on travel zones, rock on steep/exposed surfaces, vegetation on suitable ground.",
+            "check": "Texture placement helps explain slope and route instead of looking airbrushed randomly.",
             "troubleshoot": [
-              "If the route works only from the editor camera, test at player height and remove terrain/foliage snags."
+              "If every layer is painted as soft blobs, tie boundaries to slope, erosion, path or biome logic."
             ]
           },
           {
-            "title": "Phase 5",
-            "where": "Level Editor → Add (+) → Shapes / Content Drawer → build in Viewport → Play-test from player height",
-            "do": "Add foliage in clusters and preserve route edges/sightlines.",
-            "check": "The player can traverse the intended route and still read the landmark/sightline.",
+            "title": "Phase 5 — Foliage as guidance",
+            "where": "Foliage Mode / PCG if used → cluster away from route edges and key sightlines",
+            "do": "Dress in clusters, leave breathing spaces, and deliberately thin vegetation near route decisions and landmark views.",
+            "check": "The intended route stays readable from player height even in dense areas.",
             "troubleshoot": [
-              "If the route works only from the editor camera, test at player height and remove terrain/foliage snags."
+              "If foliage hides the route, do not add an arrow — edit density, species height or clearing shape."
             ]
           },
           {
-            "title": "Phase 6",
-            "where": "Level Editor → Add (+) → Shapes / Content Drawer → build in Viewport → Play-test from player height",
-            "do": "Place a landmark visible early and reveal it again later.",
-            "check": "The player can traverse the intended route and still read the landmark/sightline.",
+            "title": "Phase 6 — Landmark reveal rhythm",
+            "where": "Place one authored landmark → test from start, mid-route and approach",
+            "do": "Reveal the landmark early, hide/partially lose it during traversal, then reveal it again from a new angle.",
+            "check": "A tester can use the landmark to describe progress through the landscape.",
             "troubleshoot": [
-              "If the route works only from the editor camera, test at player height and remove terrain/foliage snags."
+              "If the landmark is visible constantly, the journey may feel flat; if never visible, it cannot orient the player."
             ]
           },
           {
-            "title": "Phase 7",
-            "where": "Level Editor → Add (+) → Shapes / Content Drawer → build in Viewport → Play-test from player height",
-            "do": "Add one authored landmark and protect the playable route from procedural/foliage clutter.",
-            "check": "The player can traverse the intended route and still read the landmark/sightline.",
+            "title": "Phase 7 — Clutter protection test",
+            "where": "Toggle procedural/foliage layers or increase density temporarily → Play the route again",
+            "do": "Stress-test the level against extra clutter, then define exclusion/clearing rules around critical gameplay space.",
+            "check": "The route and landmark survive the dressing system rather than depending on manual luck.",
             "troubleshoot": [
-              "If the route works only from the editor camera, test at player height and remove terrain/foliage snags."
+              "If procedural placement repeatedly breaks gameplay, formalise exclusion volumes/masks instead of hand-deleting every instance."
             ]
           }
         ]
@@ -856,34 +1290,141 @@ window.UE5_DESIGN_DATA = {
         "Where could density be reduced with no loss of atmosphere?"
       ],
       "engineNote": "UE5.8 supports procedural world workflows alongside hand-authored Landscape and foliage tools. Use automation to accelerate coverage, not to surrender design control.",
-      "engineUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/procedural-content-generation-framework-in-unreal-engine"
+      "engineUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/procedural-content-generation-framework-in-unreal-engine",
+      "caseStudies": [
+        {
+          "game": "Death Stranding",
+          "image": "https://www.kojimaproductions.jp/sites/default/files/2021-08/gr.DeathStranding_GameScreenshot3.jpg",
+          "sourceUrl": "https://www.kojimaproductions.jp/en/death-stranding-ps4",
+          "sourceTitle": "Kojima Productions — Death Stranding",
+          "lens": "Terrain as mechanic",
+          "notice": "Slope, rock density, river placement and distant relief make traversal itself the challenge. The landscape is not background; it is the system.",
+          "steal": "Give terrain meaningful travel costs and choices.",
+          "task": "Draw the fastest, safest and most scenic routes from foreground to the distant ridge."
+        },
+        {
+          "game": "Death Stranding",
+          "image": "https://www.kojimaproductions.jp/sites/default/files/2021-08/gr.DeathStranding_GameScreenshot5.jpg",
+          "sourceUrl": "https://www.kojimaproductions.jp/en/death-stranding-ps4",
+          "sourceTitle": "Kojima Productions — Death Stranding",
+          "lens": "Silhouette + difficulty",
+          "notice": "The mountain silhouette communicates destination and danger before the player knows the exact route.",
+          "steal": "Let large terrain forms preview the difficulty ahead.",
+          "task": "Reduce the image to black/white silhouette. What still communicates the challenge?"
+        },
+        {
+          "game": "ELDEN RING",
+          "image": "https://p325k7wa.twic.pics/high/elden-ring/elden-ring/02-screenshots/ELDENRING_01_4K.jpg?twic=v1%2Fcover%3D2160%2Fstep%3D10%2Fquality%3D80%2Foutput%3Dpreview",
+          "sourceUrl": "https://en.bandainamcoent.eu/elden-ring/elden-ring/media",
+          "sourceTitle": "Bandai Namco — ELDEN RING media gallery",
+          "lens": "Distant attraction",
+          "notice": "Large landmarks and layered terrain create long-term navigation targets while allowing local discovery.",
+          "steal": "Give players something memorable to orient around beyond the next 20 metres.",
+          "task": "Identify a long-term landmark, a mid-distance landmark and a local cue."
+        }
+      ],
+      "researchMissions": [
+        {
+          "title": "Three Routes Through One Landscape",
+          "duration": "15 min",
+          "brief": "Use an open-world screenshot and plan three routes with different player intentions.",
+          "steps": [
+            "Fast route.",
+            "Safe route.",
+            "Exploration/reward route.",
+            "Mark what terrain feature creates each choice."
+          ],
+          "evidence": "One annotated landscape image with three coloured route lines."
+        },
+        {
+          "title": "Skyline Memory Test",
+          "duration": "10 min",
+          "brief": "Collect four open-world skyline screenshots from games you know.",
+          "steps": [
+            "Hide UI.",
+            "Name the landmark.",
+            "Write what it tells you about direction or progress.",
+            "Rank which silhouette is easiest to remember."
+          ],
+          "evidence": "Four-image comparison + ranking."
+        }
+      ],
+      "challenges": [
+        {
+          "title": "Terrain Before Foliage",
+          "constraint": "No foliage or rocks until the route passes a playtest.",
+          "goal": "Make the terrain alone communicate movement and destination."
+        },
+        {
+          "title": "Three Costs",
+          "constraint": "One valley, three traversable routes.",
+          "goal": "Make each route trade time, safety or reward."
+        },
+        {
+          "title": "Foliage Firewall",
+          "constraint": "Dense biome, but the critical route can never disappear.",
+          "goal": "Use density, species and clearing patterns as guidance."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Kojima Productions — Death Stranding media",
+          "type": "Official visual reference",
+          "url": "https://www.kojimaproductions.jp/en/death-stranding-ps4",
+          "why": "Excellent terrain/traversal references where landscape is central to play."
+        },
+        {
+          "title": "Guerrilla — Relic Ruins",
+          "type": "World-design breakdown",
+          "url": "https://www.guerrilla-games.com/read/relic-ruins-creating-environmental-puzzles-for-horizon-forbidden-west",
+          "why": "Shows how open-world attraction, puzzle space and player route connect."
+        }
+      ],
+      "afterBuild": {
+        "title": "BLACK BOX: The Route You Didn’t Plan",
+        "brief": "Ask a tester to cross your valley however they want. Keep the route they invent and redesign around it instead of forcing them back onto your original path.",
+        "constraints": [
+          "Do not block their route.",
+          "Make it intentionally supported.",
+          "Keep your original route viable too."
+        ],
+        "improve": "Explain what the tester saw in the terrain that you did not.",
+        "evidence": "Original plan + actual tester path + revised path map."
+      }
     },
     {
       "id": "cinematics",
       "title": "Sequencer & Cutscenes",
       "icon": "▶",
-      "description": "Use camera language, timing and Sequencer to reveal information without making every scene a slow pan around the level.",
+      "description": "Use framing, lens, movement, staging and cuts to communicate information — not just to make a camera fly around.",
       "principles": [
-        "Every shot needs a purpose",
+        "Every shot needs a story job",
+        "Lens changes meaning",
+        "Movement needs motivation",
         "Cut on information or action",
-        "Keep screen direction readable",
-        "Use camera movement sparingly",
         "Return control cleanly"
       ],
-      "intro": "A cinematic is edited information. Sequencer provides the tools, but framing, shot duration and what you choose not to show are what make it work.",
+      "intro": "A cutscene is a controlled piece of player communication. Every shot should reveal, hide, emphasise or transition something. Start with the story beat, then choose the camera technique.",
       "referenceImages": [
         {
-          "src": "https://images.purexbox.com/bad222687593e/hellblade-2-will-display-with-black-bars-outside-of-ultrawide-mode-3.large.jpg",
-          "caption": "Senua’s Saga: Hellblade II — controlled framing, motivated firelight and restrained colour push the eye toward the confrontation.",
-          "sourceUrl": "https://www.xbox.com/en-GB/games/senuas-saga-hellblade-II",
-          "sourceTitle": "Xbox — Senua’s Saga: Hellblade II",
+          "src": "https://www.alanwake.com/wp-content/uploads/2024/06/aw2-photo-mode-02-clean-1300x650.png",
+          "caption": "Alan Wake 2 — Focal length + framing. Choose the camera based on the information/emotion the shot must deliver.",
+          "sourceUrl": "https://www.alanwake.com/story/unleash-your-creativity-with-alan-wake-2s-new-photo-mode/",
+          "sourceTitle": "Remedy — Alan Wake 2 Photo Mode",
           "kind": "reference"
         },
         {
-          "src": "https://www.playdead.com/css/img/inside/screenshots/INSIDE_01.jpg",
-          "caption": "INSIDE — a tiny character silhouette, one strong pool of light and huge negative space create immediate hierarchy and tension.",
-          "sourceUrl": "https://playdead.com/games/inside/",
-          "sourceTitle": "Playdead — INSIDE",
+          "src": "https://www.guerrilla-games.com/media/News/HFW_SCREEN_LEGAL_GLIDER_4K_RGB_20210512.webp",
+          "caption": "Horizon Forbidden West — Action geography. Establish geography before rapid cuts or close action.",
+          "sourceUrl": "https://www.guerrilla-games.com/read/15-minutes-of-new-gameplay-for-horizon-forbidden-west",
+          "sourceTitle": "Guerrilla — Horizon Forbidden West",
+          "kind": "reference"
+        },
+        {
+          "src": "https://cdn.prod.website-files.com/64630b03551142e3347ae3da/6492c4abe40138d6dc791368_control_pm_det_027.webp",
+          "caption": "CONTROL — Architecture as frame. Let the environment compose the shot for you.",
+          "sourceUrl": "https://www.remedygames.com/games/control",
+          "sourceTitle": "Remedy — CONTROL",
           "kind": "reference"
         },
         {
@@ -935,66 +1476,66 @@ window.UE5_DESIGN_DATA = {
         ],
         "phaseDetails": [
           {
-            "title": "Phase 1",
-            "where": "Level Editor → Cinematics → Level Sequence → Sequencer / Cine Camera tracks",
-            "do": "Write the information each shot must communicate.",
-            "check": "The sequence communicates its intended information at normal playback speed and returns cleanly to gameplay.",
+            "title": "Phase 1 — Write shot jobs",
+            "where": "Before Sequencer: notes / storyboard / three boxes on paper",
+            "do": "Write what the audience must learn in each beat: place, clue, threat, reaction, destination. Do not write camera moves yet.",
+            "check": "Every planned shot has one clear information/emotion job.",
             "troubleshoot": [
-              "If a shot works as a still but feels slow/confusing in playback, shorten/reframe before adding more shots."
+              "If a shot exists only because “a pan would look cool”, delete it or give it a story function."
             ]
           },
           {
-            "title": "Phase 2",
-            "where": "Level Editor → Cinematics → Level Sequence → Sequencer / Cine Camera tracks",
-            "do": "Create a Level Sequence and 3–5 Cine Camera shots.",
-            "check": "The sequence communicates its intended information at normal playback speed and returns cleanly to gameplay.",
+            "title": "Phase 2 — Build the shot list",
+            "where": "Cinematics → Add Level Sequence → add Cine Cameras + Camera Cuts track",
+            "do": "Create 3–5 shots and name cameras by job, not CameraActor_7: e.g. ESTABLISH_ROOM, REVEAL_DOOR, REACTION.",
+            "check": "Scrubbing the Camera Cuts track shows the full information sequence in the intended order.",
             "troubleshoot": [
-              "If a shot works as a still but feels slow/confusing in playback, shorten/reframe before adding more shots."
+              "If you need more than five shots for a 20-second reveal, combine or remove redundant information."
             ]
           },
           {
-            "title": "Phase 3",
-            "where": "Level Editor → Cinematics → Level Sequence → Sequencer / Cine Camera tracks",
-            "do": "Keep shot lengths varied; avoid five identical slow pans.",
-            "check": "The sequence communicates its intended information at normal playback speed and returns cleanly to gameplay.",
+            "title": "Phase 3 — Set pacing",
+            "where": "Sequencer → adjust section lengths / cut points → play at normal speed",
+            "do": "Vary shot duration based on information density. Cut once the audience has read the important thing.",
+            "check": "No shot feels like it is waiting after its information has landed.",
             "troubleshoot": [
-              "If a shot works as a still but feels slow/confusing in playback, shorten/reframe before adding more shots."
+              "If every shot is the same length, change pacing according to the beat rather than a grid."
             ]
           },
           {
-            "title": "Phase 4",
-            "where": "Level Editor → Cinematics → Level Sequence → Sequencer / Cine Camera tracks",
-            "do": "Use one motivated camera move or rack/focus-style emphasis.",
-            "check": "The sequence communicates its intended information at normal playback speed and returns cleanly to gameplay.",
+            "title": "Phase 4 — Add one motivated move",
+            "where": "Cine Camera transform/focus track → animate only where information changes",
+            "do": "Use one push, track, reveal, focus change or character-follow move that exposes something new.",
+            "check": "Pausing before vs after the move reveals a meaningful change in information.",
             "troubleshoot": [
-              "If a shot works as a still but feels slow/confusing in playback, shorten/reframe before adding more shots."
+              "If the move could be removed with no storytelling loss, make it static or redesign the move."
             ]
           },
           {
-            "title": "Phase 5",
-            "where": "Content Drawer → audio asset / attenuation / MetaSound → place source in level → test while moving",
-            "do": "Add one sound cue to support the reveal.",
-            "check": "The sequence communicates its intended information at normal playback speed and returns cleanly to gameplay.",
+            "title": "Phase 5 — Sync one sound beat",
+            "where": "Sequencer → add Audio track / place sound event aligned to reveal or cut",
+            "do": "Use one sound cue to support a reveal, transition or off-screen implication — not wallpaper music.",
+            "check": "The sound arrives at a deliberate picture beat and strengthens what the viewer notices.",
             "troubleshoot": [
-              "If a shot works as a still but feels slow/confusing in playback, shorten/reframe before adding more shots."
+              "If the sound simply starts at frame 0 and loops, choose a specific narrative moment for it."
             ]
           },
           {
-            "title": "Phase 6",
-            "where": "Level Editor → Cinematics → Level Sequence → Sequencer / Cine Camera tracks",
-            "do": "Trigger the sequence and return cleanly to player control.",
-            "check": "The sequence communicates its intended information at normal playback speed and returns cleanly to gameplay.",
+            "title": "Phase 6 — Return control cleanly",
+            "where": "Trigger sequence from gameplay → test input/camera state before, during and after",
+            "do": "Run the scene from gameplay and verify player control/camera are restored without a snap, stuck input or wrong orientation.",
+            "check": "The player can move immediately after the sequence and understands what to do next.",
             "troubleshoot": [
-              "If a shot works as a still but feels slow/confusing in playback, shorten/reframe before adding more shots."
+              "If the ending frame points away from the next goal, redesign the hand-back rather than relying on UI."
             ]
           },
           {
-            "title": "Phase 7",
-            "where": "Level Editor → Cinematics → Level Sequence → Sequencer / Cine Camera tracks",
-            "do": "Organise the sequence into clearly named shots/subsequences and sync one audio beat to a camera or action beat.",
-            "check": "The sequence communicates its intended information at normal playback speed and returns cleanly to gameplay.",
+            "title": "Phase 7 — Production tidy",
+            "where": "Sequencer → folders/subsequences/named tracks → align one audio beat exactly",
+            "do": "Organise cameras, shots and audio so another student can understand the sequence in under a minute.",
+            "check": "A partner can identify shot order and edit one shot without asking what Track_12 is.",
             "troubleshoot": [
-              "If a shot works as a still but feels slow/confusing in playback, shorten/reframe before adding more shots."
+              "If everything is unnamed, tidy before adding more cinematic complexity."
             ]
           }
         ]
@@ -1031,34 +1572,141 @@ window.UE5_DESIGN_DATA = {
         "Does sound reinforce the rhythm of the edit?"
       ],
       "engineNote": "UE5.8 Sequencer still centres on Level Sequences, Cine Camera Actors, Camera Cut tracks, Event/Director logic and Movie Render Queue for high-quality output.",
-      "engineUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/sequencer-cinematic-editor-unreal-engine"
+      "engineUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/sequencer-cinematic-editor-unreal-engine",
+      "caseStudies": [
+        {
+          "game": "Alan Wake 2",
+          "image": "https://www.alanwake.com/wp-content/uploads/2024/06/aw2-photo-mode-02-clean-1300x650.png",
+          "sourceUrl": "https://www.alanwake.com/story/unleash-your-creativity-with-alan-wake-2s-new-photo-mode/",
+          "sourceTitle": "Remedy — Alan Wake 2 Photo Mode",
+          "lens": "Focal length + framing",
+          "notice": "Photo-mode controls expose the same decisions a cinematic designer makes: lens, focus, exposure, framing and whether a character is even present.",
+          "steal": "Choose the camera based on the information/emotion the shot must deliver.",
+          "task": "Crop the image three ways: establishing, character, clue. What changes in meaning?"
+        },
+        {
+          "game": "Horizon Forbidden West",
+          "image": "https://www.guerrilla-games.com/media/News/HFW_SCREEN_LEGAL_GLIDER_4K_RGB_20210512.webp",
+          "sourceUrl": "https://www.guerrilla-games.com/read/15-minutes-of-new-gameplay-for-horizon-forbidden-west",
+          "sourceTitle": "Guerrilla — Horizon Forbidden West",
+          "lens": "Action geography",
+          "notice": "Wide framing establishes height, route and danger before tighter action. The player needs spatial understanding before spectacle.",
+          "steal": "Establish geography before rapid cuts or close action.",
+          "task": "Write a three-shot sequence: establish location → reveal threat → return to player goal."
+        },
+        {
+          "game": "CONTROL",
+          "image": "https://cdn.prod.website-files.com/64630b03551142e3347ae3da/6492c4abe40138d6dc791368_control_pm_det_027.webp",
+          "sourceUrl": "https://www.remedygames.com/games/control",
+          "sourceTitle": "Remedy — CONTROL",
+          "lens": "Architecture as frame",
+          "notice": "Strong architectural lines and scale can frame characters and reveal spaces without requiring complicated camera movement.",
+          "steal": "Let the environment compose the shot for you.",
+          "task": "Choose a static camera position that tells the same story as a moving camera. What do you gain/lose?"
+        }
+      ],
+      "researchMissions": [
+        {
+          "title": "Trailer Shot Bingo",
+          "duration": "10 min",
+          "brief": "Watch 60–90 seconds of a game trailer and count shot types.",
+          "steps": [
+            "Count wide / medium / close.",
+            "Count moving vs static shots.",
+            "Mark the longest shot.",
+            "Write why the editor cuts at three moments."
+          ],
+          "evidence": "Simple tally sheet + one paragraph about pacing."
+        },
+        {
+          "title": "Mute the Scene",
+          "duration": "10 min",
+          "brief": "Watch a short cutscene muted and write only what the camera communicates.",
+          "steps": [
+            "What is revealed first?",
+            "What is hidden?",
+            "Who has visual power?",
+            "When does the shot size change and why?"
+          ],
+          "evidence": "Four bullet observations + one camera change you would make."
+        }
+      ],
+      "challenges": [
+        {
+          "title": "Three Shots Only",
+          "constraint": "Exactly three shots, maximum 20 seconds.",
+          "goal": "Communicate place, threat and player goal."
+        },
+        {
+          "title": "One Lens",
+          "constraint": "Pick one focal length and never change it.",
+          "goal": "Create variety through staging, distance and movement instead."
+        },
+        {
+          "title": "No Fly-Through",
+          "constraint": "No aimless camera travel.",
+          "goal": "Every camera move must reveal new information or track meaningful action."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Guerrilla at GDC 2023 — Cinematics",
+          "type": "Developer trail",
+          "url": "https://www.guerrilla-games.com/read/guerrilla-gdc-2023",
+          "why": "Points students toward the studio’s cinematics production thinking."
+        },
+        {
+          "title": "Alan Wake 2 — Photo Mode",
+          "type": "Composition practice",
+          "url": "https://www.alanwake.com/story/unleash-your-creativity-with-alan-wake-2s-new-photo-mode/",
+          "why": "Useful for focal length, focus, exposure and lighting analysis."
+        }
+      ],
+      "afterBuild": {
+        "title": "BLACK BOX: Tell It Without Dialogue",
+        "brief": "Rebuild your 20-second reveal so it communicates the same story beat with dialogue and subtitles removed.",
+        "constraints": [
+          "No text.",
+          "Four cuts maximum.",
+          "At least one moment of player-relevant information."
+        ],
+        "improve": "Show both versions to a tester and ask what they understood from the camera alone.",
+        "evidence": "Shot list + tester summary."
+      }
     },
     {
       "id": "audio",
       "title": "Audio & Sound Design",
       "icon": "♪",
-      "description": "Build spaces that sound alive using ambience, attenuation, variation, reverb and carefully placed silence.",
+      "description": "Design spaces the player can understand with their ears: distance, danger, material, direction, rhythm and atmosphere.",
       "principles": [
-        "Sound has location and distance",
-        "Layer ambience rather than one giant loop",
-        "Randomise repeated sounds",
-        "Use silence as contrast",
-        "Mix for gameplay priority"
+        "Give every sound a gameplay or world job",
+        "Use layers, not one giant ambience",
+        "Distance and occlusion matter",
+        "Silence is contrast",
+        "Test while moving, not standing still"
       ],
-      "intro": "Players hear spaces before they understand them. Audio can reveal distance, danger, room size, material and activity beyond the camera.",
+      "intro": "Sound design is level design you cannot see. It tells the player what is nearby, what is behind them, whether a space is safe and whether something has changed before the camera confirms it.",
       "referenceImages": [
         {
-          "src": "https://www.playdead.com/css/img/inside/screenshots/INSIDE_01.jpg",
-          "caption": "INSIDE — a tiny character silhouette, one strong pool of light and huge negative space create immediate hierarchy and tension.",
+          "src": "https://drop-assets.ea.com/images/5Cr5lTNDijF2pzIopPZduH/2009d571be74052edf094ce0a992253f/ds-gp-hallway-04-no-watermark.jpg",
+          "caption": "Dead Space — Occlusion + projected sound. Use sound to tell the player about spaces outside the camera.",
+          "sourceUrl": "https://www.ea.com/games/dead-space/dead-space",
+          "sourceTitle": "EA / Motive — Dead Space",
+          "kind": "reference"
+        },
+        {
+          "src": "https://playdead.com/css/img/inside/screenshots/INSIDE_01.jpg",
+          "caption": "INSIDE — Sparse sound + focus. Do not fill every second. Leave room for important sounds to become events.",
           "sourceUrl": "https://playdead.com/games/inside/",
           "sourceTitle": "Playdead — INSIDE",
           "kind": "reference"
         },
         {
-          "src": "https://www.konami.com/products_master/eu_publish/silenthill2r/eu/en/images/sh2_3.png",
-          "caption": "SILENT HILL 2 — nearby forms stay readable while distance disappears, making fog both atmosphere and level-design control.",
-          "sourceUrl": "https://www.konami.com/games/eu/en/products/silenthill2r/",
-          "sourceTitle": "KONAMI — SILENT HILL 2",
+          "src": "https://www.alanwake.com/wp-content/uploads/2024/06/aw2-photo-mode-03-1920x1080.png",
+          "caption": "Alan Wake 2 — Atmosphere + state change. Design ambience as layers that can enter/leave with game state.",
+          "sourceUrl": "https://www.alanwake.com/story/unleash-your-creativity-with-alan-wake-2s-new-photo-mode/",
+          "sourceTitle": "Remedy — Alan Wake 2",
           "kind": "reference"
         },
         {
@@ -1104,66 +1752,66 @@ window.UE5_DESIGN_DATA = {
         ],
         "phaseDetails": [
           {
-            "title": "Phase 1",
-            "where": "Content Drawer → audio asset / attenuation / MetaSound → place source in level → test while moving",
-            "do": "Choose one off-screen sound source: machinery, radio, creature, storm or crowd.",
-            "check": "A moving listener can infer direction/space without the audio masking important gameplay cues.",
+            "title": "Phase 1 — Decide what the player should know",
+            "where": "Before placing audio: write source, meaning, direction and when it should be heard",
+            "do": "Choose one off-screen source and define the information it gives: machinery = destination, radio = life, creature = danger, storm = exterior, crowd = populated area.",
+            "check": "You can state the player-facing job in one sentence.",
             "troubleshoot": [
-              "If the source is hard to locate or loops obviously, test attenuation and variation while walking past it."
+              "If the answer is only “atmosphere”, make it more specific: what does the sound tell the player about space or state?"
             ]
           },
           {
-            "title": "Phase 2",
-            "where": "Content Drawer → audio asset / attenuation / MetaSound → place source in level → test while moving",
-            "do": "Create a quiet base ambience so the focal sound has contrast.",
-            "check": "A moving listener can infer direction/space without the audio masking important gameplay cues.",
+            "title": "Phase 2 — Build a quiet base",
+            "where": "Level Editor → place/author a low-level ambient bed → test at gameplay volume",
+            "do": "Create a restrained ambience layer with enough space for the important source to stand out.",
+            "check": "You can hear the environment without the focal source fighting a wall of constant noise.",
             "troubleshoot": [
-              "If the source is hard to locate or loops obviously, test attenuation and variation while walking past it."
+              "If everything is loud all the time, lower or remove layers before adding the focal cue."
             ]
           },
           {
-            "title": "Phase 3",
-            "where": "Content Drawer → audio asset / attenuation / MetaSound → place source in level → test while moving",
-            "do": "Use attenuation so direction and distance change as the player moves.",
-            "check": "A moving listener can infer direction/space without the audio masking important gameplay cues.",
+            "title": "Phase 3 — Make distance readable",
+            "where": "Sound Attenuation asset / Audio Component attenuation settings → walk toward and past source",
+            "do": "Tune falloff/spatialisation while moving from far → near → past the source.",
+            "check": "A listener can tell whether they are approaching or moving away without seeing it.",
             "troubleshoot": [
-              "If the source is hard to locate or loops obviously, test attenuation and variation while walking past it."
+              "If it disappears abruptly, widen falloff; if it feels everywhere, reduce range or improve spatialisation."
             ]
           },
           {
-            "title": "Phase 4",
-            "where": "Use the relevant Unreal editor panel for this phase, then test it immediately before continuing.",
-            "do": "Add 2–3 subtle randomised details instead of one obvious repeating loop.",
-            "check": "A moving listener can infer direction/space without the audio masking important gameplay cues.",
+            "title": "Phase 4 — Break repetition",
+            "where": "Sound Cue / MetaSound / randomised player → add 2–3 low-frequency variations",
+            "do": "Layer or randomise occasional details with different intervals/pitch/selection rather than looping one obvious event.",
+            "check": "Listen for 45 seconds: there is no easily predictable “here comes the same clank again” rhythm.",
             "troubleshoot": [
-              "If the source is hard to locate or loops obviously, test attenuation and variation while walking past it."
+              "If random sounds fire constantly, increase silence and rarity. Variation needs contrast."
             ]
           },
           {
-            "title": "Phase 5",
-            "where": "Level Editor → Add (+) → Shapes / Content Drawer → build in Viewport → Play-test from player height",
-            "do": "Use reverb/space treatment if the room type needs it.",
-            "check": "A moving listener can infer direction/space without the audio masking important gameplay cues.",
+            "title": "Phase 5 — Match the room",
+            "where": "Audio Volume / Submix / reverb approach available in project → A/B inside vs outside space",
+            "do": "Add reverb/space treatment only if the room type needs it, and compare speech/important cues for clarity.",
+            "check": "The room feels different acoustically without turning all sounds into mush.",
             "troubleshoot": [
-              "If the source is hard to locate or loops obviously, test attenuation and variation while walking past it."
+              "If reverb masks direction or dialogue, shorten/reduce it or exclude critical sounds."
             ]
           },
           {
-            "title": "Phase 6",
-            "where": "Level Editor → Add (+) → Shapes / Content Drawer → build in Viewport → Play-test from player height",
-            "do": "Play with the screen turned away and check whether the route/source is still inferable.",
-            "check": "A moving listener can infer direction/space without the audio masking important gameplay cues.",
+            "title": "Phase 6 — Screen-away test",
+            "where": "Play → turn camera away / cover monitor while a partner moves slowly",
+            "do": "Test whether direction and distance are inferable through headphones/speakers without the source being visible.",
+            "check": "The listener points roughly toward the source and notices meaningful distance change.",
             "troubleshoot": [
-              "If the source is hard to locate or loops obviously, test attenuation and variation while walking past it."
+              "If they cannot locate it, revisit attenuation/spatialisation before adding more layers."
             ]
           },
           {
-            "title": "Phase 7",
-            "where": "Return to the same saved gameplay camera → capture a matching BEFORE/AFTER frame",
-            "do": "Create one off-screen cue that communicates information before the player sees its source.",
-            "check": "A moving listener can infer direction/space without the audio masking important gameplay cues.",
+            "title": "Phase 7 — Communicate before reveal",
+            "where": "Place one cue around a corner/behind door → trigger it before source enters view",
+            "do": "Create a three-second or longer information lead where the player hears a state/threat before seeing it.",
+            "check": "A tester predicts something about the unseen source before the visual reveal.",
             "troubleshoot": [
-              "If the source is hard to locate or loops obviously, test attenuation and variation while walking past it."
+              "If they only say “I heard a noise”, make the cue more characteristic in rhythm, material, direction or behaviour."
             ]
           }
         ]
@@ -1200,34 +1848,147 @@ window.UE5_DESIGN_DATA = {
         "Could silence make the next cue more effective?"
       ],
       "engineNote": "UE5.8 Sound Attenuation still controls distance, spatialisation and reverb sends; Sound Cues remain useful for variation, while MetaSounds offers graph-based DSP for more advanced procedural audio.",
-      "engineUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/sound-attenuation-in-unreal-engine"
+      "engineUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/sound-attenuation-in-unreal-engine",
+      "caseStudies": [
+        {
+          "game": "Dead Space",
+          "image": "https://drop-assets.ea.com/images/5Cr5lTNDijF2pzIopPZduH/2009d571be74052edf094ce0a992253f/ds-gp-hallway-04-no-watermark.jpg",
+          "sourceUrl": "https://www.ea.com/games/dead-space/dead-space",
+          "sourceTitle": "EA / Motive — Dead Space",
+          "lens": "Occlusion + projected sound",
+          "notice": "Motive’s audio work explicitly considers material occlusion and projecting sound down hallways, turning unseen space into readable threat.",
+          "steal": "Use sound to tell the player about spaces outside the camera.",
+          "task": "Place three imagined sound sources in this corridor: machine, threat, safe destination. Explain how each should change with distance."
+        },
+        {
+          "game": "INSIDE",
+          "image": "https://playdead.com/css/img/inside/screenshots/INSIDE_01.jpg",
+          "sourceUrl": "https://playdead.com/games/inside/",
+          "sourceTitle": "Playdead — INSIDE",
+          "lens": "Sparse sound + focus",
+          "notice": "Minimal visual information pairs naturally with selective sound; when the mix is sparse, one mechanical or environmental event can dominate attention.",
+          "steal": "Do not fill every second. Leave room for important sounds to become events.",
+          "task": "List three moments where silence would make the next sound stronger."
+        },
+        {
+          "game": "Alan Wake 2",
+          "image": "https://www.alanwake.com/wp-content/uploads/2024/06/aw2-photo-mode-03-1920x1080.png",
+          "sourceUrl": "https://www.alanwake.com/story/unleash-your-creativity-with-alan-wake-2s-new-photo-mode/",
+          "sourceTitle": "Remedy — Alan Wake 2",
+          "lens": "Atmosphere + state change",
+          "notice": "Strong visual states suggest matching audio states: rain, electrical hum, distant city noise, threat layers and sudden absence can all signal a change before gameplay explains it.",
+          "steal": "Design ambience as layers that can enter/leave with game state.",
+          "task": "Write a four-layer ambience stack and decide which layer disappears when danger begins."
+        }
+      ],
+      "researchMissions": [
+        {
+          "title": "Eyes-Closed Map",
+          "duration": "10 min",
+          "brief": "Listen to 30–60 seconds of a game with the screen hidden.",
+          "steps": [
+            "Draw where you think sources are.",
+            "Mark near/far.",
+            "Mark continuous/one-shot.",
+            "Reveal the screen and compare."
+          ],
+          "evidence": "Your sound map + two things audio communicated correctly/incorrectly."
+        },
+        {
+          "title": "Scare It With Sound Only",
+          "duration": "15 min",
+          "brief": "Choose a visually harmless room and redesign the audio to make it threatening.",
+          "steps": [
+            "Keep all art unchanged.",
+            "Choose one low continuous layer.",
+            "Add one intermittent off-screen sound.",
+            "Use one deliberate silence."
+          ],
+          "evidence": "A layer list + 20-second recording or written cue timeline."
+        }
+      ],
+      "challenges": [
+        {
+          "title": "Off-Screen Warning",
+          "constraint": "Threat never appears on camera during the setup.",
+          "goal": "Make the player understand direction and approach using sound only."
+        },
+        {
+          "title": "Three-Layer Ambience",
+          "constraint": "Exactly three looping layers.",
+          "goal": "Create depth without turning the mix into mush."
+        },
+        {
+          "title": "Silence Button",
+          "constraint": "At one gameplay event, remove more sound than you add.",
+          "goal": "Use absence as the strongest cue."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Motive — Dead Space Audio Developer Livestream",
+          "type": "Developer breakdown",
+          "url": "https://www.ea.com/ea-studios/motive/news/focus-on-deadspace-audio-design",
+          "why": "Covers ALIVE, audio occlusion, projected hallway sound and weapon audio."
+        },
+        {
+          "title": "Dead Space — Intensity Director",
+          "type": "Systems + atmosphere",
+          "url": "https://www.ea.com/ea-play/news/inside-dead-space-4-the-intensity-director",
+          "why": "Shows audio, lighting and events coordinated to shape tension."
+        },
+        {
+          "title": "Hellblade — soundscape development",
+          "type": "Developer diary",
+          "url": "https://blog.playstation.com/archive/2015/02/23/ninja-theory-reveals-creating-hellblades-soundtrack/",
+          "why": "A useful example of music/sound being designed around emotional intent rather than default genre convention."
+        }
+      ],
+      "afterBuild": {
+        "title": "BLACK BOX: Hear It Before You See It",
+        "brief": "Add one event that the player understands through sound at least three seconds before the visual reveal.",
+        "constraints": [
+          "No subtitle or UI warning.",
+          "The cue must have direction or distance information.",
+          "Do not simply make it louder."
+        ],
+        "improve": "Ask a tester what they think is happening before they see it.",
+        "evidence": "Audio cue timeline + tester prediction."
+      }
     },
     {
       "id": "polish",
       "title": "Polish, Optimisation & Presentation",
       "icon": "✓",
-      "description": "Finish scenes by removing noise, fixing readability, checking performance and presenting work like a designer rather than hiding problems with effects.",
+      "description": "Turn “it works” into “it reads, performs and presents well” through deliberate triage instead of random final tweaks.",
       "principles": [
-        "Polish is targeted iteration",
         "Profile before guessing",
-        "Fix the biggest visual/readability problems first",
-        "Keep expensive effects intentional",
-        "Present before/after evidence"
+        "Fix the biggest visible problem first",
+        "Compare from the same camera",
+        "Presentation should show the design",
+        "Stop polishing things the player cannot read"
       ],
-      "intro": "Polish is not another layer of stuff. It is the final pass where you improve hierarchy, consistency, feedback and performance while removing distractions.",
+      "intro": "Polish is prioritisation. Fix the biggest player-facing problem first, re-test from the same camera, then decide what earns the next ten minutes. Performance and presentation are part of design quality, not separate chores.",
       "referenceImages": [
         {
-          "src": "https://pbs.twimg.com/media/EKuSnv7WwAA5P2W.jpg",
-          "caption": "CONTROL — brutalist geometry, repeated ceiling lights and strong vertical scale turn a simple route into a memorable space.",
-          "sourceUrl": "https://www.remedygames.com/games/control",
-          "sourceTitle": "Remedy Entertainment — CONTROL",
+          "src": "https://www.guerrilla-games.com/media/Horizon_FW_Artblast2560x854.png",
+          "caption": "Horizon Forbidden West — Production finish. Polish the hierarchy between systems, art, lighting and presentation — not individual details in isolation.",
+          "sourceUrl": "https://www.guerrilla-games.com/read/horizon-forbidden-west-art-blast-on-artstation",
+          "sourceTitle": "Guerrilla — Horizon Art Blast",
           "kind": "reference"
         },
         {
-          "src": "https://cdn.wccftech.com/wp-content/uploads/2020/07/DeathStranding_Screenshot_01-scaled.jpg",
-          "caption": "DEATH STRANDING — landscape scale, route readability and distant silhouettes make terrain itself part of the experience.",
-          "sourceUrl": "https://www.kojimaproductions.jp/en/death-stranding-ps4",
-          "sourceTitle": "KOJIMA PRODUCTIONS — DEATH STRANDING",
+          "src": "https://cdn.prod.website-files.com/64630b03551142e3347ae3da/6492c4ab2445934a3c76c839_control_pm_det_005.webp",
+          "caption": "CONTROL — Strong read at a glance. Make the first three seconds of the scene readable.",
+          "sourceUrl": "https://www.remedygames.com/games/control",
+          "sourceTitle": "Remedy — CONTROL",
+          "kind": "reference"
+        },
+        {
+          "src": "https://drop-assets.ea.com/images/qKm8m5buUQRNr4WIsBTcd/2d8953c4fd3f1e4acd5a78bbc9a16b30/DEAD-SPACE_Media_SLIDE-02-USP-02.jpg",
+          "caption": "Dead Space — Atmosphere + readability + performance. Every expensive effect must earn a player-facing job.",
+          "sourceUrl": "https://www.ea.com/games/dead-space/dead-space",
+          "sourceTitle": "EA / Motive — Dead Space",
           "kind": "reference"
         },
         {
@@ -1285,66 +2046,66 @@ window.UE5_DESIGN_DATA = {
         ],
         "phaseDetails": [
           {
-            "title": "Phase 1",
-            "where": "Level Editor → Cinematics → Level Sequence → Sequencer / Cine Camera tracks",
-            "do": "Capture a BEFORE shot and write the three biggest problems.",
-            "check": "The change is demonstrably better from the same camera or measurement, not just different.",
+            "title": "Phase 1 — Freeze the comparison",
+            "where": "Save a fixed camera + capture BEFORE + write only three priority problems",
+            "do": "Take one baseline image and list the three biggest player-facing issues in order.",
+            "check": "You have a ranked list, not 20 vague polish ideas.",
             "troubleshoot": [
-              "If you cannot measure or clearly see the improvement, revert and choose a more targeted change."
+              "If your list starts with tiny prop alignment while the route is unreadable, re-rank by player impact."
             ]
           },
           {
-            "title": "Phase 2",
-            "where": "Level Editor → Add (+) → Shapes / Content Drawer → build in Viewport → Play-test from player height",
-            "do": "Do a readability pass: route, focal point, collision, visual noise.",
-            "check": "The change is demonstrably better from the same camera or measurement, not just different.",
+            "title": "Phase 2 — Readability pass",
+            "where": "Play from player height + Lit/Unlit as useful → inspect route, focal point, collision and noise",
+            "do": "Fix the single biggest readability problem first, then re-test from the same start/camera.",
+            "check": "The player’s first read is clearer without needing extra UI.",
             "troubleshoot": [
-              "If you cannot measure or clearly see the improvement, revert and choose a more targeted change."
+              "If the fix adds more visual noise, simplify instead of layering more cues."
             ]
           },
           {
-            "title": "Phase 3",
-            "where": "Content Drawer → environment assets → drag into Viewport → organise in Outliner and Transform in Details",
-            "do": "Do a consistency pass: materials, light colour, scale and prop logic.",
-            "check": "The change is demonstrably better from the same camera or measurement, not just different.",
+            "title": "Phase 3 — Consistency pass",
+            "where": "Same scene → inspect scale/material/light/prop logic as a set",
+            "do": "Find outliers: wrong scale, unrelated roughness, random colour temperature, prop that breaks the fiction. Fix the most obvious family inconsistency.",
+            "check": "The scene feels like one authored place rather than assets from five packs.",
             "troubleshoot": [
-              "If you cannot measure or clearly see the improvement, revert and choose a more targeted change."
+              "If every object is unique, establish a small repeated visual/material language first."
             ]
           },
           {
-            "title": "Phase 4",
-            "where": "Viewport → View Mode → Optimisation Viewmodes / relevant profiling tool → keep the same camera for before/after",
-            "do": "Use editor view modes/stat tools to identify one performance concern.",
-            "check": "The change is demonstrably better from the same camera or measurement, not just different.",
+            "title": "Phase 4 — Profile a real concern",
+            "where": "Viewport → Optimisation Viewmodes / Shader Complexity / stat unit / stat gpu / relevant profiler",
+            "do": "Choose one measurable concern based on evidence from a view mode/stat tool.",
+            "check": "You can name the expensive/problematic category and where it occurs.",
             "troubleshoot": [
-              "If you cannot measure or clearly see the improvement, revert and choose a more targeted change."
+              "If you are guessing “Nanite is slow” or “too many polys” without evidence, return to the profiling view."
             ]
           },
           {
-            "title": "Phase 5",
-            "where": "Use the relevant Unreal editor panel for this phase, then test it immediately before continuing.",
-            "do": "Fix or simplify the concern rather than guessing.",
-            "check": "The change is demonstrably better from the same camera or measurement, not just different.",
+            "title": "Phase 5 — Make one targeted fix",
+            "where": "Change only the identified cause: material feature, shadow, VFX density, mesh/LOD, overdraw, etc.",
+            "do": "Apply one targeted simplification, then return to the same camera and measurement.",
+            "check": "The metric/view improves and the player-facing image remains acceptable.",
             "troubleshoot": [
-              "If you cannot measure or clearly see the improvement, revert and choose a more targeted change."
+              "If performance improves but the design read collapses, find a cheaper supporting solution instead of accepting the loss."
             ]
           },
           {
-            "title": "Phase 6",
-            "where": "Level Editor → Cinematics → Level Sequence → Sequencer / Cine Camera tracks",
-            "do": "Capture matching AFTER shots and present the changes side-by-side.",
-            "check": "The change is demonstrably better from the same camera or measurement, not just different.",
+            "title": "Phase 6 — Present the proof",
+            "where": "Capture matching AFTER shot + place BEFORE/AFTER side by side",
+            "do": "Show the same view before and after. Add a one-line caption naming the problem and fix.",
+            "check": "Someone else can see the improvement without you narrating it live.",
             "troubleshoot": [
-              "If you cannot measure or clearly see the improvement, revert and choose a more targeted change."
+              "If the cameras differ, recapture; otherwise you cannot tell whether the work or framing caused the improvement."
             ]
           },
           {
-            "title": "Phase 7",
-            "where": "Return to the same saved gameplay camera → capture a matching BEFORE/AFTER frame",
-            "do": "Capture a baseline, make one targeted optimisation/cleanup change, then re-test under the same conditions.",
-            "check": "The change is demonstrably better from the same camera or measurement, not just different.",
+            "title": "Phase 7 — Decide what not to polish",
+            "where": "Review remaining backlog → choose one item to deliberately leave unfinished",
+            "do": "Stop when the next change has lower player impact than the time it costs. Document one thing you intentionally did not polish and why.",
+            "check": "Your final note shows prioritisation rather than “ran out of time”.",
             "troubleshoot": [
-              "If you cannot measure or clearly see the improvement, revert and choose a more targeted change."
+              "If everything is “must fix”, your priorities are not priorities. Rank by impact and evidence."
             ]
           }
         ]
@@ -1381,7 +2142,107 @@ window.UE5_DESIGN_DATA = {
         "Does the final presentation show the work clearly without hiding flaws?"
       ],
       "engineNote": "UE5.8 provides Shader Complexity, Lumen performance/scalability tools, Unreal Insights and World Partition/HLOD workflows. Use the tool that matches the bottleneck instead of optimising by superstition.",
-      "engineUrl": "https://dev.epicgames.com/documentation/unreal-engine/guidelines-for-optimizing-rendering-for-real-time-in-unreal-engine"
+      "engineUrl": "https://dev.epicgames.com/documentation/unreal-engine/guidelines-for-optimizing-rendering-for-real-time-in-unreal-engine",
+      "caseStudies": [
+        {
+          "game": "Horizon Forbidden West",
+          "image": "https://www.guerrilla-games.com/media/Horizon_FW_Artblast2560x854.png",
+          "sourceUrl": "https://www.guerrilla-games.com/read/horizon-forbidden-west-art-blast-on-artstation",
+          "sourceTitle": "Guerrilla — Horizon Art Blast",
+          "lens": "Production finish",
+          "notice": "Final quality comes from many disciplines resolving around the same visual language and player experience, not one magic “polish” effect.",
+          "steal": "Polish the hierarchy between systems, art, lighting and presentation — not individual details in isolation.",
+          "task": "Choose the three things in the image doing the most work. What would you protect if you had to cut 50% of the detail?"
+        },
+        {
+          "game": "CONTROL",
+          "image": "https://cdn.prod.website-files.com/64630b03551142e3347ae3da/6492c4ab2445934a3c76c839_control_pm_det_005.webp",
+          "sourceUrl": "https://www.remedygames.com/games/control",
+          "sourceTitle": "Remedy — CONTROL",
+          "lens": "Strong read at a glance",
+          "notice": "A memorable scene can still be built from controlled values, repeated forms and one clear interruption. More detail is not automatically more finished.",
+          "steal": "Make the first three seconds of the scene readable.",
+          "task": "Write the first three things you notice, in order. Is that the order the designer probably wants?"
+        },
+        {
+          "game": "Dead Space",
+          "image": "https://drop-assets.ea.com/images/qKm8m5buUQRNr4WIsBTcd/2d8953c4fd3f1e4acd5a78bbc9a16b30/DEAD-SPACE_Media_SLIDE-02-USP-02.jpg",
+          "sourceUrl": "https://www.ea.com/games/dead-space/dead-space",
+          "sourceTitle": "EA / Motive — Dead Space",
+          "lens": "Atmosphere + readability + performance",
+          "notice": "Fog, lighting, VFX, materials and sound all add atmosphere, but the player still needs readable navigation and threat information.",
+          "steal": "Every expensive effect must earn a player-facing job.",
+          "task": "Pick one effect you would reduce for performance. What design information must remain intact?"
+        }
+      ],
+      "researchMissions": [
+        {
+          "title": "Three-Second Portfolio Test",
+          "duration": "10 min",
+          "brief": "Open five environment/level-design portfolio images for only three seconds each.",
+          "steps": [
+            "Write what you remember.",
+            "Reopen and check accuracy.",
+            "Identify the focal hierarchy.",
+            "Rank the clearest presentation, not the prettiest art."
+          ],
+          "evidence": "Five quick notes + one rule you will use in your own final screenshot."
+        },
+        {
+          "title": "Performance Detective",
+          "duration": "15 min",
+          "brief": "Look at one visually heavy scene and predict where the cost might be before opening profiling tools.",
+          "steps": [
+            "List likely geometry cost.",
+            "List material/VFX cost.",
+            "List lighting/shadow cost.",
+            "Then profile and compare your guess."
+          ],
+          "evidence": "Prediction vs actual findings table."
+        }
+      ],
+      "challenges": [
+        {
+          "title": "Fifteen-Minute Triage",
+          "constraint": "15 minutes, maximum three changes.",
+          "goal": "Improve the scene more than an hour of random tweaking."
+        },
+        {
+          "title": "Same Camera A/B",
+          "constraint": "Lock the camera before the fix.",
+          "goal": "Prove the change helped instead of relying on memory."
+        },
+        {
+          "title": "Budget Cut",
+          "constraint": "Reduce one expensive visual category by 30%.",
+          "goal": "Keep the player-facing design read intact."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Guerrilla — Horizon Art Blast",
+          "type": "Professional presentation",
+          "url": "https://www.guerrilla-games.com/read/horizon-forbidden-west-art-blast-on-artstation",
+          "why": "A route into production-quality portfolio work across disciplines."
+        },
+        {
+          "title": "Motive — Dead Space Art Developer Livestream",
+          "type": "Production breakdown",
+          "url": "https://www.ea.com/ea-studios/motive/news/art-developer-livestream",
+          "why": "Shows art, lighting, VFX and environment pillars working as a coordinated final experience."
+        }
+      ],
+      "afterBuild": {
+        "title": "BLACK BOX: One-Hour Ship",
+        "brief": "Freeze the project after one final hour. Spend that hour using a written priority list, not intuition.",
+        "constraints": [
+          "Profile first.",
+          "Maximum five fixes.",
+          "Every fix needs a before/after test."
+        ],
+        "improve": "Rank the fixes by player impact. Which one was not worth the time?",
+        "evidence": "Priority list + three locked-camera A/B comparisons."
+      }
     }
   ],
   "resources": [
@@ -1542,10 +2403,10 @@ window.UE5_DESIGN_DATA = {
       "featured": true,
       "referenceImages": [
         {
-          "src": "https://pbs.twimg.com/media/EKuSnv7WwAA5P2W.jpg",
-          "caption": "CONTROL — brutalist geometry, repeated ceiling lights and strong vertical scale turn a simple route into a memorable space.",
-          "sourceUrl": "https://www.remedygames.com/games/control",
-          "sourceTitle": "Remedy Entertainment — CONTROL",
+          "src": "https://playdead.com/css/img/inside/screenshots/INSIDE_01.jpg",
+          "caption": "INSIDE — Contrast + route readability. Make the valid route easier to read than the background before you add UI.",
+          "sourceUrl": "https://playdead.com/games/inside/",
+          "sourceTitle": "Playdead — INSIDE",
           "kind": "reference"
         }
       ],
@@ -1641,7 +2502,15 @@ window.UE5_DESIGN_DATA = {
       ],
       "icon": "↕",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://cdn.prod.website-files.com/64630b03551142e3347ae3da/6492c4ad955ffc88abcd7409_CONTROL_Blast_Furnace_169.webp",
+          "caption": "CONTROL — Scale + landmarks. Use one shape or landmark that survives from several viewpoints.",
+          "sourceUrl": "https://www.remedygames.com/games/control",
+          "sourceTitle": "Remedy — CONTROL",
+          "kind": "reference"
+        }
+      ],
       "source": {
         "title": "Epic — Designing Levels",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designing-levels-in-unreal-engine"
@@ -1741,6 +2610,13 @@ window.UE5_DESIGN_DATA = {
       "icon": "◎",
       "featured": true,
       "referenceImages": [
+        {
+          "src": "https://www.guerrilla-games.com/media/News/HFW_SCREEN_LEGAL_GLIDER_4K_RGB_20210512.webp",
+          "caption": "Horizon Forbidden West — Traversal affordance. Shape terrain around traversal decisions, not just pretty silhouettes.",
+          "sourceUrl": "https://www.guerrilla-games.com/read/15-minutes-of-new-gameplay-for-horizon-forbidden-west",
+          "sourceTitle": "Guerrilla — Horizon Forbidden West",
+          "kind": "reference"
+        },
         {
           "src": "https://www.playdead.com/css/img/inside/screenshots/INSIDE_01.jpg",
           "caption": "INSIDE — a tiny character silhouette, one strong pool of light and huge negative space create immediate hierarchy and tension.",
@@ -1847,7 +2723,15 @@ window.UE5_DESIGN_DATA = {
       ],
       "icon": "→",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://playdead.com/css/img/inside/screenshots/INSIDE_01.jpg",
+          "caption": "INSIDE — Contrast + route readability. Make the valid route easier to read than the background before you add UI.",
+          "sourceUrl": "https://playdead.com/games/inside/",
+          "sourceTitle": "Playdead — INSIDE",
+          "kind": "reference"
+        }
+      ],
       "source": {
         "title": "Epic — Level Design",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designing-levels-in-unreal-engine"
@@ -1948,10 +2832,10 @@ window.UE5_DESIGN_DATA = {
       "featured": true,
       "referenceImages": [
         {
-          "src": "https://pbs.twimg.com/media/EKuSnv7WwAA5P2W.jpg",
-          "caption": "CONTROL — brutalist geometry, repeated ceiling lights and strong vertical scale turn a simple route into a memorable space.",
-          "sourceUrl": "https://www.remedygames.com/games/control",
-          "sourceTitle": "Remedy Entertainment — CONTROL",
+          "src": "https://drop-assets.ea.com/images/5Cr5lTNDijF2pzIopPZduH/2009d571be74052edf094ce0a992253f/ds-gp-hallway-04-no-watermark.jpg",
+          "caption": "Dead Space — Lived-in world + threat. Every prop cluster should imply a job, routine or event.",
+          "sourceUrl": "https://www.ea.com/games/dead-space/dead-space",
+          "sourceTitle": "EA / Motive — Dead Space",
           "kind": "reference"
         },
         {
@@ -2053,7 +2937,15 @@ window.UE5_DESIGN_DATA = {
       ],
       "icon": "●",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://www.guerrilla-games.com/media/Horizon_FW_Artblast2560x854.png",
+          "caption": "Horizon Forbidden West — Reference + visual language. Choose a small visual language and repeat it intentionally.",
+          "sourceUrl": "https://www.guerrilla-games.com/read/horizon-forbidden-west-art-blast-on-artstation",
+          "sourceTitle": "Guerrilla — Horizon Art Blast",
+          "kind": "reference"
+        }
+      ],
       "source": {
         "title": "Epic — Building Virtual Worlds",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/building-virtual-worlds-in-unreal-engine"
@@ -2179,7 +3071,15 @@ window.UE5_DESIGN_DATA = {
       ],
       "icon": "✣",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://cdn.prod.website-files.com/64630b03551142e3347ae3da/6492c4ab2445934a3c76c839_control_pm_det_005.webp",
+          "caption": "CONTROL — Repetition + interruption. Repetition makes the exception readable.",
+          "sourceUrl": "https://www.remedygames.com/games/control",
+          "sourceTitle": "Remedy — CONTROL",
+          "kind": "reference"
+        }
+      ],
       "source": {
         "title": "Epic — Decal Materials",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/decal-materials-in-unreal-engine"
@@ -2284,7 +3184,15 @@ window.UE5_DESIGN_DATA = {
       ],
       "icon": "▥",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://drop-assets.ea.com/images/5Cr5lTNDijF2pzIopPZduH/2009d571be74052edf094ce0a992253f/ds-gp-hallway-04-no-watermark.jpg",
+          "caption": "Dead Space — Lived-in world + threat. Every prop cluster should imply a job, routine or event.",
+          "sourceUrl": "https://www.ea.com/games/dead-space/dead-space",
+          "sourceTitle": "EA / Motive — Dead Space",
+          "kind": "reference"
+        }
+      ],
       "source": {
         "title": "Epic — Building Virtual Worlds",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/building-virtual-worlds-in-unreal-engine"
@@ -2415,6 +3323,13 @@ window.UE5_DESIGN_DATA = {
       "icon": "◫",
       "featured": true,
       "referenceImages": [
+        {
+          "src": "https://www.kojimaproductions.jp/sites/default/files/2021-08/gr.DeathStranding_GameScreenshot6.jpg",
+          "caption": "Death Stranding — Surface identity. Make materials readable without relying on saturated colour.",
+          "sourceUrl": "https://www.kojimaproductions.jp/en/death-stranding-ps4",
+          "sourceTitle": "Kojima Productions — Death Stranding",
+          "kind": "reference"
+        },
         {
           "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/b61c2e7b-8c11-4b70-b966-97b91ec1f4ef/materialeditorui.png",
           "caption": "Unreal Material Editor — material graphs control how a surface reacts to light rather than simply placing a flat colour on a mesh.",
@@ -2551,7 +3466,15 @@ window.UE5_DESIGN_DATA = {
       ],
       "icon": "◇",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://drop-assets.ea.com/images/qKm8m5buUQRNr4WIsBTcd/2d8953c4fd3f1e4acd5a78bbc9a16b30/DEAD-SPACE_Media_SLIDE-02-USP-02.jpg",
+          "caption": "Dead Space — Wear + material story. Wear belongs where use, impact, water or neglect would actually cause it.",
+          "sourceUrl": "https://www.ea.com/games/dead-space/dead-space",
+          "sourceTitle": "EA / Motive — Dead Space",
+          "kind": "reference"
+        }
+      ],
       "source": {
         "title": "Epic UE5.8 — Artist 03: Materials & Material Instances",
         "url": "https://dev.epicgames.com/documentation/unreal-engine/artist-03-create-materials-and-material-instances"
@@ -2680,7 +3603,15 @@ window.UE5_DESIGN_DATA = {
       ],
       "icon": "≈",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://cdn.prod.website-files.com/64630b03551142e3347ae3da/6492c4ad955ffc88abcd7409_CONTROL_Blast_Furnace_169.webp",
+          "caption": "CONTROL — Material families. Build a small reusable surface family rather than 30 unrelated materials.",
+          "sourceUrl": "https://www.remedygames.com/games/control",
+          "sourceTitle": "Remedy — CONTROL",
+          "kind": "reference"
+        }
+      ],
       "source": {
         "title": "Epic UE5.8 — Artist 04: Expanded Material Instances",
         "url": "https://dev.epicgames.com/documentation/unreal-engine/artist-04-expanded-material-instances"
@@ -2803,7 +3734,15 @@ window.UE5_DESIGN_DATA = {
       ],
       "icon": "✦",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://www.kojimaproductions.jp/sites/default/files/2021-08/gr.DeathStranding_GameScreenshot6.jpg",
+          "caption": "Death Stranding — Surface identity. Make materials readable without relying on saturated colour.",
+          "sourceUrl": "https://www.kojimaproductions.jp/en/death-stranding-ps4",
+          "sourceTitle": "Kojima Productions — Death Stranding",
+          "kind": "reference"
+        }
+      ],
       "source": {
         "title": "Epic — Emissive Materials",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/using-the-emissive-material-input-in-unreal-engine"
@@ -2904,6 +3843,13 @@ window.UE5_DESIGN_DATA = {
       "icon": "☼",
       "featured": true,
       "referenceImages": [
+        {
+          "src": "https://www.alanwake.com/wp-content/uploads/2024/06/aw2-photo-mode-03-1920x1080.png",
+          "caption": "Alan Wake 2 — Colour + motivated emphasis. Treat light colour/intensity as a deliberate variable, not a vibe slider.",
+          "sourceUrl": "https://www.alanwake.com/story/unleash-your-creativity-with-alan-wake-2s-new-photo-mode/",
+          "sourceTitle": "Remedy — Alan Wake 2 Photo Mode",
+          "kind": "reference"
+        },
         {
           "src": "https://www.playdead.com/css/img/inside/screenshots/INSIDE_01.jpg",
           "caption": "INSIDE — a tiny character silhouette, one strong pool of light and huge negative space create immediate hierarchy and tension.",
@@ -3012,6 +3958,13 @@ window.UE5_DESIGN_DATA = {
       "icon": "◐",
       "featured": false,
       "referenceImages": [
+        {
+          "src": "https://playdead.com/css/img/inside/screenshots/INSIDE_01.jpg",
+          "caption": "INSIDE — Silhouette + negative space. Darkness is useful only when the important information remains readable.",
+          "sourceUrl": "https://playdead.com/games/inside/",
+          "sourceTitle": "Playdead — INSIDE",
+          "kind": "reference"
+        },
         {
           "src": "https://www.playdead.com/css/img/inside/screenshots/INSIDE_01.jpg",
           "caption": "INSIDE — a tiny character silhouette, one strong pool of light and huge negative space create immediate hierarchy and tension.",
@@ -3130,7 +4083,15 @@ window.UE5_DESIGN_DATA = {
       ],
       "icon": "◑",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://drop-assets.ea.com/images/5Cr5lTNDijF2pzIopPZduH/2009d571be74052edf094ce0a992253f/ds-gp-hallway-04-no-watermark.jpg",
+          "caption": "Dead Space — Safe pool → dangerous shadow. Lighting can create a rhythm of safety and uncertainty.",
+          "sourceUrl": "https://www.ea.com/games/dead-space/dead-space",
+          "sourceTitle": "EA / Motive — Dead Space",
+          "kind": "reference"
+        }
+      ],
       "source": {
         "title": "Epic UE5.8 — Add Post Process Volumes",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/add-post-process-volumes"
@@ -3242,6 +4203,13 @@ window.UE5_DESIGN_DATA = {
       "icon": "≈",
       "featured": true,
       "referenceImages": [
+        {
+          "src": "https://www.kojimaproductions.jp/sites/default/files/2021-08/gr.DeathStranding_GameScreenshot3.jpg",
+          "caption": "Death Stranding — Terrain as mechanic. Give terrain meaningful travel costs and choices.",
+          "sourceUrl": "https://www.kojimaproductions.jp/en/death-stranding-ps4",
+          "sourceTitle": "Kojima Productions — Death Stranding",
+          "kind": "reference"
+        },
         {
           "src": "https://img.edc-cdn.net/imgproxy/WhJevtNTVxIUT55gW9wM3-sl1hwqk0EEexbt5n9VtQc/filename%3A04-new-landscape-tool.png/resizing_type%3Afit/width%3A0/height%3A0/aHR0cHM6Ly9kMWl2N2RiNDR5aGd4bi5jbG91ZGZyb250Lm5ldC9kb2N1bWVudGF0aW9uL2ltYWdlcy80ZGIwODM4YS0yYmFhLTRmYzItYTNiNi1jNjBkNTJjOGVkM2MvMDQtbmV3LWxhbmRzY2FwZS10b29sLnBuZw",
           "caption": "Unreal Landscape tools — Manage creates the landscape, Sculpt shapes it and Paint applies landscape material layers.",
@@ -3360,7 +4328,15 @@ window.UE5_DESIGN_DATA = {
       ],
       "icon": "⌁",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://www.kojimaproductions.jp/sites/default/files/2021-08/gr.DeathStranding_GameScreenshot5.jpg",
+          "caption": "Death Stranding — Silhouette + difficulty. Let large terrain forms preview the difficulty ahead.",
+          "sourceUrl": "https://www.kojimaproductions.jp/en/death-stranding-ps4",
+          "sourceTitle": "Kojima Productions — Death Stranding",
+          "kind": "reference"
+        }
+      ],
       "source": {
         "title": "Epic UE5.8 — Landscape Quick Start",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/landscape-quick-start-guide-in-unreal-engine"
@@ -3471,7 +4447,15 @@ window.UE5_DESIGN_DATA = {
       ],
       "icon": "▧",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://p325k7wa.twic.pics/high/elden-ring/elden-ring/02-screenshots/ELDENRING_01_4K.jpg?twic=v1%2Fcover%3D2160%2Fstep%3D10%2Fquality%3D80%2Foutput%3Dpreview",
+          "caption": "ELDEN RING — Distant attraction. Give players something memorable to orient around beyond the next 20 metres.",
+          "sourceUrl": "https://en.bandainamcoent.eu/elden-ring/elden-ring/media",
+          "sourceTitle": "Bandai Namco — ELDEN RING media gallery",
+          "kind": "reference"
+        }
+      ],
       "source": {
         "title": "Epic UE5.8 — Landscape Quick Start",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/landscape-quick-start-guide-in-unreal-engine"
@@ -3588,7 +4572,15 @@ window.UE5_DESIGN_DATA = {
       ],
       "icon": "♣",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://www.kojimaproductions.jp/sites/default/files/2021-08/gr.DeathStranding_GameScreenshot3.jpg",
+          "caption": "Death Stranding — Terrain as mechanic. Give terrain meaningful travel costs and choices.",
+          "sourceUrl": "https://www.kojimaproductions.jp/en/death-stranding-ps4",
+          "sourceTitle": "Kojima Productions — Death Stranding",
+          "kind": "reference"
+        }
+      ],
       "source": {
         "title": "Epic UE5.8 — Foliage Mode",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/foliage-mode-in-unreal-engine"
@@ -3731,10 +4723,10 @@ window.UE5_DESIGN_DATA = {
       "featured": true,
       "referenceImages": [
         {
-          "src": "https://images.purexbox.com/bad222687593e/hellblade-2-will-display-with-black-bars-outside-of-ultrawide-mode-3.large.jpg",
-          "caption": "Senua’s Saga: Hellblade II — controlled framing, motivated firelight and restrained colour push the eye toward the confrontation.",
-          "sourceUrl": "https://www.xbox.com/en-GB/games/senuas-saga-hellblade-II",
-          "sourceTitle": "Xbox — Senua’s Saga: Hellblade II",
+          "src": "https://www.alanwake.com/wp-content/uploads/2024/06/aw2-photo-mode-02-clean-1300x650.png",
+          "caption": "Alan Wake 2 — Focal length + framing. Choose the camera based on the information/emotion the shot must deliver.",
+          "sourceUrl": "https://www.alanwake.com/story/unleash-your-creativity-with-alan-wake-2s-new-photo-mode/",
+          "sourceTitle": "Remedy — Alan Wake 2 Photo Mode",
           "kind": "reference"
         }
       ],
@@ -3854,7 +4846,15 @@ window.UE5_DESIGN_DATA = {
       ],
       "icon": "✂",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://www.guerrilla-games.com/media/News/HFW_SCREEN_LEGAL_GLIDER_4K_RGB_20210512.webp",
+          "caption": "Horizon Forbidden West — Action geography. Establish geography before rapid cuts or close action.",
+          "sourceUrl": "https://www.guerrilla-games.com/read/15-minutes-of-new-gameplay-for-horizon-forbidden-west",
+          "sourceTitle": "Guerrilla — Horizon Forbidden West",
+          "kind": "reference"
+        }
+      ],
       "source": {
         "title": "Epic — Camera Cuts",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/creating-camera-cuts-using-sequencer-in-unreal-engine"
@@ -3953,7 +4953,15 @@ window.UE5_DESIGN_DATA = {
       ],
       "icon": "◒",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://cdn.prod.website-files.com/64630b03551142e3347ae3da/6492c4abe40138d6dc791368_control_pm_det_027.webp",
+          "caption": "CONTROL — Architecture as frame. Let the environment compose the shot for you.",
+          "sourceUrl": "https://www.remedygames.com/games/control",
+          "sourceTitle": "Remedy — CONTROL",
+          "kind": "reference"
+        }
+      ],
       "source": {
         "title": "Epic — Cinematic workflows",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/cinematic-workflow-guides-and-examples-in-unreal-engine"
@@ -4082,7 +5090,15 @@ window.UE5_DESIGN_DATA = {
       ],
       "icon": "↻",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://www.alanwake.com/wp-content/uploads/2024/06/aw2-photo-mode-02-clean-1300x650.png",
+          "caption": "Alan Wake 2 — Focal length + framing. Choose the camera based on the information/emotion the shot must deliver.",
+          "sourceUrl": "https://www.alanwake.com/story/unleash-your-creativity-with-alan-wake-2s-new-photo-mode/",
+          "sourceTitle": "Remedy — Alan Wake 2 Photo Mode",
+          "kind": "reference"
+        }
+      ],
       "source": {
         "title": "Epic UE5.8 — Triggering Sequences from Gameplay",
         "url": "https://dev.epicgames.com/documentation/unreal-engine/play-cinematics-from-blueprints-in-unreal-engine"
@@ -4182,6 +5198,13 @@ window.UE5_DESIGN_DATA = {
       "icon": "♪",
       "featured": true,
       "referenceImages": [
+        {
+          "src": "https://drop-assets.ea.com/images/5Cr5lTNDijF2pzIopPZduH/2009d571be74052edf094ce0a992253f/ds-gp-hallway-04-no-watermark.jpg",
+          "caption": "Dead Space — Occlusion + projected sound. Use sound to tell the player about spaces outside the camera.",
+          "sourceUrl": "https://www.ea.com/games/dead-space/dead-space",
+          "sourceTitle": "EA / Motive — Dead Space",
+          "kind": "reference"
+        },
         {
           "src": "https://www.playdead.com/css/img/inside/screenshots/INSIDE_01.jpg",
           "caption": "INSIDE — a tiny character silhouette, one strong pool of light and huge negative space create immediate hierarchy and tension.",
@@ -4312,7 +5335,15 @@ window.UE5_DESIGN_DATA = {
       ],
       "icon": "◉",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://playdead.com/css/img/inside/screenshots/INSIDE_01.jpg",
+          "caption": "INSIDE — Sparse sound + focus. Do not fill every second. Leave room for important sounds to become events.",
+          "sourceUrl": "https://playdead.com/games/inside/",
+          "sourceTitle": "Playdead — INSIDE",
+          "kind": "reference"
+        }
+      ],
       "source": {
         "title": "Epic — Sound Attenuation",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/sound-attenuation-in-unreal-engine"
@@ -4435,7 +5466,15 @@ window.UE5_DESIGN_DATA = {
       ],
       "icon": "⤨",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://www.alanwake.com/wp-content/uploads/2024/06/aw2-photo-mode-03-1920x1080.png",
+          "caption": "Alan Wake 2 — Atmosphere + state change. Design ambience as layers that can enter/leave with game state.",
+          "sourceUrl": "https://www.alanwake.com/story/unleash-your-creativity-with-alan-wake-2s-new-photo-mode/",
+          "sourceTitle": "Remedy — Alan Wake 2",
+          "kind": "reference"
+        }
+      ],
       "source": {
         "title": "Epic — Sound Cue Editor",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/sound-cue-editor-in-unreal-engine"
@@ -4546,7 +5585,15 @@ window.UE5_DESIGN_DATA = {
       ],
       "icon": "⌁",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://drop-assets.ea.com/images/5Cr5lTNDijF2pzIopPZduH/2009d571be74052edf094ce0a992253f/ds-gp-hallway-04-no-watermark.jpg",
+          "caption": "Dead Space — Occlusion + projected sound. Use sound to tell the player about spaces outside the camera.",
+          "sourceUrl": "https://www.ea.com/games/dead-space/dead-space",
+          "sourceTitle": "EA / Motive — Dead Space",
+          "kind": "reference"
+        }
+      ],
       "source": {
         "title": "Epic — Audio Engine",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/audio-engine-overview-in-unreal-engine"
@@ -4660,10 +5707,10 @@ window.UE5_DESIGN_DATA = {
       "featured": true,
       "referenceImages": [
         {
-          "src": "https://pbs.twimg.com/media/EKuSnv7WwAA5P2W.jpg",
-          "caption": "CONTROL — brutalist geometry, repeated ceiling lights and strong vertical scale turn a simple route into a memorable space.",
-          "sourceUrl": "https://www.remedygames.com/games/control",
-          "sourceTitle": "Remedy Entertainment — CONTROL",
+          "src": "https://www.guerrilla-games.com/media/Horizon_FW_Artblast2560x854.png",
+          "caption": "Horizon Forbidden West — Production finish. Polish the hierarchy between systems, art, lighting and presentation — not individual details in isolation.",
+          "sourceUrl": "https://www.guerrilla-games.com/read/horizon-forbidden-west-art-blast-on-artstation",
+          "sourceTitle": "Guerrilla — Horizon Art Blast",
           "kind": "reference"
         }
       ],
@@ -4781,7 +5828,15 @@ window.UE5_DESIGN_DATA = {
       ],
       "icon": "▥",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://cdn.prod.website-files.com/64630b03551142e3347ae3da/6492c4ab2445934a3c76c839_control_pm_det_005.webp",
+          "caption": "CONTROL — Strong read at a glance. Make the first three seconds of the scene readable.",
+          "sourceUrl": "https://www.remedygames.com/games/control",
+          "sourceTitle": "Remedy — CONTROL",
+          "kind": "reference"
+        }
+      ],
       "source": {
         "title": "Epic — View Modes",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/view-modes-in-unreal-engine"
@@ -4892,7 +5947,15 @@ window.UE5_DESIGN_DATA = {
       ],
       "icon": "△",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://drop-assets.ea.com/images/qKm8m5buUQRNr4WIsBTcd/2d8953c4fd3f1e4acd5a78bbc9a16b30/DEAD-SPACE_Media_SLIDE-02-USP-02.jpg",
+          "caption": "Dead Space — Atmosphere + readability + performance. Every expensive effect must earn a player-facing job.",
+          "sourceUrl": "https://www.ea.com/games/dead-space/dead-space",
+          "sourceTitle": "EA / Motive — Dead Space",
+          "kind": "reference"
+        }
+      ],
       "source": {
         "title": "Epic UE5.8 — Static Mesh Editor UI / Nanite",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/static-mesh-editor-ui-in-unreal-engine"
@@ -4991,7 +6054,15 @@ window.UE5_DESIGN_DATA = {
       ],
       "icon": "▣",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://www.guerrilla-games.com/media/Horizon_FW_Artblast2560x854.png",
+          "caption": "Horizon Forbidden West — Production finish. Polish the hierarchy between systems, art, lighting and presentation — not individual details in isolation.",
+          "sourceUrl": "https://www.guerrilla-games.com/read/horizon-forbidden-west-art-blast-on-artstation",
+          "sourceTitle": "Guerrilla — Horizon Art Blast",
+          "kind": "reference"
+        }
+      ],
       "source": {
         "title": "Epic — Screenshots",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/taking-screenshots-in-unreal-engine"
@@ -5090,7 +6161,15 @@ window.UE5_DESIGN_DATA = {
       ],
       "icon": "⑂",
       "featured": true,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://cdn.prod.website-files.com/64630b03551142e3347ae3da/6492c4ad955ffc88abcd7409_CONTROL_Blast_Furnace_169.webp",
+          "caption": "CONTROL — Scale + landmarks. Use one shape or landmark that survives from several viewpoints.",
+          "sourceUrl": "https://www.remedygames.com/games/control",
+          "sourceTitle": "Remedy — CONTROL",
+          "kind": "reference"
+        }
+      ],
       "source": {
         "title": "Epic UE5.8 — Modeling Mode Quick Start",
         "url": "https://dev.epicgames.com/documentation/unreal-engine/modeling-mode-quick-start-in-unreal-engine?lang=en-US"
@@ -5189,7 +6268,15 @@ window.UE5_DESIGN_DATA = {
       ],
       "icon": "⌁",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://www.guerrilla-games.com/media/News/HFW_SCREEN_LEGAL_GLIDER_4K_RGB_20210512.webp",
+          "caption": "Horizon Forbidden West — Traversal affordance. Shape terrain around traversal decisions, not just pretty silhouettes.",
+          "sourceUrl": "https://www.guerrilla-games.com/read/15-minutes-of-new-gameplay-for-horizon-forbidden-west",
+          "sourceTitle": "Guerrilla — Horizon Forbidden West",
+          "kind": "reference"
+        }
+      ],
       "source": {
         "title": "Epic UE5.8 — Modeling Mode Quick Start",
         "url": "https://dev.epicgames.com/documentation/unreal-engine/modeling-mode-quick-start-in-unreal-engine?lang=en-US"
@@ -5289,6 +6376,13 @@ window.UE5_DESIGN_DATA = {
       "icon": "⌂",
       "featured": true,
       "referenceImages": [
+        {
+          "src": "https://www.guerrilla-games.com/media/Horizon_FW_Artblast2560x854.png",
+          "caption": "Horizon Forbidden West — Reference + visual language. Choose a small visual language and repeat it intentionally.",
+          "sourceUrl": "https://www.guerrilla-games.com/read/horizon-forbidden-west-art-blast-on-artstation",
+          "sourceTitle": "Guerrilla — Horizon Art Blast",
+          "kind": "reference"
+        },
         {
           "src": "assets/book/best-practices/environmental-clues-dressing.webp",
           "caption": "Book reference — A side-by-side set-dressing example showing how added props increase story clues and scene meaning.",
@@ -5394,7 +6488,15 @@ window.UE5_DESIGN_DATA = {
       ],
       "icon": "◆",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://cdn.prod.website-files.com/64630b03551142e3347ae3da/6492c4ab2445934a3c76c839_control_pm_det_005.webp",
+          "caption": "CONTROL — Repetition + interruption. Repetition makes the exception readable.",
+          "sourceUrl": "https://www.remedygames.com/games/control",
+          "sourceTitle": "Remedy — CONTROL",
+          "kind": "reference"
+        }
+      ],
       "source": {
         "title": "Epic UE5.8 — Modeling Mode",
         "url": "https://dev.epicgames.com/documentation/unreal-engine/modeling-mode-in-unreal-engine?lang=en-US"
@@ -5509,6 +6611,13 @@ window.UE5_DESIGN_DATA = {
       "icon": "▥",
       "featured": true,
       "referenceImages": [
+        {
+          "src": "https://drop-assets.ea.com/images/qKm8m5buUQRNr4WIsBTcd/2d8953c4fd3f1e4acd5a78bbc9a16b30/DEAD-SPACE_Media_SLIDE-02-USP-02.jpg",
+          "caption": "Dead Space — Wear + material story. Wear belongs where use, impact, water or neglect would actually cause it.",
+          "sourceUrl": "https://www.ea.com/games/dead-space/dead-space",
+          "sourceTitle": "EA / Motive — Dead Space",
+          "kind": "reference"
+        },
         {
           "src": "assets/book/best-practices/shader-complexity-heatmap.webp",
           "caption": "Book reference — Shader Complexity view mode highlighting expensive materials and areas needing optimisation.",
@@ -5629,7 +6738,15 @@ window.UE5_DESIGN_DATA = {
       ],
       "icon": "◩",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://cdn.prod.website-files.com/64630b03551142e3347ae3da/6492c4ad955ffc88abcd7409_CONTROL_Blast_Furnace_169.webp",
+          "caption": "CONTROL — Material families. Build a small reusable surface family rather than 30 unrelated materials.",
+          "sourceUrl": "https://www.remedygames.com/games/control",
+          "sourceTitle": "Remedy — CONTROL",
+          "kind": "reference"
+        }
+      ],
       "source": {
         "title": "Epic UE5.8 — Real-time Rendering Optimisation",
         "url": "https://dev.epicgames.com/documentation/unreal-engine/guidelines-for-optimizing-rendering-for-real-time-in-unreal-engine"
@@ -5729,6 +6846,13 @@ window.UE5_DESIGN_DATA = {
       "icon": "◐",
       "featured": true,
       "referenceImages": [
+        {
+          "src": "https://www.alanwake.com/wp-content/uploads/2024/06/aw2-photo-mode-03-1920x1080.png",
+          "caption": "Alan Wake 2 — Colour + motivated emphasis. Treat light colour/intensity as a deliberate variable, not a vibe slider.",
+          "sourceUrl": "https://www.alanwake.com/story/unleash-your-creativity-with-alan-wake-2s-new-photo-mode/",
+          "sourceTitle": "Remedy — Alan Wake 2 Photo Mode",
+          "kind": "reference"
+        },
         {
           "src": "assets/book/best-practices/lumen-gi-comparison.webp",
           "caption": "Book reference — Static lighting versus Lumen GI, plus a visual breakdown of bounce lighting and reflections.",
@@ -5840,7 +6964,15 @@ window.UE5_DESIGN_DATA = {
       ],
       "icon": "◒",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://playdead.com/css/img/inside/screenshots/INSIDE_01.jpg",
+          "caption": "INSIDE — Silhouette + negative space. Darkness is useful only when the important information remains readable.",
+          "sourceUrl": "https://playdead.com/games/inside/",
+          "sourceTitle": "Playdead — INSIDE",
+          "kind": "reference"
+        }
+      ],
       "source": {
         "title": "Epic UE5.8 — Lumen Performance Guide",
         "url": "https://dev.epicgames.com/documentation/unreal-engine/lumen-performance-guide-for-unreal-engine"
@@ -5939,7 +7071,15 @@ window.UE5_DESIGN_DATA = {
       ],
       "icon": "♧",
       "featured": true,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://www.kojimaproductions.jp/sites/default/files/2021-08/gr.DeathStranding_GameScreenshot5.jpg",
+          "caption": "Death Stranding — Silhouette + difficulty. Let large terrain forms preview the difficulty ahead.",
+          "sourceUrl": "https://www.kojimaproductions.jp/en/death-stranding-ps4",
+          "sourceTitle": "Kojima Productions — Death Stranding",
+          "kind": "reference"
+        }
+      ],
       "source": {
         "title": "Epic UE5.8 — PCG Framework",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/procedural-content-generation-framework-in-unreal-engine"
@@ -6044,7 +7184,15 @@ window.UE5_DESIGN_DATA = {
       ],
       "icon": "☂",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://p325k7wa.twic.pics/high/elden-ring/elden-ring/02-screenshots/ELDENRING_01_4K.jpg?twic=v1%2Fcover%3D2160%2Fstep%3D10%2Fquality%3D80%2Foutput%3Dpreview",
+          "caption": "ELDEN RING — Distant attraction. Give players something memorable to orient around beyond the next 20 metres.",
+          "sourceUrl": "https://en.bandainamcoent.eu/elden-ring/elden-ring/media",
+          "sourceTitle": "Bandai Namco — ELDEN RING media gallery",
+          "kind": "reference"
+        }
+      ],
       "source": {
         "title": "Epic UE5.8 — PCG Framework",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/procedural-content-generation-framework-in-unreal-engine"
@@ -6144,6 +7292,13 @@ window.UE5_DESIGN_DATA = {
       "icon": "◉",
       "featured": true,
       "referenceImages": [
+        {
+          "src": "https://www.guerrilla-games.com/media/News/HFW_SCREEN_LEGAL_GLIDER_4K_RGB_20210512.webp",
+          "caption": "Horizon Forbidden West — Action geography. Establish geography before rapid cuts or close action.",
+          "sourceUrl": "https://www.guerrilla-games.com/read/15-minutes-of-new-gameplay-for-horizon-forbidden-west",
+          "sourceTitle": "Guerrilla — Horizon Forbidden West",
+          "kind": "reference"
+        },
         {
           "src": "assets/book/best-practices/sequencer-closeup-shot.webp",
           "caption": "Book reference — A close-up cinematic shot used to discuss framing, emotional focus and shot intent.",
@@ -6273,7 +7428,15 @@ window.UE5_DESIGN_DATA = {
       ],
       "icon": "⑂",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://cdn.prod.website-files.com/64630b03551142e3347ae3da/6492c4abe40138d6dc791368_control_pm_det_027.webp",
+          "caption": "CONTROL — Architecture as frame. Let the environment compose the shot for you.",
+          "sourceUrl": "https://www.remedygames.com/games/control",
+          "sourceTitle": "Remedy — CONTROL",
+          "kind": "reference"
+        }
+      ],
       "source": {
         "title": "Epic UE5.8 — Triggering Sequences from Gameplay",
         "url": "https://dev.epicgames.com/documentation/unreal-engine/play-cinematics-from-blueprints-in-unreal-engine"
@@ -6373,6 +7536,13 @@ window.UE5_DESIGN_DATA = {
       "icon": "◖",
       "featured": true,
       "referenceImages": [
+        {
+          "src": "https://playdead.com/css/img/inside/screenshots/INSIDE_01.jpg",
+          "caption": "INSIDE — Sparse sound + focus. Do not fill every second. Leave room for important sounds to become events.",
+          "sourceUrl": "https://playdead.com/games/inside/",
+          "sourceTitle": "Playdead — INSIDE",
+          "kind": "reference"
+        },
         {
           "src": "assets/book/best-practices/sequencer-audio-markers.webp",
           "caption": "Book reference — Using markers in Sequencer to align timing, beats and audio-driven moments.",
@@ -6508,7 +7678,15 @@ window.UE5_DESIGN_DATA = {
       ],
       "icon": "≈",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://www.alanwake.com/wp-content/uploads/2024/06/aw2-photo-mode-03-1920x1080.png",
+          "caption": "Alan Wake 2 — Atmosphere + state change. Design ambience as layers that can enter/leave with game state.",
+          "sourceUrl": "https://www.alanwake.com/story/unleash-your-creativity-with-alan-wake-2s-new-photo-mode/",
+          "sourceTitle": "Remedy — Alan Wake 2",
+          "kind": "reference"
+        }
+      ],
       "source": {
         "title": "Epic UE5.8 — MetaSounds Quick Start (ambient wind)",
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/metasounds-quick-start"
@@ -6624,6 +7802,13 @@ window.UE5_DESIGN_DATA = {
       "featured": true,
       "referenceImages": [
         {
+          "src": "https://cdn.prod.website-files.com/64630b03551142e3347ae3da/6492c4ab2445934a3c76c839_control_pm_det_005.webp",
+          "caption": "CONTROL — Strong read at a glance. Make the first three seconds of the scene readable.",
+          "sourceUrl": "https://www.remedygames.com/games/control",
+          "sourceTitle": "Remedy — CONTROL",
+          "kind": "reference"
+        },
+        {
           "src": "assets/book/best-practices/unreal-insights-spike.webp",
           "caption": "Book reference — An Unreal Insights capture showing a performance spike and where to begin investigating it.",
           "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
@@ -6632,12 +7817,6 @@ window.UE5_DESIGN_DATA = {
         {
           "src": "assets/book/best-practices/shader-complexity-heatmap.webp",
           "caption": "Book reference — Shader Complexity view mode highlighting expensive materials and areas needing optimisation.",
-          "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
-          "kind": "book"
-        },
-        {
-          "src": "assets/book/best-practices/stat-gpu-world-optimisation.webp",
-          "caption": "Book reference — Stat GPU overlay demonstrating a real performance-reading workflow inside Unreal.",
           "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
           "kind": "book"
         }
@@ -6759,6 +7938,13 @@ window.UE5_DESIGN_DATA = {
       "featured": false,
       "referenceImages": [
         {
+          "src": "https://drop-assets.ea.com/images/qKm8m5buUQRNr4WIsBTcd/2d8953c4fd3f1e4acd5a78bbc9a16b30/DEAD-SPACE_Media_SLIDE-02-USP-02.jpg",
+          "caption": "Dead Space — Atmosphere + readability + performance. Every expensive effect must earn a player-facing job.",
+          "sourceUrl": "https://www.ea.com/games/dead-space/dead-space",
+          "sourceTitle": "EA / Motive — Dead Space",
+          "kind": "reference"
+        },
+        {
           "src": "assets/book/best-practices/content-browser-folders.webp",
           "caption": "Book reference — A readable folder structure makes assets findable and reduces production friction.",
           "sourceTitle": "Unreal Engine 5 Best Practices (2025) — licensed college reference",
@@ -6770,6 +7956,232 @@ window.UE5_DESIGN_DATA = {
         "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/reference-viewer-in-unreal-engine"
       },
       "prescriptive": true
+    }
+  ],
+  "roulette": [
+    {
+      "module": "world-design",
+      "moduleTitle": "Level Design Foundations",
+      "icon": "◇",
+      "title": "No Arrows Allowed",
+      "constraint": "No objective marker, waypoint beam or text sign.",
+      "goal": "Guide a fresh player to the exit using only space, landmarks, light and route shape."
+    },
+    {
+      "module": "world-design",
+      "moduleTitle": "Level Design Foundations",
+      "icon": "◇",
+      "title": "Thirty-Second Fork",
+      "constraint": "One room, two routes, one optional reward.",
+      "goal": "Make players understand the main route within 30 seconds but still notice the optional path."
+    },
+    {
+      "module": "world-design",
+      "moduleTitle": "Level Design Foundations",
+      "icon": "◇",
+      "title": "Bad Level Surgery",
+      "constraint": "Start from one intentionally confusing greybox.",
+      "goal": "Fix it with only three edits. You must explain why each edit changes player behaviour."
+    },
+    {
+      "module": "environment",
+      "moduleTitle": "Environment Art & Set Dressing",
+      "icon": "▦",
+      "title": "Seven Props, One Story",
+      "constraint": "Maximum seven movable props.",
+      "goal": "Tell a clear before-the-player-arrived story."
+    },
+    {
+      "module": "environment",
+      "moduleTitle": "Environment Art & Set Dressing",
+      "icon": "▦",
+      "title": "The 30% Cut",
+      "constraint": "Remove 30% of your dressing after you think it is finished.",
+      "goal": "Make the scene clearer, not emptier."
+    },
+    {
+      "module": "environment",
+      "moduleTitle": "Environment Art & Set Dressing",
+      "icon": "▦",
+      "title": "Hero Asset Breakout",
+      "constraint": "Everything except one object comes from the same modular kit.",
+      "goal": "Use one unique object to create identity and narrative focus."
+    },
+    {
+      "module": "materials",
+      "moduleTitle": "Materials & Surfaces",
+      "icon": "◫",
+      "title": "One Master, Three Worlds",
+      "constraint": "One master material only.",
+      "goal": "Create clean, abandoned and rain-soaked variants using instances."
+    },
+    {
+      "module": "materials",
+      "moduleTitle": "Materials & Surfaces",
+      "icon": "◫",
+      "title": "No Colour Crutch",
+      "constraint": "Temporarily desaturate the viewport.",
+      "goal": "Keep metal, plastic, stone and wetness readable through value/roughness/normal response."
+    },
+    {
+      "module": "materials",
+      "moduleTitle": "Materials & Surfaces",
+      "icon": "◫",
+      "title": "Cause Before Grunge",
+      "constraint": "Every stain or wear mark needs a physical reason.",
+      "goal": "Delete decorative dirt that cannot be explained."
+    },
+    {
+      "module": "lighting",
+      "moduleTitle": "Lighting & Atmosphere",
+      "icon": "☼",
+      "title": "One Light Horror",
+      "constraint": "One movable key light plus ambient/global light.",
+      "goal": "Create readable tension without filling the room with point lights."
+    },
+    {
+      "module": "lighting",
+      "moduleTitle": "Lighting & Atmosphere",
+      "icon": "☼",
+      "title": "Mood Swap",
+      "constraint": "Same geometry, camera and materials.",
+      "goal": "Make “safe” and “dangerous” versions using only lighting/atmosphere."
+    },
+    {
+      "module": "lighting",
+      "moduleTitle": "Lighting & Atmosphere",
+      "icon": "☼",
+      "title": "No Post Process Rescue",
+      "constraint": "Disable the Post Process Volume while judging.",
+      "goal": "Make the base lighting work before grading."
+    },
+    {
+      "module": "landscape",
+      "moduleTitle": "Landscape, Terrain & Foliage",
+      "icon": "≈",
+      "title": "Terrain Before Foliage",
+      "constraint": "No foliage or rocks until the route passes a playtest.",
+      "goal": "Make the terrain alone communicate movement and destination."
+    },
+    {
+      "module": "landscape",
+      "moduleTitle": "Landscape, Terrain & Foliage",
+      "icon": "≈",
+      "title": "Three Costs",
+      "constraint": "One valley, three traversable routes.",
+      "goal": "Make each route trade time, safety or reward."
+    },
+    {
+      "module": "landscape",
+      "moduleTitle": "Landscape, Terrain & Foliage",
+      "icon": "≈",
+      "title": "Foliage Firewall",
+      "constraint": "Dense biome, but the critical route can never disappear.",
+      "goal": "Use density, species and clearing patterns as guidance."
+    },
+    {
+      "module": "cinematics",
+      "moduleTitle": "Sequencer & Cutscenes",
+      "icon": "▶",
+      "title": "Three Shots Only",
+      "constraint": "Exactly three shots, maximum 20 seconds.",
+      "goal": "Communicate place, threat and player goal."
+    },
+    {
+      "module": "cinematics",
+      "moduleTitle": "Sequencer & Cutscenes",
+      "icon": "▶",
+      "title": "One Lens",
+      "constraint": "Pick one focal length and never change it.",
+      "goal": "Create variety through staging, distance and movement instead."
+    },
+    {
+      "module": "cinematics",
+      "moduleTitle": "Sequencer & Cutscenes",
+      "icon": "▶",
+      "title": "No Fly-Through",
+      "constraint": "No aimless camera travel.",
+      "goal": "Every camera move must reveal new information or track meaningful action."
+    },
+    {
+      "module": "audio",
+      "moduleTitle": "Audio & Sound Design",
+      "icon": "♪",
+      "title": "Off-Screen Warning",
+      "constraint": "Threat never appears on camera during the setup.",
+      "goal": "Make the player understand direction and approach using sound only."
+    },
+    {
+      "module": "audio",
+      "moduleTitle": "Audio & Sound Design",
+      "icon": "♪",
+      "title": "Three-Layer Ambience",
+      "constraint": "Exactly three looping layers.",
+      "goal": "Create depth without turning the mix into mush."
+    },
+    {
+      "module": "audio",
+      "moduleTitle": "Audio & Sound Design",
+      "icon": "♪",
+      "title": "Silence Button",
+      "constraint": "At one gameplay event, remove more sound than you add.",
+      "goal": "Use absence as the strongest cue."
+    },
+    {
+      "module": "polish",
+      "moduleTitle": "Polish, Optimisation & Presentation",
+      "icon": "✓",
+      "title": "Fifteen-Minute Triage",
+      "constraint": "15 minutes, maximum three changes.",
+      "goal": "Improve the scene more than an hour of random tweaking."
+    },
+    {
+      "module": "polish",
+      "moduleTitle": "Polish, Optimisation & Presentation",
+      "icon": "✓",
+      "title": "Same Camera A/B",
+      "constraint": "Lock the camera before the fix.",
+      "goal": "Prove the change helped instead of relying on memory."
+    },
+    {
+      "module": "polish",
+      "moduleTitle": "Polish, Optimisation & Presentation",
+      "icon": "✓",
+      "title": "Budget Cut",
+      "constraint": "Reduce one expensive visual category by 30%.",
+      "goal": "Keep the player-facing design read intact."
+    }
+  ],
+  "designLoop": [
+    {
+      "n": "01",
+      "title": "LOOK",
+      "text": "Study a real game and name the design job — not just the art style."
+    },
+    {
+      "n": "02",
+      "title": "STEAL THE PRINCIPLE",
+      "text": "Turn the example into a transferable rule you can use in another genre."
+    },
+    {
+      "n": "03",
+      "title": "RESEARCH",
+      "text": "Collect your own evidence: screenshots, maps, sound notes, shot counts or references."
+    },
+    {
+      "n": "04",
+      "title": "BUILD",
+      "text": "Use the focused UE5 recipes to construct one small, testable version."
+    },
+    {
+      "n": "05",
+      "title": "BREAK + TEST",
+      "text": "Change a constraint, remove a crutch, or give it to another player without explaining."
+    },
+    {
+      "n": "06",
+      "title": "IMPROVE",
+      "text": "Make one evidence-based revision and explain what changed for the player."
     }
   ]
 };

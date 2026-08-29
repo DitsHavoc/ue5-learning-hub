@@ -2,6 +2,10 @@
 
 The live Supabase project is upgraded incrementally. Production data is not rebuilt or wiped when features are added.
 
+## V3.35.0 Designer Studio Rebuild
+
+No database migration is required. v3.35.0 is a content, reference-imagery and learning-flow rebuild. Existing Designer Quick Tutorial IDs and Studio Build completion IDs are preserved. Hidden Black Box briefs derive their visibility from the existing Studio Build completion state and do not add new persistence.
+
 
 ## V3.19
 

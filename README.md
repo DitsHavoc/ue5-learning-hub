@@ -1,6 +1,6 @@
-# Current release — v3.34.22
+# Current release — v3.35.0
 
-The remaining Unreal imagery queue has been re-audited against the actual current Epic Designer/Artist/tutorial pages rather than requiring bespoke screenshots for every Hub-specific value. Current first-party UE5.8 workflow imagery is now reused more aggressively across Core Lessons, Programming recipes, Building Blocks and Designer Studio, while exact classroom values remain in the written steps. The previous **76 teacher-capture** figure is retired: **0 new teacher screenshots are required before launch**. The supplied Maps & Modes screenshot is retained as an authentic classroom location reference. No database migration is required.
+Designer Studio has been rebuilt around an explicit **LOOK → STEAL THE PRINCIPLE → RESEARCH → BUILD → BREAK + TEST → IMPROVE** learning loop. The eight disciplines and all 47 Designer-owned recipes are retained, but students now work through **24 real-game case studies, 16 field-research missions, 24 constraint challenges, Design Roulette, clearer Studio Builds and 8 hidden Black Box briefs** that unlock after the existing Studio Build completion. All 47 Designer-owned recipes now carry at least one useful design-target reference where appropriate. No database migration is required and existing completion IDs are preserved. See `RELEASE-NOTES-v3.35.0.md` and `DESIGNER-STUDIO-REVAMP-v3.35.0.md`.
 
 # UE5 Learning Hub v3.32.2 — Class Detail Workspace
 

@@ -1,3 +1,15 @@
+## v3.35.0 — Designer Studio Rebuild — 29 Aug 2026
+- Rebuilt Designer Studio around **LOOK → STEAL THE PRINCIPLE → RESEARCH → BUILD → BREAK + TEST → IMPROVE** rather than treating UE5 recipes as the curriculum.
+- Retained all 8 Designer disciplines and all 47 Designer-owned Quick Tutorials with their existing IDs/completion state; Lighting also continues to reuse the shared Silent Hill fog recipe.
+- Added 24 source-linked real-game case studies, 16 field research missions and 24 constraint challenges.
+- Added a cross-discipline Design Roulette using all 24 constraint challenges.
+- Added 8 hidden Black Box briefs which reveal after the existing Studio Build for that discipline is completed.
+- Rewrote 53 Studio Build phase instructions to require specific design decisions, observation and testing; removed the generic “use the relevant Unreal editor panel” wording.
+- Ensured all 47 Designer-owned recipes have at least one useful game/design target reference; the shared Silent Hill fog recipe retains its existing references.
+- Added stronger developer/professional reference material from shipped games, developer breakdowns and The Level Design Book while keeping Epic documentation as the technical UE source of truth.
+- Added no AI imagery and no new teacher-capture requirement.
+- No database migration.
+
 ## v3.34.22 — Official Tutorial Imagery Exhaustion Pass — 29 Aug 2026
 
 - Re-audited the former 76-image teacher capture queue against current UE5.6–5.8 Epic tutorial pages rather than exact-value screenshot matching.
