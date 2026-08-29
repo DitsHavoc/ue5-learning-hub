@@ -1,5 +1,5 @@
 window.UE5_BUILDING_BLOCK_DATA = {
-  "version": "3.34.0",
+  "version": "3.34.12",
   "buildDate": "28 Aug 2026",
   "tiers": {
     "core": {
@@ -1334,6 +1334,13 @@ window.UE5_BUILDING_BLOCK_DATA = {
         "data asset",
         "primary data asset"
       ],
+      "visual": {
+        "src": "https://dev.epicgames.com/community/api/documentation/image/b1324805-7a2b-44d7-b218-f1f8dc5bd2c2?height=335&resizing_type=fill&width=1920",
+        "caption": "Official UE5.8 Data Assets reference. Use the Hub recipe to create the PrimaryDataAsset class, add DisplayName and Cost, then create an authored asset instance.",
+        "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/data-assets-in-unreal-engine",
+        "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+        "kind": "epic"
+      },
       "tutorials": [],
       "lessons": []
     },
