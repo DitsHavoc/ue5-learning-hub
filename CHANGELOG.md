@@ -1,3 +1,10 @@
+## v3.37.1 — Topology Step Mockups — 29 Aug 2026
+
+- Prototyped full visual topology teaching on Crate, Barrel / Canister and Sci-fi Wall Panel.
+- Added 18 original step diagrams showing where edges/support loops/chamfers/seams/pivots should be and where extra geometry should not be added.
+- Added READ THE MESH topology maps and explicit edge-purpose rules.
+- No IDs or database schema changed.
+
 ## v3.37.0 — 3D Modelling Studio Rebuild — 29 Aug 2026
 
 - Rebuilt 3D Modelling Studio around **REFERENCE → PLAN → BLOCK → MODEL → INSPECT → GAME READY → CRITIQUE** rather than a button-first Max course.

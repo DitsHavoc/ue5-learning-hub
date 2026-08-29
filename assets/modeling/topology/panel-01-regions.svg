@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="720" viewBox="0 0 1400 720" role="img" aria-labelledby="title desc">
+<title id="title">Panel step 1 regions</title><desc id="desc"></desc>
+<defs><style>
+.bg{fill:#0b1118} .mesh{fill:#111a24;stroke:#9fb4c8;stroke-width:3} .edge{fill:none;stroke:#8298ad;stroke-width:2}
+.support{fill:none;stroke:#4fa8ff;stroke-width:5} .shape{fill:none;stroke:#7ce3c4;stroke-width:5} .warn{fill:none;stroke:#ff708d;stroke-width:4;stroke-dasharray:10 8}
+.pivot{fill:#ffcf5a;stroke:#0b1118;stroke-width:3} .label{fill:#eaf3ff;font:700 30px Arial,sans-serif} .small{fill:#a8bacd;font:22px Arial,sans-serif}
+.call{fill:#d9e8f6;font:700 22px Arial,sans-serif} .line{stroke:#d9e8f6;stroke-width:2} .uv{fill:#172536;stroke:#5f7c98;stroke-width:2}
+</style><pattern id="checker" width="40" height="40" patternUnits="userSpaceOnUse"><rect width="40" height="40" fill="#d7dde5"/><rect width="20" height="20" fill="#6f7b88"/><rect x="20" y="20" width="20" height="20" fill="#6f7b88"/></pattern></defs>
+<rect class="bg" width="100%" height="100%"/><text class="label" x="55" y="60">SCI-FI PANEL • STEP 1</text><text class="small" x="55" y="95">Design three large regions before you touch small detail.</text><rect x="220" y="150" width="720" height="450" class="mesh"/><rect x="275" y="205" width="300" height="340" class="support"/><rect x="615" y="205" width="270" height="145" class="shape"/><rect x="615" y="390" width="270" height="155" class="edge"/><line class="line" x1="275" y1="205" x2="65" y2="175"/><circle cx="275" cy="205" r="7" fill="#eaf3ff"/><text class="call" x="77" y="182">PRIMARY region</text><line class="line" x1="615" y1="205" x2="900" y2="220"/><circle cx="615" cy="205" r="7" fill="#eaf3ff"/><text class="call" x="912" y="227">SECONDARY region</text><text class="small" x="55" y="665">If the panel is not interesting now, twenty tiny bolts will not save it.</text></svg>

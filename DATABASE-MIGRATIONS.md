@@ -281,3 +281,7 @@ All three migrations were applied to the live UE5 Learning Hub Supabase project 
 ## v3.37.0 — 3D Modelling Studio Rebuild
 
 No database migration is required. This release changes static modelling curriculum/reference data, 3D Modelling Studio rendering, styling, cache/version metadata and release/QA documentation only. Existing modelling lesson/build/fix IDs are preserved, so existing `lesson_progress` completion rows and XP mappings remain valid. Critique Board integration uses the already-deployed v3.36.0 Critique Board; Supabase schema, RLS policies, RPCs, classes, projects, evidence and permissions are unchanged.
+
+## v3.37.1 — Topology Step Mockups
+
+No database migration required. This release changes only the 3D Modelling Studio presentation/data and adds local instructional SVGs. Existing progress/completion IDs are unchanged.
