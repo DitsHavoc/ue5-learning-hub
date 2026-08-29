@@ -1,5 +1,5 @@
 window.UE5_TUTORIAL_DATA = {
-  "version": "3.34.12",
+  "version": "3.34.13",
   "buildDate": "29 Aug 2026",
   "categories": [
     {
@@ -923,7 +923,8 @@ window.UE5_TUTORIAL_DATA = {
         "Character Blueprint → IA_Interact Started. Get FollowCamera World Location = Start.",
         "Get FollowCamera Forward Vector × 300 → add Start = End.",
         "Add Line Trace By Channel: Start/End as above, Visibility channel, Draw Debug For Duration.",
-        "Branch from Return Value. True → Break Hit Result → Hit Actor → Print Display Name.",
+        "Branch from the Line Trace Return Value. Continue only from True when something was hit.",
+        "True → Break Hit Result → Hit Actor → Print Display Name.",
         "Play, aim at an Actor within 300 cm and press E. If the line misses, first verify Start/End before adding casts or interfaces."
       ],
       "prescriptivePass": "3.31",
@@ -940,25 +941,44 @@ window.UE5_TUTORIAL_DATA = {
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
         },
-        null,
         {
           "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/f64e0a22-515e-41bb-af3a-c93361c5631f/guide-how-to-2b-6.png",
-          "caption": "Building the trace End point from camera location, forward direction and distance. This is the vector maths behind “what am I looking at?”",
+          "caption": "Official UE5.8 camera trace graph. Get World Location supplies the trace Start and is reused when calculating End; use your FollowCamera in this Hub tutorial.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/using-a-single-line-trace-raycast-by-channel-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/f64e0a22-515e-41bb-af3a-c93361c5631f/guide-how-to-2b-6.png",
+          "caption": "Official UE5.8 trace End calculation from camera location, forward direction and distance. The Hub uses the shorter 300 cm interaction range.",
           "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/using-a-single-line-trace-raycast-by-channel-in-unreal-engine",
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
         },
         {
           "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/243f760d-f655-4247-8c43-a8b6ea39de69/guide-how-to-2b-2.png",
-          "caption": "Adding the real Line Trace By Channel node to a Blueprint graph.",
+          "caption": "Official UE5.8 Line Trace By Channel node. Connect the Start/End values, use Visibility and enable temporary debug drawing while learning.",
           "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/using-a-single-line-trace-raycast-by-channel-in-unreal-engine",
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
         },
-        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/f71f4d3e-8707-4d18-b398-fca822b66bdd/branch_example.png",
+          "caption": "Official UE5.8 Branch example. Feed the Line Trace Return Value into Condition and continue interaction logic only from True.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/flow-control-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/4989daba-35b5-4100-9227-7ea749c7f69e/guide-how-to-2b-9.png",
+          "caption": "Official UE5.8 hit-result graph: Break Hit Result → Hit Actor → convert/display the Actor name → Print String.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/using-a-single-line-trace-raycast-by-channel-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         {
           "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/bd67ce85-1155-4bfd-9da7-6a7f4c9126d8/guide-how-to-2b-11.png",
-          "caption": "The trace running in Play with debug drawing enabled. Debug visualization is one of the fastest ways to diagnose a broken trace.",
+          "caption": "Official UE5.8 trace running in Play with debug drawing visible. Use it to prove range and direction before adding more interaction logic.",
           "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/using-a-single-line-trace-raycast-by-channel-in-unreal-engine",
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
@@ -1984,7 +2004,8 @@ window.UE5_TUTORIAL_DATA = {
         "Create/use IA_Fire mapped to Left Mouse Button.",
         "Player/weapon Blueprint → IA_Fire Started. Camera location = Start.",
         "Camera forward × 10000 + Start = End. Add Line Trace By Channel, Visibility, Draw Debug For Duration.",
-        "Branch on Return Value → Break Hit Result → Hit Actor.",
+        "Branch on the Line Trace Return Value. Continue damage logic only from True.",
+        "True → Break Hit Result → Hit Actor.",
         "True path → Apply Damage to Hit Actor with Base Damage 20.",
         "Play against a damageable target. Verify the debug line hits the same object that receives damage before adding VFX/sound."
       ],
@@ -2003,25 +2024,44 @@ window.UE5_TUTORIAL_DATA = {
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
         },
-        null,
         {
           "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/f64e0a22-515e-41bb-af3a-c93361c5631f/guide-how-to-2b-6.png",
-          "caption": "Building the trace End point from camera location, forward direction and distance. This is the vector maths behind “what am I looking at?”",
+          "caption": "Official UE5.8 camera trace graph. Get World Location supplies Start; use the camera or muzzle named by your weapon setup.",
           "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/using-a-single-line-trace-raycast-by-channel-in-unreal-engine",
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
         },
-        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/f64e0a22-515e-41bb-af3a-c93361c5631f/guide-how-to-2b-6.png",
+          "caption": "Official UE5.8 trace End calculation from camera location, forward direction and distance. Keep the Hub value of 10000 cm for this weapon.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/using-a-single-line-trace-raycast-by-channel-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/f71f4d3e-8707-4d18-b398-fca822b66bdd/branch_example.png",
+          "caption": "Official UE5.8 Branch example. Feed the Line Trace Return Value into Condition and continue damage logic only from True.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/flow-control-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/4989daba-35b5-4100-9227-7ea749c7f69e/guide-how-to-2b-9.png",
+          "caption": "Official UE5.8 hit-result graph. Break Out Hit and use Hit Actor as the damage target.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/using-a-single-line-trace-raycast-by-channel-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         {
           "src": "https://dev.epicgames.com/community/api/documentation/image/63b18bcf-298e-48fe-854d-f0d0172f7860?resizing_type=fit",
-          "caption": "Official UE5.8 Apply Damage setup showing the Damaged Actor and Base Damage inputs. Your graph can feed these from an overlap or trace hit instead.",
+          "caption": "Official UE5.8 Apply Damage setup showing the Damaged Actor and Base Damage inputs. Feed Hit Actor into Damaged Actor and use the Hub damage value.",
           "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-07-traps-and-damage-in-unreal-engine",
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
         },
         {
           "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/bd67ce85-1155-4bfd-9da7-6a7f4c9126d8/guide-how-to-2b-11.png",
-          "caption": "The trace running in Play with debug drawing enabled. Debug visualization is one of the fastest ways to diagnose a broken trace.",
+          "caption": "Official UE5.8 trace running in Play with debug drawing visible. Confirm the debug hit and damage target agree before adding effects.",
           "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/using-a-single-line-trace-raycast-by-channel-in-unreal-engine",
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"

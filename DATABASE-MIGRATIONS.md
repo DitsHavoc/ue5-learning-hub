@@ -193,3 +193,7 @@ No database migration is required. This release changes tutorial/design visual m
 ## V3.34.12 deep official source mining
 
 No database migration is required. This release changes UE tutorial visual mappings, cache/version metadata and capture/source-audit documentation only. Supabase schema, RLS policies, RPCs, XP/leaderboard logic, classes, projects, evidence and production permissions are unchanged.
+
+## V3.34.13 exact trace source alignment
+
+No database migration is required. This release changes UE tutorial visual mappings, recipe step alignment, cache/version metadata and capture/source-audit documentation only. Supabase schema, RLS policies, RPCs, XP/leaderboard logic, classes, projects, evidence and production permissions are unchanged.

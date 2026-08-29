@@ -1,5 +1,13 @@
 # Changelog
 
+## v3.34.13 — Exact Trace Source Alignment — 29 Aug 2026
+- Added exact current Epic UE5.8 visuals for Line Trace forward-vector maths, Break Hit Result / Hit Actor flow and Branch decisions.
+- Split the interaction and hitscan Line Trace recipes so each operation has the correct adjacent visual.
+- Removed 3 bespoke teacher-capture groups: 1 Core and 2 Programming / Quick Tutorial captures.
+- Reduced genuine teacher screenshot groups from 80 to 77: 8 Core, 50 Programming, 5 Building Block recognition and 14 Design Studio technical captures.
+- Re-audited Content Examples, First Hour, Lyra, Game Animation Sample and Stack O Bot without falsely counting topic overlap as an exact screenshot replacement.
+- No database migration.
+
 ## v3.34.12 — Deep Official Source Mining — 29 Aug 2026
 - Continued the strict official Epic UE5.8 source-mining pass before requesting bespoke classroom screenshots.
 - Added exact official visuals for placed Instance Editable Blueprint values, Blueprint Interface implementation, collision sizing/object comparison, Animation Blueprint Speed/Is Falling, Launch Character and Data Assets.

@@ -1,5 +1,5 @@
 window.UE5_COURSE_DATA = {
-  "version": "3.34.12",
+  "version": "3.34.13",
   "buildDate": "29 Aug 2026",
   "paths": [
     {
@@ -5368,7 +5368,13 @@ window.UE5_COURSE_DATA = {
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
         },
-        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/4a1f9b50-e595-4b3f-afb6-b9ce831dc5fb/guide-how-to-2b-5.png",
+          "caption": "Official UE5.8 trace maths: Get Forward Vector is multiplied by the trace distance. The Epic example uses 1500, matching this Hub step.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/using-a-single-line-trace-raycast-by-channel-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         {
           "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/f64e0a22-515e-41bb-af3a-c93361c5631f/guide-how-to-2b-6.png",
           "caption": "Official UE5.8 trace End calculation from camera location, forward direction and distance.",
@@ -5383,8 +5389,20 @@ window.UE5_COURSE_DATA = {
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
         },
-        null,
-        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/4989daba-35b5-4100-9227-7ea749c7f69e/guide-how-to-2b-9.png",
+          "caption": "Official UE5.8 hit-result graph: Break Hit Result → Hit Actor → convert/display the Actor name → Print String.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/using-a-single-line-trace-raycast-by-channel-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/f71f4d3e-8707-4d18-b398-fca822b66bdd/branch_example.png",
+          "caption": "Official UE5.8 Branch example. Feed the Line Trace Return Value into Condition and only use hit data from the True path.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/flow-control-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         {
           "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/bd67ce85-1155-4bfd-9da7-6a7f4c9126d8/guide-how-to-2b-11.png",
           "caption": "Official UE5.8 trace running in Play with debug drawing visible.",
