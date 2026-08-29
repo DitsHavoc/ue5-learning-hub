@@ -1,5 +1,9 @@
 # Database migration history
 
+## V3.35.4 Designer Resource Bridge Cleanup
+
+No database migration is required. v3.35.4 removes one redundant Designer Studio landing-page presentation block and its unused CSS only. The Resource Library route/content, Designer Studio modules, Studio Build IDs and all student progress/completion IDs are unchanged.
+
 ## V3.35.3 Designer Landing Cleanup
 
 No database migration is required. v3.35.3 removes two redundant Designer Studio landing-page panels and unused client-side roulette presentation data only. Module challenges, Resource Library content, Designer Studio Build IDs and all student progress/completion IDs are unchanged.

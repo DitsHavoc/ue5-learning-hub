@@ -1,6 +1,9 @@
-# Current release — v3.35.3
+# Current release — v3.35.4
 
-Designer Studio landing-page cleanup: removed the redundant **Design Roulette** panel and the **3D Modelling Studio** detour panel. Module-level constraint challenges remain exactly where they are useful, while 3D Modelling is still available through its dedicated navigation. The Designer landing page now moves directly from the learning loop / Resource Library into the eight design disciplines. No database migration or progress/completion ID changes are required. See `RELEASE-NOTES-v3.35.3.md`.
+Designer Studio landing-page trim: removed the large **Resource Library bridge** beneath “Seven moves. No waffle.” because the Resource Library already has direct navigation, Home-page promotion and site-wide search. The standalone `#/resources` area and all 18 curated resources remain untouched. The Designer landing now moves straight from the learning loop into the eight design disciplines. No database migration or progress/completion ID changes are required. See `RELEASE-NOTES-v3.35.4.md`.
+
+## Previous release — v3.35.3
+Designer Studio landing-page cleanup removed the redundant **Design Roulette** panel and the **3D Modelling Studio** detour panel. Module-level constraint challenges remain exactly where they are useful, while 3D Modelling is still available through its dedicated navigation. See `RELEASE-NOTES-v3.35.3.md`.
 
 ## Previous release — v3.35.2
 Designer Studio expanded to 24 different primary game case studies and promoted its buried links into the dedicated 18-source Resource Library. See `RELEASE-NOTES-v3.35.2.md`.

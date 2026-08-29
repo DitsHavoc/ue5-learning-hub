@@ -1,3 +1,12 @@
+## v3.35.4 — Designer Resource Bridge Cleanup — 29 Aug 2026
+
+- Removed the large **Free Assets • Sound • Professional Reference** bridge from the Designer Studio landing page beneath “Seven moves. No waffle.”
+- The dedicated `#/resources` Resource Library, its 18 curated resources, sidebar link, Home landing card and site-wide search results are unchanged.
+- Removed CSS used only by the deleted Designer bridge.
+- Corrected two pre-existing Quick Tutorial breadcrumb links from the invalid `#/Dashboard` route to the real Dashboard route `#/`.
+- Designer Studio now flows directly from the seven-move learning loop into the eight discipline cards.
+- No database migration and no progress/completion IDs changed.
+
 ## v3.35.3 — Designer Landing Cleanup — 29 Aug 2026
 
 - Removed the redundant **Design Roulette** block from the Designer Studio landing page; the 24 module-level constraint challenges remain inside their relevant disciplines.

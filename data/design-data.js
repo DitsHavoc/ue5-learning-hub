@@ -1,5 +1,5 @@
 window.UE5_DESIGN_DATA = {
-  "version": "3.35.3",
+  "version": "3.35.4",
   "buildDate": "29 Aug 2026",
   "modules": [
     {
