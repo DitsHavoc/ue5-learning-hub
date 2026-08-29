@@ -295,3 +295,8 @@ No database migration. This release changes modelling content, local visual asse
 ## v3.37.3 — Single Viewport Stage Checkpoint
 
 No database migration. Visual/data-content update only.
+
+
+## v3.37.4 — Tyre Workflow Correction
+
+No database migration required. This release changes only 3D Modelling Studio curriculum data, local stage imagery and release metadata.

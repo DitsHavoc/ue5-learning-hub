@@ -1,6 +1,6 @@
-# Current release — v3.37.3
+# Current release — v3.37.4
 
-**Single Viewport Stage Checkpoint.** Crate, Barrel and Tyre use the approved one-image-per-stage Max-style close-ups. UI/infographic generation rejects are not packaged. Remaining Build X visuals follow next. No database migration.
+**Tyre workflow correction.** Build X → Simple Game Tyre now uses a cleaner game-art workflow: restrained Torus body, tyre-profile shaping, one master tread tile, straight Array, 360° Bend, then fit/clean. Six one-stage Max-style viewport images replace the earlier tyre visuals. Rejected webpage/tutorial-UI generations are not packaged. No database migration.
 
 ## Previous release — v3.36.0
 **Critique Board + Learning XP.** Signed-in students now have a private class studio wall at `#/critique` for screenshot-based work-in-progress critique. Posts stay class-scoped, classmates answer three structured prompts, under-reviewed work is surfaced first, authors can add an improved **After** image, and teachers can moderate. Meaningful peer critique awards **15 XP for the first three rewarded critiques per Europe/London day**; students can keep helping after the cap. Designer Studio's 24 industry videos/articles now have a self-declared **Watched/read + did the task** completion worth **20 XP** each. These source completions also appear in teacher class-progress views. Teams remains the formal assignment/submission/grade space; Critique Board is intentionally formative. The live Supabase migrations were applied on 29 Aug 2026. See `RELEASE-NOTES-v3.36.0.md` and `CRITIQUE-BOARD-QA-v3.36.0.md`.

@@ -1,5 +1,5 @@
 window.UE5_MODELING_DATA = {
-  "version": "3.37.3",
+  "version": "3.37.4",
   "updated": "29 Aug 2026",
   "philosophy": "Reference first. Plan the object. Block the big forms. Add only geometry that earns its place. Inspect constantly. Make it game ready. Get another human to critique it.",
   "lessons": [
@@ -2341,13 +2341,41 @@ window.UE5_MODELING_DATA = {
         ]
       },
       "recipeVisuals": [
-        {"src":"assets/modeling/stages/crate-stage-01.png","caption":"STEP 1 • BLOCKOUT • One clean Box. Correct proportion first; zero extra cuts.","kind":"local"},
-        {"src":"assets/modeling/stages/crate-stage-02.png","caption":"STEP 2 • MAIN CUTS • Add only the loops that establish the frame and panel boundaries.","kind":"local"},
-        {"src":"assets/modeling/stages/crate-stage-03.png","caption":"STEP 3 • PANEL SHAPE • Inset the large panel areas and establish depth before detail.","kind":"local"},
-        {"src":"assets/modeling/stages/crate-stage-04.png","caption":"STEP 4 • SUPPORT LOOPS • Add close support edges only where the shape genuinely needs them.","kind":"local"},
-        {"src":"assets/modeling/stages/crate-stage-05.png","caption":"STEP 5 • FINAL LOW-POLY FORM • Keep the construction readable without filling flat faces with cuts.","kind":"local"},
-        {"src":"assets/modeling/stages/crate-stage-06.png","caption":"STEP 6 • UV CHECK • Checker scale should stay even across the asset before texturing.","kind":"local"},
-        {"src":"assets/modeling/stages/crate-stage-07.png","caption":"STEP 7 • PIVOT + EXPORT • Use a useful placement pivot at the base before FBX export.","kind":"local"}
+        {
+          "src": "assets/modeling/stages/crate-stage-01.png",
+          "caption": "STEP 1 • BLOCKOUT • One clean Box. Correct proportion first; zero extra cuts.",
+          "kind": "local"
+        },
+        {
+          "src": "assets/modeling/stages/crate-stage-02.png",
+          "caption": "STEP 2 • MAIN CUTS • Add only the loops that establish the frame and panel boundaries.",
+          "kind": "local"
+        },
+        {
+          "src": "assets/modeling/stages/crate-stage-03.png",
+          "caption": "STEP 3 • PANEL SHAPE • Inset the large panel areas and establish depth before detail.",
+          "kind": "local"
+        },
+        {
+          "src": "assets/modeling/stages/crate-stage-04.png",
+          "caption": "STEP 4 • SUPPORT LOOPS • Add close support edges only where the shape genuinely needs them.",
+          "kind": "local"
+        },
+        {
+          "src": "assets/modeling/stages/crate-stage-05.png",
+          "caption": "STEP 5 • FINAL LOW-POLY FORM • Keep the construction readable without filling flat faces with cuts.",
+          "kind": "local"
+        },
+        {
+          "src": "assets/modeling/stages/crate-stage-06.png",
+          "caption": "STEP 6 • UV CHECK • Checker scale should stay even across the asset before texturing.",
+          "kind": "local"
+        },
+        {
+          "src": "assets/modeling/stages/crate-stage-07.png",
+          "caption": "STEP 7 • PIVOT + EXPORT • Use a useful placement pivot at the base before FBX export.",
+          "kind": "local"
+        }
       ]
     },
     {
@@ -2495,12 +2523,36 @@ window.UE5_MODELING_DATA = {
         ]
       },
       "recipeVisuals": [
-        {"src":"assets/modeling/stages/barrel-stage-01.png","caption":"STEP 1 • CYLINDER • Start with a restrained radial side count and judge the silhouette at game distance.","kind":"local"},
-        {"src":"assets/modeling/stages/barrel-stage-02.png","caption":"STEP 2 • PROFILE LOOPS • Add only the rings needed to shape the shoulders, rim and base.","kind":"local"},
-        {"src":"assets/modeling/stages/barrel-stage-03.png","caption":"STEP 3 • SHAPE + BANDS • Establish the recognisable barrel form without a ladder of unnecessary loops.","kind":"local"},
-        {"src":"assets/modeling/stages/barrel-stage-04.png","caption":"STEP 4 • CLEAN FINISH • Keep bevel/support density restrained and readable in Edged Faces.","kind":"local"},
-        {"src":"assets/modeling/stages/barrel-stage-05.png","caption":"STEP 5 • UV CHECK • Use the checker to catch stretching and inconsistent texel density.","kind":"local"},
-        {"src":"assets/modeling/stages/barrel-stage-06.png","caption":"STEP 6 • PIVOT + EXPORT • Finish with a sensible placement pivot and engine-ready orientation.","kind":"local"}
+        {
+          "src": "assets/modeling/stages/barrel-stage-01.png",
+          "caption": "STEP 1 • CYLINDER • Start with a restrained radial side count and judge the silhouette at game distance.",
+          "kind": "local"
+        },
+        {
+          "src": "assets/modeling/stages/barrel-stage-02.png",
+          "caption": "STEP 2 • PROFILE LOOPS • Add only the rings needed to shape the shoulders, rim and base.",
+          "kind": "local"
+        },
+        {
+          "src": "assets/modeling/stages/barrel-stage-03.png",
+          "caption": "STEP 3 • SHAPE + BANDS • Establish the recognisable barrel form without a ladder of unnecessary loops.",
+          "kind": "local"
+        },
+        {
+          "src": "assets/modeling/stages/barrel-stage-04.png",
+          "caption": "STEP 4 • CLEAN FINISH • Keep bevel/support density restrained and readable in Edged Faces.",
+          "kind": "local"
+        },
+        {
+          "src": "assets/modeling/stages/barrel-stage-05.png",
+          "caption": "STEP 5 • UV CHECK • Use the checker to catch stretching and inconsistent texel density.",
+          "kind": "local"
+        },
+        {
+          "src": "assets/modeling/stages/barrel-stage-06.png",
+          "caption": "STEP 6 • PIVOT + EXPORT • Finish with a sensible placement pivot and engine-ready orientation.",
+          "kind": "local"
+        }
       ]
     },
     {
@@ -2518,80 +2570,99 @@ window.UE5_MODELING_DATA = {
         "max-modifier-stack"
       ],
       "teaches": [
-        "Tube segment judgement",
-        "Ring + Connect",
-        "Sidewall profile",
-        "Inset / Extrude tread",
-        "Symmetry",
-        "Wireframe checking"
+        "Radial segment judgement",
+        "Tyre cross-section shaping",
+        "Single tread tile",
+        "Array repetition",
+        "Bend modifier",
+        "Clean game-ready topology"
       ],
-      "summary": "Build a believable tyre while learning that roundness, profile and tread detail need controlled geometry rather than huge segment counts.",
+      "summary": "Build a believable game tyre with a clean tyre body and a separate repeatable tread strip. The tyre stays efficient because the tread is designed once, repeated, then bent around the wheel instead of being hacked into every face of the base mesh.",
       "phases": [
         {
-          "name": "01 • Choose the base density",
-          "brief": "Start with a Tube and deliberately choose a side count by silhouette, not habit.",
-          "proof": "Screenshot showing the chosen Tube in shaded + F4 views.",
-          "stop": "If the tyre visibly facets at intended game distance, adjust sides now. If extra sides make no visible difference, do not add them.",
+          "name": "01 • Build the tyre body",
+          "brief": "Start from a restrained Torus so the hole and radial topology already exist. Choose the lowest radial count that still reads as round.",
+          "proof": "Perspective screenshot with Edged Faces showing the low-density torus before extra detail.",
+          "stop": "If you cannot see the faceting at intended game distance, do not add more radial segments.",
           "steps": [
-            "Create a Tube in Front view and set sensible outer radius, inner radius and width for the prop scale.",
-            "Make two temporary copies with lower and higher side counts.",
-            "Compare all three from intended game distance and choose the lowest count that still reads as round.",
-            "Delete the comparison copies and save Tyre_01_Base.max."
+            "Create a Torus and keep the major Segments restrained.",
+            "Use roughly 8 cross-section Sides so the tyre profile can be shaped without becoming dense.",
+            "Compare from intended game distance before committing to the segment count."
           ]
         },
         {
-          "name": "02 • Shape the sidewall",
-          "brief": "Convert a safe working copy and use Ring/Connect to add only the loops needed to control the tyre profile.",
-          "proof": "Front/side orthographic screenshot with F4 visible.",
-          "stop": "The tyre should have a clean rounded shoulder without pinching. If a new loop does not improve the profile, remove/undo it.",
+          "name": "02 • Shape the cross-section",
+          "brief": "Convert a working copy and turn the doughnut-like torus into a tyre profile: flatter tread crown, rounded shoulders and believable sidewalls.",
+          "proof": "Front/Perspective screenshot with Edged Faces showing the flatter tread crown and controlled sidewall profile.",
+          "stop": "The outside should read as a tyre, not a perfect circular torus. Do not add loops unless they visibly improve the profile.",
           "steps": [
-            "Duplicate the Tube as Tyre_SAFE and Tyre_WORK before conversion.",
-            "Convert Tyre_WORK to Editable Poly and enter Edge level.",
-            "Use Ring to select matching cross-section edges, then Connect to add a small number of profile loops.",
-            "Scale/move those loops gradually to round the shoulder while checking Front and Perspective views."
+            "Duplicate a safe copy, then convert the working copy to Editable Poly.",
+            "Select the cross-section vertex/edge loops and scale/move them to flatten the tread crown.",
+            "Keep the shoulder rounded and the sidewall slightly softer than the tread face."
           ]
         },
         {
-          "name": "03 • Add simple tread language",
-          "brief": "Use shallow, repeated tread blocks. The goal is readable form, not a racing-simulator tyre.",
-          "proof": "Close shaded view plus wireframe showing controlled added geometry.",
-          "stop": "Tread should not intersect itself or create paper-thin slivers. If the pattern is messy, return to the clean sidewall version.",
+          "name": "03 • Make one tread tile",
+          "brief": "Model one small tread unit as a separate object. This is the only piece you design by hand.",
+          "proof": "Close viewport screenshot of one selected tread tile with clean simple geometry.",
+          "stop": "The tile should be simple enough to repeat dozens of times without exploding the polycount.",
           "steps": [
-            "Select a small, evenly spaced set of outer tread polygons rather than every polygon.",
-            "Use Inset By Polygon with a small value to create borders around those tread faces.",
-            "Extrude the selected tread faces outward only a little.",
-            "Orbit around the tyre and verify the tread remains consistent around the circumference."
+            "Create one simple tread block from a Box or small Editable Poly.",
+            "Angle the block slightly across the tyre width if the design needs it.",
+            "Keep tiny grooves and lettering for texture/normal detail rather than geometry."
           ]
         },
         {
-          "name": "04 • Finish and prove the mesh",
-          "brief": "Use a small Chamfer only where a highlight is needed and keep the stack/source recoverable.",
-          "proof": "Final shaded + edged view and saved milestone.",
-          "stop": "Do not add TurboSmooth merely because the object is round. The silhouette and shading should already be doing the job.",
+          "name": "04 • Array a straight tread strip",
+          "brief": "Use Array to repeat the tread tile in a perfectly regular straight line. Do not place blocks by eye.",
+          "proof": "Viewport screenshot showing an evenly spaced straight strip of repeated tread tiles.",
+          "stop": "Spacing and rotation must be consistent. Fix one bad master tile before making more copies.",
           "steps": [
-            "Chamfer only the edges that look unnaturally razor-sharp in the final view.",
-            "If you deliberately modelled only a half/section, use Symmetry and check the seam before continuing.",
-            "Toggle F4 and inspect for accidental density spikes, open borders or doubled geometry.",
-            "Save Tyre_04_Clean.max before any later UV/texturing work."
+            "Duplicate the master tile with Tools > Array.",
+            "Use a fixed spacing value so every repeat matches.",
+            "Alternate/mirror a second row only if the tread design genuinely needs it."
+          ]
+        },
+        {
+          "name": "05 • Bend the strip around the tyre",
+          "brief": "Attach/prepare the tread strip and use Bend to wrap it through 360 degrees around the wheel.",
+          "proof": "Viewport screenshot of the repeated tread strip bent into a clean circular ring.",
+          "stop": "The first and last repeat should meet cleanly without a large gap or overlap.",
+          "steps": [
+            "Keep a safe copy of the straight tread strip before bending.",
+            "Add a Bend modifier, use the correct axis and set Angle to 360 degrees.",
+            "Adjust the Bend gizmo/centre so the ring matches the tyre radius."
+          ]
+        },
+        {
+          "name": "06 • Fit, clean and prove the final tyre",
+          "brief": "Fit the tread ring to the tyre body, keep both source pieces recoverable and finish only the edges that need a highlight.",
+          "proof": "Final shaded + Edged Faces screenshot showing the tyre body and repeated tread working together.",
+          "stop": "No floating tread, obvious intersections, doubled seams or unnecessary smoothing density. The silhouette should already work before texturing.",
+          "steps": [
+            "Move/scale the tread ring so it sits slightly into the tread crown rather than floating above it.",
+            "Keep the tyre body and tread strip separate until you have a reason to Attach.",
+            "Use a small Chamfer only where a hard edge needs a highlight.",
+            "Save the clean source before UVs and texturing."
           ]
         }
       ],
-      "support": "Guided with selection judgement",
+      "support": "Guided with modifier-stack judgement",
       "starterValues": [
-        "Tube outer radius: 35 cm",
-        "Inner radius: 20 cm",
-        "Width/Height: 18 cm",
-        "Compare Sides: 16 / 24 / 32",
-        "Start choice: 24 sides",
-        "Tread Extrude: 1.5 cm"
+        "Torus major Segments: compare 16 / 24 / 32",
+        "Start choice: 24 major segments",
+        "Cross-section Sides: about 8",
+        "Tread: one low-poly master tile",
+        "Array: fixed spacing, no hand placement",
+        "Bend: 360° on the correct axis"
       ],
       "studentRecipe": [
-        "Create Tube: outer radius 35, inner radius 20, width/height 18. Compare 16,24,32 sides; keep 24 unless silhouette proves otherwise.",
-        "Duplicate Tyre_SAFE and Tyre_WORK. Convert only WORK.",
-        "Edge mode → Ring the shoulder edges → Connect with Segments 2, Pinch 60, Slide 0. Commit, then inspect the sidewall in Front view before moving any loop.",
-        "On the 24-side teaching tyre, select every third outer tread polygon. Use Inset By Polygon Amount 0.8 cm, then Extrude Height 1.5 cm.",
-        "Chamfer only edges that remain unnaturally razor sharp. F4 check for density spikes/open borders.",
-        "Save Tyre_04_Clean.max before UVs."
+        "Create a Torus at the correct tyre scale. Compare 16, 24 and 32 major Segments from intended game distance; keep the lowest count that still reads as round. Start with about 8 cross-section Sides.",
+        "Duplicate Tyre_SAFE and Tyre_WORK. Convert only WORK to Editable Poly. Shape the cross-section so the outside tread crown is flatter, the shoulders are rounded and the sidewalls read like a tyre rather than a perfect doughnut.",
+        "Create ONE separate tread tile from a simple Box/Editable Poly. Keep it low poly, angle it slightly across the tyre width if needed, and leave tiny grooves/lettering for textures or normal maps.",
+        "Use Tools > Array to repeat the tread tile into a straight strip with exact spacing. If you want a second staggered row, mirror/offset the same master design rather than hand-placing new blocks.",
+        "Keep a safe copy of the straight strip. Add a Bend modifier to the working strip, set Angle to 360°, choose the correct axis and move the Bend gizmo/centre until the first and last repeats meet cleanly.",
+        "Fit the bent tread ring slightly into the tyre crown so it does not float. Keep body and tread separate unless Attach is genuinely useful. F4 check for gaps, overlaps and density spikes, then save Tyre_06_Clean.max before UVs."
       ],
       "prescriptivePass": "3.31",
       "brief": {
@@ -2620,14 +2691,15 @@ window.UE5_MODELING_DATA = {
         "Pick a side count based on silhouette, not habit.",
         "Decide what is geometry and what can be texture/normal detail."
       ],
-      "variation": "Design your own simple tread repeat using no more than three distinct block shapes.",
+      "variation": "Design your own simple tread tile using no more than two block shapes, then prove the same master can create the entire circumference through Array + Bend.",
       "qualityGates": [
-        "Sidewall profile looks inflated rather than like a flat torus.",
-        "Tread spacing is regular and follows the circumference cleanly.",
-        "No accidental doubled vertices or overlapping tread pieces.",
-        "Silhouette remains clean in shaded and Edged Faces views."
+        "Tyre body has a flatter tread crown and rounded shoulder rather than a perfect torus profile.",
+        "The tread comes from a repeatable master tile, not hand-placed blocks around the wheel.",
+        "The 360° bend closes cleanly with no obvious gap or overlap.",
+        "The tread ring sits into the tyre crown rather than visibly floating above it.",
+        "Small lettering, siping and micro-grooves are reserved for texture/normal detail."
       ],
-      "critique": "Does the tread feel designed as a repeatable manufacturing pattern, or like random blocks placed around a ring?",
+      "critique": "Does the tyre look engineered from a repeatable tread system, or like individual blocks were stuck around a doughnut?",
       "proStudy": {
         "title": "Creating Realistic Vehicles in 3ds Max & Substance 3D Painter",
         "source": "80 Level • Miguel Sanchez Woodvine",
@@ -2641,10 +2713,36 @@ window.UE5_MODELING_DATA = {
         ]
       },
       "recipeVisuals": [
-        {"src":"assets/modeling/stages/tyre-stage-01.png","caption":"STEP 1 • BASE DENSITY • Start with a simple tyre ring and keep the cross-section/radial density modest.","kind":"local"},
-        {"src":"assets/modeling/stages/tyre-stage-02.png","caption":"STEP 2 • SIDEWALL LOOPS • Shape the shoulder with a small number of deliberate profile loops.","kind":"local"},
-        {"src":"assets/modeling/stages/tyre-stage-03.png","caption":"STEP 3 • SIMPLE TREAD • Add a repeatable tread unit rather than hand-placing random detail.","kind":"local"},
-        {"src":"assets/modeling/stages/tyre-stage-04.png","caption":"STEP 4 • FINAL WIREFRAME • Inspect the completed low-poly mesh for density spikes and unnecessary geometry.","kind":"local"}
+        {
+          "src": "assets/modeling/stages/tyre-stage-01.png",
+          "caption": "STEP 1 • TORUS BASE • Start with restrained radial density and enough cross-section sides to shape the tyre.",
+          "kind": "local"
+        },
+        {
+          "src": "assets/modeling/stages/tyre-stage-02.png",
+          "caption": "STEP 2 • SHAPE THE PROFILE • Flatten the tread crown and round the shoulders; stop treating the base as a perfect torus.",
+          "kind": "local"
+        },
+        {
+          "src": "assets/modeling/stages/tyre-stage-03.png",
+          "caption": "STEP 3 • ONE TREAD TILE • Design one simple repeatable piece. This is the only tread unit you model by hand.",
+          "kind": "local"
+        },
+        {
+          "src": "assets/modeling/stages/tyre-stage-04.png",
+          "caption": "STEP 4 • ARRAY STRAIGHT • Repeat the master tile with exact spacing instead of placing blocks around the tyre by eye.",
+          "kind": "local"
+        },
+        {
+          "src": "assets/modeling/stages/tyre-stage-05.png",
+          "caption": "STEP 5 • BEND 360° • Wrap the straight tread strip into a ring and make the seam close cleanly.",
+          "kind": "local"
+        },
+        {
+          "src": "assets/modeling/stages/tyre-stage-06.png",
+          "caption": "STEP 6 • FIT + CLEAN • Seat the tread ring into the tyre crown, inspect Edged Faces and keep the source mesh recoverable.",
+          "kind": "local"
+        }
       ]
     },
     {
@@ -2773,16 +2871,44 @@ window.UE5_MODELING_DATA = {
           "Stop adding detail when the panel already communicates its job from gameplay distance."
         ],
         "images": [
-          {"src":"assets/modeling/stages/panel-overview.png","caption":"FULL BUILD ROADMAP • Base slab → main forms → key cuts/support edges → finished low-poly panel. Open it large, then follow the matching images in the guide.","kind":"local"}
+          {
+            "src": "assets/modeling/stages/panel-overview.png",
+            "caption": "FULL BUILD ROADMAP • Base slab → main forms → key cuts/support edges → finished low-poly panel. Open it large, then follow the matching images in the guide.",
+            "kind": "local"
+          }
         ]
       },
       "recipeVisuals": [
-        {"src":"assets/modeling/stages/panel-stage-01.png","caption":"STEP 1 • BASE SHAPE • Begin with the clean wall/panel module and correct dimensions. No greebles.","kind":"local"},
-        {"src":"assets/modeling/stages/panel-stage-02.png","caption":"STEP 2 • PRIMARY FORMS • Establish the main frame and dominant recess first.","kind":"local"},
-        {"src":"assets/modeling/stages/panel-stage-03.png","caption":"STEP 3 • SECONDARY FORM • Add the supporting inset and only the edges required to hold it.","kind":"local"},
-        {"src":"assets/modeling/stages/panel-stage-04.png","caption":"STEP 4 • FOCAL DETAIL • Add one restrained functional detail only after the hierarchy works.","kind":"local"},
-        {"src":"assets/modeling/stages/panel-stage-04.png","caption":"STEP 5 • CHAMFER CHECK • Inspect the finished wireframe and bevel only the major edges that need a highlight.","kind":"local"},
-        {"src":"assets/modeling/stages/panel-stage-04.png","caption":"STEP 6 • GAME-DISTANCE CHECK • This is the target density. If a detail disappears at gameplay distance, consider removing it rather than adding more.","kind":"local"}
+        {
+          "src": "assets/modeling/stages/panel-stage-01.png",
+          "caption": "STEP 1 • BASE SHAPE • Begin with the clean wall/panel module and correct dimensions. No greebles.",
+          "kind": "local"
+        },
+        {
+          "src": "assets/modeling/stages/panel-stage-02.png",
+          "caption": "STEP 2 • PRIMARY FORMS • Establish the main frame and dominant recess first.",
+          "kind": "local"
+        },
+        {
+          "src": "assets/modeling/stages/panel-stage-03.png",
+          "caption": "STEP 3 • SECONDARY FORM • Add the supporting inset and only the edges required to hold it.",
+          "kind": "local"
+        },
+        {
+          "src": "assets/modeling/stages/panel-stage-04.png",
+          "caption": "STEP 4 • FOCAL DETAIL • Add one restrained functional detail only after the hierarchy works.",
+          "kind": "local"
+        },
+        {
+          "src": "assets/modeling/stages/panel-stage-04.png",
+          "caption": "STEP 5 • CHAMFER CHECK • Inspect the finished wireframe and bevel only the major edges that need a highlight.",
+          "kind": "local"
+        },
+        {
+          "src": "assets/modeling/stages/panel-stage-04.png",
+          "caption": "STEP 6 • GAME-DISTANCE CHECK • This is the target density. If a detail disappears at gameplay distance, consider removing it rather than adding more.",
+          "kind": "local"
+        }
       ]
     },
     {

@@ -1,3 +1,10 @@
+## v3.37.4 — Tyre Workflow Correction — 29 Aug 2026
+- Rebuilt Simple Game Tyre around a cleaner production workflow: low-density Torus body → shape cross-section → one tread master → Array straight strip → Bend 360° → fit/clean.
+- Replaced the four earlier tyre visuals with six single close-up Max-style viewport stages.
+- Removed the old direct face-extrusion tread teaching from the tyre recipe.
+- Small grooves, siping and lettering are explicitly texture/normal-map work unless silhouette demands geometry.
+- Existing Build X ID `build-tyre` is preserved. No database migration.
+
 ## v3.37.3 — Single Viewport Stage Checkpoint — 29 Aug 2026
 
 - Crate, Barrel and Tyre use individual close-up Max-style stage visuals.
