@@ -1,3 +1,10 @@
+## v3.37.3 — Single Viewport Stage Checkpoint — 29 Aug 2026
+
+- Crate, Barrel and Tyre use individual close-up Max-style stage visuals.
+- Crate/Barrel old combined roadmap images removed from their pre-step topology blocks.
+- Failed generated webpage/tutorial UI images excluded.
+- No IDs or database changes.
+
 ## v3.37.2 — Split Viewport Step Visuals — 29 Aug 2026
 
 - Replaced the three prototype Build X topology infographic sequences with the approved Max-style low-poly modelling renders.

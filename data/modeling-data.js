@@ -1,5 +1,5 @@
 window.UE5_MODELING_DATA = {
-  "version": "3.37.2",
+  "version": "3.37.3",
   "updated": "29 Aug 2026",
   "philosophy": "Reference first. Plan the object. Block the big forms. Add only geometry that earns its place. Inspect constantly. Make it game ready. Get another human to critique it.",
   "lessons": [
@@ -2338,23 +2338,16 @@ window.UE5_MODELING_DATA = {
           "Add main cuts before inset/extrude so you know what each region is for.",
           "Support loops belong near corners and recesses, not sprayed across the whole asset.",
           "The final crate is still a simple prop. Texture detail will do far more work than extra loops."
-        ],
-        "images": [
-          {
-            "src": "assets/modeling/stages/crate-overview.png",
-            "caption": "FULL BUILD ROADMAP • Box → main cuts → shaped panels → support loops → final low-poly crate. Open this large, then use the matching stage image beside each step.",
-            "kind": "local"
-          }
         ]
       },
       "recipeVisuals": [
-        {"src":"assets/modeling/stages/crate-stage-01.png","caption":"STEP 1 • BLOCKOUT • One simple Box. Get size and proportion right before adding a single cut.","kind":"local"},
-        {"src":"assets/modeling/stages/crate-stage-02.png","caption":"STEP 2 • MAIN CUTS • Add only the loops that establish the outer frame/lid. Large flat faces stay simple.","kind":"local"},
-        {"src":"assets/modeling/stages/crate-stage-03.png","caption":"STEP 3 • SHAPE THE PANELS • Inset/extrude the large recessed areas. Do not add tiny decorative geometry.","kind":"local"},
-        {"src":"assets/modeling/stages/crate-stage-04.png","caption":"STEP 4 • SUPPORT LOOPS • Add loops only where corners/recesses need to hold their shape.","kind":"local"},
-        {"src":"assets/modeling/stages/crate-stage-05.png","caption":"STEP 5 • FINAL LOW-POLY FORM • Use the lowest bevel/chamfer density that gives the highlight you need.","kind":"local"},
-        {"src":"assets/modeling/topology/crate-05-uv.svg","caption":"STEP 6 • UV CHECK • Keep logical shells, even checker scale and useful padding.","kind":"local"},
-        {"src":"assets/modeling/topology/crate-06-pivot.svg","caption":"STEP 7 • PIVOT + EXPORT • Put a useful placement point at world 0,0,0 before export and prove it in Unreal.","kind":"local"}
+        {"src":"assets/modeling/stages/crate-stage-01.png","caption":"STEP 1 • BLOCKOUT • One clean Box. Correct proportion first; zero extra cuts.","kind":"local"},
+        {"src":"assets/modeling/stages/crate-stage-02.png","caption":"STEP 2 • MAIN CUTS • Add only the loops that establish the frame and panel boundaries.","kind":"local"},
+        {"src":"assets/modeling/stages/crate-stage-03.png","caption":"STEP 3 • PANEL SHAPE • Inset the large panel areas and establish depth before detail.","kind":"local"},
+        {"src":"assets/modeling/stages/crate-stage-04.png","caption":"STEP 4 • SUPPORT LOOPS • Add close support edges only where the shape genuinely needs them.","kind":"local"},
+        {"src":"assets/modeling/stages/crate-stage-05.png","caption":"STEP 5 • FINAL LOW-POLY FORM • Keep the construction readable without filling flat faces with cuts.","kind":"local"},
+        {"src":"assets/modeling/stages/crate-stage-06.png","caption":"STEP 6 • UV CHECK • Checker scale should stay even across the asset before texturing.","kind":"local"},
+        {"src":"assets/modeling/stages/crate-stage-07.png","caption":"STEP 7 • PIVOT + EXPORT • Use a useful placement pivot at the base before FBX export.","kind":"local"}
       ]
     },
     {
@@ -2499,18 +2492,15 @@ window.UE5_MODELING_DATA = {
           "Add loops where the radius changes, not at equal intervals because the empty space feels wrong.",
           "Bands/rims can carry a light bevel, while the straight body stays clean.",
           "If two segment counts look the same in Unreal, keep the cheaper one."
-        ],
-        "images": [
-          {"src":"assets/modeling/stages/barrel-overview.png","caption":"FULL BUILD ROADMAP • Primitive cylinder → essential profile loops → main bands → finished low-poly barrel. The matching stage appears beside each modelling step.","kind":"local"}
         ]
       },
       "recipeVisuals": [
-        {"src":"assets/modeling/stages/barrel-stage-01.png","caption":"STEP 1 • CYLINDER PRIMITIVE • Compare side counts and keep the lowest one that still reads round from the target distance.","kind":"local"},
-        {"src":"assets/modeling/stages/barrel-stage-02.png","caption":"STEP 2 • ESSENTIAL LOOPS • Add only the profile loops needed for the rim, body break and base.","kind":"local"},
-        {"src":"assets/modeling/stages/barrel-stage-03.png","caption":"STEP 3 • SHAPE + BANDS • Build the recognisable barrel profile without filling the straight body with extra loops.","kind":"local"},
-        {"src":"assets/modeling/stages/barrel-stage-04.png","caption":"STEP 4 • CLEAN BEVELS • Finish the game-ready form with restrained edge highlights and readable topology.","kind":"local"},
-        {"src":"assets/modeling/topology/barrel-04-seam.svg","caption":"STEP 5 • UV SEAM • One logical vertical seam plus clean cap shells is easier to control and checker-test.","kind":"local"},
-        {"src":"assets/modeling/topology/barrel-05-export.svg","caption":"STEP 6 • ENGINE SCALE • Export and prove the drum beside a known-size reference in Unreal.","kind":"local"}
+        {"src":"assets/modeling/stages/barrel-stage-01.png","caption":"STEP 1 • CYLINDER • Start with a restrained radial side count and judge the silhouette at game distance.","kind":"local"},
+        {"src":"assets/modeling/stages/barrel-stage-02.png","caption":"STEP 2 • PROFILE LOOPS • Add only the rings needed to shape the shoulders, rim and base.","kind":"local"},
+        {"src":"assets/modeling/stages/barrel-stage-03.png","caption":"STEP 3 • SHAPE + BANDS • Establish the recognisable barrel form without a ladder of unnecessary loops.","kind":"local"},
+        {"src":"assets/modeling/stages/barrel-stage-04.png","caption":"STEP 4 • CLEAN FINISH • Keep bevel/support density restrained and readable in Edged Faces.","kind":"local"},
+        {"src":"assets/modeling/stages/barrel-stage-05.png","caption":"STEP 5 • UV CHECK • Use the checker to catch stretching and inconsistent texel density.","kind":"local"},
+        {"src":"assets/modeling/stages/barrel-stage-06.png","caption":"STEP 6 • PIVOT + EXPORT • Finish with a sensible placement pivot and engine-ready orientation.","kind":"local"}
       ]
     },
     {
@@ -2649,7 +2639,13 @@ window.UE5_MODELING_DATA = {
           "How wear follows real use",
           "What is modelled versus textured"
         ]
-      }
+      },
+      "recipeVisuals": [
+        {"src":"assets/modeling/stages/tyre-stage-01.png","caption":"STEP 1 • BASE DENSITY • Start with a simple tyre ring and keep the cross-section/radial density modest.","kind":"local"},
+        {"src":"assets/modeling/stages/tyre-stage-02.png","caption":"STEP 2 • SIDEWALL LOOPS • Shape the shoulder with a small number of deliberate profile loops.","kind":"local"},
+        {"src":"assets/modeling/stages/tyre-stage-03.png","caption":"STEP 3 • SIMPLE TREAD • Add a repeatable tread unit rather than hand-placing random detail.","kind":"local"},
+        {"src":"assets/modeling/stages/tyre-stage-04.png","caption":"STEP 4 • FINAL WIREFRAME • Inspect the completed low-poly mesh for density spikes and unnecessary geometry.","kind":"local"}
+      ]
     },
     {
       "id": "build-wall-panel",

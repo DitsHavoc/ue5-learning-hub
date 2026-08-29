@@ -290,3 +290,8 @@ No database migration required. This release changes only the 3D Modelling Studi
 ## v3.37.2 — Split Viewport Step Visuals
 
 No database migration. This release changes modelling content, local visual assets, guide rendering/layout and release documentation only.
+
+
+## v3.37.3 — Single Viewport Stage Checkpoint
+
+No database migration. Visual/data-content update only.
