@@ -1,6 +1,6 @@
-# Current release — v3.34.19
+# Current release — v3.34.20
 
-Site-wide search has been rebuilt as a single client-side index across Unreal Learning, Quick Tutorials, Blueprint paste assists, Building Blocks, Designer Studio, 3D Modelling Studio, Sculpt Playground and the glossary. It now searches nested instructional content as well as titles and uses token-based ranking for multi-word queries. The existing **39 paste assists from 12 official Epic UE5.8 documentation pages** are unchanged. No database migration is required.
+Unreal Learning has been consolidated so similar practical builds no longer compete as separate top-level destinations. The 47 Programming Quick Tutorials are preserved as **26 recipe families + 3 Core-Lesson applications**, and all **39 Epic paste assists** now surface contextually inside **15 relevant Core Lessons** as well as recipe families. The standalone paste-assist bank remains available as a secondary Reference shelf. Site-wide search from v3.34.19 remains in place. No database migration is required.
 
 # UE5 Learning Hub v3.32.2 — Class Detail Workspace
 

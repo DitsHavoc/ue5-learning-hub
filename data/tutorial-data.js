@@ -1,5 +1,5 @@
 window.UE5_TUTORIAL_DATA = {
-  "version": "3.34.15",
+  "version": "3.34.20",
   "buildDate": "29 Aug 2026",
   "categories": [
     {
@@ -224,7 +224,10 @@ window.UE5_TUTORIAL_DATA = {
           "kind": "epic"
         },
         null
-      ]
+      ],
+      "familyId": "enhanced-input",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "double-jump",
@@ -324,7 +327,10 @@ window.UE5_TUTORIAL_DATA = {
         null,
         null,
         null
-      ]
+      ],
+      "familyId": "movement-extras",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "sprint",
@@ -576,7 +582,10 @@ window.UE5_TUTORIAL_DATA = {
           }
         ],
         null
-      ]
+      ],
+      "familyId": "movement-extras",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "dash",
@@ -698,7 +707,10 @@ window.UE5_TUTORIAL_DATA = {
         },
         null,
         null
-      ]
+      ],
+      "familyId": "movement-extras",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "crouch",
@@ -820,7 +832,10 @@ window.UE5_TUTORIAL_DATA = {
         null,
         null,
         null
-      ]
+      ],
+      "familyId": "movement-extras",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "line-trace-interact",
@@ -983,7 +998,10 @@ window.UE5_TUTORIAL_DATA = {
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
         }
-      ]
+      ],
+      "familyId": "look-to-interact",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "key-pickup",
@@ -1120,7 +1138,10 @@ window.UE5_TUTORIAL_DATA = {
         null,
         null,
         null
-      ]
+      ],
+      "familyId": "keys-locked-doors",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "locked-door",
@@ -1245,7 +1266,10 @@ window.UE5_TUTORIAL_DATA = {
         null,
         null,
         null
-      ]
+      ],
+      "familyId": "keys-locked-doors",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "pressure-plate",
@@ -1429,7 +1453,10 @@ window.UE5_TUTORIAL_DATA = {
           }
         ],
         null
-      ]
+      ],
+      "familyId": "switches-triggers",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "button-lever",
@@ -1593,7 +1620,10 @@ window.UE5_TUTORIAL_DATA = {
         },
         null,
         null
-      ]
+      ],
+      "familyId": "switches-triggers",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "collectable",
@@ -1762,7 +1792,10 @@ window.UE5_TUTORIAL_DATA = {
         null,
         null,
         null
-      ]
+      ],
+      "familyId": "collectables",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "flashlight",
@@ -1891,7 +1924,10 @@ window.UE5_TUTORIAL_DATA = {
         },
         null,
         null
-      ]
+      ],
+      "familyId": "flashlight",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "line-trace-gun",
@@ -2066,7 +2102,10 @@ window.UE5_TUTORIAL_DATA = {
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
         }
-      ]
+      ],
+      "familyId": "trace-combat",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "projectile-gun",
@@ -2250,7 +2289,10 @@ window.UE5_TUTORIAL_DATA = {
         ],
         null,
         null
-      ]
+      ],
+      "familyId": "projectile-weapon",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "player-health",
@@ -2388,7 +2430,10 @@ window.UE5_TUTORIAL_DATA = {
           "kind": "epic"
         },
         null
-      ]
+      ],
+      "familyId": "health-damage",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "enemy-health",
@@ -2514,7 +2559,10 @@ window.UE5_TUTORIAL_DATA = {
         null,
         null,
         null
-      ]
+      ],
+      "familyId": "health-damage",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "health-pickup",
@@ -2655,7 +2703,10 @@ window.UE5_TUTORIAL_DATA = {
         null,
         null,
         null
-      ]
+      ],
+      "familyId": "health-damage",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "ammo-reload",
@@ -2830,7 +2881,10 @@ window.UE5_TUTORIAL_DATA = {
         },
         null,
         null
-      ]
+      ],
+      "familyId": "ammo-reload",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "melee-trace",
@@ -2953,7 +3007,10 @@ window.UE5_TUTORIAL_DATA = {
         null,
         null,
         null
-      ]
+      ],
+      "familyId": "trace-combat",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "lives-respawn",
@@ -3094,7 +3151,10 @@ window.UE5_TUTORIAL_DATA = {
           "kind": "epic"
         },
         null
-      ]
+      ],
+      "familyId": "respawn-checkpoints",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "checkpoint",
@@ -3247,7 +3307,10 @@ window.UE5_TUTORIAL_DATA = {
           "kind": "epic"
         },
         null
-      ]
+      ],
+      "familyId": "respawn-checkpoints",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "score-system",
@@ -3373,7 +3436,10 @@ window.UE5_TUTORIAL_DATA = {
         null,
         null,
         null
-      ]
+      ],
+      "familyId": "score-system",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "countdown-timer",
@@ -3491,7 +3557,10 @@ window.UE5_TUTORIAL_DATA = {
         null,
         null,
         null
-      ]
+      ],
+      "familyId": "countdown-timer",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "win-lose-state",
@@ -3614,7 +3683,10 @@ window.UE5_TUTORIAL_DATA = {
         null,
         null,
         null
-      ]
+      ],
+      "familyId": "win-lose",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "spawn-destroy",
@@ -3788,7 +3860,10 @@ window.UE5_TUTORIAL_DATA = {
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
         }
-      ]
+      ],
+      "familyId": "spawning",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "basic-hud",
@@ -3942,7 +4017,10 @@ window.UE5_TUTORIAL_DATA = {
           "kind": "epic"
         },
         null
-      ]
+      ],
+      "familyId": "gameplay-hud",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "health-bar",
@@ -4112,7 +4190,10 @@ window.UE5_TUTORIAL_DATA = {
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
         }
-      ]
+      ],
+      "familyId": "gameplay-hud",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "score-lives-hud",
@@ -4256,7 +4337,10 @@ window.UE5_TUTORIAL_DATA = {
         },
         null,
         null
-      ]
+      ],
+      "familyId": "gameplay-hud",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "crosshair",
@@ -4375,7 +4459,10 @@ window.UE5_TUTORIAL_DATA = {
           "kind": "epic"
         },
         null
-      ]
+      ],
+      "familyId": "gameplay-hud",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "interaction-prompt",
@@ -4512,7 +4599,10 @@ window.UE5_TUTORIAL_DATA = {
         null,
         null,
         null
-      ]
+      ],
+      "familyId": "look-to-interact",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "objective-text",
@@ -4634,7 +4724,10 @@ window.UE5_TUTORIAL_DATA = {
         null,
         null,
         null
-      ]
+      ],
+      "familyId": "gameplay-hud",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "pause-menu",
@@ -4807,7 +4900,10 @@ window.UE5_TUTORIAL_DATA = {
           }
         ],
         null
-      ]
+      ],
+      "familyId": "pause-menu",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "timeline-door",
@@ -4966,7 +5062,12 @@ window.UE5_TUTORIAL_DATA = {
         },
         null,
         null
-      ]
+      ],
+      "familyId": null,
+      "libraryHidden": true,
+      "curriculumHome": "lesson",
+      "lessonHome": "timelines",
+      "consolidationNote": "Application now surfaced inside Timelines & Lerp."
     },
     {
       "id": "moving-platform",
@@ -5127,7 +5228,10 @@ window.UE5_TUTORIAL_DATA = {
         },
         null,
         null
-      ]
+      ],
+      "familyId": "moving-world",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "damage-zone",
@@ -5301,7 +5405,10 @@ window.UE5_TUTORIAL_DATA = {
         null,
         null,
         null
-      ]
+      ],
+      "familyId": "hazards",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "random-spawner",
@@ -5466,7 +5573,10 @@ window.UE5_TUTORIAL_DATA = {
           "kind": "epic"
         },
         null
-      ]
+      ],
+      "familyId": "spawning",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "ai-patrol",
@@ -5596,7 +5706,10 @@ window.UE5_TUTORIAL_DATA = {
         },
         null,
         null
-      ]
+      ],
+      "familyId": "enemy-ai",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "ai-chase",
@@ -5741,7 +5854,10 @@ window.UE5_TUTORIAL_DATA = {
         null,
         null,
         null
-      ]
+      ],
+      "familyId": "enemy-ai",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "ai-perception",
@@ -5917,7 +6033,10 @@ window.UE5_TUTORIAL_DATA = {
         ],
         null,
         null
-      ]
+      ],
+      "familyId": "enemy-ai",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "ai-attack-range",
@@ -6047,7 +6166,10 @@ window.UE5_TUTORIAL_DATA = {
         },
         null,
         null
-      ]
+      ],
+      "familyId": "enemy-ai",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "save-checkpoint",
@@ -6178,7 +6300,12 @@ window.UE5_TUTORIAL_DATA = {
           }
         ],
         null
-      ]
+      ],
+      "familyId": null,
+      "libraryHidden": true,
+      "curriculumHome": "lesson",
+      "lessonHome": "savegame",
+      "consolidationNote": "Application now surfaced inside SaveGame."
     },
     {
       "id": "struct-data-table",
@@ -6336,7 +6463,12 @@ window.UE5_TUTORIAL_DATA = {
         null,
         null,
         null
-      ]
+      ],
+      "familyId": null,
+      "libraryHidden": true,
+      "curriculumHome": "lesson",
+      "lessonHome": "data",
+      "consolidationNote": "Application now surfaced inside Data Structures & Data Tables."
     },
     {
       "id": "gameinstance-state",
@@ -6472,7 +6604,10 @@ window.UE5_TUTORIAL_DATA = {
         null,
         null,
         null
-      ]
+      ],
+      "familyId": "between-levels",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "sound-feedback",
@@ -6589,7 +6724,10 @@ window.UE5_TUTORIAL_DATA = {
         null,
         null,
         null
-      ]
+      ],
+      "familyId": "sound-feedback",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "niagara-impact",
@@ -6718,7 +6856,10 @@ window.UE5_TUTORIAL_DATA = {
         null,
         null,
         null
-      ]
+      ],
+      "familyId": "niagara-impact",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "camera-shake",
@@ -6856,7 +6997,10 @@ window.UE5_TUTORIAL_DATA = {
         null,
         null,
         null
-      ]
+      ],
+      "familyId": "camera-feedback",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     },
     {
       "id": "silent-hill-fog",
@@ -7038,7 +7182,10 @@ window.UE5_TUTORIAL_DATA = {
           "kind": "epic"
         },
         null
-      ]
+      ],
+      "familyId": "silent-hill-fog",
+      "libraryHidden": false,
+      "curriculumHome": "family"
     }
   ],
   "chapterBuilds": [
@@ -7512,6 +7659,296 @@ window.UE5_TUTORIAL_DATA = {
         "List three specific refactors and why each helps.",
         "One screenshot/debug note proving the mechanic still works."
       ]
+    }
+  ],
+  "families": [
+    {
+      "id": "enhanced-input",
+      "title": "Enhanced Input Setup",
+      "icon": "⌨",
+      "category": "movement",
+      "summary": "Create a new Enhanced Input Action and wire it into the player cleanly.",
+      "members": [
+        "enhanced-input-action"
+      ],
+      "featured": true
+    },
+    {
+      "id": "movement-extras",
+      "title": "Character Movement Extras",
+      "icon": "↗",
+      "category": "movement",
+      "summary": "Add sprint, dash, double jump and crouch as focused movement variants.",
+      "members": [
+        "double-jump",
+        "sprint",
+        "dash",
+        "crouch"
+      ],
+      "featured": true
+    },
+    {
+      "id": "look-to-interact",
+      "title": "Look-to-Interact System",
+      "icon": "◎",
+      "category": "interaction",
+      "summary": "Trace from the player view, identify an interactable object and show a prompt when it matters.",
+      "members": [
+        "line-trace-interact",
+        "interaction-prompt"
+      ],
+      "featured": true
+    },
+    {
+      "id": "keys-locked-doors",
+      "title": "Keys & Locked Doors",
+      "icon": "🔑",
+      "category": "interaction",
+      "summary": "Pick up a key, store the state and use it to control a locked door.",
+      "members": [
+        "key-pickup",
+        "locked-door"
+      ],
+      "featured": true
+    },
+    {
+      "id": "switches-triggers",
+      "title": "Switches & Triggers",
+      "icon": "◉",
+      "category": "interaction",
+      "summary": "Build pressure plates, buttons and levers that activate world logic reliably.",
+      "members": [
+        "pressure-plate",
+        "button-lever"
+      ]
+    },
+    {
+      "id": "collectables",
+      "title": "Collectables & Counters",
+      "icon": "◆",
+      "category": "interaction",
+      "summary": "Collect objects, increment a count and use the total as game state.",
+      "members": [
+        "collectable"
+      ]
+    },
+    {
+      "id": "flashlight",
+      "title": "Player Flashlight",
+      "icon": "🔦",
+      "category": "interaction",
+      "summary": "Attach and control a useful player flashlight for exploration and horror prototypes.",
+      "members": [
+        "flashlight"
+      ]
+    },
+    {
+      "id": "trace-combat",
+      "title": "Trace Combat",
+      "icon": "✦",
+      "category": "combat",
+      "summary": "Use traces for instant ranged hits and short-range melee detection.",
+      "members": [
+        "line-trace-gun",
+        "melee-trace"
+      ],
+      "featured": true
+    },
+    {
+      "id": "projectile-weapon",
+      "title": "Projectile Weapon",
+      "icon": "➤",
+      "category": "combat",
+      "summary": "Spawn a physical projectile and make it behave like a simple weapon.",
+      "members": [
+        "projectile-gun"
+      ]
+    },
+    {
+      "id": "health-damage",
+      "title": "Health & Damage System",
+      "icon": "♥",
+      "category": "combat",
+      "summary": "Give players and enemies health, apply damage and add a health pickup.",
+      "members": [
+        "player-health",
+        "enemy-health",
+        "health-pickup"
+      ],
+      "featured": true
+    },
+    {
+      "id": "ammo-reload",
+      "title": "Ammo & Reload",
+      "icon": "▣",
+      "category": "combat",
+      "summary": "Track magazine ammo, block empty firing and reload deliberately.",
+      "members": [
+        "ammo-reload"
+      ]
+    },
+    {
+      "id": "respawn-checkpoints",
+      "title": "Respawn & Checkpoints",
+      "icon": "↻",
+      "category": "player",
+      "summary": "Handle lives, respawning and in-level checkpoints without duplicating the same state logic.",
+      "members": [
+        "lives-respawn",
+        "checkpoint"
+      ],
+      "featured": true
+    },
+    {
+      "id": "score-system",
+      "title": "Score System",
+      "icon": "★",
+      "category": "player",
+      "summary": "Store score, add to it from gameplay events and expose it to the rest of the game.",
+      "members": [
+        "score-system"
+      ]
+    },
+    {
+      "id": "countdown-timer",
+      "title": "Countdown Timer",
+      "icon": "◷",
+      "category": "player",
+      "summary": "Create a countdown that updates reliably and triggers an outcome at zero.",
+      "members": [
+        "countdown-timer"
+      ]
+    },
+    {
+      "id": "win-lose",
+      "title": "Win & Lose Conditions",
+      "icon": "⚑",
+      "category": "player",
+      "summary": "Turn game state into a clear success or failure outcome.",
+      "members": [
+        "win-lose-state"
+      ]
+    },
+    {
+      "id": "spawning",
+      "title": "Spawning Actors",
+      "icon": "✣",
+      "category": "player",
+      "summary": "Spawn, limit and destroy actors, including a simple random spawner pattern.",
+      "members": [
+        "spawn-destroy",
+        "random-spawner"
+      ]
+    },
+    {
+      "id": "gameplay-hud",
+      "title": "Gameplay HUD",
+      "icon": "▤",
+      "category": "ui",
+      "summary": "Build the common HUD pieces together: base widget, health, score/lives, objective text and crosshair.",
+      "members": [
+        "basic-hud",
+        "health-bar",
+        "score-lives-hud",
+        "objective-text",
+        "crosshair"
+      ],
+      "featured": true
+    },
+    {
+      "id": "pause-menu",
+      "title": "Pause Menu",
+      "icon": "Ⅱ",
+      "category": "ui",
+      "summary": "Pause gameplay, show a menu and return control cleanly.",
+      "members": [
+        "pause-menu"
+      ]
+    },
+    {
+      "id": "moving-world",
+      "title": "Moving Platforms & World Motion",
+      "icon": "↔",
+      "category": "world",
+      "summary": "Move world geometry smoothly and predictably using reusable motion logic.",
+      "members": [
+        "moving-platform"
+      ]
+    },
+    {
+      "id": "hazards",
+      "title": "Damage & Death Zones",
+      "icon": "☠",
+      "category": "world",
+      "summary": "Build a trigger volume that damages, kills or resets the player.",
+      "members": [
+        "damage-zone"
+      ]
+    },
+    {
+      "id": "enemy-ai",
+      "title": "Enemy AI Progression",
+      "icon": "◈",
+      "category": "ai",
+      "summary": "Progress from patrol to detection, chase and attack range as one understandable enemy behaviour chain.",
+      "members": [
+        "ai-patrol",
+        "ai-perception",
+        "ai-chase",
+        "ai-attack-range"
+      ],
+      "featured": true
+    },
+    {
+      "id": "between-levels",
+      "title": "Keep State Between Levels",
+      "icon": "⇄",
+      "category": "data",
+      "summary": "Use GameInstance for temporary state that must survive a level load.",
+      "members": [
+        "gameinstance-state"
+      ]
+    },
+    {
+      "id": "sound-feedback",
+      "title": "Blueprint Sound Feedback",
+      "icon": "♪",
+      "category": "polish",
+      "summary": "Trigger useful audio feedback from gameplay events.",
+      "members": [
+        "sound-feedback"
+      ]
+    },
+    {
+      "id": "niagara-impact",
+      "title": "Niagara Hit Effects",
+      "icon": "✺",
+      "category": "polish",
+      "summary": "Spawn a Niagara effect at a hit location and orient it from the impact data.",
+      "members": [
+        "niagara-impact"
+      ]
+    },
+    {
+      "id": "camera-feedback",
+      "title": "Camera Shake Feedback",
+      "icon": "⌁",
+      "category": "polish",
+      "summary": "Add controlled camera shake to make actions feel stronger without making the game unreadable.",
+      "members": [
+        "camera-shake"
+      ]
+    },
+    {
+      "id": "silent-hill-fog",
+      "title": "Silent Hill-style Fog",
+      "icon": "≋",
+      "category": "polish",
+      "summary": "Build readable atmospheric fog for horror without simply hiding the whole level.",
+      "members": [
+        "silent-hill-fog"
+      ],
+      "featured": true
     }
   ]
 };

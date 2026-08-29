@@ -1,11 +1,16 @@
-## v3.34.19 — Site-wide Search Repair
+## v3.34.20 — Unreal Learning Consolidation — 29 Aug 2026
+- Consolidated 47 equal top-level Programming Quick Tutorials into 26 recipe families while preserving all 47 practical builds and their existing IDs/completion state.
+- Moved Smooth Timeline Door, persistent checkpoint saving and Struct/Data Table builds into their matching Core Lessons instead of duplicating the same teaching as separate top-level recipes.
+- Added recipe-family pages that keep related outcomes together and surface relevant Epic paste assists.
+- Mapped all 39 Epic paste assists into 15 relevant Core Lessons and added contextual lesson-level paste-assist sections.
+- Demoted the standalone Snippet Bank into the Reference area and renamed the surface to Epic Paste Assists; the assists now appear where students actually learn/use them.
+- Quick Tutorial search now searches family content while site-wide search still indexes every individual practical build.
+- No database migration; teacher capture count remains 76.
 
-- Replaced the brittle collection-by-collection topbar search with one startup-built global search index.
-- Site-wide search now indexes nested lesson/tutorial instructions, mechanics, nodes, snippet prerequisites, modelling repair guidance, Building Blocks, Designer Studio, Sculpt Playground and glossary content rather than only a few headline fields.
-- Added token-based matching and title-weighted ranking so multi-word searches such as `break hit result`, `save checkpoint` and `animation blueprint` work reliably.
-- Added a visible result count/status header, raised the search panel above page content and made focus/search events rerun the active query.
-- Added safe guards so missing optional data fields cannot kill the whole search handler.
-- No curriculum, capture-count, Supabase schema or permission changes.
+## v3.34.19 — Site-wide Search Repair — 29 Aug 2026
+- Replaced the brittle site-wide search with one global client-side content index across lessons, tutorials, snippets, design, modelling, sculpting, Building Blocks and glossary content.
+- Added ranked multi-word matching and deeper step/instruction indexing.
+- No database migration.
 
 ## v3.34.18 — Snippet Well Exhaustion Pass
 

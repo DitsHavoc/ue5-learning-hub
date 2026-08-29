@@ -871,3 +871,24 @@ button:disabled{opacity:.48;cursor:not-allowed;transform:none!important}
 .search-panel-head strong{font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:var(--blue)}
 .search-panel-head small{font-size:9px;color:#74879a;text-align:right}
 .search-empty{cursor:default}
+
+/* v3.34.20 — Unreal Learning consolidation */
+.tutorial-family-card .tutorial-family-outcomes{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.tutorial-family-card .tutorial-family-outcomes span{font-size:.74rem;line-height:1.2;padding:5px 8px;border:1px solid var(--line);border-radius:999px;background:var(--panel2);color:var(--muted)}
+.tutorial-family-hero{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:24px;align-items:center;margin:0 0 18px;padding:28px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(135deg,var(--panel),var(--panel2))}
+.tutorial-family-hero h1{margin:5px 0 8px;font-size:clamp(2rem,4vw,3.2rem)}
+.tutorial-family-hero p{max-width:850px;color:var(--muted);font-size:1.05rem}
+.tutorial-family-progress{padding:18px;border:1px solid var(--line);border-radius:16px;background:var(--bg);text-align:center}
+.tutorial-family-progress strong{display:block;font-size:2rem}.tutorial-family-progress span{display:block;color:var(--muted);margin-bottom:10px}
+.family-rule-card{margin-bottom:16px}.family-variant-grid{margin-top:4px}.family-course-links{margin-top:18px}
+.family-snippet-assists{margin:0 0 18px}.family-snippet-assists summary,.lesson-paste-assists summary{cursor:pointer;font-weight:800;font-size:1.04rem}
+.lesson-paste-assists{margin-top:16px;border-color:color-mix(in srgb,var(--accent) 36%,var(--line))}
+.lesson-snippet-list{margin-top:14px}.lesson-assist-footer{margin-top:12px}
+.lesson-applications{margin-top:16px;border-left:4px solid var(--accent)}
+.lesson-application-grid{display:grid;gap:10px;margin-top:14px}
+.lesson-application-grid>a{display:grid;grid-template-columns:42px minmax(0,1fr) auto;gap:12px;align-items:center;padding:14px;border:1px solid var(--line);border-radius:14px;background:var(--panel2);text-decoration:none;color:inherit}
+.lesson-application-grid>a:hover{border-color:var(--accent)}.lesson-application-grid>a>span{font-size:1.5rem;text-align:center}.lesson-application-grid small{display:block;color:var(--muted);margin-top:3px;line-height:1.35}.lesson-application-grid b{white-space:nowrap}
+.lesson-application-note{display:flex;gap:14px;align-items:flex-start;margin:18px 0;padding:16px 18px;border:1px solid var(--line);border-radius:16px;background:var(--panel2)}
+.lesson-application-note>span{font-size:1.35rem}.lesson-application-note p{margin:4px 0 0;color:var(--muted)}
+.snippet-reference-bridge{margin-top:12px}.snippet-programming-cta.integrated{border-style:dashed}
+@media(max-width:760px){.tutorial-family-hero{grid-template-columns:1fr}.tutorial-family-progress{text-align:left}.lesson-application-grid>a{grid-template-columns:36px minmax(0,1fr)}.lesson-application-grid>a>b{grid-column:2}.lesson-application-note{flex-direction:column}}

@@ -219,5 +219,8 @@ No database migration required. This release changes static Snippet Bank data, c
 
 ## v3.34.19 — Site-wide Search Repair
 
-No database migration required. This release changes only client-side search indexing/rendering, CSS layering, cache/version metadata and QA documentation. Supabase schema, RLS policies, RPCs, XP/leaderboard logic, classes, projects and evidence are unchanged.
+No database migration required. This release changes client-side search/index rendering and cache/version metadata only. Supabase schema, RLS policies, RPCs, XP/leaderboard logic, classes, projects and evidence are unchanged.
 
+## v3.34.20 — Unreal Learning Consolidation
+
+No database migration required. This release changes static tutorial/snippet curriculum metadata and client-side navigation/rendering only. Existing tutorial IDs and completion records are preserved. Supabase schema, RLS policies, RPCs, XP/leaderboard logic, classes, projects and evidence are unchanged.

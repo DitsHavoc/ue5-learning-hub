@@ -1,5 +1,5 @@
 window.UE5_SNIPPET_DATA = {
-  "version": "3.34.18",
+  "version": "3.34.20",
   "buildDate": "29 Aug 2026",
   "policy": {
     "title": "Official Epic paste-assist bank",
@@ -76,6 +76,10 @@ window.UE5_SNIPPET_DATA = {
         "room",
         "outliner",
         "prototype"
+      ],
+      "relatedLessons": [
+        "editor",
+        "actors-components"
       ]
     },
     {
@@ -113,6 +117,10 @@ window.UE5_SNIPPET_DATA = {
         "enum",
         "for each",
         "find"
+      ],
+      "relatedLessons": [
+        "functions",
+        "variables"
       ]
     },
     {
@@ -148,6 +156,10 @@ window.UE5_SNIPPET_DATA = {
         "variant",
         "material",
         "mesh"
+      ],
+      "relatedLessons": [
+        "blueprint-classes",
+        "events"
       ]
     },
     {
@@ -183,6 +195,10 @@ window.UE5_SNIPPET_DATA = {
         "collectable",
         "interface",
         "event graph"
+      ],
+      "relatedLessons": [
+        "events",
+        "variables"
       ]
     },
     {
@@ -221,6 +237,10 @@ window.UE5_SNIPPET_DATA = {
         "branch",
         "sequence",
         "material"
+      ],
+      "relatedLessons": [
+        "blueprint-classes",
+        "branches"
       ]
     },
     {
@@ -256,6 +276,10 @@ window.UE5_SNIPPET_DATA = {
         "function",
         "branch",
         "inventory"
+      ],
+      "relatedLessons": [
+        "functions",
+        "branches"
       ]
     },
     {
@@ -293,6 +317,10 @@ window.UE5_SNIPPET_DATA = {
         "key",
         "add unique",
         "umg"
+      ],
+      "relatedLessons": [
+        "ui",
+        "functions"
       ]
     },
     {
@@ -329,6 +357,10 @@ window.UE5_SNIPPET_DATA = {
         "add to viewport",
         "possessed",
         "player"
+      ],
+      "relatedLessons": [
+        "ui",
+        "framework"
       ]
     },
     {
@@ -363,6 +395,9 @@ window.UE5_SNIPPET_DATA = {
         "pressure plate",
         "construction script",
         "material"
+      ],
+      "relatedLessons": [
+        "blueprint-classes"
       ]
     },
     {
@@ -400,6 +435,10 @@ window.UE5_SNIPPET_DATA = {
         "material",
         "begin overlap",
         "end overlap"
+      ],
+      "relatedLessons": [
+        "collision",
+        "events"
       ]
     },
     {
@@ -435,6 +474,10 @@ window.UE5_SNIPPET_DATA = {
         "boolean",
         "branch",
         "one shot"
+      ],
+      "relatedLessons": [
+        "branches",
+        "variables"
       ]
     },
     {
@@ -470,6 +513,10 @@ window.UE5_SNIPPET_DATA = {
         "array",
         "is empty",
         "multiple actors"
+      ],
+      "relatedLessons": [
+        "collision",
+        "variables"
       ]
     },
     {
@@ -507,6 +554,10 @@ window.UE5_SNIPPET_DATA = {
         "array",
         "multiple objects",
         "interaction"
+      ],
+      "relatedLessons": [
+        "interfaces-dispatchers",
+        "collision"
       ]
     },
     {
@@ -540,6 +591,9 @@ window.UE5_SNIPPET_DATA = {
         "construction script",
         "scale",
         "vector"
+      ],
+      "relatedLessons": [
+        "blueprint-classes"
       ]
     },
     {
@@ -575,6 +629,10 @@ window.UE5_SNIPPET_DATA = {
         "start location",
         "end location",
         "begin play"
+      ],
+      "relatedLessons": [
+        "timelines",
+        "variables"
       ]
     },
     {
@@ -609,6 +667,9 @@ window.UE5_SNIPPET_DATA = {
         "lerp",
         "set actor location",
         "interpolation"
+      ],
+      "relatedLessons": [
+        "timelines"
       ]
     },
     {
@@ -644,6 +705,10 @@ window.UE5_SNIPPET_DATA = {
         "reverse",
         "timeline",
         "wait"
+      ],
+      "relatedLessons": [
+        "timelines",
+        "events"
       ]
     },
     {
@@ -681,6 +746,10 @@ window.UE5_SNIPPET_DATA = {
         "level paste",
         "switch",
         "target point"
+      ],
+      "relatedLessons": [
+        "timelines",
+        "collision"
       ]
     },
     {
@@ -718,6 +787,10 @@ window.UE5_SNIPPET_DATA = {
         "for each loop",
         "overlap",
         "function"
+      ],
+      "relatedLessons": [
+        "collision",
+        "events"
       ]
     },
     {
@@ -755,6 +828,10 @@ window.UE5_SNIPPET_DATA = {
         "to text",
         "widget",
         "hp"
+      ],
+      "relatedLessons": [
+        "ui",
+        "variables"
       ]
     },
     {
@@ -793,6 +870,11 @@ window.UE5_SNIPPET_DATA = {
         "disable input",
         "create widget",
         "open level"
+      ],
+      "relatedLessons": [
+        "variables",
+        "branches",
+        "framework"
       ]
     },
     {
@@ -829,6 +911,10 @@ window.UE5_SNIPPET_DATA = {
         "key",
         "level paste",
         "puzzle"
+      ],
+      "relatedLessons": [
+        "collision",
+        "events"
       ]
     },
     {
@@ -866,6 +952,10 @@ window.UE5_SNIPPET_DATA = {
         "player reference",
         "health",
         "movement speed"
+      ],
+      "relatedLessons": [
+        "ai",
+        "events"
       ]
     },
     {
@@ -903,6 +993,10 @@ window.UE5_SNIPPET_DATA = {
         "component hit",
         "do once",
         "destroy actor"
+      ],
+      "relatedLessons": [
+        "ai",
+        "collision"
       ]
     },
     {
@@ -943,6 +1037,10 @@ window.UE5_SNIPPET_DATA = {
         "line of sight",
         "detection",
         "debug"
+      ],
+      "relatedLessons": [
+        "ai",
+        "traces"
       ]
     },
     {
@@ -979,6 +1077,9 @@ window.UE5_SNIPPET_DATA = {
         "navmesh",
         "move to player",
         "chase"
+      ],
+      "relatedLessons": [
+        "ai"
       ]
     },
     {
@@ -1017,6 +1118,10 @@ window.UE5_SNIPPET_DATA = {
         "max walk speed",
         "chase",
         "detection"
+      ],
+      "relatedLessons": [
+        "ai",
+        "branches"
       ]
     },
     {
@@ -1052,6 +1157,10 @@ window.UE5_SNIPPET_DATA = {
         "branch",
         "destroy actor",
         "delay"
+      ],
+      "relatedLessons": [
+        "ai",
+        "variables"
       ]
     },
     {
@@ -1092,6 +1201,10 @@ window.UE5_SNIPPET_DATA = {
         "disable input",
         "keys",
         "game flow"
+      ],
+      "relatedLessons": [
+        "framework",
+        "ui"
       ]
     },
     {
@@ -1126,6 +1239,10 @@ window.UE5_SNIPPET_DATA = {
         "jump pad",
         "blockout",
         "level paste"
+      ],
+      "relatedLessons": [
+        "editor",
+        "timelines"
       ]
     },
     {
@@ -1165,6 +1282,10 @@ window.UE5_SNIPPET_DATA = {
         "max count",
         "spawner",
         "interface"
+      ],
+      "relatedLessons": [
+        "events",
+        "functions"
       ]
     },
     {
@@ -1202,6 +1323,9 @@ window.UE5_SNIPPET_DATA = {
         "velocity",
         "movement mode",
         "state machine"
+      ],
+      "relatedLessons": [
+        "animation"
       ]
     },
     {
@@ -1239,6 +1363,9 @@ window.UE5_SNIPPET_DATA = {
         "transition",
         "isrunning",
         "not boolean"
+      ],
+      "relatedLessons": [
+        "animation"
       ]
     },
     {
@@ -1274,6 +1401,9 @@ window.UE5_SNIPPET_DATA = {
         "jump start",
         "transition",
         "isfalling"
+      ],
+      "relatedLessons": [
+        "animation"
       ]
     },
     {
@@ -1309,6 +1439,9 @@ window.UE5_SNIPPET_DATA = {
         "jump start",
         "transition",
         "isfalling"
+      ],
+      "relatedLessons": [
+        "animation"
       ]
     },
     {
@@ -1342,6 +1475,9 @@ window.UE5_SNIPPET_DATA = {
         "jump loop",
         "transition",
         "state machine"
+      ],
+      "relatedLessons": [
+        "animation"
       ]
     },
     {
@@ -1376,6 +1512,9 @@ window.UE5_SNIPPET_DATA = {
         "not boolean",
         "isfalling",
         "transition"
+      ],
+      "relatedLessons": [
+        "animation"
       ]
     },
     {
@@ -1409,6 +1548,9 @@ window.UE5_SNIPPET_DATA = {
         "idle",
         "time remaining",
         "transition"
+      ],
+      "relatedLessons": [
+        "animation"
       ]
     },
     {
@@ -1451,6 +1593,10 @@ window.UE5_SNIPPET_DATA = {
         "sprint",
         "dash",
         "reusable logic"
+      ],
+      "relatedLessons": [
+        "functions",
+        "variables"
       ]
     }
   ]
