@@ -1,6 +1,6 @@
 window.UE5_DESIGN_DATA = {
-  "version": "3.22.0",
-  "buildDate": "26 Aug 2026",
+  "version": "3.34.11",
+  "buildDate": "29 Aug 2026",
   "modules": [
     {
       "id": "world-design",
@@ -1468,7 +1468,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "If the decision is only visible from the editor camera, switch to Play and judge it from player height."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://dev.epicgames.com/community/api/documentation/image/a015e4ef-6cd0-4923-ad91-c674259d3ce5?resizing_type=fit",
+            "caption": "Official UE5.8 Designer track showing a blockout wall selected and moved in the viewport.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-01-project-setup-and-level-blockout-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Build with primitives",
@@ -1480,7 +1486,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "If the decision is only visible from the editor camera, switch to Play and judge it from player height."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://dev.epicgames.com/community/api/documentation/image/de68ab89-8703-46a2-869a-39e5801e9e97?resizing_type=fit",
+            "caption": "Official UE5.8 Designer track using Alt-drag to duplicate a blockout wall.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-01-project-setup-and-level-blockout-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Check movement width",
@@ -1492,7 +1504,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "If the decision is only visible from the editor camera, switch to Play and judge it from player height."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://dev.epicgames.com/community/api/documentation/image/aad4f774-14a4-4903-afa2-b4a52444e8bd?resizing_type=fit",
+            "caption": "Official UE5.8 Designer track showing blockout geometry snapping to the editor grid.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-01-project-setup-and-level-blockout-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Create one focal area",
@@ -1563,7 +1581,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "If the decision is only visible from the editor camera, switch to Play and judge it from player height."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://dev.epicgames.com/community/api/documentation/image/a015e4ef-6cd0-4923-ad91-c674259d3ce5?resizing_type=fit",
+            "caption": "Official UE5.8 Designer track showing a blockout wall selected and moved in the viewport.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-01-project-setup-and-level-blockout-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Walk the kit",
@@ -1868,12 +1892,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "If dressing starts to block movement or the focal point, delete props before adding more."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/environmental-clues-dressing.webp",
-            "caption": "Professional example: environmental dressing works when props and marks communicate use, history and focal hierarchy.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Medium props second",
@@ -1885,12 +1904,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "If dressing starts to block movement or the focal point, delete props before adding more."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/environmental-clues-dressing.webp",
-            "caption": "Professional example: environmental dressing works when props and marks communicate use, history and focal hierarchy.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Small details last",
@@ -1902,12 +1916,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "If dressing starts to block movement or the focal point, delete props before adding more."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/environmental-clues-dressing.webp",
-            "caption": "Professional example: environmental dressing works when props and marks communicate use, history and focal hierarchy.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Delete a pass",
@@ -1919,12 +1928,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "If dressing starts to block movement or the focal point, delete props before adding more."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/environmental-clues-dressing.webp",
-            "caption": "Professional example: environmental dressing works when props and marks communicate use, history and focal hierarchy.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         }
       ],
       "mistakes": [
@@ -2007,12 +2011,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "If dressing starts to block movement or the focal point, delete props before adding more."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/environmental-clues-dressing.webp",
-            "caption": "Professional example: environmental dressing works when props and marks communicate use, history and focal hierarchy.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Add supporting objects",
@@ -2024,12 +2023,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "If dressing starts to block movement or the focal point, delete props before adding more."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/environmental-clues-dressing.webp",
-            "caption": "Professional example: environmental dressing works when props and marks communicate use, history and focal hierarchy.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Leave breathing room",
@@ -2093,10 +2087,11 @@ window.UE5_DESIGN_DATA = {
             "If dressing starts to block movement or the focal point, delete props before adding more."
           ],
           "visual": {
-            "src": "assets/book/best-practices/environmental-clues-dressing.webp",
-            "caption": "Professional example: environmental dressing works when props and marks communicate use, history and focal hierarchy.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/afb7b7ec-399c-4263-90b8-beaad425f190/decal-properties.png",
+            "caption": "Official UE5.8 Decal Material properties. Set Material Domain to Deferred Decal and use a supported blend mode.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/decal-materials-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -2109,7 +2104,22 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "If dressing starts to block movement or the focal point, delete props before adding more."
           ],
-          "visual": null
+          "visual": [
+            {
+              "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/5e7606a6-97ae-4ffd-b33c-294d283984b6/create-decal-actor.png",
+              "caption": "Official UE5.8 Decal Actor creation/placement workflow.",
+              "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/decal-materials-in-unreal-engine",
+              "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+              "kind": "epic"
+            },
+            {
+              "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/78f15fb2-4635-45f3-8c3e-2b1bda184f5f/decal-actor-direction.png",
+              "caption": "Official UE5.8 Decal Actor projection direction — useful when orienting wear/stains onto a surface.",
+              "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/decal-materials-in-unreal-engine",
+              "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+              "kind": "epic"
+            }
+          ]
         },
         {
           "title": "Match scale/orientation",
@@ -2121,7 +2131,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "If dressing starts to block movement or the focal point, delete props before adding more."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/e13b9953-865e-4457-947c-d3e1e6409afe/decal-actor-properties.png",
+            "caption": "Official UE5.8 Decal Actor properties for sizing and controlling the projected decal.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/decal-materials-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Control repetition",
@@ -2145,12 +2161,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "If dressing starts to block movement or the focal point, delete props before adding more."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/environmental-clues-dressing.webp",
-            "caption": "Professional example: environmental dressing works when props and marks communicate use, history and focal hierarchy.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         }
       ],
       "mistakes": [
@@ -2213,7 +2224,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "If dressing starts to block movement or the focal point, delete props before adding more."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://dev.epicgames.com/community/api/documentation/image/aad4f774-14a4-4903-afa2-b4a52444e8bd?resizing_type=fit",
+            "caption": "Official UE5.8 Designer track showing blockout geometry snapping to the editor grid.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-01-project-setup-and-level-blockout-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Build one clean module",
@@ -2302,10 +2319,11 @@ window.UE5_DESIGN_DATA = {
             "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
           ],
           "visual": {
-            "src": "assets/book/best-practices/rain-material-graph.webp",
-            "caption": "Professional example: a material graph should use purposeful controls to create the intended surface response.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/b61c2e7b-8c11-4b70-b966-97b91ec1f4ef/materialeditorui.png",
+            "caption": "Official UE5.8 Material Editor interface. Build and connect surface inputs in the Material Graph, then preview the result.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/unreal-engine-material-editor-ui",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -2319,10 +2337,11 @@ window.UE5_DESIGN_DATA = {
             "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
           ],
           "visual": {
-            "src": "assets/book/best-practices/rain-material-graph.webp",
-            "caption": "Professional example: a material graph should use purposeful controls to create the intended surface response.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+            "src": "https://dev.epicgames.com/community/api/documentation/image/e945d5c4-f29b-4a31-9c0b-ecb45e655a7a?resizing_type=fit",
+            "caption": "Official UE5.8 material graph with Base Color and Normal texture samples connected.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/artist-03-create-materials-and-material-instances",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -2336,10 +2355,11 @@ window.UE5_DESIGN_DATA = {
             "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
           ],
           "visual": {
-            "src": "assets/book/best-practices/rain-material-graph.webp",
-            "caption": "Professional example: a material graph should use purposeful controls to create the intended surface response.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+            "src": "https://dev.epicgames.com/community/api/documentation/image/fd5c0502-5c28-44b2-b7ac-361c773bc2fe?resizing_type=fit",
+            "caption": "Official UE5.8 PBR graph showing Metallic and Roughness values connected to the material.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/artist-03-create-materials-and-material-instances",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -2353,10 +2373,11 @@ window.UE5_DESIGN_DATA = {
             "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
           ],
           "visual": {
-            "src": "assets/book/best-practices/rain-material-graph.webp",
-            "caption": "Professional example: a material graph should use purposeful controls to create the intended surface response.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+            "src": "https://dev.epicgames.com/community/api/documentation/image/fd5c0502-5c28-44b2-b7ac-361c773bc2fe?resizing_type=fit",
+            "caption": "Official UE5.8 PBR graph showing Metallic and Roughness values connected to the material.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/artist-03-create-materials-and-material-instances",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -2370,10 +2391,11 @@ window.UE5_DESIGN_DATA = {
             "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
           ],
           "visual": {
-            "src": "assets/book/best-practices/rain-material-graph.webp",
-            "caption": "Professional example: a material graph should use purposeful controls to create the intended surface response.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+            "src": "https://dev.epicgames.com/community/api/documentation/image/e945d5c4-f29b-4a31-9c0b-ecb45e655a7a?resizing_type=fit",
+            "caption": "Official UE5.8 material graph with Base Color and Normal texture samples connected.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/artist-03-create-materials-and-material-instances",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         }
       ],
@@ -2439,12 +2461,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/rain-material-graph.webp",
-            "caption": "Professional example: a material graph should use purposeful controls to create the intended surface response.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Parameterise roughness",
@@ -2456,12 +2473,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/rain-material-graph.webp",
-            "caption": "Professional example: a material graph should use purposeful controls to create the intended surface response.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Create MI_Surface_A",
@@ -2474,10 +2486,11 @@ window.UE5_DESIGN_DATA = {
             "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
           ],
           "visual": {
-            "src": "assets/book/best-practices/rain-material-graph.webp",
-            "caption": "Professional example: a material graph should use purposeful controls to create the intended surface response.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/990457fc-5f41-4d37-87b4-ce7abf387b7c/details-panel.png",
+            "caption": "Official UE5.8 Material Instance Editor Details panel. Exposed parent parameters appear here for fast variation.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/unreal-engine-material-instance-editor-ui",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -2491,10 +2504,11 @@ window.UE5_DESIGN_DATA = {
             "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
           ],
           "visual": {
-            "src": "assets/book/best-practices/rain-material-graph.webp",
-            "caption": "Professional example: a material graph should use purposeful controls to create the intended surface response.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/219987ae-1099-4783-b0fa-749cda6c7281/override-params.png",
+            "caption": "Official UE5.8 Material Instance parameter overrides. Tick a parameter before changing its instance value.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/unreal-engine-material-instance-editor-ui",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -2558,7 +2572,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/990457fc-5f41-4d37-87b4-ce7abf387b7c/details-panel.png",
+            "caption": "Official UE5.8 Material Instance Editor Details panel. Exposed parent parameters appear here for fast variation.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/unreal-engine-material-instance-editor-ui",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Lower roughness",
@@ -2571,10 +2591,11 @@ window.UE5_DESIGN_DATA = {
             "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
           ],
           "visual": {
-            "src": "assets/book/best-practices/rain-material-graph.webp",
-            "caption": "Professional example: a material graph should use purposeful controls to create the intended surface response.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/219987ae-1099-4783-b0fa-749cda6c7281/override-params.png",
+            "caption": "Official UE5.8 Material Instance parameter overrides. Tick a parameter before changing its instance value.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/unreal-engine-material-instance-editor-ui",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -2587,12 +2608,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/rain-material-graph.webp",
-            "caption": "Professional example: a material graph should use purposeful controls to create the intended surface response.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Keep variation",
@@ -2604,12 +2620,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/rain-material-graph.webp",
-            "caption": "Professional example: a material graph should use purposeful controls to create the intended surface response.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Test under grazing light",
@@ -2621,12 +2632,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Keep the camera, route or test condition consistent so the comparison means something."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/rain-material-graph.webp",
-            "caption": "Professional example: a material graph should use purposeful controls to create the intended surface response.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         }
       ],
       "mistakes": [
@@ -2677,7 +2683,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/5f8e10e1-9e33-466f-a916-1e87349d2cbc/masked-emissive-material-nodes.png",
+            "caption": "Official UE5.8 masked emissive graph: use a mask so only the intended pixels emit.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/using-the-emissive-material-input-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Multiply colour by intensity",
@@ -2690,10 +2702,11 @@ window.UE5_DESIGN_DATA = {
             "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
           ],
           "visual": {
-            "src": "assets/book/best-practices/rain-material-graph.webp",
-            "caption": "Professional example: a material graph should use purposeful controls to create the intended surface response.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/f23f8b0c-36d5-4051-b41b-6975727f8523/fully-emissive-nodes.png",
+            "caption": "Official UE5.8 emissive graph using tunable colour/intensity controls.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/using-the-emissive-material-input-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -2707,10 +2720,11 @@ window.UE5_DESIGN_DATA = {
             "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
           ],
           "visual": {
-            "src": "assets/book/best-practices/rain-material-graph.webp",
-            "caption": "Professional example: a material graph should use purposeful controls to create the intended surface response.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/4598980d-92bf-4ded-a2f1-b01a8963dff7/simple-emissive-material.png",
+            "caption": "Official UE5.8 material with Emissive Color connected. Keep the Hub Base Color and exposure guidance as written.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/using-the-emissive-material-input-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -2735,7 +2749,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/c03fe625-433a-4e7d-9b17-c60379fea96f/create-material-instance.png",
+            "caption": "Official UE5.8 Create Material Instance action for making reusable emissive variants.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/using-the-emissive-material-input-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         }
       ],
       "mistakes": [
@@ -2799,12 +2819,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/lighting-mood-comparison.webp",
-            "caption": "Professional example: compare lighting moods from the same viewpoint so contrast and readability are meaningful.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Add gentle fill",
@@ -2816,12 +2831,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/lighting-mood-comparison.webp",
-            "caption": "Professional example: compare lighting moods from the same viewpoint so contrast and readability are meaningful.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Add one accent",
@@ -2833,12 +2843,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/lighting-mood-comparison.webp",
-            "caption": "Professional example: compare lighting moods from the same viewpoint so contrast and readability are meaningful.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Toggle each light",
@@ -2850,12 +2855,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/lighting-mood-comparison.webp",
-            "caption": "Professional example: compare lighting moods from the same viewpoint so contrast and readability are meaningful.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         }
       ],
       "mistakes": [
@@ -2927,12 +2927,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/lighting-mood-comparison.webp",
-            "caption": "Professional example: compare lighting moods from the same viewpoint so contrast and readability are meaningful.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Motivate pools of light",
@@ -2944,12 +2939,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/lighting-mood-comparison.webp",
-            "caption": "Professional example: compare lighting moods from the same viewpoint so contrast and readability are meaningful.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Create one contrast event",
@@ -2961,12 +2951,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/lighting-mood-comparison.webp",
-            "caption": "Professional example: compare lighting moods from the same viewpoint so contrast and readability are meaningful.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Test with movement",
@@ -3037,12 +3022,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/lighting-mood-comparison.webp",
-            "caption": "Professional example: compare lighting moods from the same viewpoint so contrast and readability are meaningful.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Stabilise exposure",
@@ -3066,12 +3046,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/lighting-mood-comparison.webp",
-            "caption": "Professional example: compare lighting moods from the same viewpoint so contrast and readability are meaningful.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Use effects sparingly",
@@ -3095,12 +3070,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/lighting-mood-comparison.webp",
-            "caption": "Professional example: compare lighting moods from the same viewpoint so contrast and readability are meaningful.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         }
       ],
       "mistakes": [
@@ -3151,7 +3121,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://img.edc-cdn.net/imgproxy/WhJevtNTVxIUT55gW9wM3-sl1hwqk0EEexbt5n9VtQc/filename%3A04-new-landscape-tool.png/resizing_type%3Afit/width%3A0/height%3A0/aHR0cHM6Ly9kMWl2N2RiNDR5aGd4bi5jbG91ZGZyb250Lm5ldC9kb2N1bWVudGF0aW9uL2ltYWdlcy80ZGIwODM4YS0yYmFhLTRmYzItYTNiNi1jNjBkNTJjOGVkM2MvMDQtbmV3LWxhbmRzY2FwZS10b29sLnBuZw",
+            "caption": "Official UE5.8 Landscape Mode. Manage creates terrain, Sculpt reshapes it and Paint applies landscape layers.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/landscape-quick-start-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Choose a modest size",
@@ -3187,7 +3163,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://img.edc-cdn.net/imgproxy/WhJevtNTVxIUT55gW9wM3-sl1hwqk0EEexbt5n9VtQc/filename%3A04-new-landscape-tool.png/resizing_type%3Afit/width%3A0/height%3A0/aHR0cHM6Ly9kMWl2N2RiNDR5aGd4bi5jbG91ZGZyb250Lm5ldC9kb2N1bWVudGF0aW9uL2ltYWdlcy80ZGIwODM4YS0yYmFhLTRmYzItYTNiNi1jNjBkNTJjOGVkM2MvMDQtbmV3LWxhbmRzY2FwZS10b29sLnBuZw",
+            "caption": "Official UE5.8 Landscape Mode. Manage creates terrain, Sculpt reshapes it and Paint applies landscape layers.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/landscape-quick-start-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         }
       ],
       "mistakes": [
@@ -3258,7 +3240,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://img.edc-cdn.net/imgproxy/WhJevtNTVxIUT55gW9wM3-sl1hwqk0EEexbt5n9VtQc/filename%3A04-new-landscape-tool.png/resizing_type%3Afit/width%3A0/height%3A0/aHR0cHM6Ly9kMWl2N2RiNDR5aGd4bi5jbG91ZGZyb250Lm5ldC9kb2N1bWVudGF0aW9uL2ltYWdlcy80ZGIwODM4YS0yYmFhLTRmYzItYTNiNi1jNjBkNTJjOGVkM2MvMDQtbmV3LWxhbmRzY2FwZS10b29sLnBuZw",
+            "caption": "Official UE5.8 Landscape Mode. Manage creates terrain, Sculpt reshapes it and Paint applies landscape layers.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/landscape-quick-start-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Flatten playable zones",
@@ -3369,7 +3357,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://img.edc-cdn.net/imgproxy/WhJevtNTVxIUT55gW9wM3-sl1hwqk0EEexbt5n9VtQc/filename%3A04-new-landscape-tool.png/resizing_type%3Afit/width%3A0/height%3A0/aHR0cHM6Ly9kMWl2N2RiNDR5aGd4bi5jbG91ZGZyb250Lm5ldC9kb2N1bWVudGF0aW9uL2ltYWdlcy80ZGIwODM4YS0yYmFhLTRmYzItYTNiNi1jNjBkNTJjOGVkM2MvMDQtbmV3LWxhbmRzY2FwZS10b29sLnBuZw",
+            "caption": "Official UE5.8 Landscape Mode. Manage creates terrain, Sculpt reshapes it and Paint applies landscape layers.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/landscape-quick-start-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Blend edges",
@@ -3543,12 +3537,22 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/sequencer-key-features.webp",
-            "caption": "Sequencer example: tracks, cameras and timed properties are organised on one timeline.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": [
+            {
+              "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/ebbb1c16-6495-448b-8fa3-f19af40e5d67/createseq.png",
+              "caption": "Official UE5.8 workflow for creating a Level Sequence.",
+              "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/how-to-make-movies-in-unreal-engine",
+              "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+              "kind": "epic"
+            },
+            {
+              "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/6b60fd77-8c0c-4f6e-abce-e9dceaddf151/seqopen.png",
+              "caption": "Official UE5.8 Sequencer Editor after opening a Level Sequence.",
+              "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/how-to-make-movies-in-unreal-engine",
+              "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+              "kind": "epic"
+            }
+          ]
         },
         {
           "title": "Add Cine Camera",
@@ -3561,10 +3565,11 @@ window.UE5_DESIGN_DATA = {
             "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
           ],
           "visual": {
-            "src": "assets/book/best-practices/sequencer-camera-timing.webp",
-            "caption": "Sequencer camera example: framing and timing should be judged together during playback.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/b9b3f29d-052f-4cf8-91b4-f994bb4c2d5c/createcamera.png",
+            "caption": "Official UE5.8 Create New Camera control in Sequencer.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/how-to-animate-cinematic-cameras-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -3578,10 +3583,11 @@ window.UE5_DESIGN_DATA = {
             "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
           ],
           "visual": {
-            "src": "assets/book/best-practices/sequencer-camera-timing.webp",
-            "caption": "Sequencer camera example: framing and timing should be judged together during playback.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/a5a26c83-7473-44ec-872b-16c0e4218127/setfirstkey.gif",
+            "caption": "Official UE5.8 camera Transform keyframe workflow in Sequencer.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/how-to-animate-cinematic-cameras-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -3594,12 +3600,22 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/sequencer-camera-timing.webp",
-            "caption": "Sequencer camera example: framing and timing should be judged together during playback.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": [
+            {
+              "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/710028b8-062d-4a48-b30c-a4650a256e1c/timeadjust.png",
+              "caption": "Official UE5.8 Sequencer playhead/timeline used to choose a later camera keyframe.",
+              "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/how-to-animate-cinematic-cameras-in-unreal-engine",
+              "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+              "kind": "epic"
+            },
+            {
+              "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/a5a26c83-7473-44ec-872b-16c0e4218127/setfirstkey.gif",
+              "caption": "Official UE5.8 camera Transform keyframe workflow in Sequencer.",
+              "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/how-to-animate-cinematic-cameras-in-unreal-engine",
+              "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+              "kind": "epic"
+            }
+          ]
         },
         {
           "title": "Trim duration",
@@ -3611,12 +3627,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/sequencer-camera-timing.webp",
-            "caption": "Sequencer camera example: framing and timing should be judged together during playback.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         }
       ],
       "mistakes": [
@@ -3675,12 +3686,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/sequencer-camera-timing.webp",
-            "caption": "Sequencer camera example: framing and timing should be judged together during playback.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Add Camera Cuts track",
@@ -3693,10 +3699,11 @@ window.UE5_DESIGN_DATA = {
             "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
           ],
           "visual": {
-            "src": "assets/book/best-practices/sequencer-key-features.webp",
-            "caption": "Sequencer example: tracks, cameras and timed properties are organised on one timeline.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/e26705aa-21c8-4279-8cac-74648ddf6f44/create1.png",
+            "caption": "Official UE5.8 Sequencer Add Track → Camera Cut Track workflow.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/cinematic-camera-cut-track-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -3710,10 +3717,11 @@ window.UE5_DESIGN_DATA = {
             "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
           ],
           "visual": {
-            "src": "assets/book/best-practices/sequencer-key-features.webp",
-            "caption": "Sequencer example: tracks, cameras and timed properties are organised on one timeline.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/32af3a32-6709-4140-8c7d-b24c4b9a7bb3/create4.png",
+            "caption": "Official UE5.8 Camera Cuts binding/section workflow for assigning cameras.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/cinematic-camera-cut-track-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -3727,10 +3735,11 @@ window.UE5_DESIGN_DATA = {
             "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
           ],
           "visual": {
-            "src": "assets/book/best-practices/sequencer-camera-timing.webp",
-            "caption": "Sequencer camera example: framing and timing should be judged together during playback.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/fdd4aa66-7f2f-46cd-ae69-55260eb3e1a9/cut1.gif",
+            "caption": "Official UE5.8 Sequencer example of creating a camera cut at a chosen moment.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/cinematic-camera-cut-track-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -3806,12 +3815,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/sequencer-camera-timing.webp",
-            "caption": "Sequencer camera example: framing and timing should be judged together during playback.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Key only what matters",
@@ -3823,12 +3827,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/sequencer-camera-timing.webp",
-            "caption": "Sequencer camera example: framing and timing should be judged together during playback.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "End on composition",
@@ -3840,12 +3839,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/sequencer-camera-timing.webp",
-            "caption": "Sequencer camera example: framing and timing should be judged together during playback.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Add sound before sight",
@@ -3857,12 +3851,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/sequencer-audio-tracks.webp",
-            "caption": "Sequencer audio example: audio can be timed directly against visual beats.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         }
       ],
       "mistakes": [
@@ -3913,7 +3902,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/99bc4ca4-5300-4a9d-add1-3ec8319eabc8/trigger11.png",
+            "caption": "Official UE5.8 Level Blueprint reference to a Level Sequence.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/play-cinematics-from-blueprints-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Choose a trigger",
@@ -3925,7 +3920,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/ad0bd677-2517-4416-96de-9b224f2e8bba/trigger01.png",
+            "caption": "Official UE5.8 Trigger Box used to start a gameplay cinematic.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/play-cinematics-from-blueprints-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Play sequence",
@@ -3937,12 +3938,22 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/sequencer-key-features.webp",
-            "caption": "Sequencer example: tracks, cameras and timed properties are organised on one timeline.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": [
+            {
+              "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/10712277-55f5-405e-95dd-00fea5e9eda4/trigger12.png",
+              "caption": "Official UE5.8 Play (SequencePlayer) node created from a Level Sequence reference.",
+              "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/play-cinematics-from-blueprints-in-unreal-engine",
+              "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+              "kind": "epic"
+            },
+            {
+              "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/7b328802-eb9b-4d13-ac6f-67b35dbe7d5c/trigger13.png",
+              "caption": "Official UE5.8 OnActorBeginOverlap wired to play a Level Sequence.",
+              "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/play-cinematics-from-blueprints-in-unreal-engine",
+              "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+              "kind": "epic"
+            }
+          ]
         },
         {
           "title": "Handle player control",
@@ -3966,12 +3977,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/sequencer-key-features.webp",
-            "caption": "Sequencer example: tracks, cameras and timed properties are organised on one timeline.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         }
       ],
       "mistakes": [
@@ -4129,7 +4135,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Judge the sound while moving through the space; a source that sounds fine while stationary may fade or spatialise badly in play."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/c9c27776-27e1-401b-a6db-d17355cf2826/01-attenuation-volume-properties.png",
+            "caption": "Official UE5.8 Sound Attenuation volume settings including attenuation shape/radius/falloff controls.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/sound-attenuation-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Set inner radius",
@@ -4141,7 +4153,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Judge the sound while moving through the space; a source that sounds fine while stationary may fade or spatialise badly in play."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/c9c27776-27e1-401b-a6db-d17355cf2826/01-attenuation-volume-properties.png",
+            "caption": "Official UE5.8 Sound Attenuation volume settings including attenuation shape/radius/falloff controls.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/sound-attenuation-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Set falloff distance",
@@ -4153,7 +4171,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Judge the sound while moving through the space; a source that sounds fine while stationary may fade or spatialise badly in play."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/c9c27776-27e1-401b-a6db-d17355cf2826/01-attenuation-volume-properties.png",
+            "caption": "Official UE5.8 Sound Attenuation volume settings including attenuation shape/radius/falloff controls.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/sound-attenuation-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Enable spatialisation",
@@ -4165,7 +4189,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Judge the sound while moving through the space; a source that sounds fine while stationary may fade or spatialise badly in play."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/7bc8a75e-310a-4cb2-8b55-726eb577b021/23-attenuation-spatialization-properties.png",
+            "caption": "Official UE5.8 spatialisation settings for positioning audio in 3D space.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/sound-attenuation-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Test in motion",
@@ -4228,7 +4258,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Judge the sound while moving through the space; a source that sounds fine while stationary may fade or spatialise badly in play."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/e3176bcd-cc8f-4ec2-ad09-9d5a80706174/sound-cue-editor-palette-panel.png",
+            "caption": "Official UE5.8 Sound Cue Editor and node palette.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/sound-cue-reference-for-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Add several variations",
@@ -4240,7 +4276,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Judge the sound while moving through the space; a source that sounds fine while stationary may fade or spatialise badly in play."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/acbdb0fe-782b-4db2-9a17-a8c213b66e15/random-sound-node.png",
+            "caption": "Official UE5.8 Random Sound node. Connect multiple variations and use weights only when needed.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/sound-cue-reference-for-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Add Random node",
@@ -4252,7 +4294,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Judge the sound while moving through the space; a source that sounds fine while stationary may fade or spatialise badly in play."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/acbdb0fe-782b-4db2-9a17-a8c213b66e15/random-sound-node.png",
+            "caption": "Official UE5.8 Random Sound node. Connect multiple variations and use weights only when needed.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/sound-cue-reference-for-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Add small pitch/volume variation",
@@ -4264,7 +4312,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Judge the sound while moving through the space; a source that sounds fine while stationary may fade or spatialise badly in play."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/a3ee093e-8732-4c60-a9e0-6be1c839e142/modulator-sound-node.png",
+            "caption": "Official UE5.8 Modulator node for restrained random pitch/volume variation.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/sound-cue-reference-for-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Use cue in gameplay",
@@ -4339,7 +4393,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Judge the sound while moving through the space; a source that sounds fine while stationary may fade or spatialise badly in play."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/04b0d7e8-e47f-49db-bb22-d3d472d64cea/04-reverb-settings.png",
+            "caption": "Official UE5.8 Audio Volume Reverb settings, including Apply Reverb, effect, volume and fade time.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/audio-volumes-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Tune decay/wet amount",
@@ -4351,7 +4411,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Judge the sound while moving through the space; a source that sounds fine while stationary may fade or spatialise badly in play."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/04b0d7e8-e47f-49db-bb22-d3d472d64cea/04-reverb-settings.png",
+            "caption": "Official UE5.8 Audio Volume Reverb settings, including Apply Reverb, effect, volume and fade time.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/audio-volumes-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Test doorway transition",
@@ -4559,12 +4625,22 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Change one targeted cause, then return to the same test view before deciding whether it was an improvement."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/shader-complexity-heatmap.webp",
-            "caption": "Shader Complexity visualises expensive pixel cost and overlapping translucent work.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": [
+            {
+              "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/604480ba-da30-4377-945d-540fb90db34d/view-modes-menu.png",
+              "caption": "Official UE5.8 View Mode menu used to enter diagnostic modes.",
+              "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/using-transparency-in-unreal-engine-materials",
+              "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+              "kind": "epic"
+            },
+            {
+              "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/4dbafdc8-58d4-440b-943a-33545e9fdebb/shader-complexity-toggle.png",
+              "caption": "Official UE5.8 menu path to Shader Complexity.",
+              "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/using-transparency-in-unreal-engine-materials",
+              "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+              "kind": "epic"
+            }
+          ]
         },
         {
           "title": "Find the hotspot",
@@ -4576,12 +4652,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Change one targeted cause, then return to the same test view before deciding whether it was an improvement."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/shader-complexity-heatmap.webp",
-            "caption": "Shader Complexity visualises expensive pixel cost and overlapping translucent work.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Simplify one thing",
@@ -4605,12 +4676,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Keep the camera, route or test condition consistent so the comparison means something."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/shader-complexity-heatmap.webp",
-            "caption": "Shader Complexity visualises expensive pixel cost and overlapping translucent work.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         }
       ],
       "mistakes": [
@@ -5069,12 +5135,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "If dressing starts to block movement or the focal point, delete props before adding more."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/environmental-clues-dressing.webp",
-            "caption": "Professional example: environmental dressing works when props and marks communicate use, history and focal hierarchy.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Arrange cause and effect",
@@ -5086,12 +5147,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "If dressing starts to block movement or the focal point, delete props before adding more."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/environmental-clues-dressing.webp",
-            "caption": "Professional example: environmental dressing works when props and marks communicate use, history and focal hierarchy.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Add one environmental trace",
@@ -5103,12 +5159,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "If dressing starts to block movement or the focal point, delete props before adding more."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/environmental-clues-dressing.webp",
-            "caption": "Professional example: environmental dressing works when props and marks communicate use, history and focal hierarchy.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Blind read",
@@ -5120,12 +5171,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Keep the camera, route or test condition consistent so the comparison means something."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/environmental-clues-dressing.webp",
-            "caption": "Professional example: environmental dressing works when props and marks communicate use, history and focal hierarchy.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         }
       ],
       "mistakes": [
@@ -5195,12 +5241,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "If dressing starts to block movement or the focal point, delete props before adding more."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/environmental-clues-dressing.webp",
-            "caption": "Professional example: environmental dressing works when props and marks communicate use, history and focal hierarchy.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Frame it",
@@ -5212,12 +5253,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "If dressing starts to block movement or the focal point, delete props before adding more."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/environmental-clues-dressing.webp",
-            "caption": "Professional example: environmental dressing works when props and marks communicate use, history and focal hierarchy.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Protect its contrast",
@@ -5229,12 +5265,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "If dressing starts to block movement or the focal point, delete props before adding more."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/environmental-clues-dressing.webp",
-            "caption": "Professional example: environmental dressing works when props and marks communicate use, history and focal hierarchy.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Test orientation",
@@ -5309,12 +5340,22 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/shader-complexity-heatmap.webp",
-            "caption": "Shader Complexity visualises expensive pixel cost and overlapping translucent work.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": [
+            {
+              "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/4dbafdc8-58d4-440b-943a-33545e9fdebb/shader-complexity-toggle.png",
+              "caption": "Official UE5.8 menu path to Shader Complexity.",
+              "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/using-transparency-in-unreal-engine-materials",
+              "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+              "kind": "epic"
+            },
+            {
+              "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/dc8ffd1b-0d72-4e98-94b2-2337a589589c/trans_shader_complexity.png",
+              "caption": "Official UE5.8 Shader Complexity viewport example for spotting expensive transparent overlap.",
+              "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/using-transparency-in-unreal-engine-materials",
+              "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+              "kind": "epic"
+            }
+          ]
         },
         {
           "title": "Inspect the material",
@@ -5326,12 +5367,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/shader-complexity-heatmap.webp",
-            "caption": "Shader Complexity visualises expensive pixel cost and overlapping translucent work.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Simplify one thing",
@@ -5355,12 +5391,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Keep the camera, route or test condition consistent so the comparison means something."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/shader-complexity-heatmap.webp",
-            "caption": "Shader Complexity visualises expensive pixel cost and overlapping translucent work.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         }
       ],
       "mistakes": [
@@ -5418,12 +5449,22 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/shader-complexity-heatmap.webp",
-            "caption": "Shader Complexity visualises expensive pixel cost and overlapping translucent work.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": [
+            {
+              "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/4dbafdc8-58d4-440b-943a-33545e9fdebb/shader-complexity-toggle.png",
+              "caption": "Official UE5.8 menu path to Shader Complexity.",
+              "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/using-transparency-in-unreal-engine-materials",
+              "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+              "kind": "epic"
+            },
+            {
+              "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/dc8ffd1b-0d72-4e98-94b2-2337a589589c/trans_shader_complexity.png",
+              "caption": "Official UE5.8 Shader Complexity viewport example for spotting expensive transparent overlap.",
+              "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/using-transparency-in-unreal-engine-materials",
+              "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+              "kind": "epic"
+            }
+          ]
         },
         {
           "title": "Separate layers",
@@ -5435,12 +5476,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Change one parameter at a time and inspect the material under a useful light angle before adding more complexity."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/shader-complexity-heatmap.webp",
-            "caption": "Shader Complexity visualises expensive pixel cost and overlapping translucent work.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Reduce screen coverage",
@@ -5476,12 +5512,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Keep the camera, route or test condition consistent so the comparison means something."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/shader-complexity-heatmap.webp",
-            "caption": "Shader Complexity visualises expensive pixel cost and overlapping translucent work.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         }
       ],
       "mistakes": [
@@ -5532,12 +5563,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/lumen-gi-comparison.webp",
-            "caption": "Lumen comparison: judge indirect light and bounce from the same scene view.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Establish key information",
@@ -5549,12 +5575,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/lumen-gi-comparison.webp",
-            "caption": "Lumen comparison: judge indirect light and bounce from the same scene view.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Add indirect mood",
@@ -5566,12 +5587,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/lumen-gi-comparison.webp",
-            "caption": "Lumen comparison: judge indirect light and bounce from the same scene view.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Layer atmosphere",
@@ -5583,12 +5599,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/lumen-gi-comparison.webp",
-            "caption": "Lumen comparison: judge indirect light and bounce from the same scene view.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Scalability check",
@@ -5600,12 +5611,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/lumen-gi-comparison.webp",
-            "caption": "Lumen comparison: judge indirect light and bounce from the same scene view.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         }
       ],
       "mistakes": [
@@ -5681,12 +5687,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/lighting-mood-comparison.webp",
-            "caption": "Professional example: compare lighting moods from the same viewpoint so contrast and readability are meaningful.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Build the night/dusk state",
@@ -5698,12 +5699,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/lighting-mood-comparison.webp",
-            "caption": "Professional example: compare lighting moods from the same viewpoint so contrast and readability are meaningful.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Change one gameplay implication",
@@ -5715,12 +5711,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Lock or stabilise exposure while judging lighting so auto-exposure does not hide the real change."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/lighting-mood-comparison.webp",
-            "caption": "Professional example: compare lighting moods from the same viewpoint so contrast and readability are meaningful.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Compare silhouettes",
@@ -5732,12 +5723,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Keep the camera, route or test condition consistent so the comparison means something."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/lighting-mood-comparison.webp",
-            "caption": "Professional example: compare lighting moods from the same viewpoint so contrast and readability are meaningful.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         }
       ],
       "mistakes": [
@@ -5900,10 +5886,11 @@ window.UE5_DESIGN_DATA = {
             "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
           ],
           "visual": {
-            "src": "assets/book/best-practices/volumetric-fog-layers.webp",
-            "caption": "Professional example: volumetric fog controls depth and visibility in layers.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/384ec87a-79c8-47ee-9dca-c664802cc995/volumetricfog.png",
+            "caption": "Official UE5.8 Volumetric Fog example showing scene lighting scattering through the fog.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/exponential-height-fog-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
           }
         },
         {
@@ -5916,12 +5903,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/volumetric-fog-layers.webp",
-            "caption": "Professional example: volumetric fog controls depth and visibility in layers.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Add one world reaction",
@@ -5933,12 +5915,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Keep a playable route visible and test at player height; large terrain edits can look fine from the editor camera but fail in play."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/volumetric-fog-layers.webp",
-            "caption": "Professional example: volumetric fog controls depth and visibility in layers.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Performance check",
@@ -6013,12 +5990,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/sequencer-camera-timing.webp",
-            "caption": "Sequencer camera example: framing and timing should be judged together during playback.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Compare focal lengths",
@@ -6030,12 +6002,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Keep the camera, route or test condition consistent so the comparison means something."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/sequencer-camera-timing.webp",
-            "caption": "Sequencer camera example: framing and timing should be judged together during playback.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Choose depth of field deliberately",
@@ -6047,12 +6014,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/sequencer-camera-timing.webp",
-            "caption": "Sequencer camera example: framing and timing should be judged together during playback.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Test in sequence",
@@ -6064,12 +6026,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Keep the camera, route or test condition consistent so the comparison means something."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/sequencer-camera-timing.webp",
-            "caption": "Sequencer camera example: framing and timing should be judged together during playback.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         }
       ],
       "mistakes": [
@@ -6133,12 +6090,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/sequencer-key-features.webp",
-            "caption": "Sequencer example: tracks, cameras and timed properties are organised on one timeline.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Create two outcome sequences",
@@ -6150,12 +6102,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/sequencer-key-features.webp",
-            "caption": "Sequencer example: tracks, cameras and timed properties are organised on one timeline.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Create/choose a Boolean",
@@ -6179,12 +6126,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/sequencer-key-features.webp",
-            "caption": "Sequencer example: tracks, cameras and timed properties are organised on one timeline.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Return cleanly",
@@ -6196,12 +6138,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Scrub the shot, then play it at normal speed; a frame can look good while the motion or cut timing still feels wrong."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/sequencer-key-features.webp",
-            "caption": "Sequencer example: tracks, cameras and timed properties are organised on one timeline.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         }
       ],
       "mistakes": [
@@ -6364,7 +6301,13 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Judge the sound while moving through the space; a source that sounds fine while stationary may fade or spatialise badly in play."
           ],
-          "visual": null
+          "visual": {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/e0a9186a-4c04-4925-992c-a52933249175/wind_ms_details.png",
+            "caption": "Official UE5.8 MetaSound Source used for the wind quick-start workflow.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/metasounds-quick-start",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
         },
         {
           "title": "Start with a wind layer",
@@ -6526,12 +6469,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Change one targeted cause, then return to the same test view before deciding whether it was an improvement."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/stat-gpu-world-optimisation.webp",
-            "caption": "GPU profiling example: compare the same scene/camera before and after a targeted change.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         }
       ],
       "mistakes": [
@@ -6618,12 +6556,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Change one targeted cause, then return to the same test view before deciding whether it was an improvement."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/content-browser-folders.webp",
-            "caption": "Project hygiene example: a consistent Content Browser structure makes work easier to find and hand over.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Fix redirectors/dependencies safely",
@@ -6635,12 +6568,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Change one targeted cause, then return to the same test view before deciding whether it was an improvement."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/content-browser-folders.webp",
-            "caption": "Project hygiene example: a consistent Content Browser structure makes work easier to find and hand over.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Remove or quarantine unused junk",
@@ -6652,12 +6580,7 @@ window.UE5_DESIGN_DATA = {
           "troubleshoot": [
             "Change one targeted cause, then return to the same test view before deciding whether it was an improvement."
           ],
-          "visual": {
-            "src": "assets/book/best-practices/content-browser-folders.webp",
-            "caption": "Project hygiene example: a consistent Content Browser structure makes work easier to find and hand over.",
-            "kind": "book",
-            "sourceTitle": "Unreal Engine 5 Best Practices — licensed college teaching figure"
-          }
+          "visual": null
         },
         {
           "title": "Teammate test",

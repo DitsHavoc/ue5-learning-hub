@@ -180,3 +180,12 @@ Adds a class-scoped, server-side XP leaderboard system:
 Leaderboard access is restricted to students in that class and teachers with access to that class. Assessment grades are not part of the scoring model.
 
 This migration was applied to the live Supabase project on 28 Aug 2026.
+
+
+## V3.34.10 UE5 tutorial visual alignment
+
+No database migration is required. This release changes tutorial/design data and image-source mappings only. Supabase schema, policies, functions, leaderboard logic and project systems are unchanged.
+
+## V3.34.11 UE5 visual source completion
+
+No database migration is required. This release changes tutorial/design visual mappings and audit/capture documentation only. Supabase schema, RLS policies, RPCs, leaderboard logic, classes, projects, evidence and production permissions are unchanged.
