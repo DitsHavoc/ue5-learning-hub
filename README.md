@@ -1,6 +1,10 @@
-# Current release — v3.37.4
+# Current release — v3.38.0
 
-**Tyre workflow correction.** Build X → Simple Game Tyre now uses a cleaner game-art workflow: restrained Torus body, tyre-profile shaping, one master tread tile, straight Array, 360° Bend, then fit/clean. Six one-stage Max-style viewport images replace the earlier tyre visuals. Rejected webpage/tutorial-UI generations are not packaged. No database migration.
+**Game-Ready 3D Foundations.** The old Modeller Mindset/photo-collage block is replaced by a required six-chapter Module 0 with applied theory, a five-question quiz after every chapter, 20 XP per first pass, and a 12-question **Model Doctor** final worth 100 XP. Students may preview/practise Build X at any time, but new Build X completion unlocks after the final pass. Theory is rebuilt from the college 3D Modelling Theory deck and modernised around current game-art decisions. Existing 3D Modelling lesson/Build/Fix IDs are preserved. See `RELEASE-NOTES-v3.38.0.md` and `3D-MODELLING-FOUNDATIONS-QA-v3.38.0.md`.
+
+## Previous release — v3.37.4
+
+**Tyre workflow correction.** Build X → Simple Game Tyre now uses a cleaner game-art workflow: restrained Torus body, tyre-profile shaping, one master tread tile, straight Array, 360° Bend, then fit/clean. Six one-stage Max-style viewport images replace the earlier tyre visuals. Rejected webpage/tutorial-UI generations are not packaged.
 
 ## Previous release — v3.36.0
 **Critique Board + Learning XP.** Signed-in students now have a private class studio wall at `#/critique` for screenshot-based work-in-progress critique. Posts stay class-scoped, classmates answer three structured prompts, under-reviewed work is surfaced first, authors can add an improved **After** image, and teachers can moderate. Meaningful peer critique awards **15 XP for the first three rewarded critiques per Europe/London day**; students can keep helping after the cap. Designer Studio's 24 industry videos/articles now have a self-declared **Watched/read + did the task** completion worth **20 XP** each. These source completions also appear in teacher class-progress views. Teams remains the formal assignment/submission/grade space; Critique Board is intentionally formative. The live Supabase migrations were applied on 29 Aug 2026. See `RELEASE-NOTES-v3.36.0.md` and `CRITIQUE-BOARD-QA-v3.36.0.md`.

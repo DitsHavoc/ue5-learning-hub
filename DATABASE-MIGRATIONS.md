@@ -300,3 +300,12 @@ No database migration. Visual/data-content update only.
 ## v3.37.4 — Tyre Workflow Correction
 
 No database migration required. This release changes only 3D Modelling Studio curriculum data, local stage imagery and release metadata.
+
+## v3.38.0 — Game-Ready 3D Foundations
+
+File: `migrations/20260829_31_model_foundations_xp.sql`
+
+Updates the existing private learning-XP mapping only. It adds `modeltheory:*` completions at 20 XP and `modelfoundation:final` at 100 XP, while preserving the existing XP values for core lessons, tutorials, Designer sources, modelling lessons/Build X/Fix clinics, Sculpt and other learning content. No tables, buckets, RLS policies, class/project/evidence schema or assignment workflow are added.
+
+Applied successfully to the live UE5 Learning Hub Supabase project on 29 Aug 2026 as migration `model_foundations_xp`; post-migration SQL verified 20 XP for a theory chapter, 100 XP for Model Doctor and 250 XP for existing Build X.
+

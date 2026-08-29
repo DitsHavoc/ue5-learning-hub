@@ -1,3 +1,14 @@
+## v3.38.0 — Game-Ready 3D Foundations — 29 Aug 2026
+- Replaced the old 3D Modelling `Modeller Mindset` / photo-collage landing block with a purpose-built Module 0 progress/learning panel.
+- Added 6 sequential theory chapters: Read the Mesh; Work in 3D Space; Spend Geometry Wisely; Transforms & Pivots; UVs & PBR Materials; Make It Game Ready.
+- Added a 5-question scenario quiz after every chapter; 80% passes, awards +20 XP once and unlocks the next chapter.
+- Added `Model Doctor`, a 12-question mixed final; 80% passes, awards +100 XP once and unlocks new Build X completion.
+- Build X remains previewable/practisable before the gate; existing Build X completions are preserved and teachers can bypass the gate.
+- Rebuilt the theory from the college 3D Modelling Theory deck and modernised older topology/material wording into current game-art decisions.
+- Added theory/final progress to local/cloud sync, global search, student progress and teacher class-progress views.
+- Added migration `20260829_31_model_foundations_xp.sql`; applied live as `model_foundations_xp` on 29 Aug 2026.
+- Existing 12 Modelling lesson IDs, 8 Build X IDs and 6 Fix Clinic IDs are unchanged.
+
 ## v3.37.4 — Tyre Workflow Correction — 29 Aug 2026
 - Rebuilt Simple Game Tyre around a cleaner production workflow: low-density Torus body → shape cross-section → one tread master → Array straight strip → Bend 360° → fit/clean.
 - Replaced the four earlier tyre visuals with six single close-up Max-style viewport stages.

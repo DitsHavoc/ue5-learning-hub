@@ -10,6 +10,7 @@ const SNIPPETS = window.UE5_SNIPPET_DATA;
 const DESIGN = window.UE5_DESIGN_DATA;
 const NEWS = window.UE5_NEWS_DATA;
 const MODEL = window.UE5_MODELING_DATA;
+const MODEL_FOUNDATIONS = window.UE5_MODELING_FOUNDATIONS;
 const SCULPT = window.UE5_SCULPT_DATA;
 const BACKEND = window.UE5_BACKEND;
 
@@ -25,7 +26,7 @@ DESIGN.tutorials.forEach(t=>{if(!knownTutorials.has(t.id))TOOLS.tutorials.push(t
 DESIGN.modules.forEach(m=>m.tutorials.forEach(id=>{const t=TOOLS.tutorials.find(x=>x.id===id);if(t&&!t.designModule)t.designModule=m.id}));
 
 
-if (!DATA || !BLOCKS || !PROJECT || !TOOLS || !SNIPPETS || !DESIGN || !NEWS || !MODEL || !SCULPT || !BACKEND) {
+if (!DATA || !BLOCKS || !PROJECT || !TOOLS || !SNIPPETS || !DESIGN || !NEWS || !MODEL || !MODEL_FOUNDATIONS || !SCULPT || !BACKEND) {
   const e = document.querySelector('#bootError');
   if (e) e.hidden = false;
   return;
@@ -178,7 +179,7 @@ function syncProjectRichEditors(root=document){
 }
 
 function loadState(){
-  const clean={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],designSourceCompleted:[],modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[],blockCompleted:[]};
+  const clean={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],designSourceCompleted:[],modelTheoryCompleted:[],modelTheoryScores:{},modelFoundationFinal:false,modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[],blockCompleted:[]};
   try{
     const current=JSON.parse(localStorage.getItem(STORE)||'null');
     if(current) return {...clean,...current};
@@ -299,7 +300,7 @@ function mechanic(id){return PROJECT.mechanics[id]}
 function completedLessons(){return DATA.lessons.filter(l=>state.completed.includes(l.id))}
 function totalXp(){
   if(BACKEND.user&&!isTeacher()&&BACKEND.xpSummary&&Number.isFinite(Number(BACKEND.xpSummary.all_time_xp)))return Number(BACKEND.xpSummary.all_time_xp);
-  return (state.blockCompleted||[]).length*25+(state.tutorialCompleted||[]).length*25+completedLessons().reduce((n,l)=>n+l.xp,0)+TOOLS.chapterBuilds.filter(b=>state.chapterBuildCompleted.includes(b.path)).reduce((n,b)=>n+(b.xp||0),0)+(state.designBuildCompleted||[]).length*300+(state.designSourceCompleted||[]).length*20+(state.modelLessonCompleted||[]).length*100+(state.modelBuildCompleted||[]).length*250+(state.modelFixCompleted||[]).length*75+(state.sculptCompleted||[]).reduce((n,id)=>n+(SCULPT.practices.find(x=>x.id===id)?.xp||0),0)
+  return (state.blockCompleted||[]).length*25+(state.tutorialCompleted||[]).length*25+completedLessons().reduce((n,l)=>n+l.xp,0)+TOOLS.chapterBuilds.filter(b=>state.chapterBuildCompleted.includes(b.path)).reduce((n,b)=>n+(b.xp||0),0)+(state.designBuildCompleted||[]).length*300+(state.designSourceCompleted||[]).length*20+(state.modelTheoryCompleted||[]).length*(MODEL_FOUNDATIONS.chapterXp||20)+(state.modelFoundationFinal?(MODEL_FOUNDATIONS.finalXp||100):0)+(state.modelLessonCompleted||[]).length*100+(state.modelBuildCompleted||[]).length*250+(state.modelFixCompleted||[]).length*75+(state.sculptCompleted||[]).reduce((n,id)=>n+(SCULPT.practices.find(x=>x.id===id)?.xp||0),0)
 }
 function level(){
   const xp=totalXp(),n=Math.floor(xp/500)+1,into=xp%500;
@@ -457,6 +458,8 @@ async function syncCloudProgress(){
     state.chapterBuildCompleted=[...new Set([...(state.chapterBuildCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('chapter:')).map(id=>id.slice(8))])];
     state.designBuildCompleted=[...new Set([...(state.designBuildCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('designbuild:')).map(id=>id.slice(12))])];
     state.designSourceCompleted=[...new Set([...(state.designSourceCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('designsource:')).map(id=>id.slice(13))])];
+    state.modelTheoryCompleted=[...new Set([...(state.modelTheoryCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('modeltheory:')).map(id=>id.slice(12))])];
+    state.modelFoundationFinal=state.modelFoundationFinal||cloudCompleted.includes('modelfoundation:final');
     state.modelLessonCompleted=[...new Set([...(state.modelLessonCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('model:')).map(id=>id.slice(6))])];
     state.modelBuildCompleted=[...new Set([...(state.modelBuildCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('modelbuild:')).map(id=>id.slice(11))])];
     state.modelFixCompleted=[...new Set([...(state.modelFixCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('modelfix:')).map(id=>id.slice(9))])];
@@ -1076,6 +1079,64 @@ function modelProgress(){
 }
 function nextModelLesson(){return MODEL.lessons.find(x=>!modelLessonDone(x.id))||MODEL.lessons[MODEL.lessons.length-1]}
 function modelRequirements(ids){return (ids||[]).map(id=>modelLesson(id)).filter(Boolean)}
+
+function modelTheoryChapter(id){return MODEL_FOUNDATIONS.chapters.find(x=>x.id===id)}
+function modelTheoryDone(id){return (state.modelTheoryCompleted||[]).includes(id)}
+function modelTheoryScore(id){return state.modelTheoryScores?.[id]||null}
+function modelFoundationChaptersDone(){return MODEL_FOUNDATIONS.chapters.filter(x=>modelTheoryDone(x.id)).length}
+function modelFoundationDone(){return !!state.modelFoundationFinal}
+function modelTheoryUnlocked(id){
+  const ch=modelTheoryChapter(id);if(!ch)return false;if(isTeacher()||ch.order===1)return true;
+  const prev=MODEL_FOUNDATIONS.chapters.find(x=>x.order===ch.order-1);return !!prev&&modelTheoryDone(prev.id);
+}
+function modelFoundationProgress(){
+  const done=modelFoundationChaptersDone(),total=MODEL_FOUNDATIONS.chapters.length;
+  return {done,total,pct:total?Math.round(done/total*100):0,final:modelFoundationDone()};
+}
+function modelTheoryVisual(ch){
+  if(ch.visualType==='axes')return `<div class="foundation-axis-visual" aria-label="World and local coordinate system concept"><div class="axis-scene"><div class="axis-origin"><i class="axis-x">X</i><i class="axis-y">Y</i><i class="axis-z">Z</i></div><div class="axis-object"><span>OBJECT</span><div class="axis-local"><i class="axis-x">X</i><i class="axis-y">Y</i><i class="axis-z">Z</i></div></div></div><div class="foundation-axis-caption"><span><b>WORLD</b> stays with the scene.</span><span><b>LOCAL</b> follows the object and its pivot.</span></div></div>`;
+  if(ch.visual)return `<figure class="foundation-theory-visual"><img src="${esc(ch.visual)}" alt="${esc(ch.title)} visual reference" loading="lazy"><figcaption>${esc(ch.visualCaption||'')}</figcaption></figure>`;
+  return '';
+}
+function modelTheoryChapterCard(ch){
+  const done=modelTheoryDone(ch.id),unlocked=modelTheoryUnlocked(ch.id),score=modelTheoryScore(ch.id);
+  return `<a class="foundation-chapter-card ${done?'done':''} ${unlocked?'':'locked'}" href="${unlocked?`#/modeling/foundations/${ch.id}`:'#/modeling/foundations'}" ${unlocked?'':'aria-disabled="true"'}><div class="foundation-card-number">${done?'✓':String(ch.order).padStart(2,'0')}</div><div class="foundation-card-copy"><span>${esc(ch.kicker)}</span><h3>${ch.icon} ${esc(ch.title)}</h3><p>${esc(ch.intro)}</p><small>${esc(ch.duration)} • ${MODEL_FOUNDATIONS.chapterXp} XP • quiz ${MODEL_FOUNDATIONS.passPercent}% to pass${score?` • best ${score.bestPct||score.pct}%`:''}</small></div><b>${done?'Revisit →':unlocked?'Start →':'LOCKED'}</b></a>`;
+}
+function modelFoundationsLaunch(){
+  const p=modelFoundationProgress(),next=MODEL_FOUNDATIONS.chapters.find(x=>!modelTheoryDone(x.id)),target=modelFoundationDone()?MODEL_FOUNDATIONS.chapters[0]:next||null;
+  return `<section class="model-foundations-launch ${modelFoundationDone()?'complete':''}"><div class="foundation-launch-copy"><span class="deep-label">MODULE 0 • REQUIRED BEFORE BUILD X</span><h2>Understand the mesh before Max becomes a button hunt.</h2><p>Six short theory chapters turn the old slide deck into decisions you actually make while modelling: <b>read topology, choose views, spend geometry, place pivots, unwrap cleanly and make the asset game-ready.</b></p><div class="foundation-launch-progress"><div><strong>${p.done}/${p.total}</strong><span>chapters passed</span></div><div><strong>${modelFoundationDone()?'✓':'○'}</strong><span>Model Doctor</span></div><div><strong>${MODEL_FOUNDATIONS.chapterXp*p.total+MODEL_FOUNDATIONS.finalXp}</strong><span>total XP available</span></div></div><div class="progress"><span style="width:${modelFoundationDone()?100:p.pct}%"></span></div><div class="foundation-launch-actions"><a class="button primary" href="${target?`#/modeling/foundations/${target.id}`:'#/modeling/foundations'}">${modelFoundationDone()?'↻ Revisit foundations':'▶ Start / continue Module 0'}</a><a class="button ghost" href="#/modeling/foundations">See all 6 chapters →</a></div></div><div class="foundation-launch-map">${MODEL_FOUNDATIONS.chapters.map(ch=>`<div class="foundation-map-node ${modelTheoryDone(ch.id)?'done':modelTheoryUnlocked(ch.id)?'ready':'locked'}"><span>${modelTheoryDone(ch.id)?'✓':ch.icon}</span><small>${String(ch.order).padStart(2,'0')}</small><b>${esc(ch.title)}</b></div>`).join('')}</div></section>`;
+}
+function modelTheoryQuestionForm(questions,action,chapterId=''){
+  return `<form class="foundation-quiz-form" data-action-form="${action}" ${chapterId?`data-chapter="${esc(chapterId)}"`:''}>${questions.map((q,qi)=>`<fieldset class="foundation-question"><legend><span>${String(qi+1).padStart(2,'0')}</span>${esc(q.q)}</legend><div class="foundation-options">${q.options.map((o,oi)=>`<label><input type="radio" name="q${qi}" value="${oi}" required><span>${esc(o)}</span></label>`).join('')}</div></fieldset>`).join('')}<button class="button primary foundation-quiz-submit" type="submit">Check my answers →</button></form>`;
+}
+function modelTheoryReview(questions,attempt){
+  if(!attempt)return '';
+  return `<div class="foundation-review">${questions.map((q,i)=>{const picked=Number(attempt.answers?.[i]),ok=picked===q.correct;return `<article class="${ok?'correct':'wrong'}"><span>${ok?'✓':'×'}</span><div><h4>${esc(q.q)}</h4><p><b>Your answer:</b> ${esc(q.options[picked]??'No answer')}</p>${ok?'':`<p><b>Correct answer:</b> ${esc(q.options[q.correct])}</p>`}<small>${esc(q.feedback)}</small></div></article>`}).join('')}</div>`;
+}
+function modelTheoryQuizPanel(ch){
+  const attempt=modelTheoryScore(ch.id),passed=modelTheoryDone(ch.id);
+  if(!attempt)return `<section class="foundation-quiz-panel"><div class="foundation-quiz-head"><span class="deep-label">END OF CHAPTER • QUICK CHECK</span><h2>Prove you can make the call.</h2><p>${ch.quiz.length} questions. You need <b>${MODEL_FOUNDATIONS.passPercent}%</b> to pass this chapter and earn +${MODEL_FOUNDATIONS.chapterXp} XP.</p></div>${modelTheoryQuestionForm(ch.quiz,'model-theory-quiz',ch.id)}</section>`;
+  return `<section class="foundation-quiz-panel result ${passed?'passed':'retry'}"><div class="foundation-score"><strong>${attempt.pct}%</strong><span>${attempt.correct}/${attempt.total} correct</span></div><div class="foundation-quiz-head"><span class="deep-label">${passed?'✓ CHAPTER PASSED':'RETRY THE GAP'}</span><h2>${passed?'Good. Move on when you are ready.':'Not quite yet — use the review, then have another go.'}</h2><p>${passed?`Best score ${attempt.bestPct||attempt.pct}%. Chapter XP is awarded once.`:`You need ${MODEL_FOUNDATIONS.passPercent}% to unlock the next chapter.`}</p></div>${modelTheoryReview(ch.quiz,attempt)}<details class="foundation-retake"><summary>${passed?'Retake for practice':'Retake quiz'}</summary>${modelTheoryQuestionForm(ch.quiz,'model-theory-quiz',ch.id)}</details></section>`;
+}
+function modelingFoundationsPage(){
+  const p=modelFoundationProgress(),allDone=p.done===p.total;
+  return `<div class="breadcrumb"><a href="#/">Home</a> / <a href="#/modeling">3D Modelling Studio</a> / Module 0</div><section class="foundation-module-hero"><div><span class="eyebrow">MODULE 0 • 3D THEORY THAT CHANGES WHAT YOU BUILD</span><h1>⬡ ${esc(MODEL_FOUNDATIONS.title)}</h1><p>${esc(MODEL_FOUNDATIONS.short)}</p><div class="foundation-module-stats"><span><b>${p.done}/${p.total}</b> chapter quizzes</span><span><b>${MODEL_FOUNDATIONS.passPercent}%</b> pass mark</span><span><b>+${MODEL_FOUNDATIONS.chapterXp}</b> XP each</span><span><b>+${MODEL_FOUNDATIONS.finalXp}</b> final</span></div></div><div class="foundation-module-seal ${modelFoundationDone()?'done':''}"><span>${modelFoundationDone()?'✓':'0'}</span><b>${modelFoundationDone()?'FOUNDATIONS COMPLETE':'BUILD X GATE'}</b><small>${modelFoundationDone()?'You have passed Model Doctor.':'Pass all chapters + Model Doctor.'}</small></div></section><section class="foundation-origin-note"><span>FROM YOUR COLLEGE THEORY DECK → REBUILT</span><p>${esc(MODEL_FOUNDATIONS.sourceNote)}</p></section><section class="foundation-chapter-list">${MODEL_FOUNDATIONS.chapters.map(modelTheoryChapterCard).join('')}</section><section class="foundation-final-card ${allDone?'ready':'locked'} ${modelFoundationDone()?'done':''}"><div><span class="deep-label">FINAL CHECK • MODEL DOCTOR</span><h2>${modelFoundationDone()?'✓ Model Doctor passed':'Can you diagnose a game asset, not just define the words?'}</h2><p>${allDone?'12 mixed decisions from the whole module. Score at least 80% to complete Foundations and unlock Build X completion.':'Pass all six chapter quizzes first. The final check mixes topology, views, geometry budgets, pivots, UVs, materials, collision and engine-readiness.'}</p></div>${allDone?`<a class="button ${modelFoundationDone()?'success':'primary'}" href="#/modeling/foundations/final">${modelFoundationDone()?'Revisit Model Doctor':'Start Model Doctor • +'+MODEL_FOUNDATIONS.finalXp+' XP'} →</a>`:'<span class="foundation-lock-badge">🔒 '+p.done+'/'+p.total+' chapters</span>'}</section>`;
+}
+function modelingFoundationChapterPage(id){
+  const ch=modelTheoryChapter(id);if(!ch)return notFound();
+  if(!modelTheoryUnlocked(id)){
+    const prev=MODEL_FOUNDATIONS.chapters.find(x=>x.order===ch.order-1);
+    return `<div class="breadcrumb"><a href="#/modeling">3D Modelling Studio</a> / <a href="#/modeling/foundations">Module 0</a> / ${esc(ch.title)}</div><section class="foundation-locked-page"><span>🔒</span><h1>${esc(ch.title)}</h1><p>Pass <b>${esc(prev?.title||'the previous chapter')}</b> first. The sequence is deliberate: each chapter assumes the decisions from the one before it.</p><a class="button primary" href="#/modeling/foundations/${prev?.id||''}">Go to previous chapter →</a></section>`;
+  }
+  const next=MODEL_FOUNDATIONS.chapters.find(x=>x.order===ch.order+1),done=modelTheoryDone(ch.id);
+  return `<div class="breadcrumb"><a href="#/">Home</a> / <a href="#/modeling">3D Modelling Studio</a> / <a href="#/modeling/foundations">Module 0</a> / ${esc(ch.title)}</div><section class="foundation-chapter-hero"><div><span class="eyebrow">CHAPTER ${String(ch.order).padStart(2,'0')} OF ${MODEL_FOUNDATIONS.chapters.length} • ${esc(ch.duration)} • +${MODEL_FOUNDATIONS.chapterXp} XP</span><h1>${ch.icon} ${esc(ch.title)}</h1><p>${esc(ch.intro)}</p></div><div class="foundation-chapter-status ${done?'done':''}"><span>${done?'✓':'?'}</span><b>${done?'PASSED':'QUIZ REQUIRED'}</b><small>${done?`Best ${modelTheoryScore(ch.id)?.bestPct||modelTheoryScore(ch.id)?.pct||0}%`:`${MODEL_FOUNDATIONS.passPercent}% unlocks the next chapter`}</small></div></section><section class="foundation-big-idea"><span>THE DECISION THAT MATTERS</span><h2>${esc(ch.bigIdea)}</h2></section><div class="foundation-theory-layout"><div class="foundation-theory-copy">${ch.sections.map((sec,i)=>`<article><span>${String(i+1).padStart(2,'0')}</span><div><h2>${esc(sec.title)}</h2><p>${esc(sec.body)}</p>${sec.points?.length?`<ul>${sec.points.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}</div></article>`).join('')}</div>${modelTheoryVisual(ch)}</div>${modelTheoryQuizPanel(ch)}<section class="foundation-chapter-nav"><a class="button ghost" href="#/modeling/foundations">← Module map</a>${done&&next?`<a class="button primary" href="#/modeling/foundations/${next.id}">Next: ${esc(next.title)} →</a>`:done&&!next?`<a class="button primary" href="#/modeling/foundations/final">Model Doctor →</a>`:'<span>Pass the quiz to unlock the next chapter.</span>'}</section>`;
+}
+function modelingFoundationFinalPage(){
+  const allDone=modelFoundationChaptersDone()===MODEL_FOUNDATIONS.chapters.length;
+  if(!allDone&&!isTeacher())return `<div class="breadcrumb"><a href="#/modeling/foundations">Module 0</a> / Model Doctor</div><section class="foundation-locked-page"><span>🔒</span><h1>Model Doctor is locked.</h1><p>Pass all six chapter quizzes first.</p><a class="button primary" href="#/modeling/foundations">Back to Module 0 →</a></section>`;
+  const attempt=modelTheoryScore('final'),passed=modelFoundationDone();
+  return `<div class="breadcrumb"><a href="#/">Home</a> / <a href="#/modeling">3D Modelling Studio</a> / <a href="#/modeling/foundations">Module 0</a> / Model Doctor</div><section class="foundation-final-hero"><span class="eyebrow">FINAL CHECK • ${MODEL_FOUNDATIONS.finalQuiz.length} MIXED DECISIONS • +${MODEL_FOUNDATIONS.finalXp} XP</span><h1>🩺 Model Doctor</h1><p>No definitions-for-the-sake-of-definitions. Diagnose modelling decisions across topology, views, pivots, UVs, materials, collision and game-readiness.</p></section>${attempt?`<section class="foundation-quiz-panel result ${passed?'passed':'retry'}"><div class="foundation-score"><strong>${attempt.pct}%</strong><span>${attempt.correct}/${attempt.total} correct</span></div><div class="foundation-quiz-head"><span class="deep-label">${passed?'✓ FOUNDATIONS COMPLETE':'ONE MORE PASS'}</span><h2>${passed?'Build X completion is unlocked.':'Review the misses and retake Model Doctor.'}</h2><p>${passed?`+${MODEL_FOUNDATIONS.finalXp} XP awarded once. The theory now becomes something you prove in the builds.`:`You need ${MODEL_FOUNDATIONS.passPercent}% to pass.`}</p></div>${modelTheoryReview(MODEL_FOUNDATIONS.finalQuiz,attempt)}<details class="foundation-retake"><summary>${passed?'Retake for practice':'Retake Model Doctor'}</summary>${modelTheoryQuestionForm(MODEL_FOUNDATIONS.finalQuiz,'model-theory-final')}</details></section>`:`<section class="foundation-quiz-panel"><div class="foundation-quiz-head"><span class="deep-label">MAKE THE CALL</span><h2>12 questions. 10 correct passes.</h2><p>This is the final gate before Build X completion.</p></div>${modelTheoryQuestionForm(MODEL_FOUNDATIONS.finalQuiz,'model-theory-final')}</section>`}<section class="foundation-chapter-nav"><a class="button ghost" href="#/modeling/foundations">← Module map</a>${passed?'<a class="button primary" href="#/modeling">⬡ Return to 3D Modelling Studio →</a>':'<span>Use the review. The point is to fix the decision, not memorise a letter.</span>'}</section>`;
+}
 function modelDiagram(src,caption='Concept diagram'){
   if(!src)return '';
   return `<div class="model-diagram"><div class="model-diagram-label">CONCEPT MAP • NOT 3DS MAX UI</div>${zoomableImage({src,alt:caption,caption,kind:'local',eager:false})}</div>`;
@@ -1136,8 +1197,8 @@ function modelLessonCard(l){
   return `<a class="model-lesson-card ${done?'done':''}" href="#/modeling/lesson/${l.id}"><div class="model-lesson-number">${String(l.order).padStart(2,'0')}</div><div><span class="eyebrow">${done?'✓ COMPLETE • ':''}${esc(l.duration)} • +100 XP</span><h3>${l.icon} ${esc(l.title)}</h3><p>${esc(l.intro)}</p><div class="model-skill-row"><span class="new-skill">NEW: ${esc(l.newSkill)}</span>${l.priorSkills.slice(0,3).map(x=>`<span>${esc(x)}</span>`).join('')}</div></div><span class="designer-open">${done?'Revisit':'Start'} →</span></a>`;
 }
 function modelBuildCard(b){
-  const done=modelBuildDone(b.id),req=modelRequirements(b.requires),ready=req.every(x=>modelLessonDone(x.id)),ref=b.references?.[0];
-  return `<a class="model-build-card visual ${done?'done':''}" href="#/modeling/build/${b.id}">${ref?`<div class="model-build-thumb"><img class="remote-reference-image" src="${esc(ref.src)}" alt="${esc(b.title)} reference" loading="lazy"><span>REAL REFERENCE</span></div>`:`<div class="model-build-icon">${b.icon}</div>`}<div class="model-build-copy"><span class="eyebrow">${esc(b.difficulty)} • ${esc(b.time)} • ${esc(b.support||'Guided checkpoints')}${ready?' • READY':' • SCAFFOLD FIRST'}</span><h3>${esc(b.title)}</h3><p>${esc(b.brief?.context||b.summary)}</p><div class="tutorial-tag-row">${b.teaches.slice(0,5).map(x=>`<span>${esc(x)}</span>`).join('')}</div><strong>${done?'✓ Revisit build':'Open brief →'}</strong></div></a>`;
+  const done=modelBuildDone(b.id),req=modelRequirements(b.requires),skillsReady=req.every(x=>modelLessonDone(x.id)),foundationReady=modelFoundationDone()||done,ready=skillsReady&&foundationReady,ref=b.references?.[0];
+  return `<a class="model-build-card visual ${done?'done':''} ${foundationReady?'':'foundation-locked'}" href="#/modeling/build/${b.id}">${ref?`<div class="model-build-thumb"><img class="remote-reference-image" src="${esc(ref.src)}" alt="${esc(b.title)} reference" loading="lazy"><span>REAL REFERENCE</span></div>`:`<div class="model-build-icon">${b.icon}</div>`}<div class="model-build-copy"><span class="eyebrow">${esc(b.difficulty)} • ${esc(b.time)} • ${esc(b.support||'Guided checkpoints')}${done?' • COMPLETE':!foundationReady?' • MODULE 0 REQUIRED':ready?' • READY':' • SCAFFOLD FIRST'}</span><h3>${esc(b.title)}</h3><p>${esc(b.brief?.context||b.summary)}</p><div class="tutorial-tag-row">${b.teaches.slice(0,5).map(x=>`<span>${esc(x)}</span>`).join('')}</div><strong>${done?'✓ Revisit build':!foundationReady?'Preview brief • 🔒 completion locked': 'Open brief →'}</strong></div></a>`;
 }
 function modelFixCard(f){
   const done=modelFixDone(f.id);
@@ -1153,9 +1214,9 @@ function modelToolBoundaries(l){
   return `<section class="model-tool-boundaries"><div><span class="deep-label">TOOLS YOU MAY USE TODAY</span><div class="model-tool-chips allowed">${today.map(x=>`<span>✓ ${esc(x)}</span>`).join('')}</div></div><div><span class="deep-label">LEAVE THESE ALONE FOR NOW</span><div class="model-tool-chips locked">${later.map(x=>`<span>⛔ ${esc(x)}</span>`).join('')}</div></div></section>`;
 }
 function modelingPage(){
-  const p=modelProgress(),n=nextModelLesson(),heroRefs=MODEL.builds.slice(0,3).map(b=>b.references?.[0]).filter(Boolean);
+  const p=modelProgress(),n=nextModelLesson();
   return `<div class="page-head model-page-head revamped"><div class="breadcrumb"><a href="#/">Home</a> / 3D Modelling Studio</div><span class="eyebrow">REFERENCE • 3DS MAX • GAME ASSETS • SUBSTANCE • UE5</span><h1>⬡ 3D Modelling Studio</h1><p class="muted">Stop making random boxes with details stuck on them. Learn to <b>look at an object, plan it, block the important forms, model cleanly, judge the mesh and prove it works in game.</b></p><div class="designer-stats"><div><strong>${MODEL.lessons.length}</strong><span>step-by-step lessons</span></div><div><strong>${MODEL.builds.length}</strong><span>production briefs</span></div><div><strong>${MODEL.fixes.length}</strong><span>bad-model clinics</span></div><div><strong>${p.done}/${p.total}</strong><span>lessons complete</span></div></div></div>
-  <section class="model-rebuild-manifesto"><div class="model-rebuild-copy"><span class="deep-label">THE MODELLER MINDSET</span><h2>The mesh starts before you open Max.</h2><p>Professional-looking work comes from <b>reference, proportion, construction logic, deliberate topology and constant checking</b>. The software is only where those decisions become geometry.</p><div class="model-principle-chips">${(MODEL.studioPrinciples||[]).map(x=>`<span>${esc(x)}</span>`).join('')}</div></div>${heroRefs.length?`<div class="model-hero-reference-stack">${heroRefs.map((r,i)=>zoomableImage({src:r.src,alt:`3D modelling reference object ${i+1}`,caption:r.caption||`Reference ${i+1}`,sourceUrl:r.sourceUrl||'',sourceTitle:r.sourceTitle||'Reference source',kind:'reference',eager:i===0})).join('')}</div>`:''}</section>
+  ${modelFoundationsLaunch()}
   ${modelStudioLoop()}
   <section class="model-continue revamped"><div><span class="eyebrow">PICK UP WHERE YOU LEFT OFF • ${p.pct}% COMPLETE</span><h2>${n.icon} ${esc(n.title)}</h2><p>${esc(n.aim)}</p><div class="progress"><span style="width:${p.pct}%"></span></div></div><a class="button primary" href="#/modeling/lesson/${n.id}">▶ Continue modelling</a></section>
   <section class="section model-build-section first"><div class="section-head"><div><span class="eyebrow">MAKE SOMETHING REAL</span><h2>Eight briefs. Guidance fades as you improve.</h2><p>Every build now starts with real reference and planning questions, then walks through production checkpoints. The final Hero Prop stops telling you what to make.</p></div></div><div class="model-build-grid revamped">${MODEL.builds.map(modelBuildCard).join('')}</div></section>
@@ -1184,8 +1245,8 @@ function modelingLessonPage(id){
   <section class="model-lesson-footer"><div>${prev?`<a class="button ghost" href="#/modeling/lesson/${prev.id}">← ${esc(prev.title)}</a>`:''}</div><button class="button ${done?'success':'primary'}" data-action="complete-model-lesson" data-model-lesson="${l.id}">${done?'✓ Complete':'Mark complete • +100 XP'}</button><div>${next?`<a class="button ghost" href="#/modeling/lesson/${next.id}">${esc(next.title)} →</a>`:`<a class="button ghost" href="#/modeling">Back to Studio →</a>`}</div></section></article>`;
 }
 function modelingBuildPage(id){
-  const b=modelBuild(id);if(!b)return notFound();const done=modelBuildDone(id),req=modelRequirements(b.requires),ready=req.every(x=>modelLessonDone(x.id)),hero=b.references?.[0];
-  return `<div class="breadcrumb"><a href="#/">Home</a> / <a href="#/modeling">3D Modelling Studio</a> / Build X / ${esc(b.title)}</div><section class="model-build-hero revamped"><div><span class="eyebrow">PRODUCTION BRIEF • ${esc(b.difficulty)} • ${esc(b.time)} • ${esc(b.support||'Guided checkpoints')}</span><h1>${b.icon} ${esc(b.title)}</h1><p>${esc(b.brief?.context||b.summary)}</p><div class="tutorial-tag-row large">${b.teaches.map(x=>`<span>${esc(x)}</span>`).join('')}</div></div>${hero?`<div class="model-build-hero-image"><img class="remote-reference-image" src="${esc(hero.src)}" alt="${esc(b.title)} real reference"><span>START FROM REFERENCE — NOT MEMORY</span></div>`:''}<div class="model-complete-box"><strong>${ready?'Prerequisites covered':'Scaffold first'}</strong><p>${ready?'You know the risky tools. Now make the decisions.':'You can read the brief now, but the linked lessons teach the techniques properly first.'}</p><button class="button ${done?'success':'primary'}" data-action="complete-model-build" data-model-build="${b.id}">${done?'✓ Build complete':'Mark Build X complete • +250 XP'}</button></div></section>
+  const b=modelBuild(id);if(!b)return notFound();const done=modelBuildDone(id),req=modelRequirements(b.requires),skillsReady=req.every(x=>modelLessonDone(x.id)),foundationReady=modelFoundationDone()||done,ready=skillsReady&&foundationReady,hero=b.references?.[0];
+  return `<div class="breadcrumb"><a href="#/">Home</a> / <a href="#/modeling">3D Modelling Studio</a> / Build X / ${esc(b.title)}</div><section class="model-build-hero revamped"><div><span class="eyebrow">PRODUCTION BRIEF • ${esc(b.difficulty)} • ${esc(b.time)} • ${esc(b.support||'Guided checkpoints')}</span><h1>${b.icon} ${esc(b.title)}</h1><p>${esc(b.brief?.context||b.summary)}</p><div class="tutorial-tag-row large">${b.teaches.map(x=>`<span>${esc(x)}</span>`).join('')}</div></div>${hero?`<div class="model-build-hero-image"><img class="remote-reference-image" src="${esc(hero.src)}" alt="${esc(b.title)} real reference"><span>START FROM REFERENCE — NOT MEMORY</span></div>`:''}<div class="model-complete-box"><strong>${done?'✓ Build complete':!foundationReady?'🔒 Module 0 required':ready?'Prerequisites covered':'Scaffold first'}</strong><p>${done?'Revisit the brief whenever a later asset exposes a gap.':!foundationReady?'You can preview and practise this build, but completion stays locked until Game-Ready 3D Foundations + Model Doctor are passed.':ready?'You know the risky tools. Now make the decisions.':'You can read the brief now, but the linked lessons teach the techniques properly first.'}</p>${!foundationReady&&!done?`<a class="button ghost" href="#/modeling/foundations">Complete Module 0 →</a>`:`<button class="button ${done?'success':'primary'}" data-action="complete-model-build" data-model-build="${b.id}">${done?'✓ Build complete':'Mark Build X complete • +250 XP'}</button>`}</div></section>
   ${modelBuildReferenceBoard(b)}
   ${modelTopologyGuide(b)}
   ${modelBuildBrief(b)}
@@ -1197,7 +1258,7 @@ function modelingBuildPage(id){
   ${modelQualityGates(b)}
   ${modelIndustryStudyCard(b.proStudy)}
   ${modelCritiqueBridge(b.critique||'What is the single change that would improve this asset most?','Before you call it finished')}
-  <section class="model-finish-bar revamped"><p><b>Final rule:</b> fix failed geometry in the source. Do not hide problems under materials, Substance grunge or Unreal transforms.</p><button class="button ${done?'success':'primary'}" data-action="complete-model-build" data-model-build="${b.id}">${done?'✓ Build complete':'Mark complete • +250 XP'}</button></section>`;
+  <section class="model-finish-bar revamped"><p><b>Final rule:</b> fix failed geometry in the source. Do not hide problems under materials, Substance grunge or Unreal transforms.</p>${done?`<button class="button success" data-action="complete-model-build" data-model-build="${b.id}">✓ Build complete</button>`:foundationReady?`<button class="button primary" data-action="complete-model-build" data-model-build="${b.id}">Mark complete • +250 XP</button>`:`<a class="button ghost" href="#/modeling/foundations">🔒 Pass Module 0 first →</a>`}</section>`;
 }
 function modelingFixPage(id){
   const f=modelFix(id);if(!f)return notFound();const done=modelFixDone(id);
@@ -1226,7 +1287,7 @@ function dashboard(){
   <section class="portal-path-grid" aria-label="Choose a Learning Hub area">
     <a class="portal-path-card programming" href="#/programming"><div class="portal-path-icon">⌘</div><span class="portal-kicker">BUILDING BLOCKS • SYSTEMS • BLUEPRINTS</span><h2>Unreal Learning</h2><p>Learn Unreal terms in tiny Building Blocks, understand the deeper systems, then apply them in practical tutorials and projects.</p><div class="portal-chip-row"><span>${BLOCKS.blocks.filter(b=>b.tier==='core').length} core blocks</span><span>${DATA.lessons.length} system lessons</span><span>${(TOOLS.families||[]).length} recipe families</span></div><strong>Enter Unreal Learning →</strong></a>
     <a class="portal-path-card design" href="#/design"><div class="portal-path-icon">✦</div><span class="portal-kicker">LEVELS • ART • LIGHT • SOUND</span><h2>Design</h2><p>Build readable spaces, create atmosphere, guide players and learn why strong game worlds communicate rather than simply decorate.</p><div class="portal-chip-row"><span>${DESIGN.modules.length} disciplines</span><span>24 different games</span><span>Black Box challenges</span></div><strong>Enter Designer Studio →</strong></a>
-    <a class="portal-path-card modeling" href="#/modeling"><div class="portal-path-icon">⬡</div><span class="portal-kicker">3DS MAX • TOPOLOGY • UVS</span><h2>3D Modelling</h2><p>Start from reference, plan the form, follow clear 3ds Max steps, inspect the mesh and finish with a game-ready asset you can explain.</p><div class="portal-chip-row"><span>${MODEL.lessons.length} deep lessons</span><span>${MODEL.builds.length} Build X</span><span>${MODEL.fixes.length} repair clinics</span></div><strong>Open 3D Modelling Studio →</strong></a>
+    <a class="portal-path-card modeling" href="#/modeling"><div class="portal-path-icon">⬡</div><span class="portal-kicker">3DS MAX • TOPOLOGY • UVS</span><h2>3D Modelling</h2><p>Start from reference, plan the form, follow clear 3ds Max steps, inspect the mesh and finish with a game-ready asset you can explain.</p><div class="portal-chip-row"><span>${MODEL_FOUNDATIONS.chapters.length} foundations chapters</span><span>${MODEL.lessons.length} deep lessons</span><span>${MODEL.builds.length} Build X</span></div><strong>Open 3D Modelling Studio →</strong></a>
     <a class="portal-path-card sculpt" href="#/sculpt"><div class="portal-path-icon">🗿</div><span class="portal-kicker">DIGITAL CLAY • FORM • SILHOUETTE</span><h2>Sculpt Playground</h2><p>Push and pull digital clay in SculptGL with six tiny guided exercises, then inspect what exists underneath the surface.</p><div class="portal-chip-row"><span>${SCULPT.practices.length} exercises</span><span>Browser sculpting</span><span>OBJ → Max</span></div><strong>Play with clay →</strong></a>
     <a class="portal-path-card projects" href="#/projects"><div class="portal-path-icon">▣</div><span class="portal-kicker">MAKE • DOCUMENT • ITERATE</span><h2>Projects</h2><p>Take what you know into assignments, game jams and team projects with development logs, milestones, screenshots and feedback.</p><div class="portal-chip-row"><span>Solo</span><span>Group</span><span>Development logs</span></div><strong>Open Projects →</strong></a>
     <a class="portal-path-card news" href="#/news"><div class="portal-path-icon">◉</div><span class="portal-kicker">LIVE • INDUSTRY • WATCH & LISTEN</span><h2>News & Industry</h2><p>Follow games and development stories, trailers, podcasts and industry discussion. Save what matters and come back later.</p><div class="portal-chip-row"><span>Live feeds</span><span>Read later</span><span>Discussion</span></div><strong>See what is happening →</strong></a>
@@ -1875,7 +1936,7 @@ function progressPage(){
   <div class="stat-grid">
     <div class="stat"><small>Lessons</small><strong>${completedLessons().length}/${DATA.lessons.length}</strong></div>
     <div class="stat"><small>Practical builds</small><strong>${completedTutorialCount()}/${TOOLS.tutorials.length}</strong></div>
-    <div class="stat"><small>3D Modelling</small><strong>${(state.modelLessonCompleted||[]).length}/${MODEL.lessons.length}</strong></div>
+    <div class="stat"><small>3D Foundations</small><strong>${modelFoundationChaptersDone()}/${MODEL_FOUNDATIONS.chapters.length}${modelFoundationDone()?' ✓':''}</strong></div><div class="stat"><small>3D Modelling</small><strong>${(state.modelLessonCompleted||[]).length}/${MODEL.lessons.length}</strong></div>
     <div class="stat"><small>Sculpt Playground</small><strong>${(state.sculptCompleted||[]).length}/${SCULPT.practices.length}</strong></div>
     <div class="stat"><small>Chapter Builds</small><strong>${state.chapterBuildCompleted.length}/${TOOLS.chapterBuilds.length}</strong></div>
     <div class="stat"><small>Practice mechanics</small><strong>${pp.complete}/${pp.total}</strong></div>
@@ -2114,14 +2175,14 @@ function classProgressRows(o,memberIds,items,prefix='',titleKey=x=>x.title){
 function studentCompletedContent(o,userId){
   const completed=new Set(o.progress.filter(p=>p.user_id===userId&&p.completed).map(p=>p.lesson_id));
   const list=(items,prefix='')=>items.filter(x=>completed.has(prefix+x.id)).map(x=>`<li>${esc(x.title)}</li>`).join('');
-  const core=list(DATA.lessons),blocks=list(BLOCKS.blocks,'block:'),tutorials=list(TOOLS.tutorials,'tutorial:'),model=list(MODEL.lessons,'model:'),sculpt=list(SCULPT.practices,'sculpt:'),design=list(DESIGN.modules.map(m=>({id:m.id,title:m.build?.title||m.title})),'designbuild:'),designSources=list(designSourceItems(),'designsource:'),modelBuild=list(MODEL.builds||[],'modelbuild:'),modelFix=list(MODEL.fixes||[],'modelfix:'),chapters=TOOLS.chapterBuilds.filter(x=>completed.has(`chapter:${x.path}`)).map(x=>`<li>${esc(x.title)}</li>`).join('');
+  const core=list(DATA.lessons),blocks=list(BLOCKS.blocks,'block:'),tutorials=list(TOOLS.tutorials,'tutorial:'),modelTheory=list(MODEL_FOUNDATIONS.chapters,'modeltheory:')+(completed.has('modelfoundation:final')?'<li>Model Doctor</li>':''),model=list(MODEL.lessons,'model:'),sculpt=list(SCULPT.practices,'sculpt:'),design=list(DESIGN.modules.map(m=>({id:m.id,title:m.build?.title||m.title})),'designbuild:'),designSources=list(designSourceItems(),'designsource:'),modelBuild=list(MODEL.builds||[],'modelbuild:'),modelFix=list(MODEL.fixes||[],'modelfix:'),chapters=TOOLS.chapterBuilds.filter(x=>completed.has(`chapter:${x.path}`)).map(x=>`<li>${esc(x.title)}</li>`).join('');
   return `<div class="student-content-detail">
     <div><strong>Building Blocks</strong><ul>${blocks||'<li class="muted">None completed yet.</li>'}</ul></div>
     <div><strong>Core lessons</strong><ul>${core||'<li class="muted">None completed yet.</li>'}</ul></div>
     <div><strong>Practical builds</strong><ul>${tutorials||'<li class="muted">None completed yet.</li>'}</ul></div>
     <div><strong>Designer Studio</strong><ul>${design||'<li class="muted">None completed yet.</li>'}</ul></div>
     <div><strong>Designer industry sources</strong><ul>${designSources||'<li class="muted">None completed yet.</li>'}</ul></div>
-    <div><strong>3D / Sculpt</strong><ul>${model+modelBuild+modelFix+sculpt||'<li class="muted">None completed yet.</li>'}</ul></div>
+    <div><strong>3D Foundations</strong><ul>${modelTheory||'<li class="muted">None completed yet.</li>'}</ul></div><div><strong>3D / Sculpt</strong><ul>${model+modelBuild+modelFix+sculpt||'<li class="muted">None completed yet.</li>'}</ul></div>
     <div><strong>Chapter Builds</strong><ul>${chapters||'<li class="muted">None completed yet.</li>'}</ul></div>
   </div>`;
 }
@@ -2161,7 +2222,7 @@ async function renderTeacherClass(classId){
       </div>
       <section class="section"><div class="section-head"><div><h2>Students in ${esc(c.name)}</h2><p>Open a student to see the exact content they have completed, not just a percentage.</p></div><span class="sync-chip">${members.length} student${members.length===1?'':'s'}</span></div>
         <div class="class-student-grid">${members.length?members.map(p=>{
-          const core=count(p.id,DATA.lessons),blocks=count(p.id,BLOCKS.blocks,'block:'),tutorials=count(p.id,TOOLS.tutorials,'tutorial:'),model=count(p.id,MODEL.lessons,'model:')+count(p.id,SCULPT.practices,'sculpt:'),evidence=approved.filter(s=>s.user_id===p.id).length;
+          const core=count(p.id,DATA.lessons),blocks=count(p.id,BLOCKS.blocks,'block:'),tutorials=count(p.id,TOOLS.tutorials,'tutorial:'),model=count(p.id,MODEL_FOUNDATIONS.chapters,'modeltheory:')+(done(p.id,'modelfoundation:final')?1:0)+count(p.id,MODEL.lessons,'model:')+count(p.id,SCULPT.practices,'sculpt:'),evidence=approved.filter(s=>s.user_id===p.id).length;
           return `<article class="class-student-card"><div class="class-student-head">${avatarMarkup('sm',p.display_name)}<div><h3>${esc(p.display_name)}</h3><span>${core}/${DATA.lessons.length} core lessons</span></div></div><div class="class-student-stats"><span><b>${blocks}</b> blocks</span><span><b>${tutorials}</b> tutorials</span><span><b>${model}</b> 3D/sculpt</span><span><b>${evidence}</b> evidence</span></div><details><summary>View completed content</summary>${studentCompletedContent(o,p.id)}</details></article>`;
         }).join(''):'<div class="empty"><h3>No students yet.</h3><p>Students will appear here after joining this class.</p></div>'}</div>
       </section>
@@ -2175,6 +2236,7 @@ async function renderTeacherClass(classId){
         <details class="class-content-group"><summary>🛠 Practical builds <span>${TOOLS.tutorials.length} outcomes</span></summary><div>${classProgressRows(o,memberIds,TOOLS.tutorials,'tutorial:')}</div></details>
         <details class="class-content-group"><summary>🎨 Designer Studio Builds <span>${DESIGN.modules.length} builds</span></summary><div>${classProgressRows(o,memberIds,DESIGN.modules.map(m=>({id:m.id,title:m.build?.title||m.title})),'designbuild:')}</div></details>
         <details class="class-content-group"><summary>🎬 Designer Industry Sources <span>${designSourceItems().length} source tasks</span></summary><div>${classProgressRows(o,memberIds,designSourceItems(),'designsource:')}</div></details>
+        <details class="class-content-group"><summary>🧠 3D Foundations <span>${MODEL_FOUNDATIONS.chapters.length} chapters + final</span></summary><div>${classProgressRows(o,memberIds,MODEL_FOUNDATIONS.chapters,'modeltheory:')}${classProgressRows(o,memberIds,[{id:'final',title:'Model Doctor'}],'modelfoundation:')}</div></details>
         <details class="class-content-group"><summary>⬡ 3D Modelling <span>${MODEL.lessons.length} lessons</span></summary><div>${classProgressRows(o,memberIds,MODEL.lessons,'model:')}</div></details>
         ${(MODEL.builds||[]).length?`<details class="class-content-group"><summary>🔧 3D Build X <span>${MODEL.builds.length} builds</span></summary><div>${classProgressRows(o,memberIds,MODEL.builds,'modelbuild:')}</div></details>`:''}
         ${(MODEL.fixes||[]).length?`<details class="class-content-group"><summary>🩹 Fix This Model <span>${MODEL.fixes.length} clinics</span></summary><div>${classProgressRows(o,memberIds,MODEL.fixes,'modelfix:')}</div></details>`:''}
@@ -2341,7 +2403,7 @@ async function renderTeacher(){
     const lessonIds=new Set(DATA.lessons.map(l=>l.id));
     const byStudent=id=>o.progress.filter(x=>x.user_id===id&&lessonIds.has(x.lesson_id)&&x.completed).length;
     const tutorialBy=id=>o.progress.filter(x=>x.user_id===id&&String(x.lesson_id).startsWith('tutorial:')&&x.completed).length;
-    const modelingBy=id=>o.progress.filter(x=>x.user_id===id&&(String(x.lesson_id).startsWith('model:')||String(x.lesson_id).startsWith('sculpt:'))&&x.completed).length;
+    const modelingBy=id=>o.progress.filter(x=>x.user_id===id&&(String(x.lesson_id).startsWith('model:')||String(x.lesson_id).startsWith('modeltheory:')||String(x.lesson_id).startsWith('modelfoundation:')||String(x.lesson_id).startsWith('sculpt:'))&&x.completed).length;
     const chapterBy=id=>o.progress.filter(x=>x.user_id===id&&String(x.lesson_id).startsWith('chapter:')&&x.completed).length;
     const projBy=id=>o.projects.filter(x=>x.user_id===id&&x.status==='complete').length;
     const commentsBy=id=>o.comments.filter(x=>x.student_id===id).length;
@@ -2362,7 +2424,7 @@ async function renderTeacher(){
       <div class="teacher-stat"><small>Evidence approved</small><strong>${approved}</strong></div>
       <div class="teacher-stat"><small>Lesson completions</small><strong>${o.progress.filter(x=>lessonIds.has(x.lesson_id)&&x.completed).length}</strong></div>
       <div class="teacher-stat"><small>Practical builds tried</small><strong>${o.progress.filter(x=>String(x.lesson_id).startsWith('tutorial:')&&x.completed).length}</strong></div>
-      <div class="teacher-stat"><small>3D Modelling lessons</small><strong>${o.progress.filter(x=>(String(x.lesson_id).startsWith('model:')||String(x.lesson_id).startsWith('sculpt:'))&&x.completed).length}</strong></div>
+      <div class="teacher-stat"><small>3D / Foundations</small><strong>${o.progress.filter(x=>(String(x.lesson_id).startsWith('model:')||String(x.lesson_id).startsWith('modeltheory:')||String(x.lesson_id).startsWith('modelfoundation:')||String(x.lesson_id).startsWith('sculpt:'))&&x.completed).length}</strong></div>
       <div class="teacher-stat"><small>Chapter Builds complete</small><strong>${o.progress.filter(x=>String(x.lesson_id).startsWith('chapter:')&&x.completed).length}</strong></div>
       <div class="teacher-stat"><small>Practice mechanics complete</small><strong>${o.projects.filter(x=>x.status==='complete').length}</strong></div>
       <div class="teacher-stat"><small>Comments / questions</small><strong>${o.comments.length}</strong></div>
@@ -2456,7 +2518,7 @@ async function renderTeacher(){
     <section class="section">
       <div class="section-head"><div><h2>Student overview</h2><p>Completion is useful, but approved evidence is the stronger signal.</p></div></div>
       <table class="teacher-table"><thead><tr><th>Student</th><th>Lessons</th><th>Tutorials</th><th>3D Max</th><th>Chapter Builds</th><th>Practice</th><th>Approved evidence</th><th>Comments</th></tr></thead><tbody>
-      ${o.profiles.map(p=>`<tr><td>${esc(p.display_name)}</td><td>${byStudent(p.id)}/${DATA.lessons.length}</td><td>${tutorialBy(p.id)}/${TOOLS.tutorials.length}</td><td>${modelingBy(p.id)}/${MODEL.lessons.length+SCULPT.practices.length}</td><td>${chapterBy(p.id)}/${TOOLS.chapterBuilds.length}</td><td>${projBy(p.id)}/${Object.keys(PROJECT.mechanics).length}</td><td>${approvedBy(p.id)}/${DATA.lessons.length}</td><td>${commentsBy(p.id)}</td></tr>`).join('')}
+      ${o.profiles.map(p=>`<tr><td>${esc(p.display_name)}</td><td>${byStudent(p.id)}/${DATA.lessons.length}</td><td>${tutorialBy(p.id)}/${TOOLS.tutorials.length}</td><td>${modelingBy(p.id)}/${MODEL_FOUNDATIONS.chapters.length+1+MODEL.lessons.length+SCULPT.practices.length}</td><td>${chapterBy(p.id)}/${TOOLS.chapterBuilds.length}</td><td>${projBy(p.id)}/${Object.keys(PROJECT.mechanics).length}</td><td>${approvedBy(p.id)}/${DATA.lessons.length}</td><td>${commentsBy(p.id)}</td></tr>`).join('')}
       </tbody></table>
     </section>
 
@@ -2517,6 +2579,9 @@ function route(options={}){
   else if(parts[0]==='challenges'){app.innerHTML=challengeBoard();activate('challenges')}
   else if(parts[0]==='homework'){app.innerHTML=homeworkBoard();activate('homework')}
   else if(parts[0]==='sculpt'){app.innerHTML=sculptPage(parts[1]);activate('sculpt')}
+  else if(parts[0]==='modeling'&&parts[1]==='foundations'&&parts[2]==='final'){app.innerHTML=modelingFoundationFinalPage();activate('modeling')}
+  else if(parts[0]==='modeling'&&parts[1]==='foundations'&&parts[2]){app.innerHTML=modelingFoundationChapterPage(parts[2]);activate('modeling')}
+  else if(parts[0]==='modeling'&&parts[1]==='foundations'){app.innerHTML=modelingFoundationsPage();activate('modeling')}
   else if(parts[0]==='modeling'&&parts[1]==='lesson'&&parts[2]){app.innerHTML=modelingLessonPage(parts[2]);activate('modeling')}
   else if(parts[0]==='modeling'&&parts[1]==='build'&&parts[2]){app.innerHTML=modelingBuildPage(parts[2]);activate('modeling')}
   else if(parts[0]==='modeling'&&parts[1]==='fix'&&parts[2]){app.innerHTML=modelingFixPage(parts[2]);activate('modeling')}
@@ -2706,6 +2771,7 @@ async function setModelLessonComplete(id){
 }
 async function setModelBuildComplete(id){
   const b=modelBuild(id);if(!b)return;const was=modelBuildDone(id),before=localUnlockedBadgeIds();
+  if(!was&&!modelFoundationDone()&&!isTeacher()){toast('Pass Module 0 + Model Doctor before marking Build X complete.');return}
   state.modelBuildCompleted=was?(state.modelBuildCompleted||[]).filter(x=>x!==id):[...new Set([...(state.modelBuildCompleted||[]),id])];saveState();
   if(BACKEND.user){try{await BACKEND.setLessonComplete(`modelbuild:${id}`,!was)}catch(e){toast('Saved locally; cloud sync failed.')}}
   if(was)toast('Build X marked incomplete.');else badgeUnlockAfter(before,'◆ Build X complete • +250 XP');finishInlineUpdate(!was);
@@ -3174,6 +3240,26 @@ document.addEventListener('submit',async e=>{
     toast('That brief is over the 6,000 character limit. Shorten it before saving.');
     return;
   }
+  if(e.target.dataset.actionForm==='model-theory-quiz'){
+    e.preventDefault();const ch=modelTheoryChapter(e.target.dataset.chapter);if(!ch)return;
+    const fd=new FormData(e.target),answers=ch.quiz.map((_,i)=>{const v=fd.get(`q${i}`);return v===null?NaN:Number(v)});
+    if(answers.some(Number.isNaN)){toast('Answer every question first.');return}
+    const correct=ch.quiz.reduce((n,q,i)=>n+(answers[i]===q.correct?1:0),0),total=ch.quiz.length,pct=Math.round(correct/total*100),old=modelTheoryScore(ch.id),bestPct=Math.max(old?.bestPct||old?.pct||0,pct),passed=pct>=MODEL_FOUNDATIONS.passPercent,firstPass=passed&&!modelTheoryDone(ch.id);
+    state.modelTheoryScores={...(state.modelTheoryScores||{}),[ch.id]:{answers,correct,total,pct,bestPct,at:new Date().toISOString()}};
+    if(firstPass)state.modelTheoryCompleted=[...new Set([...(state.modelTheoryCompleted||[]),ch.id])];saveState();
+    if(firstPass&&BACKEND.user){try{await BACKEND.setLessonComplete(`modeltheory:${ch.id}`,true)}catch(err){toast('Passed locally; cloud sync failed.')}}
+    toast(passed?(firstPass?`Chapter passed • +${MODEL_FOUNDATIONS.chapterXp} XP`:'Chapter passed again — XP was already awarded.'):`${pct}% — review the misses and retry.`);route({preserveScroll:true});return;
+  }
+  if(e.target.dataset.actionForm==='model-theory-final'){
+    e.preventDefault();if(modelFoundationChaptersDone()<MODEL_FOUNDATIONS.chapters.length&&!isTeacher()){toast('Pass all six chapters first.');return}
+    const qs=MODEL_FOUNDATIONS.finalQuiz,fd=new FormData(e.target),answers=qs.map((_,i)=>{const v=fd.get(`q${i}`);return v===null?NaN:Number(v)});
+    if(answers.some(Number.isNaN)){toast('Answer every question first.');return}
+    const correct=qs.reduce((n,q,i)=>n+(answers[i]===q.correct?1:0),0),total=qs.length,pct=Math.round(correct/total*100),old=modelTheoryScore('final'),bestPct=Math.max(old?.bestPct||old?.pct||0,pct),passed=pct>=MODEL_FOUNDATIONS.passPercent,firstPass=passed&&!modelFoundationDone();
+    state.modelTheoryScores={...(state.modelTheoryScores||{}),final:{answers,correct,total,pct,bestPct,at:new Date().toISOString()}};
+    if(firstPass)state.modelFoundationFinal=true;saveState();
+    if(firstPass&&BACKEND.user){try{await BACKEND.setLessonComplete('modelfoundation:final',true)}catch(err){toast('Passed locally; cloud sync failed.')}}
+    toast(passed?(firstPass?`Model Doctor passed • +${MODEL_FOUNDATIONS.finalXp} XP • Build X completion unlocked`:'Model Doctor passed again — XP was already awarded.'):`${pct}% — use the review and have another go.`);route({preserveScroll:true});return;
+  }
   if(e.target.dataset.actionForm==='critique-post'){
     e.preventDefault();const fd=new FormData(e.target),file=e.target.elements.file?.files?.[0];
     try{await BACKEND.createCritiquePost({classId:e.target.dataset.class,area:fd.get('area'),title:fd.get('title'),prompt:fd.get('prompt'),file});e.target.reset();await renderCritiqueBoard();toast('Posted to your class Critique Board.');}catch(err){toast(err.message)}return;
@@ -3545,6 +3631,10 @@ function buildGlobalSearchIndex(){
   (DESIGN.resources||[]).forEach(r=>add({
     title:r.title,meta:`Resource Library • ${r.type||'Resource'} • ${r.license||'check terms'}`,href:'#/resources',icon:r.icon||'🎁',kind:'resource',data:deepSearchText(r)
   }));
+  (MODEL_FOUNDATIONS.chapters||[]).forEach(ch=>add({
+    title:ch.title,meta:`3D Modelling Studio • Foundations Chapter ${ch.order}`,href:`#/modeling/foundations/${ch.id}`,icon:ch.icon||'⬡',kind:'model-theory',data:deepSearchText(ch)
+  }));
+  add({title:'Model Doctor',meta:'3D Modelling Studio • Foundations final check',href:'#/modeling/foundations/final',icon:'🩺',kind:'model-theory',data:deepSearchText(MODEL_FOUNDATIONS.finalQuiz||[])});
   (MODEL.lessons||[]).forEach(l=>add({
     title:l.title,meta:`3D Modelling Studio • Lesson ${l.order||''}`,href:`#/modeling/lesson/${l.id}`,icon:'⬡',kind:'model-lesson',data:deepSearchText(l)
   }));
@@ -3628,7 +3718,7 @@ function setupSearch(){
 $('#menuButton').addEventListener('click',()=>$('#sidebar').classList.toggle('open'));
 $('#resetProgress').addEventListener('click',()=>{
   if(confirm('Reset all locally saved lesson progress, XP and game-project status on this browser?')){
-    state={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],designSourceCompleted:[],modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[],blockCompleted:[]};
+    state={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],designSourceCompleted:[],modelTheoryCompleted:[],modelTheoryScores:{},modelFoundationFinal:false,modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[],blockCompleted:[]};
     projectState={project_title:'Signal Lost',theme:PROJECT.themes[0],pitch:'',mechanics:{}};
     saveState();saveProjectState();route();toast('Local progress reset.');
   }
