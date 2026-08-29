@@ -1,5 +1,35 @@
 # Changelog
 
+## v3.34.12 — Deep Official Source Mining — 29 Aug 2026
+- Continued the strict official Epic UE5.8 source-mining pass before requesting bespoke classroom screenshots.
+- Added exact official visuals for placed Instance Editable Blueprint values, Blueprint Interface implementation, collision sizing/object comparison, Animation Blueprint Speed/Is Falling, Launch Character and Data Assets.
+- Removed additional teacher captures where existing current Epic visuals already teach the repeated operation and the Hub text carries the exact names/values.
+- Reduced genuine teacher screenshot groups from 90 to 80: 9 Core, 52 Programming, 5 Building Block recognition and 14 Design Studio technical captures.
+- This is 131 fewer teacher screenshots than the original 211-capture audit.
+- Added refreshed v3.34.12 capture, Design Studio plan and deep-source audit documents.
+- No database migration.
+
+## v3.34.11 — UE5 Visual Source Completion — 29 Aug 2026
+- Expanded the current Epic UE5.8 visual-source pass across Core Lessons, Programming Quick Tutorials and Design Studio.
+- Reused exact official editor visuals for standard repeatable actions instead of requiring bespoke classroom screenshots.
+- Kept custom Blueprint graphs and exact Hub-specific values/configurations on the teacher-capture list.
+- Reclassified proof/test steps as image-free where a screenshot adds no teaching value.
+- Reclassified Design Studio judgement/outcome tasks to reference/before-after/diagram visuals rather than Unreal UI captures.
+- Reduced genuine teacher screenshot groups from 211 to 90: 17 Core, 53 Programming, 6 Building Block recognition and 14 Design Studio technical captures.
+- Current data contains 316 official Epic visual placements using 138 unique Epic-hosted image URLs across 54 official source pages.
+- Added refreshed v3.34.11 classroom-capture, Design Studio visual-plan and source-audit documents.
+- No database migration.
+
+## v3.34.10 — UE5 Tutorial Visual Alignment — 29 Aug 2026
+- Added exact official Epic UE5.8 screenshots directly to numbered Core Lesson and Programming Quick Tutorial steps where the image genuinely demonstrates that action.
+- Reworked Sprint around Epic's current UE5.8 Enhanced Input example and added exact UMG anchor, Apply Damage, Spawn Actor, Destroy Actor and Play Sound at Location visuals.
+- Reused verified existing Epic visuals for overlap events, Timelines, AI navigation/perception, Data Tables, spawning, camera shake, fog and other matching workflows.
+- Added official Material Instance, Landscape and fog/editor images to matching Design Studio practical steps.
+- Removed 80 misleading repeated book-reference images from Design Studio numbered steps and added 5 exact official step visuals; licensed book figures remain in genuine reference/inspiration contexts.
+- Added an online-source audit plus refreshed Core/Programming/Building Block and Design Studio classroom-capture lists.
+- Current data contains 142 step-level official Epic visual placements using 81 unique Epic-hosted image URLs across 34 documentation pages.
+- Left proof/test/reflection steps image-free when a screenshot would not improve instruction.
+- No database migration.
 ## v3.34.9 — Class XP Leaderboards — 28 Aug 2026
 - Added class-only weekly and all-time XP leaderboards with Top 10, personal position, level and streak.
 - Added teacher per-class pause/enable control.

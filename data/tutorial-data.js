@@ -1,6 +1,6 @@
 window.UE5_TUTORIAL_DATA = {
-  "version": "3.34.0",
-  "buildDate": "28 Aug 2026",
+  "version": "3.34.12",
+  "buildDate": "29 Aug 2026",
   "categories": [
     {
       "id": "movement",
@@ -216,7 +216,13 @@ window.UE5_TUTORIAL_DATA = {
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
         },
-        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/6100dc17-058b-4aa8-a778-993789529d6c/image_4.png",
+          "caption": "Official UE5.8 Enhanced Input event wired to Print String — the same test pattern used here.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/enhanced-input-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null
       ]
     },
@@ -414,30 +420,65 @@ window.UE5_TUTORIAL_DATA = {
       "featured": false,
       "referenceImages": [
         {
-          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/bb3fb38c-3a7e-4d0b-b920-b31b88d11f5a/image_0.png",
-          "caption": "Official UE5.8 Content Browser route for creating Enhanced Input assets.",
-          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/enhanced-input-in-unreal-engine",
+          "src": "https://dev.epicgames.com/community/api/documentation/image/9cb4211d-8939-4820-8ac0-3f29b165c236?resizing_type=fit",
+          "caption": "Official UE5.8 Designer tutorial: IA_Sprint created in the Input/Actions folder.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/designer-09-sprint-input-action-in-unreal-engine?lang=en-US",
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
         },
         {
-          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/f2c62175-7fbb-4d83-81b3-4b09d51d24bd/image_1.png",
-          "caption": "Official UE5.8 Input Action Details showing the Digital (Bool) Value Type used by IA_Sprint.",
-          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/enhanced-input-in-unreal-engine",
+          "src": "https://dev.epicgames.com/community/api/documentation/image/12c6ce4e-c59f-444e-aceb-4abd63974088?resizing_type=fit",
+          "caption": "Official UE5.8 IA_Sprint Details showing the Digital (Bool) Value Type.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/designer-09-sprint-input-action-in-unreal-engine?lang=en-US",
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
         },
         {
-          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/6c38fff1-2df0-4100-9a7d-bc6f3b06427a/image_6.png",
-          "caption": "Official UE5.8 Input Mapping Context editor. The Sprint recipe uses the same mapping workflow and a PIE-safe Caps Lock binding.",
-          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/enhanced-input-in-unreal-engine",
+          "src": "https://dev.epicgames.com/community/api/documentation/image/6ad33824-36b7-4399-9226-0e253c1da24c?resizing_type=fit",
+          "caption": "Official UE5.8 IA_Sprint Input Action Editor with the Down trigger configured.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/designer-09-sprint-input-action-in-unreal-engine?lang=en-US",
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
         },
         {
-          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/df0f9c97-7aad-416b-b9db-8a34d6cfd10d/behavior-tree-function-complete.png",
-          "caption": "Official UE5.8 Blueprint example of a Character-owned function driving Set Max Walk Speed through Character Movement.",
-          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/behavior-tree-in-unreal-engine---quick-start-guide?lang=en-US",
+          "src": "https://dev.epicgames.com/community/api/documentation/image/6018129f-da31-4bdb-bb1b-648ce74d85a9?resizing_type=fit",
+          "caption": "Official UE5.8 IMC_Default mapping IA_Sprint to Caps Lock — exactly the classroom mapping used in this recipe.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/designer-09-sprint-input-action-in-unreal-engine?lang=en-US",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://dev.epicgames.com/community/api/documentation/image/3ed5cfae-fbba-4242-9c3e-0425822b6f1b?resizing_type=fit",
+          "caption": "Official UE5.8 sprint variables setup, including SprintMovementSpeed = 1000.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/designer-09-sprint-input-action-in-unreal-engine?lang=en-US",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://dev.epicgames.com/community/api/documentation/image/a61fd7b1-acf5-42a3-959a-d3289f00a0c9?resizing_type=fit",
+          "caption": "Official UE5.8 BeginPlay graph capturing Character Movement Max Walk Speed into DefaultMovementSpeed.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/designer-09-sprint-input-action-in-unreal-engine?lang=en-US",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://dev.epicgames.com/community/api/documentation/image/abc65efd-631f-40f7-bbea-1ca96c464af7?resizing_type=fit",
+          "caption": "Official UE5.8 IA_Sprint Enhanced Input Action event with Triggered and Completed outputs.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/designer-09-sprint-input-action-in-unreal-engine?lang=en-US",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://dev.epicgames.com/community/api/documentation/image/003945dd-8c7a-456c-96a3-0d4cc475bc11?resizing_type=fit",
+          "caption": "Official UE5.8 Triggered path setting Max Walk Speed from SprintMovementSpeed.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/designer-09-sprint-input-action-in-unreal-engine?lang=en-US",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://dev.epicgames.com/community/api/documentation/image/ad8d72a7-7401-4c23-a4f5-ebd4305532a7?resizing_type=fit",
+          "caption": "Official UE5.8 completed sprint graph: Triggered applies sprint speed and Completed restores DefaultMovementSpeed.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/designer-09-sprint-input-action-in-unreal-engine?lang=en-US",
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
         }
@@ -469,31 +510,71 @@ window.UE5_TUTORIAL_DATA = {
       "recipeVisuals": [
         [
           {
-            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/bb3fb38c-3a7e-4d0b-b920-b31b88d11f5a/image_0.png",
-            "caption": "Create an Input Action from the official UE5.8 Input asset menu.",
-            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/enhanced-input-in-unreal-engine",
+            "src": "https://dev.epicgames.com/community/api/documentation/image/9cb4211d-8939-4820-8ac0-3f29b165c236?resizing_type=fit",
+            "caption": "Official UE5.8 Designer tutorial: IA_Sprint created in the Input/Actions folder.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/designer-09-sprint-input-action-in-unreal-engine?lang=en-US",
             "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
             "kind": "epic"
           },
           {
-            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/f2c62175-7fbb-4d83-81b3-4b09d51d24bd/image_1.png",
-            "caption": "Input Action Details: keep IA_Sprint as Digital (Bool).",
-            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/enhanced-input-in-unreal-engine",
+            "src": "https://dev.epicgames.com/community/api/documentation/image/12c6ce4e-c59f-444e-aceb-4abd63974088?resizing_type=fit",
+            "caption": "Official UE5.8 IA_Sprint Details showing the Digital (Bool) Value Type.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/designer-09-sprint-input-action-in-unreal-engine?lang=en-US",
             "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
             "kind": "epic"
           }
         ],
-        null,
-        null,
-        null,
-        null,
         {
-          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/df0f9c97-7aad-416b-b9db-8a34d6cfd10d/behavior-tree-function-complete.png",
-          "caption": "Official UE5.8 example showing Set Max Walk Speed correctly targeted through Character Movement. Your sprint graph uses this same node twice: SprintMovementSpeed on Triggered and DefaultMovementSpeed on Completed.",
-          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/behavior-tree-in-unreal-engine---quick-start-guide?lang=en-US",
+          "src": "https://dev.epicgames.com/community/api/documentation/image/6ad33824-36b7-4399-9226-0e253c1da24c?resizing_type=fit",
+          "caption": "Official UE5.8 IA_Sprint Input Action Editor with the Down trigger configured.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/designer-09-sprint-input-action-in-unreal-engine?lang=en-US",
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
         },
+        {
+          "src": "https://dev.epicgames.com/community/api/documentation/image/6018129f-da31-4bdb-bb1b-648ce74d85a9?resizing_type=fit",
+          "caption": "Official UE5.8 IMC_Default mapping IA_Sprint to Caps Lock — exactly the classroom mapping used in this recipe.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/designer-09-sprint-input-action-in-unreal-engine?lang=en-US",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://dev.epicgames.com/community/api/documentation/image/3ed5cfae-fbba-4242-9c3e-0425822b6f1b?resizing_type=fit",
+          "caption": "Official UE5.8 sprint variables setup, including SprintMovementSpeed = 1000.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/designer-09-sprint-input-action-in-unreal-engine?lang=en-US",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://dev.epicgames.com/community/api/documentation/image/a61fd7b1-acf5-42a3-959a-d3289f00a0c9?resizing_type=fit",
+          "caption": "Official UE5.8 BeginPlay graph capturing Character Movement Max Walk Speed into DefaultMovementSpeed.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/designer-09-sprint-input-action-in-unreal-engine?lang=en-US",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        [
+          {
+            "src": "https://dev.epicgames.com/community/api/documentation/image/abc65efd-631f-40f7-bbea-1ca96c464af7?resizing_type=fit",
+            "caption": "Official UE5.8 IA_Sprint Enhanced Input Action event with Triggered and Completed outputs.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/designer-09-sprint-input-action-in-unreal-engine?lang=en-US",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://dev.epicgames.com/community/api/documentation/image/003945dd-8c7a-456c-96a3-0d4cc475bc11?resizing_type=fit",
+            "caption": "Official UE5.8 Triggered path setting Max Walk Speed from SprintMovementSpeed.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/designer-09-sprint-input-action-in-unreal-engine?lang=en-US",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://dev.epicgames.com/community/api/documentation/image/ad8d72a7-7401-4c23-a4f5-ebd4305532a7?resizing_type=fit",
+            "caption": "Official UE5.8 completed sprint graph: Triggered applies sprint speed and Completed restores DefaultMovementSpeed.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/designer-09-sprint-input-action-in-unreal-engine?lang=en-US",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
+        ],
         null
       ]
     },
@@ -593,10 +674,28 @@ window.UE5_TUTORIAL_DATA = {
         "timers-delay-tick"
       ],
       "recipeVisuals": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/bb3fb38c-3a7e-4d0b-b920-b31b88d11f5a/image_0.png",
+          "caption": "Official UE5.8 Enhanced Input asset creation workflow. Create the Input Action named in the Hub step.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/enhanced-input-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/f6187c7e-2858-4553-b5bc-9b746d5bef0e/image_3.png",
+          "caption": "Official UE5.8 Enhanced Input Action event in Blueprint. Choose the trigger pin named in the Hub step.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/enhanced-input-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null,
-        null,
-        null,
-        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/c29a9a3f-0559-4618-818e-e2886d3ba992/mod-smart-link-blueprint-launch-character-1.png",
+          "caption": "Official UE5.8 Launch Character node/pin reference. For this Hub dash, connect the scaled forward vector to Launch Velocity, enable XY Override and leave Z Override OFF; Epic’s pictured example uses different settings.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/overview-of-how-to-modify-the-navigation-mesh-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null,
         null
       ]
@@ -709,7 +808,13 @@ window.UE5_TUTORIAL_DATA = {
         "actors-components"
       ],
       "recipeVisuals": [
-        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/bb3fb38c-3a7e-4d0b-b920-b31b88d11f5a/image_0.png",
+          "caption": "Official UE5.8 Enhanced Input asset creation workflow. Create the Input Action named in the Hub step.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/enhanced-input-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null,
         null,
         null,
@@ -828,7 +933,13 @@ window.UE5_TUTORIAL_DATA = {
         "traces-hit-results"
       ],
       "recipeVisuals": [
-        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/bb3fb38c-3a7e-4d0b-b920-b31b88d11f5a/image_0.png",
+          "caption": "Official UE5.8 Enhanced Input asset creation workflow. Create the Input Action named in the Hub step.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/enhanced-input-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null,
         {
           "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/f64e0a22-515e-41bb-af3a-c93361c5631f/guide-how-to-2b-6.png",
@@ -956,8 +1067,29 @@ window.UE5_TUTORIAL_DATA = {
         "spawn-destroy"
       ],
       "recipeVisuals": [
-        null,
-        null,
+        [
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/846ba685-3440-4abb-b515-7fc74402a95a/contentbrowserdropdown.png",
+            "caption": "Official UE5.8 Content Browser route to Blueprint Class. Use the asset name from the Hub step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/b4cc035a-4fad-4b19-90d2-39d538604814/new_asset_parent_class.png",
+            "caption": "Official UE5.8 Blueprint parent-class chooser. Search/select the class named in the Hub step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
+        ],
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/e984b7d9-6b40-4d9c-bf0c-f4ac40c0fc4b/myblueprint_variable.png",
+          "caption": "Official UE5.8 My Blueprint variable control. Create the variable, then use the Hub name, type and default value.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         {
           "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/3c8fbaad-8f3c-4849-829b-0ece960f436f/beginoverlap.png",
           "caption": "Official UE5.8 Event Actor Begin Overlap node. Other Actor identifies what entered the pickup.",
@@ -1067,8 +1199,29 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "recipeVisuals": [
         null,
-        null,
-        null,
+        [
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/846ba685-3440-4abb-b515-7fc74402a95a/contentbrowserdropdown.png",
+            "caption": "Official UE5.8 Content Browser route to Blueprint Class. Use the asset name from the Hub step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/b4cc035a-4fad-4b19-90d2-39d538604814/new_asset_parent_class.png",
+            "caption": "Official UE5.8 Blueprint parent-class chooser. Search/select the class named in the Hub step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
+        ],
+        {
+          "src": "https://dev.epicgames.com/community/api/documentation/image/cd144c2d-621f-48e8-87c4-0fe02d8bb0bf?resizing_type=fit",
+          "caption": "Official UE5.8 completed key-gated door Event Graph. The Hub uses a simpler HasKey Boolean but the decision pattern is the same.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/designer-03-open-doors-with-keys-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null,
         null,
         null
@@ -1198,9 +1351,46 @@ window.UE5_TUTORIAL_DATA = {
         "events-execution"
       ],
       "recipeVisuals": [
+        [
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/846ba685-3440-4abb-b515-7fc74402a95a/contentbrowserdropdown.png",
+            "caption": "Official UE5.8 Content Browser route to Blueprint Class. Use the asset name from the Hub step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/b4cc035a-4fad-4b19-90d2-39d538604814/new_asset_parent_class.png",
+            "caption": "Official UE5.8 Blueprint parent-class chooser. Search/select the class named in the Hub step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/67a54191-1b18-4e82-abb2-4f8ff258ee55/add_new_component_list.png",
+            "caption": "Official UE5.8 Add Component menu. Search for the component named in the Hub instruction.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/components-window-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
+        ],
         null,
-        null,
-        null,
+        [
+          {
+            "src": "https://dev.epicgames.com/community/api/documentation/image/6e44536d-af86-4aae-a863-afec370143db?resizing_type=fit",
+            "caption": "Official UE5.8 Timeline Editor. Create and edit time-based tracks and keys here.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/editing-timelines-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://dev.epicgames.com/community/api/documentation/image/02c05d7d-44db-4251-9485-16e852833735?resizing_type=fit",
+            "caption": "Official UE5.8 Timeline Float Track. The Hub commonly uses a 0→1 Alpha track to drive a Lerp.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/editing-timelines-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
+        ],
         null,
         [
           {
@@ -1341,8 +1531,38 @@ window.UE5_TUTORIAL_DATA = {
         "timelines-lerp"
       ],
       "recipeVisuals": [
-        null,
-        null,
+        [
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/846ba685-3440-4abb-b515-7fc74402a95a/contentbrowserdropdown.png",
+            "caption": "Official UE5.8 Content Browser route to Blueprint Class. Use the asset name from the Hub step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/b4cc035a-4fad-4b19-90d2-39d538604814/new_asset_parent_class.png",
+            "caption": "Official UE5.8 Blueprint parent-class chooser. Search/select the class named in the Hub step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
+        ],
+        [
+          {
+            "src": "https://dev.epicgames.com/community/api/documentation/image/6e44536d-af86-4aae-a863-afec370143db?resizing_type=fit",
+            "caption": "Official UE5.8 Timeline Editor. Create and edit time-based tracks and keys here.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/editing-timelines-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://dev.epicgames.com/community/api/documentation/image/02c05d7d-44db-4251-9485-16e852833735?resizing_type=fit",
+            "caption": "Official UE5.8 Timeline Float Track. The Hub commonly uses a 0→1 Alpha track to drive a Lerp.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/editing-timelines-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
+        ],
         null,
         {
           "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/28be1dab-7592-4213-bff6-fdd63f67b5c9/flipflop_example.png",
@@ -1480,15 +1700,45 @@ window.UE5_TUTORIAL_DATA = {
         "spawn-destroy"
       ],
       "recipeVisuals": [
-        null,
-        null,
         {
-          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/d6592c8e-b5d3-42cc-a025-96ee00c2a12c/beginoverlapex.png",
-          "caption": "Official UE5.8 Begin Overlap example increments an Integer Counter when the expected Actor overlaps — the same pattern used by this collectable step.",
-          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/events-in-unreal-engine?lang=en-US",
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/e984b7d9-6b40-4d9c-bf0c-f4ac40c0fc4b/myblueprint_variable.png",
+          "caption": "Official UE5.8 My Blueprint variable control. Create the variable, then use the Hub name, type and default value.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
         },
+        [
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/846ba685-3440-4abb-b515-7fc74402a95a/contentbrowserdropdown.png",
+            "caption": "Official UE5.8 Content Browser route to Blueprint Class. Use the asset name from the Hub step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/b4cc035a-4fad-4b19-90d2-39d538604814/new_asset_parent_class.png",
+            "caption": "Official UE5.8 Blueprint parent-class chooser. Search/select the class named in the Hub step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
+        ],
+        [
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/3c8fbaad-8f3c-4849-829b-0ece960f436f/beginoverlap.png",
+            "caption": "Official UE5.8 Event Actor Begin Overlap node.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/events-in-unreal-engine?lang=en-US",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/d6592c8e-b5d3-42cc-a025-96ee00c2a12c/beginoverlapex.png",
+            "caption": "Official UE5.8 overlap example incrementing an Integer Counter.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/events-in-unreal-engine?lang=en-US",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
+        ],
         null,
         null,
         null
@@ -1605,8 +1855,20 @@ window.UE5_TUTORIAL_DATA = {
       "recipeVisuals": [
         null,
         null,
-        null,
-        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/bb3fb38c-3a7e-4d0b-b920-b31b88d11f5a/image_0.png",
+          "caption": "Official UE5.8 Enhanced Input asset creation workflow. Create the Input Action named in the Hub step.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/enhanced-input-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/bb3fb38c-3a7e-4d0b-b920-b31b88d11f5a/image_0.png",
+          "caption": "Official UE5.8 Enhanced Input asset creation workflow. Create the Input Action named in the Hub step.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/enhanced-input-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null,
         null
       ]
@@ -1700,6 +1962,13 @@ window.UE5_TUTORIAL_DATA = {
           "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/using-a-single-line-trace-raycast-by-channel-in-unreal-engine",
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
+        },
+        {
+          "src": "https://dev.epicgames.com/community/api/documentation/image/63b18bcf-298e-48fe-854d-f0d0172f7860?resizing_type=fit",
+          "caption": "Official UE5.8 Apply Damage setup showing the Damaged Actor and Base Damage inputs. Your graph can feed these from an overlap or trace hit instead.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-07-traps-and-damage-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
         }
       ],
       "source": null,
@@ -1727,7 +1996,13 @@ window.UE5_TUTORIAL_DATA = {
         "damage-system"
       ],
       "recipeVisuals": [
-        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/bb3fb38c-3a7e-4d0b-b920-b31b88d11f5a/image_0.png",
+          "caption": "Official UE5.8 Enhanced Input asset creation workflow. Create the Input Action named in the Hub step.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/enhanced-input-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null,
         {
           "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/f64e0a22-515e-41bb-af3a-c93361c5631f/guide-how-to-2b-6.png",
@@ -1737,7 +2012,13 @@ window.UE5_TUTORIAL_DATA = {
           "kind": "epic"
         },
         null,
-        null,
+        {
+          "src": "https://dev.epicgames.com/community/api/documentation/image/63b18bcf-298e-48fe-854d-f0d0172f7860?resizing_type=fit",
+          "caption": "Official UE5.8 Apply Damage setup showing the Damaged Actor and Base Damage inputs. Your graph can feed these from an overlap or trace hit instead.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-07-traps-and-damage-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         {
           "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/bd67ce85-1155-4bfd-9da7-6a7f4c9126d8/guide-how-to-2b-11.png",
           "caption": "The trace running in Play with debug drawing enabled. Debug visualization is one of the fastest ways to diagnose a broken trace.",
@@ -1833,7 +2114,29 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "icon": "●",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/d9dd4665-e3c4-4cd1-93d5-1ea50efee444/spawn1.png",
+          "caption": "Official UE5.8 Spawn Actor example showing the class/transform flow and the Return Value for the exact spawned Actor instance.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-communications-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://dev.epicgames.com/community/api/documentation/image/63b18bcf-298e-48fe-854d-f0d0172f7860?resizing_type=fit",
+          "caption": "Official UE5.8 Designer course: Apply Damage wired with the damaged Actor and Base Damage pins.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-07-traps-and-damage-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/de30d652-526a-4654-b6b7-120bba87abfa/event9.png",
+          "caption": "Official UE5.8 Blueprint communication example showing a stored spawned-Actor reference flowing into Destroy Actor.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-communications-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        }
+      ],
       "source": null,
       "prescriptive": true,
       "starterValues": [
@@ -1858,10 +2161,53 @@ window.UE5_TUTORIAL_DATA = {
         "damage-system"
       ],
       "recipeVisuals": [
+        [
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/846ba685-3440-4abb-b515-7fc74402a95a/contentbrowserdropdown.png",
+            "caption": "Official UE5.8 Content Browser route to Blueprint Class. Use the asset name from the Hub step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/b4cc035a-4fad-4b19-90d2-39d538604814/new_asset_parent_class.png",
+            "caption": "Official UE5.8 Blueprint parent-class chooser. Search/select the class named in the Hub step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/67a54191-1b18-4e82-abb2-4f8ff258ee55/add_new_component_list.png",
+            "caption": "Official UE5.8 Add Component menu. Search for the component named in the Hub instruction.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/components-window-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
+        ],
         null,
-        null,
-        null,
-        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/d9dd4665-e3c4-4cd1-93d5-1ea50efee444/spawn1.png",
+          "caption": "Official UE5.8 Spawn Actor example showing the class/transform flow and the Return Value for the exact spawned Actor instance.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-communications-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        [
+          {
+            "src": "https://dev.epicgames.com/community/api/documentation/image/63b18bcf-298e-48fe-854d-f0d0172f7860?resizing_type=fit",
+            "caption": "Official UE5.8 Designer course: Apply Damage wired with the damaged Actor and Base Damage pins.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-07-traps-and-damage-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/de30d652-526a-4654-b6b7-120bba87abfa/event9.png",
+            "caption": "Official UE5.8 Blueprint communication example showing a stored spawned-Actor reference flowing into Destroy Actor.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-communications-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
+        ],
         null,
         null
       ]
@@ -1978,7 +2324,13 @@ window.UE5_TUTORIAL_DATA = {
         "branches-switches"
       ],
       "recipeVisuals": [
-        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/e984b7d9-6b40-4d9c-bf0c-f4ac40c0fc4b/myblueprint_variable.png",
+          "caption": "Official UE5.8 My Blueprint variable control. Create the variable, then use the Hub name, type and default value.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         {
           "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/c656a0f5-2fad-4106-a67e-673a5dc8019d/anydamage.png",
           "caption": "Official UE5.8 Event AnyDamage node. The Damage Float is the incoming value used by the Hub health calculation.",
@@ -1988,7 +2340,13 @@ window.UE5_TUTORIAL_DATA = {
         },
         null,
         null,
-        null,
+        {
+          "src": "https://dev.epicgames.com/community/api/documentation/image/0210b9ae-f9a7-4b42-b3e1-6bbe231964d8?resizing_type=fit",
+          "caption": "Official UE5.8 Blueprint Apply Damage node wired in Epic’s current Traps and Damage course.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-07-traps-and-damage-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null
       ]
     },
@@ -2098,7 +2456,13 @@ window.UE5_TUTORIAL_DATA = {
         "events-execution"
       ],
       "recipeVisuals": [
-        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/e984b7d9-6b40-4d9c-bf0c-f4ac40c0fc4b/myblueprint_variable.png",
+          "caption": "Official UE5.8 My Blueprint variable control. Create the variable, then use the Hub name, type and default value.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         {
           "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/c656a0f5-2fad-4106-a67e-673a5dc8019d/anydamage.png",
           "caption": "Official UE5.8 Event AnyDamage node. Use its Damage Float as the amount to subtract from enemy Health.",
@@ -2218,8 +2582,29 @@ window.UE5_TUTORIAL_DATA = {
         "spawn-destroy"
       ],
       "recipeVisuals": [
-        null,
-        null,
+        [
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/846ba685-3440-4abb-b515-7fc74402a95a/contentbrowserdropdown.png",
+            "caption": "Official UE5.8 Content Browser route to Blueprint Class. Use the asset name from the Hub step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/b4cc035a-4fad-4b19-90d2-39d538604814/new_asset_parent_class.png",
+            "caption": "Official UE5.8 Blueprint parent-class chooser. Search/select the class named in the Hub step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
+        ],
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/e984b7d9-6b40-4d9c-bf0c-f4ac40c0fc4b/myblueprint_variable.png",
+          "caption": "Official UE5.8 My Blueprint variable control. Create the variable, then use the Hub name, type and default value.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         {
           "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/3c8fbaad-8f3c-4849-829b-0ece960f436f/beginoverlap.png",
           "caption": "Official UE5.8 Event Actor Begin Overlap node. Use Other Actor to identify the player before applying the heal.",
@@ -2375,10 +2760,34 @@ window.UE5_TUTORIAL_DATA = {
         "enhanced-input"
       ],
       "recipeVisuals": [
-        null,
-        null,
-        null,
-        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/e984b7d9-6b40-4d9c-bf0c-f4ac40c0fc4b/myblueprint_variable.png",
+          "caption": "Official UE5.8 My Blueprint variable control. Create the variable, then use the Hub name, type and default value.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/4e362077-5d37-4966-a9be-235adf72f872/01-43_onfirecondit.png",
+          "caption": "Official UE5.8 ammo > 0 check before firing. Use the Hub variable names and values.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-ui-designer-quick-start-guide-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/fbe5fe3c-b301-4bae-a5a5-1f8f8642cdcd/01-45_ammocountscript.png",
+          "caption": "Official UE5.8 ammo decrement pattern after a successful shot.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-ui-designer-quick-start-guide-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/46b4b10b-c3d6-402e-9926-0beecb2d8e25/01-46_reloadammo.png",
+          "caption": "Official UE5.8 UMG Quick Start reload proof: R sets Ammo from MaxAmmo. The Hub extends this idea with ReserveAmmo so ammunition is transferred rather than created.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/umg-ui-designer-quick-start-guide-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null,
         null
       ]
@@ -2492,7 +2901,13 @@ window.UE5_TUTORIAL_DATA = {
         "variables-types"
       ],
       "recipeVisuals": [
-        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/bb3fb38c-3a7e-4d0b-b920-b31b88d11f5a/image_0.png",
+          "caption": "Official UE5.8 Enhanced Input asset creation workflow. Create the Input Action named in the Hub step.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/enhanced-input-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null,
         null,
         null,
@@ -2891,8 +3306,29 @@ window.UE5_TUTORIAL_DATA = {
         "blueprint-types"
       ],
       "recipeVisuals": [
-        null,
-        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/e984b7d9-6b40-4d9c-bf0c-f4ac40c0fc4b/myblueprint_variable.png",
+          "caption": "Official UE5.8 My Blueprint variable control. Create the variable, then use the Hub name, type and default value.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        [
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/cd54af36-d3ee-4cc5-8283-f3ddd2d79f65/name_function_blueprint.png",
+            "caption": "Official UE5.8 My Blueprint workflow for creating and naming a Function. Use the function name from the Hub step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/functions-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/285c04b9-ff68-41c8-b4b3-d38c7ff3aeb3/function_details.png",
+            "caption": "Official UE5.8 Function Details. Add the inputs/outputs named in the Hub step and use the specified data types.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/functions-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
+        ],
         null,
         null,
         null,
@@ -3127,7 +3563,13 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "recipeVisuals": [
         null,
-        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/e984b7d9-6b40-4d9c-bf0c-f4ac40c0fc4b/myblueprint_variable.png",
+          "caption": "Official UE5.8 My Blueprint variable control. Create the variable, then use the Hub name, type and default value.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null,
         null,
         null,
@@ -3260,10 +3702,31 @@ window.UE5_TUTORIAL_DATA = {
         "transforms-units"
       ],
       "recipeVisuals": [
+        [
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/846ba685-3440-4abb-b515-7fc74402a95a/contentbrowserdropdown.png",
+            "caption": "Official UE5.8 Content Browser route to Blueprint Class. Use the asset name from the Hub step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/b4cc035a-4fad-4b19-90d2-39d538604814/new_asset_parent_class.png",
+            "caption": "Official UE5.8 Blueprint parent-class chooser. Search/select the class named in the Hub step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
+        ],
         null,
         null,
-        null,
-        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/d9dd4665-e3c4-4cd1-93d5-1ea50efee444/spawn1.png",
+          "caption": "Official UE5.8 Spawn Actor example. The Return Value is the exact Actor instance that was created.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-communications-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         {
           "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/d9dd4665-e3c4-4cd1-93d5-1ea50efee444/spawn1.png",
           "caption": "Official UE5.8 Blueprint example using the Spawn Actor Return Value as the reference to the exact Actor instance that was just created.",
@@ -3272,7 +3735,13 @@ window.UE5_TUTORIAL_DATA = {
           "kind": "epic"
         },
         null,
-        null
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/de30d652-526a-4654-b6b7-120bba87abfa/event9.png",
+          "caption": "Official UE5.8 Blueprint communication example using a stored spawned-Actor reference with Destroy Actor.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-communications-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        }
       ]
     },
     {
@@ -3360,6 +3829,13 @@ window.UE5_TUTORIAL_DATA = {
           "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-ui-designer-quick-start-guide-in-unreal-engine",
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/84597427-3e2c-4396-8146-f8b290a3c3b8/anchormedallion.png",
+          "caption": "Official UE5.8 UMG Canvas anchor medallion at the default top-left anchor position. Keep the HUD READY text anchored from the top-left rather than relying on viewport pixels alone.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/umg-anchors-in-unreal-engine-ui?lang=en-US",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
         }
       ],
       "source": null,
@@ -3391,13 +3867,31 @@ window.UE5_TUTORIAL_DATA = {
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
         },
-        null,
-        null,
-        null,
         {
-          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/79856c5e-fe2e-4653-9092-081396b85652/01-18_beginplay.png",
-          "caption": "Add to Viewport completes the basic HUD flow so the created widget becomes visible to the player.",
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/84597427-3e2c-4396-8146-f8b290a3c3b8/anchormedallion.png",
+          "caption": "Official UE5.8 UMG Canvas anchor medallion at the default top-left anchor position. Keep the HUD READY text anchored from the top-left rather than relying on viewport pixels alone.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/umg-anchors-in-unreal-engine-ui?lang=en-US",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/aa8b31c0-d8ee-476f-8903-69ec242d8439/ue5_1-01-bpscript-create-widget.png",
+          "caption": "Official UE5.8 Blueprint example: Create Widget followed by Add to Viewport.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/creating-widgets-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/718d2be1-244d-4399-aae0-628b5389823c/01-17_hudtovar.png",
+          "caption": "Official UE5.8 Create Widget return value promoted to a stored HUD reference.",
           "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-ui-designer-quick-start-guide-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/aa8b31c0-d8ee-476f-8903-69ec242d8439/ue5_1-01-bpscript-create-widget.png",
+          "caption": "Official UE5.8 Blueprint example: Create Widget followed by Add to Viewport.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/creating-widgets-in-unreal-engine",
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
         },
@@ -3534,11 +4028,44 @@ window.UE5_TUTORIAL_DATA = {
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
         },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/e984b7d9-6b40-4d9c-bf0c-f4ac40c0fc4b/myblueprint_variable.png",
+          "caption": "Official UE5.8 My Blueprint variable control. Create the variable, then use the Hub name, type and default value.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        [
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/cd54af36-d3ee-4cc5-8283-f3ddd2d79f65/name_function_blueprint.png",
+            "caption": "Official UE5.8 My Blueprint workflow for creating and naming a Function. Use the function name from the Hub step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/functions-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/285c04b9-ff68-41c8-b4b3-d38c7ff3aeb3/function_details.png",
+            "caption": "Official UE5.8 Function Details. Add the inputs/outputs named in the Hub step and use the specified data types.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/functions-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
+        ],
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/9ba289a3-0be9-427d-b3a3-67e345192e17/02-23_healthscript.png",
+          "caption": "Official UE5.8 HUD health update/binding pattern. Follow the Hub function/variable names.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-ui-designer-quick-start-guide-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null,
-        null,
-        null,
-        null,
-        null
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/e984b7d9-6b40-4d9c-bf0c-f4ac40c0fc4b/myblueprint_variable.png",
+          "caption": "Official UE5.8 My Blueprint variable control. Create the variable, then use the Hub name, type and default value.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        }
       ]
     },
     {
@@ -3650,10 +4177,37 @@ window.UE5_TUTORIAL_DATA = {
         "functions-events-macros"
       ],
       "recipeVisuals": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/ccc3bc02-5fd5-433d-b5a9-3fb4eae719e2/02-12_hudlayout.png",
+          "caption": "Official UE5.8 UMG HUD layout showing common Text and Progress Bar widgets in the Designer.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-ui-designer-quick-start-guide-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null,
-        null,
-        null,
-        null,
+        [
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/cd54af36-d3ee-4cc5-8283-f3ddd2d79f65/name_function_blueprint.png",
+            "caption": "Official UE5.8 My Blueprint workflow for creating and naming a Function. Use the function name from the Hub step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/functions-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/285c04b9-ff68-41c8-b4b3-d38c7ff3aeb3/function_details.png",
+            "caption": "Official UE5.8 Function Details. Add the inputs/outputs named in the Hub step and use the specified data types.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/functions-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
+        ],
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/c5cedbf0-bcad-4815-8d20-ac86c19829de/02-26_ammoscript.png",
+          "caption": "Official UE5.8 integer-to-text HUD conversion pattern, useful when writing score/lives values to Text widgets.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-ui-designer-quick-start-guide-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null,
         null
       ]
@@ -3751,17 +4305,29 @@ window.UE5_TUTORIAL_DATA = {
         "umg-widgets"
       ],
       "recipeVisuals": [
-        null,
-        null,
         {
-          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/70ef9720-50e4-454f-9d48-803bb190c6e8/centercenter.png",
-          "caption": "Official UE5.8 UMG Anchor preset: centre/centre. Use this for the Crosshair step that anchors the Image to the centre of the canvas.",
-          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-anchors-in-unreal-engine-ui",
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/ccc3bc02-5fd5-433d-b5a9-3fb4eae719e2/02-12_hudlayout.png",
+          "caption": "Official UE5.8 UMG HUD layout showing common Text and Progress Bar widgets in the Designer.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-ui-designer-quick-start-guide-in-unreal-engine",
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
         },
         null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/70ef9720-50e4-454f-9d48-803bb190c6e8/centercenter.png",
+          "caption": "Official UE5.8 UMG Centre/Center anchor preset. Use this preset for the crosshair so its anchor stays at viewport centre.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/umg-anchors-in-unreal-engine-ui?lang=en-US",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/347c6d83-fb04-4f2c-b1d4-e644f2884e10/button1.png",
+          "caption": "Official UE5.8 UMG Screen Size control used to preview the layout at different screen sizes and aspect ratios.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/umg-anchors-in-unreal-engine-ui?lang=en-US",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null
       ]
     },
@@ -3873,9 +4439,30 @@ window.UE5_TUTORIAL_DATA = {
         "umg-widgets"
       ],
       "recipeVisuals": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/ccc3bc02-5fd5-433d-b5a9-3fb4eae719e2/02-12_hudlayout.png",
+          "caption": "Official UE5.8 UMG HUD layout showing common Text and Progress Bar widgets in the Designer.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-ui-designer-quick-start-guide-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null,
-        null,
-        null,
+        [
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/cd54af36-d3ee-4cc5-8283-f3ddd2d79f65/name_function_blueprint.png",
+            "caption": "Official UE5.8 My Blueprint workflow for creating and naming a Function. Use the function name from the Hub step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/functions-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/285c04b9-ff68-41c8-b4b3-d38c7ff3aeb3/function_details.png",
+            "caption": "Official UE5.8 Function Details. Add the inputs/outputs named in the Hub step and use the specified data types.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/functions-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
+        ],
         null,
         null,
         null
@@ -3989,7 +4576,13 @@ window.UE5_TUTORIAL_DATA = {
         "functions-events-macros"
       ],
       "recipeVisuals": [
-        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/ccc3bc02-5fd5-433d-b5a9-3fb4eae719e2/02-12_hudlayout.png",
+          "caption": "Official UE5.8 UMG HUD layout showing common Text and Progress Bar widgets in the Designer.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-ui-designer-quick-start-guide-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null,
         null,
         null,
@@ -4107,8 +4700,20 @@ window.UE5_TUTORIAL_DATA = {
         "pawn-character-controller"
       ],
       "recipeVisuals": [
-        null,
-        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/bf146350-4103-4b5a-a33d-23b00ca8bc63/01-01_createwidgetblueprint.png",
+          "caption": "Official UE5.8 workflow for creating a Widget Blueprint. Use the Hub widget name.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-ui-designer-quick-start-guide-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/bb3fb38c-3a7e-4d0b-b920-b31b88d11f5a/image_0.png",
+          "caption": "Official UE5.8 Enhanced Input asset creation workflow. Create the Input Action named in the Hub step.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/enhanced-input-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         [
           {
             "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/aa8b31c0-d8ee-476f-8903-69ec242d8439/ue5_1-01-bpscript-create-widget.png",
@@ -4273,16 +4878,46 @@ window.UE5_TUTORIAL_DATA = {
         "transforms-units"
       ],
       "recipeVisuals": [
+        [
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/846ba685-3440-4abb-b515-7fc74402a95a/contentbrowserdropdown.png",
+            "caption": "Official UE5.8 Content Browser route to Blueprint Class. Use the asset name from the Hub step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/b4cc035a-4fad-4b19-90d2-39d538604814/new_asset_parent_class.png",
+            "caption": "Official UE5.8 Blueprint parent-class chooser. Search/select the class named in the Hub step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
+        ],
+        [
+          {
+            "src": "https://dev.epicgames.com/community/api/documentation/image/6e44536d-af86-4aae-a863-afec370143db?resizing_type=fit",
+            "caption": "Official UE5.8 Timeline Editor. Create and edit time-based tracks and keys here.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/editing-timelines-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://dev.epicgames.com/community/api/documentation/image/02c05d7d-44db-4251-9485-16e852833735?resizing_type=fit",
+            "caption": "Official UE5.8 Timeline Float Track. The Hub commonly uses a 0→1 Alpha track to drive a Lerp.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/editing-timelines-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
+        ],
         null,
         {
-          "src": "https://dev.epicgames.com/community/api/documentation/image/02c05d7d-44db-4251-9485-16e852833735?resizing_type=fit",
-          "caption": "A Float Track inside a Timeline. Keys define values at specific times and the curve controls interpolation between them.",
+          "src": "https://dev.epicgames.com/community/api/documentation/image/9a0884b6-e598-411d-a20e-1044d0d76bc3?resizing_type=fit",
+          "caption": "Official UE5.8 Timeline node outputs. Track data becomes pins that can drive a Lerp or transform.",
           "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/editing-timelines-in-unreal-engine",
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
         },
-        null,
-        null,
         null,
         null
       ]
@@ -4413,16 +5048,37 @@ window.UE5_TUTORIAL_DATA = {
         "variables-types"
       ],
       "recipeVisuals": [
-        null,
+        [
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/846ba685-3440-4abb-b515-7fc74402a95a/contentbrowserdropdown.png",
+            "caption": "Official UE5.8 Content Browser route to Blueprint Class. Use the asset name from the Hub step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/b4cc035a-4fad-4b19-90d2-39d538604814/new_asset_parent_class.png",
+            "caption": "Official UE5.8 Blueprint parent-class chooser. Search/select the class named in the Hub step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
+        ],
         null,
         {
           "src": "https://dev.epicgames.com/community/api/documentation/image/02c05d7d-44db-4251-9485-16e852833735?resizing_type=fit",
-          "caption": "A Float Track inside a Timeline. Keys define values at specific times and the curve controls interpolation between them.",
+          "caption": "Official UE5.8 Timeline Float Track. The Hub commonly uses a 0→1 Alpha track to drive a Lerp.",
           "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/editing-timelines-in-unreal-engine",
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
         },
-        null,
+        {
+          "src": "https://dev.epicgames.com/community/api/documentation/image/9a0884b6-e598-411d-a20e-1044d0d76bc3?resizing_type=fit",
+          "caption": "Official UE5.8 Timeline node outputs. Track data becomes pins that can drive a Lerp or transform.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/editing-timelines-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null,
         null
       ]
@@ -4526,6 +5182,13 @@ window.UE5_TUTORIAL_DATA = {
           "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/events-in-unreal-engine?lang=en-US",
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
+        },
+        {
+          "src": "https://dev.epicgames.com/community/api/documentation/image/63b18bcf-298e-48fe-854d-f0d0172f7860?resizing_type=fit",
+          "caption": "Official UE5.8 Apply Damage setup showing the Damaged Actor and Base Damage inputs. Your graph can feed these from an overlap or trace hit instead.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-07-traps-and-damage-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
         }
       ],
       "source": null,
@@ -4549,14 +5212,45 @@ window.UE5_TUTORIAL_DATA = {
         "damage-system"
       ],
       "recipeVisuals": [
-        null,
-        {
-          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/3c8fbaad-8f3c-4849-829b-0ece960f436f/beginoverlap.png",
-          "caption": "Official UE5.8 Event Actor Begin Overlap node. This is the one-shot trigger that starts the damage-zone path.",
-          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/events-in-unreal-engine?lang=en-US",
-          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-          "kind": "epic"
-        },
+        [
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/846ba685-3440-4abb-b515-7fc74402a95a/contentbrowserdropdown.png",
+            "caption": "Official UE5.8 Content Browser route to Blueprint Class. Use the asset name from the Hub step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/b4cc035a-4fad-4b19-90d2-39d538604814/new_asset_parent_class.png",
+            "caption": "Official UE5.8 Blueprint parent-class chooser. Search/select the class named in the Hub step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/67a54191-1b18-4e82-abb2-4f8ff258ee55/add_new_component_list.png",
+            "caption": "Official UE5.8 Add Component menu. Search for the component named in the Hub instruction.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/components-window-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
+        ],
+        [
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/3c8fbaad-8f3c-4849-829b-0ece960f436f/beginoverlap.png",
+            "caption": "Official UE5.8 Event Actor Begin Overlap trigger used by the damage zone.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/events-in-unreal-engine?lang=en-US",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://dev.epicgames.com/community/api/documentation/image/63b18bcf-298e-48fe-854d-f0d0172f7860?resizing_type=fit",
+            "caption": "Official UE5.8 Apply Damage setup showing the Damaged Actor and Base Damage inputs. Your graph can feed these from an overlap or trace hit instead.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-07-traps-and-damage-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
+        ],
         null,
         null,
         null,
@@ -4660,7 +5354,15 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "icon": "🎲",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/d9dd4665-e3c4-4cd1-93d5-1ea50efee444/spawn1.png",
+          "caption": "Official UE5.8 Spawn Actor example showing the class/transform flow and the Return Value for the exact spawned Actor instance.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-communications-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        }
+      ],
       "source": null,
       "prescriptive": true,
       "starterValues": [
@@ -4684,11 +5386,39 @@ window.UE5_TUTORIAL_DATA = {
         "transforms-units"
       ],
       "recipeVisuals": [
+        [
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/846ba685-3440-4abb-b515-7fc74402a95a/contentbrowserdropdown.png",
+            "caption": "Official UE5.8 Content Browser route to Blueprint Class. Use the asset name from the Hub step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/b4cc035a-4fad-4b19-90d2-39d538604814/new_asset_parent_class.png",
+            "caption": "Official UE5.8 Blueprint parent-class chooser. Search/select the class named in the Hub step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/67a54191-1b18-4e82-abb2-4f8ff258ee55/add_new_component_list.png",
+            "caption": "Official UE5.8 Add Component menu. Search for the component named in the Hub instruction.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/components-window-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
+        ],
         null,
         null,
         null,
-        null,
-        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/d9dd4665-e3c4-4cd1-93d5-1ea50efee444/spawn1.png",
+          "caption": "Official UE5.8 Spawn Actor example showing the class/transform flow and the Return Value for the exact spawned Actor instance.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-communications-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null
       ]
     },
@@ -4804,7 +5534,7 @@ window.UE5_TUTORIAL_DATA = {
       "recipeVisuals": [
         {
           "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/69bc24a6-f990-4cfe-b45a-f1d1d899ea8f/basic-navmesh-visualize-a.png",
-          "caption": "Official UE5.8 example: press P to visualise the generated NavMesh. Green shows where AI navigation is available.",
+          "caption": "Official UE5.8 NavMesh visualisation. Press P; green shows where AI navigation is available.",
           "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/basic-navigation-in-unreal-engine",
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
@@ -4813,7 +5543,7 @@ window.UE5_TUTORIAL_DATA = {
         null,
         {
           "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/fccc3f17-4a64-4262-989e-dddb80d139e2/basic-npc-ai-moveto.png",
-          "caption": "Official UE5.8 Blueprint example using AI Move To to send an AI-controlled Pawn toward a destination.",
+          "caption": "Official UE5.8 Blueprint example using AI Move To to send an AI-controlled Pawn towards a destination.",
           "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/basic-navigation-in-unreal-engine",
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
@@ -4948,10 +5678,16 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "recipeVisuals": [
         null,
-        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/b6953df1-c9fc-4716-83fd-7a18fd635340/behavior-tree-quick-start-step-6-13.png",
+          "caption": "Official UE5.8 Blackboard value-setting pattern. Use the Hub’s TargetActor/Blackboard key names.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/behavior-tree-in-unreal-engine---quick-start-guide",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         {
           "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/fccc3f17-4a64-4262-989e-dddb80d139e2/basic-npc-ai-moveto.png",
-          "caption": "Official UE5.8 Blueprint example using AI Move To to send an AI-controlled Pawn toward a destination.",
+          "caption": "Official UE5.8 Blueprint example using AI Move To to send an AI-controlled Pawn towards a destination.",
           "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/basic-navigation-in-unreal-engine",
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
@@ -5105,7 +5841,7 @@ window.UE5_TUTORIAL_DATA = {
         null,
         {
           "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/762379df-8ac3-4f2a-8492-f39f9fa1e63c/3-perception-setup.png",
-          "caption": "Official UE5.8: AI Perception Sight configuration with Detect Neutrals enabled.",
+          "caption": "Official UE5.8 AI Perception Sight configuration, including Detect Neutrals.",
           "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/behavior-tree-in-unreal-engine---quick-start-guide?lang=en-US",
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
@@ -5113,15 +5849,22 @@ window.UE5_TUTORIAL_DATA = {
         [
           {
             "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/3c69b6a0-618d-4acb-895b-260513693f3c/3b-click-add-event.png",
-            "caption": "Official UE5.8: add On Target Perception Updated from the AI Perception component Events section.",
-            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/behavior-tree-in-unreal-engine---quick-start-guide?lang=en-US",
+            "caption": "Official UE5.8 Details-panel route for adding On Target Perception Updated.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/behavior-tree-in-unreal-engine---quick-start-guide",
             "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
             "kind": "epic"
           },
           {
             "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/823adff0-b037-40ca-95ad-2f9decad9738/behavior-tree-quick-start-step-6-8.png",
-            "caption": "Official UE5.8 perception example breaks the stimulus and branches on whether the Actor was successfully sensed.",
-            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/behavior-tree-in-unreal-engine---quick-start-guide?lang=en-US",
+            "caption": "Official UE5.8 On Target Perception Updated graph using AI Stimulus and a Branch.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/behavior-tree-in-unreal-engine---quick-start-guide",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/b6953df1-c9fc-4716-83fd-7a18fd635340/behavior-tree-quick-start-step-6-13.png",
+            "caption": "Official UE5.8 Blackboard value-setting pattern. Use the Hub’s TargetActor/Blackboard key names.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/unreal-engine/behavior-tree-in-unreal-engine---quick-start-guide",
             "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
             "kind": "epic"
           }
@@ -5240,10 +5983,22 @@ window.UE5_TUTORIAL_DATA = {
         "timers-delay-tick"
       ],
       "recipeVisuals": [
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/e984b7d9-6b40-4d9c-bf0c-f4ac40c0fc4b/myblueprint_variable.png",
+          "caption": "Official UE5.8 My Blueprint variable control. Create the variable, then use the Hub name, type and default value.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null,
         null,
-        null,
-        null,
+        {
+          "src": "https://dev.epicgames.com/community/api/documentation/image/235ef302-058b-472f-9fb9-a0248e2a75ed?resizing_type=fit",
+          "caption": "Official UE5.8 enemy Apply Damage graph from Epic’s current enemy tutorial.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-08-create-an-enemy-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null,
         null
       ]
@@ -5341,11 +6096,41 @@ window.UE5_TUTORIAL_DATA = {
         "transforms-units"
       ],
       "recipeVisuals": [
+        [
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/846ba685-3440-4abb-b515-7fc74402a95a/contentbrowserdropdown.png",
+            "caption": "Official UE5.8 Content Browser route to Blueprint Class. Use the asset name from the Hub step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/b4cc035a-4fad-4b19-90d2-39d538604814/new_asset_parent_class.png",
+            "caption": "Official UE5.8 Blueprint parent-class chooser. Search/select the class named in the Hub step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
+        ],
         null,
         null,
         null,
-        null,
-        null,
+        [
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/846ba685-3440-4abb-b515-7fc74402a95a/contentbrowserdropdown.png",
+            "caption": "Official UE5.8 Content Browser route to Blueprint Class. Use the asset name from the Hub step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/b4cc035a-4fad-4b19-90d2-39d538604814/new_asset_parent_class.png",
+            "caption": "Official UE5.8 Blueprint parent-class chooser. Search/select the class named in the Hub step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
+        ],
         null
       ]
     },
@@ -5485,13 +6270,22 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "recipeVisuals": [
         null,
-        {
-          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/8197a9d4-1212-445f-aedb-19379fb043d9/datarowtype.png",
-          "caption": "Choosing the Data Table Row Type tells Unreal which Struct defines the columns and data types for every row.",
-          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/data-driven-gameplay-elements-in-unreal-engine",
-          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
-          "kind": "epic"
-        },
+        [
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/8197a9d4-1212-445f-aedb-19379fb043d9/datarowtype.png",
+            "caption": "Official UE5.8 Data Table Row Type picker. Choose the Struct that defines the table columns.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/data-driven-gameplay-elements-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/7d4513c2-a311-451d-9d6d-5d85edcef6b3/datatableobject.png",
+            "caption": "Official UE5.8 Data Table asset in the Content Browser.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/data-driven-gameplay-elements-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
+        ],
         null,
         null,
         null,
@@ -5605,8 +6399,29 @@ window.UE5_TUTORIAL_DATA = {
         "object-class-references"
       ],
       "recipeVisuals": [
-        null,
-        null,
+        [
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/846ba685-3440-4abb-b515-7fc74402a95a/contentbrowserdropdown.png",
+            "caption": "Official UE5.8 Content Browser route to Blueprint Class. Use the asset name from the Hub step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/b4cc035a-4fad-4b19-90d2-39d538604814/new_asset_parent_class.png",
+            "caption": "Official UE5.8 Blueprint parent-class chooser. Search/select the class named in the Hub step.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
+        ],
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/e984b7d9-6b40-4d9c-bf0c-f4ac40c0fc4b/myblueprint_variable.png",
+          "caption": "Official UE5.8 My Blueprint variable control. Create the variable, then use the Hub name, type and default value.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-basic-user-guide-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null,
         null,
         null,
@@ -5686,7 +6501,15 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "icon": "♪",
       "featured": false,
-      "referenceImages": [],
+      "referenceImages": [
+        {
+          "src": "https://dev.epicgames.com/community/api/documentation/image/56ce0b26-9f45-433e-b4c7-f3ba15938a80?resizing_type=fit",
+          "caption": "Official UE5.8 Artist course: Play Sound at Location wired to a world position. Use this branch when the sound should come from a place in the world.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/artist-11-add-footstep-sounds-to-a-character",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        }
+      ],
       "source": null,
       "prescriptive": true,
       "starterValues": [
@@ -5709,7 +6532,13 @@ window.UE5_TUTORIAL_DATA = {
       ],
       "recipeVisuals": [
         null,
-        null,
+        {
+          "src": "https://dev.epicgames.com/community/api/documentation/image/56ce0b26-9f45-433e-b4c7-f3ba15938a80?resizing_type=fit",
+          "caption": "Official UE5.8 Artist course: Play Sound at Location wired to a world position. Use this branch when the sound should come from a place in the world.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/artist-11-add-footstep-sounds-to-a-character",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null,
         null,
         null,
@@ -5952,7 +6781,13 @@ window.UE5_TUTORIAL_DATA = {
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
         },
-        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/3b0a48d7-5ea0-4696-b775-5f8f6ccaf5bf/openshake.png",
+          "caption": "Official UE5.8 Camera Shake asset open for pattern and amplitude tuning.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/camera-shakes-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         {
           "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/78846e41-72fc-4fbb-a395-4ec60974fe96/shakebp1.png",
           "caption": "Official UE5.8 Blueprint example for starting a Camera Shake through the Player Camera Manager.",
@@ -6119,10 +6954,31 @@ window.UE5_TUTORIAL_DATA = {
           "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
           "kind": "epic"
         },
+        [
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/669dc61c-9481-43a6-b117-ec6c76244ccb/03-exponential-height-fog-enabled.png",
+            "caption": "Official UE5.8 Exponential Height Fog example with the fog layer enabled.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/exponential-height-fog-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          },
+          {
+            "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/384ec87a-79c8-47ee-9dca-c664802cc995/volumetricfog.png",
+            "caption": "Official UE5.8 Volumetric Fog example showing scene lighting scattering through the fog.",
+            "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/exponential-height-fog-in-unreal-engine",
+            "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+            "kind": "epic"
+          }
+        ],
         null,
         null,
-        null,
-        null,
+        {
+          "src": "https://d1iv7db44yhgxn.cloudfront.net/documentation/images/67a54191-1b18-4e82-abb2-4f8ff258ee55/add_new_component_list.png",
+          "caption": "Official UE5.8 Add Component menu. Search for the component named in the Hub instruction.",
+          "sourceUrl": "https://dev.epicgames.com/documentation/en-us/unreal-engine/components-window-in-unreal-engine",
+          "sourceTitle": "Epic Games — Unreal Engine 5.8 Documentation",
+          "kind": "epic"
+        },
         null
       ]
     }
