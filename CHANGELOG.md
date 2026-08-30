@@ -1,3 +1,11 @@
+## v3.39.3 — Teams-First Lean Hub + Egress Pass — 30 Aug 2026
+- Retired collaborative Hub Projects and formal lesson-evidence submission/review from live student and teacher navigation; Microsoft Teams is now the single place for project briefs, deadlines, formal submissions and assessed feedback.
+- Replaced lesson evidence uploads with a lightweight **Keep proof for Teams** checklist so practical lessons still tell students exactly what to capture without storing another copy in the Hub.
+- Kept Critique Board, classes, learning progress, XP/badges, lesson comments, student requests, revision, Designer, Unreal, Modelling and Sculpt intact.
+- Legacy `#/projects` / `#/my-game` bookmarks now land on a Teams-first notice instead of fetching project records.
+- Reduced Supabase egress for active screenshot features with client-side WebP optimisation, thumbnails, lazy loading and tighter cloud reads.
+- Preserved all historical Project/evidence rows and files read-only; no student work was deleted.
+- Applied migrations `project_media_thumbnail_backfill` and `retire_projects_and_evidence_writes`; the latter removes all client Project/formal-evidence mutation policies and old project RPC execution while leaving Critique Board media writable.
 
 ## v3.39.2 — Editorial Correction Pass
 - Corrected Environment Art and Materials primary case studies to teach the actual discipline.

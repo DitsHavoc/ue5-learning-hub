@@ -44,6 +44,60 @@ function projectExternalUrl(value){
   return url.href.slice(0,2000);
 }
 
+const IMAGE_FULL_MAX=1920;
+const IMAGE_THUMB_MAX=640;
+const IMAGE_FULL_QUALITY=0.82;
+const IMAGE_THUMB_QUALITY=0.72;
+function thumbnailPath(path){return `${path}.thumb.webp`;}
+function isImageMime(mime){return /^image\/(png|jpeg|webp)$/i.test(String(mime||''));}
+function canvasToBlob(canvas,type='image/webp',quality=0.8){
+  return new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('Could not optimise image.')),type,quality));
+}
+async function imageBitmapForFile(file){
+  if(window.createImageBitmap)return window.createImageBitmap(file);
+  const url=URL.createObjectURL(file);
+  try{
+    const img=await new Promise((resolve,reject)=>{const node=new Image();node.onload=()=>resolve(node);node.onerror=()=>reject(new Error('Could not read image.'));node.src=url;});
+    return img;
+  }finally{URL.revokeObjectURL(url);}
+}
+async function resizeImageFile(file,maxDimension,quality,label='optimised'){
+  const source=await imageBitmapForFile(file);
+  try{
+    const w=Number(source.width||source.naturalWidth)||1,h=Number(source.height||source.naturalHeight)||1;
+    const scale=Math.min(1,maxDimension/Math.max(w,h));
+    const width=Math.max(1,Math.round(w*scale)),height=Math.max(1,Math.round(h*scale));
+    const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;
+    const ctx=canvas.getContext('2d',{alpha:true});
+    if(!ctx)throw new Error('Image optimisation is unavailable in this browser.');
+    ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(source,0,0,width,height);
+    const blob=await canvasToBlob(canvas,'image/webp',quality);
+    const stem=String(file.name||'image').replace(/\.[^.]+$/,'').replace(/[^a-zA-Z0-9._-]+/g,'-').slice(-80)||'image';
+    return new File([blob],`${stem}-${label}.webp`,{type:'image/webp',lastModified:Date.now()});
+  }finally{try{source.close?.()}catch(e){}}
+}
+async function prepareImageUpload(file){
+  const mime=String(file?.type||'').toLowerCase();
+  if(!file||!isImageMime(mime))return {full:file,thumb:null,optimised:false};
+  try{
+    const [fullCandidate,thumb]=await Promise.all([
+      resizeImageFile(file,IMAGE_FULL_MAX,IMAGE_FULL_QUALITY,'web'),
+      resizeImageFile(file,IMAGE_THUMB_MAX,IMAGE_THUMB_QUALITY,'thumb')
+    ]);
+    const useOptimised=fullCandidate.size<file.size||file.size>786432;
+    return {full:useOptimised?fullCandidate:file,thumb,optimised:useOptimised};
+  }catch(err){
+    console.warn('Image optimisation fallback',err?.message||err);
+    return {full:file,thumb:null,optimised:false};
+  }
+}
+async function uploadOptionalThumbnail(bucket,path,file){
+  if(!file)return false;
+  const {error}=await client.storage.from(bucket).upload(thumbnailPath(path),file,{upsert:false,contentType:'image/webp',cacheControl:'3600'});
+  if(error){console.warn('Thumbnail upload',error.message);return false}
+  return true;
+}
+
 const api = {
   mode: configured ? 'cloud' : 'local',
   microsoftEnabled,
@@ -59,12 +113,27 @@ const api = {
     const {data:{session}} = await client.auth.getSession();
     this.user = session?.user || null;
     if(this.user) await this.loadProfile();
-    client.auth.onAuthStateChange(async (event,session)=>{
-      this.user = session?.user || null;
-      this.profile = null;
-      this.xpSummary = null;
-      this.recoveryMode = event === 'PASSWORD_RECOVERY';
-      if(this.user) {
+    if(this.user) {
+      await this.migrateLocalProgress();
+      await this.completePendingTeacherBootstrap();
+      await this.completePendingTeacherInvite();
+      await this.completePendingClassJoin();
+    }
+    this.emit();
+    client.auth.onAuthStateChange(async (event,nextSession)=>{
+      const nextUser=nextSession?.user||null;
+      const currentId=this.user?.id||null,nextId=nextUser?.id||null;
+      // Supabase emits INITIAL_SESSION/SIGNED_IN after getSession(). Do not reload the whole Hub for the same session.
+      if((event==='INITIAL_SESSION'||event==='SIGNED_IN'||event==='TOKEN_REFRESHED')&&currentId&&nextId===currentId){
+        this.user=nextUser;
+        if(event==='TOKEN_REFRESHED')return;
+        return;
+      }
+      this.user=nextUser;
+      this.profile=null;
+      this.xpSummary=null;
+      this.recoveryMode=event==='PASSWORD_RECOVERY';
+      if(this.user){
         await this.loadProfile();
         await this.migrateLocalProgress();
         await this.completePendingTeacherBootstrap();
@@ -73,13 +142,6 @@ const api = {
       }
       this.emit();
     });
-    if(this.user) {
-      await this.migrateLocalProgress();
-      await this.completePendingTeacherBootstrap();
-      await this.completePendingTeacherInvite();
-      await this.completePendingClassJoin();
-    }
-    this.emit();
   },
   onChange(fn){this.listeners.push(fn)},
   emit(){this.listeners.forEach(fn=>{try{fn(this)}catch(e){console.error(e)}})},
@@ -340,14 +402,18 @@ const api = {
     let local=null;
     try{local=JSON.parse(localStorage.getItem('ue5hub:v2:progress')||'null')}catch(e){}
     const ids=[...(local?.completed||[]),...(local?.tutorialCompleted||[]).map(id=>`tutorial:${id}`),...(local?.chapterBuildCompleted||[]).map(id=>`chapter:${id}`),...(local?.designBuildCompleted||[]).map(id=>`designbuild:${id}`),...(local?.designSourceCompleted||[]).map(id=>`designsource:${id}`),...(local?.modelTheoryCompleted||[]).map(id=>`modeltheory:${id}`),...(local?.modelFoundationFinal?[`modelfoundation:final`]:[]),...(local?.modelLessonCompleted||[]).map(id=>`model:${id}`),...(local?.modelBuildCompleted||[]).map(id=>`modelbuild:${id}`),...(local?.modelFixCompleted||[]).map(id=>`modelfix:${id}`),...(local?.sculptCompleted||[]).map(id=>`sculpt:${id}`),...(local?.blockCompleted||[]).map(id=>`block:${id}`)];
-    if(!ids.length)return;
-    const rows=[...new Set(ids)].map(id=>({user_id:this.user.id,lesson_id:id,completed:true,completed_at:new Date().toISOString()}));
+    const unique=[...new Set(ids)].sort();
+    if(!unique.length)return;
+    const markerKey=`ue5hub:v3:migrated-progress:${this.user.id}`;
+    const fingerprint=unique.join('|');
+    if(localStorage.getItem(markerKey)===fingerprint)return;
+    const rows=unique.map(id=>({user_id:this.user.id,lesson_id:id,completed:true,completed_at:new Date().toISOString()}));
     const {error}=await client.from('lesson_progress').upsert(rows,{onConflict:'user_id,lesson_id'});
-    if(error)console.warn('Progress migration',error.message);
+    if(error)console.warn('Progress migration',error.message);else localStorage.setItem(markerKey,fingerprint);
   },
   async getLessonProgress(){
     if(!client||!this.user)return [];
-    const {data,error}=await client.from('lesson_progress').select('*').eq('user_id',this.user.id);
+    const {data,error}=await client.from('lesson_progress').select('lesson_id,completed').eq('user_id',this.user.id);
     if(error){console.warn(error.message);return []} return data||[];
   },
   async setLessonComplete(lessonId,completed){
@@ -409,15 +475,21 @@ const api = {
       throw error;
     }
     const rows=(data||[]).map(r=>({...r,feedback:Array.isArray(r.feedback)?r.feedback:[]}));
-    const paths=[];
-    rows.forEach(r=>{if(r.storage_path)paths.push(r.storage_path);if(r.improved_storage_path)paths.push(r.improved_storage_path)});
+    const originals=[],thumbs=[];
+    rows.forEach(r=>{if(r.storage_path){originals.push(r.storage_path);thumbs.push(thumbnailPath(r.storage_path))}if(r.improved_storage_path){originals.push(r.improved_storage_path);thumbs.push(thumbnailPath(r.improved_storage_path))}});
     const urlMap={};
-    if(paths.length){
-      const {data:signed,error:sErr}=await client.storage.from('critique-media').createSignedUrls([...new Set(paths)],900);
+    if(originals.length||thumbs.length){
+      const all=[...new Set([...originals,...thumbs])];
+      const {data:signed,error:sErr}=await client.storage.from('critique-media').createSignedUrls(all,900);
       if(sErr)console.warn('Critique signed URLs',sErr.message);
       (signed||[]).forEach(x=>{if(x.path&&x.signedUrl)urlMap[x.path]=x.signedUrl});
     }
-    return rows.map(r=>({...r,image_url:urlMap[r.storage_path]||'',improved_url:urlMap[r.improved_storage_path]||''}));
+    return rows.map(r=>({...r,
+      image_url:urlMap[r.storage_path]||'',
+      image_thumb_url:urlMap[thumbnailPath(r.storage_path)]||'',
+      improved_url:urlMap[r.improved_storage_path]||'',
+      improved_thumb_url:r.improved_storage_path?(urlMap[thumbnailPath(r.improved_storage_path)]||''):''
+    }));
   },
   async createCritiquePost({classId,area='General',title='',prompt='',file}){
     if(!client||!this.user)throw new Error('Sign in to post work for critique.');
@@ -428,17 +500,19 @@ const api = {
     const mime=critiqueImageMime(file);
     if(!CRITIQUE_ALLOWED_MIMES.has(mime))throw new Error('Use a PNG, JPG or WebP screenshot.');
     if(file.size>8388608)throw new Error('Keep Critique Board screenshots under 8 MB.');
-    const postId=crypto.randomUUID(),safe=(file.name||'critique-image').replace(/[^a-zA-Z0-9._-]+/g,'-').slice(-100);
-    const path=`${classId}/${this.user.id}/${postId}/original-${Date.now()}-${safe}`;
-    const {error:uploadError}=await client.storage.from('critique-media').upload(path,file,{upsert:false,contentType:mime});
+    const prepared=await prepareImageUpload(file),uploadFile=prepared.full,uploadMime=String(uploadFile.type||mime).toLowerCase();
+    const postId=crypto.randomUUID(),safe=(file.name||'critique-image').replace(/[^a-zA-Z0-9._-]+/g,'-').slice(-100),storageSafe=(uploadFile.name||safe).replace(/[^a-zA-Z0-9._-]+/g,'-').slice(-100);
+    const path=`${classId}/${this.user.id}/${postId}/original-${Date.now()}-${storageSafe}`;
+    const {error:uploadError}=await client.storage.from('critique-media').upload(path,uploadFile,{upsert:false,contentType:uploadMime,cacheControl:'3600'});
     if(uploadError){
       if(uploadError.message?.toLowerCase().includes('bucket'))throw new Error('Critique Board needs the v3.36.0 database migration.');
       throw uploadError;
     }
+    await uploadOptionalThumbnail('critique-media',path,prepared.thumb);
     const {data:row,error:insertError}=await client.from('critique_posts').insert({
       id:postId,class_id:classId,author_id:this.user.id,area:String(area||'General').trim().slice(0,40),title:String(title||'').trim().slice(0,120),prompt:cleanPrompt,storage_path:path,original_name:file.name||safe
     }).select().single();
-    if(insertError){await client.storage.from('critique-media').remove([path]);throw insertError;}
+    if(insertError){await client.storage.from('critique-media').remove([path,thumbnailPath(path)]);throw insertError;}
     return row;
   },
   async addCritiqueImprovedImage(postId,classId,file){
@@ -449,12 +523,14 @@ const api = {
     if(file.size>8388608)throw new Error('Keep Critique Board screenshots under 8 MB.');
     const {data:existing,error:readError}=await client.from('critique_posts').select('improved_storage_path').eq('id',postId).single();
     if(readError)throw readError;
-    const safe=(file.name||'improved-critique').replace(/[^a-zA-Z0-9._-]+/g,'-').slice(-100),path=`${classId}/${this.user.id}/${postId}/improved-${Date.now()}-${safe}`;
-    const {error:uploadError}=await client.storage.from('critique-media').upload(path,file,{upsert:false,contentType:mime});
+    const prepared=await prepareImageUpload(file),uploadFile=prepared.full,uploadMime=String(uploadFile.type||mime).toLowerCase();
+    const safe=(file.name||'improved-critique').replace(/[^a-zA-Z0-9._-]+/g,'-').slice(-100),storageSafe=(uploadFile.name||safe).replace(/[^a-zA-Z0-9._-]+/g,'-').slice(-100),path=`${classId}/${this.user.id}/${postId}/improved-${Date.now()}-${storageSafe}`;
+    const {error:uploadError}=await client.storage.from('critique-media').upload(path,uploadFile,{upsert:false,contentType:uploadMime,cacheControl:'3600'});
     if(uploadError)throw uploadError;
+    await uploadOptionalThumbnail('critique-media',path,prepared.thumb);
     const {data:row,error:updateError}=await client.from('critique_posts').update({improved_storage_path:path,improved_name:file.name||safe,updated_at:new Date().toISOString()}).eq('id',postId).select().single();
-    if(updateError){await client.storage.from('critique-media').remove([path]);throw updateError;}
-    if(existing?.improved_storage_path)await client.storage.from('critique-media').remove([existing.improved_storage_path]);
+    if(updateError){await client.storage.from('critique-media').remove([path,thumbnailPath(path)]);throw updateError;}
+    if(existing?.improved_storage_path)await client.storage.from('critique-media').remove([existing.improved_storage_path,thumbnailPath(existing.improved_storage_path)]);
     return row;
   },
   async postCritiqueFeedback(postId,{worksWell='',clearer='',changeTry=''}){
@@ -475,7 +551,8 @@ const api = {
     if(!client||!this.user)throw new Error('Sign in first.');
     const {data:post,error:readError}=await client.from('critique_posts').select('storage_path,improved_storage_path').eq('id',postId).single();
     if(readError)throw readError;
-    const paths=[post.storage_path,post.improved_storage_path].filter(Boolean);
+    const originals=[post.storage_path,post.improved_storage_path].filter(Boolean);
+    const paths=[...originals,...originals.map(thumbnailPath)];
     const {error}=await client.from('critique_posts').delete().eq('id',postId);
     if(error)throw error;
     if(paths.length){const {error:sErr}=await client.storage.from('critique-media').remove(paths);if(sErr)console.warn('Critique media cleanup',sErr.message);}
@@ -483,7 +560,7 @@ const api = {
   },
   async getProjectProgress(){
     if(!client||!this.user)return [];
-    const {data,error}=await client.from('project_progress').select('*').eq('user_id',this.user.id);
+    const {data,error}=await client.from('project_progress').select('mechanic_id,status,notes').eq('user_id',this.user.id);
     if(error){console.warn(error.message);return []} return data||[];
   },
   async setProjectMechanic(mechanicId,status,notes=''){
@@ -495,7 +572,7 @@ const api = {
   },
   async getProjectProfile(){
     if(!client||!this.user)return null;
-    const {data,error}=await client.from('student_projects').select('*').eq('user_id',this.user.id).maybeSingle();
+    const {data,error}=await client.from('student_projects').select('project_title,theme,pitch,updated_at').eq('user_id',this.user.id).maybeSingle();
     if(error){console.warn(error.message);return null}return data;
   },
   async saveProjectProfile(values){
@@ -688,7 +765,8 @@ const api = {
   async deleteProject(projectId){
     if(!client||!this.user)throw new Error('Sign in first.');
     const {data:media}=await client.from('project_media').select('storage_path').eq('project_id',projectId);
-    const paths=(media||[]).map(x=>x.storage_path);
+    const originals=(media||[]).map(x=>x.storage_path);
+    const paths=[...originals,...originals.map(thumbnailPath)];
     if(paths.length)await client.storage.from('project-media').remove(paths);
     const {error}=await client.from('projects').delete().eq('id',projectId);
     if(error)throw error;return true;
@@ -757,7 +835,8 @@ const api = {
   async deleteProjectUpdate(projectId,updateId){
     if(!client||!this.user)throw new Error('Sign in first.');
     const {data:media}=await client.from('project_media').select('storage_path').eq('project_id',projectId).eq('update_id',updateId);
-    const paths=(media||[]).map(x=>x.storage_path);
+    const originals=(media||[]).map(x=>x.storage_path);
+    const paths=[...originals,...originals.map(thumbnailPath)];
     if(paths.length)await client.storage.from('project-media').remove(paths);
     const {error}=await client.from('project_updates').delete().eq('id',updateId);
     if(error)throw error;return true;
@@ -771,12 +850,15 @@ const api = {
       const file=list[i],mime=projectFileMime(file);
       if(file.size>10485760)throw new Error(`${file.name} is larger than 10 MB. Upload it to OneDrive or another cloud drive and paste the share link instead.`);
       if(!PROJECT_ALLOWED_MIMES.has(mime))throw new Error('Use PNG, JPG, WebP, PDF, Word, PowerPoint or Excel files.');
-      const safe=(file.name||'project-evidence').replace(/[^a-zA-Z0-9._-]+/g,'-').slice(-100);
-      const path=`${projectId}/${this.user.id}/${updateId}/${Date.now()}-${i}-${safe}`;
-      const {error:uploadError}=await client.storage.from('project-media').upload(path,file,{upsert:false,contentType:mime});
+      const prepared=isImageMime(mime)?await prepareImageUpload(file):{full:file,thumb:null,optimised:false};
+      const uploadFile=prepared.full,uploadMime=String(uploadFile.type||mime).toLowerCase();
+      const safe=(file.name||'project-evidence').replace(/[^a-zA-Z0-9._-]+/g,'-').slice(-100),storageSafe=(uploadFile.name||safe).replace(/[^a-zA-Z0-9._-]+/g,'-').slice(-100);
+      const path=`${projectId}/${this.user.id}/${updateId}/${Date.now()}-${i}-${storageSafe}`;
+      const {error:uploadError}=await client.storage.from('project-media').upload(path,uploadFile,{upsert:false,contentType:uploadMime,cacheControl:'3600'});
       if(uploadError)throw uploadError;
-      const {data:record,error:recordError}=await client.from('project_media').insert({project_id:projectId,update_id:updateId,uploader_id:this.user.id,storage_path:path,original_name:file.name||safe,mime_type:mime,size_bytes:file.size||0,caption:String(captions[i]||'').trim().slice(0,500)}).select().single();
-      if(recordError){await client.storage.from('project-media').remove([path]);throw recordError;}
+      if(prepared.thumb)await uploadOptionalThumbnail('project-media',path,prepared.thumb);
+      const {data:record,error:recordError}=await client.from('project_media').insert({project_id:projectId,update_id:updateId,uploader_id:this.user.id,storage_path:path,original_name:file.name||safe,mime_type:uploadMime,size_bytes:uploadFile.size||0,caption:String(captions[i]||'').trim().slice(0,500)}).select().single();
+      if(recordError){await client.storage.from('project-media').remove([path,thumbnailPath(path)]);throw recordError;}
       uploaded.push(record);
     }
     return uploaded;
@@ -790,6 +872,32 @@ const api = {
     if(!client||!this.user)throw new Error('Sign in to view project files.');
     const {data,error}=await client.storage.from('project-media').createSignedUrl(path,300);
     if(error)throw error;return data?.signedUrl||null;
+  },
+  async openProjectThumbnail(path){
+    if(!client||!this.user)throw new Error('Sign in to view project files.');
+    const {data,error}=await client.storage.from('project-media').createSignedUrl(thumbnailPath(path),300);
+    if(error)throw error;return data?.signedUrl||null;
+  },
+  async backfillProjectThumbnail(path){
+    if(!client||!this.user||!path)return null;
+    const parts=String(path).split('/');
+    const canCreate=this.profile?.role==='teacher'||parts[1]===this.user.id;
+    if(!canCreate)return null;
+    try{
+      const originalUrl=await this.openProjectFile(path);
+      if(!originalUrl)return null;
+      const response=await fetch(originalUrl,{cache:'force-cache'});
+      if(!response.ok)return null;
+      const blob=await response.blob();
+      if(!isImageMime(blob.type))return null;
+      const name=parts.at(-1)||'legacy-project-image';
+      const legacyFile=new File([blob],name,{type:blob.type,lastModified:Date.now()});
+      const prepared=await prepareImageUpload(legacyFile);
+      if(!prepared.thumb)return null;
+      const {error}=await client.storage.from('project-media').upload(thumbnailPath(path),prepared.thumb,{upsert:false,contentType:'image/webp',cacheControl:'3600'});
+      if(error&&!['409','Duplicate'].some(x=>String(error.code||error.message||'').includes(x)))console.warn('Legacy project thumbnail',error.message);
+      return await this.openProjectThumbnail(path);
+    }catch(err){console.warn('Legacy project thumbnail',err?.message||err);return null}
   },
   async postProjectComment(projectId,updateId,body){
     if(!client||!this.user)throw new Error('Sign in first.');
@@ -857,7 +965,7 @@ const api = {
     if(!client||!this.user)return [];
     const {data,error}=await client
       .from('evidence_submissions')
-      .select('*,submission_files(*)')
+      .select('id,user_id,lesson_id,mechanic_id,reflection,evidence_url,status,teacher_feedback,reviewed_by,submitted_at,reviewed_at,created_at,updated_at,submission_files(id,submission_id,storage_path,original_name,mime_type,size_bytes,created_at)')
       .eq('user_id',this.user.id)
       .order('updated_at',{ascending:false});
     if(error){console.warn('Submissions',error.message);return []}
@@ -867,7 +975,7 @@ const api = {
     if(!client||!this.user)return null;
     const {data,error}=await client
       .from('evidence_submissions')
-      .select('*,submission_files(*)')
+      .select('id,user_id,lesson_id,mechanic_id,reflection,evidence_url,status,teacher_feedback,reviewed_by,submitted_at,reviewed_at,created_at,updated_at,submission_files(id,submission_id,storage_path,original_name,mime_type,size_bytes,created_at)')
       .eq('user_id',this.user.id)
       .eq('mechanic_id',mechanicId)
       .maybeSingle();
@@ -899,21 +1007,25 @@ const api = {
     if(!client||!this.user)throw new Error('Sign in to upload evidence.');
     if(!file)return null;
     if(file.size>10485760)throw new Error('Evidence file must be 10 MB or smaller.');
+    const rawMime=String(file.type||'').toLowerCase();
     const allowed=['image/png','image/jpeg','image/webp','application/pdf'];
-    if(!allowed.includes(file.type))throw new Error('Use PNG, JPG, WebP or PDF evidence.');
-    const safe=(file.name||'evidence').replace(/[^a-zA-Z0-9._-]+/g,'-').slice(-100);
-    const path=`${this.user.id}/${submissionId}/${Date.now()}-${safe}`;
-    const {error:uploadError}=await client.storage.from('student-evidence').upload(path,file,{upsert:false,contentType:file.type});
+    if(!allowed.includes(rawMime))throw new Error('Use PNG, JPG, WebP or PDF evidence.');
+    const prepared=isImageMime(rawMime)?await prepareImageUpload(file):{full:file,thumb:null,optimised:false};
+    const uploadFile=prepared.full,uploadMime=String(uploadFile.type||rawMime).toLowerCase();
+    const safe=(file.name||'evidence').replace(/[^a-zA-Z0-9._-]+/g,'-').slice(-100),storageSafe=(uploadFile.name||safe).replace(/[^a-zA-Z0-9._-]+/g,'-').slice(-100);
+    const path=`${this.user.id}/${submissionId}/${Date.now()}-${storageSafe}`;
+    const {error:uploadError}=await client.storage.from('student-evidence').upload(path,uploadFile,{upsert:false,contentType:uploadMime,cacheControl:'3600'});
     if(uploadError)throw uploadError;
+    if(prepared.thumb)await uploadOptionalThumbnail('student-evidence',path,prepared.thumb);
     const {error:recordError}=await client.from('submission_files').insert({
       submission_id:submissionId,
       storage_path:path,
       original_name:file.name||safe,
-      mime_type:file.type||'',
-      size_bytes:file.size||0
+      mime_type:uploadMime,
+      size_bytes:uploadFile.size||0
     });
     if(recordError){
-      await client.storage.from('student-evidence').remove([path]);
+      await client.storage.from('student-evidence').remove([path,thumbnailPath(path)]);
       throw recordError;
     }
     return path;
@@ -931,11 +1043,17 @@ const api = {
     if(error)throw error;
     return data?.signedUrl||null;
   },
+  async openEvidenceThumbnail(path){
+    if(!client||!this.user)throw new Error('Sign in to view evidence.');
+    const {data,error}=await client.storage.from('student-evidence').createSignedUrl(thumbnailPath(path),300);
+    if(error)throw error;
+    return data?.signedUrl||null;
+  },
   async getNotifications(){
     if(!client||!this.user)return [];
     const {data,error}=await client
       .from('notifications')
-      .select('*')
+      .select('id,user_id,kind,title,body,link,read_at,created_at')
       .eq('user_id',this.user.id)
       .order('created_at',{ascending:false})
       .limit(50);
@@ -1184,21 +1302,19 @@ const api = {
   },
   async teacherOverview(){
     if(!client||!this.user||this.profile?.role!=='teacher')return null;
-    const [{data:profiles},{data:teachers},{data:progress},{data:projects},{data:comments},{data:requests},{data:submissions},{data:classes},{data:teacherInvites},{data:collabProjects}] = await Promise.all([
+    const [{data:profiles},{data:teachers},{data:progress},{data:projects},{data:comments},{data:requests},{data:classes},{data:teacherInvites}] = await Promise.all([
       client.from('profiles').select('id,display_name,role,created_at').eq('role','student').order('display_name'),
       client.from('profiles').select('id,display_name,role,created_at').eq('role','teacher').order('display_name'),
-      client.from('lesson_progress').select('*').eq('completed',true),
-      client.from('project_progress').select('*'),
+      client.from('lesson_progress').select('user_id,lesson_id,completed').eq('completed',true),
+      client.from('project_progress').select('user_id,mechanic_id,status'),
       client.from('lesson_comments').select('*').order('created_at',{ascending:false}),
       client.from('student_requests').select('id,author_id,category,title,body,status,created_at,request_votes(user_id)').order('created_at',{ascending:false}),
-      client.from('evidence_submissions').select('*,submission_files(*)').order('updated_at',{ascending:false}),
       client.from('classes').select('*,class_members(user_id),class_teachers(teacher_id,added_by,created_at)').order('created_at',{ascending:false}),
-      client.from('teacher_invites').select('id,code_hint,label,created_by,expires_at,used_by,used_at,revoked_at,created_at').eq('created_by',this.user.id).order('created_at',{ascending:false}),
-      client.from('projects').select('id,owner_id,title,project_type,project_kind,class_id,status,updated_at').order('updated_at',{ascending:false})
+      client.from('teacher_invites').select('id,code_hint,label,created_by,expires_at,used_by,used_at,revoked_at,created_at').eq('created_by',this.user.id).order('created_at',{ascending:false})
     ]);
     return {
       profiles:profiles||[],teachers:teachers||[],progress:progress||[],projects:projects||[],comments:comments||[],
-      requests:requests||[],submissions:submissions||[],classes:classes||[],teacherInvites:teacherInvites||[],collabProjects:collabProjects||[]
+      requests:requests||[],classes:classes||[],teacherInvites:teacherInvites||[]
     };
   }
 };

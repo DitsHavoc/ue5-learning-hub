@@ -318,3 +318,17 @@ File: `migrations/20260829_32_model_video_xp.sql`
 Updates only the private learning-XP mapping. `modelvideo:*` lesson-progress completions are worth 20 XP once, preserving all existing values for Module 0 chapters, Model Doctor, Modelling lessons, Build X, Fix Clinics, Designer sources, Unreal learning and Sculpt. No tables, buckets, RLS policies, class/project/evidence schema or assignment workflow are added.
 
 Applied successfully to the live UE5 Learning Hub Supabase project on 29 Aug 2026 as migration `model_video_xp`; verification returned 20 XP for `modelvideo:interface-basics`, 20 XP for `modeltheory:read-the-mesh` and 250 XP for `modelbuild:build-crate`.
+
+## v3.39.3 — Egress Optimisation + Teams-First Project Retirement
+
+Files:
+- `migrations/20260830_33_project_media_thumbnail_backfill.sql`
+- `migrations/20260830_34_retire_projects_and_evidence_writes.sql`
+
+Migration 33 was applied while the bandwidth pass was being built. It allowed a tightly-scoped one-time `.thumb.webp` backfill beside an existing `project-media` object so legacy full-resolution screenshots could stop being repeatedly downloaded by gallery views.
+
+The product decision then changed: collaborative Hub Projects and formal lesson-evidence uploads are now retired in favour of Microsoft Teams. Migration 34 preserves all historical rows/files and SELECT access for recovery/export, but removes client mutation policies for Projects, project templates/members/milestones/updates/media/comments and formal evidence submissions/files. It also removes the project/evidence Storage write policies and revokes the old project mutation RPCs. The temporary legacy-thumbnail INSERT policy from migration 33 is removed by migration 34 because the retired Project UI no longer needs to create thumbnails.
+
+**Critique Board is not retired.** Its class-scoped Storage INSERT/UPDATE/DELETE policies remain writable, and its images are client-compressed/thumbnailed by v3.39.3.
+
+Both migrations were applied successfully to the live UE5 Learning Hub project on 30 Aug 2026. Post-migration policy verification showed that the only remaining non-SELECT Storage policies in the audited project/evidence set were the three Critique Board media policies.

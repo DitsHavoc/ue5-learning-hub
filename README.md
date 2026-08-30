@@ -1,4 +1,8 @@
-# Current release — v3.39.2
+# Current release — v3.39.3
+
+**Teams-First Lean Hub + Egress Pass.** The duplicate Hub Projects/formal evidence-submission workflow is retired from live student and teacher navigation. Microsoft Teams is the single home for project briefs, deadlines, formal submissions and assessed feedback; the Hub keeps learning, practical builds, revision, Critique Board, classes, progress, XP and lesson feedback. Historical Project/evidence data is preserved read-only rather than deleted. Screenshot uploads that remain in active Hub features are client-optimised and thumbnailed to reduce Supabase egress. See `RELEASE-NOTES-v3.39.3.md` and `TEAMS-FIRST-EGRESS-QA-v3.39.3.md`.
+
+## Previous release — v3.39.2
 
 **Editorial Correction Pass.** The Hub copy was audited for student clarity without rewriting content that was already working. Environment Art & Set Dressing and Materials & Surfaces now use six discipline-specific primary case studies backed by developer/GDC/interview evidence; generic development-history copy has been removed from live student pages; Core Unreal deep-dive headings and project/assessment wording have been cleaned up. No IDs, XP rules or database schema changed. See `RELEASE-NOTES-v3.39.2.md` and `EDITORIAL-CORRECTION-QA-v3.39.2.md`.
 

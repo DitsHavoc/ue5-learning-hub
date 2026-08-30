@@ -1894,3 +1894,83 @@ alter table public.critique_feedback add constraint critique_feedback_works_well
 alter table public.critique_feedback add constraint critique_feedback_clearer_check check (char_length(clearer) between 12 and 600);
 alter table public.critique_feedback add constraint critique_feedback_change_try_check check (char_length(change_try) between 12 and 600);
 
+
+-- ============================================================================
+-- v3.39.3 — legacy project screenshot thumbnail helper (migration 33)
+-- Historical migration retained in the deploy-all schema. The INSERT policy is
+-- intentionally removed by the Teams-first retirement block immediately after.
+-- ============================================================================
+create or replace function private.can_write_project_thumbnail_path(p_path text)
+returns boolean
+language sql
+stable
+security definer
+set search_path = pg_catalog, public, private, storage
+as $$
+  select
+    right(coalesce(p_path,''),11) = '.thumb.webp'
+    and (
+      (
+        split_part(coalesce(p_path,''),'/',2) = (select auth.uid())::text
+        and (select private.project_is_member((select private.project_id_from_media_path(p_path)),(select auth.uid())))
+      )
+      or (select private.teacher_can_access_project((select private.project_id_from_media_path(p_path))))
+    )
+    and exists(
+      select 1
+      from storage.objects o
+      where o.bucket_id = 'project-media'
+        and o.name = left(p_path, greatest(length(p_path)-11,0))
+    );
+$$;
+revoke all on function private.can_write_project_thumbnail_path(text) from public, anon;
+grant execute on function private.can_write_project_thumbnail_path(text) to authenticated;
+drop policy if exists "project media legacy thumbnail upload" on storage.objects;
+create policy "project media legacy thumbnail upload" on storage.objects
+for insert to authenticated
+with check (
+  bucket_id='project-media'
+  and (select private.can_write_project_thumbnail_path(name))
+);
+
+-- ============================================================================
+-- v3.39.3 — Teams-first retirement of duplicate Projects/evidence writes
+-- Historical data remains readable under existing SELECT policies.
+-- ============================================================================
+drop policy if exists "students create own submissions" on public.evidence_submissions;
+drop policy if exists "submissions updated by editable owner or assigned teacher" on public.evidence_submissions;
+drop policy if exists "students add files to editable submissions" on public.submission_files;
+drop policy if exists "students delete files from editable submissions" on public.submission_files;
+
+drop policy if exists "project owner updates project" on public.projects;
+drop policy if exists "active project owner deletes project" on public.projects;
+drop policy if exists "class teachers create project templates" on public.project_templates;
+drop policy if exists "class teachers update project templates" on public.project_templates;
+drop policy if exists "class teachers delete project templates" on public.project_templates;
+drop policy if exists "active owner removes members or member leaves" on public.project_members;
+drop policy if exists "active members update own role label" on public.project_members;
+drop policy if exists "lead or teacher creates milestones" on public.project_milestones;
+drop policy if exists "team lead or teacher updates milestones" on public.project_milestones;
+drop policy if exists "lead or teacher deletes milestones" on public.project_milestones;
+drop policy if exists "active members create own project updates" on public.project_updates;
+drop policy if exists "active authors update own project updates" on public.project_updates;
+drop policy if exists "active authors delete own project updates" on public.project_updates;
+drop policy if exists "active members add own project media" on public.project_media;
+drop policy if exists "active uploader updates own project media caption" on public.project_media;
+drop policy if exists "active uploader deletes own project media" on public.project_media;
+drop policy if exists "members active or teachers review project comments" on public.project_comments;
+drop policy if exists "teachers add overall project feedback" on public.project_comments;
+drop policy if exists "authors update own project comments while reviewable" on public.project_comments;
+drop policy if exists "authors delete own project comments while reviewable" on public.project_comments;
+
+drop policy if exists "project media storage upload" on storage.objects;
+drop policy if exists "project media legacy thumbnail upload" on storage.objects;
+drop policy if exists "project media storage delete own" on storage.objects;
+drop policy if exists "students upload editable evidence" on storage.objects;
+drop policy if exists "students update editable evidence" on storage.objects;
+drop policy if exists "students delete editable evidence" on storage.objects;
+
+revoke execute on function public.join_project_by_code(text) from public, anon, authenticated;
+revoke execute on function public.regenerate_project_join_code(uuid) from public, anon, authenticated;
+revoke execute on function public.reopen_project(uuid) from public, anon, authenticated;
+revoke execute on function public.start_project_from_template(uuid,text) from public, anon, authenticated;

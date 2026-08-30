@@ -48,7 +48,6 @@ const BADGE_META={
   'halfway':{rarity:'Uncommon',tone:'uncommon',hint:'Complete 10 core lessons.'},
   'community':{rarity:'Uncommon',tone:'uncommon',hint:'Submit an idea to the Requests Board.'},
   'chapter-build':{rarity:'Rare',tone:'rare',hint:'Complete your first Chapter Build.'},
-  'evidence':{rarity:'Rare',tone:'rare',hint:'Get 3 pieces of evidence approved.'},
   'game-builder':{rarity:'Rare',tone:'rare',hint:'Complete 10 Signal Lost practice mechanics.'},
   'final-game':{rarity:'Epic',tone:'epic',hint:'Complete all Signal Lost practice mechanics.'},
   'course':{rarity:'Legendary',tone:'legendary',hint:'Complete every core lesson.'},
@@ -453,9 +452,13 @@ function updateChrome(){
     if(classesNav)classesNav.hidden=true;
   }
 }
+let cloudSyncPromise=null,cloudSyncLastAt=0;
 async function syncCloudProgress(){
   if(!BACKEND.user)return;
-  try{
+  const now=Date.now();
+  if(cloudSyncPromise)return cloudSyncPromise;
+  if(now-cloudSyncLastAt<2000)return;
+  cloudSyncPromise=(async()=>{try{
     const rows=await BACKEND.getLessonProgress();
     const cloudCompleted=rows.filter(r=>r.completed).map(r=>r.lesson_id);
     const lessonIds=new Set(DATA.lessons.map(l=>l.id));
@@ -486,7 +489,9 @@ async function syncCloudProgress(){
       projectState.pitch=profile.pitch||projectState.pitch;
     }
     saveProjectState();
-  }catch(e){console.warn('Cloud sync',e)}
+    cloudSyncLastAt=Date.now();
+  }catch(e){console.warn('Cloud sync',e)}finally{cloudSyncPromise=null}})();
+  return cloudSyncPromise;
 }
 
 function lessonRow(l,index){
@@ -769,7 +774,7 @@ function projectTaskCard(l){
     <div class="project-proof"><strong>Definition of done</strong>${requirements(x.proof)}</div>
     <div class="callout good"><b>Optional polish:</b> ${esc(x.polish)}</div>
     <div class="project-status-bar">
-      <small>This tracks the optional <b>Signal Lost practice</b>. Assignment and group work belongs in <b>Projects</b>.</small>
+      <small>This only tracks the optional <b>Signal Lost practice mechanic</b>. Formal briefs, submissions and assessment stay in <b>Microsoft Teams</b>.</small>
       ${statusControls(l.id)}
     </div>
   </div>`;
@@ -1306,29 +1311,33 @@ function modelingFixPage(id){
 
 
 
+function teamsProjectNoticePage(){
+  return `<div class="page-head"><div class="breadcrumb"><a href="#/">Home</a> / Projects</div><span class="eyebrow">TEAMS-FIRST WORKFLOW</span><h1>Project work lives in Microsoft Teams</h1><p class="muted">The Hub now focuses on learning, practice, revision, critique and progress. Project briefs, deadlines, formal submissions and assessed feedback stay in Microsoft Teams so there is only one place to hand work in.</p></div>
+  <section class="section"><div class="section-head"><div><h2>Use the Hub to get better at the work</h2><p>Learn the technique here, practise it, use Critique Board for informal feedback, then follow the project brief and submit through Teams.</p></div></div><div class="button-row"><a class="button primary" href="#/homework">Open independent study →</a><a class="button ghost" href="#/critique">Open Critique Board</a><a class="button ghost" href="#/">Back to Home</a></div></section>`;
+}
+
 function classHomeShortcut(){
   if(!BACKEND.user)return '';
   const teacher=isTeacher();
   return `<section class="portal-class-shortcut ${teacher?'teacher':'student'}">
     <div class="portal-class-shortcut-icon">🏫</div>
-    <div class="portal-class-shortcut-copy"><span class="eyebrow">${teacher?'TEACHING GROUPS':'YOUR TEACHING GROUP'}</span><h2>${teacher?'Classes':'My Class'}</h2><p>${teacher?'Jump straight to student rosters, class codes and class progress without hunting through the Teacher dashboard.':'Keep your class, progress and class projects one click away.'}</p></div>
-    <div class="portal-class-shortcut-actions"><a class="button primary" href="#/classes">${teacher?'Open Classes':'Open My Class'} →</a><a class="button ghost" href="${teacher?'#/teacher':'#/progress'}">${teacher?'Teacher dashboard':'Evidence & Progress'}</a></div>
+    <div class="portal-class-shortcut-copy"><span class="eyebrow">${teacher?'TEACHING GROUPS':'YOUR TEACHING GROUP'}</span><h2>${teacher?'Classes':'My Class'}</h2><p>${teacher?'Jump straight to student rosters, class codes and class progress without hunting through the Teacher dashboard.':'Keep your class, progress and peer feedback one click away.'}</p></div>
+    <div class="portal-class-shortcut-actions"><a class="button primary" href="#/classes">${teacher?'Open Classes':'Open My Class'} →</a><a class="button ghost" href="${teacher?'#/teacher':'#/progress'}">${teacher?'Teacher dashboard':'My Progress'}</a></div>
   </section>`;
 }
 
 function dashboard(){
   return `<section class="portal-hero portal-hero-clean">
-    <div><span class="eyebrow">UE5 LEARNING HUB</span><h1>Choose a path.</h1><p>Learn systems. Design worlds. Build assets. Make projects. Keep an eye on the industry.</p></div>
+    <div><span class="eyebrow">UE5 LEARNING HUB</span><h1>Choose a path.</h1><p>Learn systems. Design worlds. Build assets. Practise, critique and keep an eye on the industry.</p></div>
   </section>
 
   ${classHomeShortcut()}
 
   <section class="portal-path-grid" aria-label="Choose a Learning Hub area">
-    <a class="portal-path-card programming" href="#/programming"><div class="portal-path-icon">⌘</div><span class="portal-kicker">BUILDING BLOCKS • SYSTEMS • BLUEPRINTS</span><h2>Unreal Learning</h2><p>Learn Unreal terms in tiny Building Blocks, understand the deeper systems, then apply them in practical tutorials and projects.</p><div class="portal-chip-row"><span>${BLOCKS.blocks.filter(b=>b.tier==='core').length} core blocks</span><span>${DATA.lessons.length} system lessons</span><span>${(TOOLS.families||[]).length} recipe families</span></div><strong>Enter Unreal Learning →</strong></a>
+    <a class="portal-path-card programming" href="#/programming"><div class="portal-path-icon">⌘</div><span class="portal-kicker">BUILDING BLOCKS • SYSTEMS • BLUEPRINTS</span><h2>Unreal Learning</h2><p>Learn Unreal terms in tiny Building Blocks, understand the deeper systems, then apply them in practical tutorials and challenge builds.</p><div class="portal-chip-row"><span>${BLOCKS.blocks.filter(b=>b.tier==='core').length} core blocks</span><span>${DATA.lessons.length} system lessons</span><span>${(TOOLS.families||[]).length} recipe families</span></div><strong>Enter Unreal Learning →</strong></a>
     <a class="portal-path-card design" href="#/design"><div class="portal-path-icon">✦</div><span class="portal-kicker">LEVELS • ART • LIGHT • SOUND</span><h2>Design</h2><p>Build readable spaces, create atmosphere, guide players and learn why strong game worlds communicate rather than simply decorate.</p><div class="portal-chip-row"><span>${DESIGN.modules.length} disciplines</span><span>24 different games</span><span>Black Box challenges</span></div><strong>Enter Designer Studio →</strong></a>
     <a class="portal-path-card modeling" href="#/modeling"><div class="portal-path-icon">⬡</div><span class="portal-kicker">3DS MAX • TOPOLOGY • UVS</span><h2>3D Modelling</h2><p>Start from reference, plan the form, follow clear 3ds Max steps, inspect the mesh and finish with a game-ready asset you can explain.</p><div class="portal-chip-row"><span>${MODEL_FOUNDATIONS.chapters.length} foundations chapters</span><span>${MODEL.lessons.length} deep lessons</span><span>${MODEL.builds.length} Build X</span></div><strong>Open 3D Modelling Studio →</strong></a>
     <a class="portal-path-card sculpt" href="#/sculpt"><div class="portal-path-icon">🗿</div><span class="portal-kicker">DIGITAL CLAY • FORM • SILHOUETTE</span><h2>Sculpt Playground</h2><p>Push and pull digital clay in SculptGL with six tiny guided exercises, then inspect what exists underneath the surface.</p><div class="portal-chip-row"><span>${SCULPT.practices.length} exercises</span><span>Browser sculpting</span><span>OBJ → Max</span></div><strong>Play with clay →</strong></a>
-    <a class="portal-path-card projects" href="#/projects"><div class="portal-path-icon">▣</div><span class="portal-kicker">MAKE • DOCUMENT • ITERATE</span><h2>Projects</h2><p>Take what you know into assignments, game jams and team projects with development logs, milestones, screenshots and feedback.</p><div class="portal-chip-row"><span>Solo</span><span>Group</span><span>Development logs</span></div><strong>Open Projects →</strong></a>
     <a class="portal-path-card news" href="#/news"><div class="portal-path-icon">◉</div><span class="portal-kicker">LIVE • INDUSTRY • WATCH & LISTEN</span><h2>News & Industry</h2><p>Follow games and development stories, trailers, podcasts and industry discussion. Save what matters and come back later.</p><div class="portal-chip-row"><span>Live feeds</span><span>Read later</span><span>Discussion</span></div><strong>See what is happening →</strong></a>
   </section>
 
@@ -1344,8 +1353,8 @@ function dashboard(){
 function programmingPage(){
   const i=level(),n=nextLesson(),np=pathProgress(n.path),pb=pendingUnlockedBuild(),blocksDone=(state.blockCompleted||[]).length,coreBlocks=BLOCKS.blocks.filter(b=>b.tier==='core'),coreDone=coreBlocks.filter(b=>blockDone(b.id)).length;
   const pathsComplete=DATA.paths.filter(p=>pathProgress(p.id).pct===100).length;
-  return `<div class="page-head programming-page-head"><div class="breadcrumb"><a href="#/">Home</a> / Unreal Learning</div><span class="eyebrow">UNDERSTAND THE ENGINE • BUILD SYSTEMS • APPLY THEM</span><h1>⌘ Unreal Learning</h1><p class="muted">You do not need to memorise Unreal before making games. Learn a small Building Block, use it in a system, then meet it again in tutorials and projects.</p></div>
-  <section class="unreal-learning-ladder"><a href="#/blocks"><span>01</span><div><small>3–8 MINUTE MICRO-LEARNING</small><h2>🧱 Building Blocks</h2><p>What does IA, BPI, Struct, AnimBP, NavMesh or Skeletal Mesh actually mean? Learn the term once with a tiny proof exercise.</p><strong>${coreDone}/${coreBlocks.length} Core learned →</strong></div></a><a href="#/path/${n.path}"><span>02</span><div><small>DEEPER SYSTEM UNDERSTANDING</small><h2>⌘ Core System Lessons</h2><p>Understand why systems work, build them carefully, debug them and apply them in a larger mechanic.</p><strong>${completedLessons().length}/${DATA.lessons.length} lessons complete →</strong></div></a><a href="#/tutorials"><span>03</span><div><small>JUST-IN-TIME BUILDING</small><h2>🛠 Quick Tutorials</h2><p>Choose a system family first, then the exact practical outcome. Similar builds are grouped instead of repeated as separate top-level destinations.</p><strong>${(TOOLS.families||[]).length} families • ${TOOLS.tutorials.filter(t=>!t.libraryHidden).length} family builds + ${TOOLS.tutorials.filter(t=>t.libraryHidden).length} lesson applications →</strong></div></a><a href="#/challenges"><span>04</span><div><small>REMOVE THE TRAINING WHEELS</small><h2>🔥 Challenges & Projects</h2><p>Combine systems without every node being handed to you. This is where copying becomes understanding.</p><strong>Prove it →</strong></div></a></section>
+  return `<div class="page-head programming-page-head"><div class="breadcrumb"><a href="#/">Home</a> / Unreal Learning</div><span class="eyebrow">UNDERSTAND THE ENGINE • BUILD SYSTEMS • APPLY THEM</span><h1>⌘ Unreal Learning</h1><p class="muted">You do not need to memorise Unreal before making games. Learn a small Building Block, use it in a system, then meet it again in tutorials and challenge builds.</p></div>
+  <section class="unreal-learning-ladder"><a href="#/blocks"><span>01</span><div><small>3–8 MINUTE MICRO-LEARNING</small><h2>🧱 Building Blocks</h2><p>What does IA, BPI, Struct, AnimBP, NavMesh or Skeletal Mesh actually mean? Learn the term once with a tiny proof exercise.</p><strong>${coreDone}/${coreBlocks.length} Core learned →</strong></div></a><a href="#/path/${n.path}"><span>02</span><div><small>DEEPER SYSTEM UNDERSTANDING</small><h2>⌘ Core System Lessons</h2><p>Understand why systems work, build them carefully, debug them and apply them in a larger mechanic.</p><strong>${completedLessons().length}/${DATA.lessons.length} lessons complete →</strong></div></a><a href="#/tutorials"><span>03</span><div><small>JUST-IN-TIME BUILDING</small><h2>🛠 Quick Tutorials</h2><p>Choose a system family first, then the exact practical outcome. Similar builds are grouped instead of repeated as separate top-level destinations.</p><strong>${(TOOLS.families||[]).length} families • ${TOOLS.tutorials.filter(t=>!t.libraryHidden).length} family builds + ${TOOLS.tutorials.filter(t=>t.libraryHidden).length} lesson applications →</strong></div></a><a href="#/challenges"><span>04</span><div><small>REMOVE THE TRAINING WHEELS</small><h2>🔥 Challenges & Practice</h2><p>Combine systems without every node being handed to you. This is where copying becomes understanding.</p><strong>Prove it →</strong></div></a></section>
   <section class="programming-continue"><div><span class="eyebrow">CONTINUE CORE SYSTEMS • ${esc(path(n.path).title)}</span><h2>${esc(n.title)}</h2><p>${esc(n.short)}</p><div class="path-meta"><span>${n.duration} • ${n.xp} XP</span><span>${np.pct}% path complete</span></div><div class="progress"><span style="width:${np.pct}%"></span></div></div><div class="programming-continue-actions"><a class="button primary" href="${pb?`#/chapter-build/${pb.path}`:`#/lesson/${n.id}`}">${pb?`🎮 Build: ${esc(pb.title)}`:'▶ Continue core lesson'}</a><a class="button ghost" href="#/blocks">🧱 Building Blocks</a></div></section>
   <section class="snippet-programming-cta integrated"><div><span class="eyebrow">⚡ EPIC PASTE ASSISTS</span><h2>Learn the system first; use the shortcut at the right moment.</h2><p>Use the official Epic paste assists inside the relevant Unreal Learning lessons and recipe families. The standalone bank remains a searchable reference shelf when you need to find one directly.</p></div><a class="button ghost" href="#/snippets">Search the reference bank →</a></section>
   <div class="stat-grid programming-stats"><div class="stat"><small>Building Blocks</small><strong>${blocksDone}/${BLOCKS.blocks.length}</strong></div><div class="stat"><small>Core lessons</small><strong>${completedLessons().length}/${DATA.lessons.length}</strong></div><div class="stat"><small>Practical builds</small><strong>${TOOLS.tutorials.filter(t=>tutorialDone(t.id)).length}/${TOOLS.tutorials.length}</strong></div><div class="stat"><small>Total XP</small><strong>${i.xp}</strong></div></div>
@@ -1527,22 +1536,14 @@ function evidenceStatusClass(s){
   return ({draft:'draft',submitted:'submitted',changes_required:'changes',approved:'approved'})[s]||'none';
 }
 function evidenceSection(l){
-  if(!BACKEND.user){
-    return `<section class="content-card" id="evidence">
-      <span class="eyebrow">10 • Evidence</span><h2>Prove you built it</h2>
-      <p class="muted">A completion tick tells you that you visited the lesson. Evidence shows that the mechanic actually works in your game.</p>
-      <div class="offline-note">Sign in with a free Learning Hub account to submit screenshots/PDF evidence, a build link and a short reflection for teacher review. Guest lesson and game progress still works locally on this browser.</div>
-      ${BACKEND.mode==='cloud'?'<button class="button small" data-action="open-auth" style="margin-top:9px">Sign in / create account</button>':''}
-    </section>`;
-  }
-  return `<section class="content-card" id="evidence">
-    <span class="eyebrow">10 • Evidence</span><h2>Prove you built it</h2>
-    <p class="muted">Show the mechanic working in your actual game and briefly explain what you built, what changed, and what you learned.</p>
+  return `<section class="content-card teams-proof-card" id="evidence">
+    <span class="eyebrow">10 • Keep proof for Teams</span><h2>Capture what proves it works</h2>
+    <p class="muted">The Hub does not collect assignment evidence. Use this checklist to decide what is worth capturing, then submit through Microsoft Teams when your teacher asks for it.</p>
     ${l.evidencePrompt?`<div class="evidence-brief">
-      <div><span class="deep-label">SHOW</span>${l.evidencePrompt.show.map(x=>`<p>✓ ${esc(x)}</p>`).join('')}</div>
-      <div><span class="deep-label">REFLECT</span>${l.evidencePrompt.reflection.map(x=>`<p>• ${esc(x)}</p>`).join('')}</div>
+      <div><span class="deep-label">CAPTURE</span>${l.evidencePrompt.show.map(x=>`<p>✓ ${esc(x)}</p>`).join('')}</div>
+      <div><span class="deep-label">BE READY TO EXPLAIN</span>${l.evidencePrompt.reflection.map(x=>`<p>• ${esc(x)}</p>`).join('')}</div>
     </div>`:''}
-    <div id="evidencePanel" data-lesson="${l.id}"><div class="muted">Loading your evidence…</div></div>
+    <div class="callout good"><b>Teams hand-in:</b> keep the clearest screenshot, clip, build link or short reflection your brief asks for. Nothing is uploaded to the Hub from this section.</div>
   </section>`;
 }
 
@@ -1632,7 +1633,7 @@ function lessonPage(id){
 
     <section class="content-card" id="debug"><span class="eyebrow">08 • Debug & improve</span><h2>Common problems</h2><ul>${l.common.map(x=>`<li>${esc(x)}</li>`).join('')}</ul><div class="callout good"><b>Good practice:</b> ${esc(l.goodPractice)}</div></section>
 
-    <section class="content-card" id="game"><span class="eyebrow">09 • Practice build</span><h2>Apply it in a playable system</h2><p>Use Signal Lost as the shared practice spine, or adapt the same mechanic to a sandbox. Your assessed and group projects are logged separately in Projects.</p>${projectTaskCard(l)}</section>
+    <section class="content-card" id="game"><span class="eyebrow">09 • Practice build</span><h2>Apply it in a playable system</h2><p>Use Signal Lost as the shared practice spine, or adapt the same mechanic to a sandbox. This is practice, not an assignment submission — formal project work stays in Microsoft Teams.</p>${projectTaskCard(l)}</section>
 
     ${evidenceSection(l)}
     ${commentSection(l)}
@@ -1656,8 +1657,8 @@ function lessonPage(id){
       <button class="section-button" data-action="scroll" data-target="debug">08 Debug & improve</button>
       <button class="section-button" data-action="scroll" data-target="game">09 Practice build</button>
     </div>
-    <div class="lesson-nav-group"><span class="lesson-nav-label">SUBMIT & REFLECT</span>
-      <button class="section-button" data-action="scroll" data-target="evidence">10 Evidence</button>
+    <div class="lesson-nav-group"><span class="lesson-nav-label">PROVE & REFLECT</span>
+      <button class="section-button" data-action="scroll" data-target="evidence">10 Proof for Teams</button>
       <button class="section-button" data-action="scroll" data-target="comments">11 Ask / reflect</button>
     </div>
     <hr>
@@ -1852,7 +1853,7 @@ function projectUpdateHtml(u,project,bundle){
   const commentButton=teacher?'Send targeted feedback':'Reply';
   const commentForm=`<form class="project-comment-form ${teacher?'teacher-feedback-form':''}" data-action-form="project-comment" data-project="${project.id}" data-update="${u.id}"><textarea name="body" maxlength="3000" required placeholder="${esc(commentPlaceholder)}"></textarea><button class="button tiny ${teacher?'primary':''}" type="submit">${commentButton}</button></form>`;
   const composer=canComment?(teacher?`<details class="targeted-feedback-compose"><summary>＋ Add targeted feedback <span>optional</span></summary>${commentForm}</details>`:commentForm):'';
-  return `<article class="project-log-entry ${mine?'mine':''}"><div class="project-log-head"><div><span class="entry-type">Milestone evidence</span><strong>${esc(u.author?.display_name||'Student')}</strong>${member?.role_label?`<small class="author-role">${esc(member.role_label)}</small>`:''}${u.title?`<h3>${esc(u.title)}</h3>`:''}</div><time>${new Date(u.created_at).toLocaleString()}${edited?' • edited':''}</time></div>${milestone?`<div class="log-milestone">Milestone: ${esc(milestone.title)}</div>`:`<div class="log-milestone unlinked">Not linked to a milestone</div>`}${projectUpdateBody(u)}${projectMediaHtml(u.media)}${projectExternalLinkHtml(u)}<div class="project-comments"><div class="project-comments-title">${commentTitle}</div>${u.comments.map(c=>{const staff=c.author?.role==='teacher';return `<div class="project-comment ${staff?'teacher-comment':''}"><b>${esc(c.author?.display_name||'User')}${staff?' <span class="comment-role-pill">🎓 Teacher</span>':''}</b><span>${new Date(c.created_at).toLocaleString()}</span><p>${esc(c.body)}</p></div>`}).join('')}${composer}</div>${mine&&active?`<details class="project-entry-edit"><summary>Edit my evidence</summary><form class="project-update-form compact-form" data-action-form="edit-project-update" data-project="${project.id}" data-update="${u.id}" data-existing-media="${u.media?.length||0}" data-has-milestones="${bundle.milestones.length?'1':'0'}"><div class="form-two"><label>Short heading <small>optional</small><input name="title" maxlength="180" value="${esc(u.title||'')}"></label><label>Milestone <small>${bundle.milestones.length?'required':'optional'}</small><select name="milestoneId" ${bundle.milestones.length?'required':''}><option value="">${bundle.milestones.length?'Choose milestone…':'Not linked'}</option>${bundle.milestones.map(m=>`<option value="${m.id}" ${m.id===u.milestone_id?'selected':''}>${esc(m.title)}</option>`).join('')}</select></label></div><label class="written-update-required"><span>Written update <small>required</small></span><textarea name="whatDid" maxlength="4000" required placeholder="Explain what you made or changed and what the evidence shows.">${esc(u.what_did||u.body||'')}</textarea></label><label><span>Why I did it <small>optional</small></span><textarea name="why" maxlength="3000">${esc(u.why||'')}</textarea></label><label><span>Problems / changes <small>optional</small></span><textarea name="problems" maxlength="3000">${esc(u.problems||'')}</textarea></label><label><span>Next steps <small>optional</small></span><textarea name="nextSteps" maxlength="3000">${esc(u.next_steps||'')}</textarea></label><div class="project-link-fields"><label><span>Link to larger work <small>optional</small></span><input type="url" name="externalUrl" maxlength="2000" value="${esc(u.external_url||'')}" placeholder="https://... OneDrive, Google Drive, SharePoint, YouTube etc."><small>Use this for large builds, videos or source files. Make sure your teacher has permission to view it.</small></label><label><span>Link label <small>optional</small></span><input name="externalLabel" maxlength="160" value="${esc(u.external_label||'')}" placeholder="e.g. Final playable build"></label></div>${u.media?.length?`<div class="existing-caption-editor"><strong>File captions / notes</strong>${u.media.map(f=>`<label>${esc(f.original_name)}<input name="caption_${f.id}" maxlength="500" value="${esc(f.caption||'')}" placeholder="What should the teacher notice?"></label>`).join('')}</div>`:''}${remaining?`<label>Add evidence files <small>optional • ${remaining} remaining • max 10 MB each</small><input type="file" name="files" multiple accept=".png,.jpg,.jpeg,.webp,.pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,image/png,image/jpeg,image/webp,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" data-project-files><small>Images, PDF, Word, PowerPoint or Excel. For larger files, use the share-link field above.</small></label><div class="file-caption-list" data-file-captions></div>`:''}<div class="button-row"><button class="button small primary" type="submit">Save evidence</button><button class="link-button danger-link" type="button" data-action="delete-project-update" data-project="${project.id}" data-update="${u.id}">Delete entry</button></div></form></details>`:''}</article>`;
+  return `<article class="project-log-entry ${mine?'mine':''}"><div class="project-log-head"><div><span class="entry-type">Milestone evidence</span><strong>${esc(u.author?.display_name||'Student')}</strong>${member?.role_label?`<small class="author-role">${esc(member.role_label)}</small>`:''}${u.title?`<h3>${esc(u.title)}</h3>`:''}</div><time>${new Date(u.created_at).toLocaleString()}${edited?' • edited':''}</time></div>${milestone?`<div class="log-milestone">Milestone: ${esc(milestone.title)}</div>`:`<div class="log-milestone unlinked">Not linked to a milestone</div>`}${projectUpdateBody(u)}${projectMediaHtml(u.media)}${projectExternalLinkHtml(u)}<div class="project-comments"><div class="project-comments-title">${commentTitle}</div>${u.comments.map(c=>{const staff=c.author?.role==='teacher';return `<div class="project-comment ${staff?'teacher-comment':''}"><b>${esc(c.author?.display_name||'User')}${staff?' <span class="comment-role-pill">🎓 Teacher</span>':''}</b><span>${new Date(c.created_at).toLocaleString()}</span><p>${esc(c.body)}</p></div>`}).join('')}${composer}</div>${mine&&active?`<details class="project-entry-edit"><summary>Edit my evidence</summary><form class="project-update-form compact-form" data-action-form="edit-project-update" data-project="${project.id}" data-update="${u.id}" data-existing-media="${u.media?.length||0}" data-has-milestones="${bundle.milestones.length?'1':'0'}"><div class="form-two"><label>Short heading <small>optional</small><input name="title" maxlength="180" value="${esc(u.title||'')}"></label><label>Milestone <small>${bundle.milestones.length?'required':'optional'}</small><select name="milestoneId" ${bundle.milestones.length?'required':''}><option value="">${bundle.milestones.length?'Choose milestone…':'Not linked'}</option>${bundle.milestones.map(m=>`<option value="${m.id}" ${m.id===u.milestone_id?'selected':''}>${esc(m.title)}</option>`).join('')}</select></label></div><label class="written-update-required"><span>Written update <small>required</small></span><textarea name="whatDid" maxlength="4000" required placeholder="Explain what you made or changed and what the evidence shows.">${esc(u.what_did||u.body||'')}</textarea></label><label><span>Why I did it <small>optional</small></span><textarea name="why" maxlength="3000">${esc(u.why||'')}</textarea></label><label><span>Problems / changes <small>optional</small></span><textarea name="problems" maxlength="3000">${esc(u.problems||'')}</textarea></label><label><span>Next steps <small>optional</small></span><textarea name="nextSteps" maxlength="3000">${esc(u.next_steps||'')}</textarea></label><div class="project-link-fields"><label><span>Link to larger work <small>optional</small></span><input type="url" name="externalUrl" maxlength="2000" value="${esc(u.external_url||'')}" placeholder="https://... OneDrive, Google Drive, SharePoint, YouTube etc."><small>Use this for large builds, videos or source files. Make sure your teacher has permission to view it.</small></label><label><span>Link label <small>optional</small></span><input name="externalLabel" maxlength="160" value="${esc(u.external_label||'')}" placeholder="e.g. Final playable build"></label></div>${u.media?.length?`<div class="existing-caption-editor"><strong>File captions / notes</strong>${u.media.map(f=>`<label>${esc(f.original_name)}<input name="caption_${f.id}" maxlength="500" value="${esc(f.caption||'')}" placeholder="What should the teacher notice?"></label>`).join('')}</div>`:''}${remaining?`<label>Add evidence files <small>optional • ${remaining} remaining • max 10 MB each</small><input type="file" name="files" multiple accept=".png,.jpg,.jpeg,.webp,.pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,image/png,image/jpeg,image/webp,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" data-project-files><small>Images are automatically resized and compressed for the Hub. PDF, Word, PowerPoint and Excel stay unchanged. For larger files, use the share-link field above.</small></label><div class="file-caption-list" data-file-captions></div>`:''}<div class="button-row"><button class="button small primary" type="submit">Save evidence</button><button class="link-button danger-link" type="button" data-action="delete-project-update" data-project="${project.id}" data-update="${u.id}">Delete entry</button></div></form></details>`:''}</article>`;
 }
 
 function projectOverallFeedbackHtml(comments,project,teacher){
@@ -1883,7 +1884,7 @@ async function renderProjectDetail(id){
       <section class="project-panel"><span class="eyebrow">Team</span><h2>${p.project_type==='group'?'Shared project':'Project owner'}</h2><div class="project-member-list">${b.members.map(m=>`<div class="project-member"><div class="project-member-avatar">${esc((m.profile?.display_name||'?').slice(0,1).toUpperCase())}</div><div><strong>${esc(m.profile?.display_name||'Student')}</strong><small>${m.role==='owner'?'Project Lead':esc(m.role_label||'Team member')}</small></div>${owner&&active&&m.role!=='owner'?`<button class="link-button danger-link" data-action="remove-project-member" data-project="${p.id}" data-user="${m.user_id}">Remove</button>`:''}</div>`).join('')}</div>${me&&active?`<form class="inline-role-form" data-action-form="project-role" data-project="${p.id}"><label>My role in this project<input name="roleLabel" maxlength="100" value="${esc(me.role_label||'')}" placeholder="e.g. Level Designer"></label><button class="button small" type="submit">Save role</button></form>`:''}${p.project_type==='group'&&owner&&active?`<div class="project-code-box"><small>GROUP JOIN CODE</small><code>${esc(p.join_code||'')}</code><div class="button-row"><button class="button small" data-action="copy-project-code" data-code="${esc(p.join_code||'')}">Copy code</button><button class="button small ghost" data-action="regenerate-project-code" data-project="${p.id}">New code</button></div></div>`:''}${me&&me.role!=='owner'&&active?`<button class="button small danger" data-action="leave-project" data-project="${p.id}" data-user="${BACKEND.user.id}">Leave project</button>`:''}</section>
       ${milestonePanel}
     </div>
-    ${canLog?`<section class="section project-log-create"><div class="section-head"><div><h2>Add milestone evidence</h2><p>Choose the milestone, write a short explanation of what you did, then attach files or a share link if they help prove it. Written context is required so evidence never has to explain itself.</p></div></div><form class="project-update-form milestone-evidence-form" data-action-form="project-update" data-project="${p.id}" data-existing-media="0" data-has-milestones="${b.milestones.length?'1':'0'}"><div class="form-two"><label>Short heading <small>optional</small><input name="title" maxlength="180" placeholder="e.g. Rebuilt the corridor greybox"></label><label>Milestone <small>${b.milestones.length?'required':'optional'}</small><select name="milestoneId" ${b.milestones.length?'required':''}><option value="">${b.milestones.length?'Choose milestone…':'Not linked to a milestone'}</option>${b.milestones.map(m=>`<option value="${m.id}">${esc(m.title)}</option>`).join('')}</select></label></div><label class="written-update-required"><span>Written update <small>required</small></span><textarea name="whatDid" maxlength="4000" required placeholder="What did you make, test or change? What should your teacher notice in the evidence?"></textarea></label><div class="structured-log-grid supporting-prompts"><label><span>Why I did it <small>optional</small></span><textarea name="why" maxlength="3000" placeholder="Why was this the right decision?"></textarea></label><label><span>Problems / changes <small>optional</small></span><textarea name="problems" maxlength="3000" placeholder="What went wrong or changed after testing?"></textarea></label><label><span>Next steps <small>optional</small></span><textarea name="nextSteps" maxlength="3000" placeholder="What will you do next?"></textarea></label></div><div class="project-link-fields"><label><span>Link to larger work <small>optional</small></span><input type="url" name="externalUrl" maxlength="2000" placeholder="https://... OneDrive, Google Drive, SharePoint, YouTube etc."><small>For large builds, videos or source files. Make sure your teacher has permission to view the link.</small></label><label><span>Link label <small>optional</small></span><input name="externalLabel" maxlength="160" placeholder="e.g. Final playable build"></label></div><label>Evidence files <small>optional • up to 6 • max 10 MB each</small><input type="file" name="files" multiple accept=".png,.jpg,.jpeg,.webp,.pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,image/png,image/jpeg,image/webp,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" data-project-files><small>PNG, JPG, WebP, PDF, Word, PowerPoint or Excel.</small></label><div class="file-caption-list" data-file-captions></div><div class="milestone-evidence-help"><b>What gets saved together:</b> milestone + written update + files/share link + teacher feedback.</div><button class="button primary" type="submit">Add milestone evidence</button></form></section>`:''}
+    ${canLog?`<section class="section project-log-create"><div class="section-head"><div><h2>Add milestone evidence</h2><p>Choose the milestone, write a short explanation of what you did, then attach files or a share link if they help prove it. Written context is required so evidence never has to explain itself.</p></div></div><form class="project-update-form milestone-evidence-form" data-action-form="project-update" data-project="${p.id}" data-existing-media="0" data-has-milestones="${b.milestones.length?'1':'0'}"><div class="form-two"><label>Short heading <small>optional</small><input name="title" maxlength="180" placeholder="e.g. Rebuilt the corridor greybox"></label><label>Milestone <small>${b.milestones.length?'required':'optional'}</small><select name="milestoneId" ${b.milestones.length?'required':''}><option value="">${b.milestones.length?'Choose milestone…':'Not linked to a milestone'}</option>${b.milestones.map(m=>`<option value="${m.id}">${esc(m.title)}</option>`).join('')}</select></label></div><label class="written-update-required"><span>Written update <small>required</small></span><textarea name="whatDid" maxlength="4000" required placeholder="What did you make, test or change? What should your teacher notice in the evidence?"></textarea></label><div class="structured-log-grid supporting-prompts"><label><span>Why I did it <small>optional</small></span><textarea name="why" maxlength="3000" placeholder="Why was this the right decision?"></textarea></label><label><span>Problems / changes <small>optional</small></span><textarea name="problems" maxlength="3000" placeholder="What went wrong or changed after testing?"></textarea></label><label><span>Next steps <small>optional</small></span><textarea name="nextSteps" maxlength="3000" placeholder="What will you do next?"></textarea></label></div><div class="project-link-fields"><label><span>Link to larger work <small>optional</small></span><input type="url" name="externalUrl" maxlength="2000" placeholder="https://... OneDrive, Google Drive, SharePoint, YouTube etc."><small>For large builds, videos or source files. Make sure your teacher has permission to view the link.</small></label><label><span>Link label <small>optional</small></span><input name="externalLabel" maxlength="160" placeholder="e.g. Final playable build"></label></div><label>Evidence files <small>optional • up to 6 • max 10 MB each</small><input type="file" name="files" multiple accept=".png,.jpg,.jpeg,.webp,.pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,image/png,image/jpeg,image/webp,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" data-project-files><small>Screenshots are automatically resized and compressed. PDF, Word, PowerPoint and Excel stay unchanged.</small></label><div class="file-caption-list" data-file-captions></div><div class="milestone-evidence-help"><b>What gets saved together:</b> milestone + written update + files/share link + teacher feedback.</div><button class="button primary" type="submit">Add milestone evidence</button></form></section>`:''}
     <section class="section"><div class="section-head"><div><h2>Milestone evidence</h2><p>Evidence stays attached to the relevant checkpoint. Teacher comments here are optional and best used only for something specific.</p></div></div><div class="project-log-list">${b.updates.length?b.updates.map(u=>projectUpdateHtml(u,p,b)).join(''):'<div class="empty">No milestone evidence yet.</div>'}</div></section>
     ${projectOverallFeedbackHtml(b.comments,p,teacher)}
     ${me?`<section class="section"><div class="section-head"><div><h2>My Contributions</h2><p>Only the development evidence attributed to you, ready to refer back to when you submit assessment work elsewhere.</p></div></div><div class="contribution-summary"><div><small>My log entries</small><strong>${myUpdates.length}</strong></div><div><small>My files</small><strong>${myMedia}</strong></div><div><small>Role</small><strong>${esc(me.role_label||(me.role==='owner'?'Project Lead':'Team member'))}</strong></div></div><div class="my-contribution-list">${myUpdates.length?myUpdates.slice().reverse().map(u=>contributionEntryHtml(u,b)).join(''):'<div class="muted">Your own entries will appear here.</div>'}</div></section>`:''}
@@ -1904,8 +1905,32 @@ function bindProjectFileInputs(root=document){
   });
 }
 
+function lazySignedPreview(nodes,{thumbnail,full,backfill=null,alt,fallbackText}){
+  const load=async node=>{
+    if(node.dataset.previewLoaded==='1')return;
+    node.dataset.previewLoaded='1';
+    const path=node.dataset.path;
+    try{
+      let thumbUrl='';
+      try{thumbUrl=await thumbnail(path)}catch(e){}
+      const img=document.createElement('img');img.alt=alt;img.loading='lazy';img.decoding='async';
+      let fellBack=false;
+      img.addEventListener('error',async()=>{
+        if(fellBack)return;fellBack=true;
+        if(backfill){try{const generated=await backfill(path);if(generated){img.src=generated;return}}catch(e){}}
+        try{const fullUrl=await full(path);if(fullUrl){img.src=fullUrl;return}}catch(e){}
+        node.textContent=fallbackText;
+      });
+      if(thumbUrl){node.replaceChildren(img);img.src=thumbUrl;}
+      else{const fullUrl=await full(path);if(fullUrl){node.replaceChildren(img);img.src=fullUrl;}else node.textContent=fallbackText;}
+    }catch(e){node.textContent=fallbackText;}
+  };
+  if(!('IntersectionObserver' in window)){nodes.forEach(load);return}
+  const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){observer.unobserve(entry.target);load(entry.target)}}),{rootMargin:'240px 0px'});
+  nodes.forEach(node=>observer.observe(node));
+}
 async function hydrateProjectMedia(){
-  await Promise.all($$('[data-project-preview]').map(async node=>{try{const url=await BACKEND.openProjectFile(node.dataset.path);if(!url)return;const img=document.createElement('img');img.src=url;img.alt='Project screenshot';img.loading='lazy';node.replaceChildren(img);}catch(e){node.textContent='Preview unavailable';}}));
+  lazySignedPreview($$('[data-project-preview]'),{thumbnail:path=>BACKEND.openProjectThumbnail(path),full:path=>BACKEND.openProjectFile(path),backfill:path=>BACKEND.backfillProjectThumbnail(path),alt:'Project screenshot',fallbackText:'Preview unavailable'});
 }
 
 async function loadEvidence(id){
@@ -1934,7 +1959,7 @@ function evidenceForm(l,s){
   return `<form class="evidence-form" data-action-form="evidence" data-lesson="${l.id}">
     <label><span>Short reflection</span><textarea name="reflection" maxlength="4000" required placeholder="What did you build? What problem did you solve? What did you change after testing?">${esc(s?.reflection||'')}</textarea></label>
     <label><span>Evidence link <small>optional</small></span><input name="evidenceUrl" type="url" maxlength="1000" value="${esc(s?.evidence_url||'')}" placeholder="Unlisted video, OneDrive/SharePoint link later, build link…"></label>
-    <label><span>Upload screenshots / PDF <small>optional • up to 6 files • max 10 MB each</small></span><input name="file" type="file" multiple accept="image/png,image/jpeg,image/webp,application/pdf"><small class="evidence-upload-help">PNG, JPG, WebP or PDF. For gameplay video, paste an external video/Stream/OneDrive link above rather than uploading the video file.</small></label>
+    <label><span>Upload screenshots / PDF <small>optional • up to 6 files • max 10 MB each</small></span><input name="file" type="file" multiple accept="image/png,image/jpeg,image/webp,application/pdf"><small class="evidence-upload-help">PNG, JPG, WebP or PDF. Screenshots are automatically resized and compressed for the Hub. For gameplay video, paste an external video/Stream/OneDrive link above rather than uploading the video file.</small></label>
     <div class="button-row">
       <button class="button small ghost" type="submit" data-intent="draft">Save draft</button>
       <button class="button small primary" type="submit" data-intent="submit">Submit for review</button>
@@ -1951,7 +1976,6 @@ function achievementData(approvedCount=0,requestCount=0){
     ['halfway','Halfway There','Complete 10 lessons.',done>=10,'½'],
     ['recipe','Recipe Tested','Complete 5 practical builds.',tuts>=5,'🛠'],
     ['chapter-build','Chapter Builder','Complete your first unlocked Chapter Build.',builds>=1,'🎮'],
-    ['evidence','Proof, Not Promises','Get 3 pieces of evidence approved.',approvedCount>=3,'✓'],
     ['community','Community Voice','Submit an idea to the Requests Board.',requestCount>=1,'✦'],
     ['final-game','Practice Build Complete','Complete all 20 practice mechanics.',game>=Object.keys(PROJECT.mechanics).length,'◈'],
     ['course','UE5 Pathfinder','Complete every lesson.',done>=DATA.lessons.length,'★'],
@@ -1971,9 +1995,9 @@ function progressPage(){
   const pp=projectProgress(),i=level(),eq=equippedBadge(),teacher=isTeacher();
   return `<div class="page-head progress-page-head">
     <div class="breadcrumb"><a href="#/">Dashboard</a> / My Progress</div>
-    <span class="eyebrow">XP • BADGES • EVIDENCE • FEEDBACK</span>
+    <span class="eyebrow">XP • BADGES • LEARNING • FEEDBACK</span>
     <h1>◎ My Progress</h1>
-    <p class="muted">${teacher?'Your staff badge and MAX level are automatic. Learning completion, evidence and project activity still track normally below.':"Track what you've completed, pin a favourite badge to your profile, and keep the evidence that proves what you can actually build."}</p>
+    <p class="muted">${teacher?'Your staff badge and MAX level are automatic. Learning completion and practice progress still track normally below.':"Track what you've learned, what you've practised and the badges you've earned. Formal project submissions stay in Microsoft Teams."}</p>
   </div>
   <section class="progress-player-banner ${teacher?'teacher-progress-banner':''}"><div class="progress-player-id">${avatarMarkup('xl',userDisplayName())}<div><span class="eyebrow">${esc(userRankTitle())}</span><h2>${esc(userDisplayName())}</h2><p>${teacher?'🎓 Teacher • Level MAX':`Level ${i.n} • ${i.xp} XP`}</p></div></div>${levelRingMarkup()}<div class="progress-equipped"><span>${teacher?'STAFF BADGE':'PINNED BADGE'}</span><strong>${eq?`${eq[4]} ${esc(eq[1])}`:'None yet'}</strong><small>${teacher?'Teacher-only • automatically equipped':eq?esc(BADGE_META[eq[0]]?.rarity||'Common'):'Unlock and pin one below'}</small></div></section>
   <div class="stat-grid">
@@ -1984,13 +2008,12 @@ function progressPage(){
     <div class="stat"><small>Chapter Builds</small><strong>${state.chapterBuildCompleted.length}/${TOOLS.chapterBuilds.length}</strong></div>
     <div class="stat"><small>Practice mechanics</small><strong>${pp.complete}/${pp.total}</strong></div>
     <div class="stat"><small>${teacher?'Level':'XP'}</small><strong>${teacher?'MAX':i.xp}</strong></div>
-    <div class="stat"><small>Cloud evidence</small><strong id="progressEvidenceStat">${BACKEND.user?'…':'Locked'}</strong></div>
   </div>
-  <section class="section"><div class="section-head"><div><span class="eyebrow">BADGE CABINET</span><h2>Achievements</h2><p>${teacher?'Your Unreal Instructor badge stays equipped; student-style achievements still record your learning activity.':'Meaningful milestones rather than participation confetti. Pin any unlocked badge to your player card.'}</p></div></div><div class="achievement-grid badge-cabinet" id="achievementGrid">${renderAchievements(0,0)}</div></section>
-  <section class="section"><div class="section-head"><div><h2>Evidence tracker</h2><p>See what has been submitted, approved or sent back for improvement.</p></div></div><div id="progressEvidence">${BACKEND.user?'<div class="empty">Loading evidence…</div>':'<div class="offline-note">Evidence tracking unlocks when you sign in. Lesson completion and optional Signal Lost practice status still work locally as a guest.</div>'}</div></section>
-  <section class="section"><div class="section-head"><div><h2>My class</h2><p>Your teaching group once account sign-in is enabled.</p></div></div><div id="progressClasses">${BACKEND.user?'<div class="empty">Loading classes…</div>':'<div class="offline-note">Create or sign in to a Learning Hub account, then join using the class code from your teacher.</div>'}</div></section>
-  <section class="section" id="notifications"><div class="section-head"><div><h2>Notifications</h2><p>Teacher feedback and roadmap updates.</p></div></div><div id="progressNotifications">${BACKEND.user?'<div class="empty">Loading notifications…</div>':'<div class="offline-note">Notifications unlock when you sign in to a Learning Hub account.</div>'}</div></section>`;
+  <section class="section"><div class="section-head"><div><span class="eyebrow">BADGE CABINET</span><h2>Achievements</h2><p>${teacher?'Your Unreal Instructor badge stays equipped; student-style achievements still record your learning activity.':'Meaningful learning milestones rather than participation confetti. Pin any unlocked badge to your player card.'}</p></div></div><div class="achievement-grid badge-cabinet" id="achievementGrid">${renderAchievements(0,0)}</div></section>
+  <section class="section"><div class="section-head"><div><h2>My class</h2><p>Your teaching group and class learning tools.</p></div></div><div id="progressClasses">${BACKEND.user?'<div class="empty">Loading classes…</div>':'<div class="offline-note">Create or sign in to a Learning Hub account, then join using the class code from your teacher.</div>'}</div></section>
+  <section class="section" id="notifications"><div class="section-head"><div><h2>Notifications</h2><p>Teacher replies, critique activity and roadmap updates.</p></div></div><div id="progressNotifications">${BACKEND.user?'<div class="empty">Loading notifications…</div>':'<div class="offline-note">Notifications unlock when you sign in to a Learning Hub account.</div>'}</div></section>`;
 }
+
 function renderAchievements(approvedCount,requestCount){
   return achievementData(approvedCount,requestCount).map(a=>{
     const meta=BADGE_META[a[0]]||{rarity:'Common',tone:'common',hint:a[2]},staff=a[0]==='teacher',pinned=staff&&isTeacher()||profilePrefs.badge===a[0];
@@ -1999,29 +2022,11 @@ function renderAchievements(approvedCount,requestCount){
 }
 async function renderProgressCloud(){
   if(!BACKEND.user)return;
-  const [subs,classes,notes,requests]=await Promise.all([
-    BACKEND.getMySubmissions(),BACKEND.getMyClasses(),BACKEND.getNotifications(),BACKEND.getRequests()
+  const [classes,notes,requests]=await Promise.all([
+    BACKEND.getMyClasses(),BACKEND.getNotifications(),BACKEND.getRequests()
   ]);
-  const approved=subs.filter(s=>s.status==='approved').length;
-  const submitted=subs.filter(s=>s.status==='submitted').length;
-  const changes=subs.filter(s=>s.status==='changes_required').length;
   const mine=requests.filter(r=>r.author_id===BACKEND.user.id).length;
-  const stat=$('#progressEvidenceStat');if(stat)stat.textContent=`${approved} approved`;
-  const ag=$('#achievementGrid');if(ag)ag.innerHTML=renderAchievements(approved,mine);
-
-  const evidence=$('#progressEvidence');
-  if(evidence){
-    const byMechanic=Object.fromEntries(subs.map(s=>[s.mechanic_id,s]));
-    evidence.innerHTML=`<div class="evidence-overview"><span><b>${approved}</b> approved</span><span><b>${submitted}</b> waiting</span><span><b>${changes}</b> changes required</span></div>
-    <div class="progress-list">${DATA.lessons.map(l=>{
-      const s=byMechanic[l.id],status=s?.status||'none';
-      return `<a class="progress-evidence-row ${evidenceStatusClass(status)}" href="#/lesson/${l.id}">
-        <span class="mechanic-state">${status==='approved'?'✓':status==='submitted'?'◷':status==='changes_required'?'!':'○'}</span>
-        <span><strong>${esc(l.projectTask?.name||l.title)}</strong><small>${esc(l.title)}</small></span>
-        <span class="request-status ${evidenceStatusClass(status)}">${esc(s?evidenceStatusLabel(status):'No evidence')}</span>
-      </a>`;
-    }).join('')}</div>`;
-  }
+  const ag=$('#achievementGrid');if(ag)ag.innerHTML=renderAchievements(0,mine);
 
   const classBox=$('#progressClasses');
   if(classBox)classBox.innerHTML=`
@@ -2039,6 +2044,7 @@ async function renderProgressCloud(){
   </div>`).join(''):'<div class="empty">No notifications yet.</div>';
   refreshNotificationCount(notes);
 }
+
 function refreshNotificationCount(notes=null){
   const badge=$('#notificationCount');
   if(!badge)return;
@@ -2287,7 +2293,7 @@ function studentCompletedContent(o,userId){
 async function renderTeacherClass(classId){
   const box=$('#teacherClassContent');if(!box)return;
   try{
-    const [o,allProjects,allTemplates]=await Promise.all([BACKEND.teacherOverview(),BACKEND.getProjects(),BACKEND.getProjectTemplates()]);
+    const o=await BACKEND.teacherOverview();
     const c=(o?.classes||[]).find(x=>String(x.id)===String(classId));
     if(!c){box.innerHTML='<div class="empty"><h3>Class not found.</h3><p>You may no longer teach this class, or it may have been deleted.</p><a class="button ghost" href="#/teacher">Back to Teacher Dashboard</a></div>';return}
     const memberIds=(c.class_members||[]).map(m=>m.user_id);
@@ -2295,40 +2301,34 @@ async function renderTeacherClass(classId){
     const progress=o.progress||[];
     const done=(uid,id)=>progress.some(p=>p.user_id===uid&&p.lesson_id===id&&p.completed);
     const count=(uid,items,prefix='')=>items.filter(x=>done(uid,prefix+x.id)).length;
-    const pending=(o.submissions||[]).filter(s=>memberIds.includes(s.user_id)&&s.status==='submitted');
-    const approved=(o.submissions||[]).filter(s=>memberIds.includes(s.user_id)&&s.status==='approved');
-    const classProjects=(allProjects||[]).filter(p=>String(p.class_id||'')===String(c.id));
-    const classTemplates=(allTemplates||[]).filter(t=>String(t.class_id||'')===String(c.id));
     const teacherNames=Object.fromEntries((o.teachers||[]).map(t=>[t.id,t.display_name]));
     const teacherIds=(c.class_teachers||[]).map(t=>t.teacher_id);
     const head=document.querySelector('.class-detail-head');
-    if(head)head.innerHTML=`<div class="breadcrumb"><a href="#/teacher">Teacher Dashboard</a> / ${esc(c.name)}</div><span class="eyebrow">Class learning view • ${esc(c.academic_year||'No academic year')}</span><h1>${esc(c.name)}</h1><p class="muted">One class, its students and exactly what they have completed across the Hub.</p><div class="class-detail-team">${teacherIds.map(id=>`<span>${esc(teacherNames[id]||'Teacher')}${id===c.teacher_id?' • Owner':''}</span>`).join('')}</div>`;
+    if(head)head.innerHTML=`<div class="breadcrumb"><a href="#/teacher">Teacher Dashboard</a> / ${esc(c.name)}</div><span class="eyebrow">Class learning view • ${esc(c.academic_year||'No academic year')}</span><h1>${esc(c.name)}</h1><p class="muted">One class, its students and exactly what they have completed across the Hub. Formal project work and submissions stay in Microsoft Teams.</p><div class="class-detail-team">${teacherIds.map(id=>`<span>${esc(teacherNames[id]||'Teacher')}${id===c.teacher_id?' • Owner':''}</span>`).join('')}</div>`;
     const lessonTotal=DATA.lessons.length*memberIds.length;
     const lessonDone=memberIds.reduce((n,uid)=>n+count(uid,DATA.lessons),0);
     const blockTotal=BLOCKS.blocks.length*memberIds.length;
     const blockDone=memberIds.reduce((n,uid)=>n+count(uid,BLOCKS.blocks,'block:'),0);
     const tutorialTotal=TOOLS.tutorials.length*memberIds.length;
     const tutorialDone=memberIds.reduce((n,uid)=>n+count(uid,TOOLS.tutorials,'tutorial:'),0);
+    const designDone=memberIds.reduce((n,uid)=>n+count(uid,DESIGN.modules.map(m=>({id:m.id})),'designbuild:'),0);
+    const modelDone=memberIds.reduce((n,uid)=>n+count(uid,MODEL.lessons,'model:')+count(uid,MODEL_FOUNDATIONS.chapters,'modeltheory:')+(done(uid,'modelfoundation:final')?1:0),0);
     box.innerHTML=`
       <div class="teacher-grid class-detail-stats">
         <div class="teacher-stat"><small>Students</small><strong>${memberIds.length}</strong></div>
         <div class="teacher-stat"><small>Building Blocks</small><strong>${blockDone}</strong><span>of ${blockTotal||0} student completions</span></div>
         <div class="teacher-stat"><small>Core lessons</small><strong>${lessonDone}</strong><span>of ${lessonTotal||0} student completions</span></div>
         <div class="teacher-stat"><small>Practical builds</small><strong>${tutorialDone}</strong><span>of ${tutorialTotal||0} student completions</span></div>
-        <div class="teacher-stat"><small>Evidence waiting</small><strong>${pending.length}</strong></div>
-        <div class="teacher-stat"><small>Class projects</small><strong>${classProjects.length}</strong><span>${classProjects.filter(p=>p.status==='complete').length} complete</span></div>
+        <div class="teacher-stat"><small>Designer builds</small><strong>${designDone}</strong></div>
+        <div class="teacher-stat"><small>3D learning</small><strong>${modelDone}</strong></div>
       </div>
       <section class="section"><div class="section-head"><div><h2>Students in ${esc(c.name)}</h2><p>Open a student to see the exact content they have completed, not just a percentage.</p></div><span class="sync-chip">${members.length} student${members.length===1?'':'s'}</span></div>
         <div class="class-student-grid">${members.length?members.map(p=>{
-          const core=count(p.id,DATA.lessons),blocks=count(p.id,BLOCKS.blocks,'block:'),tutorials=count(p.id,TOOLS.tutorials,'tutorial:'),model=count(p.id,MODEL_FOUNDATIONS.chapters,'modeltheory:')+(done(p.id,'modelfoundation:final')?1:0)+count(p.id,MODEL.lessons,'model:')+count(p.id,SCULPT.practices,'sculpt:'),evidence=approved.filter(s=>s.user_id===p.id).length;
-          return `<article class="class-student-card"><div class="class-student-head">${avatarMarkup('sm',p.display_name)}<div><h3>${esc(p.display_name)}</h3><span>${core}/${DATA.lessons.length} core lessons</span></div></div><div class="class-student-stats"><span><b>${blocks}</b> blocks</span><span><b>${tutorials}</b> tutorials</span><span><b>${model}</b> 3D/sculpt</span><span><b>${evidence}</b> evidence</span></div><details><summary>View completed content</summary>${studentCompletedContent(o,p.id)}</details></article>`;
+          const core=count(p.id,DATA.lessons),blocks=count(p.id,BLOCKS.blocks,'block:'),tutorials=count(p.id,TOOLS.tutorials,'tutorial:'),design=count(p.id,DESIGN.modules.map(m=>({id:m.id})),'designbuild:'),model=count(p.id,MODEL_FOUNDATIONS.chapters,'modeltheory:')+(done(p.id,'modelfoundation:final')?1:0)+count(p.id,MODEL.lessons,'model:')+count(p.id,SCULPT.practices,'sculpt:'),chapters=count(p.id,TOOLS.chapterBuilds.map(x=>({id:x.path})),'chapter:');
+          return `<article class="class-student-card"><div class="class-student-head">${avatarMarkup('sm',p.display_name)}<div><h3>${esc(p.display_name)}</h3><span>${core}/${DATA.lessons.length} core lessons</span></div></div><div class="class-student-stats"><span><b>${blocks}</b> blocks</span><span><b>${tutorials}</b> tutorials</span><span><b>${design}</b> design builds</span><span><b>${model}</b> 3D/sculpt</span><span><b>${chapters}</b> chapter builds</span></div><details><summary>View completed content</summary>${studentCompletedContent(o,p.id)}</details></article>`;
         }).join(''):'<div class="empty"><h3>No students yet.</h3><p>Students will appear here after joining this class.</p></div>'}</div>
       </section>
-      <section class="section class-project-workspace"><div class="section-head"><div><span class="eyebrow">CLASS PROJECTS</span><h2>Projects for ${esc(c.name)}</h2><p>See the briefs you have given this class and open the live individual or group project copies from the same workspace.</p></div><a class="button ghost small" href="#/projects">Open all Projects →</a></div>
-        <details open class="class-content-group"><summary>▣ Project templates <span>${classTemplates.length} linked to this class</span></summary><div style="padding:16px">${classTemplates.length?`<div class="multi-project-grid">${classTemplates.map(t=>`<article class="multi-project-card template-card"><div class="project-card-top"><span class="project-type-pill solo">${esc(projectTemplateWorkModeLabel(t.work_mode).toUpperCase())}</span><span class="request-status ${t.status==='published'?'shipped':t.status==='archived'?'declined':'new'}">${esc(t.status==='published'?'Published':t.status==='archived'?'Archived':'Draft')}</span></div><h3>${esc(t.title)}</h3><p>${esc(projectRichExcerpt(t.brief||'No brief yet.'))}</p><div class="project-card-meta"><span>${esc(projectKindLabel(t.project_kind))}</span><span>${t.milestones.length} milestone${t.milestones.length===1?'':'s'}</span>${t.assessment_unit?`<span>${esc(t.assessment_unit)}</span>`:''}</div><a class="button primary small" href="#/projects/template/${t.id}">Manage template →</a></article>`).join('')}</div>`:'<div class="empty"><h3>No project templates for this class yet.</h3><p>Create one from Projects when you are ready.</p></div>'}</div></details>
-        <details open class="class-content-group"><summary>🎮 Student project activity <span>${classProjects.length} project${classProjects.length===1?'':'s'}</span></summary><div style="padding:16px">${projectListCards(classProjects,'No student project copies for this class yet.')}</div></details>
-      </section>
-      <section class="section class-learning-content"><div class="section-head"><div><span class="eyebrow">CLASS CONTENT</span><h2>What has this class completed?</h2><p>Every row shows how many students in this class have completed that piece of Hub content. This is progress visibility, not an assignment wall.</p></div></div>
+      <section class="section class-learning-content"><div class="section-head"><div><span class="eyebrow">CLASS CONTENT</span><h2>What has this class completed?</h2><p>Every row shows how many students in this class have completed that piece of Hub learning. Project briefs, deadlines and submissions are handled in Microsoft Teams.</p></div></div>
         <details open class="class-content-group"><summary>🧱 Building Blocks <span>${BLOCKS.blocks.length} concepts</span></summary><div>${classProgressRows(o,memberIds,BLOCKS.blocks,'block:')}</div></details>
         <details open class="class-content-group"><summary>🧠 Core System Lessons <span>${DATA.lessons.length} lessons</span></summary><div>${classProgressRows(o,memberIds,DATA.lessons)}</div></details>
         <details class="class-content-group"><summary>🛠 Practical builds <span>${TOOLS.tutorials.length} outcomes</span></summary><div>${classProgressRows(o,memberIds,TOOLS.tutorials,'tutorial:')}</div></details>
@@ -2370,8 +2370,8 @@ function critiqueFeedbackMarkup(f,post){
 }
 function critiquePostCard(post){
   const mine=post.author_id===BACKEND.user?.id,feedback=post.feedback||[],already=feedback.some(f=>f.author_id===BACKEND.user?.id),needs=!mine&&feedback.length<2,staff=post.author_role==='teacher';
-  const canDelete=mine||isTeacher(),after=post.improved_url;
-  return `<article class="critique-post-card ${needs?'needs-feedback':''} ${mine?'my-critique-post':''}" id="critique-post-${post.id}" data-critique-post data-post="${post.id}" data-mine="${mine?'1':'0'}" data-needs="${needs?'1':'0'}"><div class="critique-post-meta"><div><span class="critique-area">${esc(post.area||'General')}</span>${needs?'<span class="critique-needs-chip">NEEDS FEEDBACK</span>':''}${after?'<span class="critique-improved-chip">IMPROVED VERSION</span>':''}</div><small>${esc(post.author_name||'Student')}${staff?' • Teacher':''} • ${new Date(post.created_at).toLocaleString()}</small></div>${post.title?`<h2>${esc(post.title)}</h2>`:''}<div class="critique-question"><span>THE QUESTION</span><p>${esc(post.prompt)}</p></div><div class="critique-image-stage ${after?'before-after':''}"><figure><span>${after?'BEFORE':'WORK IN PROGRESS'}</span>${post.image_url?`<button class="zoomable-image" data-action="open-image"><img src="${esc(post.image_url)}" alt="${esc(post.title||post.prompt)} critique screenshot" loading="lazy"><small>Open image</small></button>`:'<div class="critique-image-missing">Screenshot unavailable</div>'}</figure>${after?`<figure><span>AFTER</span><button class="zoomable-image" data-action="open-image"><img src="${esc(after)}" alt="Improved version of ${esc(post.title||'critique work')}" loading="lazy"><small>Open image</small></button></figure>`:''}</div>${mine?`<div class="critique-owner-tools"><form data-action-form="critique-improved" data-post="${post.id}" data-class="${post.class_id}"><label><span>${after?'Replace improved version':'Show what changed'}</span><input name="file" type="file" accept="image/png,image/jpeg,image/webp" required></label><button class="button ghost small" type="submit">${after?'Replace After image':'Upload improved version →'}</button></form>${canDelete?`<button class="link-button danger-link" data-action="delete-critique-post" data-post="${post.id}">Delete post</button>`:''}</div>`:canDelete?`<div class="critique-owner-tools teacher"><button class="link-button danger-link" data-action="delete-critique-post" data-post="${post.id}">Remove post</button></div>`:''}<section class="critique-feedback-zone"><div class="critique-feedback-title"><div><span class="eyebrow">PEER CRITIQUE</span><h3>${feedback.length} response${feedback.length===1?'':'s'}</h3></div>${needs?'<small>Two useful responses get this off the “needs feedback” list.</small>':''}</div>${feedback.length?`<div class="critique-feedback-list">${feedback.map(f=>critiqueFeedbackMarkup(f,post)).join('')}</div>`:'<div class="critique-no-feedback">No critique yet. Be the first useful human.</div>'}${!mine&&!already?`<form class="critique-feedback-form" data-action-form="critique-feedback" data-post="${post.id}"><div class="critique-feedback-form-head"><strong>Give structured feedback</strong><span>${isTeacher()?'Teacher feedback • no XP':'+15 XP for up to 3 meaningful critiques per day'}</span></div><label><span>What works?</span><textarea name="worksWell" minlength="12" maxlength="600" rows="2" placeholder="What already reads clearly or feels strong?" required></textarea></label><label><span>What could be clearer?</span><textarea name="clearer" minlength="12" maxlength="600" rows="2" placeholder="Where did your eye go, or what confused you?" required></textarea></label><label><span>One change I’d try…</span><textarea name="changeTry" minlength="12" maxlength="600" rows="2" placeholder="Give one specific, testable suggestion." required></textarea></label><button class="button primary small" type="submit">Post critique${isTeacher()?'':' • +15 XP if rewarded'}</button></form>`:already?'<div class="critique-already">✓ You have already given this person feedback.</div>':''}</section></article>`;
+  const canDelete=mine||isTeacher(),after=post.improved_url,beforeThumb=post.image_thumb_url||post.image_url,afterThumb=post.improved_thumb_url||after;
+  return `<article class="critique-post-card ${needs?'needs-feedback':''} ${mine?'my-critique-post':''}" id="critique-post-${post.id}" data-critique-post data-post="${post.id}" data-mine="${mine?'1':'0'}" data-needs="${needs?'1':'0'}"><div class="critique-post-meta"><div><span class="critique-area">${esc(post.area||'General')}</span>${needs?'<span class="critique-needs-chip">NEEDS FEEDBACK</span>':''}${after?'<span class="critique-improved-chip">IMPROVED VERSION</span>':''}</div><small>${esc(post.author_name||'Student')}${staff?' • Teacher':''} • ${new Date(post.created_at).toLocaleString()}</small></div>${post.title?`<h2>${esc(post.title)}</h2>`:''}<div class="critique-question"><span>THE QUESTION</span><p>${esc(post.prompt)}</p></div><div class="critique-image-stage ${after?'before-after':''}"><figure><span>${after?'BEFORE':'WORK IN PROGRESS'}</span>${post.image_url?`<button class="zoomable-image" data-action="open-image" data-src="${esc(post.image_url)}"><img class="cloud-thumb" src="${esc(beforeThumb)}" data-full-src="${esc(post.image_url)}" alt="${esc(post.title||post.prompt)} critique screenshot" loading="lazy" decoding="async"><small>Open image</small></button>`:'<div class="critique-image-missing">Screenshot unavailable</div>'}</figure>${after?`<figure><span>AFTER</span><button class="zoomable-image" data-action="open-image" data-src="${esc(after)}"><img class="cloud-thumb" src="${esc(afterThumb)}" data-full-src="${esc(after)}" alt="Improved version of ${esc(post.title||'critique work')}" loading="lazy" decoding="async"><small>Open image</small></button></figure>`:''}</div>${mine?`<div class="critique-owner-tools"><form data-action-form="critique-improved" data-post="${post.id}" data-class="${post.class_id}"><label><span>${after?'Replace improved version':'Show what changed'}</span><input name="file" type="file" accept="image/png,image/jpeg,image/webp" required></label><button class="button ghost small" type="submit">${after?'Replace After image':'Upload improved version →'}</button></form>${canDelete?`<button class="link-button danger-link" data-action="delete-critique-post" data-post="${post.id}">Delete post</button>`:''}</div>`:canDelete?`<div class="critique-owner-tools teacher"><button class="link-button danger-link" data-action="delete-critique-post" data-post="${post.id}">Remove post</button></div>`:''}<section class="critique-feedback-zone"><div class="critique-feedback-title"><div><span class="eyebrow">PEER CRITIQUE</span><h3>${feedback.length} response${feedback.length===1?'':'s'}</h3></div>${needs?'<small>Two useful responses get this off the “needs feedback” list.</small>':''}</div>${feedback.length?`<div class="critique-feedback-list">${feedback.map(f=>critiqueFeedbackMarkup(f,post)).join('')}</div>`:'<div class="critique-no-feedback">No critique yet. Be the first useful human.</div>'}${!mine&&!already?`<form class="critique-feedback-form" data-action-form="critique-feedback" data-post="${post.id}"><div class="critique-feedback-form-head"><strong>Give structured feedback</strong><span>${isTeacher()?'Teacher feedback • no XP':'+15 XP for up to 3 meaningful critiques per day'}</span></div><label><span>What works?</span><textarea name="worksWell" minlength="12" maxlength="600" rows="2" placeholder="What already reads clearly or feels strong?" required></textarea></label><label><span>What could be clearer?</span><textarea name="clearer" minlength="12" maxlength="600" rows="2" placeholder="Where did your eye go, or what confused you?" required></textarea></label><label><span>One change I’d try…</span><textarea name="changeTry" minlength="12" maxlength="600" rows="2" placeholder="Give one specific, testable suggestion." required></textarea></label><button class="button primary small" type="submit">Post critique${isTeacher()?'':' • +15 XP if rewarded'}</button></form>`:already?'<div class="critique-already">✓ You have already given this person feedback.</div>':''}</section></article>`;
 }
 function applyCritiqueFilter(){
   const cards=$$('[data-critique-post]');let shown=0;
@@ -2393,7 +2393,7 @@ async function renderCritiqueBoard(){
     const cls=classes.find(c=>String(c.id)===String(critiqueClassId))||classes[0];
     const [posts,rewarded]=await Promise.all([BACKEND.getCritiquePosts(cls.id),BACKEND.getCritiqueRewardCountToday()]);critiquePostsCache=posts;
     const mine=posts.filter(p=>p.author_id===BACKEND.user.id).length,needs=posts.filter(p=>p.author_id!==BACKEND.user.id&&(p.feedback||[]).length<2).length;
-    box.innerHTML=`<section class="critique-toolbar"><label>Class<select id="critiqueClassSelect">${classes.map(c=>`<option value="${c.id}" ${String(c.id)===String(cls.id)?'selected':''}>${esc(c.name)}${c.academic_year?' • '+esc(c.academic_year):''}</option>`).join('')}</select></label><button class="button primary" data-action="random-critique">🎲 Give me something to critique</button></section><section class="critique-stats"><div><strong>${posts.length}</strong><span>class posts</span></div><div><strong>${needs}</strong><span>need feedback</span></div><div><strong>${mine}</strong><span>your posts</span></div>${isTeacher()?'<div><strong>MOD</strong><span>teacher view</span></div>':`<div><strong>${Math.min(rewarded,3)}/3</strong><span>rewarded critiques today</span></div>`}</section><section class="critique-post-composer"><div><span class="deep-label">POST WORK IN PROGRESS</span><h2>Ask one useful question.</h2><p>Do not just post “thoughts?”. Tell classmates what you are trying to communicate so they can test whether it actually reads.</p></div><form data-action-form="critique-post" data-class="${cls.id}"><div class="critique-compose-grid"><label><span>Design area</span><select name="area"><option>Level Design</option><option>Environment</option><option>Materials</option><option>Lighting</option><option>Terrain / World</option><option>Cinematics</option><option>Audio</option><option>Polish</option><option>3D Modelling</option><option>Other</option></select></label><label><span>Short title <small>optional</small></span><input name="title" maxlength="120" placeholder="e.g. Corridor lighting pass"></label></div><label><span>What do you want classmates to judge?</span><textarea name="prompt" minlength="8" maxlength="600" rows="3" placeholder="I’m trying to make the player notice the doorway first. Does it work?" required></textarea></label><label class="critique-file-pick"><span>Screenshot</span><input name="file" type="file" accept="image/png,image/jpeg,image/webp" required><small>PNG, JPG or WebP • maximum 8 MB</small></label><button class="button primary" type="submit">💬 Post for critique</button></form></section><section class="section critique-feed-section"><div class="section-head"><div><span class="eyebrow">CLASS STUDIO WALL</span><h2>Give useful feedback while people are still building</h2><p>Structured critique rewards the first three meaningful responses you give each day. You can keep helping after that; the XP just stops.</p></div><span class="sync-chip" id="critiqueVisibleCount">${posts.length} posts shown</span></div><div class="critique-filter-row"><button class="tutorial-filter ${critiqueFilter==='all'?'active':''}" data-action="critique-filter" data-filter="all">All</button><button class="tutorial-filter ${critiqueFilter==='needs'?'active':''}" data-action="critique-filter" data-filter="needs">Needs feedback ${needs?`(${needs})`:''}</button><button class="tutorial-filter ${critiqueFilter==='mine'?'active':''}" data-action="critique-filter" data-filter="mine">My work ${mine?`(${mine})`:''}</button></div><div class="critique-feed">${posts.length?posts.map(critiquePostCard).join(''):'<div class="empty"><h3>The studio wall is empty.</h3><p>Post the first screenshot and ask something specific.</p></div>'}</div></section>`;
+    box.innerHTML=`<section class="critique-toolbar"><label>Class<select id="critiqueClassSelect">${classes.map(c=>`<option value="${c.id}" ${String(c.id)===String(cls.id)?'selected':''}>${esc(c.name)}${c.academic_year?' • '+esc(c.academic_year):''}</option>`).join('')}</select></label><button class="button primary" data-action="random-critique">🎲 Give me something to critique</button></section><section class="critique-stats"><div><strong>${posts.length}</strong><span>class posts</span></div><div><strong>${needs}</strong><span>need feedback</span></div><div><strong>${mine}</strong><span>your posts</span></div>${isTeacher()?'<div><strong>MOD</strong><span>teacher view</span></div>':`<div><strong>${Math.min(rewarded,3)}/3</strong><span>rewarded critiques today</span></div>`}</section><section class="critique-post-composer"><div><span class="deep-label">POST WORK IN PROGRESS</span><h2>Ask one useful question.</h2><p>Do not just post “thoughts?”. Tell classmates what you are trying to communicate so they can test whether it actually reads.</p></div><form data-action-form="critique-post" data-class="${cls.id}"><div class="critique-compose-grid"><label><span>Design area</span><select name="area"><option>Level Design</option><option>Environment</option><option>Materials</option><option>Lighting</option><option>Terrain / World</option><option>Cinematics</option><option>Audio</option><option>Polish</option><option>3D Modelling</option><option>Other</option></select></label><label><span>Short title <small>optional</small></span><input name="title" maxlength="120" placeholder="e.g. Corridor lighting pass"></label></div><label><span>What do you want classmates to judge?</span><textarea name="prompt" minlength="8" maxlength="600" rows="3" placeholder="I’m trying to make the player notice the doorway first. Does it work?" required></textarea></label><label class="critique-file-pick"><span>Screenshot</span><input name="file" type="file" accept="image/png,image/jpeg,image/webp" required><small>PNG, JPG or WebP • maximum 8 MB • automatically optimised for the Hub</small></label><button class="button primary" type="submit">💬 Post for critique</button></form></section><section class="section critique-feed-section"><div class="section-head"><div><span class="eyebrow">CLASS STUDIO WALL</span><h2>Give useful feedback while people are still building</h2><p>Structured critique rewards the first three meaningful responses you give each day. You can keep helping after that; the XP just stops.</p></div><span class="sync-chip" id="critiqueVisibleCount">${posts.length} posts shown</span></div><div class="critique-filter-row"><button class="tutorial-filter ${critiqueFilter==='all'?'active':''}" data-action="critique-filter" data-filter="all">All</button><button class="tutorial-filter ${critiqueFilter==='needs'?'active':''}" data-action="critique-filter" data-filter="needs">Needs feedback ${needs?`(${needs})`:''}</button><button class="tutorial-filter ${critiqueFilter==='mine'?'active':''}" data-action="critique-filter" data-filter="mine">My work ${mine?`(${mine})`:''}</button></div><div class="critique-feed">${posts.length?posts.map(critiquePostCard).join(''):'<div class="empty"><h3>The studio wall is empty.</h3><p>Post the first screenshot and ask something specific.</p></div>'}</div></section>`;
     applyCritiqueFilter();refreshCritiqueNav();
   }catch(err){box.innerHTML=`<div class="empty"><h3>Could not load the Critique Board.</h3><p>${esc(err.message)}</p></div>`}
 }
@@ -2448,9 +2448,9 @@ async function renderLeaderboard(){
       ${isTeacher()&&!enabled?'<div class="teacher-security-banner"><b>LEADERBOARD PAUSED FOR STUDENTS</b><span>You can still preview it here. Students in this class cannot see rankings until you enable it again.</span></div>':''}
       ${rows.length?`<section class="leaderboard-podium">${podium.map((r,i)=>`<article class="podium-card place-${i+1}"><span class="podium-medal">${leaderboardMedal(r.rank_position)}</span><span class="podium-avatar">${esc(String(r.display_name||'?').slice(0,1).toUpperCase())}</span><h3>${esc(r.display_name)}</h3><p>Level ${r.current_level} • ${esc(leaderboardTitle(r.current_level))}</p><strong>${Number(r.score_xp||0).toLocaleString()} XP</strong>${r.current_streak?`<small>🔥 ${r.current_streak} day streak</small>`:'<small>No current streak</small>'}</article>`).join('')}</section>`:''}
       <section class="leaderboard-spotlights">${improving?`<article><span>📈</span><div><small>BIGGEST PROGRESS THIS WEEK</small><strong>${esc(improving.display_name)}</strong><p>+${Math.max(0,(improving.weekly_xp||0)-(improving.previous_week_xp||0)).toLocaleString()} XP vs last week</p></div></article>`:''}${active?`<article><span>🔥</span><div><small>CURRENT STREAK</small><strong>${esc(active.display_name)}</strong><p>${active.current_streak||0} active day${Number(active.current_streak)===1?'':'s'}</p></div></article>`:''}</section>
-      <section class="section leaderboard-board"><div class="section-head"><div><h2>${leaderboardPeriod==='week'?'This week':'All-time'} Top 10</h2><p>XP comes from genuine learning progress and project milestones. Repeating the same completion does not award it twice.</p></div><span class="sync-chip">${rows.length} student${rows.length===1?'':'s'}</span></div><div class="leaderboard-list">${top.map(r=>leaderboardRow(r,r.user_id===BACKEND.user.id)).join('')||'<div class="empty">No XP activity yet.</div>'}</div></section>
+      <section class="section leaderboard-board"><div class="section-head"><div><h2>${leaderboardPeriod==='week'?'This week':'All-time'} Top 10</h2><p>XP comes from genuine learning progress. Repeating the same completion does not award it twice.</p></div><span class="sync-chip">${rows.length} student${rows.length===1?'':'s'}</span></div><div class="leaderboard-list">${top.map(r=>leaderboardRow(r,r.user_id===BACKEND.user.id)).join('')||'<div class="empty">No XP activity yet.</div>'}</div></section>
       ${!isTeacher()&&me&&!top.some(r=>r.user_id===BACKEND.user.id)?`<section class="your-rank-card"><span class="eyebrow">YOUR POSITION</span>${leaderboardRow(me,true)}</section>`:''}
-      <section class="leaderboard-rules"><span class="eyebrow">HOW XP WORKS</span><h2>Progress, not grades.</h2><div class="leaderboard-rule-grid"><span><b>Core learning</b>Uses the XP already attached to Hub lessons and chapter builds.</span><span><b>+20 XP</b>Complete an industry video/article source task in Designer Studio.</span><span><b>+15 XP</b>Meaningful structured peer critique — first 3 rewarded each day.</span><span><b>+25 XP</b>Quick Tutorial, Building Block or first proper evidence for a milestone.</span><span><b>+40 XP</b>Project milestone completed.</span><span><b>+100 XP</b>Full project completed.</span><span><b>+5 XP</b>First genuine activity of the day.</span><span><b>No farming</b>One reward per source/post; critique XP has a daily cap.</span></div></section>`;
+      <section class="leaderboard-rules"><span class="eyebrow">HOW XP WORKS</span><h2>Progress, not grades.</h2><div class="leaderboard-rule-grid"><span><b>Core learning</b>Uses the XP already attached to Hub lessons and chapter builds.</span><span><b>+20 XP</b>Complete an industry video/article source task in Designer Studio.</span><span><b>+15 XP</b>Meaningful structured peer critique — first 3 rewarded each day.</span><span><b>+25 XP</b>Quick Tutorial or Building Block completion.</span><span><b>+5 XP</b>First genuine activity of the day.</span><span><b>No farming</b>One reward per source/post; critique XP has a daily cap.</span></div></section>`;
   }catch(err){box.innerHTML=`<div class="empty"><h3>Could not load the leaderboard.</h3><p>${esc(err.message)}</p></div>`}
 }
 
@@ -2469,7 +2469,7 @@ async function renderClassesHub(){
     }
 
     const classes=await BACKEND.getMyClasses();
-    box.innerHTML=`${classes.length?`<section class="classes-hub-grid student-classes">${classes.map(c=>`<article class="classes-hub-card student"><div class="classes-hub-card-top"><div><span class="eyebrow">YOUR CLASS</span><h2>${esc(c.name)}</h2><p>${esc(c.academic_year||'Teaching group')}</p></div><span class="classes-hub-count student">🏫</span></div><p class="classes-hub-note">Use the shortcuts below for the work connected to your Learning Hub account.</p><div class="classes-hub-actions"><a class="button primary" href="#/progress">Evidence & Progress →</a><a class="button ghost" href="#/leaderboard">🏆 Leaderboard</a><a class="button ghost" href="#/projects">Class Projects</a></div></article>`).join('')}</section>`:`<div class="empty classes-hub-empty"><h3>You are not in a class yet.</h3><p>Enter the class code your teacher gave you.</p></div>`}
+    box.innerHTML=`${classes.length?`<section class="classes-hub-grid student-classes">${classes.map(c=>`<article class="classes-hub-card student"><div class="classes-hub-card-top"><div><span class="eyebrow">YOUR CLASS</span><h2>${esc(c.name)}</h2><p>${esc(c.academic_year||'Teaching group')}</p></div><span class="classes-hub-count student">🏫</span></div><p class="classes-hub-note">Use the shortcuts below for the work connected to your Learning Hub account.</p><div class="classes-hub-actions"><a class="button primary" href="#/progress">My Progress →</a><a class="button ghost" href="#/leaderboard">🏆 Leaderboard</a><a class="button ghost" href="#/critique">💬 Critique Board</a></div></article>`).join('')}</section>`:`<div class="empty classes-hub-empty"><h3>You are not in a class yet.</h3><p>Enter the class code your teacher gave you.</p></div>`}
     <section class="classes-join-panel"><div><span class="eyebrow">${classes.length?'NEED ANOTHER CLASS?':'JOIN YOUR CLASS'}</span><h2>Use a class code</h2><p>Your teacher can give you the current code for the teaching group.</p></div><form class="join-class-inline" data-action-form="join-class"><input name="classCode" maxlength="20" required placeholder="CLASS CODE"><button class="button primary" type="submit">Join class</button></form></section>`;
   }catch(err){box.innerHTML=`<div class="empty"><h3>Could not load classes.</h3><p>${esc(err.message)}</p></div>`}
 }
@@ -2478,7 +2478,7 @@ function teacherPage(){
   if(!BACKEND.user || BACKEND.profile?.role!=='teacher'){
     return `<div class="page-head"><span class="eyebrow">Teacher dashboard</span><h1>Teacher access</h1><p class="muted">This page becomes available to a profile with the teacher role when the cloud backend is connected.</p></div><div class="offline-note">Student learning remains fully usable in local mode. Teacher overview needs Supabase because it is aggregating progress across different accounts/devices.</div>`;
   }
-  return `<div class="page-head"><span class="eyebrow">Teacher dashboard</span><h1>Teaching overview</h1><p class="muted">Class groups, evidence waiting for review, project progress, student questions and the student roadmap.</p></div><div id="teacherContent"><div class="empty">Loading teaching data…</div></div>`;
+  return `<div class="page-head"><span class="eyebrow">Teacher dashboard</span><h1>Teaching overview</h1><p class="muted">Class groups, learning progress, student questions, critique and the student roadmap. Formal project work stays in Microsoft Teams.</p></div><div id="teacherContent"><div class="empty">Loading teaching data…</div></div>`;
 }
 function notFound(){return `<div class="empty"><h2>That page fell out of the level.</h2><p>Return to the dashboard.</p><a class="button" href="#/">Dashboard</a></div>`}
 
@@ -2490,8 +2490,7 @@ function evidenceFileCard(f){
   return `<div class="teacher-evidence-file ${image?'image':'document'}">${image?`<button class="evidence-thumb" data-action="open-evidence-file" data-path="${esc(f.storage_path)}" aria-label="Open ${esc(f.original_name)}"><span class="evidence-thumb-loading" data-evidence-preview data-path="${esc(f.storage_path)}">Loading preview…</span></button>`:`<button class="evidence-doc-icon" data-action="open-evidence-file" data-path="${esc(f.storage_path)}">PDF</button>`}<div class="teacher-evidence-meta"><strong>${esc(f.original_name)}</strong><small>${esc(f.mime_type||'file')} • ${humanFileSize(f.size_bytes)}</small><button class="link-button" data-action="open-evidence-file" data-path="${esc(f.storage_path)}">Open file</button></div></div>`;
 }
 async function hydrateEvidencePreviews(){
-  const nodes=$$('[data-evidence-preview]');
-  await Promise.all(nodes.map(async node=>{try{const url=await BACKEND.openEvidenceFile(node.dataset.path);if(!url)return;const img=document.createElement('img');img.src=url;img.alt='Student evidence preview';img.loading='lazy';node.replaceChildren(img);}catch(err){node.textContent='Preview unavailable — open file';}}));
+  lazySignedPreview($$('[data-evidence-preview]'),{thumbnail:path=>BACKEND.openEvidenceThumbnail(path),full:path=>BACKEND.openEvidenceFile(path),alt:'Student evidence preview',fallbackText:'Preview unavailable — open file'});
 }
 
 async function renderTeacher(){
@@ -2502,35 +2501,31 @@ async function renderTeacher(){
     const lessonIds=new Set(DATA.lessons.map(l=>l.id));
     const byStudent=id=>o.progress.filter(x=>x.user_id===id&&lessonIds.has(x.lesson_id)&&x.completed).length;
     const tutorialBy=id=>o.progress.filter(x=>x.user_id===id&&String(x.lesson_id).startsWith('tutorial:')&&x.completed).length;
-    const modelingBy=id=>o.progress.filter(x=>x.user_id===id&&(String(x.lesson_id).startsWith('model:')||String(x.lesson_id).startsWith('modeltheory:')||String(x.lesson_id).startsWith('modelfoundation:')||String(x.lesson_id).startsWith('sculpt:'))&&x.completed).length;
+    const designBy=id=>o.progress.filter(x=>x.user_id===id&&String(x.lesson_id).startsWith('designbuild:')&&x.completed).length;
+    const modelingBy=id=>o.progress.filter(x=>x.user_id===id&&(String(x.lesson_id).startsWith('model:')||String(x.lesson_id).startsWith('modeltheory:')||String(x.lesson_id).startsWith('modelfoundation:')||String(x.lesson_id).startsWith('modelbuild:')||String(x.lesson_id).startsWith('modelfix:')||String(x.lesson_id).startsWith('sculpt:'))&&x.completed).length;
     const chapterBy=id=>o.progress.filter(x=>x.user_id===id&&String(x.lesson_id).startsWith('chapter:')&&x.completed).length;
-    const projBy=id=>o.projects.filter(x=>x.user_id===id&&x.status==='complete').length;
-    const commentsBy=id=>o.comments.filter(x=>x.student_id===id).length;
-    const approvedBy=id=>o.submissions.filter(x=>x.user_id===id&&x.status==='approved').length;
+    const projBy=id=>(o.projects||[]).filter(x=>x.user_id===id&&x.status==='complete').length;
+    const commentsBy=id=>(o.comments||[]).filter(x=>x.student_id===id).length;
     const names=Object.fromEntries(o.profiles.map(p=>[p.id,p.display_name]));
     const teacherNames=Object.fromEntries((o.teachers||[]).map(p=>[p.id,p.display_name]));
-    const recent=o.comments.slice(0,12);
-    const pending=o.submissions.filter(s=>s.status==='submitted');
-    const reviewed=o.submissions.filter(s=>s.status==='approved'||s.status==='changes_required').slice(0,12);
-    const approved=o.submissions.filter(s=>s.status==='approved').length;
-    const activeClasses=o.classes.filter(c=>!c.archived);
-    const archivedClasses=o.classes.filter(c=>c.archived);
+    const recent=(o.comments||[]).slice(0,12);
+    const activeClasses=(o.classes||[]).filter(c=>!c.archived);
+    const archivedClasses=(o.classes||[]).filter(c=>c.archived);
 
     box.innerHTML=`<div class="teacher-grid">
       <div class="teacher-stat"><small>Students</small><strong>${o.profiles.length}</strong></div>
       <div class="teacher-stat"><small>Active classes</small><strong>${activeClasses.length}</strong><span>${archivedClasses.length} archived</span></div>
-      <div class="teacher-stat"><small>Evidence waiting</small><strong>${pending.length}</strong></div>
-      <div class="teacher-stat"><small>Evidence approved</small><strong>${approved}</strong></div>
       <div class="teacher-stat"><small>Lesson completions</small><strong>${o.progress.filter(x=>lessonIds.has(x.lesson_id)&&x.completed).length}</strong></div>
       <div class="teacher-stat"><small>Practical builds tried</small><strong>${o.progress.filter(x=>String(x.lesson_id).startsWith('tutorial:')&&x.completed).length}</strong></div>
-      <div class="teacher-stat"><small>3D / Foundations</small><strong>${o.progress.filter(x=>(String(x.lesson_id).startsWith('model:')||String(x.lesson_id).startsWith('modeltheory:')||String(x.lesson_id).startsWith('modelfoundation:')||String(x.lesson_id).startsWith('sculpt:'))&&x.completed).length}</strong></div>
+      <div class="teacher-stat"><small>Designer builds</small><strong>${o.progress.filter(x=>String(x.lesson_id).startsWith('designbuild:')&&x.completed).length}</strong></div>
+      <div class="teacher-stat"><small>3D / Foundations</small><strong>${o.progress.filter(x=>(String(x.lesson_id).startsWith('model:')||String(x.lesson_id).startsWith('modeltheory:')||String(x.lesson_id).startsWith('modelfoundation:')||String(x.lesson_id).startsWith('modelbuild:')||String(x.lesson_id).startsWith('modelfix:')||String(x.lesson_id).startsWith('sculpt:'))&&x.completed).length}</strong></div>
       <div class="teacher-stat"><small>Chapter Builds complete</small><strong>${o.progress.filter(x=>String(x.lesson_id).startsWith('chapter:')&&x.completed).length}</strong></div>
-      <div class="teacher-stat"><small>Practice mechanics complete</small><strong>${o.projects.filter(x=>x.status==='complete').length}</strong></div>
-      <div class="teacher-stat"><small>Comments / questions</small><strong>${o.comments.length}</strong></div>
-      <div class="teacher-stat"><small>Student requests</small><strong>${o.requests.length}</strong></div>
+      <div class="teacher-stat"><small>Practice mechanics complete</small><strong>${(o.projects||[]).filter(x=>x.status==='complete').length}</strong></div>
+      <div class="teacher-stat"><small>Comments / questions</small><strong>${(o.comments||[]).length}</strong></div>
+      <div class="teacher-stat"><small>Student requests</small><strong>${(o.requests||[]).length}</strong></div>
     </div>
 
-    <div class="teacher-security-banner"><b>CLASS-SCOPED PRIVACY ACTIVE</b><span>You only see student progress, evidence and comments from classes you own or co-teach. Permanent class deletion remains owner-only.</span></div>
+    <div class="teacher-security-banner"><b>CLASS-SCOPED PRIVACY ACTIVE</b><span>You only see learning progress and lesson comments from classes you own or co-teach. Project briefs, files and formal feedback stay in Microsoft Teams.</span></div>
 
     <section class="section">
       <div class="section-head"><div><h2>Teacher team</h2><p>Invite colleagues without sharing a permanent master code. Each invite is unique, expires and can only be used once.</p></div><span class="sync-chip">${o.teachers?.length||1} teacher${(o.teachers?.length||1)===1?'':'s'}</span></div>
@@ -2538,101 +2533,38 @@ async function renderTeacher(){
         <form class="project-panel form-grid" data-action-form="create-teacher-invite">
           <span class="eyebrow">Invite a teacher</span>
           <label>Who is it for? <span class="muted">(optional)</span><input name="label" maxlength="120" placeholder="e.g. Leah / Games teacher"></label>
-          <label>Expires after
-            <select name="days"><option value="1">1 day</option><option value="3">3 days</option><option value="7" selected>7 days</option><option value="14">14 days</option><option value="30">30 days</option></select>
-          </label>
-          <button class="button small primary" type="submit">Generate teacher invite</button>
-          <div id="teacherInviteResult"></div>
+          <label>Expires after<select name="days"><option value="1">1 day</option><option value="3">3 days</option><option value="7" selected>7 days</option><option value="14">14 days</option><option value="30">30 days</option></select></label>
+          <button class="button small primary" type="submit">Generate teacher invite</button><div id="teacherInviteResult"></div>
         </form>
-        <div class="teacher-team-panel">
-          <div class="teacher-list">${(o.teachers||[]).map(t=>`<div class="teacher-person"><span class="teacher-person-icon">T</span><div><strong>${esc(t.display_name)}</strong><small>${t.id===BACKEND.user.id?'You • Teacher':'Teacher'}</small></div></div>`).join('')||'<div class="muted">Teacher account active.</div>'}</div>
-          <div class="teacher-invite-list">
-            ${(o.teacherInvites||[]).length?(o.teacherInvites||[]).map(inv=>{
-              const expired=new Date(inv.expires_at)<=new Date();
-              const state=inv.used_at?'Used':inv.revoked_at?'Revoked':expired?'Expired':'Active';
-              return `<div class="teacher-invite-row ${state.toLowerCase()}">
-                <div><strong>${esc(inv.label||'Teacher invite')}</strong><small>Code ending ${esc(inv.code_hint)} • ${state} • expires ${new Date(inv.expires_at).toLocaleDateString()}</small></div>
-                ${state==='Active'?`<button class="button tiny ghost" data-action="revoke-teacher-invite" data-invite="${inv.id}">Revoke</button>`:''}
-              </div>`;
-            }).join(''):'<div class="muted">No teacher invites created yet.</div>'}
-          </div>
-        </div>
+        <div class="teacher-team-panel"><div class="teacher-list">${(o.teachers||[]).map(t=>`<div class="teacher-person"><span class="teacher-person-icon">T</span><div><strong>${esc(t.display_name)}</strong><small>${t.id===BACKEND.user.id?'You • Teacher':'Teacher'}</small></div></div>`).join('')||'<div class="muted">Teacher account active.</div>'}</div><div class="teacher-invite-list">${(o.teacherInvites||[]).length?(o.teacherInvites||[]).map(inv=>{const expired=new Date(inv.expires_at)<=new Date();const state=inv.used_at?'Used':inv.revoked_at?'Revoked':expired?'Expired':'Active';return `<div class="teacher-invite-row ${state.toLowerCase()}"><div><strong>${esc(inv.label||'Teacher invite')}</strong><small>Code ending ${esc(inv.code_hint)} • ${state} • expires ${new Date(inv.expires_at).toLocaleDateString()}</small></div>${state==='Active'?`<button class="button tiny ghost" data-action="revoke-teacher-invite" data-invite="${inv.id}">Revoke</button>`:''}</div>`}).join(''):'<div class="muted">No teacher invites created yet.</div>'}</div></div>
       </div>
     </section>
 
     <section class="section">
-      <div class="section-head"><div><h2>Classes</h2><p>Classes you own or co-teach. Assigned teachers share student/progress/evidence access; only the class owner can add/remove co-teachers or permanently delete the class.</p></div><span class="sync-chip">${activeClasses.length} active</span></div>
+      <div class="section-head"><div><h2>Classes</h2><p>Classes you own or co-teach. Assigned teachers share learning-progress access; only the class owner can add/remove co-teachers or permanently delete the class.</p></div><span class="sync-chip">${activeClasses.length} active</span></div>
       <div class="teacher-split">
-        <form class="project-panel form-grid" data-action-form="create-class">
-          <span class="eyebrow">New class</span>
-          <label>Class name<input name="name" required maxlength="100" placeholder="Games Y1 A"></label>
-          <label>Academic year<input name="academicYear" maxlength="40" placeholder="2026/27"></label>
-          <button class="button small primary" type="submit">Create class</button>
-        </form>
+        <form class="project-panel form-grid" data-action-form="create-class"><span class="eyebrow">New class</span><label>Class name<input name="name" required maxlength="100" placeholder="Games Y1 A"></label><label>Academic year<input name="academicYear" maxlength="40" placeholder="2026/27"></label><button class="button small primary" type="submit">Create class</button></form>
         <div class="class-manager">
           ${activeClasses.length?activeClasses.map(c=>{
-            const memberIds=(c.class_members||[]).map(m=>m.user_id);
-            const available=o.profiles.filter(p=>!memberIds.includes(p.id));
-            const teacherIds=(c.class_teachers||[]).map(t=>t.teacher_id);
-            const availableTeachers=(o.teachers||[]).filter(t=>!teacherIds.includes(t.id));
-            const isOwner=c.teacher_id===BACKEND.user.id;
-            return `<div class="class-card ${isOwner?'owned':'co-taught'}">
-              <div class="class-card-head"><div><strong>${esc(c.name)}</strong><small>${esc(c.academic_year||'No academic year set')} • ${isOwner?'You own this class':'You co-teach this class'}</small></div><span>${memberIds.length} student${memberIds.length===1?'':'s'}</span></div>
-
-              <div class="class-teaching-team"><div class="class-team-head"><small>TEACHING TEAM</small><span>${teacherIds.length} teacher${teacherIds.length===1?'':'s'}</span></div><div class="class-teacher-chips">${teacherIds.map(id=>`<div class="class-teacher-chip ${id===c.teacher_id?'owner':''}"><span>${esc(teacherNames[id]||'Teacher')}</span><small>${id===c.teacher_id?'Owner':id===BACKEND.user.id?'You • Co-teacher':'Co-teacher'}</small>${isOwner&&id!==c.teacher_id?`<button data-action="remove-class-teacher" data-class="${c.id}" data-teacher="${id}" data-name="${esc(teacherNames[id]||'Teacher')}" title="Remove co-teacher">×</button>`:''}</div>`).join('')}</div>
-              ${isOwner&&availableTeachers.length?`<form class="class-add-teacher" data-action-form="add-class-teacher" data-class="${c.id}"><select name="teacher" required><option value="">Add co-teacher…</option>${availableTeachers.map(t=>`<option value="${t.id}">${esc(t.display_name)}</option>`).join('')}</select><button class="button small" type="submit">Add teacher</button></form>`:''}</div>
-
+            const memberIds=(c.class_members||[]).map(m=>m.user_id),available=o.profiles.filter(p=>!memberIds.includes(p.id)),teacherIds=(c.class_teachers||[]).map(t=>t.teacher_id),availableTeachers=(o.teachers||[]).filter(t=>!teacherIds.includes(t.id)),isOwner=c.teacher_id===BACKEND.user.id;
+            return `<div class="class-card ${isOwner?'owned':'co-taught'}"><div class="class-card-head"><div><strong>${esc(c.name)}</strong><small>${esc(c.academic_year||'No academic year set')} • ${isOwner?'You own this class':'You co-teach this class'}</small></div><span>${memberIds.length} student${memberIds.length===1?'':'s'}</span></div>
+              <div class="class-teaching-team"><div class="class-team-head"><small>TEACHING TEAM</small><span>${teacherIds.length} teacher${teacherIds.length===1?'':'s'}</span></div><div class="class-teacher-chips">${teacherIds.map(id=>`<div class="class-teacher-chip ${id===c.teacher_id?'owner':''}"><span>${esc(teacherNames[id]||'Teacher')}</span><small>${id===c.teacher_id?'Owner':id===BACKEND.user.id?'You • Co-teacher':'Co-teacher'}</small>${isOwner&&id!==c.teacher_id?`<button data-action="remove-class-teacher" data-class="${c.id}" data-teacher="${id}" data-name="${esc(teacherNames[id]||'Teacher')}" title="Remove co-teacher">×</button>`:''}</div>`).join('')}</div>${isOwner&&availableTeachers.length?`<form class="class-add-teacher" data-action-form="add-class-teacher" data-class="${c.id}"><select name="teacher" required><option value="">Add co-teacher…</option>${availableTeachers.map(t=>`<option value="${t.id}">${esc(t.display_name)}</option>`).join('')}</select><button class="button small" type="submit">Add teacher</button></form>`:''}</div>
               <details class="class-edit-panel"><summary>Edit class details</summary><form class="class-edit-form" data-action-form="edit-class" data-class="${c.id}"><label>Class name<input name="name" maxlength="100" value="${esc(c.name)}" required></label><label>Academic year<input name="academicYear" maxlength="40" value="${esc(c.academic_year||'')}"></label><button class="button small primary" type="submit">Save changes</button></form></details>
               <div class="class-code-panel ${c.join_enabled?'enabled':'paused'}"><div><small>STUDENT JOIN CODE</small><code>${esc(c.join_code||'—')}</code><span>${c.join_enabled?'Accepting joins':'Paused'}</span></div><div class="class-code-actions"><button class="button small ghost" data-action="copy-class-code" data-code="${esc(c.join_code||'')}">Copy</button><button class="button small ghost" data-action="toggle-class-join" data-class="${c.id}" data-enabled="${c.join_enabled?'1':'0'}">${c.join_enabled?'Pause':'Enable'}</button><button class="button small ghost" data-action="regenerate-class-code" data-class="${c.id}">New code</button></div></div>
               <div class="class-members">${memberIds.length?memberIds.map(id=>`<div class="class-member"><span>${esc(names[id]||'Student')}</span><button data-action="remove-class-member" data-class="${c.id}" data-student="${id}" title="Remove">×</button></div>`).join(''):'<div class="muted">No students in this class yet. Give students the join code above.</div>'}</div>
-              ${available.length?`<form class="class-add" data-action-form="add-class-member" data-class="${c.id}"><select name="student" required><option value="">Add student already visible to you…</option>${available.map(s=>`<option value="${s.id}">${esc(s.display_name)}</option>`).join('')}</select><button class="button small" type="submit">Add</button></form>`:'<div class="muted">New students should normally join with the class code. Manual add only lists students already visible through one of your classes.</div>'}
-              <div class="class-open-row"><a class="button primary class-open-button" href="#/teacher/class/${c.id}">Open class →</a><span>See this class's students and learning content.</span></div>
-              <div class="class-danger-row"><button class="button small ghost" data-action="archive-class" data-class="${c.id}" data-name="${esc(c.name)}">Archive class</button>${isOwner?`<button class="button small danger" data-action="delete-class" data-class="${c.id}" data-name="${esc(c.name)}">Delete permanently</button>`:`<button class="button small ghost" data-action="leave-class-teacher" data-class="${c.id}" data-name="${esc(c.name)}">Leave teaching team</button>`}</div>
-            </div>`;
+              ${available.length?`<form class="class-add" data-action-form="add-class-member" data-class="${c.id}"><select name="student" required><option value="">Add student already visible to you…</option>${available.map(st=>`<option value="${st.id}">${esc(st.display_name)}</option>`).join('')}</select><button class="button small" type="submit">Add</button></form>`:'<div class="muted">New students should normally join with the class code. Manual add only lists students already visible through one of your classes.</div>'}
+              <div class="class-open-row"><a class="button primary class-open-button" href="#/teacher/class/${c.id}">Open class →</a><span>See this class's students and learning content.</span></div><div class="class-danger-row"><button class="button small ghost" data-action="archive-class" data-class="${c.id}" data-name="${esc(c.name)}">Archive class</button>${isOwner?`<button class="button small danger" data-action="delete-class" data-class="${c.id}" data-name="${esc(c.name)}">Delete permanently</button>`:`<button class="button small ghost" data-action="leave-class-teacher" data-class="${c.id}" data-name="${esc(c.name)}">Leave teaching team</button>`}</div></div>`;
           }).join(''):'<div class="offline-note">No active classes yet. Create your first teaching group here.</div>'}
-          ${archivedClasses.length?`<details class="archived-classes"><summary>${archivedClasses.length} archived class${archivedClasses.length===1?'':'es'}</summary><div class="archived-class-list">${archivedClasses.map(c=>{const isOwner=c.teacher_id===BACKEND.user.id;return `<div class="class-card archived"><div class="class-card-head"><div><strong>${esc(c.name)}</strong><small>${esc(c.academic_year||'')} • ${isOwner?'Owner':'Co-teacher'}</small></div><span>Archived</span></div><p class="muted">Students, progress and evidence remain in the Hub; this class no longer accepts joins.</p><div class="class-danger-row"><button class="button small ghost" data-action="unarchive-class" data-class="${c.id}" data-name="${esc(c.name)}">Restore class</button>${isOwner?`<button class="button small danger" data-action="delete-class" data-class="${c.id}" data-name="${esc(c.name)}">Delete permanently</button>`:`<button class="button small ghost" data-action="leave-class-teacher" data-class="${c.id}" data-name="${esc(c.name)}">Leave teaching team</button>`}</div></div>`}).join('')}</div></details>`:''}
+          ${archivedClasses.length?`<details class="archived-classes"><summary>${archivedClasses.length} archived class${archivedClasses.length===1?'':'es'}</summary><div class="archived-class-list">${archivedClasses.map(c=>{const isOwner=c.teacher_id===BACKEND.user.id;return `<div class="class-card archived"><div class="class-card-head"><div><strong>${esc(c.name)}</strong><small>${esc(c.academic_year||'')} • ${isOwner?'Owner':'Co-teacher'}</small></div><span>Archived</span></div><p class="muted">Students and learning progress remain in the Hub; this class no longer accepts joins.</p><div class="class-danger-row"><button class="button small ghost" data-action="unarchive-class" data-class="${c.id}" data-name="${esc(c.name)}">Restore class</button>${isOwner?`<button class="button small danger" data-action="delete-class" data-class="${c.id}" data-name="${esc(c.name)}">Delete permanently</button>`:`<button class="button small ghost" data-action="leave-class-teacher" data-class="${c.id}" data-name="${esc(c.name)}">Leave teaching team</button>`}</div></div>`}).join('')}</div></details>`:''}
         </div>
       </div>
     </section>
 
-    <section class="section">
-      <div class="section-head"><div><h2>Evidence waiting for review</h2><p>Approve genuine working evidence or send it back with a clear improvement target.</p></div><span class="sync-chip">${pending.length} waiting</span></div>
-      <div class="submission-grid">${pending.length?pending.map(s=>{
-        const l=lesson(s.lesson_id),link=safeUrl(s.evidence_url),files=s.submission_files||[];
-        return `<article class="submission-card pending">
-          <div class="submission-head"><div><span class="eyebrow">${esc(names[s.user_id]||'Student')} • ${esc(l?.title||s.lesson_id)}</span><h3>${esc(l?.projectTask?.name||s.mechanic_id)}</h3></div><span class="request-status submitted">Waiting</span></div>
-          <div class="reflection-box"><strong>Student reflection</strong><p>${esc(s.reflection||'No reflection supplied.')}</p></div>
-          <div class="teacher-evidence-received"><div class="teacher-evidence-received-head"><strong>Evidence received</strong><span>${files.length} uploaded file${files.length===1?'':'s'}${link?' + link':''}</span></div>${files.length?`<div class="teacher-evidence-files">${files.map(evidenceFileCard).join('')}</div>`:'<div class="muted">No uploaded file — review the external evidence link/reflection.</div>'}${link?`<a class="button small ghost" target="_blank" rel="noopener" href="${esc(link)}">↗ Open external evidence / video link</a>`:''}</div>
-          <form class="review-form" data-action-form="review-evidence" data-submission="${s.id}">
-            <textarea name="feedback" maxlength="4000" placeholder="Short useful feedback. What is working? What should they improve?"></textarea>
-            <div class="button-row">
-              <button class="button small primary" type="submit" data-status="approved">✓ Approve evidence</button>
-              <button class="button small ghost" type="submit" data-status="changes_required">↺ Needs changes</button>
-            </div>
-          </form>
-        </article>`;
-      }).join(''):'<div class="empty"><h3>Nothing waiting.</h3><p>Submitted student evidence will appear here.</p></div>'}</div>
-    </section>
+    <section class="section"><div class="section-head"><div><h2>Student overview</h2><p>Use completion to spot who needs help. Formal assessment decisions still belong in Microsoft Teams.</p></div></div><table class="teacher-table"><thead><tr><th>Student</th><th>Lessons</th><th>Tutorials</th><th>Designer</th><th>3D</th><th>Chapter Builds</th><th>Practice</th><th>Comments</th></tr></thead><tbody>${o.profiles.map(p=>`<tr><td>${esc(p.display_name)}</td><td>${byStudent(p.id)}/${DATA.lessons.length}</td><td>${tutorialBy(p.id)}/${TOOLS.tutorials.length}</td><td>${designBy(p.id)}/${DESIGN.modules.length}</td><td>${modelingBy(p.id)}</td><td>${chapterBy(p.id)}/${TOOLS.chapterBuilds.length}</td><td>${projBy(p.id)}/${Object.keys(PROJECT.mechanics).length}</td><td>${commentsBy(p.id)}</td></tr>`).join('')}</tbody></table></section>
 
-    <section class="section">
-      <div class="section-head"><div><h2>Student overview</h2><p>Completion is useful, but approved evidence is the stronger signal.</p></div></div>
-      <table class="teacher-table"><thead><tr><th>Student</th><th>Lessons</th><th>Tutorials</th><th>3D Max</th><th>Chapter Builds</th><th>Practice</th><th>Approved evidence</th><th>Comments</th></tr></thead><tbody>
-      ${o.profiles.map(p=>`<tr><td>${esc(p.display_name)}</td><td>${byStudent(p.id)}/${DATA.lessons.length}</td><td>${tutorialBy(p.id)}/${TOOLS.tutorials.length}</td><td>${modelingBy(p.id)}/${MODEL_FOUNDATIONS.chapters.length+1+MODEL.lessons.length+SCULPT.practices.length}</td><td>${chapterBy(p.id)}/${TOOLS.chapterBuilds.length}</td><td>${projBy(p.id)}/${Object.keys(PROJECT.mechanics).length}</td><td>${approvedBy(p.id)}/${DATA.lessons.length}</td><td>${commentsBy(p.id)}</td></tr>`).join('')}
-      </tbody></table>
-    </section>
+    <section class="section"><div class="section-head"><div><h2>Student roadmap</h2><p>Top requests and current build status.</p></div><a class="button small" href="#/requests">Open full Requests Board</a></div><div class="board-grid">${(o.requests||[]).slice().sort((a,b)=>(b.request_votes?.length||0)-(a.request_votes?.length||0)).slice(0,6).map(r=>`<div class="board-card"><span class="eyebrow">${esc(requestCategoryLabel(r.category))} • ${r.request_votes?.length||0} votes</span><h3>${esc(r.title)}</h3><p>${esc(r.body)}</p><span class="request-status ${esc(r.status)}">${esc(requestStatusLabel(r.status))}</span></div>`).join('')||'<div class="empty">No requests yet.</div>'}</div></section>
 
-    ${reviewed.length?`<section class="section"><div class="section-head"><div><h2>Recent evidence decisions</h2><p>A quick record of what was approved or sent back.</p></div></div><div class="board-grid">${reviewed.map(s=>`<div class="board-card"><span class="eyebrow">${esc(names[s.user_id]||'Student')} • ${esc(lesson(s.lesson_id)?.title||s.lesson_id)}</span><h3>${esc(evidenceStatusLabel(s.status))}</h3><p>${esc(s.teacher_feedback||'No written feedback.')}</p><span class="request-status ${evidenceStatusClass(s.status)}">${esc(evidenceStatusLabel(s.status))}</span></div>`).join('')}</div></section>`:''}
-
-    <section class="section"><div class="section-head"><div><h2>Student roadmap</h2><p>Top requests and current build status.</p></div><a class="button small" href="#/requests">Open full Requests Board</a></div>
-    <div class="board-grid">${o.requests.slice().sort((a,b)=>(b.request_votes?.length||0)-(a.request_votes?.length||0)).slice(0,6).map(r=>`<div class="board-card"><span class="eyebrow">${esc(requestCategoryLabel(r.category))} • ${r.request_votes?.length||0} votes</span><h3>${esc(r.title)}</h3><p>${esc(r.body)}</p><span class="request-status ${esc(r.status)}">${esc(requestStatusLabel(r.status))}</span></div>`).join('')||'<div class="empty">No requests yet.</div>'}</div></section>
-
-    <section class="section"><div class="section-head"><div><h2>Recent questions & reflections</h2><p>Reply directly to the student. Replies remain inside that student's private lesson thread.</p></div></div>
-    <div class="board-grid">${recent.length?recent.map(c=>{
-      const l=lesson(c.lesson_id);
-      return `<div class="board-card"><span class="eyebrow">${esc(names[c.student_id]||'Student')} • ${esc(l?.title||c.lesson_id)}</span><p>${esc(c.body)}</p>
-      <form class="comment-form" data-action-form="teacher-reply" data-lesson="${esc(c.lesson_id)}" data-student="${esc(c.student_id)}"><textarea name="body" maxlength="2000" placeholder="Teacher reply…" required></textarea><button class="button small primary" type="submit">Reply</button></form></div>`;
-    }).join(''):'<div class="empty">No student comments yet.</div>'}</div></section>`;
-    await hydrateEvidencePreviews();
+    <section class="section"><div class="section-head"><div><h2>Recent questions & reflections</h2><p>Reply directly to the student. Replies remain inside that student's private lesson thread.</p></div></div><div class="board-grid">${recent.length?recent.map(c=>{const l=lesson(c.lesson_id);return `<div class="board-card"><span class="eyebrow">${esc(names[c.student_id]||'Student')} • ${esc(l?.title||c.lesson_id)}</span><p>${esc(c.body)}</p><form class="comment-form" data-action-form="teacher-reply" data-lesson="${esc(c.lesson_id)}" data-student="${esc(c.student_id)}"><textarea name="body" maxlength="2000" placeholder="Teacher reply…" required></textarea><button class="button small primary" type="submit">Reply</button></form></div>`}).join(''):'<div class="empty">No student comments yet.</div>'}</div></section>`;
   }catch(e){box.innerHTML=`<div class="offline-note">${esc(e.message)}</div>`}
 }
 
@@ -2666,10 +2598,7 @@ function route(options={}){
   else if(parts[0]==='news'){app.innerHTML=newsPage();activate('news')}
   else if(parts[0]==='path'){app.innerHTML=pathPage(parts[1]);activate(parts[1])}
   else if(parts[0]==='lesson'){app.innerHTML=lessonPage(parts[1]);const l=lesson(parts[1]);if(l)activate(l.path)}
-  else if(parts[0]==='my-game'){location.replace('#/projects');return}
-  else if(parts[0]==='projects'&&parts[1]==='template'&&parts[2]){app.innerHTML=projectTemplatePage(parts[2]);activate('projects')}
-  else if(parts[0]==='projects'&&parts[1]){app.innerHTML=projectDetailPage(parts[1]);activate('projects')}
-  else if(parts[0]==='projects'){app.innerHTML=projectsPage();activate('projects')}
+  else if(parts[0]==='my-game'||parts[0]==='projects'){app.innerHTML=teamsProjectNoticePage();activate('home')}
   else if(parts[0]==='classes'){app.innerHTML=classesPage();activate('classes')}
   else if(parts[0]==='leaderboard'){app.innerHTML=leaderboardPage();activate('leaderboard')}
   else if(parts[0]==='critique'){app.innerHTML=critiquePage();activate('critique')}
@@ -2710,15 +2639,12 @@ function route(options={}){
   app.focus({preventScroll:true});
   $('#sidebar').classList.remove('open');
 
-  if(parts[0]==='lesson'&&BACKEND.user){loadComments(parts[1]);loadEvidence(parts[1]);}
+  if(parts[0]==='lesson'&&BACKEND.user)loadComments(parts[1]);
   if(parts[0]==='news') loadNewsFeed();
   if(parts[0]==='leaderboard'&&BACKEND.user) renderLeaderboard();
   if(parts[0]==='critique'&&BACKEND.user) renderCritiqueBoard();
   if(parts[0]==='progress'&&BACKEND.user) renderProgressCloud();
   if(parts[0]==='classes'&&BACKEND.user) renderClassesHub();
-  if(parts[0]==='projects'&&!parts[1]&&BACKEND.user) renderProjects();
-  if(parts[0]==='projects'&&parts[1]==='template'&&parts[2]&&BACKEND.user) renderProjectTemplate(parts[2]);
-  else if(parts[0]==='projects'&&parts[1]&&BACKEND.user) renderProjectDetail(parts[1]);
   if(parts[0]==='requests'&&BACKEND.user) renderRequests();
   if(parts[0]==='teacher'&&parts[1]==='class'&&parts[2]) renderTeacherClass(parts[2]);
   else if(parts[0]==='teacher') renderTeacher();
@@ -3022,7 +2948,7 @@ function renderAuth(){
         </div>
         <button class="button primary" type="submit">Create account</button>
       </form>
-      <p class="auth-message"><b>Guest mode remains available:</b> close this window and the whole learning course still works. An account is needed for cloud sync, Projects/group collaboration, classes, evidence, feedback, requests and notifications.</p>
+      <p class="auth-message"><b>Guest mode remains available:</b> close this window and the whole learning course still works. An account is needed for cloud sync, classes, Critique Board, lesson feedback, requests, leaderboards and notifications. Formal assignment submission stays in Microsoft Teams.</p>
       <div class="teacher-account-links">
         <button class="link-button" data-action="auth-view" data-view="teacher-invite">I have a teacher invite</button>
         <button class="link-button teacher-setup-link" data-action="auth-view" data-view="teacher-setup">First installation only: create the first teacher</button>
@@ -3857,6 +3783,7 @@ $('#resetProgress').addEventListener('click',()=>{
 $('#authModal').addEventListener('click',e=>{if(e.target===$('#authModal'))closeAuth()});
 document.addEventListener('error',e=>{
   const img=e.target;
+  if(img?.classList?.contains('cloud-thumb')&&img.dataset.fullSrc&&!img.dataset.fullFallback){img.dataset.fullFallback='1';img.src=img.dataset.fullSrc;return;}
   if(img?.classList?.contains('remote-reference-image')){img.closest('.visual-flow-card')?.classList.add('image-failed');img.closest('.model-build-thumb')?.classList.add('image-failed');img.closest('.model-build-hero-image')?.classList.add('image-failed');}
 },true);
 $('#imageLightbox')?.addEventListener('click',e=>{if(e.target===$('#imageLightbox'))closeImageLightbox()});
