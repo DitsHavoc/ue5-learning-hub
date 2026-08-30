@@ -8,7 +8,59 @@ const emailAuthEnabled = configured && cfg.emailAuthEnabled !== false;
 const PENDING_CLASS_KEY = 'ue5hub:v3:pending-class-code';
 const PENDING_TEACHER_KEY = 'ue5hub:v3:pending-teacher-code';
 const PENDING_TEACHER_INVITE_KEY = 'ue5hub:v3:pending-teacher-invite';
+function localCompletionIds(){
+  let local=null;
+  try{local=JSON.parse(localStorage.getItem('ue5hub:v2:progress')||'null')}catch(e){}
+  const ids=[...(local?.completed||[]),...(local?.tutorialCompleted||[]).map(id=>`tutorial:${id}`),...(local?.chapterBuildCompleted||[]).map(id=>`chapter:${id}`),...(local?.designBuildCompleted||[]).map(id=>`designbuild:${id}`),...(local?.designSourceCompleted||[]).map(id=>`designsource:${id}`),...(local?.modelVideoCompleted||[]).map(id=>`modelvideo:${id}`),...(local?.modelTheoryCompleted||[]).map(id=>`modeltheory:${id}`),...(local?.modelFoundationFinal?[`modelfoundation:final`]:[]),...(local?.modelLessonCompleted||[]).map(id=>`model:${id}`),...(local?.modelBuildCompleted||[]).map(id=>`modelbuild:${id}`),...(local?.modelFixCompleted||[]).map(id=>`modelfix:${id}`),...(local?.sculptCompleted||[]).map(id=>`sculpt:${id}`),...(local?.blockCompleted||[]).map(id=>`block:${id}`)];
+  return [...new Set(ids)].sort();
+}
+function localProgressMarkerKey(api){return `ue5hub:v3:migrated-progress:${api.user?.id||'guest'}`;}
+function markLocalProgressSynced(api){
+  if(!api.user)return;
+  try{localStorage.setItem(localProgressMarkerKey(api),localCompletionIds().join('|'));}catch(e){}
+}
 const client = configured ? window.supabase.createClient(cfg.url, cfg.publishableKey) : null;
+
+// v3.39.4 — keep routine cloud reads quiet. Route changes can happen quickly in a SPA,
+// so identical reads share one in-flight promise and then use a short TTL cache.
+const READ_CACHE = new Map();
+const READ_INFLIGHT = new Map();
+const SIGNED_URL_CACHE = new Map();
+function scopedReadKey(api,key){return `${api.user?.id||'guest'}:${key}`;}
+async function cachedRead(api,key,ttlMs,loader,{force=false}={}){
+  const cacheKey=scopedReadKey(api,key),now=Date.now(),hit=READ_CACHE.get(cacheKey);
+  if(!force&&hit&&now-hit.at<ttlMs)return hit.value;
+  if(READ_INFLIGHT.has(cacheKey))return READ_INFLIGHT.get(cacheKey);
+  const promise=(async()=>{
+    const value=await loader();
+    READ_CACHE.set(cacheKey,{at:Date.now(),value});
+    return value;
+  })().finally(()=>READ_INFLIGHT.delete(cacheKey));
+  READ_INFLIGHT.set(cacheKey,promise);
+  return promise;
+}
+function invalidateReadCache(api,prefix=''){
+  const scope=`${api.user?.id||'guest'}:`;
+  for(const key of [...READ_CACHE.keys()])if(key.startsWith(scope)&&(!prefix||key.slice(scope.length).startsWith(prefix)))READ_CACHE.delete(key);
+  for(const key of [...READ_INFLIGHT.keys()])if(key.startsWith(scope)&&(!prefix||key.slice(scope.length).startsWith(prefix)))READ_INFLIGHT.delete(key);
+}
+function clearAllReadCache(){READ_CACHE.clear();READ_INFLIGHT.clear();SIGNED_URL_CACHE.clear();}
+async function cachedSignedUrls(bucket,paths,{expiresIn=3600,reuseMs=3300000}={}){
+  const now=Date.now(),all=[...new Set((paths||[]).filter(Boolean))],map={},missing=[];
+  all.forEach(path=>{
+    const key=`${bucket}:${path}`,hit=SIGNED_URL_CACHE.get(key);
+    if(hit&&now-hit.at<reuseMs)map[path]=hit.url;else missing.push(path);
+  });
+  if(missing.length){
+    const {data,error}=await client.storage.from(bucket).createSignedUrls(missing,expiresIn);
+    if(error)console.warn(`${bucket} signed URLs`,error.message);
+    (data||[]).forEach(x=>{if(x.path&&x.signedUrl){SIGNED_URL_CACHE.set(`${bucket}:${x.path}`,{at:Date.now(),url:x.signedUrl});map[x.path]=x.signedUrl;}});
+  }
+  return map;
+}
+function invalidateClassReads(api){
+  ['teacher-overview','teacher-class:','teaching-classes','teaching-class-cards','my-classes','critique-','leaderboard:'].forEach(prefix=>invalidateReadCache(api,prefix));
+}
 
 
 const PROJECT_FILE_MIMES = {
@@ -93,7 +145,7 @@ async function prepareImageUpload(file){
 }
 async function uploadOptionalThumbnail(bucket,path,file){
   if(!file)return false;
-  const {error}=await client.storage.from(bucket).upload(thumbnailPath(path),file,{upsert:false,contentType:'image/webp',cacheControl:'3600'});
+  const {error}=await client.storage.from(bucket).upload(thumbnailPath(path),file,{upsert:false,contentType:'image/webp',cacheControl:'31536000'});
   if(error){console.warn('Thumbnail upload',error.message);return false}
   return true;
 }
@@ -129,6 +181,7 @@ const api = {
         if(event==='TOKEN_REFRESHED')return;
         return;
       }
+      clearAllReadCache();
       this.user=nextUser;
       this.profile=null;
       this.xpSummary=null;
@@ -147,7 +200,7 @@ const api = {
   emit(){this.listeners.forEach(fn=>{try{fn(this)}catch(e){console.error(e)}})},
   async loadProfile(){
     if(!client||!this.user)return null;
-    const {data,error}=await client.from('profiles').select('*').eq('id',this.user.id).maybeSingle();
+    const {data,error}=await client.from('profiles').select('id,display_name,role,created_at').eq('id',this.user.id).maybeSingle();
     if(error){console.warn('Profile load',error.message);return null}
     this.profile=data;return data;
   },
@@ -300,6 +353,7 @@ const api = {
     if(error)throw error;
     const row=Array.isArray(data)?data[0]:data;
     if(!row)throw new Error('Teacher invite could not be created.');
+    invalidateReadCache(this,'teacher-overview');
     return row;
   },
   async getTeacherInvites(){
@@ -316,6 +370,7 @@ const api = {
     const {data,error}=await client.rpc('revoke_teacher_invite',{p_invite_id:inviteId});
     if(error)throw error;
     if(data!==true)throw new Error('Invite could not be revoked. It may already be used or revoked.');
+    invalidateReadCache(this,'teacher-overview');
     return true;
   },
   async signInEmail({email,password}){
@@ -360,6 +415,7 @@ const api = {
     if(error)throw error;
     const row=Array.isArray(data)?data[0]:data;
     if(!row)throw new Error('That class code is invalid or unavailable.');
+    invalidateClassReads(this);
     return row;
   },
   async completePendingClassJoin(){
@@ -399,49 +455,56 @@ const api = {
   async signOut(){ if(client) await client.auth.signOut(); },
   async migrateLocalProgress(){
     if(!client||!this.user)return;
-    let local=null;
-    try{local=JSON.parse(localStorage.getItem('ue5hub:v2:progress')||'null')}catch(e){}
-    const ids=[...(local?.completed||[]),...(local?.tutorialCompleted||[]).map(id=>`tutorial:${id}`),...(local?.chapterBuildCompleted||[]).map(id=>`chapter:${id}`),...(local?.designBuildCompleted||[]).map(id=>`designbuild:${id}`),...(local?.designSourceCompleted||[]).map(id=>`designsource:${id}`),...(local?.modelTheoryCompleted||[]).map(id=>`modeltheory:${id}`),...(local?.modelFoundationFinal?[`modelfoundation:final`]:[]),...(local?.modelLessonCompleted||[]).map(id=>`model:${id}`),...(local?.modelBuildCompleted||[]).map(id=>`modelbuild:${id}`),...(local?.modelFixCompleted||[]).map(id=>`modelfix:${id}`),...(local?.sculptCompleted||[]).map(id=>`sculpt:${id}`),...(local?.blockCompleted||[]).map(id=>`block:${id}`)];
-    const unique=[...new Set(ids)].sort();
+    const unique=localCompletionIds();
     if(!unique.length)return;
-    const markerKey=`ue5hub:v3:migrated-progress:${this.user.id}`;
-    const fingerprint=unique.join('|');
+    const markerKey=localProgressMarkerKey(this),fingerprint=unique.join('|');
     if(localStorage.getItem(markerKey)===fingerprint)return;
     const rows=unique.map(id=>({user_id:this.user.id,lesson_id:id,completed:true,completed_at:new Date().toISOString()}));
     const {error}=await client.from('lesson_progress').upsert(rows,{onConflict:'user_id,lesson_id'});
     if(error)console.warn('Progress migration',error.message);else localStorage.setItem(markerKey,fingerprint);
   },
-  async getLessonProgress(){
+  async getLessonProgress({force=false}={}){
     if(!client||!this.user)return [];
-    const {data,error}=await client.from('lesson_progress').select('lesson_id,completed').eq('user_id',this.user.id);
-    if(error){console.warn(error.message);return []} return data||[];
+    return cachedRead(this,'lesson-progress',300000,async()=>{
+      const {data,error}=await client.from('lesson_progress').select('lesson_id,completed').eq('user_id',this.user.id);
+      if(error){console.warn(error.message);return []} return data||[];
+    },{force});
   },
   async setLessonComplete(lessonId,completed){
     if(!client||!this.user)return false;
     const row={user_id:this.user.id,lesson_id:lessonId,completed,completed_at:completed?new Date().toISOString():null};
     const {error}=await client.from('lesson_progress').upsert(row,{onConflict:'user_id,lesson_id'});
-    if(error)throw error;if(completed)await this.refreshXpSummary();return true;
+    if(error)throw error;
+    invalidateReadCache(this,'lesson-progress');
+    markLocalProgressSynced(this);
+    if(completed)await this.refreshXpSummary({force:true});
+    return true;
   },
-  async refreshXpSummary(){
+  async refreshXpSummary({force=false}={}){
     if(!client||!this.user||this.profile?.role==='teacher'){this.xpSummary=null;return null}
-    const {data,error}=await client.rpc('get_my_xp_summary');
-    if(error){console.warn('XP summary',error.message);return this.xpSummary}
-    this.xpSummary=Array.isArray(data)?(data[0]||null):data;
-    return this.xpSummary;
+    const value=await cachedRead(this,'xp-summary',60000,async()=>{
+      const {data,error}=await client.rpc('get_my_xp_summary');
+      if(error){console.warn('XP summary',error.message);return this.xpSummary}
+      return Array.isArray(data)?(data[0]||null):data;
+    },{force});
+    this.xpSummary=value;return value;
   },
   async getLeaderboardClasses(){
     if(!client||!this.user)return [];
     return this.profile?.role==='teacher'?this.getTeachingClasses():this.getMyClasses();
   },
-  async getClassLeaderboard(classId,period='week'){
+  async getClassLeaderboard(classId,period='week',{force=false}={}){
     if(!client||!this.user)throw new Error('Sign in to view the leaderboard.');
-    const {data,error}=await client.rpc('get_class_leaderboard',{p_class_id:classId,p_period:period==='all'?'all':'week'});
-    if(error)throw error;return data||[];
+    const cleanPeriod=period==='all'?'all':'week';
+    return cachedRead(this,`leaderboard:${classId}:${cleanPeriod}`,60000,async()=>{
+      const {data,error}=await client.rpc('get_class_leaderboard',{p_class_id:classId,p_period:cleanPeriod});
+      if(error)throw error;return data||[];
+    },{force});
   },
   async setClassLeaderboardEnabled(classId,enabled){
     if(!client||!this.user||this.profile?.role!=='teacher')throw new Error('Teacher access required.');
     const {data,error}=await client.rpc('set_class_leaderboard_enabled',{p_class_id:classId,p_enabled:Boolean(enabled)});
-    if(error)throw error;return Array.isArray(data)?data[0]:data;
+    if(error)throw error;invalidateClassReads(this);return Array.isArray(data)?data[0]:data;
   },
 
   // v3.36.0 class-scoped Critique Board
@@ -449,47 +512,48 @@ const api = {
     if(!client||!this.user)return [];
     return this.profile?.role==='teacher'?this.getTeachingClasses():this.getMyClasses();
   },
-  async getCritiqueAttentionCount(){
+  async getCritiqueAttentionCount({force=false}={}){
     if(!client||!this.user)return 0;
-    const {data,error}=await client.rpc('get_critique_attention_count');
-    if(error){
-      if(error.code==='42883'||error.code==='42P01')return 0;
-      console.warn('Critique attention count',error.message);return 0;
-    }
-    return Number(data||0);
+    return cachedRead(this,'critique-attention',60000,async()=>{
+      const {data,error}=await client.rpc('get_critique_attention_count');
+      if(error){
+        if(error.code==='42883'||error.code==='42P01')return 0;
+        console.warn('Critique attention count',error.message);return 0;
+      }
+      return Number(data||0);
+    },{force});
   },
-  async getCritiqueRewardCountToday(){
+  async getCritiqueRewardCountToday({force=false}={}){
     if(!client||!this.user||this.profile?.role==='teacher')return 0;
-    const {data,error}=await client.rpc('get_my_critique_reward_count_today');
-    if(error){
-      if(error.code==='42883'||error.code==='42P01')return 0;
-      console.warn('Critique reward count',error.message);return 0;
-    }
-    return Number(data||0);
+    return cachedRead(this,'critique-reward-today',60000,async()=>{
+      const {data,error}=await client.rpc('get_my_critique_reward_count_today');
+      if(error){
+        if(error.code==='42883'||error.code==='42P01')return 0;
+        console.warn('Critique reward count',error.message);return 0;
+      }
+      return Number(data||0);
+    },{force});
   },
-  async getCritiquePosts(classId){
+  async getCritiquePosts(classId,{force=false}={}){
     if(!client||!this.user)throw new Error('Sign in to open the Critique Board.');
-    const {data,error}=await client.rpc('get_critique_feed',{p_class_id:classId});
-    if(error){
-      if(error.code==='42883'||error.code==='42P01')throw new Error('Critique Board needs the v3.36.0 database migration.');
-      throw error;
-    }
-    const rows=(data||[]).map(r=>({...r,feedback:Array.isArray(r.feedback)?r.feedback:[]}));
-    const originals=[],thumbs=[];
-    rows.forEach(r=>{if(r.storage_path){originals.push(r.storage_path);thumbs.push(thumbnailPath(r.storage_path))}if(r.improved_storage_path){originals.push(r.improved_storage_path);thumbs.push(thumbnailPath(r.improved_storage_path))}});
-    const urlMap={};
-    if(originals.length||thumbs.length){
+    return cachedRead(this,`critique-posts:${classId}`,45000,async()=>{
+      const {data,error}=await client.rpc('get_critique_feed',{p_class_id:classId});
+      if(error){
+        if(error.code==='42883'||error.code==='42P01')throw new Error('Critique Board needs the v3.36.0 database migration.');
+        throw error;
+      }
+      const rows=(data||[]).map(r=>({...r,feedback:Array.isArray(r.feedback)?r.feedback:[]}));
+      const originals=[],thumbs=[];
+      rows.forEach(r=>{if(r.storage_path){originals.push(r.storage_path);thumbs.push(thumbnailPath(r.storage_path))}if(r.improved_storage_path){originals.push(r.improved_storage_path);thumbs.push(thumbnailPath(r.improved_storage_path))}});
       const all=[...new Set([...originals,...thumbs])];
-      const {data:signed,error:sErr}=await client.storage.from('critique-media').createSignedUrls(all,900);
-      if(sErr)console.warn('Critique signed URLs',sErr.message);
-      (signed||[]).forEach(x=>{if(x.path&&x.signedUrl)urlMap[x.path]=x.signedUrl});
-    }
-    return rows.map(r=>({...r,
-      image_url:urlMap[r.storage_path]||'',
-      image_thumb_url:urlMap[thumbnailPath(r.storage_path)]||'',
-      improved_url:urlMap[r.improved_storage_path]||'',
-      improved_thumb_url:r.improved_storage_path?(urlMap[thumbnailPath(r.improved_storage_path)]||''):''
-    }));
+      const urlMap=all.length?await cachedSignedUrls('critique-media',all):{};
+      return rows.map(r=>({...r,
+        image_url:urlMap[r.storage_path]||'',
+        image_thumb_url:urlMap[thumbnailPath(r.storage_path)]||'',
+        improved_url:urlMap[r.improved_storage_path]||'',
+        improved_thumb_url:r.improved_storage_path?(urlMap[thumbnailPath(r.improved_storage_path)]||''):''
+      }));
+    },{force});
   },
   async createCritiquePost({classId,area='General',title='',prompt='',file}){
     if(!client||!this.user)throw new Error('Sign in to post work for critique.');
@@ -503,7 +567,7 @@ const api = {
     const prepared=await prepareImageUpload(file),uploadFile=prepared.full,uploadMime=String(uploadFile.type||mime).toLowerCase();
     const postId=crypto.randomUUID(),safe=(file.name||'critique-image').replace(/[^a-zA-Z0-9._-]+/g,'-').slice(-100),storageSafe=(uploadFile.name||safe).replace(/[^a-zA-Z0-9._-]+/g,'-').slice(-100);
     const path=`${classId}/${this.user.id}/${postId}/original-${Date.now()}-${storageSafe}`;
-    const {error:uploadError}=await client.storage.from('critique-media').upload(path,uploadFile,{upsert:false,contentType:uploadMime,cacheControl:'3600'});
+    const {error:uploadError}=await client.storage.from('critique-media').upload(path,uploadFile,{upsert:false,contentType:uploadMime,cacheControl:'31536000'});
     if(uploadError){
       if(uploadError.message?.toLowerCase().includes('bucket'))throw new Error('Critique Board needs the v3.36.0 database migration.');
       throw uploadError;
@@ -513,6 +577,7 @@ const api = {
       id:postId,class_id:classId,author_id:this.user.id,area:String(area||'General').trim().slice(0,40),title:String(title||'').trim().slice(0,120),prompt:cleanPrompt,storage_path:path,original_name:file.name||safe
     }).select().single();
     if(insertError){await client.storage.from('critique-media').remove([path,thumbnailPath(path)]);throw insertError;}
+    invalidateReadCache(this,'critique-');
     return row;
   },
   async addCritiqueImprovedImage(postId,classId,file){
@@ -525,12 +590,13 @@ const api = {
     if(readError)throw readError;
     const prepared=await prepareImageUpload(file),uploadFile=prepared.full,uploadMime=String(uploadFile.type||mime).toLowerCase();
     const safe=(file.name||'improved-critique').replace(/[^a-zA-Z0-9._-]+/g,'-').slice(-100),storageSafe=(uploadFile.name||safe).replace(/[^a-zA-Z0-9._-]+/g,'-').slice(-100),path=`${classId}/${this.user.id}/${postId}/improved-${Date.now()}-${storageSafe}`;
-    const {error:uploadError}=await client.storage.from('critique-media').upload(path,uploadFile,{upsert:false,contentType:uploadMime,cacheControl:'3600'});
+    const {error:uploadError}=await client.storage.from('critique-media').upload(path,uploadFile,{upsert:false,contentType:uploadMime,cacheControl:'31536000'});
     if(uploadError)throw uploadError;
     await uploadOptionalThumbnail('critique-media',path,prepared.thumb);
     const {data:row,error:updateError}=await client.from('critique_posts').update({improved_storage_path:path,improved_name:file.name||safe,updated_at:new Date().toISOString()}).eq('id',postId).select().single();
     if(updateError){await client.storage.from('critique-media').remove([path,thumbnailPath(path)]);throw updateError;}
     if(existing?.improved_storage_path)await client.storage.from('critique-media').remove([existing.improved_storage_path,thumbnailPath(existing.improved_storage_path)]);
+    invalidateReadCache(this,'critique-');
     return row;
   },
   async postCritiqueFeedback(postId,{worksWell='',clearer='',changeTry=''}){
@@ -539,13 +605,14 @@ const api = {
     if(fields.some(x=>x.length<12))throw new Error('Give a little more detail in all three boxes — at least 12 characters each.');
     const {data,error}=await client.from('critique_feedback').insert({post_id:postId,author_id:this.user.id,works_well:fields[0].slice(0,600),clearer:fields[1].slice(0,600),change_try:fields[2].slice(0,600)}).select().single();
     if(error){if(error.code==='23505')throw new Error('You already critiqued this post.');throw error;}
-    if(data?.xp_awarded)await this.refreshXpSummary();
+    invalidateReadCache(this,'critique-');
+    if(data?.xp_awarded)await this.refreshXpSummary({force:true});
     return data;
   },
   async deleteCritiqueFeedback(feedbackId){
     if(!client||!this.user)throw new Error('Sign in first.');
     const {error}=await client.from('critique_feedback').delete().eq('id',feedbackId);
-    if(error)throw error;return true;
+    if(error)throw error;invalidateReadCache(this,'critique-');return true;
   },
   async deleteCritiquePost(postId){
     if(!client||!this.user)throw new Error('Sign in first.');
@@ -556,6 +623,7 @@ const api = {
     const {error}=await client.from('critique_posts').delete().eq('id',postId);
     if(error)throw error;
     if(paths.length){const {error:sErr}=await client.storage.from('critique-media').remove(paths);if(sErr)console.warn('Critique media cleanup',sErr.message);}
+    invalidateReadCache(this,'critique-');
     return true;
   },
   async getProjectProgress(){
@@ -582,18 +650,22 @@ const api = {
   },
 
   // v3.16 project templates + lightweight development logbooks
-  async getTeachingClasses(){
+  async getTeachingClasses({force=false}={}){
     if(!client||!this.user||this.profile?.role!=='teacher')return [];
-    const {data,error}=await client.from('classes').select('id,name,academic_year,archived,leaderboard_enabled').eq('archived',false).order('name');
-    if(error)throw error;return data||[];
+    return cachedRead(this,'teaching-classes',120000,async()=>{
+      const {data,error}=await client.from('classes').select('id,name,academic_year,archived,leaderboard_enabled').eq('archived',false).order('name');
+      if(error)throw error;return data||[];
+    },{force});
   },
-  async getTeachingClassCards(){
+  async getTeachingClassCards({force=false}={}){
     if(!client||!this.user||this.profile?.role!=='teacher')return [];
-    const {data,error}=await client.from('classes')
-      .select('id,teacher_id,name,academic_year,archived,join_code,join_enabled,leaderboard_enabled,class_members(user_id),class_teachers(teacher_id)')
-      .eq('archived',false)
-      .order('name');
-    if(error)throw error;return data||[];
+    return cachedRead(this,'teaching-class-cards',120000,async()=>{
+      const {data,error}=await client.from('classes')
+        .select('id,teacher_id,name,academic_year,archived,join_code,join_enabled,leaderboard_enabled,class_members(user_id),class_teachers(teacher_id)')
+        .eq('archived',false)
+        .order('name');
+      if(error)throw error;return data||[];
+    },{force});
   },
   async getProjectTemplates(){
     if(!client||!this.user)return [];
@@ -939,27 +1011,35 @@ const api = {
     }
     return data;
   },
-  async getComments(lessonId){
+  async getComments(lessonId,{force=false}={}){
     if(!client||!this.user)return [];
-    let q=client.from('lesson_comments').select('*,author:profiles!lesson_comments_author_id_fkey(display_name,role)').eq('lesson_id',lessonId).order('created_at');
-    const {data,error}=await q;
-    if(error){console.warn(error.message);return []}return data||[];
+    return cachedRead(this,`lesson-comments:${lessonId}`,60000,async()=>{
+      const {data,error}=await client.from('lesson_comments')
+        .select('id,lesson_id,student_id,author_id,body,created_at,author:profiles!lesson_comments_author_id_fkey(display_name,role)')
+        .eq('lesson_id',lessonId).order('created_at');
+      if(error){console.warn(error.message);return []}return data||[];
+    },{force});
   },
   async postComment({lessonId,body,studentId=null}){
     if(!client||!this.user)throw new Error('Sign in to post comments.');
     const sid = this.profile?.role==='teacher' ? studentId : this.user.id;
     if(!sid)throw new Error('Choose a student first.');
     const {error}=await client.from('lesson_comments').insert({lesson_id:lessonId,student_id:sid,author_id:this.user.id,body});
-    if(error)throw error;return true;
+    if(error)throw error;
+    invalidateReadCache(this,`lesson-comments:${lessonId}`);
+    invalidateReadCache(this,'teacher-overview');
+    return true;
   },
-  async getMyClasses(){
+  async getMyClasses({force=false}={}){
     if(!client||!this.user)return [];
-    const {data,error}=await client
-      .from('class_members')
-      .select('joined_at,class:classes(id,name,academic_year,teacher_id,archived,leaderboard_enabled)')
-      .eq('user_id',this.user.id);
-    if(error){console.warn('Classes',error.message);return []}
-    return (data||[]).map(x=>x.class).filter(c=>c && !c.archived);
+    return cachedRead(this,'my-classes',120000,async()=>{
+      const {data,error}=await client
+        .from('class_members')
+        .select('joined_at,class:classes(id,name,academic_year,teacher_id,archived,leaderboard_enabled)')
+        .eq('user_id',this.user.id);
+      if(error){console.warn('Classes',error.message);return []}
+      return (data||[]).map(x=>x.class).filter(c=>c && !c.archived);
+    },{force});
   },
   async getMySubmissions(){
     if(!client||!this.user)return [];
@@ -1049,28 +1129,30 @@ const api = {
     if(error)throw error;
     return data?.signedUrl||null;
   },
-  async getNotifications(){
+  async getNotifications({force=false}={}){
     if(!client||!this.user)return [];
-    const {data,error}=await client
-      .from('notifications')
-      .select('id,user_id,kind,title,body,link,read_at,created_at')
-      .eq('user_id',this.user.id)
-      .order('created_at',{ascending:false})
-      .limit(50);
-    if(error){console.warn('Notifications',error.message);return []}
-    return data||[];
+    return cachedRead(this,'notifications',60000,async()=>{
+      const {data,error}=await client
+        .from('notifications')
+        .select('id,kind,title,body,link,read_at,created_at')
+        .eq('user_id',this.user.id)
+        .order('created_at',{ascending:false})
+        .limit(50);
+      if(error){console.warn('Notifications',error.message);return []}
+      return data||[];
+    },{force});
   },
   async markNotificationRead(id){
     if(!client||!this.user)return false;
     const {error}=await client.from('notifications').update({read_at:new Date().toISOString()}).eq('id',id).eq('user_id',this.user.id);
-    if(error)throw error;return true;
+    if(error)throw error;invalidateReadCache(this,'notifications');return true;
   },
   async createClass({name,academicYear}){
     if(!client||!this.user||this.profile?.role!=='teacher')throw new Error('Teacher access required.');
     const {data,error}=await client.from('classes').insert({
       teacher_id:this.user.id,name,academic_year:academicYear||''
     }).select().single();
-    if(error)throw error;return data;
+    if(error)throw error;invalidateClassReads(this);return data;
   },
   async updateClass({classId,name,academicYear}){
     if(!client||!this.user||this.profile?.role!=='teacher')throw new Error('Teacher access required.');
@@ -1080,24 +1162,24 @@ const api = {
     const {data,error}=await client.from('classes')
       .update({name:cleanName,academic_year:cleanYear})
       .eq('id',classId).select().single();
-    if(error)throw error;return data;
+    if(error)throw error;invalidateClassReads(this);return data;
   },
   async setClassArchived(classId,archived){
     if(!client||!this.user||this.profile?.role!=='teacher')throw new Error('Teacher access required.');
     const changes=archived?{archived:true,join_enabled:false}:{archived:false};
     const {data,error}=await client.from('classes').update(changes)
       .eq('id',classId).select().single();
-    if(error)throw error;return data;
+    if(error)throw error;invalidateClassReads(this);return data;
   },
   async deleteClass(classId){
     if(!client||!this.user||this.profile?.role!=='teacher')throw new Error('Teacher access required.');
     const {error}=await client.from('classes').delete().eq('id',classId).eq('teacher_id',this.user.id);
-    if(error)throw error;return true;
+    if(error)throw error;invalidateClassReads(this);return true;
   },
   async setClassJoinEnabled(classId,enabled){
     if(!client||!this.user||this.profile?.role!=='teacher')throw new Error('Teacher access required.');
     const {data,error}=await client.from('classes').update({join_enabled:Boolean(enabled)}).eq('id',classId).select().single();
-    if(error)throw error;return data;
+    if(error)throw error;invalidateClassReads(this);return data;
   },
   async regenerateClassCode(classId){
     if(!client||!this.user||this.profile?.role!=='teacher')throw new Error('Teacher access required.');
@@ -1106,17 +1188,17 @@ const api = {
     crypto.getRandomValues(bytes);
     const code=[...bytes].map(b=>alphabet[b%alphabet.length]).join('');
     const {data,error}=await client.from('classes').update({join_code:code}).eq('id',classId).select().single();
-    if(error)throw error;return data;
+    if(error)throw error;invalidateClassReads(this);return data;
   },
   async addClassMember(classId,userId){
     if(!client||!this.user||this.profile?.role!=='teacher')throw new Error('Teacher access required.');
     const {error}=await client.from('class_members').upsert({class_id:classId,user_id:userId},{onConflict:'class_id,user_id'});
-    if(error)throw error;return true;
+    if(error)throw error;invalidateClassReads(this);return true;
   },
   async removeClassMember(classId,userId){
     if(!client||!this.user||this.profile?.role!=='teacher')throw new Error('Teacher access required.');
     const {error}=await client.from('class_members').delete().eq('class_id',classId).eq('user_id',userId);
-    if(error)throw error;return true;
+    if(error)throw error;invalidateClassReads(this);return true;
   },
   async addClassTeacher(classId,teacherId){
     if(!client||!this.user||this.profile?.role!=='teacher')throw new Error('Teacher access required.');
@@ -1124,12 +1206,12 @@ const api = {
     const {error}=await client.from('class_teachers').insert({
       class_id:classId,teacher_id:teacherId,added_by:this.user.id
     });
-    if(error)throw error;return true;
+    if(error)throw error;invalidateClassReads(this);return true;
   },
   async removeClassTeacher(classId,teacherId){
     if(!client||!this.user||this.profile?.role!=='teacher')throw new Error('Teacher access required.');
     const {error}=await client.from('class_teachers').delete().eq('class_id',classId).eq('teacher_id',teacherId);
-    if(error)throw error;return true;
+    if(error)throw error;invalidateClassReads(this);return true;
   },
   async reviewSubmission({submissionId,status,feedback}){
     if(!client||!this.user||this.profile?.role!=='teacher')throw new Error('Teacher access required.');
@@ -1153,30 +1235,46 @@ const api = {
     if(nErr)console.warn('Notification',nErr.message);
     return data;
   },
-  async getNewsState(storyKeys=[]){
+  async getNewsState(storyKeys=[],{force=false}={}){
     if(!client||!this.user)return {saved:[],votes:{},myVotes:[],comments:{}};
     const keys=[...new Set((storyKeys||[]).map(String).filter(Boolean))].slice(0,120);
     if(!keys.length)return {saved:[],votes:{},myVotes:[],comments:{}};
-    const [{data:saved,error:sErr},{data:votes,error:vErr},{data:comments,error:cErr}]=await Promise.all([
-      client.from('news_saved').select('story_key').eq('user_id',this.user.id).in('story_key',keys),
-      client.from('news_votes').select('story_key,user_id').in('story_key',keys),
-      client.from('news_comments').select('story_key').in('story_key',keys)
-    ]);
-    if(sErr||vErr||cErr){
-      const err=sErr||vErr||cErr;
-      if(err?.code==='42P01')throw new Error('News social features need the V3.20 database migration.');
-      throw err;
-    }
-    const voteCounts={},commentCounts={},mine=[];
-    (votes||[]).forEach(v=>{voteCounts[v.story_key]=(voteCounts[v.story_key]||0)+1;if(v.user_id===this.user.id)mine.push(v.story_key)});
-    (comments||[]).forEach(c=>{commentCounts[c.story_key]=(commentCounts[c.story_key]||0)+1});
-    return {saved:(saved||[]).map(x=>x.story_key),votes:voteCounts,myVotes:mine,comments:commentCounts};
+    const signature=keys.slice().sort().join('|');
+    return cachedRead(this,`news-state:${signature}`,300000,async()=>{
+      const {data,error}=await client.rpc('get_news_state_compact',{p_story_keys:keys});
+      if(error){
+        if(error.code==='42883'){
+          // Backwards-compatible fallback for a frontend deployed before the compact RPC migration.
+          const [{data:saved,error:sErr},{data:votes,error:vErr},{data:comments,error:cErr}]=await Promise.all([
+            client.from('news_saved').select('story_key').eq('user_id',this.user.id).in('story_key',keys),
+            client.from('news_votes').select('story_key,user_id').in('story_key',keys),
+            client.from('news_comments').select('story_key').in('story_key',keys)
+          ]);
+          if(sErr||vErr||cErr)throw sErr||vErr||cErr;
+          const voteCounts={},commentCounts={},mine=[];
+          (votes||[]).forEach(v=>{voteCounts[v.story_key]=(voteCounts[v.story_key]||0)+1;if(v.user_id===this.user.id)mine.push(v.story_key)});
+          (comments||[]).forEach(c=>{commentCounts[c.story_key]=(commentCounts[c.story_key]||0)+1});
+          return {saved:(saved||[]).map(x=>x.story_key),votes:voteCounts,myVotes:mine,comments:commentCounts};
+        }
+        if(error.code==='42P01')throw new Error('News social features need the V3.20 database migration.');
+        throw error;
+      }
+      const rows=data||[],votes={},comments={},saved=[],mine=[];
+      rows.forEach(r=>{
+        const key=String(r.story_key||'');if(!key)return;
+        votes[key]=Number(r.vote_count||0);comments[key]=Number(r.comment_count||0);
+        if(r.saved)saved.push(key);if(r.my_vote)mine.push(key);
+      });
+      return {saved,votes,myVotes:mine,comments};
+    },{force});
   },
-  async getSavedNews(){
+  async getSavedNews({force=false}={}){
     if(!client||!this.user)return [];
-    const {data,error}=await client.from('news_saved').select('story_key,story_url,story_title,story_summary,story_source,story_image,story_category,story_date,saved_at').eq('user_id',this.user.id).order('saved_at',{ascending:false});
-    if(error){if(error.code==='42P01')throw new Error('News social features need the V3.20 database migration.');throw error}
-    return data||[];
+    return cachedRead(this,'news-saved',300000,async()=>{
+      const {data,error}=await client.from('news_saved').select('story_key,story_url,story_title,story_summary,story_source,story_image,story_category,story_date,saved_at').eq('user_id',this.user.id).order('saved_at',{ascending:false});
+      if(error){if(error.code==='42P01')throw new Error('News social features need the V3.20 database migration.');throw error}
+      return data||[];
+    },{force});
   },
   async setNewsSaved(story,saved){
     if(!client||!this.user)throw new Error('Sign in to save stories for later.');
@@ -1190,6 +1288,7 @@ const api = {
       const {error}=await client.from('news_saved').delete().eq('user_id',this.user.id).eq('story_key',story.key);
       if(error)throw error;
     }
+    invalidateReadCache(this,'news-');
     return true;
   },
   async setNewsVote(story,voted){
@@ -1201,16 +1300,20 @@ const api = {
       const {error}=await client.from('news_votes').delete().eq('user_id',this.user.id).eq('story_key',story.key);
       if(error)throw error;
     }
+    invalidateReadCache(this,'news-');
     return true;
   },
-  async getNewsComments(storyKey){
+  async getNewsComments(storyKey,{force=false}={}){
     if(!client||!this.user)return [];
-    const {data,error}=await client.rpc('get_news_comments',{p_story_key:String(storyKey||'')});
-    if(error){
-      if(error.code==='42883'||error.code==='42P01')throw new Error('News comments need the V3.20 database migration.');
-      throw error;
-    }
-    return data||[];
+    const key=String(storyKey||'');
+    return cachedRead(this,`news-comments:${key}`,30000,async()=>{
+      const {data,error}=await client.rpc('get_news_comments',{p_story_key:key});
+      if(error){
+        if(error.code==='42883'||error.code==='42P01')throw new Error('News comments need the V3.20 database migration.');
+        throw error;
+      }
+      return data||[];
+    },{force});
   },
   async postNewsComment(story,body){
     if(!client||!this.user)throw new Error('Sign in to join the discussion.');
@@ -1219,41 +1322,51 @@ const api = {
     const {data,error}=await client.from('news_comments').insert({
       story_key:story.key,story_url:story.url,story_title:story.title,story_source:story.source||'',author_id:this.user.id,body:clean
     }).select('id').single();
-    if(error)throw error;return data;
+    if(error)throw error;invalidateReadCache(this,'news-');return data;
   },
   async deleteNewsComment(commentId){
     if(!client||!this.user)throw new Error('Sign in first.');
     const {error}=await client.from('news_comments').delete().eq('id',commentId);
-    if(error)throw error;return true;
+    if(error)throw error;invalidateReadCache(this,'news-');return true;
   },
-  async getRequests(){
+  async getMyRequestCount({force=false}={}){
+    if(!client||!this.user)return 0;
+    return cachedRead(this,'my-request-count',300000,async()=>{
+      const {count,error}=await client.from('student_requests').select('id',{count:'exact',head:true}).eq('author_id',this.user.id);
+      if(error){console.warn('Request count',error.message);return 0}
+      return Number(count||0);
+    },{force});
+  },
+  async getRequests({force=false}={}){
     if(!client||!this.user)return [];
-    const [{data,error},{data:replies,error:rErr}]=await Promise.all([
-      client.from('student_requests').select('id,category,title,body,status,created_at,updated_at,author_id,request_votes(user_id)').order('created_at',{ascending:false}),
-      client.from('request_replies').select('id,request_id,author_id,body,created_at,updated_at').order('created_at')
-    ]);
-    if(error){console.warn('Requests',error.message);return []}
-    if(rErr){console.warn('Request replies',rErr.message);}
-    const authorIds=[...new Set((replies||[]).map(x=>x.author_id))];
-    let profiles=[];
-    if(authorIds.length){
-      const {data:pData}=await client.from('profiles').select('id,display_name,role').in('id',authorIds);
-      profiles=pData||[];
-    }
-    const names=Object.fromEntries(profiles.map(x=>[x.id,x]));
-    return (data||[]).map(r=>({
-      ...r,
-      votes:(r.request_votes||[]).length,
-      my_vote:(r.request_votes||[]).some(v=>v.user_id===this.user.id),
-      replies:(replies||[]).filter(x=>x.request_id===r.id).map(x=>({...x,author:names[x.author_id]||null}))
-    }));
+    return cachedRead(this,'requests',60000,async()=>{
+      const [{data,error},{data:replies,error:rErr}]=await Promise.all([
+        client.from('student_requests').select('id,category,title,body,status,created_at,updated_at,author_id,request_votes(user_id)').order('created_at',{ascending:false}),
+        client.from('request_replies').select('id,request_id,author_id,body,created_at,updated_at').order('created_at')
+      ]);
+      if(error){console.warn('Requests',error.message);return []}
+      if(rErr){console.warn('Request replies',rErr.message);}
+      const authorIds=[...new Set((replies||[]).map(x=>x.author_id))];
+      let profiles=[];
+      if(authorIds.length){
+        const {data:pData}=await client.from('profiles').select('id,display_name,role').in('id',authorIds);
+        profiles=pData||[];
+      }
+      const names=Object.fromEntries(profiles.map(x=>[x.id,x]));
+      return (data||[]).map(r=>({
+        ...r,
+        votes:(r.request_votes||[]).length,
+        my_vote:(r.request_votes||[]).some(v=>v.user_id===this.user.id),
+        replies:(replies||[]).filter(x=>x.request_id===r.id).map(x=>({...x,author:names[x.author_id]||null}))
+      }));
+    },{force});
   },
   async submitRequest({category,title,body}){
     if(!client||!this.user)throw new Error('Sign in to a Learning Hub account first.');
     const {error}=await client.from('student_requests').insert({
       author_id:this.user.id,category,title,body
     });
-    if(error)throw error;return true;
+    if(error)throw error;invalidateReadCache(this,'requests');invalidateReadCache(this,'my-request-count');invalidateReadCache(this,'teacher-overview');return true;
   },
   async setRequestVote(requestId,voted){
     if(!client||!this.user)throw new Error('Sign in first.');
@@ -1264,6 +1377,7 @@ const api = {
       const {error}=await client.from('request_votes').delete().eq('request_id',requestId).eq('user_id',this.user.id);
       if(error)throw error;
     }
+    invalidateReadCache(this,'requests');invalidateReadCache(this,'teacher-overview');
     return true;
   },
   async replyToRequest(requestId,body){
@@ -1277,6 +1391,7 @@ const api = {
       const {error:nErr}=await client.from('notifications').insert({user_id:req.author_id,kind:'request_reply',title:`Teacher replied: ${req.title}`,body:clean,link:'#/requests'});
       if(nErr)console.warn('Request reply notification',nErr.message);
     }
+    invalidateReadCache(this,'requests');invalidateReadCache(this,'teacher-overview');
     return reply;
   },
   async setRequestStatus(requestId,status){
@@ -1293,29 +1408,51 @@ const api = {
       link:'#/requests'
     });
     if(nErr)console.warn('Notification',nErr.message);
+    invalidateReadCache(this,'requests');invalidateReadCache(this,'teacher-overview');
     return true;
   },
   async deleteRequest(requestId){
     if(!client||!this.user||this.profile?.role!=='teacher')throw new Error('Teacher access required.');
     const {error}=await client.from('student_requests').delete().eq('id',requestId);
-    if(error)throw error;return true;
+    if(error)throw error;invalidateReadCache(this,'requests');invalidateReadCache(this,'teacher-overview');return true;
   },
-  async teacherOverview(){
+  async teacherClassOverview(classId,{force=false}={}){
     if(!client||!this.user||this.profile?.role!=='teacher')return null;
-    const [{data:profiles},{data:teachers},{data:progress},{data:projects},{data:comments},{data:requests},{data:classes},{data:teacherInvites}] = await Promise.all([
-      client.from('profiles').select('id,display_name,role,created_at').eq('role','student').order('display_name'),
-      client.from('profiles').select('id,display_name,role,created_at').eq('role','teacher').order('display_name'),
-      client.from('lesson_progress').select('user_id,lesson_id,completed').eq('completed',true),
-      client.from('project_progress').select('user_id,mechanic_id,status'),
-      client.from('lesson_comments').select('*').order('created_at',{ascending:false}),
-      client.from('student_requests').select('id,author_id,category,title,body,status,created_at,request_votes(user_id)').order('created_at',{ascending:false}),
-      client.from('classes').select('*,class_members(user_id),class_teachers(teacher_id,added_by,created_at)').order('created_at',{ascending:false}),
-      client.from('teacher_invites').select('id,code_hint,label,created_by,expires_at,used_by,used_at,revoked_at,created_at').eq('created_by',this.user.id).order('created_at',{ascending:false})
-    ]);
-    return {
-      profiles:profiles||[],teachers:teachers||[],progress:progress||[],projects:projects||[],comments:comments||[],
-      requests:requests||[],classes:classes||[],teacherInvites:teacherInvites||[]
-    };
+    const id=String(classId||'');
+    return cachedRead(this,`teacher-class:${id}`,60000,async()=>{
+      const {data:classInfo,error:cErr}=await client.from('classes')
+        .select('id,teacher_id,name,academic_year,archived,join_code,join_enabled,leaderboard_enabled,class_members(user_id),class_teachers(teacher_id,added_by,created_at)')
+        .eq('id',id).maybeSingle();
+      if(cErr)throw cErr;if(!classInfo)return {profiles:[],teachers:[],progress:[],classes:[]};
+      const memberIds=[...new Set((classInfo.class_members||[]).map(x=>x.user_id).filter(Boolean))];
+      const teacherIds=[...new Set([classInfo.teacher_id,...(classInfo.class_teachers||[]).map(x=>x.teacher_id)].filter(Boolean))];
+      const [{data:profiles,error:pErr},{data:teachers,error:tErr},{data:progress,error:prErr}]=await Promise.all([
+        memberIds.length?client.from('profiles').select('id,display_name,role').in('id',memberIds).order('display_name'):Promise.resolve({data:[],error:null}),
+        teacherIds.length?client.from('profiles').select('id,display_name,role').in('id',teacherIds).order('display_name'):Promise.resolve({data:[],error:null}),
+        memberIds.length?client.from('lesson_progress').select('user_id,lesson_id,completed').in('user_id',memberIds).eq('completed',true):Promise.resolve({data:[],error:null})
+      ]);
+      if(pErr||tErr||prErr)throw pErr||tErr||prErr;
+      return {profiles:profiles||[],teachers:teachers||[],progress:progress||[],classes:[classInfo]};
+    },{force});
+  },
+
+  async teacherOverview({force=false}={}){
+    if(!client||!this.user||this.profile?.role!=='teacher')return null;
+    return cachedRead(this,'teacher-overview',60000,async()=>{
+      const [{data:profiles},{data:teachers},{data:progressSummary},{data:comments},{data:requests},{data:classes},{data:teacherInvites}] = await Promise.all([
+        client.from('profiles').select('id,display_name,role').eq('role','student').order('display_name'),
+        client.from('profiles').select('id,display_name,role').eq('role','teacher').order('display_name'),
+        client.rpc('get_teacher_progress_summary'),
+        client.from('lesson_comments').select('id,lesson_id,student_id,author_id,body,created_at').order('created_at',{ascending:false}).limit(50),
+        client.from('student_requests').select('id,author_id,category,title,body,status,created_at,request_votes(user_id)').order('created_at',{ascending:false}).limit(100),
+        client.from('classes').select('id,teacher_id,name,academic_year,archived,join_code,join_enabled,leaderboard_enabled,class_members(user_id),class_teachers(teacher_id,added_by,created_at)').order('created_at',{ascending:false}),
+        client.from('teacher_invites').select('id,code_hint,label,created_by,expires_at,used_by,used_at,revoked_at,created_at').eq('created_by',this.user.id).order('created_at',{ascending:false})
+      ]);
+      return {
+        profiles:profiles||[],teachers:teachers||[],progressSummary:progressSummary||[],comments:comments||[],
+        requests:requests||[],classes:classes||[],teacherInvites:teacherInvites||[]
+      };
+    },{force});
   }
 };
 window.UE5_BACKEND = api;

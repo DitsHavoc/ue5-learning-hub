@@ -1,4 +1,8 @@
-# Current release — v3.39.3
+# Current release — v3.39.4
+
+**Network Quiet.** Full-site Supabase traffic audit and scaling pass for classroom rollout. Duplicate/in-flight reads are cached and deduplicated; News social state now uses one compact aggregate RPC; teacher dashboards request compact progress summaries rather than every completion row; retired Projects/evidence media can no longer be served by stale clients; Critique signed URLs are reused; and active image uploads keep long-lived immutable browser caching. Learning content, routes, completion IDs, XP rules and Teams-first boundaries are unchanged. See `RELEASE-NOTES-v3.39.4.md` and `NETWORK-QUIET-QA-v3.39.4.md`.
+
+## Previous release — v3.39.3
 
 **Teams-First Lean Hub + Egress Pass.** The duplicate Hub Projects/formal evidence-submission workflow is retired from live student and teacher navigation. Microsoft Teams is the single home for project briefs, deadlines, formal submissions and assessed feedback; the Hub keeps learning, practical builds, revision, Critique Board, classes, progress, XP and lesson feedback. Historical Project/evidence data is preserved read-only rather than deleted. Screenshot uploads that remain in active Hub features are client-optimised and thumbnailed to reduce Supabase egress. See `RELEASE-NOTES-v3.39.3.md` and `TEAMS-FIRST-EGRESS-QA-v3.39.3.md`.
 

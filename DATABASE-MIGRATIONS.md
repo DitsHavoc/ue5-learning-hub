@@ -1,3 +1,13 @@
+## v3.39.4 — Network Quiet
+
+Apply after v3.39.3:
+
+1. `migrations/20260830_35_network_quiet_compact_news.sql` — compact aggregate News social state (`vote_count`, `comment_count`, saved state and current-user vote) instead of shipping individual rows to every browser.
+2. `migrations/20260830_36_network_quiet_teacher_progress.sql` — compact per-student Teacher dashboard progress totals.
+3. `migrations/20260830_37_archive_retired_project_media_reads.sql` — removes authenticated Storage SELECT policies for the retired Project/evidence media so stale builds cannot keep serving archived screenshots.
+
+All three migrations were applied to the live project on 30 Aug 2026. They do not delete historical Project/evidence objects. Critique Board Storage access remains active.
+
 # Database migration history
 
 ## V3.35.4 Designer Resource Bridge Cleanup

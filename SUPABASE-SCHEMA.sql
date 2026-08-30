@@ -1437,6 +1437,39 @@ end;$$;
 revoke all on function public.get_news_comments(text) from public;
 grant execute on function public.get_news_comments(text) to authenticated;
 
+
+-- v3.39.4 — compact News social counters (network/egress reduction)
+create or replace function public.get_news_state_compact(p_story_keys text[])
+returns table(story_key text,vote_count bigint,comment_count bigint,saved boolean,my_vote boolean)
+language sql stable security invoker set search_path=pg_catalog,public as $$
+  with keys as (
+    select distinct k.story_key
+    from unnest(coalesce(p_story_keys,array[]::text[])) as k(story_key)
+    where char_length(k.story_key) between 3 and 80
+    limit 120
+  ),
+  vote_counts as (
+    select v.story_key,count(*)::bigint as vote_count,bool_or(v.user_id=(select auth.uid())) as my_vote
+    from public.news_votes v join keys k on k.story_key=v.story_key group by v.story_key
+  ),
+  comment_counts as (
+    select c.story_key,count(*)::bigint as comment_count
+    from public.news_comments c join keys k on k.story_key=c.story_key group by c.story_key
+  ),
+  saved_rows as (
+    select s.story_key from public.news_saved s join keys k on k.story_key=s.story_key
+    where s.user_id=(select auth.uid())
+  )
+  select k.story_key,coalesce(v.vote_count,0)::bigint,coalesce(c.comment_count,0)::bigint,
+         (s.story_key is not null),coalesce(v.my_vote,false)
+  from keys k
+  left join vote_counts v on v.story_key=k.story_key
+  left join comment_counts c on c.story_key=k.story_key
+  left join saved_rows s on s.story_key=k.story_key;
+$$;
+revoke all on function public.get_news_state_compact(text[]) from public,anon;
+grant execute on function public.get_news_state_compact(text[]) to authenticated;
+
 -- ===== v3.36.0 CRITIQUE BOARD + LEARNING XP =====
 -- v3.36.0 — class-scoped Critique Board + structured critique XP + Designer source-task XP
 
@@ -1974,3 +2007,56 @@ revoke execute on function public.join_project_by_code(text) from public, anon, 
 revoke execute on function public.regenerate_project_join_code(uuid) from public, anon, authenticated;
 revoke execute on function public.reopen_project(uuid) from public, anon, authenticated;
 revoke execute on function public.start_project_from_template(uuid,text) from public, anon, authenticated;
+
+-- ============================================================================
+-- v3.39.4 — compact teacher dashboard progress summary (migration 36)
+-- ============================================================================
+create or replace function public.get_teacher_progress_summary()
+returns table(
+  user_id uuid,
+  core_lessons bigint,
+  tutorials bigint,
+  designer_builds bigint,
+  modelling bigint,
+  chapter_builds bigint
+)
+language sql
+stable
+security invoker
+set search_path = pg_catalog, public
+as $$
+  select
+    lp.user_id,
+    count(*) filter (where lp.completed is true and position(':' in lp.lesson_id)=0)::bigint as core_lessons,
+    count(*) filter (where lp.completed is true and lp.lesson_id like 'tutorial:%')::bigint as tutorials,
+    count(*) filter (where lp.completed is true and lp.lesson_id like 'designbuild:%')::bigint as designer_builds,
+    count(*) filter (
+      where lp.completed is true
+        and (
+          lp.lesson_id like 'model:%'
+          or lp.lesson_id like 'modeltheory:%'
+          or lp.lesson_id like 'modelfoundation:%'
+          or lp.lesson_id like 'modelbuild:%'
+          or lp.lesson_id like 'modelfix:%'
+          or lp.lesson_id like 'sculpt:%'
+        )
+    )::bigint as modelling,
+    count(*) filter (where lp.completed is true and lp.lesson_id like 'chapter:%')::bigint as chapter_builds
+  from public.lesson_progress lp
+  where exists (
+    select 1 from public.profiles me
+    where me.id=(select auth.uid()) and me.role='teacher'
+  )
+  group by lp.user_id;
+$$;
+revoke all on function public.get_teacher_progress_summary() from public, anon;
+grant execute on function public.get_teacher_progress_summary() to authenticated;
+
+-- ============================================================================
+-- v3.39.4 — archive retired Project/evidence media reads (migration 37)
+-- ============================================================================
+-- Retired content remains stored for admin recovery, but authenticated Hub clients
+-- can no longer mint/read the old large Project/evidence media through Storage.
+drop policy if exists "project media storage read" on storage.objects;
+drop policy if exists "students read own evidence" on storage.objects;
+drop policy if exists "assigned teachers read evidence" on storage.objects;

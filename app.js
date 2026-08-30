@@ -477,18 +477,8 @@ async function syncCloudProgress(){
     state.sculptCompleted=[...new Set([...(state.sculptCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('sculpt:')).map(id=>id.slice(7))])];
     await BACKEND.refreshXpSummary();
     saveState();
-
-    const pRows=await BACKEND.getProjectProgress();
-    for(const r of pRows){
-      projectState.mechanics[r.mechanic_id]={status:r.status,notes:r.notes||''};
-    }
-    const profile=await BACKEND.getProjectProfile();
-    if(profile){
-      projectState.project_title=profile.project_title||projectState.project_title;
-      projectState.theme=profile.theme||projectState.theme;
-      projectState.pitch=profile.pitch||projectState.pitch;
-    }
-    saveProjectState();
+    // Projects are Teams-first from v3.39.3. The old Signal Lost practice state remains local-only
+    // so signing in no longer reads legacy project_progress/student_projects on every boot.
     cloudSyncLastAt=Date.now();
   }catch(e){console.warn('Cloud sync',e)}finally{cloudSyncPromise=null}})();
   return cloudSyncPromise;
@@ -1367,7 +1357,7 @@ const NEWS_CACHE_STORE='ue5hub:v3331:news-cache';
 let newsStories=[];
 let newsCategory='all';
 let newsSearch='';
-let newsSocial={saved:new Set(),savedItems:[],votes:{},myVotes:new Set(),comments:{},available:true};
+let newsSocial={saved:new Set(),savedItems:[],votes:{},myVotes:new Set(),comments:{},available:true,savedLoaded:false};
 
 function newsStoryKey(value){
   const text=String(value||'');let h=2166136261;
@@ -1443,15 +1433,21 @@ async function fetchNewsSource(source,{force=false}={}){
   }).filter(Boolean);
 }
 async function loadNewsSocial(){
-  newsSocial={saved:new Set(),savedItems:[],votes:{},myVotes:new Set(),comments:{},available:true};
+  newsSocial={saved:new Set(),savedItems:[],votes:{},myVotes:new Set(),comments:{},available:true,savedLoaded:false};
   if(!BACKEND.user)return;
   try{
-    const savedRows=await BACKEND.getSavedNews();
-    const keys=[...newsStories.map(s=>s.key),...(savedRows||[]).map(r=>r.story_key)];
-    const x=await BACKEND.getNewsState(keys);
-    const savedItems=(savedRows||[]).map(r=>({key:r.story_key,url:r.story_url,title:r.story_title,summary:r.story_summary||'Saved for later.',source:r.story_source||'Saved story',sourceId:'saved',badge:'★',category:r.story_category||'games',date:r.story_date||r.saved_at,image:r.story_image||'',savedAt:r.saved_at}));
-    newsSocial={saved:new Set((savedRows||[]).map(r=>r.story_key)),savedItems,votes:x.votes||{},myVotes:new Set(x.myVotes||[]),comments:x.comments||{},available:true};
+    const x=await BACKEND.getNewsState(newsStories.map(s=>s.key));
+    newsSocial={saved:new Set(x.saved||[]),savedItems:[],votes:x.votes||{},myVotes:new Set(x.myVotes||[]),comments:x.comments||{},available:true,savedLoaded:false};
   }catch(err){newsSocial.available=false;console.warn('News social',err.message);toast(err.message)}
+}
+async function loadSavedNewsItems(force=false){
+  if(!BACKEND.user||newsSocial.savedLoaded&&!force)return;
+  try{
+    const savedRows=await BACKEND.getSavedNews({force});
+    newsSocial.savedItems=(savedRows||[]).map(r=>({key:r.story_key,url:r.story_url,title:r.story_title,summary:r.story_summary||'Saved for later.',source:r.story_source||'Saved story',sourceId:'saved',badge:'★',category:r.story_category||'games',date:r.story_date||r.saved_at,image:r.story_image||'',savedAt:r.saved_at}));
+    newsSocial.saved=new Set((savedRows||[]).map(r=>r.story_key));
+    newsSocial.savedLoaded=true;
+  }catch(err){newsSocial.available=false;console.warn('Saved news',err.message);toast(err.message)}
 }
 async function loadNewsFeed(force=false){
   const box=$('#newsFeed');if(!box)return;
@@ -2022,10 +2018,9 @@ function renderAchievements(approvedCount,requestCount){
 }
 async function renderProgressCloud(){
   if(!BACKEND.user)return;
-  const [classes,notes,requests]=await Promise.all([
-    BACKEND.getMyClasses(),BACKEND.getNotifications(),BACKEND.getRequests()
+  const [classes,notes,mine]=await Promise.all([
+    BACKEND.getMyClasses(),BACKEND.getNotifications(),BACKEND.getMyRequestCount()
   ]);
-  const mine=requests.filter(r=>r.author_id===BACKEND.user.id).length;
   const ag=$('#achievementGrid');if(ag)ag.innerHTML=renderAchievements(0,mine);
 
   const classBox=$('#progressClasses');
@@ -2293,7 +2288,7 @@ function studentCompletedContent(o,userId){
 async function renderTeacherClass(classId){
   const box=$('#teacherClassContent');if(!box)return;
   try{
-    const o=await BACKEND.teacherOverview();
+    const o=await BACKEND.teacherClassOverview(classId);
     const c=(o?.classes||[]).find(x=>String(x.id)===String(classId));
     if(!c){box.innerHTML='<div class="empty"><h3>Class not found.</h3><p>You may no longer teach this class, or it may have been deleted.</p><a class="button ghost" href="#/teacher">Back to Teacher Dashboard</a></div>';return}
     const memberIds=(c.class_members||[]).map(m=>m.user_id);
@@ -2498,14 +2493,13 @@ async function renderTeacher(){
   try{
     const o=await BACKEND.teacherOverview();
     if(!o){box.innerHTML='<div class="empty">Teacher data unavailable.</div>';return}
-    const lessonIds=new Set(DATA.lessons.map(l=>l.id));
-    const byStudent=id=>o.progress.filter(x=>x.user_id===id&&lessonIds.has(x.lesson_id)&&x.completed).length;
-    const tutorialBy=id=>o.progress.filter(x=>x.user_id===id&&String(x.lesson_id).startsWith('tutorial:')&&x.completed).length;
-    const designBy=id=>o.progress.filter(x=>x.user_id===id&&String(x.lesson_id).startsWith('designbuild:')&&x.completed).length;
-    const modelingBy=id=>o.progress.filter(x=>x.user_id===id&&(String(x.lesson_id).startsWith('model:')||String(x.lesson_id).startsWith('modeltheory:')||String(x.lesson_id).startsWith('modelfoundation:')||String(x.lesson_id).startsWith('modelbuild:')||String(x.lesson_id).startsWith('modelfix:')||String(x.lesson_id).startsWith('sculpt:'))&&x.completed).length;
-    const chapterBy=id=>o.progress.filter(x=>x.user_id===id&&String(x.lesson_id).startsWith('chapter:')&&x.completed).length;
-    const projBy=id=>(o.projects||[]).filter(x=>x.user_id===id&&x.status==='complete').length;
-    const commentsBy=id=>(o.comments||[]).filter(x=>x.student_id===id).length;
+    const progressRows=o.progressSummary||[],progressBy=Object.fromEntries(progressRows.map(x=>[x.user_id,x]));
+    const pcount=(id,key)=>Number(progressBy[id]?.[key]||0);
+    const byStudent=id=>pcount(id,'core_lessons');
+    const tutorialBy=id=>pcount(id,'tutorials');
+    const designBy=id=>pcount(id,'designer_builds');
+    const modelingBy=id=>pcount(id,'modelling');
+    const chapterBy=id=>pcount(id,'chapter_builds');
     const names=Object.fromEntries(o.profiles.map(p=>[p.id,p.display_name]));
     const teacherNames=Object.fromEntries((o.teachers||[]).map(p=>[p.id,p.display_name]));
     const recent=(o.comments||[]).slice(0,12);
@@ -2515,13 +2509,11 @@ async function renderTeacher(){
     box.innerHTML=`<div class="teacher-grid">
       <div class="teacher-stat"><small>Students</small><strong>${o.profiles.length}</strong></div>
       <div class="teacher-stat"><small>Active classes</small><strong>${activeClasses.length}</strong><span>${archivedClasses.length} archived</span></div>
-      <div class="teacher-stat"><small>Lesson completions</small><strong>${o.progress.filter(x=>lessonIds.has(x.lesson_id)&&x.completed).length}</strong></div>
-      <div class="teacher-stat"><small>Practical builds tried</small><strong>${o.progress.filter(x=>String(x.lesson_id).startsWith('tutorial:')&&x.completed).length}</strong></div>
-      <div class="teacher-stat"><small>Designer builds</small><strong>${o.progress.filter(x=>String(x.lesson_id).startsWith('designbuild:')&&x.completed).length}</strong></div>
-      <div class="teacher-stat"><small>3D / Foundations</small><strong>${o.progress.filter(x=>(String(x.lesson_id).startsWith('model:')||String(x.lesson_id).startsWith('modeltheory:')||String(x.lesson_id).startsWith('modelfoundation:')||String(x.lesson_id).startsWith('modelbuild:')||String(x.lesson_id).startsWith('modelfix:')||String(x.lesson_id).startsWith('sculpt:'))&&x.completed).length}</strong></div>
-      <div class="teacher-stat"><small>Chapter Builds complete</small><strong>${o.progress.filter(x=>String(x.lesson_id).startsWith('chapter:')&&x.completed).length}</strong></div>
-      <div class="teacher-stat"><small>Practice mechanics complete</small><strong>${(o.projects||[]).filter(x=>x.status==='complete').length}</strong></div>
-      <div class="teacher-stat"><small>Comments / questions</small><strong>${(o.comments||[]).length}</strong></div>
+      <div class="teacher-stat"><small>Lesson completions</small><strong>${progressRows.reduce((n,x)=>n+Number(x.core_lessons||0),0)}</strong></div>
+      <div class="teacher-stat"><small>Practical builds tried</small><strong>${progressRows.reduce((n,x)=>n+Number(x.tutorials||0),0)}</strong></div>
+      <div class="teacher-stat"><small>Designer builds</small><strong>${progressRows.reduce((n,x)=>n+Number(x.designer_builds||0),0)}</strong></div>
+      <div class="teacher-stat"><small>3D / Foundations</small><strong>${progressRows.reduce((n,x)=>n+Number(x.modelling||0),0)}</strong></div>
+      <div class="teacher-stat"><small>Chapter Builds complete</small><strong>${progressRows.reduce((n,x)=>n+Number(x.chapter_builds||0),0)}</strong></div>
       <div class="teacher-stat"><small>Student requests</small><strong>${(o.requests||[]).length}</strong></div>
     </div>
 
@@ -2560,9 +2552,9 @@ async function renderTeacher(){
       </div>
     </section>
 
-    <section class="section"><div class="section-head"><div><h2>Student overview</h2><p>Use completion to spot who needs help. Formal assessment decisions still belong in Microsoft Teams.</p></div></div><table class="teacher-table"><thead><tr><th>Student</th><th>Lessons</th><th>Tutorials</th><th>Designer</th><th>3D</th><th>Chapter Builds</th><th>Practice</th><th>Comments</th></tr></thead><tbody>${o.profiles.map(p=>`<tr><td>${esc(p.display_name)}</td><td>${byStudent(p.id)}/${DATA.lessons.length}</td><td>${tutorialBy(p.id)}/${TOOLS.tutorials.length}</td><td>${designBy(p.id)}/${DESIGN.modules.length}</td><td>${modelingBy(p.id)}</td><td>${chapterBy(p.id)}/${TOOLS.chapterBuilds.length}</td><td>${projBy(p.id)}/${Object.keys(PROJECT.mechanics).length}</td><td>${commentsBy(p.id)}</td></tr>`).join('')}</tbody></table></section>
+    <section class="section"><div class="section-head"><div><h2>Student overview</h2><p>Use completion to spot who needs help. Formal assessment decisions still belong in Microsoft Teams.</p></div></div><table class="teacher-table"><thead><tr><th>Student</th><th>Lessons</th><th>Tutorials</th><th>Designer</th><th>3D</th><th>Chapter Builds</th></tr></thead><tbody>${o.profiles.map(p=>`<tr><td>${esc(p.display_name)}</td><td>${byStudent(p.id)}/${DATA.lessons.length}</td><td>${tutorialBy(p.id)}/${TOOLS.tutorials.length}</td><td>${designBy(p.id)}/${DESIGN.modules.length}</td><td>${modelingBy(p.id)}</td><td>${chapterBy(p.id)}/${TOOLS.chapterBuilds.length}</td></tr>`).join('')}</tbody></table></section>
 
-    <section class="section"><div class="section-head"><div><h2>Student roadmap</h2><p>Top requests and current build status.</p></div><a class="button small" href="#/requests">Open full Requests Board</a></div><div class="board-grid">${(o.requests||[]).slice().sort((a,b)=>(b.request_votes?.length||0)-(a.request_votes?.length||0)).slice(0,6).map(r=>`<div class="board-card"><span class="eyebrow">${esc(requestCategoryLabel(r.category))} • ${r.request_votes?.length||0} votes</span><h3>${esc(r.title)}</h3><p>${esc(r.body)}</p><span class="request-status ${esc(r.status)}">${esc(requestStatusLabel(r.status))}</span></div>`).join('')||'<div class="empty">No requests yet.</div>'}</div></section>
+    <section class="section"><div class="section-head"><div><h2>Student roadmap</h2><p>Top student requests and ideas for what the Hub should support next.</p></div><a class="button small" href="#/requests">Open full Requests Board</a></div><div class="board-grid">${(o.requests||[]).slice().sort((a,b)=>(b.request_votes?.length||0)-(a.request_votes?.length||0)).slice(0,6).map(r=>`<div class="board-card"><span class="eyebrow">${esc(requestCategoryLabel(r.category))} • ${r.request_votes?.length||0} votes</span><h3>${esc(r.title)}</h3><p>${esc(r.body)}</p><span class="request-status ${esc(r.status)}">${esc(requestStatusLabel(r.status))}</span></div>`).join('')||'<div class="empty">No requests yet.</div>'}</div></section>
 
     <section class="section"><div class="section-head"><div><h2>Recent questions & reflections</h2><p>Reply directly to the student. Replies remain inside that student's private lesson thread.</p></div></div><div class="board-grid">${recent.length?recent.map(c=>{const l=lesson(c.lesson_id);return `<div class="board-card"><span class="eyebrow">${esc(names[c.student_id]||'Student')} • ${esc(l?.title||c.lesson_id)}</span><p>${esc(c.body)}</p><form class="comment-form" data-action-form="teacher-reply" data-lesson="${esc(c.lesson_id)}" data-student="${esc(c.student_id)}"><textarea name="body" maxlength="2000" placeholder="Teacher reply…" required></textarea><button class="button small primary" type="submit">Reply</button></form></div>`}).join(''):'<div class="empty">No student comments yet.</div>'}</div></section>`;
   }catch(e){box.innerHTML=`<div class="offline-note">${esc(e.message)}</div>`}
@@ -2725,9 +2717,14 @@ function bindNewsPage(){
   newsCategory='all';newsSearch='';
   const apply=()=>{newsSearch=search.value.trim();renderNewsFeed()};
   bindEmbeddedSearchInput(search,apply,()=>$('#newsFeed')?.scrollIntoView({block:'start',behavior:'smooth'}));
-  $$('[data-news-filter]').forEach(btn=>btn.addEventListener('click',()=>{
+  $$('[data-news-filter]').forEach(btn=>btn.addEventListener('click',async()=>{
     $$('[data-news-filter]').forEach(x=>x.classList.remove('active'));btn.classList.add('active');
-    newsCategory=btn.dataset.newsFilter||'all';renderNewsFeed();
+    newsCategory=btn.dataset.newsFilter||'all';
+    if(newsCategory==='saved'&&BACKEND.user&&!newsSocial.savedLoaded){
+      const box=$('#newsFeed');if(box)box.innerHTML='<div class="news-loading"><span class="news-pulse"></span><div><strong>Loading your saved stories…</strong></div></div>';
+      await loadSavedNewsItems();
+    }
+    renderNewsFeed();
   }));
 }
 function bindPageInputs(){
@@ -2847,9 +2844,7 @@ async function setMechanicStatus(id,status){
   const old=projectState.mechanics[id]||{};
   projectState.mechanics[id]={...old,status};
   saveProjectState();
-  if(BACKEND.user){
-    try{await BACKEND.setProjectMechanic(id,status,old.notes||'')}catch(e){toast('Saved locally; cloud sync failed.')}
-  }
+  // Legacy practice tracker is local-only; formal project work lives in Microsoft Teams.
   toast(status==='complete'?'Game mechanic complete ✓':status==='building'?'Marked as building.':'Reset to not started.');
   finishInlineUpdate(status==='complete'&&old.status!=='complete');
 }
@@ -2858,13 +2853,7 @@ async function saveProjectProfile(){
   projectState.theme=$('#projectTheme')?.value||PROJECT.themes[0];
   projectState.pitch=$('#projectPitch')?.value.trim()||'';
   saveProjectState();
-  if(BACKEND.user){
-    try{await BACKEND.saveProjectProfile({
-      project_title:projectState.project_title,
-      theme:projectState.theme,
-      pitch:projectState.pitch
-    })}catch(e){toast('Saved locally; cloud sync failed.');return}
-  }
+  // Legacy practice profile is local-only; formal project work lives in Microsoft Teams.
   toast('Project identity saved.');
   route();
 }

@@ -1,3 +1,13 @@
+## v3.39.4 — Network Quiet — 30 Aug 2026
+- Audited all Supabase reads/writes, timers, Storage access and signed-URL generation across the Hub.
+- Removed legacy `project_progress` / `student_projects` boot reads now that Projects are Teams-first.
+- Added short-lived, user-scoped read caching and in-flight deduplication for routine cloud data.
+- Replaced News vote/comment row downloads with one compact aggregate RPC per story set.
+- Teacher dashboard now consumes compact category totals; class detail fetches only the selected class scope.
+- Reuses Critique signed URLs and gives immutable uploaded images long browser-cache lifetimes.
+- Retired Project/evidence Storage reads are blocked so stale clients cannot continue serving archived large screenshots.
+- No learning content, IDs, XP values, badges or Teams-first workflow changed.
+
 ## v3.39.3 — Teams-First Lean Hub + Egress Pass — 30 Aug 2026
 - Retired collaborative Hub Projects and formal lesson-evidence submission/review from live student and teacher navigation; Microsoft Teams is now the single place for project briefs, deadlines, formal submissions and assessed feedback.
 - Replaced lesson evidence uploads with a lightweight **Keep proof for Teams** checklist so practical lessons still tell students exactly what to capture without storing another copy in the Hub.
