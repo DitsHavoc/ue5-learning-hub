@@ -1,3 +1,11 @@
+## v3.42.1 — Hub Rivalry — 31 Aug 2026
+
+- Homepage `Who is making moves?` is now Hub-wide rather than silently choosing one class.
+- Added `Everyone` to the full Leaderboard view while retaining class-specific filters and per-class pause controls.
+- Students are deduplicated across classes; teachers never rank.
+- Only active, leaderboard-enabled classes feed the Hub-wide board.
+- Added one compact cached `get_hub_leaderboard` RPC so the homepage does not fan out across class leaderboards.
+
 ## v3.42.0 — Teacher Command Centre — 31 Aug 2026
 - Rebuilt the Teacher dashboard around a class-by-class Learning Pulse covering Unreal, Theory, Designer Studio, 3D/Sculpt, Guided Path checkpoints and recent activity.
 - Added a class-detail snapshot with all three Guided Path percentages, weekly XP, streak and last activity per student.

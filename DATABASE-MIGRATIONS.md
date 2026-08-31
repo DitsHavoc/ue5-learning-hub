@@ -372,3 +372,9 @@ Migration 39:
 No tables, buckets, RLS policies or assignment/project workflows are added. Guided Path checkpoints continue to use `lesson_progress` with no XP. The overview remains a compact server-side aggregation for Network Quiet; raw per-lesson rows are fetched only after a teacher opens a specific class.
 
 Applied successfully to the live UE5 Learning Hub Supabase project on 31 Aug 2026 as migration `teacher_command_centre_tracking`. Post-migration verification returned Theory = 25 XP, Designer source = 20 XP, Pathway checkpoint = 0 XP and Tutorial = 25 XP. All five pre-existing Theory XP events were verified at 25 XP after repair.
+
+## v3.42.1 — Hub-Wide Leaderboard
+
+File: `migrations/20260831_40_hub_wide_leaderboard.sql`
+
+Adds `public.get_hub_leaderboard(text)`, a compact authenticated RPC used by the homepage and the `Everyone` leaderboard view. Eligible students come from non-archived classes with `leaderboard_enabled=true`, are deduplicated across classes and are ranked from the existing `learning_xp_events` ledger. No XP data is rewritten.

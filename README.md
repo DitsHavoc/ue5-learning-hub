@@ -1,6 +1,6 @@
-# Current release — v3.42.0
+# Current release — v3.42.1
 
-**Teacher Command Centre.** Makes learning progress genuinely scannable for teachers across Unreal, Game Design Theory, Designer Studio, 3D/Sculpt and Guided Paths; adds weekly XP/streak context to class detail; brings Guided Path checkpoints into teacher tracking; adds three pathway badges; and puts a compact class leaderboard at the top of the signed-in homepage. It also fixes the live Theory/Designer-source XP map so Theory awards 25 XP and Designer source tasks award 20 XP as intended. See `RELEASE-NOTES-v3.42.0.md` and `TEACHER-COMMAND-CENTRE-QA-v3.42.0.md`.
+**Hub Rivalry.** Makes the homepage leaderboard Hub-wide instead of silently selecting one class. Students in active leaderboard-enabled classes are ranked once across the whole Hub, the full Leaderboard page gains an `Everyone` view alongside class filters, and the global ranking comes from one compact cached RPC. See `RELEASE-NOTES-v3.42.1.md` and `HUB-RIVALRY-QA-v3.42.1.md`.
 
 ## Previous release — v3.41.2
 

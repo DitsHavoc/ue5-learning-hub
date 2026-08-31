@@ -1,0 +1,11 @@
+UE5 LEARNING HUB v3.42.1 — HUB RIVALRY
+
+If v3.42.0 is already live:
+1. Upload/replace the files in this ZIP at the same repository paths.
+2. The Supabase migration has already been applied live. The SQL file is included so the repository keeps the database history.
+3. Let Render redeploy, then hard-refresh the site.
+
+Expected result:
+- Homepage says HUB RIVALRY • THIS WEEK and shows everyone eligible across the Hub.
+- Full Leaderboard defaults to Everyone and still lets you switch to individual classes.
+- Class pause controls remain class-specific.

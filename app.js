@@ -86,7 +86,7 @@ let authView = 'signin';
 let revisionSession = null;
 let blocksTier = 'core';
 let leaderboardPeriod = 'week';
-let leaderboardClassId = '';
+let leaderboardClassId = 'all';
 let critiqueClassId = '';
 let critiqueFilter = 'all';
 let critiquePostsCache = [];
@@ -1537,19 +1537,15 @@ function classHomeShortcut(){
 
 function homeLeaderboardPreview(){
   if(!BACKEND.user)return '';
-  return `<section class="home-leaderboard" id="homeLeaderboard"><div class="home-leaderboard-head"><div><span class="eyebrow">🏆 CLASS RIVALRY • THIS WEEK</span><h2>Who is making moves?</h2><p>Learning XP only — never grades.</p></div><a class="button ghost small" href="#/leaderboard">Full leaderboard →</a></div><div class="home-leaderboard-body"><div class="empty">Loading this week's leaders…</div></div></section>`;
+  return `<section class="home-leaderboard" id="homeLeaderboard"><div class="home-leaderboard-head"><div><span class="eyebrow">🏆 HUB RIVALRY • THIS WEEK</span><h2>Who is making moves?</h2><p>Everyone in leaderboard-enabled classes • learning XP only • never grades.</p></div><a class="button ghost small" href="#/leaderboard">Full leaderboard →</a></div><div class="home-leaderboard-body"><div class="empty">Loading this week's Hub leaders…</div></div></section>`;
 }
 async function renderHomeLeaderboardPreview(){
   const box=$('#homeLeaderboard .home-leaderboard-body');if(!box||!BACKEND.user)return;
   try{
-    const classes=await BACKEND.getLeaderboardClasses();
-    if(!classes.length){document.getElementById('homeLeaderboard')?.remove();return}
-    const cls=classes.find(c=>c.leaderboard_enabled!==false)||classes[0];
-    if(cls.leaderboard_enabled===false&&!isTeacher()){document.getElementById('homeLeaderboard')?.remove();return}
-    const rows=await BACKEND.getClassLeaderboard(cls.id,'week');
+    const rows=await BACKEND.getHubLeaderboard('week');
     const top=rows.slice(0,3),me=rows.find(r=>r.user_id===BACKEND.user.id);
-    if(!rows.length){box.innerHTML=`<div class="home-leaderboard-empty"><b>${esc(cls.name)}</b><span>No XP on the board yet. First useful completion takes the lead.</span></div>`;return}
-    box.innerHTML=`<div class="home-leaderboard-class"><span>${esc(cls.name)}</span><small>${rows.length} student${rows.length===1?'':'s'} ranked</small></div><div class="home-leaderboard-podium">${top.map(r=>`<div class="home-rival ${r.user_id===BACKEND.user.id?'is-you':''}"><span class="home-rival-rank">${leaderboardMedal(r.rank_position)}</span><div><strong>${esc(r.display_name)}${r.user_id===BACKEND.user.id?' <em>YOU</em>':''}</strong><small>${Number(r.weekly_xp||0).toLocaleString()} XP${r.current_streak?` • 🔥 ${r.current_streak}`:''}</small></div></div>`).join('')}</div>${!isTeacher()&&me&&!top.some(r=>r.user_id===BACKEND.user.id)?`<div class="home-your-rank"><span>Your position</span><b>#${me.rank_position}</b><strong>${Number(me.weekly_xp||0).toLocaleString()} XP</strong></div>`:''}`;
+    if(!rows.length){box.innerHTML=`<div class="home-leaderboard-empty"><b>Everyone</b><span>No XP on the board yet. First useful completion takes the lead.</span></div>`;return}
+    box.innerHTML=`<div class="home-leaderboard-class"><span>🌐 Everyone</span><small>${rows.length} student${rows.length===1?'':'s'} ranked</small></div><div class="home-leaderboard-podium">${top.map(r=>`<div class="home-rival ${r.user_id===BACKEND.user.id?'is-you':''}"><span class="home-rival-rank">${leaderboardMedal(r.rank_position)}</span><div><strong>${esc(r.display_name)}${r.user_id===BACKEND.user.id?' <em>YOU</em>':''}</strong><small>${Number(r.weekly_xp||0).toLocaleString()} XP${r.current_streak?` • 🔥 ${r.current_streak}`:''}</small></div></div>`).join('')}</div>${!isTeacher()&&me&&!top.some(r=>r.user_id===BACKEND.user.id)?`<div class="home-your-rank"><span>Your position</span><b>#${me.rank_position}</b><strong>${Number(me.weekly_xp||0).toLocaleString()} XP</strong></div>`:''}`;
   }catch(e){document.getElementById('homeLeaderboard')?.remove()}
 }
 
@@ -2690,9 +2686,9 @@ function randomCritiquePost(){
 
 function leaderboardPage(){
   if(!BACKEND.user){
-    return `<div class="page-head"><div class="breadcrumb"><a href="#/">Home</a> / Leaderboard</div><span class="eyebrow">CLASS XP</span><h1>🏆 Leaderboard</h1><p class="muted">Sign in to see your class ranking, XP and streak.</p></div><div class="offline-note">Leaderboards are class-only. Sign in with your Learning Hub account to continue.</div>`;
+    return `<div class="page-head"><div class="breadcrumb"><a href="#/">Home</a> / Leaderboard</div><span class="eyebrow">HUB XP</span><h1>🏆 Leaderboard</h1><p class="muted">Sign in to see Hub-wide and class rankings, XP and streaks.</p></div><div class="offline-note">Sign in with your Learning Hub account to continue.</div>`;
   }
-  return `<div class="page-head leaderboard-page-head"><div class="breadcrumb"><a href="#/">Home</a> / Leaderboard</div><span class="eyebrow">CLASS PROGRESSION</span><h1>🏆 Leaderboard</h1><p class="muted">Useful progress earns XP. Grades and assessment marks are never ranked here.</p></div><div id="leaderboardContent"><div class="empty">Loading class leaderboard…</div></div>`;
+  return `<div class="page-head leaderboard-page-head"><div class="breadcrumb"><a href="#/">Home</a> / Leaderboard</div><span class="eyebrow">HUB + CLASS PROGRESSION</span><h1>🏆 Leaderboard</h1><p class="muted">Useful progress earns XP. Compare across the Hub or switch to one of your classes. Grades and assessment marks are never ranked here.</p></div><div id="leaderboardContent"><div class="empty">Loading leaderboard…</div></div>`;
 }
 function leaderboardTitle(levelNo){
   const n=Number(levelNo)||1;
@@ -2712,24 +2708,29 @@ async function renderLeaderboard(){
   const box=$('#leaderboardContent');if(!box||!BACKEND.user)return;
   try{
     const classes=await BACKEND.getLeaderboardClasses();
-    if(!classes.length){box.innerHTML=`<div class="empty"><h3>No class leaderboard yet.</h3><p>${isTeacher()?'Create or join a teaching class first.':'Join your class with the code from your teacher.'}</p></div>`;return}
-    if(!leaderboardClassId||!classes.some(c=>String(c.id)===String(leaderboardClassId)))leaderboardClassId=String(classes[0].id);
-    const cls=classes.find(c=>String(c.id)===String(leaderboardClassId))||classes[0];
-    const enabled=cls.leaderboard_enabled!==false;
-    if(!enabled&&!isTeacher()){
-      box.innerHTML=`<section class="leaderboard-toolbar"><label>Class<select id="leaderboardClassSelect">${classes.map(c=>`<option value="${c.id}" ${String(c.id)===String(cls.id)?'selected':''}>${esc(c.name)}</option>`).join('')}</select></label></section><div class="empty leaderboard-paused"><h3>🏆 Leaderboard paused</h3><p>Your teacher has switched the leaderboard off for this class.</p></div>`;return;
+    if(!leaderboardClassId)leaderboardClassId='all';
+    if(leaderboardClassId!=='all'&&!classes.some(c=>String(c.id)===String(leaderboardClassId)))leaderboardClassId='all';
+    const globalView=leaderboardClassId==='all';
+    const cls=globalView?null:(classes.find(c=>String(c.id)===String(leaderboardClassId))||null);
+    if(!globalView&&!cls){leaderboardClassId='all';return renderLeaderboard()}
+    const enabled=globalView?true:cls.leaderboard_enabled!==false;
+    const options=`<option value="all" ${globalView?'selected':''}>🌐 Everyone</option>${classes.map(c=>`<option value="${c.id}" ${!globalView&&String(c.id)===String(cls?.id)?'selected':''}>${esc(c.name)}${c.academic_year?' • '+esc(c.academic_year):''}</option>`).join('')}`;
+    if(!globalView&&!enabled&&!isTeacher()){
+      box.innerHTML=`<section class="leaderboard-toolbar"><label>View<select id="leaderboardClassSelect">${options}</select></label></section><div class="empty leaderboard-paused"><h3>🏆 Leaderboard paused</h3><p>Your teacher has switched the leaderboard off for this class. You can still use the Hub-wide view if you belong to another leaderboard-enabled class.</p></div>`;return;
     }
-    const rows=await BACKEND.getClassLeaderboard(cls.id,leaderboardPeriod);
+    const rows=globalView?await BACKEND.getHubLeaderboard(leaderboardPeriod):await BACKEND.getClassLeaderboard(cls.id,leaderboardPeriod);
     const me=rows.find(r=>r.user_id===BACKEND.user.id)||null;
     const top=rows.slice(0,10),podium=rows.slice(0,3);
     const improving=[...rows].sort((a,b)=>((b.weekly_xp||0)-(b.previous_week_xp||0))-((a.weekly_xp||0)-(a.previous_week_xp||0)))[0]||null;
     const active=[...rows].sort((a,b)=>(b.current_streak||0)-(a.current_streak||0))[0]||null;
+    const scopeLabel=globalView?'across the Hub':`in ${esc(cls.name)}`;
     box.innerHTML=`
-      <section class="leaderboard-toolbar"><label>Class<select id="leaderboardClassSelect">${classes.map(c=>`<option value="${c.id}" ${String(c.id)===String(cls.id)?'selected':''}>${esc(c.name)}${c.academic_year?' • '+esc(c.academic_year):''}</option>`).join('')}</select></label><div class="leaderboard-period-tabs"><button class="${leaderboardPeriod==='week'?'active':''}" data-action="leaderboard-period" data-period="week">This week</button><button class="${leaderboardPeriod==='all'?'active':''}" data-action="leaderboard-period" data-period="all">All time</button></div>${isTeacher()?`<button class="button ghost small" data-action="toggle-leaderboard" data-class="${cls.id}" data-enabled="${enabled?'1':'0'}">${enabled?'Pause for students':'Enable for students'}</button>`:''}</section>
-      ${isTeacher()&&!enabled?'<div class="teacher-security-banner"><b>LEADERBOARD PAUSED FOR STUDENTS</b><span>You can still preview it here. Students in this class cannot see rankings until you enable it again.</span></div>':''}
+      <section class="leaderboard-toolbar"><label>View<select id="leaderboardClassSelect">${options}</select></label><div class="leaderboard-period-tabs"><button class="${leaderboardPeriod==='week'?'active':''}" data-action="leaderboard-period" data-period="week">This week</button><button class="${leaderboardPeriod==='all'?'active':''}" data-action="leaderboard-period" data-period="all">All time</button></div>${isTeacher()&&!globalView?`<button class="button ghost small" data-action="toggle-leaderboard" data-class="${cls.id}" data-enabled="${enabled?'1':'0'}">${enabled?'Pause for students':'Enable for students'}</button>`:''}</section>
+      ${isTeacher()&&!globalView&&!enabled?'<div class="teacher-security-banner"><b>LEADERBOARD PAUSED FOR STUDENTS</b><span>You can still preview it here. Students in this class cannot see rankings until you enable it again.</span></div>':''}
+      ${globalView?'<div class="teacher-security-banner hub-rivalry-note"><b>🌐 HUB-WIDE RIVALRY</b><span>Each student appears once, even if they belong to more than one class. Only active, leaderboard-enabled classes feed this board.</span></div>':''}
       ${rows.length?`<section class="leaderboard-podium">${podium.map((r,i)=>`<article class="podium-card place-${i+1}"><span class="podium-medal">${leaderboardMedal(r.rank_position)}</span><span class="podium-avatar">${esc(String(r.display_name||'?').slice(0,1).toUpperCase())}</span><h3>${esc(r.display_name)}</h3><p>Level ${r.current_level} • ${esc(leaderboardTitle(r.current_level))}</p><strong>${Number(r.score_xp||0).toLocaleString()} XP</strong>${r.current_streak?`<small>🔥 ${r.current_streak} day streak</small>`:'<small>No current streak</small>'}</article>`).join('')}</section>`:''}
       <section class="leaderboard-spotlights">${improving?`<article><span>📈</span><div><small>BIGGEST PROGRESS THIS WEEK</small><strong>${esc(improving.display_name)}</strong><p>+${Math.max(0,(improving.weekly_xp||0)-(improving.previous_week_xp||0)).toLocaleString()} XP vs last week</p></div></article>`:''}${active?`<article><span>🔥</span><div><small>CURRENT STREAK</small><strong>${esc(active.display_name)}</strong><p>${active.current_streak||0} active day${Number(active.current_streak)===1?'':'s'}</p></div></article>`:''}</section>
-      <section class="section leaderboard-board"><div class="section-head"><div><h2>${leaderboardPeriod==='week'?'This week':'All-time'} Top 10</h2><p>XP comes from genuine learning progress. Repeating the same completion does not award it twice.</p></div><span class="sync-chip">${rows.length} student${rows.length===1?'':'s'}</span></div><div class="leaderboard-list">${top.map(r=>leaderboardRow(r,r.user_id===BACKEND.user.id)).join('')||'<div class="empty">No XP activity yet.</div>'}</div></section>
+      <section class="section leaderboard-board"><div class="section-head"><div><h2>${leaderboardPeriod==='week'?'This week':'All-time'} Top 10 ${scopeLabel}</h2><p>XP comes from genuine learning progress. Repeating the same completion does not award it twice.</p></div><span class="sync-chip">${rows.length} student${rows.length===1?'':'s'}</span></div><div class="leaderboard-list">${top.map(r=>leaderboardRow(r,r.user_id===BACKEND.user.id)).join('')||'<div class="empty">No XP activity yet.</div>'}</div></section>
       ${!isTeacher()&&me&&!top.some(r=>r.user_id===BACKEND.user.id)?`<section class="your-rank-card"><span class="eyebrow">YOUR POSITION</span>${leaderboardRow(me,true)}</section>`:''}
       <section class="leaderboard-rules"><span class="eyebrow">HOW XP WORKS</span><h2>Progress, not grades.</h2><div class="leaderboard-rule-grid"><span><b>Core learning</b>Uses the XP already attached to Hub lessons and chapter builds.</span><span><b>+20 XP</b>Complete an industry video/article source task in Designer Studio.</span><span><b>+15 XP</b>Meaningful structured peer critique — first 3 rewarded each day.</span><span><b>+25 XP</b>Quick Tutorial or Building Block completion.</span><span><b>+5 XP</b>First genuine activity of the day.</span><span><b>No farming</b>One reward per source/post; critique XP has a daily cap.</span></div></section>`;
   }catch(err){box.innerHTML=`<div class="empty"><h3>Could not load the leaderboard.</h3><p>${esc(err.message)}</p></div>`}

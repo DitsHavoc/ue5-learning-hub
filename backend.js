@@ -517,6 +517,14 @@ const api = {
       if(error)throw error;return data||[];
     },{force});
   },
+  async getHubLeaderboard(period='week',{force=false}={}){
+    if(!client||!this.user)throw new Error('Sign in to view the leaderboard.');
+    const cleanPeriod=period==='all'?'all':'week';
+    return cachedRead(this,`hub-leaderboard:${cleanPeriod}`,60000,async()=>{
+      const {data,error}=await client.rpc('get_hub_leaderboard',{p_period:cleanPeriod});
+      if(error)throw error;return data||[];
+    },{force});
+  },
   async setClassLeaderboardEnabled(classId,enabled){
     if(!client||!this.user||this.profile?.role!=='teacher')throw new Error('Teacher access required.');
     const {data,error}=await client.rpc('set_class_leaderboard_enabled',{p_class_id:classId,p_enabled:Boolean(enabled)});
