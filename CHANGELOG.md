@@ -1,4 +1,25 @@
+## v3.41.0 — Guided Paths — 31 Aug 2026
+
+- Added four optional outcome-based Guided Paths through existing Theory, Unreal, Designer and 3D content.
+- Paths derive progress from existing completion IDs; prior work counts automatically and no duplicate XP is awarded.
+- Added choice stages, grouped stages and untracked optional classroom/playtest activities without hard-locking the site.
+- Added Theory → practical “Put this into practice” bridges where a strong existing Hub application exists.
+- Added Guided Paths to navigation, home and global search.
+- Preserved the existing Unreal course rather than duplicating it as another pathway.
+- No database migration, new tables or routine cloud reads.
+
 ## v3.39.4 — Network Quiet — 30 Aug 2026
+
+## v3.40.0 — Game Design Theory (31 Aug 2026)
+
+- Added a first-class Game Design Theory hub with 24 lessons across six paths.
+- Added Board Game Lab: students play and analyse a physical game before designing their own adaptation.
+- Added real-game examples, professional/original further reading, classroom tasks and scenario quizzes.
+- Added Theory to global search, Revision Quizzes, My Progress and teacher class-detail progress.
+- Added +25 XP one-time Theory completions via existing lesson_progress / learning_xp_events architecture.
+- Added Design Analyst and Systems Thinker badges.
+- Preserved v3.39.4 Network Quiet read/cache behaviour; no new tables or routine cloud reads.
+
 - Audited all Supabase reads/writes, timers, Storage access and signed-URL generation across the Hub.
 - Removed legacy `project_progress` / `student_projects` boot reads now that Projects are Teams-first.
 - Added short-lived, user-scoped read caching and in-flight deduplication for routine cloud data.

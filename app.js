@@ -9,6 +9,7 @@ const TOOLS = window.UE5_TUTORIAL_DATA;
 const SNIPPETS = window.UE5_SNIPPET_DATA;
 const DESIGN = window.UE5_DESIGN_DATA;
 const THEORY = window.UE5_THEORY_DATA;
+const PATHWAYS = window.UE5_PATHWAY_DATA;
 const NEWS = window.UE5_NEWS_DATA;
 const MODEL = window.UE5_MODELING_DATA;
 const MODEL_FOUNDATIONS = window.UE5_MODELING_FOUNDATIONS;
@@ -29,7 +30,7 @@ DESIGN.tutorials.forEach(t=>{if(!knownTutorials.has(t.id))TOOLS.tutorials.push(t
 DESIGN.modules.forEach(m=>m.tutorials.forEach(id=>{const t=TOOLS.tutorials.find(x=>x.id===id);if(t&&!t.designModule)t.designModule=m.id}));
 
 
-if (!DATA || !BLOCKS || !PROJECT || !TOOLS || !SNIPPETS || !DESIGN || !THEORY || !NEWS || !MODEL || !MODEL_FOUNDATIONS || !MODEL_VIDEOS || !SCULPT || !STUDY || !BACKEND) {
+if (!DATA || !BLOCKS || !PROJECT || !TOOLS || !SNIPPETS || !DESIGN || !THEORY || !PATHWAYS || !NEWS || !MODEL || !MODEL_FOUNDATIONS || !MODEL_VIDEOS || !SCULPT || !STUDY || !BACKEND) {
   const e = document.querySelector('#bootError');
   if (e) e.hidden = false;
   return;
@@ -1352,10 +1353,104 @@ function theoryLessonPage(id){
   ${theoryExampleCard(l.example)}${l.examples?.length?`<section class="section"><div class="section-head"><div><span class="eyebrow">COMPARE REAL ADAPTATIONS</span><h2>What survived the conversion?</h2><p>Do not copy components. Identify the principle the designers preserved.</p></div></div><div class="theory-example-grid">${l.examples.map(theoryExampleCard).join('')}</div></section>`:''}
   <section class="theory-warning"><div><span>⚠</span><h2>Common design traps</h2></div><ul>${(l.mistakes||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></section>
   <section class="theory-task"><div><span class="eyebrow">APPLY IT • ${esc(l.task.title)}</span><h2>${esc(l.task.brief)}</h2><ol>${(l.task.steps||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ol><div class="callout good"><b>EVIDENCE:</b> ${esc(l.task.evidence)}</div>${l.task.stretch?`<div class="callout"><b>STRETCH:</b> ${esc(l.task.stretch)}</div>`:''}</div></section>
+  ${theoryApplyNext(l.id)}
   <section class="section"><div class="section-head"><div><span class="eyebrow">GO DEEPER</span><h2>Further reading & professional sources</h2><p>These are here when you want the full theory, original paper, industry talk or real rule set. They are not required to earn the lesson XP.</p></div></div>${theorySources(l)}</section>
   <section class="theory-quiz-section"><div class="section-head"><div><span class="eyebrow">SCENARIO CHECK • ${THEORY.passPercent}% PASS</span><h2>Can you use the idea?</h2><p>${done?'You have already passed this lesson. Retake it any time; XP is only awarded once.':'Answer every question. A pass marks the lesson complete and awards XP.'}</p></div>${s?`<span class="sync-chip">Best ${s.bestPct||s.pct}%</span>`:''}</div><form class="theory-quiz-form" data-action-form="theory-quiz" data-theory="${esc(l.id)}">${l.quiz.map((q,qi)=>`<fieldset><legend>${qi+1}. ${esc(q.q)}</legend>${q.options.map((o,oi)=>`<label><input type="radio" name="q${qi}" value="${oi}" required><span>${esc(o)}</span></label>`).join('')}</fieldset>`).join('')}<button class="button primary" type="submit">${done?'Retake scenario check':'Check answers & complete lesson'} →</button></form>${theoryQuizReview(l,s)}</section>
   <nav class="theory-lesson-nav"><div>${prev?`<a class="button ghost" href="#/theory/${prev.id}">← ${esc(prev.title)}</a>`:`<a class="button ghost" href="#/theory">← Theory home</a>`}</div><div>${next?`<a class="button primary" href="#/theory/${next.id}">${esc(next.title)} →</a>`:`<a class="button primary" href="#/theory">Theory dashboard →</a>`}</div></nav>`;
 }
+
+
+function guidedPath(id){return (PATHWAYS.paths||[]).find(x=>x.id===id)}
+function guidedItemInfo(item){
+  if(!item)return {title:'Unknown step',href:'#/',icon:'○',area:'Hub'};
+  if(item.type==='activity')return {title:item.title||'Practical activity',href:item.href||'#/',icon:item.icon||'○',area:item.area||'Practical activity',description:item.description||''};
+  if(item.type==='theory'){
+    const x=theoryLesson(item.id);return {title:item.title||x?.title||item.id,href:`#/theory/${item.id}`,icon:x?.icon||'◈',area:'Game Design Theory',description:item.why||x?.short||''};
+  }
+  if(item.type==='lesson'){
+    const x=lesson(item.id);return {title:item.title||x?.title||item.id,href:`#/lesson/${item.id}`,icon:'⌘',area:'Unreal Learning',description:item.why||x?.short||''};
+  }
+  if(item.type==='tutorial'){
+    const x=tutorial(item.id),designer=x?.designModule;return {title:item.title||x?.title||item.id,href:`#/tutorial/${item.id}`,icon:designer?'✦':'🛠',area:designer?'Designer Studio practical':'Quick Tutorial',description:item.why||x?.summary||''};
+  }
+  if(item.type==='designBuild'){
+    const x=designModule(item.id);return {title:item.title||x?.build?.title||x?.title||item.id,href:`#/design/${item.id}`,icon:x?.icon||'✦',area:'Designer Studio Build',description:item.why||x?.build?.brief||x?.description||''};
+  }
+  if(item.type==='modelFoundation'){
+    const x=modelTheoryChapter(item.id);return {title:item.title||x?.title||item.id,href:`#/modeling/foundations/${item.id}`,icon:x?.icon||'🧠',area:'3D Foundations',description:item.why||x?.short||x?.summary||''};
+  }
+  if(item.type==='modelFinal')return {title:item.title||'Model Doctor',href:'#/modeling/foundations/final',icon:'🩺',area:'3D Foundations final check',description:item.why||'Prove you can diagnose game-ready mesh decisions before Build X completion unlocks.'};
+  if(item.type==='modelLesson'){
+    const x=modelLesson(item.id);return {title:item.title||x?.title||item.id,href:`#/modeling/lesson/${item.id}`,icon:'⬡',area:'3D Modelling lesson',description:item.why||x?.purpose||x?.newSkill||''};
+  }
+  if(item.type==='modelBuild'){
+    const x=modelBuild(item.id);return {title:item.title||x?.title||item.id,href:`#/modeling/build/${item.id}`,icon:x?.icon||'⬡',area:'3D Build X',description:item.why||x?.brief||x?.description||''};
+  }
+  if(item.type==='chapterBuild'){
+    const x=TOOLS.chapterBuilds.find(b=>b.path===item.id);return {title:item.title||x?.title||item.id,href:`#/chapter-build/${item.id}`,icon:x?.icon||'🎮',area:'Unreal Chapter Build',description:item.why||x?.summary||''};
+  }
+  return {title:item.title||item.id||'Hub step',href:item.href||'#/',icon:item.icon||'○',area:item.area||'Hub',description:item.why||item.description||''};
+}
+function guidedItemDone(item){
+  if(!item)return false;
+  if(item.type==='choice')return (item.options||[]).some(guidedItemDone);
+  if(item.type==='group')return (item.items||[]).length>0&&(item.items||[]).every(guidedItemDone);
+  if(item.type==='theory')return theoryDone(item.id);
+  if(item.type==='lesson')return state.completed.includes(item.id);
+  if(item.type==='tutorial')return tutorialDone(item.id);
+  if(item.type==='designBuild')return designBuildDone(item.id);
+  if(item.type==='modelFoundation')return modelTheoryDone(item.id);
+  if(item.type==='modelFinal')return modelFoundationDone();
+  if(item.type==='modelLesson')return modelLessonDone(item.id);
+  if(item.type==='modelBuild')return modelBuildDone(item.id);
+  if(item.type==='chapterBuild')return chapterBuildDone(item.id);
+  return false;
+}
+function guidedStepTrackable(step){return step&&step.type!=='activity'}
+function guidedPathProgress(value){
+  const p=typeof value==='string'?guidedPath(value):value;if(!p)return {done:0,total:0,pct:0,current:-1};
+  const track=p.steps.filter(guidedStepTrackable),done=track.filter(guidedItemDone).length;
+  const current=p.steps.findIndex(s=>guidedStepTrackable(s)&&!guidedItemDone(s));
+  return {done,total:track.length,pct:track.length?Math.round(done/track.length*100):0,current};
+}
+function guidedChoiceOptions(step){
+  return `<div class="guided-choice-grid">${(step.options||[]).map(o=>{const x=guidedItemInfo(o),done=guidedItemDone(o);return `<a class="guided-choice-option ${done?'done':''}" href="${esc(x.href)}"><span>${done?'✓':x.icon}</span><div><small>${esc(x.area)}</small><strong>${esc(x.title)}</strong></div><b>${done?'Done':'Choose →'}</b></a>`}).join('')}</div>`;
+}
+function guidedGroupItems(step){
+  const items=step.items||[],done=items.filter(guidedItemDone).length;
+  return `<details class="guided-group-details" ${done<items.length?'open':''}><summary><span>${done}/${items.length} complete</span><b>Show the steps</b></summary><div>${items.map(o=>{const x=guidedItemInfo(o),ok=guidedItemDone(o);return `<a href="${esc(x.href)}" class="guided-group-item ${ok?'done':''}"><span>${ok?'✓':x.icon}</span><div><small>${esc(x.area)}</small><strong>${esc(x.title)}</strong></div><b>${ok?'Done':'Open →'}</b></a>`}).join('')}</div></details>`;
+}
+function guidedStepCard(step,i,current){
+  const trackable=guidedStepTrackable(step),done=trackable&&guidedItemDone(step),isCurrent=trackable&&!done&&i===current,status=!trackable?'activity':done?'done':isCurrent?'current':'later';
+  if(step.type==='choice')return `<article class="guided-step ${status}"><div class="guided-step-num">${done?'✓':String(i+1).padStart(2,'0')}</div><div class="guided-step-main"><div class="guided-step-head"><div><span class="eyebrow">CHOICE STEP • COMPLETE ANY ONE</span><h2>${esc(step.icon||'◇')} ${esc(step.title)}</h2></div><span class="guided-state">${done?'✓ Complete':isCurrent?'▶ Recommended next':'○ Coming up'}</span></div><p>${esc(step.description||'Choose the outcome that best fits what you want to make.')}</p>${guidedChoiceOptions(step)}</div></article>`;
+  if(step.type==='group')return `<article class="guided-step ${status}"><div class="guided-step-num">${done?'✓':String(i+1).padStart(2,'0')}</div><div class="guided-step-main"><div class="guided-step-head"><div><span class="eyebrow">GROUPED STAGE</span><h2>${esc(step.icon||'◇')} ${esc(step.title)}</h2></div><span class="guided-state">${done?'✓ Complete':isCurrent?'▶ Recommended next':'○ Coming up'}</span></div><p>${esc(step.description||'Complete the linked foundation pieces in this stage.')}</p>${guidedGroupItems(step)}</div></article>`;
+  const x=guidedItemInfo(step);
+  return `<article class="guided-step ${status}"><div class="guided-step-num">${done?'✓':trackable?String(i+1).padStart(2,'0'):'+'}</div><div class="guided-step-main"><div class="guided-step-head"><div><span class="eyebrow">${esc(x.area)}${!trackable?' • OPTIONAL / TEACHER-SET':''}</span><h2>${esc(x.icon)} ${esc(x.title)}</h2></div><span class="guided-state">${!trackable?'Try it':done?'✓ Complete':isCurrent?'▶ Recommended next':'○ Coming up'}</span></div><p>${esc(x.description||step.description||'Open the existing Hub content and complete it when it is useful.')}</p><div class="guided-step-actions"><a class="button ${isCurrent?'primary':'ghost'}" href="${esc(x.href)}">${done?'Revisit':!trackable?'Open activity':'Open step'} →</a>${!trackable?'<small>This activity does not affect pathway progress or XP.</small>':''}</div></div></article>`;
+}
+function guidedPathCard(p){
+  const x=guidedPathProgress(p),done=x.total>0&&x.done===x.total;
+  return `<a class="guided-path-card ${done?'complete':''}" href="#/pathways/${p.id}"><div class="guided-path-card-top"><span class="guided-path-icon">${p.icon}</span><span class="guided-path-progress">${done?'✓ Complete':`${x.done}/${x.total}`}</span></div><span class="eyebrow">${esc(p.kicker)}</span><h2>${esc(p.title)}</h2><p>${esc(p.summary)}</p><div class="progress"><span style="width:${x.pct}%"></span></div><div class="guided-path-card-foot"><span>${x.pct}% complete</span><strong>${x.done?'Continue':'Start'} →</strong></div></a>`;
+}
+function guidedPathsPage(){
+  return `<div class="page-head guided-paths-head"><div class="breadcrumb"><a href="#/">Home</a> / Guided Paths</div><span class="eyebrow">OPTIONAL ROUTES • EXISTING CONTENT • NO LOCKS</span><h1>↠ Guided Paths</h1><p class="muted">Not sure what to learn next? Pick an outcome and the Hub will put useful Theory, Unreal, Designer and 3D content into a sensible order. Prefer exploring? Ignore this page and keep browsing normally.</p></div>
+  <section class="guided-paths-rule"><div><span class="deep-label">THE RULE</span><h2>Guidance, not another course system.</h2><p>${esc(PATHWAYS.intro)}</p></div><ul>${(PATHWAYS.principles||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></section>
+  <section class="section"><div class="section-head"><div><h2>Choose an outcome</h2><p>These are the only launch paths. We add another only when there is a real teaching reason.</p></div></div><div class="guided-path-grid">${PATHWAYS.paths.map(guidedPathCard).join('')}</div></section>
+  <section class="guided-existing-course"><div><span class="eyebrow">ALREADY STRUCTURED PROPERLY</span><h2>⌘ Want to learn Unreal systematically?</h2><p>Unreal Learning already has six ordered stages and Chapter Builds. We are not duplicating it inside Guided Paths.</p></div><a class="button primary" href="#/programming">Open Unreal Learning →</a></section>
+  <section class="guided-free-explore"><div><span class="eyebrow">OR JUST EXPLORE</span><h2>Know what you need? Go straight there.</h2><p>Search, tutorials and every normal Hub area remain open.</p></div><div class="button-row"><a class="button ghost" href="#/theory">◈ Theory</a><a class="button ghost" href="#/design">✦ Designer Studio</a><a class="button ghost" href="#/modeling">⬡ 3D Modelling</a><a class="button ghost" href="#/tutorials">🛠 Quick Tutorials</a></div></section>`;
+}
+function guidedPathPage(id){
+  const p=guidedPath(id);if(!p)return notFound();const x=guidedPathProgress(p),done=x.total>0&&x.done===x.total;
+  return `<div class="breadcrumb"><a href="#/">Home</a> / <a href="#/pathways">Guided Paths</a> / ${esc(p.title)}</div>
+  <section class="guided-path-hero"><div><span class="eyebrow">${esc(p.kicker)} • OPTIONAL GUIDED ROUTE</span><h1>${p.icon} ${esc(p.title)}</h1><p>${esc(p.summary)}</p><div class="guided-path-audience"><b>WHO IS THIS FOR?</b> ${esc(p.audience)}</div></div><div class="guided-path-hero-progress"><strong>${x.done}/${x.total}</strong><span>tracked steps complete</span><div class="progress"><span style="width:${x.pct}%"></span></div><small>${done?'Path complete — revisit anything whenever you need it.':'All links stay open. “Recommended next” is guidance, not a lock.'}</small></div></section>
+  <section class="guided-outcome"><span>🎯</span><div><small>THE OUTCOME</small><strong>${esc(p.outcome)}</strong></div></section>
+  <section class="guided-sequence"><div class="section-head"><div><span class="eyebrow">RECOMMENDED ORDER</span><h2>One useful next step at a time</h2><p>Completed Hub work is recognised automatically. Choice stages count when you complete any one option. Optional activities never gate progress.</p></div></div>${p.steps.map((s,i)=>guidedStepCard(s,i,x.current)).join('')}</section>
+  <section class="guided-path-footer"><div><span class="eyebrow">NEED SOMETHING ELSE?</span><h2>Leave the path whenever you want.</h2><p>Your progress stays in the actual lessons/builds, so there is nothing special to save here.</p></div><div class="button-row"><a class="button primary" href="#/pathways">← All Guided Paths</a><a class="button ghost" href="#/">Explore the Hub</a></div></section>`;
+}
+function theoryApplyNext(id){
+  const links=PATHWAYS.applyLinks?.[id]||[];if(!links.length)return '';
+  return `<section class="theory-apply-next"><div class="section-head"><div><span class="eyebrow">PUT THIS INTO PRACTICE</span><h2>Where could this idea go next?</h2><p>Optional links into existing Hub practical work. Pick one that actually helps what you are making.</p></div></div><div class="theory-apply-link-grid">${links.map(x=>`<a href="${esc(x.href)}"><span>${esc(x.icon||'→')}</span><div><small>${esc(x.meta||'Hub practical')}</small><strong>${esc(x.title)}</strong><p>${esc(x.why||'Apply the theory in a practical task.')}</p></div><b>Open →</b></a>`).join('')}</div></section>`;
+}
+
 
 
 
@@ -1376,10 +1471,12 @@ function classHomeShortcut(){
 
 function dashboard(){
   return `<section class="portal-hero portal-hero-clean">
-    <div><span class="eyebrow">UE5 LEARNING HUB</span><h1>Choose a path.</h1><p>Learn systems. Understand game design. Build worlds and assets. Practise, critique and keep an eye on the industry.</p></div>
+    <div><span class="eyebrow">UE5 LEARNING HUB</span><h1>Choose where to learn.</h1><p>Learn systems. Understand game design. Build worlds and assets. Practise, critique and keep an eye on the industry.</p></div>
   </section>
 
   ${classHomeShortcut()}
+
+  <a class="guided-home-cta" href="#/pathways"><div class="guided-home-icon">↠</div><div><span class="portal-kicker">NOT SURE WHAT TO DO NEXT?</span><h2>Try a Guided Path</h2><p>Four optional outcome-based routes connect Theory, Designer Studio, Unreal and 3D in a sensible order. Nothing else gets locked.</p><div class="portal-chip-row"><span>4 launch paths</span><span>Existing XP counts</span><span>Browse freely anytime</span></div></div><strong>See Guided Paths →</strong></a>
 
   <section class="portal-path-grid" aria-label="Choose a Learning Hub area">
     <a class="portal-path-card programming" href="#/programming"><div class="portal-path-icon">⌘</div><span class="portal-kicker">BUILDING BLOCKS • SYSTEMS • BLUEPRINTS</span><h2>Unreal Learning</h2><p>Learn Unreal terms in tiny Building Blocks, understand the deeper systems, then apply them in practical tutorials and challenge builds.</p><div class="portal-chip-row"><span>${BLOCKS.blocks.filter(b=>b.tier==='core').length} core blocks</span><span>${DATA.lessons.length} system lessons</span><span>${(TOOLS.families||[]).length} recipe families</span></div><strong>Enter Unreal Learning →</strong></a>
@@ -2652,6 +2749,8 @@ function route(options={}){
   const parts=currentHash.replace(/^#\//,'').split('/').filter(Boolean),app=$('#app');
   $$('.nav a').forEach(a=>a.classList.remove('active'));
   if(!parts.length){app.innerHTML=dashboard();activate('home')}
+  else if(parts[0]==='pathways'&&parts[1]){app.innerHTML=guidedPathPage(parts[1]);activate('pathways')}
+  else if(parts[0]==='pathways'){app.innerHTML=guidedPathsPage();activate('pathways')}
   else if(parts[0]==='programming'){app.innerHTML=programmingPage();activate('programming')}
   else if(parts[0]==='blocks'){app.innerHTML=blocksPage();activate('blocks')}
   else if(parts[0]==='block'&&parts[1]){app.innerHTML=blockPage(parts[1]);activate('blocks')}
@@ -3759,6 +3858,7 @@ function buildGlobalSearchIndex(){
   (THEORY.lessons||[]).forEach(t=>add({
     title:t.title,meta:`Game Design Theory • ${theoryPath(t.path)?.title||'Theory'} • +${THEORY.xp} XP`,href:`#/theory/${t.id}`,icon:t.icon||'◈',kind:'theory',data:deepSearchText(t)
   }));
+  (PATHWAYS.paths||[]).forEach(p=>add({title:p.title,meta:'Guided Path • optional route through existing Hub content',href:`#/pathways/${p.id}`,icon:p.icon||'↠',kind:'guided-path',data:deepSearchText(p)}));
     (DESIGN.modules||[]).forEach(m=>add({
     title:m.title,meta:'Designer Studio • Discipline',href:`#/design/${m.id}`,icon:m.icon||'◆',kind:'design',data:deepSearchText(m)
   }));
@@ -3793,6 +3893,7 @@ function buildGlobalSearchIndex(){
   }));
 
   [
+    ['Guided Paths','Optional outcome-based routes through Theory, Unreal, Designer Studio and 3D without locking the rest of the Hub','#/pathways','↠'],
     ['Unreal Learning','Core lessons, learning paths and practical Unreal Engine progression','#/programming','◇'],
     ['Blueprint Snippet Bank','Official Epic paste assists and reusable Blueprint graph helpers','#/snippets','⚡'],
     ['Quick Tutorials','Recipe families and practical UE5 build outcomes','#/tutorials','🛠'],

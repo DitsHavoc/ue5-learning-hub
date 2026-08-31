@@ -1,6 +1,14 @@
-# Current release — v3.39.4
+# Current release — v3.41.0
 
-**Network Quiet.** Full-site Supabase traffic audit and scaling pass for classroom rollout. Duplicate/in-flight reads are cached and deduplicated; News social state now uses one compact aggregate RPC; teacher dashboards request compact progress summaries rather than every completion row; retired Projects/evidence media can no longer be served by stale clients; Critique signed URLs are reused; and active image uploads keep long-lived immutable browser caching. Learning content, routes, completion IDs, XP rules and Teams-first boundaries are unchanged. See `RELEASE-NOTES-v3.39.4.md` and `NETWORK-QUIET-QA-v3.39.4.md`.
+**Guided Paths.** Adds four optional, outcome-based routes through the Hub: Build a Playable Level, Create a Gameplay Mechanic, Make a Game-Ready 3D Prop, and Digital Game → Tabletop. Paths reuse existing completion IDs and XP, keep every normal page open, recognise prior progress automatically, and add Theory → practical bridges without creating another LMS/progress system. No database migration or new routine cloud reads. See `RELEASE-NOTES-v3.41.0.md` and `GUIDED-PATHS-QA-v3.41.0.md`.
+
+## Previous release — v3.40.0
+
+**Game Design Theory.** Adds a first-class 24-lesson Game Design Theory hub across design foundations, player decisions, systems/balance, player experience, space/world and design process. It includes a classroom Board Game Lab, real-game examples, professional/original further reading, practical tasks, scenario quizzes, Revision integration and one-time +25 XP completion. It is built directly on v3.39.4 Network Quiet + the homepage/Noclip hotfix, preserving the traffic/caching work and Teams-first boundary. See `RELEASE-NOTES-v3.40.0.md` and `GAME-DESIGN-THEORY-QA-v3.40.0.md`.
+
+### Preserved baseline
+
+v3.39.4 **Network Quiet** remains underneath this release: duplicate/in-flight reads are cached and deduplicated; News social state uses compact RPC data; teacher overview uses compact progress summaries; retired project/evidence media reads remain disabled; Critique signed URLs are reused; and active image uploads retain long-lived immutable caching.
 
 ## Previous release — v3.39.3
 
