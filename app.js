@@ -8,6 +8,7 @@ const PROJECT = window.UE5_PROJECT_DATA;
 const TOOLS = window.UE5_TUTORIAL_DATA;
 const SNIPPETS = window.UE5_SNIPPET_DATA;
 const DESIGN = window.UE5_DESIGN_DATA;
+const THEORY = window.UE5_THEORY_DATA;
 const NEWS = window.UE5_NEWS_DATA;
 const MODEL = window.UE5_MODELING_DATA;
 const MODEL_FOUNDATIONS = window.UE5_MODELING_FOUNDATIONS;
@@ -28,7 +29,7 @@ DESIGN.tutorials.forEach(t=>{if(!knownTutorials.has(t.id))TOOLS.tutorials.push(t
 DESIGN.modules.forEach(m=>m.tutorials.forEach(id=>{const t=TOOLS.tutorials.find(x=>x.id===id);if(t&&!t.designModule)t.designModule=m.id}));
 
 
-if (!DATA || !BLOCKS || !PROJECT || !TOOLS || !SNIPPETS || !DESIGN || !NEWS || !MODEL || !MODEL_FOUNDATIONS || !MODEL_VIDEOS || !SCULPT || !STUDY || !BACKEND) {
+if (!DATA || !BLOCKS || !PROJECT || !TOOLS || !SNIPPETS || !DESIGN || !THEORY || !NEWS || !MODEL || !MODEL_FOUNDATIONS || !MODEL_VIDEOS || !SCULPT || !STUDY || !BACKEND) {
   const e = document.querySelector('#bootError');
   if (e) e.hidden = false;
   return;
@@ -58,6 +59,8 @@ const BADGE_META={
   'max-apprentice':{rarity:'Uncommon',tone:'uncommon',hint:"Complete all 14 videos in Dits' Max series."},
   'industry-eye':{rarity:'Rare',tone:'rare',hint:'Complete at least one industry deep dive in every Designer discipline.'},
   'design-thinker':{rarity:'Epic',tone:'epic',hint:'Complete all eight Designer Studio builds.'},
+  'design-analyst':{rarity:'Uncommon',tone:'uncommon',hint:'Complete six Game Design Theory lessons.'},
+  'theory-scholar':{rarity:'Epic',tone:'epic',hint:'Complete all Game Design Theory lessons.'},
   'digital-clay':{rarity:'Uncommon',tone:'uncommon',hint:'Complete all six Sculpt Playground exercises.'},
   'teacher':{rarity:'Staff',tone:'staff',hint:'Exclusive to verified Learning Hub teacher accounts.'}
 };
@@ -185,7 +188,7 @@ function syncProjectRichEditors(root=document){
 }
 
 function loadState(){
-  const clean={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],designSourceCompleted:[],modelVideoCompleted:[],modelTheoryCompleted:[],modelTheoryScores:{},modelFoundationFinal:false,modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[],blockCompleted:[]};
+  const clean={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],designSourceCompleted:[],theoryCompleted:[],theoryScores:{},modelVideoCompleted:[],modelTheoryCompleted:[],modelTheoryScores:{},modelFoundationFinal:false,modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[],blockCompleted:[]};
   try{
     const current=JSON.parse(localStorage.getItem(STORE)||'null');
     if(current) return {...clean,...current};
@@ -274,6 +277,7 @@ function nextBadgeTarget(){
   const candidates=[
     {id:'first-step',current:Math.min(done,1),target:1},
     {id:'recipe',current:Math.min(tuts,5),target:5},
+    {id:'design-analyst',current:Math.min((state.theoryCompleted||[]).length,6),target:6},
     {id:'blueprint-core',current:['variables','branches','functions'].filter(x=>ids.has(x)).length,target:3},
     {id:'halfway',current:Math.min(done,10),target:10},
     {id:'chapter-build',current:Math.min(builds,1),target:1},
@@ -306,7 +310,7 @@ function mechanic(id){return PROJECT.mechanics[id]}
 function completedLessons(){return DATA.lessons.filter(l=>state.completed.includes(l.id))}
 function totalXp(){
   if(BACKEND.user&&!isTeacher()&&BACKEND.xpSummary&&Number.isFinite(Number(BACKEND.xpSummary.all_time_xp)))return Number(BACKEND.xpSummary.all_time_xp);
-  return (state.blockCompleted||[]).length*25+(state.tutorialCompleted||[]).length*25+completedLessons().reduce((n,l)=>n+l.xp,0)+TOOLS.chapterBuilds.filter(b=>state.chapterBuildCompleted.includes(b.path)).reduce((n,b)=>n+(b.xp||0),0)+(state.designBuildCompleted||[]).length*300+(state.designSourceCompleted||[]).length*20+(state.modelVideoCompleted||[]).length*(MODEL_VIDEOS.xp||20)+(state.modelTheoryCompleted||[]).length*(MODEL_FOUNDATIONS.chapterXp||20)+(state.modelFoundationFinal?(MODEL_FOUNDATIONS.finalXp||100):0)+(state.modelLessonCompleted||[]).length*100+(state.modelBuildCompleted||[]).length*250+(state.modelFixCompleted||[]).length*75+(state.sculptCompleted||[]).reduce((n,id)=>n+(SCULPT.practices.find(x=>x.id===id)?.xp||0),0)
+  return (state.blockCompleted||[]).length*25+(state.tutorialCompleted||[]).length*25+completedLessons().reduce((n,l)=>n+l.xp,0)+TOOLS.chapterBuilds.filter(b=>state.chapterBuildCompleted.includes(b.path)).reduce((n,b)=>n+(b.xp||0),0)+(state.designBuildCompleted||[]).length*300+(state.designSourceCompleted||[]).length*20+(state.theoryCompleted||[]).length*(THEORY.xp||25)+(state.modelVideoCompleted||[]).length*(MODEL_VIDEOS.xp||20)+(state.modelTheoryCompleted||[]).length*(MODEL_FOUNDATIONS.chapterXp||20)+(state.modelFoundationFinal?(MODEL_FOUNDATIONS.finalXp||100):0)+(state.modelLessonCompleted||[]).length*100+(state.modelBuildCompleted||[]).length*250+(state.modelFixCompleted||[]).length*75+(state.sculptCompleted||[]).reduce((n,id)=>n+(SCULPT.practices.find(x=>x.id===id)?.xp||0),0)
 }
 function level(){
   const xp=totalXp(),n=Math.floor(xp/500)+1,into=xp%500;
@@ -468,6 +472,7 @@ async function syncCloudProgress(){
     state.chapterBuildCompleted=[...new Set([...(state.chapterBuildCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('chapter:')).map(id=>id.slice(8))])];
     state.designBuildCompleted=[...new Set([...(state.designBuildCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('designbuild:')).map(id=>id.slice(12))])];
     state.designSourceCompleted=[...new Set([...(state.designSourceCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('designsource:')).map(id=>id.slice(13))])];
+    state.theoryCompleted=[...new Set([...(state.theoryCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('theory:')).map(id=>id.slice(7))])];
     state.modelVideoCompleted=[...new Set([...(state.modelVideoCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('modelvideo:')).map(id=>id.slice(11))])];
     state.modelTheoryCompleted=[...new Set([...(state.modelTheoryCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('modeltheory:')).map(id=>id.slice(12))])];
     state.modelFoundationFinal=state.modelFoundationFinal||cloudCompleted.includes('modelfoundation:final');
@@ -1300,6 +1305,59 @@ function modelingFixPage(id){
 }
 
 
+function theoryLesson(id){return (THEORY.lessons||[]).find(x=>x.id===id)}
+function theoryPath(id){return (THEORY.paths||[]).find(x=>x.id===id)}
+function theoryDone(id){return (state.theoryCompleted||[]).includes(id)}
+function theoryScore(id){return (state.theoryScores||{})[id]||null}
+function theoryPathProgress(id){
+  const lessons=(THEORY.lessons||[]).filter(x=>x.path===id),done=lessons.filter(x=>theoryDone(x.id)).length;
+  return {done,total:lessons.length,pct:lessons.length?Math.round(done/lessons.length*100):0};
+}
+function theoryCard(l){
+  const p=theoryPath(l.path),done=theoryDone(l.id),score=theoryScore(l.id),search=normaliseSearchText(`${l.title} ${l.short} ${p?.title||''} ${(l.keyIdeas||[]).join(' ')}`);
+  return `<a class="theory-card ${done?'done':''}" href="#/theory/${l.id}" data-theory-card data-path="${esc(l.path)}" data-search="${esc(search)}"><div class="theory-card-icon">${l.icon||'◈'}</div><div><span class="eyebrow">${esc(p?.title||'Game Design Theory')} • ${esc(l.duration||'15–20 min')}</span><h3>${esc(l.title)}</h3><p>${esc(l.short)}</p><div class="theory-card-foot"><span>${done?'✓ Complete':score?`Best ${score.bestPct||score.pct}%`:'Scenario quiz'}</span><b>+${THEORY.xp} XP</b></div></div></a>`;
+}
+function theoryDiagram(d){
+  if(!d?.nodes?.length)return '';
+  return `<section class="theory-diagram-card"><span class="eyebrow">MODEL IT</span><h2>${esc(d.title||'Design model')}</h2><div class="theory-diagram-flow">${d.nodes.map((n,i)=>`${i?'<span class="theory-arrow">→</span>':''}<strong>${esc(n)}</strong>`).join('')}</div>${d.caption?`<p>${esc(d.caption)}</p>`:''}</section>`;
+}
+function theoryExampleCard(x){
+  if(!x)return '';
+  const url=safeUrl(x.sourceUrl||''),image=x.src?safeUrl(x.src):'';
+  return `<article class="theory-example-card">${image?`<button class="zoom-image-button theory-example-image" type="button" data-action="open-image" data-src="${esc(image)}" data-caption="${esc(x.title||x.game||'Game example')}" data-source="${esc(url)}"><img class="remote-reference-image" src="${esc(image)}" alt="${esc((x.game||'Game')+' design example')}" loading="lazy"></button>`:''}<div><span class="eyebrow">REAL GAME EXAMPLE${x.game?` • ${esc(x.game)}`:''}</span><h3>${esc(x.title||x.game||'Example')}</h3><p>${esc(x.body||'')}</p>${url?`<a class="link-button" href="${esc(url)}" target="_blank" rel="noopener">${esc(x.sourceTitle||'Open source')} ↗</a>`:''}</div></article>`;
+}
+function theorySources(l){
+  return `<div class="theory-source-grid">${(l.sources||[]).map(s=>{const u=safeUrl(s.url);return u?`<a class="theory-source-card" href="${esc(u)}" target="_blank" rel="noopener"><span>${esc(s.kind||'Further reading')}</span><strong>${esc(s.title)}</strong>${s.note?`<p>${esc(s.note)}</p>`:''}<b>Open source ↗</b></a>`:''}).join('')}</div>`;
+}
+function theoryQuizReview(l,s){
+  if(!s?.answers)return '';
+  return `<div class="theory-quiz-review">${l.quiz.map((q,i)=>{const selected=s.answers[i],ok=selected===q.correct;return `<article class="${ok?'correct':'wrong'}"><span>${ok?'✓ Correct':'× Review'}</span><strong>${esc(q.q)}</strong><p><b>Your answer:</b> ${esc(q.options[selected]??'No answer')}</p><p><b>Correct:</b> ${esc(q.options[q.correct])}</p><small>${esc(q.feedback)}</small></article>`}).join('')}</div>`;
+}
+function theoryPage(){
+  const done=(state.theoryCompleted||[]).length,total=THEORY.lessons.length,pct=total?Math.round(done/total*100):0,lab=THEORY.lab;
+  return `<div class="page-head theory-page-head"><div class="breadcrumb"><a href="#/">Home</a> / Game Design Theory</div><span class="eyebrow">SYSTEMS • PLAYERS • BALANCE • EXPERIENCE • PROCESS</span><h1>◈ Game Design Theory</h1><p class="muted">Learn why games work, not just how to build them. Read the idea, see it in a real game, try a small design task, then prove you can apply it in a scenario quiz.</p></div>
+  <section class="theory-dashboard"><div><span class="eyebrow">YOUR THEORY PROGRESS</span><h2>${done}/${total} lessons • ${done*THEORY.xp}/${total*THEORY.xp} XP earned</h2><div class="progress"><span style="width:${pct}%"></span></div></div><div class="theory-method"><span>UNDERSTAND</span><b>→</b><span>SEE IT</span><b>→</b><span>TRY IT</span><b>→</b><span>QUIZ</span><b>→</b><span>APPLY</span></div></section>
+  <section class="theory-lab" id="boardGameLab"><div class="theory-lab-mark">🎲</div><div><span class="eyebrow">OPTIONAL PRACTICAL DESIGN LAB</span><h2>${esc(lab.title)}</h2><p>${esc(lab.intro)}</p><div class="callout good"><b>TABLETOP ADAPTATION PROJECT?</b> Your teacher may ask you to complete this lab before your group commits to its design.</div><div class="theory-lab-columns"><div><h3>How to run it</h3><ol>${lab.rules.map(x=>`<li>${esc(x)}</li>`).join('')}</ol></div><div><h3>Design evidence to collect</h3><ul>${lab.prompts.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div></div><div class="callout"><b>EVIDENCE:</b> ${esc(lab.evidence)}</div><p class="muted"><b>Why try it?</b> ${esc(lab.note)}</p></div></section>
+  <div class="study-toolbar theory-toolbar"><input id="theorySearch" type="search" enterkeyhint="search" placeholder="Search agency, balance, pacing, playtesting…"><div class="filter-row"><button class="filter active" data-theory-filter="all">All <b>${total}</b></button>${THEORY.paths.map(p=>`<button class="filter" data-theory-filter="${esc(p.id)}">${p.icon} ${esc(p.title)}</button>`).join('')}</div><span class="study-result-count" id="theoryResultCount">${total} lessons</span></div>
+  <div class="theory-path-overview">${THEORY.paths.map(p=>{const x=theoryPathProgress(p.id);return `<article><span>${p.icon}</span><div><strong>${esc(p.title)}</strong><p>${esc(p.short)}</p><div class="progress"><span style="width:${x.pct}%"></span></div><small>${x.done}/${x.total} complete</small></div></article>`}).join('')}</div>
+  <div class="theory-grid" id="theoryGrid">${THEORY.lessons.map(theoryCard).join('')}</div><div class="empty" id="theorySearchEmpty" hidden><h2>No theory lessons match.</h2><p>Try a shorter design term or switch back to All.</p></div>`;
+}
+function theoryLessonPage(id){
+  const l=theoryLesson(id);if(!l)return notFound();const p=theoryPath(l.path),done=theoryDone(l.id),s=theoryScore(l.id),passed=(s?.bestPct||s?.pct||0)>=THEORY.passPercent,idx=THEORY.lessons.indexOf(l),prev=THEORY.lessons[idx-1],next=THEORY.lessons[idx+1];
+  return `<div class="breadcrumb"><a href="#/">Home</a> / <a href="#/theory">Game Design Theory</a> / ${esc(l.title)}</div>
+  <section class="theory-lesson-hero"><div><span class="eyebrow">${p?.icon||'◈'} ${esc(p?.title||'Game Design Theory')} • ${esc(l.duration)} • +${THEORY.xp} XP</span><h1>${l.icon||'◈'} ${esc(l.title)}</h1><p>${esc(l.short)}</p></div><div class="theory-status ${done?'done':''}"><strong>${done?'✓ Complete':s?`Best score ${s.bestPct||s.pct}%`:`Pass ${THEORY.passPercent}% to complete`}</strong><span>${done?'XP is awarded once on the first pass.':'The quiz uses design scenarios, not just definitions.'}</span></div></section>
+  <section class="theory-definition"><div><span class="eyebrow">THE IDEA</span><h2>What is it?</h2><p>${esc(l.definition)}</p></div><div><span class="eyebrow">WHY IT MATTERS</span><h2>Why should a designer care?</h2><p>${esc(l.why)}</p></div></section>
+  ${theoryDiagram(l.diagram)}
+  <section class="content-card"><span class="eyebrow">KEY IDEAS</span><h2>What to remember</h2><div class="theory-key-grid">${(l.keyIdeas||[]).map((x,i)=>`<article><span>${String(i+1).padStart(2,'0')}</span><p>${esc(x)}</p></article>`).join('')}</div></section>
+  ${theoryExampleCard(l.example)}${l.examples?.length?`<section class="section"><div class="section-head"><div><span class="eyebrow">COMPARE REAL ADAPTATIONS</span><h2>What survived the conversion?</h2><p>Do not copy components. Identify the principle the designers preserved.</p></div></div><div class="theory-example-grid">${l.examples.map(theoryExampleCard).join('')}</div></section>`:''}
+  <section class="theory-warning"><div><span>⚠</span><h2>Common design traps</h2></div><ul>${(l.mistakes||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></section>
+  <section class="theory-task"><div><span class="eyebrow">APPLY IT • ${esc(l.task.title)}</span><h2>${esc(l.task.brief)}</h2><ol>${(l.task.steps||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ol><div class="callout good"><b>EVIDENCE:</b> ${esc(l.task.evidence)}</div>${l.task.stretch?`<div class="callout"><b>STRETCH:</b> ${esc(l.task.stretch)}</div>`:''}</div></section>
+  <section class="section"><div class="section-head"><div><span class="eyebrow">GO DEEPER</span><h2>Further reading & professional sources</h2><p>These are here when you want the full theory, original paper, industry talk or real rule set. They are not required to earn the lesson XP.</p></div></div>${theorySources(l)}</section>
+  <section class="theory-quiz-section"><div class="section-head"><div><span class="eyebrow">SCENARIO CHECK • ${THEORY.passPercent}% PASS</span><h2>Can you use the idea?</h2><p>${done?'You have already passed this lesson. Retake it any time; XP is only awarded once.':'Answer every question. A pass marks the lesson complete and awards XP.'}</p></div>${s?`<span class="sync-chip">Best ${s.bestPct||s.pct}%</span>`:''}</div><form class="theory-quiz-form" data-action-form="theory-quiz" data-theory="${esc(l.id)}">${l.quiz.map((q,qi)=>`<fieldset><legend>${qi+1}. ${esc(q.q)}</legend>${q.options.map((o,oi)=>`<label><input type="radio" name="q${qi}" value="${oi}" required><span>${esc(o)}</span></label>`).join('')}</fieldset>`).join('')}<button class="button primary" type="submit">${done?'Retake scenario check':'Check answers & complete lesson'} →</button></form>${theoryQuizReview(l,s)}</section>
+  <nav class="theory-lesson-nav"><div>${prev?`<a class="button ghost" href="#/theory/${prev.id}">← ${esc(prev.title)}</a>`:`<a class="button ghost" href="#/theory">← Theory home</a>`}</div><div>${next?`<a class="button primary" href="#/theory/${next.id}">${esc(next.title)} →</a>`:`<a class="button primary" href="#/theory">Theory dashboard →</a>`}</div></nav>`;
+}
+
+
 
 function teamsProjectNoticePage(){
   return `<div class="page-head"><div class="breadcrumb"><a href="#/">Home</a> / Projects</div><span class="eyebrow">TEAMS-FIRST WORKFLOW</span><h1>Project work lives in Microsoft Teams</h1><p class="muted">The Hub now focuses on learning, practice, revision, critique and progress. Project briefs, deadlines, formal submissions and assessed feedback stay in Microsoft Teams so there is only one place to hand work in.</p></div>
@@ -1318,13 +1376,14 @@ function classHomeShortcut(){
 
 function dashboard(){
   return `<section class="portal-hero portal-hero-clean">
-    <div><span class="eyebrow">UE5 LEARNING HUB</span><h1>Choose a path.</h1><p>Learn systems. Design worlds. Build assets. Practise, critique and keep an eye on the industry.</p></div>
+    <div><span class="eyebrow">UE5 LEARNING HUB</span><h1>Choose a path.</h1><p>Learn systems. Understand game design. Build worlds and assets. Practise, critique and keep an eye on the industry.</p></div>
   </section>
 
   ${classHomeShortcut()}
 
   <section class="portal-path-grid" aria-label="Choose a Learning Hub area">
     <a class="portal-path-card programming" href="#/programming"><div class="portal-path-icon">⌘</div><span class="portal-kicker">BUILDING BLOCKS • SYSTEMS • BLUEPRINTS</span><h2>Unreal Learning</h2><p>Learn Unreal terms in tiny Building Blocks, understand the deeper systems, then apply them in practical tutorials and challenge builds.</p><div class="portal-chip-row"><span>${BLOCKS.blocks.filter(b=>b.tier==='core').length} core blocks</span><span>${DATA.lessons.length} system lessons</span><span>${(TOOLS.families||[]).length} recipe families</span></div><strong>Enter Unreal Learning →</strong></a>
+    <a class="portal-path-card theory" href="#/theory"><div class="portal-path-icon">◈</div><span class="portal-kicker">PLAYERS • SYSTEMS • BALANCE • PROCESS</span><h2>Game Design Theory</h2><p>Understand why games work: core loops, agency, meaningful choices, economies, pacing, level readability, prototyping and playtesting.</p><div class="portal-chip-row"><span>${THEORY.lessons.length} theory lessons</span><span>${THEORY.lessons.length*THEORY.xp} XP</span><span>Scenario quizzes</span></div><strong>Think like a designer →</strong></a>
     <a class="portal-path-card design" href="#/design"><div class="portal-path-icon">✦</div><span class="portal-kicker">LEVELS • ART • LIGHT • SOUND</span><h2>Design</h2><p>Build readable spaces, create atmosphere, guide players and learn why strong game worlds communicate rather than simply decorate.</p><div class="portal-chip-row"><span>${DESIGN.modules.length} disciplines</span><span>24 different games</span><span>Black Box challenges</span></div><strong>Enter Designer Studio →</strong></a>
     <a class="portal-path-card modeling" href="#/modeling"><div class="portal-path-icon">⬡</div><span class="portal-kicker">3DS MAX • TOPOLOGY • UVS</span><h2>3D Modelling</h2><p>Start from reference, plan the form, follow clear 3ds Max steps, inspect the mesh and finish with a game-ready asset you can explain.</p><div class="portal-chip-row"><span>${MODEL_FOUNDATIONS.chapters.length} foundations chapters</span><span>${MODEL.lessons.length} deep lessons</span><span>${MODEL.builds.length} Build X</span></div><strong>Open 3D Modelling Studio →</strong></a>
     <a class="portal-path-card sculpt" href="#/sculpt"><div class="portal-path-icon">🗿</div><span class="portal-kicker">DIGITAL CLAY • FORM • SILHOUETTE</span><h2>Sculpt Playground</h2><p>Push and pull digital clay in SculptGL with six tiny guided exercises, then inspect what exists underneath the surface.</p><div class="portal-chip-row"><span>${SCULPT.practices.length} exercises</span><span>Browser sculpting</span><span>OBJ → Max</span></div><strong>Play with clay →</strong></a>
@@ -1982,6 +2041,8 @@ function achievementData(approvedCount=0,requestCount=0){
     ['max-apprentice','Max Apprentice',"Complete all 14 videos in Dits' Max series.",(state.modelVideoCompleted||[]).length>=MODEL_VIDEOS.videos.length,'▶'],
     ['industry-eye','Industry Eye','Complete at least one industry deep dive in every Designer discipline.',DESIGN.modules.every(m=>(m.industryDeepDives||[]).some((_,i)=>(state.designSourceCompleted||[]).includes(designSourceKey(m,i)))),'👁'],
     ['design-thinker','Design Thinker','Complete all eight Designer Studio builds.',(state.designBuildCompleted||[]).length>=DESIGN.modules.length,'✦'],
+    ['design-analyst','Design Analyst','Complete six Game Design Theory lessons.',(state.theoryCompleted||[]).length>=6,'◈'],
+    ['theory-scholar','Systems Thinker','Complete every Game Design Theory lesson.',(state.theoryCompleted||[]).length>=THEORY.lessons.length,'◎'],
     ['digital-clay','Digital Clay','Complete all six Sculpt Playground exercises.',sculptDoneCount>=SCULPT.practices.length,'🗿']
   ];
   if(isTeacher())rows.unshift(['teacher','Unreal Instructor','Verified Learning Hub teacher account. Staff-only badge; students cannot unlock it.',true,'🎓']);
@@ -1999,6 +2060,7 @@ function progressPage(){
   <div class="stat-grid">
     <div class="stat"><small>Lessons</small><strong>${completedLessons().length}/${DATA.lessons.length}</strong></div>
     <div class="stat"><small>Practical builds</small><strong>${completedTutorialCount()}/${TOOLS.tutorials.length}</strong></div>
+    <div class="stat"><small>Game Design Theory</small><strong>${(state.theoryCompleted||[]).length}/${THEORY.lessons.length}</strong></div>
     <div class="stat"><small>3D Foundations</small><strong>${modelFoundationChaptersDone()}/${MODEL_FOUNDATIONS.chapters.length}${modelFoundationDone()?' ✓':''}</strong></div><div class="stat"><small>3D Modelling</small><strong>${(state.modelLessonCompleted||[]).length}/${MODEL.lessons.length}</strong></div>
     <div class="stat"><small>Sculpt Playground</small><strong>${(state.sculptCompleted||[]).length}/${SCULPT.practices.length}</strong></div>
     <div class="stat"><small>Chapter Builds</small><strong>${state.chapterBuildCompleted.length}/${TOOLS.chapterBuilds.length}</strong></div>
@@ -2209,6 +2271,7 @@ function revisionTopics(){
   DATA.lessons.forEach(l=>topics.push({id:`ue:${l.id}`,areaId:'unreal',areaTitle:'Unreal Learning',icon:path(l.path)?.icon||'⌘',title:l.title,meta:path(l.path)?.title||'Unreal',href:`#/lesson/${l.id}`,sourceLabel:`Open ${l.title}`,questions:(l.quiz||[]).map((q,qi)=>({question:q[0],options:q[1],correct:Array.isArray(q[2])?q[2]:[q[2]],feedback:q[3],key:`ue:${l.id}:${qi}`}))}));
   MODEL_FOUNDATIONS.chapters.forEach(ch=>topics.push({id:`3d:${ch.id}`,areaId:'modeling',areaTitle:'3D Foundations',icon:ch.icon||'⬡',title:ch.title,meta:'Module 0',href:`#/modeling/foundations/${ch.id}`,sourceLabel:`Open ${ch.title}`,questions:(ch.quiz||[]).map((q,qi)=>({question:q.q,options:q.options,correct:[q.correct],feedback:q.feedback,key:`3d:${ch.id}:${qi}`}))}));
   DESIGN.modules.forEach(m=>topics.push({id:`design:${m.id}`,areaId:'design',areaTitle:'Designer Studio',icon:m.icon||'✦',title:m.title,meta:'Design judgement',href:`#/design/${m.id}`,sourceLabel:`Open ${m.title}`,questions:(STUDY.designRevision[m.id]||[]).map((q,qi)=>({question:q[0],options:q[1],correct:Array.isArray(q[2])?q[2]:[q[2]],feedback:q[3],key:`design:${m.id}:${qi}`}))}));
+  THEORY.lessons.forEach(t=>topics.push({id:`theory:${t.id}`,areaId:'theory',areaTitle:'Game Design Theory',icon:t.icon||'◈',title:t.title,meta:theoryPath(t.path)?.title||'Theory',href:`#/theory/${t.id}`,sourceLabel:`Open ${t.title}`,questions:(t.quiz||[]).map((q,qi)=>({question:q.q,options:q.options,correct:[q.correct],feedback:q.feedback,key:`theory:${t.id}:${qi}`}))}));
   return topics;
 }
 function revisionQuestionBank(topicIds=null){
@@ -2222,7 +2285,7 @@ function revisionSelectionLabel(topicIds){
   if(!topicIds?.length)return 'Random mixed';
   const topics=revisionTopics(),selected=topics.filter(t=>topicIds.includes(t.id));
   if(selected.length===1)return selected[0].title;
-  for(const area of ['unreal','design','modeling']){const all=topics.filter(t=>t.areaId===area);if(all.length===selected.length&&all.every(t=>topicIds.includes(t.id)))return all[0]?.areaTitle||'Focused area'}
+  for(const area of ['unreal','theory','design','modeling']){const all=topics.filter(t=>t.areaId===area);if(all.length===selected.length&&all.every(t=>topicIds.includes(t.id)))return all[0]?.areaTitle||'Focused area'}
   return `${selected.length} selected topics`;
 }
 function startRevisionQuiz(topicIds=null,count=10,label=null){
@@ -2250,9 +2313,9 @@ function revision(){
     return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Revision</div><span class="eyebrow">${esc(revisionSession.topicLabel)}</span><h1>Question ${n} of ${revisionSession.questions.length}</h1><div class="revision-progress"><span style="width:${Math.round((revisionSession.index/revisionSession.questions.length)*100)}%"></span></div></div><section class="revision-quiz-card"><span class="eyebrow">${esc(q.areaTitle)} • ${esc(q.topicTitle)}</span><h2>${esc(q.question)}</h2><p class="muted">${multiple?'Select every answer that applies.':'Choose the best answer.'}</p><form data-action-form="revision-answer" class="revision-answer-form">${q.options.map((o,i)=>`<label class="revision-choice"><input type="${multiple?'checkbox':'radio'}" name="answer" value="${i}" ${multiple?'':'required'}><span>${esc(o)}</span></label>`).join('')}<div class="button-row"><button class="button primary" type="submit">${n===revisionSession.questions.length?'Finish quiz':'Next question →'}</button><button class="button ghost" type="button" data-action="revision-abandon">Quit quiz</button></div></form></section>`;
   }
   const results=loadRevisionResults(),total=revisionQuestionBank().length,topicTotal=revisionTopics().length;
-  return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Revision</div><span class="eyebrow">Scored retrieval + design judgement</span><h1>↻ Revision Quizzes</h1><p class="muted">Practise Blueprint systems, Module 0 game-art theory and Designer Studio decisions. Choose one area to focus on or mix them for a quick retrieval session.</p></div>
+  return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Revision</div><span class="eyebrow">Scored retrieval + design judgement</span><h1>↻ Revision Quizzes</h1><p class="muted">Practise Blueprint systems, Game Design Theory, Module 0 game-art theory and Designer Studio decisions. Choose one area to focus on or mix them for a quick retrieval session.</p></div>
   <div class="revision-start-grid"><section class="project-panel revision-random"><span class="eyebrow">Random quiz</span><h2>Mix the whole Hub</h2><p><b>${total}</b> questions across <b>${topicTotal}</b> topics are shuffled each time.</p><form data-action-form="revision-random-start"><label>Number of questions<select name="count"><option value="10" selected>10 — quick revision</option><option value="20">20 — solid session</option><option value="30">30 — full workout</option></select></label><button class="button primary" type="submit">Start mixed quiz →</button></form></section><section class="project-panel revision-focus-intro"><span class="eyebrow">Focused quiz</span><h2>Choose what you actually need</h2><p>Pick a whole area or individual topics. Use Unreal for technical recall, 3D Foundations for game-art decisions, or Designer Studio for scenario-based judgement.</p><div class="callout good"><b>Best use:</b> revise a weak area, prepare for the next practical session, then follow the review links straight back to the content you missed.</div></section></div>
-  <section class="section revision-builder"><div class="section-head"><div><h2>Build a focused quiz</h2><p id="revisionSelectionSummary">Choose at least one topic.</p></div></div><form data-action-form="revision-focused-start" id="revisionFocusedForm"><div class="revision-path-picker-grid revision-area-picker-grid">${revisionAreaPicker('unreal','⌘','Unreal Learning','Core Blueprint/system knowledge from the existing course quizzes.')}${revisionAreaPicker('design','✦','Designer Studio','Scenario questions: choose the design decision that best solves the problem.')}${revisionAreaPicker('modeling','⬡','3D Foundations','Mesh, views, geometry, pivots, UVs, PBR and game-ready decisions.')}</div><div class="revision-builder-footer"><label>Number of questions<select name="count"><option value="10" selected>10</option><option value="20">20</option><option value="30">30</option></select></label><button class="button primary" type="submit">Start focused quiz →</button></div></form></section>
+  <section class="section revision-builder"><div class="section-head"><div><h2>Build a focused quiz</h2><p id="revisionSelectionSummary">Choose at least one topic.</p></div></div><form data-action-form="revision-focused-start" id="revisionFocusedForm"><div class="revision-path-picker-grid revision-area-picker-grid">${revisionAreaPicker('unreal','⌘','Unreal Learning','Core Blueprint/system knowledge from the existing course quizzes.')}${revisionAreaPicker('theory','◈','Game Design Theory','Systems, choices, balance, experience, space and design-process scenarios.')}${revisionAreaPicker('design','✦','Designer Studio','Scenario questions: choose the design decision that best solves the problem.')}${revisionAreaPicker('modeling','⬡','3D Foundations','Mesh, views, geometry, pivots, UVs, PBR and game-ready decisions.')}</div><div class="revision-builder-footer"><label>Number of questions<select name="count"><option value="10" selected>10</option><option value="20">20</option><option value="30">30</option></select></label><button class="button primary" type="submit">Start focused quiz →</button></div></form></section>
   ${results.length?`<section class="section"><div class="section-head"><div><h2>Recent scores</h2><p>Stored on this browser for quick progress checks.</p></div></div><div class="recent-quiz-results">${results.slice(0,6).map(r=>`<div><strong>${r.pct}%</strong><span>${esc(r.topicLabel)} • ${r.correct}/${r.total}</span><small>${new Date(r.at).toLocaleString()}</small></div>`).join('')}</div></section>`:''}`;
 }
 
@@ -2274,11 +2337,12 @@ function classProgressRows(o,memberIds,items,prefix='',titleKey=x=>x.title){
 function studentCompletedContent(o,userId){
   const completed=new Set(o.progress.filter(p=>p.user_id===userId&&p.completed).map(p=>p.lesson_id));
   const list=(items,prefix='')=>items.filter(x=>completed.has(prefix+x.id)).map(x=>`<li>${esc(x.title)}</li>`).join('');
-  const core=list(DATA.lessons),blocks=list(BLOCKS.blocks,'block:'),tutorials=list(TOOLS.tutorials,'tutorial:'),modelTheory=list(MODEL_FOUNDATIONS.chapters,'modeltheory:')+(completed.has('modelfoundation:final')?'<li>Model Doctor</li>':''),model=list(MODEL.lessons,'model:'),sculpt=list(SCULPT.practices,'sculpt:'),design=list(DESIGN.modules.map(m=>({id:m.id,title:m.build?.title||m.title})),'designbuild:'),designSources=list(designSourceItems(),'designsource:'),modelVideos=list(modelVideoItems(),'modelvideo:'),modelBuild=list(MODEL.builds||[],'modelbuild:'),modelFix=list(MODEL.fixes||[],'modelfix:'),chapters=TOOLS.chapterBuilds.filter(x=>completed.has(`chapter:${x.path}`)).map(x=>`<li>${esc(x.title)}</li>`).join('');
+  const core=list(DATA.lessons),blocks=list(BLOCKS.blocks,'block:'),tutorials=list(TOOLS.tutorials,'tutorial:'),theory=list(THEORY.lessons,'theory:'),modelTheory=list(MODEL_FOUNDATIONS.chapters,'modeltheory:')+(completed.has('modelfoundation:final')?'<li>Model Doctor</li>':''),model=list(MODEL.lessons,'model:'),sculpt=list(SCULPT.practices,'sculpt:'),design=list(DESIGN.modules.map(m=>({id:m.id,title:m.build?.title||m.title})),'designbuild:'),designSources=list(designSourceItems(),'designsource:'),modelVideos=list(modelVideoItems(),'modelvideo:'),modelBuild=list(MODEL.builds||[],'modelbuild:'),modelFix=list(MODEL.fixes||[],'modelfix:'),chapters=TOOLS.chapterBuilds.filter(x=>completed.has(`chapter:${x.path}`)).map(x=>`<li>${esc(x.title)}</li>`).join('');
   return `<div class="student-content-detail">
     <div><strong>Building Blocks</strong><ul>${blocks||'<li class="muted">None completed yet.</li>'}</ul></div>
     <div><strong>Core lessons</strong><ul>${core||'<li class="muted">None completed yet.</li>'}</ul></div>
     <div><strong>Practical builds</strong><ul>${tutorials||'<li class="muted">None completed yet.</li>'}</ul></div>
+    <div><strong>Game Design Theory</strong><ul>${theory||'<li class="muted">None completed yet.</li>'}</ul></div>
     <div><strong>Designer Studio</strong><ul>${design||'<li class="muted">None completed yet.</li>'}</ul></div>
     <div><strong>Designer industry sources</strong><ul>${designSources||'<li class="muted">None completed yet.</li>'}</ul></div>
     <div><strong>3D Foundations</strong><ul>${modelTheory||'<li class="muted">None completed yet.</li>'}</ul></div><div><strong>3D Videos</strong><ul>${modelVideos||'<li class="muted">None completed yet.</li>'}</ul></div><div><strong>3D / Sculpt</strong><ul>${model+modelBuild+modelFix+sculpt||'<li class="muted">None completed yet.</li>'}</ul></div>
@@ -2306,6 +2370,8 @@ async function renderTeacherClass(classId){
     const blockDone=memberIds.reduce((n,uid)=>n+count(uid,BLOCKS.blocks,'block:'),0);
     const tutorialTotal=TOOLS.tutorials.length*memberIds.length;
     const tutorialDone=memberIds.reduce((n,uid)=>n+count(uid,TOOLS.tutorials,'tutorial:'),0);
+    const theoryTotal=THEORY.lessons.length*memberIds.length;
+    const theoryDone=memberIds.reduce((n,uid)=>n+count(uid,THEORY.lessons,'theory:'),0);
     const designDone=memberIds.reduce((n,uid)=>n+count(uid,DESIGN.modules.map(m=>({id:m.id})),'designbuild:'),0);
     const modelDone=memberIds.reduce((n,uid)=>n+count(uid,MODEL.lessons,'model:')+count(uid,MODEL_FOUNDATIONS.chapters,'modeltheory:')+(done(uid,'modelfoundation:final')?1:0),0);
     box.innerHTML=`
@@ -2314,19 +2380,21 @@ async function renderTeacherClass(classId){
         <div class="teacher-stat"><small>Building Blocks</small><strong>${blockDone}</strong><span>of ${blockTotal||0} student completions</span></div>
         <div class="teacher-stat"><small>Core lessons</small><strong>${lessonDone}</strong><span>of ${lessonTotal||0} student completions</span></div>
         <div class="teacher-stat"><small>Practical builds</small><strong>${tutorialDone}</strong><span>of ${tutorialTotal||0} student completions</span></div>
+        <div class="teacher-stat"><small>Game Design Theory</small><strong>${theoryDone}</strong><span>of ${theoryTotal||0} student completions</span></div>
         <div class="teacher-stat"><small>Designer builds</small><strong>${designDone}</strong></div>
         <div class="teacher-stat"><small>3D learning</small><strong>${modelDone}</strong></div>
       </div>
       <section class="section"><div class="section-head"><div><h2>Students in ${esc(c.name)}</h2><p>Open a student to see the exact content they have completed, not just a percentage.</p></div><span class="sync-chip">${members.length} student${members.length===1?'':'s'}</span></div>
         <div class="class-student-grid">${members.length?members.map(p=>{
-          const core=count(p.id,DATA.lessons),blocks=count(p.id,BLOCKS.blocks,'block:'),tutorials=count(p.id,TOOLS.tutorials,'tutorial:'),design=count(p.id,DESIGN.modules.map(m=>({id:m.id})),'designbuild:'),model=count(p.id,MODEL_FOUNDATIONS.chapters,'modeltheory:')+(done(p.id,'modelfoundation:final')?1:0)+count(p.id,MODEL.lessons,'model:')+count(p.id,SCULPT.practices,'sculpt:'),chapters=count(p.id,TOOLS.chapterBuilds.map(x=>({id:x.path})),'chapter:');
-          return `<article class="class-student-card"><div class="class-student-head">${avatarMarkup('sm',p.display_name)}<div><h3>${esc(p.display_name)}</h3><span>${core}/${DATA.lessons.length} core lessons</span></div></div><div class="class-student-stats"><span><b>${blocks}</b> blocks</span><span><b>${tutorials}</b> tutorials</span><span><b>${design}</b> design builds</span><span><b>${model}</b> 3D/sculpt</span><span><b>${chapters}</b> chapter builds</span></div><details><summary>View completed content</summary>${studentCompletedContent(o,p.id)}</details></article>`;
+          const core=count(p.id,DATA.lessons),blocks=count(p.id,BLOCKS.blocks,'block:'),tutorials=count(p.id,TOOLS.tutorials,'tutorial:'),theory=count(p.id,THEORY.lessons,'theory:'),design=count(p.id,DESIGN.modules.map(m=>({id:m.id})),'designbuild:'),model=count(p.id,MODEL_FOUNDATIONS.chapters,'modeltheory:')+(done(p.id,'modelfoundation:final')?1:0)+count(p.id,MODEL.lessons,'model:')+count(p.id,SCULPT.practices,'sculpt:'),chapters=count(p.id,TOOLS.chapterBuilds.map(x=>({id:x.path})),'chapter:');
+          return `<article class="class-student-card"><div class="class-student-head">${avatarMarkup('sm',p.display_name)}<div><h3>${esc(p.display_name)}</h3><span>${core}/${DATA.lessons.length} core lessons</span></div></div><div class="class-student-stats"><span><b>${blocks}</b> blocks</span><span><b>${tutorials}</b> tutorials</span><span><b>${theory}</b> theory</span><span><b>${design}</b> design builds</span><span><b>${model}</b> 3D/sculpt</span><span><b>${chapters}</b> chapter builds</span></div><details><summary>View completed content</summary>${studentCompletedContent(o,p.id)}</details></article>`;
         }).join(''):'<div class="empty"><h3>No students yet.</h3><p>Students will appear here after joining this class.</p></div>'}</div>
       </section>
       <section class="section class-learning-content"><div class="section-head"><div><span class="eyebrow">CLASS CONTENT</span><h2>What has this class completed?</h2><p>Every row shows how many students in this class have completed that piece of Hub learning. Project briefs, deadlines and submissions are handled in Microsoft Teams.</p></div></div>
         <details open class="class-content-group"><summary>🧱 Building Blocks <span>${BLOCKS.blocks.length} concepts</span></summary><div>${classProgressRows(o,memberIds,BLOCKS.blocks,'block:')}</div></details>
         <details open class="class-content-group"><summary>🧠 Core System Lessons <span>${DATA.lessons.length} lessons</span></summary><div>${classProgressRows(o,memberIds,DATA.lessons)}</div></details>
         <details class="class-content-group"><summary>🛠 Practical builds <span>${TOOLS.tutorials.length} outcomes</span></summary><div>${classProgressRows(o,memberIds,TOOLS.tutorials,'tutorial:')}</div></details>
+        <details class="class-content-group"><summary>◈ Game Design Theory <span>${THEORY.lessons.length} lessons</span></summary><div>${classProgressRows(o,memberIds,THEORY.lessons,'theory:')}</div></details>
         <details class="class-content-group"><summary>🎨 Designer Studio Builds <span>${DESIGN.modules.length} builds</span></summary><div>${classProgressRows(o,memberIds,DESIGN.modules.map(m=>({id:m.id,title:m.build?.title||m.title})),'designbuild:')}</div></details>
         <details class="class-content-group"><summary>🎬 Designer Industry Sources <span>${designSourceItems().length} source tasks</span></summary><div>${classProgressRows(o,memberIds,designSourceItems(),'designsource:')}</div></details>
         <details class="class-content-group"><summary>🎥 3ds Max Video Series <span>${MODEL_VIDEOS.videos.length} follow-alongs</span></summary><div>${classProgressRows(o,memberIds,modelVideoItems(),'modelvideo:')}</div></details>
@@ -2607,6 +2675,8 @@ function route(options={}){
   else if(parts[0]==='modeling'&&parts[1]==='build'&&parts[2]){app.innerHTML=modelingBuildPage(parts[2]);activate('modeling')}
   else if(parts[0]==='modeling'&&parts[1]==='fix'&&parts[2]){app.innerHTML=modelingFixPage(parts[2]);activate('modeling')}
   else if(parts[0]==='modeling'){app.innerHTML=modelingPage();activate('modeling')}
+  else if(parts[0]==='theory'&&parts[1]){app.innerHTML=theoryLessonPage(parts[1]);activate('theory')}
+  else if(parts[0]==='theory'){app.innerHTML=theoryPage();activate('theory')}
   else if(parts[0]==='design'&&parts[1]){app.innerHTML=designModulePage(parts[1]);activate('design')}
   else if(parts[0]==='design'){app.innerHTML=designPage();activate('design')}
   else if(parts[0]==='resources'){app.innerHTML=resourceLibraryPage();activate('resources')}
@@ -2728,6 +2798,13 @@ function bindNewsPage(){
   }));
 }
 function bindPageInputs(){
+  const ts=$('#theorySearch');
+  if(ts){
+    let area='all';
+    const apply=()=>{const q=normaliseSearchText(ts.value),tokens=q.split(/\s+/).filter(Boolean);let visible=0;$$('[data-theory-card]').forEach(x=>{const okArea=area==='all'||x.dataset.path===area,hay=x.dataset.search||'',okText=!tokens.length||tokens.every(t=>hay.includes(t)),ok=okArea&&okText;x.style.display=ok?'':'none';if(ok)visible++;});const out=$('#theoryResultCount');if(out)out.textContent=`${visible} lesson${visible===1?'':'s'}`;const empty=$('#theorySearchEmpty');if(empty)empty.hidden=visible!==0;};
+    bindEmbeddedSearchInput(ts,apply,()=>firstVisible('[data-theory-card]')?.scrollIntoView({block:'center',behavior:'smooth'}));
+    $$('[data-theory-filter]').forEach(btn=>btn.addEventListener('click',()=>{$$('[data-theory-filter]').forEach(x=>x.classList.remove('active'));btn.classList.add('active');area=btn.dataset.theoryFilter||'all';apply();}));
+  }
   const gs=$('#glossarySearch');
   if(gs){
     let area='all';
@@ -3284,7 +3361,17 @@ document.addEventListener('submit',async e=>{
     toast('That brief is over the 6,000 character limit. Shorten it before saving.');
     return;
   }
-  if(e.target.dataset.actionForm==='model-theory-quiz'){
+  if(e.target.dataset.actionForm==='theory-quiz'){
+    e.preventDefault();const l=theoryLesson(e.target.dataset.theory);if(!l)return;
+    const fd=new FormData(e.target),answers=l.quiz.map((_,i)=>{const v=fd.get(`q${i}`);return v===null?NaN:Number(v)});
+    if(answers.some(Number.isNaN)){toast('Answer every question first.');return}
+    const correct=l.quiz.reduce((n,q,i)=>n+(answers[i]===q.correct?1:0),0),total=l.quiz.length,pct=Math.round(correct/total*100),old=theoryScore(l.id),bestPct=Math.max(old?.bestPct||old?.pct||0,pct),passed=pct>=THEORY.passPercent,firstPass=passed&&!theoryDone(l.id),before=firstPass?localUnlockedBadgeIds():null;
+    state.theoryScores={...(state.theoryScores||{}),[l.id]:{answers,correct,total,pct,bestPct,at:new Date().toISOString()}};
+    if(firstPass)state.theoryCompleted=[...new Set([...(state.theoryCompleted||[]),l.id])];saveState();
+    if(firstPass&&BACKEND.user){try{await BACKEND.setLessonComplete(`theory:${l.id}`,true)}catch(err){toast('Passed locally; cloud sync failed.')}}
+    if(firstPass){badgeUnlockAfter(before,`Theory lesson passed • +${THEORY.xp} XP`);finishInlineUpdate(true)}else{toast(passed?'Passed again — XP was already awarded.':`${pct}% — review the scenario feedback and retry.`);route({preserveScroll:true})}return;
+  }
+    if(e.target.dataset.actionForm==='model-theory-quiz'){
     e.preventDefault();const ch=modelTheoryChapter(e.target.dataset.chapter);if(!ch)return;
     const fd=new FormData(e.target),answers=ch.quiz.map((_,i)=>{const v=fd.get(`q${i}`);return v===null?NaN:Number(v)});
     if(answers.some(Number.isNaN)){toast('Answer every question first.');return}
@@ -3669,7 +3756,10 @@ function buildGlobalSearchIndex(){
     title:t.title,meta:t.libraryHidden?`Core lesson application • ${lesson(t.lessonHome||t.referenceLesson)?.title||'Unreal Learning'}`:`Practical build • ${f?.title||tutorialCategory(t.category)?.title||'UE5'} • ${t.duration||''}`,
     href:`#/tutorial/${t.id}`,icon:'🛠',kind:'tutorial',data:deepSearchText(t)
   })});
-  (DESIGN.modules||[]).forEach(m=>add({
+  (THEORY.lessons||[]).forEach(t=>add({
+    title:t.title,meta:`Game Design Theory • ${theoryPath(t.path)?.title||'Theory'} • +${THEORY.xp} XP`,href:`#/theory/${t.id}`,icon:t.icon||'◈',kind:'theory',data:deepSearchText(t)
+  }));
+    (DESIGN.modules||[]).forEach(m=>add({
     title:m.title,meta:'Designer Studio • Discipline',href:`#/design/${m.id}`,icon:m.icon||'◆',kind:'design',data:deepSearchText(m)
   }));
   (DESIGN.resources||[]).forEach(r=>add({
@@ -3706,13 +3796,14 @@ function buildGlobalSearchIndex(){
     ['Unreal Learning','Core lessons, learning paths and practical Unreal Engine progression','#/programming','◇'],
     ['Blueprint Snippet Bank','Official Epic paste assists and reusable Blueprint graph helpers','#/snippets','⚡'],
     ['Quick Tutorials','Recipe families and practical UE5 build outcomes','#/tutorials','🛠'],
+    ['Game Design Theory','Core loops, MDA, agency, choices, balance, pacing, accessibility, prototyping, playtesting and adaptation','#/theory','◈'],
     ['Designer Studio','Level design, lighting, materials, terrain, cinematic and environment design','#/design','◆'],
     ['Critique Board','Class studio wall, screenshots, peer feedback, structured critique and improvement','#/critique','💬'],
     ['Resource Library','Free assets, CC0 textures, HDRIs, sound libraries, level explorers, UI reference, documentaries and professional talks','#/resources','🧰'],
     ['3D Modelling Studio','3ds Max modelling lessons, builds, video series and topology repair','#/modeling','⬡'],
     ["Dits' 3ds Max Video Series",'14 follow-along videos covering interface, primitives, Editable Poly, modifiers, Array, mini builds and materials','#/modeling/videos','🎬'],
     ['Glossary','Unreal Engine, game design and 3D modelling terminology','#/glossary','?'],
-    ['Revision Quizzes','Mixed Unreal, Designer Studio and 3D Foundations knowledge checks','#/revision','↻'],
+    ['Revision Quizzes','Mixed Unreal, Game Design Theory, Designer Studio and 3D Foundations knowledge checks','#/revision','↻'],
     ['Homework','Independent study across Unreal, design and 3D with Teams-ready task copy','#/homework','⌂']
   ].forEach(([title,data,href,icon])=>add({title,meta:'Hub area',href,icon,kind:'area',data}));
   return entries;
@@ -3764,7 +3855,7 @@ function setupSearch(){
 $('#menuButton').addEventListener('click',()=>$('#sidebar').classList.toggle('open'));
 $('#resetProgress').addEventListener('click',()=>{
   if(confirm('Reset all locally saved lesson progress, XP and game-project status on this browser?')){
-    state={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],designSourceCompleted:[],modelVideoCompleted:[],modelTheoryCompleted:[],modelTheoryScores:{},modelFoundationFinal:false,modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[],blockCompleted:[]};
+    state={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],designSourceCompleted:[],theoryCompleted:[],theoryScores:{},modelVideoCompleted:[],modelTheoryCompleted:[],modelTheoryScores:{},modelFoundationFinal:false,modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[],blockCompleted:[]};
     projectState={project_title:'Signal Lost',theme:PROJECT.themes[0],pitch:'',mechanics:{}};
     saveState();saveProjectState();route();toast('Local progress reset.');
   }

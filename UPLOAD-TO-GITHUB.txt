@@ -1,0 +1,15 @@
+UE5 LEARNING HUB v3.40.0 — GITHUB UPLOAD SET
+
+Upload/replace these paths in the repository root:
+  index.html
+  app.js
+  backend.js
+  styles.css
+  data/theory-data.js
+
+Also commit this migration file to the repo:
+  migrations/20260831_38_game_design_theory_xp.sql
+
+IMPORTANT: committing the SQL file does not itself change the live Supabase database unless your deployment pipeline automatically runs migrations. If not, run the SQL once in Supabase SQL Editor.
+
+The Board Game Lab is OPTIONAL for general Game Design Theory study. It is not a prerequisite or unlock gate. It is highlighted as especially useful for the tabletop adaptation project.
