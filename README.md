@@ -1,6 +1,10 @@
-# Current release — v3.41.0
+# Current release — v3.41.1
 
-**Guided Paths.** Adds four optional, outcome-based routes through the Hub: Build a Playable Level, Create a Gameplay Mechanic, Make a Game-Ready 3D Prop, and Digital Game → Tabletop. Paths reuse existing completion IDs and XP, keep every normal page open, recognise prior progress automatically, and add Theory → practical bridges without creating another LMS/progress system. No database migration or new routine cloud reads. See `RELEASE-NOTES-v3.41.0.md` and `GUIDED-PATHS-QA-v3.41.0.md`.
+**Guided Paths teaching pass.** Keeps three genuinely cross-Hub outcome routes: Build a Playable Level, Create a Gameplay Mechanic, and Digital Game → Tabletop. Removes the duplicate 3D path, adds real Level Design study/research, makes Unreal mechanic choices prerequisite-aware, and makes practical tabletop/playtest stages count toward pathway completion. Path checkpoints sync through existing `lesson_progress` without XP, new tables, SQL migrations or an extra routine read. See `RELEASE-NOTES-v3.41.1.md` and `GUIDED-PATHS-QA-v3.41.1.md`.
+
+## Previous release — v3.41.0
+
+**Guided Paths prototype.** Introduced four optional outcome-based paths and Theory → practical cross-links. v3.41.1 keeps the underlying pathway engine but corrects the teaching sequence, removes the duplicate 3D route and makes meaningful practical checkpoints count.
 
 ## Previous release — v3.40.0
 

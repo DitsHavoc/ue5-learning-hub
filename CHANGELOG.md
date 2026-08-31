@@ -1,3 +1,13 @@
+## v3.41.1 — Guided Paths Teaching Pass — 31 Aug 2026
+
+- Reduced Guided Paths to three cross-Hub outcomes; removed the duplicate 3D Prop route and surfaced the existing 3D course instead.
+- Build a Playable Level now includes one real professional source task plus a Level Design field-research checkpoint before the practical sequence.
+- Create a Gameplay Mechanic now adapts prerequisites to the chosen mechanic: Interaction adds Traces; Checkpoint adds Framework; Health/Score remain lean.
+- Gameplay playtesting is now a required pathway checkpoint with an evidence-based revision.
+- Digital Game → Tabletop now requires the Board Game Lab, a whole-team played-the-game check, Prototype V1, a real playtest and Prototype V2.
+- Added synced, zero-XP pathway checkpoints using existing `lesson_progress` (`completed=false`, `completed_at` as the marker); no SQL migration and no extra routine read.
+- Existing Theory → practical cross-links retained and the `Scope & Constraints` 3D link now points to the existing 3D Modelling Studio.
+
 ## v3.41.0 — Guided Paths — 31 Aug 2026
 
 - Added four optional outcome-based Guided Paths through existing Theory, Unreal, Designer and 3D content.

@@ -189,7 +189,7 @@ function syncProjectRichEditors(root=document){
 }
 
 function loadState(){
-  const clean={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],designSourceCompleted:[],theoryCompleted:[],theoryScores:{},modelVideoCompleted:[],modelTheoryCompleted:[],modelTheoryScores:{},modelFoundationFinal:false,modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[],blockCompleted:[]};
+  const clean={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],designSourceCompleted:[],theoryCompleted:[],theoryScores:{},modelVideoCompleted:[],modelTheoryCompleted:[],modelTheoryScores:{},modelFoundationFinal:false,modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[],blockCompleted:[],pathwayCheckpoints:[]};
   try{
     const current=JSON.parse(localStorage.getItem(STORE)||'null');
     if(current) return {...clean,...current};
@@ -481,6 +481,7 @@ async function syncCloudProgress(){
     state.modelBuildCompleted=[...new Set([...(state.modelBuildCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('modelbuild:')).map(id=>id.slice(11))])];
     state.modelFixCompleted=[...new Set([...(state.modelFixCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('modelfix:')).map(id=>id.slice(9))])];
     state.sculptCompleted=[...new Set([...(state.sculptCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('sculpt:')).map(id=>id.slice(7))])];
+    state.pathwayCheckpoints=[...new Set([...(state.pathwayCheckpoints||[]),...rows.filter(r=>r.lesson_id?.startsWith('pathway:')&&r.completed_at).map(r=>r.lesson_id.slice(8))])];
     await BACKEND.refreshXpSummary();
     saveState();
     // Projects are Teams-first from v3.39.3. The old Signal Lost practice state remains local-only
@@ -1361,9 +1362,11 @@ function theoryLessonPage(id){
 
 
 function guidedPath(id){return (PATHWAYS.paths||[]).find(x=>x.id===id)}
+function pathCheckpointDone(id){return (state.pathwayCheckpoints||[]).includes(id)}
 function guidedItemInfo(item){
   if(!item)return {title:'Unknown step',href:'#/',icon:'○',area:'Hub'};
   if(item.type==='activity')return {title:item.title||'Practical activity',href:item.href||'#/',icon:item.icon||'○',area:item.area||'Practical activity',description:item.description||''};
+  if(item.type==='checkpoint')return {title:item.title||'Pathway checkpoint',href:item.href||'',icon:item.icon||'◆',area:item.area||'Required pathway checkpoint',description:item.description||''};
   if(item.type==='theory'){
     const x=theoryLesson(item.id);return {title:item.title||x?.title||item.id,href:`#/theory/${item.id}`,icon:x?.icon||'◈',area:'Game Design Theory',description:item.why||x?.short||''};
   }
@@ -1375,6 +1378,14 @@ function guidedItemInfo(item){
   }
   if(item.type==='designBuild'){
     const x=designModule(item.id);return {title:item.title||x?.build?.title||x?.title||item.id,href:`#/design/${item.id}`,icon:x?.icon||'✦',area:'Designer Studio Build',description:item.why||x?.build?.brief||x?.description||''};
+  }
+  if(item.type==='designSource'){
+    const m=designModule(item.module),i=Number(item.index)||0,d=m?.industryDeepDives?.[i];
+    return {title:item.title||d?.title||'Professional design source',href:m?`#/design/${m.id}`:'#/design',icon:item.icon||'◉',area:`${m?.title||'Designer Studio'} • professional source`,description:item.why||d?.focus||d?.task||''};
+  }
+  if(item.type==='route'){
+    const items=item.items||[],next=items.find(x=>!guidedItemDone(x))||items[items.length-1],x=guidedItemInfo(next);
+    return {title:item.title||x.title,href:x.href,icon:item.icon||x.icon||'◇',area:item.area||'Mechanic route',description:item.note||item.description||''};
   }
   if(item.type==='modelFoundation'){
     const x=modelTheoryChapter(item.id);return {title:item.title||x?.title||item.id,href:`#/modeling/foundations/${item.id}`,icon:x?.icon||'🧠',area:'3D Foundations',description:item.why||x?.short||x?.summary||''};
@@ -1394,11 +1405,13 @@ function guidedItemInfo(item){
 function guidedItemDone(item){
   if(!item)return false;
   if(item.type==='choice')return (item.options||[]).some(guidedItemDone);
-  if(item.type==='group')return (item.items||[]).length>0&&(item.items||[]).every(guidedItemDone);
+  if(item.type==='group'||item.type==='route')return (item.items||[]).length>0&&(item.items||[]).every(guidedItemDone);
+  if(item.type==='checkpoint')return pathCheckpointDone(item.id);
   if(item.type==='theory')return theoryDone(item.id);
   if(item.type==='lesson')return state.completed.includes(item.id);
   if(item.type==='tutorial')return tutorialDone(item.id);
   if(item.type==='designBuild')return designBuildDone(item.id);
+  if(item.type==='designSource'){const m=designModule(item.module);return Boolean(m)&&designSourceDone(m,Number(item.index)||0)}
   if(item.type==='modelFoundation')return modelTheoryDone(item.id);
   if(item.type==='modelFinal')return modelFoundationDone();
   if(item.type==='modelLesson')return modelLessonDone(item.id);
@@ -1414,7 +1427,14 @@ function guidedPathProgress(value){
   return {done,total:track.length,pct:track.length?Math.round(done/track.length*100):0,current};
 }
 function guidedChoiceOptions(step){
-  return `<div class="guided-choice-grid">${(step.options||[]).map(o=>{const x=guidedItemInfo(o),done=guidedItemDone(o);return `<a class="guided-choice-option ${done?'done':''}" href="${esc(x.href)}"><span>${done?'✓':x.icon}</span><div><small>${esc(x.area)}</small><strong>${esc(x.title)}</strong></div><b>${done?'Done':'Choose →'}</b></a>`}).join('')}</div>`;
+  return `<div class="guided-choice-grid">${(step.options||[]).map(o=>{
+    const done=guidedItemDone(o),x=guidedItemInfo(o);
+    if(o.type==='route'){
+      const items=o.items||[],complete=items.filter(guidedItemDone).length,next=items.find(v=>!guidedItemDone(v)),nextInfo=next?guidedItemInfo(next):null;
+      return `<a class="guided-choice-option route ${done?'done':''}" href="${esc(x.href)}"><span>${done?'✓':x.icon}</span><div><small>${done?'ROUTE COMPLETE':`${complete}/${items.length} complete${nextInfo?` • next: ${esc(nextInfo.title)}`:''}`}</small><strong>${esc(x.title)}</strong>${o.note?`<em>${esc(o.note)}</em>`:''}</div><b>${done?'Done':'Continue →'}</b></a>`;
+    }
+    return `<a class="guided-choice-option ${done?'done':''}" href="${esc(x.href)}"><span>${done?'✓':x.icon}</span><div><small>${esc(x.area)}</small><strong>${esc(x.title)}</strong></div><b>${done?'Done':'Choose →'}</b></a>`;
+  }).join('')}</div>`;
 }
 function guidedGroupItems(step){
   const items=step.items||[],done=items.filter(guidedItemDone).length;
@@ -1422,8 +1442,12 @@ function guidedGroupItems(step){
 }
 function guidedStepCard(step,i,current){
   const trackable=guidedStepTrackable(step),done=trackable&&guidedItemDone(step),isCurrent=trackable&&!done&&i===current,status=!trackable?'activity':done?'done':isCurrent?'current':'later';
-  if(step.type==='choice')return `<article class="guided-step ${status}"><div class="guided-step-num">${done?'✓':String(i+1).padStart(2,'0')}</div><div class="guided-step-main"><div class="guided-step-head"><div><span class="eyebrow">CHOICE STEP • COMPLETE ANY ONE</span><h2>${esc(step.icon||'◇')} ${esc(step.title)}</h2></div><span class="guided-state">${done?'✓ Complete':isCurrent?'▶ Recommended next':'○ Coming up'}</span></div><p>${esc(step.description||'Choose the outcome that best fits what you want to make.')}</p>${guidedChoiceOptions(step)}</div></article>`;
+  if(step.type==='choice')return `<article class="guided-step ${status}"><div class="guided-step-num">${done?'✓':String(i+1).padStart(2,'0')}</div><div class="guided-step-main"><div class="guided-step-head"><div><span class="eyebrow">CHOICE STEP • COMPLETE ANY ONE ROUTE</span><h2>${esc(step.icon||'◇')} ${esc(step.title)}</h2></div><span class="guided-state">${done?'✓ Complete':isCurrent?'▶ Recommended next':'○ Coming up'}</span></div><p>${esc(step.description||'Choose the outcome that best fits what you want to make.')}</p>${guidedChoiceOptions(step)}</div></article>`;
   if(step.type==='group')return `<article class="guided-step ${status}"><div class="guided-step-num">${done?'✓':String(i+1).padStart(2,'0')}</div><div class="guided-step-main"><div class="guided-step-head"><div><span class="eyebrow">GROUPED STAGE</span><h2>${esc(step.icon||'◇')} ${esc(step.title)}</h2></div><span class="guided-state">${done?'✓ Complete':isCurrent?'▶ Recommended next':'○ Coming up'}</span></div><p>${esc(step.description||'Complete the linked foundation pieces in this stage.')}</p>${guidedGroupItems(step)}</div></article>`;
+  if(step.type==='checkpoint'){
+    const x=guidedItemInfo(step),open=x.href?`<a class="button ghost" href="${esc(x.href)}">Open related Hub area →</a>`:'';
+    return `<article class="guided-step checkpoint ${status}"><div class="guided-step-num">${done?'✓':String(i+1).padStart(2,'0')}</div><div class="guided-step-main"><div class="guided-step-head"><div><span class="eyebrow">REQUIRED FOR THIS PATH • NO XP</span><h2>${esc(x.icon)} ${esc(x.title)}</h2></div><span class="guided-state">${done?'✓ Complete':isCurrent?'▶ Recommended next':'○ Coming up'}</span></div><p>${esc(x.description)}</p><div class="guided-step-actions">${open}<button class="button ${done?'success':'primary'}" data-action="complete-pathway-checkpoint" data-checkpoint="${esc(step.id)}">${done?'✓ Checkpoint complete':esc(step.actionLabel||'Mark checkpoint complete')}</button><small>Records pathway progress only. It never locks the Hub or awards XP.</small></div></div></article>`;
+  }
   const x=guidedItemInfo(step);
   return `<article class="guided-step ${status}"><div class="guided-step-num">${done?'✓':trackable?String(i+1).padStart(2,'0'):'+'}</div><div class="guided-step-main"><div class="guided-step-head"><div><span class="eyebrow">${esc(x.area)}${!trackable?' • OPTIONAL / TEACHER-SET':''}</span><h2>${esc(x.icon)} ${esc(x.title)}</h2></div><span class="guided-state">${!trackable?'Try it':done?'✓ Complete':isCurrent?'▶ Recommended next':'○ Coming up'}</span></div><p>${esc(x.description||step.description||'Open the existing Hub content and complete it when it is useful.')}</p><div class="guided-step-actions"><a class="button ${isCurrent?'primary':'ghost'}" href="${esc(x.href)}">${done?'Revisit':!trackable?'Open activity':'Open step'} →</a>${!trackable?'<small>This activity does not affect pathway progress or XP.</small>':''}</div></div></article>`;
 }
@@ -1432,19 +1456,19 @@ function guidedPathCard(p){
   return `<a class="guided-path-card ${done?'complete':''}" href="#/pathways/${p.id}"><div class="guided-path-card-top"><span class="guided-path-icon">${p.icon}</span><span class="guided-path-progress">${done?'✓ Complete':`${x.done}/${x.total}`}</span></div><span class="eyebrow">${esc(p.kicker)}</span><h2>${esc(p.title)}</h2><p>${esc(p.summary)}</p><div class="progress"><span style="width:${x.pct}%"></span></div><div class="guided-path-card-foot"><span>${x.pct}% complete</span><strong>${x.done?'Continue':'Start'} →</strong></div></a>`;
 }
 function guidedPathsPage(){
-  return `<div class="page-head guided-paths-head"><div class="breadcrumb"><a href="#/">Home</a> / Guided Paths</div><span class="eyebrow">OPTIONAL ROUTES • EXISTING CONTENT • NO LOCKS</span><h1>↠ Guided Paths</h1><p class="muted">Not sure what to learn next? Pick an outcome and the Hub will put useful Theory, Unreal, Designer and 3D content into a sensible order. Prefer exploring? Ignore this page and keep browsing normally.</p></div>
+  return `<div class="page-head guided-paths-head"><div class="breadcrumb"><a href="#/">Home</a> / Guided Paths</div><span class="eyebrow">OPTIONAL ROUTES • EXISTING CONTENT • NO HARD LOCKS</span><h1>↠ Guided Paths</h1><p class="muted">Not sure what to learn next? Pick an outcome and the Hub will connect useful Theory, Unreal and Designer content in a sensible order. Prefer exploring? Ignore this page and keep browsing normally.</p></div>
   <section class="guided-paths-rule"><div><span class="deep-label">THE RULE</span><h2>Guidance, not another course system.</h2><p>${esc(PATHWAYS.intro)}</p></div><ul>${(PATHWAYS.principles||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></section>
-  <section class="section"><div class="section-head"><div><h2>Choose an outcome</h2><p>These are the only launch paths. We add another only when there is a real teaching reason.</p></div></div><div class="guided-path-grid">${PATHWAYS.paths.map(guidedPathCard).join('')}</div></section>
-  <section class="guided-existing-course"><div><span class="eyebrow">ALREADY STRUCTURED PROPERLY</span><h2>⌘ Want to learn Unreal systematically?</h2><p>Unreal Learning already has six ordered stages and Chapter Builds. We are not duplicating it inside Guided Paths.</p></div><a class="button primary" href="#/programming">Open Unreal Learning →</a></section>
+  <section class="section"><div class="section-head"><div><h2>Choose an outcome</h2><p>These paths exist only where joining different Hub areas creates a better learning journey.</p></div></div><div class="guided-path-grid">${PATHWAYS.paths.map(guidedPathCard).join('')}</div></section>
+  <section class="section guided-existing-wrap"><div class="section-head"><div><span class="eyebrow">ALREADY STRUCTURED PROPERLY</span><h2>Two areas already have their own full learning route</h2><p>We do not duplicate them inside Guided Paths.</p></div></div><div class="guided-existing-grid"><article class="guided-existing-course"><div><span class="eyebrow">SIX STAGES + CHAPTER BUILDS</span><h2>⌘ Learn Unreal systematically</h2><p>Unreal Learning already moves from foundations through Blueprints, framework, gameplay systems and professional practice.</p></div><a class="button primary" href="#/programming">Open Unreal Learning →</a></article><article class="guided-existing-course"><div><span class="eyebrow">FOUNDATIONS + BUILD X</span><h2>⬡ Learn game-ready 3D</h2><p>3D Modelling Studio already has gated foundations, progressive Max lessons, Build X briefs, UV/material/export work and the independent Hero Prop.</p></div><a class="button primary" href="#/modeling">Open 3D Modelling →</a></article></div></section>
   <section class="guided-free-explore"><div><span class="eyebrow">OR JUST EXPLORE</span><h2>Know what you need? Go straight there.</h2><p>Search, tutorials and every normal Hub area remain open.</p></div><div class="button-row"><a class="button ghost" href="#/theory">◈ Theory</a><a class="button ghost" href="#/design">✦ Designer Studio</a><a class="button ghost" href="#/modeling">⬡ 3D Modelling</a><a class="button ghost" href="#/tutorials">🛠 Quick Tutorials</a></div></section>`;
 }
 function guidedPathPage(id){
   const p=guidedPath(id);if(!p)return notFound();const x=guidedPathProgress(p),done=x.total>0&&x.done===x.total;
   return `<div class="breadcrumb"><a href="#/">Home</a> / <a href="#/pathways">Guided Paths</a> / ${esc(p.title)}</div>
-  <section class="guided-path-hero"><div><span class="eyebrow">${esc(p.kicker)} • OPTIONAL GUIDED ROUTE</span><h1>${p.icon} ${esc(p.title)}</h1><p>${esc(p.summary)}</p><div class="guided-path-audience"><b>WHO IS THIS FOR?</b> ${esc(p.audience)}</div></div><div class="guided-path-hero-progress"><strong>${x.done}/${x.total}</strong><span>tracked steps complete</span><div class="progress"><span style="width:${x.pct}%"></span></div><small>${done?'Path complete — revisit anything whenever you need it.':'All links stay open. “Recommended next” is guidance, not a lock.'}</small></div></section>
+  <section class="guided-path-hero"><div><span class="eyebrow">${esc(p.kicker)} • OPTIONAL GUIDED ROUTE</span><h1>${p.icon} ${esc(p.title)}</h1><p>${esc(p.summary)}</p><div class="guided-path-audience"><b>WHO IS THIS FOR?</b> ${esc(p.audience)}</div></div><div class="guided-path-hero-progress"><strong>${x.done}/${x.total}</strong><span>path stages complete</span><div class="progress"><span style="width:${x.pct}%"></span></div><small>${done?'Path complete — revisit anything whenever you need it.':'All normal Hub content stays open. “Recommended next” is guidance, not a site lock.'}</small></div></section>
   <section class="guided-outcome"><span>🎯</span><div><small>THE OUTCOME</small><strong>${esc(p.outcome)}</strong></div></section>
-  <section class="guided-sequence"><div class="section-head"><div><span class="eyebrow">RECOMMENDED ORDER</span><h2>One useful next step at a time</h2><p>Completed Hub work is recognised automatically. Choice stages count when you complete any one option. Optional activities never gate progress.</p></div></div>${p.steps.map((s,i)=>guidedStepCard(s,i,x.current)).join('')}</section>
-  <section class="guided-path-footer"><div><span class="eyebrow">NEED SOMETHING ELSE?</span><h2>Leave the path whenever you want.</h2><p>Your progress stays in the actual lessons/builds, so there is nothing special to save here.</p></div><div class="button-row"><a class="button primary" href="#/pathways">← All Guided Paths</a><a class="button ghost" href="#/">Explore the Hub</a></div></section>`;
+  <section class="guided-sequence"><div class="section-head"><div><span class="eyebrow">RECOMMENDED ORDER</span><h2>One useful next step at a time</h2><p>Existing completions count automatically. Choice stages adapt to the route you pick. Required practical checkpoints count toward this path but award no XP. You can still open any Hub page whenever you need it.</p></div></div>${p.steps.map((s,i)=>guidedStepCard(s,i,x.current)).join('')}</section>
+  <section class="guided-path-footer"><div><span class="eyebrow">NEED SOMETHING ELSE?</span><h2>Leave the path whenever you want.</h2><p>Your real lesson/build progress remains exactly where it already lives.</p></div><div class="button-row"><a class="button primary" href="#/pathways">← All Guided Paths</a><a class="button ghost" href="#/">Explore the Hub</a></div></section>`;
 }
 function theoryApplyNext(id){
   const links=PATHWAYS.applyLinks?.[id]||[];if(!links.length)return '';
@@ -1476,7 +1500,7 @@ function dashboard(){
 
   ${classHomeShortcut()}
 
-  <a class="guided-home-cta" href="#/pathways"><div class="guided-home-icon">↠</div><div><span class="portal-kicker">NOT SURE WHAT TO DO NEXT?</span><h2>Try a Guided Path</h2><p>Four optional outcome-based routes connect Theory, Designer Studio, Unreal and 3D in a sensible order. Nothing else gets locked.</p><div class="portal-chip-row"><span>4 launch paths</span><span>Existing XP counts</span><span>Browse freely anytime</span></div></div><strong>See Guided Paths →</strong></a>
+  <a class="guided-home-cta" href="#/pathways"><div class="guided-home-icon">↠</div><div><span class="portal-kicker">NOT SURE WHAT TO DO NEXT?</span><h2>Try a Guided Path</h2><p>Three optional outcome-based routes connect Theory, Designer Studio and Unreal in a sensible order. Nothing else gets locked.</p><div class="portal-chip-row"><span>3 guided paths</span><span>Existing XP counts</span><span>Browse freely anytime</span></div></div><strong>See Guided Paths →</strong></a>
 
   <section class="portal-path-grid" aria-label="Choose a Learning Hub area">
     <a class="portal-path-card programming" href="#/programming"><div class="portal-path-icon">⌘</div><span class="portal-kicker">BUILDING BLOCKS • SYSTEMS • BLUEPRINTS</span><h2>Unreal Learning</h2><p>Learn Unreal terms in tiny Building Blocks, understand the deeper systems, then apply them in practical tutorials and challenge builds.</p><div class="portal-chip-row"><span>${BLOCKS.blocks.filter(b=>b.tier==='core').length} core blocks</span><span>${DATA.lessons.length} system lessons</span><span>${(TOOLS.families||[]).length} recipe families</span></div><strong>Enter Unreal Learning →</strong></a>
@@ -3015,6 +3039,12 @@ async function setSculptComplete(id){
   if(BACKEND.user){try{await BACKEND.setLessonComplete(`sculpt:${id}`,!was)}catch(e){toast('Saved locally; cloud sync failed.')}}
   if(was)toast('Sculpt exercise marked incomplete.');else badgeUnlockAfter(before,`🗿 Sculpt exercise complete • +${p.xp} XP`);finishInlineUpdate(!was);
 }
+async function setPathwayCheckpointComplete(id){
+  const clean=String(id||'').trim();if(!clean)return;const was=pathCheckpointDone(clean);
+  state.pathwayCheckpoints=was?(state.pathwayCheckpoints||[]).filter(x=>x!==clean):[...new Set([...(state.pathwayCheckpoints||[]),clean])];saveState();
+  if(BACKEND.user){try{await BACKEND.setPathwayCheckpointComplete(clean,!was)}catch(e){toast('Saved locally; cloud sync failed.')}}
+  toast(was?'Pathway checkpoint marked incomplete.':'Pathway checkpoint complete ✓');finishInlineUpdate(!was);
+}
 
 async function setMechanicStatus(id,status){
   const old=projectState.mechanics[id]||{};
@@ -3271,6 +3301,7 @@ document.addEventListener('click',async e=>{
   else if(a==='complete-model-build') await setModelBuildComplete(b.dataset.modelBuild);
   else if(a==='complete-model-fix') await setModelFixComplete(b.dataset.modelFix);
   else if(a==='complete-sculpt') await setSculptComplete(b.dataset.sculpt);
+  else if(a==='complete-pathway-checkpoint') await setPathwayCheckpointComplete(b.dataset.checkpoint);
   else if(a==='quiz'){
     const l=lesson(b.dataset.lesson),qi=+b.dataset.q,oi=+b.dataset.o,q=l.quiz[qi],wrap=b.closest('.quiz');
     $$('.quiz-option',wrap).forEach(x=>x.disabled=true);
@@ -3956,7 +3987,7 @@ function setupSearch(){
 $('#menuButton').addEventListener('click',()=>$('#sidebar').classList.toggle('open'));
 $('#resetProgress').addEventListener('click',()=>{
   if(confirm('Reset all locally saved lesson progress, XP and game-project status on this browser?')){
-    state={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],designSourceCompleted:[],theoryCompleted:[],theoryScores:{},modelVideoCompleted:[],modelTheoryCompleted:[],modelTheoryScores:{},modelFoundationFinal:false,modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[],blockCompleted:[]};
+    state={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],designSourceCompleted:[],theoryCompleted:[],theoryScores:{},modelVideoCompleted:[],modelTheoryCompleted:[],modelTheoryScores:{},modelFoundationFinal:false,modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[],blockCompleted:[],pathwayCheckpoints:[]};
     projectState={project_title:'Signal Lost',theme:PROJECT.themes[0],pitch:'',mechanics:{}};
     saveState();saveProjectState();route();toast('Local progress reset.');
   }
