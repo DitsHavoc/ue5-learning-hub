@@ -1,0 +1,38 @@
+UE5 LEARNING HUB v3.42.2 — DESIGNER PRACTICAL CLARITY
+
+UPLOAD/REPLACE THESE FILES IN GITHUB:
+- index.html
+- app.js
+- data/design-data.js
+- README.md
+- CHANGELOG.md
+- RELEASE-NOTES-v3.42.2.md
+- DESIGN-PRACTICAL-INSTRUCTION-QA-v3.42.2.md
+
+NO SUPABASE MIGRATION IS REQUIRED.
+
+WHAT CHANGED
+- All 47 native Designer Studio Quick Tutorials were audited/refined.
+- The native Designer bank now contains 268 explicit practical steps.
+- The 48th module-listed practical, Make Silent Hill-style Fog, remains in the shared Quick Tutorial bank and already uses the detailed prescriptive starter-value format.
+- Designer recipes render as DESIGN TESTS with Design → Test → Revise and WHERE TO WORK wording.
+- Existing IDs, progress, XP and Guided Path references are preserved.
+
+AFTER RENDER REDEPLOYS
+Hard-refresh the site and spot-check:
+1. Quick Tutorials → Make a Route Read Without Arrows
+2. Design a Clear Decision Point
+3. Create Pacing with Space
+4. Basic PBR Material or Wet Surface
+5. Light a Horror Corridor / Make Silent Hill-style Fog
+6. Create Your First Sequencer Shot or Build Camera Cuts
+7. Sound Attenuation or MetaSound Wind
+8. One normal programming Quick Tutorial — confirm it still uses mechanic/build wording
+
+EXPECTED DESIGN-TUTORIAL PAGE LANGUAGE
+- 01 • THE DESIGN TEST
+- Design → Test → Revise
+- WHERE TO WORK
+- 02 • DO THE CONTROLLED EXERCISE
+
+There is no database step for this release.

@@ -1,3 +1,13 @@
+## v3.42.2 — Designer Practical Clarity — 31 Aug 2026
+- Audited/refined all 47 native Designer Studio Quick Tutorials: 268 practical steps across Level Design, Environment Art, Materials, Lighting, Landscape, Cinematics, Audio and Polish/Optimisation.
+- Standardised practical steps around WHERE TO WORK, DO THIS, YOU SHOULD SEE, WHY, TEST / CHECK and step-specific recovery guidance.
+- Rebuilt Make a Route Read Without Arrows, Design a Clear Decision Point and Create Pacing with Space as controlled greybox exercises with fixed starter measurements and silent/repeatable playtests.
+- Replaced vague starter instructions across the wider Designer bank with concrete object counts, dimensions, parameter values, frame ranges, listening positions, diagnostic views and before/after tests where useful.
+- Verified the eighth Lighting module practical, Make Silent Hill-style Fog, remains in the shared tutorial bank with its existing prescriptive starter-value recipe.
+- Design tutorial pages now identify themselves as DESIGN TESTS and use Design → Test → Revise / WHERE TO WORK language instead of calling every task a “small working mechanic”.
+- Existing tutorial IDs, module IDs, completion state, XP and Guided Path references are unchanged. No database migration required.
+- Final static QA passed 2,695 assertions; browser smoke testing could not run because the container blocks local/file Chromium navigation.
+
 ## v3.42.1 — Hub Rivalry — 31 Aug 2026
 
 - Homepage `Who is making moves?` is now Hub-wide rather than silently choosing one class.

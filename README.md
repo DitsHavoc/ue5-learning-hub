@@ -1,6 +1,18 @@
-# Current release — v3.42.1
+# Current release — v3.42.2
 
-**Hub Rivalry.** Makes the homepage leaderboard Hub-wide instead of silently selecting one class. Students in active leaderboard-enabled classes are ranked once across the whole Hub, the full Leaderboard page gains an `Everyone` view alongside class filters, and the global ranking comes from one compact cached RPC. See `RELEASE-NOTES-v3.42.1.md` and `HUB-RIVALRY-QA-v3.42.1.md`.
+**Designer Practical Clarity.** Audits/refines all 47 native Designer Studio Quick Tutorials (268 practical steps) as controlled beginner exercises with concrete dimensions, object counts, starter values, exact test conditions and visible success checks. Design recipes now render as design tests rather than generic “small working mechanic” pages. The shared Silent Hill fog practical is also verified against the prescriptive standard. IDs and XP remain unchanged. See `RELEASE-NOTES-v3.42.2.md` and `DESIGN-PRACTICAL-INSTRUCTION-QA-v3.42.2.md`.
+
+## Previous release — v3.42.1
+
+**Hub Rivalry.** Makes the homepage leaderboard Hub-wide instead of silently selecting one class. Students in active leaderboard-enabled classes are ranked once across the whole Hub, while the full Leaderboard page keeps class filters. See `RELEASE-NOTES-v3.42.1.md` and `HUB-RIVALRY-QA-v3.42.1.md`.
+
+## Previous release — v3.42.0
+
+**Teacher Command Centre.** Expands teacher progress tracking across Unreal, Theory, Designer Studio, 3D/Sculpt and Guided Path checkpoints, adds new pathway badges and brings the weekly leaderboard onto the homepage.
+
+## Previous release — v3.41.3
+
+**Theory Case Study Parity.** Brings all 24 unique theory game case studies up to the same deeper analysis/source/video standard, including click-to-load Watch It In Action material where useful.
 
 ## Previous release — v3.41.2
 
