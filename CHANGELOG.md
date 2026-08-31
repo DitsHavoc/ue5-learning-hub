@@ -1,3 +1,12 @@
+## v3.41.2 — Theory Case Study Diversity Pass — 31 Aug 2026
+
+- Replaces repeated Theory case studies with 24 distinct games across the 24 lessons.
+- Adds OMORI to Environmental Storytelling and Jet Set Radio to Game Feel & Feedback.
+- Expands professional/developer/official Theory sources to 71 cards, including more interviews, GDC talks, videos, research and official material.
+- Shows the case-study game on every Theory card.
+- Preserves all Theory lesson IDs, quizzes, tasks, XP, progress, Guided Path references and Revision integration.
+- No database migration or new routine network call.
+
 ## v3.41.1 — Guided Paths Teaching Pass — 31 Aug 2026
 
 - Reduced Guided Paths to three cross-Hub outcomes; removed the duplicate 3D Prop route and surfaced the existing 3D course instead.

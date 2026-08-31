@@ -1,5 +1,5 @@
 window.UE5_THEORY_DATA = {
-  "version": "3.40.0",
+  "version": "3.41.2",
   "buildDate": "2026-08-31",
   "xp": 25,
   "passPercent": 67,
@@ -96,24 +96,30 @@ window.UE5_THEORY_DATA = {
       },
       "example": {
         "game": "INSIDE",
-        "title": "Notice the design, not just the atmosphere",
-        "body": "INSIDE is visually distinctive, but the design question is what the player is allowed to do, what the environment communicates and how those constraints produce tension and curiosity.",
-        "src": "https://playdead.com/css/img/inside/screenshots/INSIDE_01.jpg",
+        "title": "Design is what the player does",
+        "body": "INSIDE is remembered for atmosphere, but its design is visible in the restrictions placed on the player: a small verb set, readable threats, tightly controlled information and spaces that turn simple actions into tension and curiosity.",
+        "src": "https://cdn.akamai.steamstatic.com/steam/apps/304430/header.jpg",
         "sourceUrl": "https://playdead.com/games/inside/",
         "sourceTitle": "Playdead — INSIDE"
       },
       "sources": [
         {
+          "title": "INSIDE Presentations — Playdead",
+          "url": "https://blog.playdead.com/articles/inside_presentations/inside_publications.html",
+          "note": "Playdead collects its own GDC talks, videos and publications on how INSIDE was built and refined.",
+          "kind": "Developer resources"
+        },
+        {
           "title": "Rules of Play — MIT Press",
           "url": "https://mitpress.mit.edu/9780262240451/rules-of-play/",
-          "note": "A major game-design text covering meaningful play, systems, uncertainty, information and emergence.",
+          "note": "A major design text on rules, systems, meaningful play, information and emergence.",
           "kind": "Further reading"
         },
         {
           "title": "Design in Detail — GDC Vault",
           "url": "https://www.gdcvault.com/play/1015851/Design-in-Detail-Identifying-the",
-          "note": "A practical talk about identifying the important design variables inside a game.",
-          "kind": "Further reading"
+          "note": "A practical design talk about finding the variables that actually drive play.",
+          "kind": "Developer talk"
         }
       ],
       "task": {
@@ -197,17 +203,29 @@ window.UE5_THEORY_DATA = {
       },
       "example": {
         "game": "Death Stranding",
-        "title": "A loop built around preparation and traversal",
-        "body": "Delivery is not just “walk from A to B”. Route choice, cargo condition, tools and terrain feed back into preparation for the next journey.",
-        "src": "https://www.kojimaproductions.jp/sites/default/files/2021-08/gr.DeathStranding_GameScreenshot3.jpg",
+        "title": "Preparation → traversal → delivery → improvement",
+        "body": "Death Stranding makes delivery into a repeatable decision loop. Cargo, terrain, route choice and tools affect how a journey plays; the result of that journey then changes what the player can prepare for next.",
+        "src": "https://cdn.akamai.steamstatic.com/steam/apps/1850570/header.jpg",
         "sourceUrl": "https://www.kojimaproductions.jp/en/death-stranding-directors-cut",
-        "sourceTitle": "Kojima Productions — Death Stranding"
+        "sourceTitle": "Kojima Productions — Death Stranding Director’s Cut"
       },
       "sources": [
         {
+          "title": "The Hideo Kojima Death Stranding Interview — PlayStation Blog",
+          "url": "https://blog.playstation.com/2017/02/23/the-hideo-kojima-death-stranding-interview-strands-decima-and-guerrilla-games/",
+          "note": "Kojima discusses the game’s core idea of connection and the design thinking behind the new IP.",
+          "kind": "Developer interview"
+        },
+        {
+          "title": "Death Stranding: An AI Postmortem — GDC Vault",
+          "url": "https://www.gdcvault.com/play/1027144",
+          "note": "A Kojima Productions postmortem covering navigation and AI problems created by the game’s unusual terrain and traversal.",
+          "kind": "Developer talk"
+        },
+        {
           "title": "The Turducken Method of Game Design — GDC Vault",
           "url": "https://www.gdcvault.com/play/1014958/The-Turducken-Method-of-Game",
-          "note": "A useful discussion of nested activity, reward and reveal loops.",
+          "note": "Useful background on nested activity and reward loops.",
           "kind": "Further reading"
         }
       ],
@@ -289,25 +307,25 @@ window.UE5_THEORY_DATA = {
         "caption": "Rule → behaviour → experience. Then work backwards to refine the rule."
       },
       "example": {
-        "game": "Elden Ring",
-        "title": "Mechanics become behaviour",
-        "body": "Stamina, checkpoints, enemy placement and loss/recovery rules are mechanics. Cautious exploration, learning patterns and deciding whether to push onward are dynamics. Tension, mastery and discovery are parts of the resulting experience.",
-        "src": "https://p325k7wa.twic.pics/high/elden-ring/elden-ring/02-screenshots/ELDENRING_01_4K.jpg?twic=v1%2Fcover%3D2160%2Fstep%3D10%2Fquality%3D80%2Foutput%3Dpreview",
-        "sourceUrl": "https://en.bandainamcoent.eu/elden-ring/elden-ring",
-        "sourceTitle": "Bandai Namco — Elden Ring"
+        "game": "Journey",
+        "title": "Mechanics can be designed toward an emotion",
+        "body": "Journey uses a deliberately small set of mechanics—movement, jumping, cloth interaction and a wordless call. Their interaction with anonymous co-op produces dynamics such as waiting, following and helping, supporting aesthetics such as companionship, wonder, vulnerability and loss.",
+        "src": "https://cdn.akamai.steamstatic.com/steam/apps/638230/header.jpg",
+        "sourceUrl": "https://thatgamecompany.com/journey/",
+        "sourceTitle": "thatgamecompany — Journey"
       },
       "sources": [
         {
           "title": "MDA: A Formal Approach to Game Design and Game Research — AAAI",
           "url": "https://aaai.org/papers/ws04-04-001-mda-a-formal-approach-to-game-design-and-game-research/",
-          "note": "The original Hunicke, LeBlanc and Zubek paper.",
-          "kind": "Original theory"
+          "note": "The original MDA paper: Mechanics → Dynamics → Aesthetics.",
+          "kind": "Research"
         },
         {
-          "title": "MDA paper PDF",
-          "url": "https://www.cs.northwestern.edu/~hunicke/MDA.pdf",
-          "note": "Direct PDF of the original paper.",
-          "kind": "Original theory"
+          "title": "Designing Journey — GDC Vault",
+          "url": "https://www.gdcvault.com/play/1017700/Designing",
+          "note": "Jenova Chen explains the experiments, failures and design decisions used to realise Journey’s emotional arc.",
+          "kind": "Developer talk"
         }
       ],
       "task": {
@@ -389,25 +407,31 @@ window.UE5_THEORY_DATA = {
         "caption": "Keep the decision; simplify the calculation."
       },
       "example": {
-        "game": "CONTROL",
-        "title": "Pillars help a strange world stay coherent",
-        "body": "When environments, powers, combat and narrative all compete for attention, clear design pillars help teams decide which ideas strengthen the intended experience and which merely add noise.",
-        "src": "https://cdn.prod.website-files.com/64630b03551142e3347ae3da/6492c4ad955ffc88abcd7409_CONTROL_Blast_Furnace_169.webp",
+        "game": "Control",
+        "title": "A strange world still needs a coherent design promise",
+        "body": "Control combines supernatural powers, destructive combat, investigation and an impossible bureaucratic building. Strong creative principles keep those very different ingredients pointing toward the same experience instead of becoming an unrelated feature pile.",
+        "src": "https://cdn.akamai.steamstatic.com/steam/apps/870780/header.jpg",
         "sourceUrl": "https://www.remedygames.com/games/control",
-        "sourceTitle": "Remedy — CONTROL"
+        "sourceTitle": "Remedy Entertainment — Control"
       },
       "sources": [
         {
+          "title": "Control freak: Inside the narrative design of Remedy’s least linear game — Game Developer",
+          "url": "https://www.gamedeveloper.com/design/-i-control-i-freak-inside-the-narrative-design-of-remedy-s-least-linear-game",
+          "note": "Remedy narrative designer Brooke Maggs discusses how world, level, combat and narrative teams kept the Oldest House coherent.",
+          "kind": "Developer interview"
+        },
+        {
           "title": "Rules of Play — MIT Press",
           "url": "https://mitpress.mit.edu/9780262240451/rules-of-play/",
-          "note": "Useful background on systems, rules and meaningful play.",
+          "note": "Useful wider reading on systems, rules and abstraction.",
           "kind": "Further reading"
         },
         {
           "title": "Designing Assassin’s Creed II — GDC Vault",
           "url": "https://www.gdcvault.com/play/1012306/Designing-Assassin-s-Creed",
-          "note": "A large production example of organising and selecting design ideas.",
-          "kind": "Further reading"
+          "note": "A professional case study in turning high-level creative goals into production decisions.",
+          "kind": "Developer talk"
         }
       ],
       "task": {
@@ -490,18 +514,30 @@ window.UE5_THEORY_DATA = {
         "caption": "Players need to understand enough of the consequence to make the next decision better."
       },
       "example": {
-        "game": "Horizon Forbidden West",
-        "title": "Tools create options",
-        "body": "Traversal tools, weapons and enemy parts offer multiple approaches. The design value is not the number of tools; it is whether different tools support different plans and consequences.",
-        "src": "https://www.guerrilla-games.com/media/News/HFW_SCREEN_LEGAL_GLIDER_4K_RGB_20210512.webp",
-        "sourceUrl": "https://www.guerrilla-games.com/read/horizon-forbidden-west-gameplay-reveal",
-        "sourceTitle": "Guerrilla — Horizon Forbidden West"
+        "game": "Baldur’s Gate 3",
+        "title": "Agency comes from viable approaches and consequences",
+        "body": "Baldur’s Gate 3 repeatedly lets players combine dialogue, movement, objects, spells, stealth and combat in different ways. Agency comes from the game recognising those approaches and allowing choices to alter situations—not simply from offering more buttons.",
+        "src": "https://cdn.akamai.steamstatic.com/steam/apps/1086940/header.jpg",
+        "sourceUrl": "https://baldursgate3.game/",
+        "sourceTitle": "Larian Studios — Baldur’s Gate 3"
       },
       "sources": [
         {
+          "title": "The Secrets of Baldur’s Gate 3 — GDC Vault",
+          "url": "https://gdcvault.com/play/1034610/The-Secrets-of-Baldur-s",
+          "note": "Swen Vincke gives a behind-the-scenes account of the design and development challenges behind Larian’s systemic RPG.",
+          "kind": "Developer talk"
+        },
+        {
+          "title": "Community Update #26 — Larian Studios",
+          "url": "https://baldursgate3.game/news/community-update-26-evil-endings-new-beginnings_117",
+          "note": "An official example of Larian continuing to expand outcomes and consequences around player choice.",
+          "kind": "Official"
+        },
+        {
           "title": "Decisions That Matter — GDC Vault",
           "url": "https://www.gdcvault.com/play/1020570/Level-Design-in-a-Day",
-          "note": "Matthias Worch on meaningful choice in game and level design.",
+          "note": "A useful professional discussion of making decisions matter to the player.",
           "kind": "Further reading"
         }
       ],
@@ -585,24 +621,30 @@ window.UE5_THEORY_DATA = {
         "caption": "The tension sits in what you give up, not merely in the number of buttons."
       },
       "example": {
-        "game": "Elden Ring",
-        "title": "Loadout choices carry opportunity cost",
-        "body": "Weapons, equipment load, attributes and limited preparation create different strengths and weaknesses. A build is interesting because investing in one direction closes or delays another.",
-        "src": "https://p325k7wa.twic.pics/high/elden-ring/elden-ring/02-screenshots/ELDENRING_01_4K.jpg?twic=v1%2Fcover%3D2160%2Fstep%3D10%2Fquality%3D80%2Foutput%3Dpreview",
-        "sourceUrl": "https://en.bandainamcoent.eu/elden-ring/elden-ring",
-        "sourceTitle": "Bandai Namco — Elden Ring"
+        "game": "Papers, Please",
+        "title": "A choice matters when every option costs something",
+        "body": "Papers, Please turns document checking into repeated trade-offs. Processing people quickly earns the money your family needs, but rules become increasingly demanding and individual travellers create moral pressure. The interesting choice is rarely “good or evil”; it is what cost you are willing to accept.",
+        "src": "https://cdn.akamai.steamstatic.com/steam/apps/239030/header.jpg",
+        "sourceUrl": "https://papersplea.se/",
+        "sourceTitle": "Lucas Pope — Papers, Please"
       },
       "sources": [
         {
+          "title": "Road to the IGF: Lucas Pope’s Papers, Please — Game Developer",
+          "url": "https://www.gamedeveloper.com/design/road-to-the-igf-lucas-pope-s-i-papers-please-i-",
+          "note": "Lucas Pope explains how bureaucracy, throughput and changing rules became the game’s mechanics.",
+          "kind": "Developer interview"
+        },
+        {
           "title": "Decisions That Matter — GDC Vault",
           "url": "https://www.gdcvault.com/play/1020570/Level-Design-in-a-Day",
-          "note": "Meaningful choice applied to game and level design.",
-          "kind": "Further reading"
+          "note": "A design talk about creating choices that produce meaningful consequences.",
+          "kind": "Developer talk"
         },
         {
           "title": "Rules of Play — MIT Press",
           "url": "https://mitpress.mit.edu/9780262240451/rules-of-play/",
-          "note": "Meaningful play and systems theory.",
+          "note": "Background reading on meaningful play and system relationships.",
           "kind": "Further reading"
         }
       ],
@@ -685,18 +727,30 @@ window.UE5_THEORY_DATA = {
         "caption": "The player creates tension by choosing when to stop."
       },
       "example": {
-        "game": "Dead Space",
-        "title": "Scarcity makes “continue or retreat” matter",
-        "body": "Limited ammunition and healing make exploration decisions more tense because entering another dangerous space can consume resources needed later.",
-        "src": "https://drop-assets.ea.com/images/5Cr5lTNDijF2pzIopPZduH/2009d571be74052edf094ce0a992253f/ds-gp-hallway-04-no-watermark.jpg",
-        "sourceUrl": "https://www.ea.com/games/dead-space/dead-space",
-        "sourceTitle": "EA — Dead Space"
+        "game": "Darkest Dungeon",
+        "title": "The profitable choice can also be the dangerous one",
+        "body": "In Darkest Dungeon, pushing deeper can produce more treasure and progress, but health, stress, supplies and the risk of permanent hero loss accumulate. Retreating protects what you have; continuing asks whether the possible reward is worth exposing a damaged party to another problem.",
+        "src": "https://cdn.akamai.steamstatic.com/steam/apps/262060/header.jpg",
+        "sourceUrl": "https://www.darkestdungeon.com/darkest-dungeon/",
+        "sourceTitle": "Red Hook Studios — Darkest Dungeon"
       },
       "sources": [
         {
+          "title": "Darkest Dungeon: A Design Postmortem — GDC Vault",
+          "url": "https://gdcvault.com/play/1023089/Darkest-Dungeon-A-Design",
+          "note": "Tyler Sigman explains the stress, affliction and roguelike systems and the iterations behind them.",
+          "kind": "Developer talk"
+        },
+        {
+          "title": "Darkest Dungeon: A Design Postmortem — GDC video",
+          "url": "https://www.youtube.com/watch?v=0IUaGQhlPwo",
+          "note": "Free official GDC recording of the Red Hook design postmortem.",
+          "kind": "Video"
+        },
+        {
           "title": "Cards, Dice, and RNGs: Using Randomness in Games — GDC Vault",
           "url": "https://www.gdcvault.com/play/1028984/Cards-Dice-and-RNGs-Using",
-          "note": "Useful alongside risk because uncertainty changes how players value outcomes.",
+          "note": "Useful wider reading on how risk interacts with uncertainty.",
           "kind": "Further reading"
         }
       ],
@@ -779,25 +833,25 @@ window.UE5_THEORY_DATA = {
         "caption": "Ask whether the interesting skill is responding to uncertainty or committing before the result."
       },
       "example": {
-        "game": "CONTROL",
-        "title": "Uncertainty works best beside strong player tools",
-        "body": "Combat contains unpredictable movement and threats, but the player still has reliable movement, telekinesis, cover and weapon choices. Uncertainty creates problems to solve rather than replacing play.",
-        "src": "https://cdn.prod.website-files.com/64630b03551142e3347ae3da/6492c4ad955ffc88abcd7409_CONTROL_Blast_Furnace_169.webp",
-        "sourceUrl": "https://www.remedygames.com/games/control",
-        "sourceTitle": "Remedy — CONTROL"
+        "game": "XCOM 2",
+        "title": "Probability creates plans, not guarantees",
+        "body": "XCOM 2 exposes hit chances before many attacks, so uncertainty becomes part of planning. Strong play is about creating fallback options, improving odds and deciding how much risk a turn can tolerate—not assuming a 90% shot is certain.",
+        "src": "https://cdn.akamai.steamstatic.com/steam/apps/268500/header.jpg",
+        "sourceUrl": "https://www.xcom.com/xcom-2/",
+        "sourceTitle": "2K / Firaxis — XCOM 2"
       },
       "sources": [
         {
-          "title": "Cards, Dice, and RNGs: Using Randomness in Games — GDC Vault",
-          "url": "https://www.gdcvault.com/play/1028984/Cards-Dice-and-RNGs-Using",
-          "note": "Randy Smith on designing with random systems.",
-          "kind": "Further reading"
+          "title": "Jake Solomon explains the careful use of randomness in XCOM 2 — Game Developer",
+          "url": "https://www.gamedeveloper.com/design/jake-solomon-explains-the-careful-use-of-randomness-in-i-xcom-2-i-",
+          "note": "XCOM’s creative director discusses probability, player psychology and why displayed odds need careful handling.",
+          "kind": "Developer interview"
         },
         {
-          "title": "Board Game Design Day: White, Brown, and Pink — GDC Vault",
-          "url": "https://www.gdcvault.com/play/1024920/Board-Game-Design-Day-White",
-          "note": "Tabletop-focused discussion of randomness and player perception.",
-          "kind": "Further reading"
+          "title": "Cards, Dice, and RNGs: Using Randomness in Games — GDC Vault",
+          "url": "https://www.gdcvault.com/play/1028984/Cards-Dice-and-RNGs-Using",
+          "note": "Professional background on different uses of randomness in games.",
+          "kind": "Developer talk"
         }
       ],
       "task": {
@@ -880,18 +934,30 @@ window.UE5_THEORY_DATA = {
         "caption": "Designers decide whether to reinforce momentum or introduce pressure that keeps the contest alive."
       },
       "example": {
-        "game": "Elden Ring",
-        "title": "Progression is deliberately reinforcing",
-        "body": "Runes, levels and equipment make future encounters more manageable—a positive feedback structure—but rising enemy challenge and risk keep the loop from becoming trivial.",
-        "src": "https://p325k7wa.twic.pics/high/elden-ring/elden-ring/02-screenshots/ELDENRING_01_4K.jpg?twic=v1%2Fcover%3D2160%2Fstep%3D10%2Fquality%3D80%2Foutput%3Dpreview",
-        "sourceUrl": "https://en.bandainamcoent.eu/elden-ring/elden-ring",
-        "sourceTitle": "Bandai Namco — Elden Ring"
+        "game": "Mario Kart 8 Deluxe",
+        "title": "Catch-up pressure is a negative feedback tool",
+        "body": "Mario Kart changes the value and availability of items according to race context, helping trailing players threaten the leaders. That is a negative-feedback principle: the system pushes against a growing advantage so the contest can stay alive, while strong driving still matters.",
+        "src": "https://www.nintendo.com/eu/media/images/10_share_images/games_15/nintendo_switch_4/H2x1_NSwitch_MarioKart8Deluxe_image1600w.jpg",
+        "sourceUrl": "https://www.nintendo.com/en-gb/Games/Nintendo-Switch-games/Mario-Kart-8-Deluxe-1173281.html",
+        "sourceTitle": "Nintendo — Mario Kart 8 Deluxe"
       },
       "sources": [
         {
+          "title": "Mario Kart 8 director Kosuke Yabuki on balancing — Nintendo Life",
+          "url": "https://www.nintendolife.com/news/2014/05/interview_mario_kart_8_director_kosuke_yabuki_on_key_features_of_the_wii_us_blockbuster_release",
+          "note": "Yabuki explains that the team rebuilt and repeatedly tested the whole balance rather than tuning one isolated part.",
+          "kind": "Developer interview"
+        },
+        {
+          "title": "Mario Kart 8: “It’s not all about luck” — GameSpot",
+          "url": "https://www.gamespot.com/articles/mario-kart-8-it-s-not-all-about-luck-two-rainbow-roads-confirmed/1100-6418730/",
+          "note": "Developer comments on item distribution, race position and careful balancing.",
+          "kind": "Developer interview"
+        },
+        {
           "title": "Macroeconomics of a Game — GDC Vault",
           "url": "https://www.gdcvault.com/play/1026070/Macroeconomics-of-a-Game",
-          "note": "How resources and system pressures affect a game economy over time.",
+          "note": "Useful wider reading on reinforcing and balancing loops.",
           "kind": "Further reading"
         }
       ],
@@ -975,25 +1041,31 @@ window.UE5_THEORY_DATA = {
         "caption": "Watch the flow over time: stockpiles tell you when a resource has stopped forcing decisions."
       },
       "example": {
-        "game": "Death Stranding",
-        "title": "Cargo capacity is a resource too",
-        "body": "Space, weight, equipment and route risk turn inventory capacity into a resource. Choosing what to carry is an economy of opportunity, not simply a menu.",
-        "src": "https://www.kojimaproductions.jp/sites/default/files/2021-08/gr.DeathStranding_GameScreenshot3.jpg",
-        "sourceUrl": "https://www.kojimaproductions.jp/en/death-stranding-directors-cut",
-        "sourceTitle": "Kojima Productions — Death Stranding"
+        "game": "Stardew Valley",
+        "title": "Time, energy, money and materials compete for attention",
+        "body": "Stardew Valley’s economy is not only gold. Each day has limited time and energy; crops, mining, fishing and animals create resources, while seeds, tool upgrades, buildings and crafting consume them. The player constantly chooses where today’s limited capacity should go.",
+        "src": "https://cdn.akamai.steamstatic.com/steam/apps/413150/header.jpg",
+        "sourceUrl": "https://www.stardewvalley.net/",
+        "sourceTitle": "ConcernedApe — Stardew Valley"
       },
       "sources": [
         {
-          "title": "Economic Balancing and Improved Monetization — GDC Vault",
-          "url": "https://www.gdcvault.com/play/1020524/Economic-Balancing-and-Improved-Monetization",
-          "note": "Useful fundamentals on balancing economic flows.",
-          "kind": "Further reading"
+          "title": "Road to the IGF: ConcernedApe’s Stardew Valley — Game Developer",
+          "url": "https://www.gamedeveloper.com/design/road-to-the-igf-concernedape-s-i-stardew-valley-i-",
+          "note": "Eric Barone discusses the game’s design origins and how he expanded the farming-life formula.",
+          "kind": "Developer interview"
+        },
+        {
+          "title": "Eric Barone talks Stardew Valley & Haunted Chocolatier — PC Gamer",
+          "url": "https://www.youtube.com/watch?v=olf3wAuCfeU",
+          "note": "Long-form video interview with ConcernedApe about Stardew Valley and his evolving design thinking.",
+          "kind": "Video"
         },
         {
           "title": "Macroeconomics of a Game — GDC Vault",
           "url": "https://www.gdcvault.com/play/1026070/Macroeconomics-of-a-Game",
-          "note": "A wider view of supply, demand and long-term game economies.",
-          "kind": "Further reading"
+          "note": "Professional background on game economies, sources, sinks and system-wide effects.",
+          "kind": "Developer talk"
         }
       ],
       "task": {
@@ -1076,18 +1148,30 @@ window.UE5_THEORY_DATA = {
         "caption": "A strong option can be healthy if it has a context, cost and response."
       },
       "example": {
-        "game": "Horizon Forbidden West",
-        "title": "Enemy parts create readable counterplay",
-        "body": "Different targets, elemental weaknesses and tools give players ways to respond to enemy strengths rather than merely increasing enemy health.",
-        "src": "https://www.guerrilla-games.com/media/News/HFW_SCREEN_LEGAL_GLIDER_4K_RGB_20210512.webp",
-        "sourceUrl": "https://www.guerrilla-games.com/read/horizon-forbidden-west-gameplay-reveal",
-        "sourceTitle": "Guerrilla — Horizon Forbidden West"
+        "game": "Street Fighter 6",
+        "title": "Strong options stay interesting when answers exist",
+        "body": "Street Fighter 6’s Drive system gives both players powerful offensive, defensive and movement tools from a shared resource. The design challenge is not making every option identical; it is creating costs, timings and counters so powerful actions still invite a response.",
+        "src": "https://cdn.akamai.steamstatic.com/steam/apps/1364780/header.jpg",
+        "sourceUrl": "https://www.streetfighter.com/6/en-uk/",
+        "sourceTitle": "Capcom — Street Fighter 6"
       },
       "sources": [
         {
+          "title": "Street Fighter 6 development discussion — Capcom Integrated Report",
+          "url": "https://www.capcom.co.jp/ir/english/data/oar/2023/development.html",
+          "note": "Capcom developers discuss broadening Street Fighter while protecting the depth of competitive play.",
+          "kind": "Developer interview"
+        },
+        {
+          "title": "Street Fighter 6 developers on the Drive system — Famitsu",
+          "url": "https://www.famitsu.com/news/202206/17264369.html",
+          "note": "The development team explains the shared Drive resource and the offensive, defensive and movement options built around it.",
+          "kind": "Developer interview"
+        },
+        {
           "title": "Flavors of Challenge: The 8 Kinds of Difficulty — GDC Vault",
           "url": "https://gdcvault.com/play/1035713/Flavors-of-Challenge-The-8",
-          "note": "Useful for distinguishing different kinds of challenge instead of treating difficulty as one number.",
+          "note": "Useful context for separating fair challenge from raw numerical difficulty.",
           "kind": "Further reading"
         }
       ],
@@ -1172,24 +1256,30 @@ window.UE5_THEORY_DATA = {
       },
       "example": {
         "game": "Elden Ring",
-        "title": "Difficulty includes knowledge and pattern learning",
-        "body": "Challenge comes from timing, observation, route choice, build decisions and learning enemy behaviour—not just raw statistics.",
-        "src": "https://p325k7wa.twic.pics/high/elden-ring/elden-ring/02-screenshots/ELDENRING_01_4K.jpg?twic=v1%2Fcover%3D2160%2Fstep%3D10%2Fquality%3D80%2Foutput%3Dpreview",
+        "title": "Progression includes power, knowledge and route choice",
+        "body": "Elden Ring lets players grow through levels and equipment, but also through knowledge of enemies and the world. Its open structure adds another progression tool: if one obstacle is too severe, the player can explore elsewhere, improve, learn and return later.",
+        "src": "https://cdn.akamai.steamstatic.com/steam/apps/1245620/header.jpg",
         "sourceUrl": "https://en.bandainamcoent.eu/elden-ring/elden-ring",
-        "sourceTitle": "Bandai Namco — Elden Ring"
+        "sourceTitle": "Bandai Namco / FromSoftware — Elden Ring"
       },
       "sources": [
         {
+          "title": "Interview with Hidetaka Miyazaki — PlayStation Blog",
+          "url": "https://blog.playstation.com/2022/01/28/an-interview-with-fromsoftwares-hidetaka-miyazki/",
+          "note": "Miyazaki discusses freedom of progression, learning through failure and providing multiple ways to overcome difficult situations.",
+          "kind": "Developer interview"
+        },
+        {
           "title": "Flavors of Challenge: The 8 Kinds of Difficulty — GDC Vault",
           "url": "https://gdcvault.com/play/1035713/Flavors-of-Challenge-The-8",
-          "note": "A contemporary framework for thinking about different kinds of challenge.",
-          "kind": "Further reading"
+          "note": "A useful framework for analysing what kind of difficulty a game is actually asking from the player.",
+          "kind": "Developer talk"
         },
         {
           "title": "UX Summit: Difficult Games by Design — GDC Vault",
           "url": "https://www.gdcvault.com/play/1034838/UX-Summit-Difficult-Games-by",
-          "note": "Player-research perspective on deliberately difficult games.",
-          "kind": "Further reading"
+          "note": "Professional discussion of deliberately challenging game experiences.",
+          "kind": "Developer talk"
         }
       ],
       "task": {
@@ -1272,19 +1362,37 @@ window.UE5_THEORY_DATA = {
         "caption": "Each layer should help the player understand what happened—not just make noise."
       },
       "example": {
-        "game": "CONTROL",
-        "title": "Impact communicates force",
-        "body": "Telekinesis combines animation, object motion, sound, particles and enemy reaction. The spectacle works because all layers communicate the same action.",
-        "src": "https://cdn.prod.website-files.com/64630b03551142e3347ae3da/6492c4ad955ffc88abcd7409_CONTROL_Blast_Furnace_169.webp",
-        "sourceUrl": "https://www.remedygames.com/games/control",
-        "sourceTitle": "Remedy — CONTROL"
+        "game": "Jet Set Radio",
+        "title": "Movement, music and style all answer the player",
+        "body": "Jet Set Radio makes skating expressive through the combination of speed, grinding, tagging, animation, camera movement, sound and an aggressively distinctive soundtrack. The feedback layers agree with each other: the game wants motion to feel confident, rhythmic and rebellious rather than merely functional.",
+        "src": "https://cdn.akamai.steamstatic.com/steam/apps/205950/header.jpg",
+        "sourceUrl": "https://store.steampowered.com/app/205950/Jet_Set_Radio/",
+        "sourceTitle": "SEGA — Jet Set Radio"
       },
       "sources": [
         {
+          "title": "Jet Set Radio Future Q&A — GameSpot",
+          "url": "https://www.gamespot.com/articles/jet-set-radio-future-qanda/1100-2778750/",
+          "note": "Director Masayoshi Kikuchi and art director Ryuuta Ueda discuss the visual influences and “extreme” identity inherited from Jet Set Radio.",
+          "kind": "Developer interview"
+        },
+        {
+          "title": "Smilebit Q&A — GameSpot",
+          "url": "https://www.gamespot.com/articles/smilebit-qanda/1100-2850400/",
+          "note": "Smilebit discusses level design, atmosphere and why music was curated to preserve the game’s particular feel.",
+          "kind": "Developer interview"
+        },
+        {
+          "title": "Staying in Tune: Richard Jacques on game music — Game Developer",
+          "url": "https://www.gamedeveloper.com/audio/staying-in-tune-richard-jacques-on-game-music-s-past-present-and-future",
+          "note": "Composer Richard Jacques discusses game music including his work on Jet Set Radio and how music supports the identity of play.",
+          "kind": "Developer interview"
+        },
+        {
           "title": "Game Feel: A Game Designer’s Guide to Virtual Sensation — Routledge",
           "url": "https://www.routledge.com/Game-Feel-A-Game-Designers-Guide-to-Virtual-Sensation/Swink/p/book/9780123743282",
-          "note": "Steve Swink’s influential text on the feel of real-time control.",
-          "kind": "Book"
+          "note": "A foundational text on input, response and virtual sensation.",
+          "kind": "Further reading"
         }
       ],
       "task": {
@@ -1365,19 +1473,25 @@ window.UE5_THEORY_DATA = {
         "caption": "Contrast gives peaks meaning. A flat line at 100% stops feeling intense."
       },
       "example": {
-        "game": "Dead Space",
-        "title": "Silence is part of horror pacing",
-        "body": "Quiet traversal, unsettling sound and partial information build anticipation so combat spikes feel more dangerous than they would in constant action.",
-        "src": "https://drop-assets.ea.com/images/5Cr5lTNDijF2pzIopPZduH/2009d571be74052edf094ce0a992253f/ds-gp-hallway-04-no-watermark.jpg",
-        "sourceUrl": "https://www.ea.com/games/dead-space/dead-space",
-        "sourceTitle": "EA — Dead Space"
+        "game": "Resident Evil 4 (Remake)",
+        "title": "Tension needs peaks, recovery and a controlled tempo",
+        "body": "Resident Evil 4 alternates combat pressure with exploration, resource management, quieter traversal and deliberate breaks. The remake changed controls, enemy behaviour and spaces together so added player mobility did not destroy the tempo between horror and action.",
+        "src": "https://cdn.akamai.steamstatic.com/steam/apps/2050650/header.jpg",
+        "sourceUrl": "https://www.residentevil.com/re4/en-uk/",
+        "sourceTitle": "Capcom — Resident Evil 4"
       },
       "sources": [
         {
-          "title": "What Happened Here? Environmental Storytelling — GDC Vault",
-          "url": "https://www.gdcvault.com/play/1012696/What-Happened-Here-Environmental",
-          "note": "Useful for thinking about how spaces control anticipation, information and pacing.",
-          "kind": "Further reading"
+          "title": "Talking Resident Evil 4’s updated combat — Xbox Wire",
+          "url": "https://news.xbox.com/en-us/2023/03/10/talking-resident-evil-4-updated-combat/",
+          "note": "Producer Yoshiaki Hirabayashi discusses preserving the original tempo while changing controls, enemies and level design.",
+          "kind": "Developer interview"
+        },
+        {
+          "title": "How Resident Evil 4’s directors approached the remake — Game Informer",
+          "url": "https://gameinformer.com/exclusive-feature/2023/02/08/how-resident-evil-4s-directors-approached-designing-the-remake",
+          "note": "The directors explain how they revisited familiar encounters without losing the character of the original.",
+          "kind": "Developer interview"
         }
       ],
       "task": {
@@ -1460,25 +1574,31 @@ window.UE5_THEORY_DATA = {
         "caption": "Context makes instructions memorable because the player immediately uses them."
       },
       "example": {
-        "game": "INSIDE",
-        "title": "Teach through space and consequence",
-        "body": "INSIDE rarely stops for long written explanations. Layout, animation, danger and repeated interaction teach what the character can do and what the world expects.",
-        "src": "https://playdead.com/css/img/inside/screenshots/INSIDE_01.jpg",
-        "sourceUrl": "https://playdead.com/games/inside/",
-        "sourceTitle": "Playdead — INSIDE"
+        "game": "Portal",
+        "title": "Teach one rule, then ask the player to prove it",
+        "body": "Portal’s opening chambers introduce interaction rules through small, controlled problems rather than a large manual. Each space gives the player just enough information to discover a rule, then changes the context so the next puzzle checks whether that rule was actually understood.",
+        "src": "https://cdn.akamai.steamstatic.com/steam/apps/400/header.jpg",
+        "sourceUrl": "https://store.steampowered.com/app/400/Portal/",
+        "sourceTitle": "Valve — Portal"
       },
       "sources": [
         {
-          "title": "Start Right, Start Fun: Unveiling Onboarding — GDC Vault",
-          "url": "https://www.gdcvault.com/play/1034824/Start-Right-Start-Fun-Unveiling",
-          "note": "A modern onboarding-focused GDC session.",
-          "kind": "Further reading"
+          "title": "Thinking With Portals: Creating Valve’s New IP — Game Developer",
+          "url": "https://www.gamedeveloper.com/design/thinking-with-portals-creating-valve-s-new-ip",
+          "note": "A development account of how Portal’s mechanics, testing and teaching structure were shaped.",
+          "kind": "Developer article"
         },
         {
-          "title": "Game Accessibility Guidelines — Basic",
-          "url": "https://gameaccessibilityguidelines.com/basic/",
-          "note": "Includes interactive tutorials, clear language and readable presentation among broad accessibility guidance.",
-          "kind": "Further reading"
+          "title": "Portal 2: Making a sequel to a “perfect” game — Game Developer",
+          "url": "https://www.gamedeveloper.com/design/gdc-2012-i-portal-2-i-making-a-sequel-to-a-perfect-game",
+          "note": "Valve discusses the challenge of teaching Portal concepts to new players without boring experienced players.",
+          "kind": "Developer talk"
+        },
+        {
+          "title": "Valve publications",
+          "url": "https://www.valvesoftware.com/en/publications",
+          "note": "Valve’s own archive includes its Portal postmortem and playtesting presentations.",
+          "kind": "Official"
         }
       ],
       "task": {
@@ -1561,30 +1681,36 @@ window.UE5_THEORY_DATA = {
         "caption": "Preserve the intended challenge while reducing accidental barriers."
       },
       "example": {
-        "game": "Horizon Forbidden West",
-        "title": "Accessibility is a system of options",
-        "body": "Modern large games increasingly expose controls, visual/audio options and assistance so players can tune barriers without requiring a single one-size-fits-all mode.",
-        "src": "https://www.guerrilla-games.com/media/News/HFW_SCREEN_LEGAL_GLIDER_4K_RGB_20210512.webp",
-        "sourceUrl": "https://www.guerrilla-games.com/read/horizon-forbidden-west-gameplay-reveal",
-        "sourceTitle": "Guerrilla — Horizon Forbidden West"
+        "game": "Forza Motorsport",
+        "title": "Accessibility can redesign the information channel",
+        "body": "Forza Motorsport’s Blind Driving Assists convert important spatial driving information into configurable audio cues. That is more than adding a difficulty toggle: it changes how track position, steering and braking information can reach a player.",
+        "src": "https://cdn.akamai.steamstatic.com/steam/apps/2440510/header.jpg",
+        "sourceUrl": "https://forza.net/motorsport",
+        "sourceTitle": "Turn 10 Studios — Forza Motorsport"
       },
       "sources": [
         {
+          "title": "From Blind Driving Assists to One Touch Driving — Xbox Wire",
+          "url": "https://news.xbox.com/en-us/2023/04/27/forza-motorsport-accessibility-features-blind-driving/",
+          "note": "Turn 10 explains the research, consultation and design behind Forza Motorsport’s accessibility systems.",
+          "kind": "Developer article"
+        },
+        {
+          "title": "Forza Motorsport — Blind Driving Assists — Xbox",
+          "url": "https://www.youtube.com/watch?v=T7aVUqmQ_Sc",
+          "note": "Official Xbox video with accessibility consultant Brandon Cole and Turn 10 developers demonstrating the system.",
+          "kind": "Video"
+        },
+        {
+          "title": "Forza Motorsport Accessibility Support",
+          "url": "https://support.forzamotorsport.net/hc/en-us/articles/46524064744851-Forza-Motorsport-Accessibility-Support",
+          "note": "Current official documentation for the game’s accessibility and assist options.",
+          "kind": "Official"
+        },
+        {
           "title": "Game Accessibility Guidelines",
           "url": "https://gameaccessibilityguidelines.com/",
-          "note": "Developer-friendly guidelines maintained with industry, specialist and academic input.",
-          "kind": "Industry guidance"
-        },
-        {
-          "title": "Game Accessibility Guidelines — Basic",
-          "url": "https://gameaccessibilityguidelines.com/basic/",
-          "note": "High-impact considerations that apply broadly.",
-          "kind": "Further reading"
-        },
-        {
-          "title": "Full accessibility guideline list",
-          "url": "https://gameaccessibilityguidelines.com/full-list/",
-          "note": "Basic, intermediate and advanced guidance together.",
+          "note": "Practical guidelines organised by player barriers and implementation complexity.",
           "kind": "Further reading"
         }
       ],
@@ -1668,19 +1794,31 @@ window.UE5_THEORY_DATA = {
         "caption": "A signifier sets an expectation; the game should usually honour it."
       },
       "example": {
-        "game": "CONTROL",
-        "title": "Architecture teaches what is important",
-        "body": "Material, lighting, signage and repeated architectural language help distinguish routes, doors, arenas and points of interest inside an intentionally strange building.",
-        "src": "https://cdn.prod.website-files.com/64630b03551142e3347ae3da/6492c4ad955ffc88abcd7409_CONTROL_Blast_Furnace_169.webp",
-        "sourceUrl": "https://www.remedygames.com/games/control",
-        "sourceTitle": "Remedy — CONTROL"
+        "game": "Half-Life 2",
+        "title": "Objects teach use through appearance, context and consequence",
+        "body": "Half-Life 2 repeatedly uses familiar objects and environmental context to suggest interaction: a can can be picked up, a padlock suggests a blocked route, movable physics objects invite experimentation. The important lesson is that players read what an object appears to allow before they know its code.",
+        "src": "https://cdn.akamai.steamstatic.com/steam/apps/220/header.jpg",
+        "sourceUrl": "https://www.half-life.com/en/halflife2",
+        "sourceTitle": "Valve — Half-Life 2"
       },
       "sources": [
         {
+          "title": "Affordance Design in Half-Life 2 — Game Developer",
+          "url": "https://www.gamedeveloper.com/design/affordance-design-in-half-life-2",
+          "note": "A direct analysis of perceptible, hidden and false affordances in Half-Life 2’s opening level.",
+          "kind": "Design analysis"
+        },
+        {
+          "title": "Valve publications",
+          "url": "https://www.valvesoftware.com/en/publications",
+          "note": "Valve’s official archive of design, art and playtesting presentations.",
+          "kind": "Official"
+        },
+        {
           "title": "Level Design in a Day — GDC Vault",
           "url": "https://gdcvault.com/play/1014207/Level-Design-in-a-Day",
-          "note": "A collection of level-design practice and theory sessions.",
-          "kind": "Further reading"
+          "note": "Useful professional context for communicating interaction and intent through spaces.",
+          "kind": "Developer talk"
         }
       ],
       "task": {
@@ -1763,19 +1901,31 @@ window.UE5_THEORY_DATA = {
         "caption": "Players should repeatedly regain orientation after making a choice."
       },
       "example": {
-        "game": "INSIDE",
-        "title": "Composition points without arrows",
-        "body": "Framing, contrast, movement and level geometry direct attention while the screen remains remarkably uncluttered.",
-        "src": "https://playdead.com/css/img/inside/screenshots/INSIDE_01.jpg",
-        "sourceUrl": "https://playdead.com/games/inside/",
-        "sourceTitle": "Playdead — INSIDE"
+        "game": "Firewatch",
+        "title": "Guide exploration without turning the world into a corridor",
+        "body": "Firewatch has to support free-looking exploration while still moving players toward story goals. World structure, goals, gating and level composition quietly narrow possibilities at the right moments, allowing the wilderness to feel explorable without becoming directionless.",
+        "src": "https://cdn.akamai.steamstatic.com/steam/apps/383870/header.jpg",
+        "sourceUrl": "https://www.firewatchgame.com/",
+        "sourceTitle": "Campo Santo — Firewatch"
       },
       "sources": [
         {
-          "title": "Level Design in a Day — GDC Vault",
-          "url": "https://www.gdcvault.com/play/1030783/Level-Design-in-a-Day",
-          "note": "Level-design sessions covering practical spatial decisions.",
-          "kind": "Further reading"
+          "title": "Designing for Exploration and Choice in Firewatch — GDC Vault",
+          "url": "https://www.gdcvault.com/play/1022409/Designing-for-Exploration-and-Choice",
+          "note": "Campo Santo discusses world structure, goals, gating and encounter design for a non-combat exploration game.",
+          "kind": "Developer talk"
+        },
+        {
+          "title": "Video: Designing for exploration and choice in Firewatch — Game Developer",
+          "url": "https://www.gamedeveloper.com/design/video-designing-for-exploration-and-choice-in-i-firewatch-i-",
+          "note": "Free video/article version of the Campo Santo design talk.",
+          "kind": "Video"
+        },
+        {
+          "title": "Firewatch — About",
+          "url": "https://www.firewatchgame.com/about/",
+          "note": "Official game information and developer audio-tour details.",
+          "kind": "Official"
         }
       ],
       "task": {
@@ -1858,25 +2008,31 @@ window.UE5_THEORY_DATA = {
         "caption": "The player reconstructs a story from evidence rather than receiving a lecture."
       },
       "example": {
-        "game": "Alan Wake 2",
-        "title": "Spaces carry narrative information",
-        "body": "Set dressing, light, signs, objects and spatial contrast support the investigation and horror tone. The question is what each clue tells the player about people, events or danger.",
-        "src": "https://www.alanwake.com/wp-content/uploads/2024/06/aw2-photo-mode-03-1920x1080.png",
-        "sourceUrl": "https://www.alanwake.com/",
-        "sourceTitle": "Remedy — Alan Wake 2"
+        "game": "OMORI",
+        "title": "A space can represent memory as well as location",
+        "body": "OMORI uses stark contrasts between White Space, Headspace and Faraway Town to make environment part of the story. Repetition, absence, object placement and changes in familiar places communicate memory, avoidance and trauma before the player is given a complete verbal explanation.",
+        "src": "https://cdn.akamai.steamstatic.com/steam/apps/1150690/header.jpg",
+        "sourceUrl": "https://www.omocat.com/omori",
+        "sourceTitle": "OMOCAT — OMORI"
       },
       "sources": [
         {
-          "title": "What Happened Here? Environmental Storytelling — GDC Vault",
-          "url": "https://www.gdcvault.com/play/1012696/What-Happened-Here-Environmental",
-          "note": "Harvey Smith and Matthias Worch on environmental storytelling.",
-          "kind": "Industry talk"
+          "title": "Trauma in OMORI’s Environmental Design — Games and Culture",
+          "url": "https://journals.sagepub.com/doi/10.1177/15554120231162982",
+          "note": "Academic analysis focused specifically on how OMORI’s spaces represent trauma and memory.",
+          "kind": "Research"
         },
         {
-          "title": "Designing for Non-Linear Storytelling in Tacoma — GDC Vault",
-          "url": "https://www.gdcvault.com/play/1025178/Level-Design-Workshop-Designing-for",
-          "note": "How space can support discovery of story in different orders.",
-          "kind": "Further reading"
+          "title": "OMORI developer interview — Game*Spark",
+          "url": "https://www.gamespark.jp/article/2021/02/05/105845.html",
+          "note": "OMOCAT discusses the game’s story, themes, visual identity and the personal experiences that informed the work.",
+          "kind": "Developer interview"
+        },
+        {
+          "title": "OMORI Official Walkthrough & Artbook — OMOCAT",
+          "url": "https://www.omocat-shop.com/collections/omori/products/omori-the-official-walkthrough-artbook",
+          "note": "Official art and development material, including creator/artist material around the game’s world.",
+          "kind": "Official"
         }
       ],
       "task": {
@@ -1959,19 +2115,31 @@ window.UE5_THEORY_DATA = {
         "caption": "The outcome is produced by system interaction, not selected from one authored script."
       },
       "example": {
-        "game": "CONTROL",
-        "title": "Systems can collide",
-        "body": "Physics objects, powers, enemy behaviour and destructible spaces can combine into combat moments that are authored at the system level rather than choreographed one-by-one.",
-        "src": "https://cdn.prod.website-files.com/64630b03551142e3347ae3da/6492c4ad955ffc88abcd7409_CONTROL_Blast_Furnace_169.webp",
-        "sourceUrl": "https://www.remedygames.com/games/control",
-        "sourceTitle": "Remedy — CONTROL"
+        "game": "HITMAN World of Assassination",
+        "title": "Author systems and opportunities, not every exact outcome",
+        "body": "HITMAN’s locations combine disguises, schedules, restricted spaces, distractions, accidents, NPC behaviours and tools. Designers author the rules and opportunities, but players can combine them into assassination plans and mishaps that were not scripted as one fixed sequence.",
+        "src": "https://cdn.akamai.steamstatic.com/steam/apps/1659040/header.jpg",
+        "sourceUrl": "https://hitman.com/",
+        "sourceTitle": "IO Interactive — HITMAN World of Assassination"
       },
       "sources": [
         {
-          "title": "Rules of Play — MIT Press",
-          "url": "https://mitpress.mit.edu/9780262240451/rules-of-play/",
-          "note": "Includes emergence as a key way of understanding games as systems.",
-          "kind": "Further reading"
+          "title": "Modular Sandbox Design: Tools and Workflows for Hitman — GDC Vault",
+          "url": "https://www.gdcvault.com/play/1022840/Modular-Sandbox-Design-Tools-and",
+          "note": "IO Interactive explains the modular systems and workflows behind its assassination sandbox.",
+          "kind": "Developer talk"
+        },
+        {
+          "title": "Lessons learned from five years on the Hitman series — Game Developer",
+          "url": "https://www.gamedeveloper.com/production/q-a-lessons-learned-from-five-years-spent-on-the-i-hitman-i-series",
+          "note": "IO Interactive discusses systemic kills, player-created scenarios and lessons from building the sandbox.",
+          "kind": "Developer interview"
+        },
+        {
+          "title": "Level Design in Hitman: Guiding Players in a Non-Linear Sandbox — GDC",
+          "url": "https://www.youtube.com/watch?v=hc8_W2PERZE",
+          "note": "Official GDC video about supporting players inside an open-ended sandbox without removing freedom.",
+          "kind": "Video"
         }
       ],
       "task": {
@@ -2054,25 +2222,25 @@ window.UE5_THEORY_DATA = {
         "caption": "A finished small game provides more evidence than a huge design document and half a prototype."
       },
       "example": {
-        "game": "INSIDE",
-        "title": "Constraint creates focus",
-        "body": "A restricted action set does not mean shallow design. Limits let level situations, timing and environment carry more of the experience.",
-        "src": "https://playdead.com/css/img/inside/screenshots/INSIDE_01.jpg",
-        "sourceUrl": "https://playdead.com/games/inside/",
-        "sourceTitle": "Playdead — INSIDE"
+        "game": "A Short Hike",
+        "title": "Small scope can sharpen the whole game",
+        "body": "A Short Hike was built around a deliberately tiny open world and a tight production deadline. Its limited scale encouraged reusable tools, a focused movement set and “stretch” features that could be cut without breaking the core experience—scope becoming a design strength rather than only a production restriction.",
+        "src": "https://cdn.akamai.steamstatic.com/steam/apps/1055540/header.jpg",
+        "sourceUrl": "https://ashorthike.com/",
+        "sourceTitle": "Adam Robinson-Yu — A Short Hike"
       },
       "sources": [
         {
-          "title": "Designing Over the Top: Saints Row — GDC Vault",
-          "url": "https://www.gdcvault.com/play/1016157/Designing-Over-the-Top-Saints",
-          "note": "Useful production/design perspective on selecting and managing ideas.",
-          "kind": "Further reading"
+          "title": "Crafting A Tiny Open World: A Short Hike Postmortem — GDC Vault",
+          "url": "https://www.gdcvault.com/play/1026613/",
+          "note": "Adam Robinson-Yu explains how a small scale, deadline and production constraints shaped the game.",
+          "kind": "Developer talk"
         },
         {
-          "title": "Designing Assassin’s Creed II — GDC Vault",
-          "url": "https://www.gdcvault.com/play/1012306/Designing-Assassin-s-Creed",
-          "note": "A large-team example of structuring ambitious design.",
-          "kind": "Further reading"
+          "title": "Finding smart shortcuts in A Short Hike — Game Developer",
+          "url": "https://www.gamedeveloper.com/design/finding-smart-shortcuts-in-a-short-hike-postmortem-unlocking-the-vault-4",
+          "note": "A concise breakdown of the postmortem’s lessons on limitations, stretch goals and finishing a small game.",
+          "kind": "Developer article"
         }
       ],
       "task": {
@@ -2155,25 +2323,31 @@ window.UE5_THEORY_DATA = {
         "caption": "If the prototype cannot fail, it probably is not testing a useful assumption."
       },
       "example": {
-        "game": "CONTROL",
-        "title": "Prototype the behaviour before the spectacle",
-        "body": "A final telekinetic combat system contains huge production value, but the early design question is much simpler: is grabbing, aiming and throwing objects tactically interesting and readable?",
-        "src": "https://cdn.prod.website-files.com/64630b03551142e3347ae3da/6492c4ad955ffc88abcd7409_CONTROL_Blast_Furnace_169.webp",
-        "sourceUrl": "https://www.remedygames.com/games/control",
-        "sourceTitle": "Remedy — CONTROL"
+        "game": "Hades",
+        "title": "Build something testable, then let evidence reshape it",
+        "body": "Hades was designed for Early Access from the beginning. Supergiant shipped a playable structure, watched how people used it and repeatedly changed systems, balance and content. It is a useful large-scale example of the prototype mindset: expose uncertain ideas to play before treating them as final.",
+        "src": "https://cdn.akamai.steamstatic.com/steam/apps/1145360/header.jpg",
+        "sourceUrl": "https://www.supergiantgames.com/games/hades/",
+        "sourceTitle": "Supergiant Games — Hades"
       },
       "sources": [
         {
-          "title": "Prototyping Based Design: A Better Way to Create Games — GDC Vault",
-          "url": "https://www.gdcvault.com/play/1012473/Prototyping-Based-Design-A-Better",
-          "note": "Lee Perry / Epic on prototype-led design.",
-          "kind": "Further reading"
+          "title": "Hades FAQ — Supergiant Games",
+          "url": "https://www.supergiantgames.com/blog/hades-faq/",
+          "note": "Supergiant explains that Hades was designed around Early Access so it could evolve through player feedback.",
+          "kind": "Official"
         },
         {
-          "title": "Play Early, Play Often: Prototyping Civilization IV — GDC Vault",
-          "url": "https://www.gdcvault.com/play/1013284/Play-Early-Play-Often-Prototyping",
-          "note": "A production example of early, repeated prototyping.",
-          "kind": "Further reading"
+          "title": "Hades: Developing Hell — Noclip",
+          "url": "https://www.noclip.video/hades",
+          "note": "A documentary series embedded with Supergiant throughout Hades’ Early Access development.",
+          "kind": "Video"
+        },
+        {
+          "title": "Prototyping Based Design: A Better Way to Create Games — GDC Vault",
+          "url": "https://www.gdcvault.com/play/1012473/Prototyping-Based-Design-A-Better",
+          "note": "Professional guidance on answering design questions with cheap, playable prototypes.",
+          "kind": "Developer talk"
         }
       ],
       "task": {
@@ -2257,25 +2431,31 @@ window.UE5_THEORY_DATA = {
         "caption": "A bug or misunderstanding discovered early is useful information, not failure."
       },
       "example": {
-        "game": "INSIDE",
-        "title": "Readable play depends on observation",
-        "body": "A game with minimal explicit instruction has to be repeatedly tested for where players look, what they try and whether spatial cues create the intended understanding.",
-        "src": "https://playdead.com/css/img/inside/screenshots/INSIDE_01.jpg",
-        "sourceUrl": "https://playdead.com/games/inside/",
-        "sourceTitle": "Playdead — INSIDE"
+        "game": "Left 4 Dead",
+        "title": "Observe real players, change the game, test again",
+        "body": "Valve used external playtesting throughout Left 4 Dead’s development, watching where players struggled and changing systems, visuals and spaces in response. The important evidence was behaviour: what testers actually saw, understood and did—not what the team hoped they would do.",
+        "src": "https://cdn.akamai.steamstatic.com/steam/apps/500/header.jpg",
+        "sourceUrl": "https://www.l4d.com/",
+        "sourceTitle": "Valve — Left 4 Dead"
       },
       "sources": [
         {
-          "title": "Valve's Approach to Playtesting — GDC Vault",
-          "url": "https://www.gdcvault.com/play/1566/Valve-s-Approach-to-Playtesting",
-          "note": "Mike Ambinder on Valve’s empirical approach to playtesting.",
-          "kind": "Further reading"
+          "title": "Left 4 Dead Blog — playtesting at Valve",
+          "url": "https://www.l4d.com/blog/post.php?id=1849",
+          "note": "Valve describes bringing in people from outside the company, observing them and changing the game based on their experience.",
+          "kind": "Official"
         },
         {
-          "title": "Playtesting: Avoiding Evil — GDC Vault",
-          "url": "https://www.gdcvault.com/play/1024451/Playtesting-Avoiding-Evil",
-          "note": "Practical thinking about extracting useful information from playtests.",
-          "kind": "Further reading"
+          "title": "Valve publications",
+          "url": "https://www.valvesoftware.com/en/publications",
+          "note": "Valve’s official archive lists “Valve’s Approach to Playtesting: The Application of Empiricism” and its Left 4 Dead design talks.",
+          "kind": "Official"
+        },
+        {
+          "title": "Left 4 Dead art direction and playtesting — Valve",
+          "url": "https://www.l4d.com/blog/?p=51",
+          "note": "Concrete examples of visual and level-design changes made after playtesters could not read threats or routes clearly.",
+          "kind": "Developer article"
         }
       ],
       "task": {
@@ -2360,49 +2540,37 @@ window.UE5_THEORY_DATA = {
         "caption": "The success test is not “does it contain everything?” but “does this still create the important kind of play?”"
       },
       "example": {
-        "game": "Videogame → tabletop",
-        "title": "Translate computation into decisions",
-        "body": "Enemy AI can become a behaviour deck or priority table. Crafting can become resource tokens and recipes. Fog of war can become face-down tiles. Cooldowns can become rotated cards or counters. Stealth can become patrol rules, noise and vision cones.",
-        "src": "https://drop-assets.ea.com/images/5Cr5lTNDijF2pzIopPZduH/2009d571be74052edf094ce0a992253f/ds-gp-hallway-04-no-watermark.jpg",
-        "sourceUrl": "https://www.ea.com/games/dead-space/dead-space",
-        "sourceTitle": "EA — Dead Space"
+        "game": "Slay the Spire → Slay the Spire: The Board Game",
+        "title": "Preserve the decisions, not the computer",
+        "body": "The digital Slay the Spire can calculate large numbers, enemy logic and many status effects instantly. The board game keeps the recognisable deckbuilding decisions but compresses maths, converts automated systems into cards/tokens and adds cooperative play that makes sense around a physical table.",
+        "src": "https://cdn.akamai.steamstatic.com/steam/apps/646570/header.jpg",
+        "sourceUrl": "https://contentiongames.com/games/slay/",
+        "sourceTitle": "Contention Games — Slay the Spire: The Board Game"
       },
       "sources": [
         {
-          "title": "Dark Souls Board Games — Steamforged",
-          "url": "https://steamforged.com/en-gb/pages/dark-souls-board-games",
-          "note": "Official adaptation page.",
-          "kind": "Further reading"
-        },
-        {
-          "title": "Dark Souls free rules/resources — Steamforged",
-          "url": "https://steamforged.com/en-gb/collections/dark-souls-board-game-free-resource-vault",
-          "note": "Useful for studying how a commercial rule set communicates play.",
-          "kind": "Further reading"
-        },
-        {
-          "title": "Minecraft: Builders & Biomes — Ravensburger",
-          "url": "https://www.ravensburger.co.uk/en-GB/products/games/strategy-games/minecraft-builders-biomes--26132",
-          "note": "Official product/adaptation information.",
-          "kind": "Further reading"
-        },
-        {
           "title": "Slay the Spire: The Board Game — Contention Games",
           "url": "https://contentiongames.com/games/slay/",
-          "note": "Official adaptation page.",
-          "kind": "Further reading"
+          "note": "Official board-game page: components, co-op structure and the physical adaptation.",
+          "kind": "Official"
         },
         {
-          "title": "Slay the Spire rulebook — Contention Games",
+          "title": "Slay the Spire: The Board Game rulebook — Contention Games",
           "url": "https://contentiongames.com/_images/STS_KS_Rulebook.pdf",
-          "note": "Read the actual rules and compare them with the videogame.",
-          "kind": "Further reading"
+          "note": "Read the physical rules and compare what was preserved, simplified or replaced.",
+          "kind": "Official rules"
         },
         {
-          "title": "Bloodborne Board Game rulebook — CMON",
-          "url": "https://resources.cmon.com/Bloodborne-Rulebook-Final.pdf",
-          "note": "Another videogame-to-tabletop rule set for comparison.",
-          "kind": "Further reading"
+          "title": "Designing Slay the Spire — The Board Game — Nerdlab",
+          "url": "https://nerdlab-games.com/090-designing-slay-the-spire-the-boardgame-with-gary-dworetsky/",
+          "note": "Interview/podcast with board-game designer Gary Dworetsky about adapting the digital game.",
+          "kind": "Developer interview"
+        },
+        {
+          "title": "Dark Souls Board Games — Steamforged",
+          "url": "https://steamforged.com/en-gb/pages/dark-souls-board-games",
+          "note": "A second adaptation to compare: which digital ideas survive differently at the table?",
+          "kind": "Further comparison"
         }
       ],
       "task": {

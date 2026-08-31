@@ -1,4 +1,8 @@
-# Current release — v3.41.1
+# Current release — v3.41.2
+
+**Theory Case Study Diversity Pass.** Keeps the v3.41.1 Guided Paths system intact while rebuilding the 24 Game Design Theory case studies so every lesson uses a different game. Adds OMORI, Jet Set Radio, Journey, Baldur’s Gate 3, Papers Please, XCOM 2, Mario Kart 8 Deluxe, Stardew Valley, Street Fighter 6, Portal, Forza Motorsport, Half-Life 2, Firewatch, HITMAN, A Short Hike, Hades, Left 4 Dead and more, with expanded professional/developer/official reading and video material. Existing Theory IDs, XP and progress are preserved. See `RELEASE-NOTES-v3.41.2.md` and `THEORY-DIVERSITY-QA-v3.41.2.md`.
+
+## Previous release — v3.41.1
 
 **Guided Paths teaching pass.** Keeps three genuinely cross-Hub outcome routes: Build a Playable Level, Create a Gameplay Mechanic, and Digital Game → Tabletop. Removes the duplicate 3D path, adds real Level Design study/research, makes Unreal mechanic choices prerequisite-aware, and makes practical tabletop/playtest stages count toward pathway completion. Path checkpoints sync through existing `lesson_progress` without XP, new tables, SQL migrations or an extra routine read. See `RELEASE-NOTES-v3.41.1.md` and `GUIDED-PATHS-QA-v3.41.1.md`.
 
