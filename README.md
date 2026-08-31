@@ -1,6 +1,6 @@
-# Current release — v3.41.3
+# Current release — v3.42.0
 
-**Theory Case Study Parity + Watch It In Action.** Brings all 24 unique Game Design Theory case studies up to the same teaching standard: a bespoke three-point design breakdown, a designer question, at least three written professional/official/developer sources, and a purpose-picked gameplay/trailer/developer video where it adds value. Fifteen YouTube sources are click-to-load through privacy-enhanced embeds; nine lessons link to the strongest official/developer/professional media page instead. No video player or thumbnail loads on lesson open. Existing Theory IDs, quizzes, tasks, XP, progress and Guided Paths are preserved. See `RELEASE-NOTES-v3.41.3.md` and `THEORY-CASE-STUDY-PARITY-QA-v3.41.3.md`.
+**Teacher Command Centre.** Makes learning progress genuinely scannable for teachers across Unreal, Game Design Theory, Designer Studio, 3D/Sculpt and Guided Paths; adds weekly XP/streak context to class detail; brings Guided Path checkpoints into teacher tracking; adds three pathway badges; and puts a compact class leaderboard at the top of the signed-in homepage. It also fixes the live Theory/Designer-source XP map so Theory awards 25 XP and Designer source tasks award 20 XP as intended. See `RELEASE-NOTES-v3.42.0.md` and `TEACHER-COMMAND-CENTRE-QA-v3.42.0.md`.
 
 ## Previous release — v3.41.2
 

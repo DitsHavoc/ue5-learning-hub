@@ -1,3 +1,13 @@
+## v3.42.0 — Teacher Command Centre — 31 Aug 2026
+- Rebuilt the Teacher dashboard around a class-by-class Learning Pulse covering Unreal, Theory, Designer Studio, 3D/Sculpt, Guided Path checkpoints and recent activity.
+- Added a class-detail snapshot with all three Guided Path percentages, weekly XP, streak and last activity per student.
+- Added Guided Path checkpoint rows to class content tracking without awarding XP.
+- Expanded My Progress to show Building Blocks, Designer Studio, Guided Paths, Max videos and Build X activity.
+- Added Level Architect, Mechanic Maker and Tabletop Translator badges for completing the three Guided Paths.
+- Added a compact top-three weekly class leaderboard to the signed-in homepage; full ranking remains on the Leaderboard page and respects the teacher pause switch.
+- Fixed the live XP map: Game Design Theory is +25 XP and Designer industry-source tasks are +20 XP. Existing mis-awarded Theory events are corrected by migration.
+- Replaced the Network Quiet teacher progress summary RPC with a current compact summary covering every tracked learning area plus last activity.
+
 ## v3.41.3 — Theory Case Study Parity + Watch It In Action — 31 Aug 2026
 
 - Gives all 24 Theory lessons a bespoke case-study breakdown with three game-specific design observations and one designer question.

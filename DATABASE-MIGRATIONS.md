@@ -1,3 +1,14 @@
+## v3.40.0 — Game Design Theory XP
+
+Run after v3.39.4 migrations:
+
+```sql
+-- Supabase SQL Editor
+-- migrations/20260831_38_game_design_theory_xp.sql
+```
+
+This changes only the existing private XP lookup function so `theory:*` lesson completions award **25 XP** through the existing `lesson_progress` → `learning_xp_events` trigger. No new table, policy or routine read is introduced.
+
 ## v3.39.4 — Network Quiet
 
 Apply after v3.39.3:
@@ -342,3 +353,22 @@ The product decision then changed: collaborative Hub Projects and formal lesson-
 **Critique Board is not retired.** Its class-scoped Storage INSERT/UPDATE/DELETE policies remain writable, and its images are client-compressed/thumbnailed by v3.39.3.
 
 Both migrations were applied successfully to the live UE5 Learning Hub project on 30 Aug 2026. Post-migration policy verification showed that the only remaining non-SELECT Storage policies in the audited project/evidence set were the three Critique Board media policies.
+
+## v3.42.0 — Teacher Command Centre Tracking Parity
+
+File: `migrations/20260831_39_teacher_command_centre_tracking.sql`
+
+The Teacher Command Centre audit found that the v3.40 Theory XP migration file had been included in the static build but had never been applied to the live project. As a result, `theory:*` completions were falling through to the old 100 XP default instead of the intended 25 XP, and future `designsource:*` completions could also fall through incorrectly.
+
+Migration 39:
+- maps `theory:*` to 25 XP
+- maps `designsource:*` to 20 XP
+- explicitly maps `pathway:*` to 0 XP
+- preserves all existing Unreal, tutorial, Building Block, 3D, Sculpt and Chapter Build XP values
+- repairs already-recorded Theory learning-XP events to 25 XP (five events existed at migration time)
+- repairs any existing Designer-source learning-XP events to 20 XP
+- expands `get_teacher_progress_summary()` to cover Building Blocks, Theory, Designer source tasks, all current 3D families, Sculpt, Chapter Builds, Guided Path checkpoints and last Hub activity
+
+No tables, buckets, RLS policies or assignment/project workflows are added. Guided Path checkpoints continue to use `lesson_progress` with no XP. The overview remains a compact server-side aggregation for Network Quiet; raw per-lesson rows are fetched only after a teacher opens a specific class.
+
+Applied successfully to the live UE5 Learning Hub Supabase project on 31 Aug 2026 as migration `teacher_command_centre_tracking`. Post-migration verification returned Theory = 25 XP, Designer source = 20 XP, Pathway checkpoint = 0 XP and Tutorial = 25 XP. All five pre-existing Theory XP events were verified at 25 XP after repair.

@@ -62,6 +62,9 @@ const BADGE_META={
   'design-thinker':{rarity:'Epic',tone:'epic',hint:'Complete all eight Designer Studio builds.'},
   'design-analyst':{rarity:'Uncommon',tone:'uncommon',hint:'Complete six Game Design Theory lessons.'},
   'theory-scholar':{rarity:'Epic',tone:'epic',hint:'Complete all Game Design Theory lessons.'},
+  'level-architect':{rarity:'Rare',tone:'rare',hint:'Complete the Build a Playable Level Guided Path.'},
+  'mechanic-maker':{rarity:'Rare',tone:'rare',hint:'Complete the Create a Gameplay Mechanic Guided Path.'},
+  'tabletop-translator':{rarity:'Epic',tone:'epic',hint:'Complete the Digital Game → Tabletop Guided Path.'},
   'digital-clay':{rarity:'Uncommon',tone:'uncommon',hint:'Complete all six Sculpt Playground exercises.'},
   'teacher':{rarity:'Staff',tone:'staff',hint:'Exclusive to verified Learning Hub teacher accounts.'}
 };
@@ -275,10 +278,16 @@ function equippedBadge(){
 function nextBadgeTarget(){
   const done=completedLessons().length,tuts=completedTutorialCount(),game=projectProgress().complete,builds=state.chapterBuildCompleted.length;
   const ids=new Set(state.completed);
+  const pathBadgeTargets=[
+    ['playable-level','level-architect'],
+    ['gameplay-mechanic','mechanic-maker'],
+    ['digital-to-tabletop','tabletop-translator']
+  ].map(([pathId,id])=>{const x=guidedPathProgress(pathId);return {id,current:x.done,target:x.total}}).filter(x=>x.current>0&&x.target>0);
   const candidates=[
     {id:'first-step',current:Math.min(done,1),target:1},
     {id:'recipe',current:Math.min(tuts,5),target:5},
     {id:'design-analyst',current:Math.min((state.theoryCompleted||[]).length,6),target:6},
+    ...pathBadgeTargets,
     {id:'blueprint-core',current:['variables','branches','functions'].filter(x=>ids.has(x)).length,target:3},
     {id:'halfway',current:Math.min(done,10),target:10},
     {id:'chapter-build',current:Math.min(builds,1),target:1},
@@ -1436,6 +1445,29 @@ function guidedPathProgress(value){
   const current=p.steps.findIndex(s=>guidedStepTrackable(s)&&!guidedItemDone(s));
   return {done,total:track.length,pct:track.length?Math.round(done/track.length*100):0,current};
 }
+function guidedItemDoneForProgress(item,completed,checkpoints){
+  if(!item)return false;
+  if(item.type==='choice')return (item.options||[]).some(x=>guidedItemDoneForProgress(x,completed,checkpoints));
+  if(item.type==='group'||item.type==='route')return (item.items||[]).length>0&&(item.items||[]).every(x=>guidedItemDoneForProgress(x,completed,checkpoints));
+  if(item.type==='checkpoint')return checkpoints.has(item.id);
+  if(item.type==='theory')return completed.has(`theory:${item.id}`);
+  if(item.type==='lesson')return completed.has(item.id);
+  if(item.type==='tutorial')return completed.has(`tutorial:${item.id}`);
+  if(item.type==='designBuild')return completed.has(`designbuild:${item.id}`);
+  if(item.type==='designSource'){const m=designModule(item.module);return Boolean(m)&&completed.has(`designsource:${designSourceKey(m,Number(item.index)||0)}`)}
+  if(item.type==='modelFoundation')return completed.has(`modeltheory:${item.id}`);
+  if(item.type==='modelFinal')return completed.has('modelfoundation:final');
+  if(item.type==='modelLesson')return completed.has(`model:${item.id}`);
+  if(item.type==='modelBuild')return completed.has(`modelbuild:${item.id}`);
+  if(item.type==='chapterBuild')return completed.has(`chapter:${item.id}`);
+  return false;
+}
+function guidedPathProgressForStudent(value,rows,userId){
+  const p=typeof value==='string'?guidedPath(value):value;if(!p)return {done:0,total:0,pct:0};
+  const mine=(rows||[]).filter(r=>r.user_id===userId),completed=new Set(mine.filter(r=>r.completed).map(r=>r.lesson_id)),checkpoints=new Set(mine.filter(r=>r.lesson_id?.startsWith('pathway:')&&r.completed_at).map(r=>r.lesson_id.slice(8)));
+  const track=p.steps.filter(guidedStepTrackable),done=track.filter(step=>guidedItemDoneForProgress(step,completed,checkpoints)).length;
+  return {done,total:track.length,pct:track.length?Math.round(done/track.length*100):0};
+}
 function guidedChoiceOptions(step){
   return `<div class="guided-choice-grid">${(step.options||[]).map(o=>{
     const done=guidedItemDone(o),x=guidedItemInfo(o);
@@ -1503,12 +1535,32 @@ function classHomeShortcut(){
   </section>`;
 }
 
+function homeLeaderboardPreview(){
+  if(!BACKEND.user)return '';
+  return `<section class="home-leaderboard" id="homeLeaderboard"><div class="home-leaderboard-head"><div><span class="eyebrow">🏆 CLASS RIVALRY • THIS WEEK</span><h2>Who is making moves?</h2><p>Learning XP only — never grades.</p></div><a class="button ghost small" href="#/leaderboard">Full leaderboard →</a></div><div class="home-leaderboard-body"><div class="empty">Loading this week's leaders…</div></div></section>`;
+}
+async function renderHomeLeaderboardPreview(){
+  const box=$('#homeLeaderboard .home-leaderboard-body');if(!box||!BACKEND.user)return;
+  try{
+    const classes=await BACKEND.getLeaderboardClasses();
+    if(!classes.length){document.getElementById('homeLeaderboard')?.remove();return}
+    const cls=classes.find(c=>c.leaderboard_enabled!==false)||classes[0];
+    if(cls.leaderboard_enabled===false&&!isTeacher()){document.getElementById('homeLeaderboard')?.remove();return}
+    const rows=await BACKEND.getClassLeaderboard(cls.id,'week');
+    const top=rows.slice(0,3),me=rows.find(r=>r.user_id===BACKEND.user.id);
+    if(!rows.length){box.innerHTML=`<div class="home-leaderboard-empty"><b>${esc(cls.name)}</b><span>No XP on the board yet. First useful completion takes the lead.</span></div>`;return}
+    box.innerHTML=`<div class="home-leaderboard-class"><span>${esc(cls.name)}</span><small>${rows.length} student${rows.length===1?'':'s'} ranked</small></div><div class="home-leaderboard-podium">${top.map(r=>`<div class="home-rival ${r.user_id===BACKEND.user.id?'is-you':''}"><span class="home-rival-rank">${leaderboardMedal(r.rank_position)}</span><div><strong>${esc(r.display_name)}${r.user_id===BACKEND.user.id?' <em>YOU</em>':''}</strong><small>${Number(r.weekly_xp||0).toLocaleString()} XP${r.current_streak?` • 🔥 ${r.current_streak}`:''}</small></div></div>`).join('')}</div>${!isTeacher()&&me&&!top.some(r=>r.user_id===BACKEND.user.id)?`<div class="home-your-rank"><span>Your position</span><b>#${me.rank_position}</b><strong>${Number(me.weekly_xp||0).toLocaleString()} XP</strong></div>`:''}`;
+  }catch(e){document.getElementById('homeLeaderboard')?.remove()}
+}
+
 function dashboard(){
   return `<section class="portal-hero portal-hero-clean">
     <div><span class="eyebrow">UE5 LEARNING HUB</span><h1>Choose where to learn.</h1><p>Learn systems. Understand game design. Build worlds and assets. Practise, critique and keep an eye on the industry.</p></div>
   </section>
 
   ${classHomeShortcut()}
+
+  ${homeLeaderboardPreview()}
 
   <a class="guided-home-cta" href="#/pathways"><div class="guided-home-icon">↠</div><div><span class="portal-kicker">NOT SURE WHAT TO DO NEXT?</span><h2>Try a Guided Path</h2><p>Three optional outcome-based routes connect Theory, Designer Studio and Unreal in a sensible order. Nothing else gets locked.</p><div class="portal-chip-row"><span>3 guided paths</span><span>Existing XP counts</span><span>Browse freely anytime</span></div></div><strong>See Guided Paths →</strong></a>
 
@@ -2174,6 +2226,9 @@ function achievementData(approvedCount=0,requestCount=0){
     ['design-thinker','Design Thinker','Complete all eight Designer Studio builds.',(state.designBuildCompleted||[]).length>=DESIGN.modules.length,'✦'],
     ['design-analyst','Design Analyst','Complete six Game Design Theory lessons.',(state.theoryCompleted||[]).length>=6,'◈'],
     ['theory-scholar','Systems Thinker','Complete every Game Design Theory lesson.',(state.theoryCompleted||[]).length>=THEORY.lessons.length,'◎'],
+    ['level-architect','Level Architect','Complete the Build a Playable Level Guided Path.',guidedPathProgress('playable-level').pct===100,'◇'],
+    ['mechanic-maker','Mechanic Maker','Complete the Create a Gameplay Mechanic Guided Path.',guidedPathProgress('gameplay-mechanic').pct===100,'⚙'],
+    ['tabletop-translator','Tabletop Translator','Complete the Digital Game → Tabletop Guided Path.',guidedPathProgress('digital-to-tabletop').pct===100,'🎲'],
     ['digital-clay','Digital Clay','Complete all six Sculpt Playground exercises.',sculptDoneCount>=SCULPT.practices.length,'🗿']
   ];
   if(isTeacher())rows.unshift(['teacher','Unreal Instructor','Verified Learning Hub teacher account. Staff-only badge; students cannot unlock it.',true,'🎓']);
@@ -2189,13 +2244,17 @@ function progressPage(){
   </div>
   <section class="progress-player-banner ${teacher?'teacher-progress-banner':''}"><div class="progress-player-id">${avatarMarkup('xl',userDisplayName())}<div><span class="eyebrow">${esc(userRankTitle())}</span><h2>${esc(userDisplayName())}</h2><p>${teacher?'🎓 Teacher • Level MAX':`Level ${i.n} • ${i.xp} XP`}</p></div></div>${levelRingMarkup()}<div class="progress-equipped"><span>${teacher?'STAFF BADGE':'PINNED BADGE'}</span><strong>${eq?`${eq[4]} ${esc(eq[1])}`:'None yet'}</strong><small>${teacher?'Teacher-only • automatically equipped':eq?esc(BADGE_META[eq[0]]?.rarity||'Common'):'Unlock and pin one below'}</small></div></section>
   <div class="stat-grid">
-    <div class="stat"><small>Lessons</small><strong>${completedLessons().length}/${DATA.lessons.length}</strong></div>
+    <div class="stat"><small>Core lessons</small><strong>${completedLessons().length}/${DATA.lessons.length}</strong></div>
+    <div class="stat"><small>Building Blocks</small><strong>${(state.blockCompleted||[]).length}/${BLOCKS.blocks.length}</strong></div>
     <div class="stat"><small>Practical builds</small><strong>${completedTutorialCount()}/${TOOLS.tutorials.length}</strong></div>
     <div class="stat"><small>Game Design Theory</small><strong>${(state.theoryCompleted||[]).length}/${THEORY.lessons.length}</strong></div>
-    <div class="stat"><small>3D Foundations</small><strong>${modelFoundationChaptersDone()}/${MODEL_FOUNDATIONS.chapters.length}${modelFoundationDone()?' ✓':''}</strong></div><div class="stat"><small>3D Modelling</small><strong>${(state.modelLessonCompleted||[]).length}/${MODEL.lessons.length}</strong></div>
+    <div class="stat"><small>Designer Studio</small><strong>${(state.designBuildCompleted||[]).length}/${DESIGN.modules.length}</strong><span>${(state.designSourceCompleted||[]).length} source tasks</span></div>
+    <div class="stat"><small>Guided Paths</small><strong>${PATHWAYS.paths.filter(p=>guidedPathProgress(p).pct===100).length}/${PATHWAYS.paths.length}</strong><span>${(state.pathwayCheckpoints||[]).length} checkpoints</span></div>
+    <div class="stat"><small>3D Foundations</small><strong>${modelFoundationChaptersDone()}/${MODEL_FOUNDATIONS.chapters.length}${modelFoundationDone()?' ✓':''}</strong></div>
+    <div class="stat"><small>3ds Max videos</small><strong>${(state.modelVideoCompleted||[]).length}/${MODEL_VIDEOS.videos.length}</strong></div>
+    <div class="stat"><small>3D Modelling</small><strong>${(state.modelLessonCompleted||[]).length}/${MODEL.lessons.length}</strong><span>${(state.modelBuildCompleted||[]).length} Build X</span></div>
     <div class="stat"><small>Sculpt Playground</small><strong>${(state.sculptCompleted||[]).length}/${SCULPT.practices.length}</strong></div>
     <div class="stat"><small>Chapter Builds</small><strong>${state.chapterBuildCompleted.length}/${TOOLS.chapterBuilds.length}</strong></div>
-    <div class="stat"><small>Practice mechanics</small><strong>${pp.complete}/${pp.total}</strong></div>
     <div class="stat"><small>${teacher?'Level':'XP'}</small><strong>${teacher?'MAX':i.xp}</strong></div>
   </div>
   <section class="section"><div class="section-head"><div><span class="eyebrow">BADGE CABINET</span><h2>Achievements</h2><p>${teacher?'Your Unreal Instructor badge stays equipped; student-style achievements still record your learning activity.':'Meaningful learning milestones rather than participation confetti. Pin any unlocked badge to your player card.'}</p></div></div><div class="achievement-grid badge-cabinet" id="achievementGrid">${renderAchievements(0,0)}</div></section>
@@ -2465,11 +2524,22 @@ function classProgressRows(o,memberIds,items,prefix='',titleKey=x=>x.title){
     return `<div class="class-content-row"><div class="class-content-name"><strong>${esc(titleKey(item))}</strong>${item.duration?`<small>${esc(item.duration)}</small>`:''}</div><div class="class-content-progress"><div class="progress"><span style="width:${pct}%"></span></div><span>${complete}/${total} complete</span></div></div>`;
   }).join('');
 }
+function classCheckpointRows(o,memberIds,items){
+  const total=memberIds.length;
+  return items.map(item=>{
+    const id=`pathway:${item.id}`;
+    const complete=memberIds.filter(uid=>o.progress.some(p=>p.user_id===uid&&p.lesson_id===id&&p.completed_at)).length;
+    const pct=total?Math.round((complete/total)*100):0;
+    return `<div class="class-content-row"><div class="class-content-name"><strong>${esc(item.title)}</strong><small>${esc(item.pathTitle||'Guided Path')} • no XP</small></div><div class="class-content-progress"><div class="progress"><span style="width:${pct}%"></span></div><span>${complete}/${total} complete</span></div></div>`;
+  }).join('');
+}
 function studentCompletedContent(o,userId){
   const completed=new Set(o.progress.filter(p=>p.user_id===userId&&p.completed).map(p=>p.lesson_id));
   const list=(items,prefix='')=>items.filter(x=>completed.has(prefix+x.id)).map(x=>`<li>${esc(x.title)}</li>`).join('');
   const core=list(DATA.lessons),blocks=list(BLOCKS.blocks,'block:'),tutorials=list(TOOLS.tutorials,'tutorial:'),theory=list(THEORY.lessons,'theory:'),modelTheory=list(MODEL_FOUNDATIONS.chapters,'modeltheory:')+(completed.has('modelfoundation:final')?'<li>Model Doctor</li>':''),model=list(MODEL.lessons,'model:'),sculpt=list(SCULPT.practices,'sculpt:'),design=list(DESIGN.modules.map(m=>({id:m.id,title:m.build?.title||m.title})),'designbuild:'),designSources=list(designSourceItems(),'designsource:'),modelVideos=list(modelVideoItems(),'modelvideo:'),modelBuild=list(MODEL.builds||[],'modelbuild:'),modelFix=list(MODEL.fixes||[],'modelfix:'),chapters=TOOLS.chapterBuilds.filter(x=>completed.has(`chapter:${x.path}`)).map(x=>`<li>${esc(x.title)}</li>`).join('');
+  const pathStatus=PATHWAYS.paths.map(p=>{const x=guidedPathProgressForStudent(p,o.progress,userId);return `<li>${p.icon} ${esc(p.title)} — ${x.done}/${x.total} (${x.pct}%)</li>`}).join('');
   return `<div class="student-content-detail">
+    <div><strong>Guided Paths</strong><ul>${pathStatus}</ul></div>
     <div><strong>Building Blocks</strong><ul>${blocks||'<li class="muted">None completed yet.</li>'}</ul></div>
     <div><strong>Core lessons</strong><ul>${core||'<li class="muted">None completed yet.</li>'}</ul></div>
     <div><strong>Practical builds</strong><ul>${tutorials||'<li class="muted">None completed yet.</li>'}</ul></div>
@@ -2483,18 +2553,25 @@ function studentCompletedContent(o,userId){
 async function renderTeacherClass(classId){
   const box=$('#teacherClassContent');if(!box)return;
   try{
-    const o=await BACKEND.teacherClassOverview(classId);
+    const [o,weeklyRows]=await Promise.all([BACKEND.teacherClassOverview(classId),BACKEND.getClassLeaderboard(classId,'week').catch(()=>[])]);
     const c=(o?.classes||[]).find(x=>String(x.id)===String(classId));
     if(!c){box.innerHTML='<div class="empty"><h3>Class not found.</h3><p>You may no longer teach this class, or it may have been deleted.</p><a class="button ghost" href="#/teacher">Back to Teacher Dashboard</a></div>';return}
     const memberIds=(c.class_members||[]).map(m=>m.user_id);
-    const members=(o.profiles||[]).filter(p=>memberIds.includes(p.id));
+    const members=(o.profiles||[]).filter(p=>memberIds.includes(p.id)).sort((a,b)=>a.display_name.localeCompare(b.display_name));
     const progress=o.progress||[];
     const done=(uid,id)=>progress.some(p=>p.user_id===uid&&p.lesson_id===id&&p.completed);
     const count=(uid,items,prefix='')=>items.filter(x=>done(uid,prefix+x.id)).length;
     const teacherNames=Object.fromEntries((o.teachers||[]).map(t=>[t.id,t.display_name]));
     const teacherIds=(c.class_teachers||[]).map(t=>t.teacher_id);
+    const weeklyBy=Object.fromEntries((weeklyRows||[]).map(r=>[r.user_id,r]));
+    const lastActivity=uid=>{
+      const times=progress.filter(r=>r.user_id===uid&&(r.completed||r.completed_at)).map(r=>new Date(r.completed_at||r.updated_at||0).getTime()).filter(Number.isFinite);
+      return times.length?new Date(Math.max(...times)).toISOString():null;
+    };
+    const checkpointItems=[];const checkpointSeen=new Set();
+    (PATHWAYS.paths||[]).forEach(path=>path.steps.filter(x=>x.type==='checkpoint').forEach(x=>{if(!checkpointSeen.has(x.id)){checkpointSeen.add(x.id);checkpointItems.push({...x,pathTitle:path.title})}}));
     const head=document.querySelector('.class-detail-head');
-    if(head)head.innerHTML=`<div class="breadcrumb"><a href="#/teacher">Teacher Dashboard</a> / ${esc(c.name)}</div><span class="eyebrow">Class learning view • ${esc(c.academic_year||'No academic year')}</span><h1>${esc(c.name)}</h1><p class="muted">One class, its students and exactly what they have completed across the Hub. Formal project work and submissions stay in Microsoft Teams.</p><div class="class-detail-team">${teacherIds.map(id=>`<span>${esc(teacherNames[id]||'Teacher')}${id===c.teacher_id?' • Owner':''}</span>`).join('')}</div>`;
+    if(head)head.innerHTML=`<div class="breadcrumb"><a href="#/teacher">Teacher Dashboard</a> / ${esc(c.name)}</div><span class="eyebrow">Class learning view • ${esc(c.academic_year||'No academic year')}</span><h1>${esc(c.name)}</h1><p class="muted">Scan every student, then drill into exact Hub content. Formal project work and submissions stay in Microsoft Teams.</p><div class="class-detail-team">${teacherIds.map(id=>`<span>${esc(teacherNames[id]||'Teacher')}${id===c.teacher_id?' • Owner':''}</span>`).join('')}</div>`;
     const lessonTotal=DATA.lessons.length*memberIds.length;
     const lessonDone=memberIds.reduce((n,uid)=>n+count(uid,DATA.lessons),0);
     const blockTotal=BLOCKS.blocks.length*memberIds.length;
@@ -2505,6 +2582,7 @@ async function renderTeacherClass(classId){
     const theoryDone=memberIds.reduce((n,uid)=>n+count(uid,THEORY.lessons,'theory:'),0);
     const designDone=memberIds.reduce((n,uid)=>n+count(uid,DESIGN.modules.map(m=>({id:m.id})),'designbuild:'),0);
     const modelDone=memberIds.reduce((n,uid)=>n+count(uid,MODEL.lessons,'model:')+count(uid,MODEL_FOUNDATIONS.chapters,'modeltheory:')+(done(uid,'modelfoundation:final')?1:0),0);
+    const checkpointDone=memberIds.reduce((n,uid)=>n+checkpointItems.filter(x=>progress.some(r=>r.user_id===uid&&r.lesson_id===`pathway:${x.id}`&&r.completed_at)).length,0);
     box.innerHTML=`
       <div class="teacher-grid class-detail-stats">
         <div class="teacher-stat"><small>Students</small><strong>${memberIds.length}</strong></div>
@@ -2514,20 +2592,29 @@ async function renderTeacherClass(classId){
         <div class="teacher-stat"><small>Game Design Theory</small><strong>${theoryDone}</strong><span>of ${theoryTotal||0} student completions</span></div>
         <div class="teacher-stat"><small>Designer builds</small><strong>${designDone}</strong></div>
         <div class="teacher-stat"><small>3D learning</small><strong>${modelDone}</strong></div>
+        <div class="teacher-stat"><small>Guided checkpoints</small><strong>${checkpointDone}</strong><span>required path evidence</span></div>
       </div>
-      <section class="section"><div class="section-head"><div><h2>Students in ${esc(c.name)}</h2><p>Open a student to see the exact content they have completed, not just a percentage.</p></div><span class="sync-chip">${members.length} student${members.length===1?'':'s'}</span></div>
+
+      <section class="section class-snapshot-section"><div class="section-head"><div><span class="eyebrow">AT-A-GLANCE</span><h2>Student learning snapshot</h2><p>The fast scan: core progress, Theory, Designer Studio, 3D, Guided Paths, this week's XP and recent activity.</p></div><a class="button small ghost" href="#/leaderboard">🏆 Full leaderboard</a></div><div class="class-snapshot-scroll"><table class="class-snapshot-table"><thead><tr><th>Student</th><th>Unreal</th><th>Theory</th><th>Designer</th><th>3D / Sculpt</th><th>Guided Paths</th><th>Week XP</th><th>Streak</th><th>Last activity</th></tr></thead><tbody>${members.map(p=>{
+        const core=count(p.id,DATA.lessons),tutorials=count(p.id,TOOLS.tutorials,'tutorial:'),chapters=count(p.id,TOOLS.chapterBuilds.map(x=>({id:x.path})),'chapter:'),theory=count(p.id,THEORY.lessons,'theory:'),design=count(p.id,DESIGN.modules.map(m=>({id:m.id})),'designbuild:'),sources=count(p.id,designSourceItems(),'designsource:'),foundation=count(p.id,MODEL_FOUNDATIONS.chapters,'modeltheory:')+(done(p.id,'modelfoundation:final')?1:0),modelVideos=count(p.id,modelVideoItems(),'modelvideo:'),model=count(p.id,MODEL.lessons,'model:'),buildX=count(p.id,MODEL.builds||[],'modelbuild:'),modelFix=count(p.id,MODEL.fixes||[],'modelfix:'),sculpt=count(p.id,SCULPT.practices,'sculpt:'),xp=weeklyBy[p.id];
+        const pathChips=PATHWAYS.paths.map(path=>{const x=guidedPathProgressForStudent(path,progress,p.id);return `<span class="path-mini ${x.pct===100?'done':''}" title="${esc(path.title)}">${path.icon} ${x.pct}%</span>`}).join('');
+        return `<tr><td><strong>${esc(p.display_name)}</strong></td><td><b>${core}/${DATA.lessons.length}</b><small>${tutorials} practical • ${chapters} chapter</small></td><td><b>${theory}/${THEORY.lessons.length}</b></td><td><b>${design}/${DESIGN.modules.length}</b><small>${sources} source tasks</small></td><td><b>${foundation}/${MODEL_FOUNDATIONS.chapters.length+1}</b><small>${modelVideos}/${MODEL_VIDEOS.videos.length} Max videos • ${model}/${MODEL.lessons.length} lessons • ${buildX} Build X • ${modelFix} fixes • ${sculpt} sculpt</small></td><td><div class="path-mini-row">${pathChips}</div></td><td><b>${Number(xp?.weekly_xp||0).toLocaleString()}</b></td><td>${xp?.current_streak?`🔥 ${xp.current_streak}`:'—'}</td><td><span class="teacher-activity ${lastActivity(p.id)?'active':''}">${teacherActivityLabel(lastActivity(p.id))}</span></td></tr>`;
+      }).join('')}</tbody></table></div></section>
+
+      <section class="section"><div class="section-head"><div><h2>Student detail</h2><p>Open a student to see exact completed content and all three Guided Path percentages.</p></div><span class="sync-chip">${members.length} student${members.length===1?'':'s'}</span></div>
         <div class="class-student-grid">${members.length?members.map(p=>{
           const core=count(p.id,DATA.lessons),blocks=count(p.id,BLOCKS.blocks,'block:'),tutorials=count(p.id,TOOLS.tutorials,'tutorial:'),theory=count(p.id,THEORY.lessons,'theory:'),design=count(p.id,DESIGN.modules.map(m=>({id:m.id})),'designbuild:'),model=count(p.id,MODEL_FOUNDATIONS.chapters,'modeltheory:')+(done(p.id,'modelfoundation:final')?1:0)+count(p.id,MODEL.lessons,'model:')+count(p.id,SCULPT.practices,'sculpt:'),chapters=count(p.id,TOOLS.chapterBuilds.map(x=>({id:x.path})),'chapter:');
           return `<article class="class-student-card"><div class="class-student-head">${avatarMarkup('sm',p.display_name)}<div><h3>${esc(p.display_name)}</h3><span>${core}/${DATA.lessons.length} core lessons</span></div></div><div class="class-student-stats"><span><b>${blocks}</b> blocks</span><span><b>${tutorials}</b> tutorials</span><span><b>${theory}</b> theory</span><span><b>${design}</b> design builds</span><span><b>${model}</b> 3D/sculpt</span><span><b>${chapters}</b> chapter builds</span></div><details><summary>View completed content</summary>${studentCompletedContent(o,p.id)}</details></article>`;
         }).join(''):'<div class="empty"><h3>No students yet.</h3><p>Students will appear here after joining this class.</p></div>'}</div>
       </section>
-      <section class="section class-learning-content"><div class="section-head"><div><span class="eyebrow">CLASS CONTENT</span><h2>What has this class completed?</h2><p>Every row shows how many students in this class have completed that piece of Hub learning. Project briefs, deadlines and submissions are handled in Microsoft Teams.</p></div></div>
+      <section class="section class-learning-content"><div class="section-head"><div><span class="eyebrow">CLASS CONTENT</span><h2>What has this class completed?</h2><p>Every row shows how many students have completed that piece of Hub learning. Guided Path checkpoints are tracked separately because they deliberately award no XP.</p></div></div>
         <details open class="class-content-group"><summary>🧱 Building Blocks <span>${BLOCKS.blocks.length} concepts</span></summary><div>${classProgressRows(o,memberIds,BLOCKS.blocks,'block:')}</div></details>
         <details open class="class-content-group"><summary>🧠 Core System Lessons <span>${DATA.lessons.length} lessons</span></summary><div>${classProgressRows(o,memberIds,DATA.lessons)}</div></details>
         <details class="class-content-group"><summary>🛠 Practical builds <span>${TOOLS.tutorials.length} outcomes</span></summary><div>${classProgressRows(o,memberIds,TOOLS.tutorials,'tutorial:')}</div></details>
         <details class="class-content-group"><summary>◈ Game Design Theory <span>${THEORY.lessons.length} lessons</span></summary><div>${classProgressRows(o,memberIds,THEORY.lessons,'theory:')}</div></details>
         <details class="class-content-group"><summary>🎨 Designer Studio Builds <span>${DESIGN.modules.length} builds</span></summary><div>${classProgressRows(o,memberIds,DESIGN.modules.map(m=>({id:m.id,title:m.build?.title||m.title})),'designbuild:')}</div></details>
         <details class="class-content-group"><summary>🎬 Designer Industry Sources <span>${designSourceItems().length} source tasks</span></summary><div>${classProgressRows(o,memberIds,designSourceItems(),'designsource:')}</div></details>
+        <details class="class-content-group"><summary>↠ Guided Path Checkpoints <span>${checkpointItems.length} practical checkpoints</span></summary><div>${classCheckpointRows(o,memberIds,checkpointItems)}</div></details>
         <details class="class-content-group"><summary>🎥 3ds Max Video Series <span>${MODEL_VIDEOS.videos.length} follow-alongs</span></summary><div>${classProgressRows(o,memberIds,modelVideoItems(),'modelvideo:')}</div></details>
         <details class="class-content-group"><summary>🧠 3D Foundations <span>${MODEL_FOUNDATIONS.chapters.length} chapters + final</span></summary><div>${classProgressRows(o,memberIds,MODEL_FOUNDATIONS.chapters,'modeltheory:')}${classProgressRows(o,memberIds,[{id:'final',title:'Model Doctor'}],'modelfoundation:')}</div></details>
         <details class="class-content-group"><summary>⬡ 3D Modelling <span>${MODEL.lessons.length} lessons</span></summary><div>${classProgressRows(o,memberIds,MODEL.lessons,'model:')}</div></details>
@@ -2687,6 +2774,17 @@ async function hydrateEvidencePreviews(){
   lazySignedPreview($$('[data-evidence-preview]'),{thumbnail:path=>BACKEND.openEvidenceThumbnail(path),full:path=>BACKEND.openEvidenceFile(path),alt:'Student evidence preview',fallbackText:'Preview unavailable — open file'});
 }
 
+function teacherActivityLabel(value){
+  if(!value)return 'No Hub activity yet';
+  const d=new Date(value);if(Number.isNaN(d.getTime()))return '—';
+  const diff=Math.max(0,Date.now()-d.getTime()),min=Math.floor(diff/60000),hr=Math.floor(diff/3600000),day=Math.floor(diff/86400000);
+  if(min<2)return 'Just now';
+  if(min<60)return `${min} min ago`;
+  if(hr<24)return `${hr} hr${hr===1?'':'s'} ago`;
+  if(day<7)return `${day} day${day===1?'':'s'} ago`;
+  return d.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+}
+
 async function renderTeacher(){
   const box=$('#teacherContent');if(!box)return;
   try{
@@ -2694,33 +2792,37 @@ async function renderTeacher(){
     if(!o){box.innerHTML='<div class="empty">Teacher data unavailable.</div>';return}
     const progressRows=o.progressSummary||[],progressBy=Object.fromEntries(progressRows.map(x=>[x.user_id,x]));
     const pcount=(id,key)=>Number(progressBy[id]?.[key]||0);
-    const byStudent=id=>pcount(id,'core_lessons');
-    const tutorialBy=id=>pcount(id,'tutorials');
-    const designBy=id=>pcount(id,'designer_builds');
-    const modelingBy=id=>pcount(id,'modelling');
-    const chapterBy=id=>pcount(id,'chapter_builds');
     const names=Object.fromEntries(o.profiles.map(p=>[p.id,p.display_name]));
     const teacherNames=Object.fromEntries((o.teachers||[]).map(p=>[p.id,p.display_name]));
     const recent=(o.comments||[]).slice(0,12);
     const activeClasses=(o.classes||[]).filter(c=>!c.archived);
     const archivedClasses=(o.classes||[]).filter(c=>c.archived);
+    const designSourcesTotal=designSourceItems().length;
+    const foundationsTotal=MODEL_FOUNDATIONS.chapters.length+1;
+    const pathwayCheckpointTotal=[...new Set((PATHWAYS.paths||[]).flatMap(path=>(path.steps||[]).filter(step=>step.type==='checkpoint').map(step=>step.id)))].length;
+    const sum=key=>progressRows.reduce((n,x)=>n+Number(x[key]||0),0);
+    const modelActivity=x=>Number(x.modelling_foundations||0)+Number(x.modelling_videos||0)+Number(x.modelling_lessons||0)+Number(x.modelling_builds||0)+Number(x.modelling_fixes||0)+Number(x.sculpt||0);
+    const classPulse=activeClasses.map(c=>{
+      const memberIds=(c.class_members||[]).map(m=>m.user_id),members=o.profiles.filter(p=>memberIds.includes(p.id)).sort((a,b)=>a.display_name.localeCompare(b.display_name));
+      return `<article class="teacher-class-pulse"><div class="teacher-class-pulse-head"><div><span class="eyebrow">${esc(c.academic_year||'CURRENT CLASS')}</span><h3>${esc(c.name)}</h3><p>${members.length} student${members.length===1?'':'s'} • scan progress here, open the class for exact content and Guided Path stages.</p></div><a class="button small primary" href="#/teacher/class/${c.id}">Open detailed class →</a></div>${members.length?`<div class="teacher-pulse-scroll"><table class="teacher-pulse-table"><thead><tr><th>Student</th><th>Unreal</th><th>Theory</th><th>Designer</th><th>3D / Sculpt</th><th>Guided</th><th>Last activity</th></tr></thead><tbody>${members.map(st=>{const id=st.id,pr=progressBy[id]||{};return `<tr><td><strong>${esc(st.display_name)}</strong></td><td><b>${pcount(id,'core_lessons')}/${DATA.lessons.length}</b> core<small>${pcount(id,'building_blocks')} blocks • ${pcount(id,'tutorials')} practical • ${pcount(id,'chapter_builds')} chapters</small></td><td><b>${pcount(id,'theory')}/${THEORY.lessons.length}</b><small>Game Design Theory</small></td><td><b>${pcount(id,'designer_builds')}/${DESIGN.modules.length}</b> builds<small>${pcount(id,'designer_sources')}/${designSourcesTotal} source tasks</small></td><td><b>${pcount(id,'modelling_foundations')}/${foundationsTotal}</b> foundations<small>${pcount(id,'modelling_videos')}/${MODEL_VIDEOS.videos.length} Max videos • ${pcount(id,'modelling_lessons')}/${MODEL.lessons.length} lessons • ${pcount(id,'modelling_builds')} Build X • ${pcount(id,'modelling_fixes')} fixes • ${pcount(id,'sculpt')} sculpt</small></td><td><b>${pcount(id,'pathway_checkpoints')}/${pathwayCheckpointTotal}</b><small>required checkpoints</small></td><td><span class="teacher-activity ${pr.last_activity?'active':''}">${teacherActivityLabel(pr.last_activity)}</span></td></tr>`}).join('')}</tbody></table></div>`:'<div class="empty">No students in this class yet.</div>'}</article>`;
+    }).join('');
 
-    box.innerHTML=`<div class="teacher-grid">
+    box.innerHTML=`<div class="teacher-grid teacher-command-stats">
       <div class="teacher-stat"><small>Students</small><strong>${o.profiles.length}</strong></div>
       <div class="teacher-stat"><small>Active classes</small><strong>${activeClasses.length}</strong><span>${archivedClasses.length} archived</span></div>
-      <div class="teacher-stat"><small>Lesson completions</small><strong>${progressRows.reduce((n,x)=>n+Number(x.core_lessons||0),0)}</strong></div>
-      <div class="teacher-stat"><small>Practical builds tried</small><strong>${progressRows.reduce((n,x)=>n+Number(x.tutorials||0),0)}</strong></div>
-      <div class="teacher-stat"><small>Designer builds</small><strong>${progressRows.reduce((n,x)=>n+Number(x.designer_builds||0),0)}</strong></div>
-      <div class="teacher-stat"><small>3D / Foundations</small><strong>${progressRows.reduce((n,x)=>n+Number(x.modelling||0),0)}</strong></div>
-      <div class="teacher-stat"><small>Chapter Builds complete</small><strong>${progressRows.reduce((n,x)=>n+Number(x.chapter_builds||0),0)}</strong></div>
+      <div class="teacher-stat"><small>Core lessons complete</small><strong>${sum('core_lessons')}</strong></div>
+      <div class="teacher-stat"><small>Theory complete</small><strong>${sum('theory')}</strong></div>
+      <div class="teacher-stat"><small>Designer activity</small><strong>${sum('designer_builds')+sum('designer_sources')}</strong><span>builds + source tasks</span></div>
+      <div class="teacher-stat"><small>3D / Sculpt activity</small><strong>${progressRows.reduce((n,x)=>n+modelActivity(x),0)}</strong></div>
+      <div class="teacher-stat"><small>Guided checkpoints</small><strong>${sum('pathway_checkpoints')}</strong><span>${pathwayCheckpointTotal} possible per student • no XP</span></div>
       <div class="teacher-stat"><small>Student requests</small><strong>${(o.requests||[]).length}</strong></div>
     </div>
 
-    <div class="teacher-security-banner"><b>CLASS-SCOPED PRIVACY ACTIVE</b><span>You only see learning progress and lesson comments from classes you own or co-teach. Project briefs, files and formal feedback stay in Microsoft Teams.</span></div>
+    <div class="teacher-security-banner"><b>CLASS-SCOPED PRIVACY ACTIVE</b><span>You only see learning progress and lesson comments from classes you own or co-teach. Formal project work, deadlines and submissions stay in Microsoft Teams.</span></div>
 
-    <section class="section">
-      <div class="section-head"><div><h2>Teacher team</h2><p>Invite colleagues without sharing a permanent master code. Each invite is unique, expires and can only be used once.</p></div><span class="sync-chip">${o.teachers?.length||1} teacher${(o.teachers?.length||1)===1?'':'s'}</span></div>
-      <div class="teacher-split">
+    <section class="section teacher-learning-pulse"><div class="section-head"><div><span class="eyebrow">LEARNING PULSE</span><h2>What has everyone actually done?</h2><p>One scan across Unreal, Theory, Designer Studio, 3D and Guided Path checkpoints. Open a class for the exact lessons, builds, path percentages, weekly XP and streaks.</p></div><a class="button small ghost" href="#/leaderboard">🏆 Open leaderboard</a></div><div class="teacher-class-pulse-list">${classPulse||'<div class="empty"><h3>No active classes yet.</h3><p>Create a class below, then students can join with its code.</p></div>'}</div></section>
+
+    <details class="teacher-admin-section"><summary><span>👥 Teacher team & invites</span><small>${o.teachers?.length||1} teacher${(o.teachers?.length||1)===1?'':'s'}</small></summary><section class="section teacher-admin-inner"><div class="teacher-split">
         <form class="project-panel form-grid" data-action-form="create-teacher-invite">
           <span class="eyebrow">Invite a teacher</span>
           <label>Who is it for? <span class="muted">(optional)</span><input name="label" maxlength="120" placeholder="e.g. Leah / Games teacher"></label>
@@ -2728,12 +2830,9 @@ async function renderTeacher(){
           <button class="button small primary" type="submit">Generate teacher invite</button><div id="teacherInviteResult"></div>
         </form>
         <div class="teacher-team-panel"><div class="teacher-list">${(o.teachers||[]).map(t=>`<div class="teacher-person"><span class="teacher-person-icon">T</span><div><strong>${esc(t.display_name)}</strong><small>${t.id===BACKEND.user.id?'You • Teacher':'Teacher'}</small></div></div>`).join('')||'<div class="muted">Teacher account active.</div>'}</div><div class="teacher-invite-list">${(o.teacherInvites||[]).length?(o.teacherInvites||[]).map(inv=>{const expired=new Date(inv.expires_at)<=new Date();const state=inv.used_at?'Used':inv.revoked_at?'Revoked':expired?'Expired':'Active';return `<div class="teacher-invite-row ${state.toLowerCase()}"><div><strong>${esc(inv.label||'Teacher invite')}</strong><small>Code ending ${esc(inv.code_hint)} • ${state} • expires ${new Date(inv.expires_at).toLocaleDateString()}</small></div>${state==='Active'?`<button class="button tiny ghost" data-action="revoke-teacher-invite" data-invite="${inv.id}">Revoke</button>`:''}</div>`}).join(''):'<div class="muted">No teacher invites created yet.</div>'}</div></div>
-      </div>
-    </section>
+      </div></section></details>
 
-    <section class="section">
-      <div class="section-head"><div><h2>Classes</h2><p>Classes you own or co-teach. Assigned teachers share learning-progress access; only the class owner can add/remove co-teachers or permanently delete the class.</p></div><span class="sync-chip">${activeClasses.length} active</span></div>
-      <div class="teacher-split">
+    <details class="teacher-admin-section"><summary><span>🏫 Manage classes, codes & teaching teams</span><small>${activeClasses.length} active</small></summary><section class="section teacher-admin-inner"><div class="teacher-split">
         <form class="project-panel form-grid" data-action-form="create-class"><span class="eyebrow">New class</span><label>Class name<input name="name" required maxlength="100" placeholder="Games Y1 A"></label><label>Academic year<input name="academicYear" maxlength="40" placeholder="2026/27"></label><button class="button small primary" type="submit">Create class</button></form>
         <div class="class-manager">
           ${activeClasses.length?activeClasses.map(c=>{
@@ -2748,10 +2847,7 @@ async function renderTeacher(){
           }).join(''):'<div class="offline-note">No active classes yet. Create your first teaching group here.</div>'}
           ${archivedClasses.length?`<details class="archived-classes"><summary>${archivedClasses.length} archived class${archivedClasses.length===1?'':'es'}</summary><div class="archived-class-list">${archivedClasses.map(c=>{const isOwner=c.teacher_id===BACKEND.user.id;return `<div class="class-card archived"><div class="class-card-head"><div><strong>${esc(c.name)}</strong><small>${esc(c.academic_year||'')} • ${isOwner?'Owner':'Co-teacher'}</small></div><span>Archived</span></div><p class="muted">Students and learning progress remain in the Hub; this class no longer accepts joins.</p><div class="class-danger-row"><button class="button small ghost" data-action="unarchive-class" data-class="${c.id}" data-name="${esc(c.name)}">Restore class</button>${isOwner?`<button class="button small danger" data-action="delete-class" data-class="${c.id}" data-name="${esc(c.name)}">Delete permanently</button>`:`<button class="button small ghost" data-action="leave-class-teacher" data-class="${c.id}" data-name="${esc(c.name)}">Leave teaching team</button>`}</div></div>`}).join('')}</div></details>`:''}
         </div>
-      </div>
-    </section>
-
-    <section class="section"><div class="section-head"><div><h2>Student overview</h2><p>Use completion to spot who needs help. Formal assessment decisions still belong in Microsoft Teams.</p></div></div><table class="teacher-table"><thead><tr><th>Student</th><th>Lessons</th><th>Tutorials</th><th>Designer</th><th>3D</th><th>Chapter Builds</th></tr></thead><tbody>${o.profiles.map(p=>`<tr><td>${esc(p.display_name)}</td><td>${byStudent(p.id)}/${DATA.lessons.length}</td><td>${tutorialBy(p.id)}/${TOOLS.tutorials.length}</td><td>${designBy(p.id)}/${DESIGN.modules.length}</td><td>${modelingBy(p.id)}</td><td>${chapterBy(p.id)}/${TOOLS.chapterBuilds.length}</td></tr>`).join('')}</tbody></table></section>
+      </div></section></details>
 
     <section class="section"><div class="section-head"><div><h2>Student roadmap</h2><p>Top student requests and ideas for what the Hub should support next.</p></div><a class="button small" href="#/requests">Open full Requests Board</a></div><div class="board-grid">${(o.requests||[]).slice().sort((a,b)=>(b.request_votes?.length||0)-(a.request_votes?.length||0)).slice(0,6).map(r=>`<div class="board-card"><span class="eyebrow">${esc(requestCategoryLabel(r.category))} • ${r.request_votes?.length||0} votes</span><h3>${esc(r.title)}</h3><p>${esc(r.body)}</p><span class="request-status ${esc(r.status)}">${esc(requestStatusLabel(r.status))}</span></div>`).join('')||'<div class="empty">No requests yet.</div>'}</div></section>
 
@@ -2834,6 +2930,7 @@ function route(options={}){
   app.focus({preventScroll:true});
   $('#sidebar').classList.remove('open');
 
+  if(!parts.length&&BACKEND.user) renderHomeLeaderboardPreview();
   if(parts[0]==='lesson'&&BACKEND.user)loadComments(parts[1]);
   if(parts[0]==='news') loadNewsFeed();
   if(parts[0]==='leaderboard'&&BACKEND.user) renderLeaderboard();

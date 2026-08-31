@@ -1,0 +1,15 @@
+UE5 LEARNING HUB v3.42.0 — TEACHER COMMAND CENTRE
+
+1. The Supabase migration has been applied live as part of this release build/audit.
+2. Upload the contents of the v3.42.0 GITHUB-UPLOAD ZIP to the repository root.
+3. Allow Render to redeploy.
+4. Hard-refresh once after deployment.
+
+QUICK LIVE CHECK
+- Home: signed-in account shows Class Rivalry near the top.
+- #/teacher: Learning Pulse is the first major section.
+- Open a class: snapshot shows Theory, Designer, 3D, Guided Path %, weekly XP and streak.
+- #/progress: new pathway badges and expanded tracking stats are present.
+- #/leaderboard: Theory completions now contribute 25 XP each, not 100.
+
+No manual SQL remains after the migration has been applied successfully.

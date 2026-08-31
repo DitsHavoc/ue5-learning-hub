@@ -1445,7 +1445,7 @@ const api = {
       const [{data:profiles,error:pErr},{data:teachers,error:tErr},{data:progress,error:prErr}]=await Promise.all([
         memberIds.length?client.from('profiles').select('id,display_name,role').in('id',memberIds).order('display_name'):Promise.resolve({data:[],error:null}),
         teacherIds.length?client.from('profiles').select('id,display_name,role').in('id',teacherIds).order('display_name'):Promise.resolve({data:[],error:null}),
-        memberIds.length?client.from('lesson_progress').select('user_id,lesson_id,completed').in('user_id',memberIds).eq('completed',true):Promise.resolve({data:[],error:null})
+        memberIds.length?client.from('lesson_progress').select('user_id,lesson_id,completed,completed_at,updated_at').in('user_id',memberIds):Promise.resolve({data:[],error:null})
       ]);
       if(pErr||tErr||prErr)throw pErr||tErr||prErr;
       return {profiles:profiles||[],teachers:teachers||[],progress:progress||[],classes:[classInfo]};
