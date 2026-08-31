@@ -618,10 +618,17 @@ button:disabled{opacity:.48;cursor:not-allowed;transform:none!important}
 .portal-path-card.modeling{background:radial-gradient(circle at 90% 0,rgba(105,212,255,.17),transparent 34%),linear-gradient(145deg,#0c2029,#0a141c);color:#aeeaff}
 .portal-path-card.sculpt{background:radial-gradient(circle at 90% 0,rgba(220,118,255,.18),transparent 34%),linear-gradient(145deg,#201126,#0d121b);color:#ecb6ff}
 @media(min-width:1180px){
-  .portal-path-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .portal-path-card{min-height:285px;padding:24px}
+  /* Six tracks let three full-width cards sit on row one, then centre two cards on row two without changing card width. */
+  .portal-path-grid{grid-template-columns:repeat(6,minmax(0,1fr))}
+  .portal-path-card{grid-column:span 2;min-height:285px;padding:24px}
+  .portal-path-card:nth-child(4){grid-column:2 / span 2}
+  .portal-path-card:nth-child(5){grid-column:4 / span 2}
   .portal-path-card h2{font-size:31px}
   .portal-path-card p{font-size:14px!important}
+}
+@media(min-width:851px) and (max-width:1179px){
+  /* The two-column breakpoint has one leftover card; keep it centred too. */
+  .portal-path-card:nth-child(5){grid-column:1 / -1;width:calc((100% - 15px)/2);justify-self:center}
 }
 
 /* Account / Avatar Studio alignment. */

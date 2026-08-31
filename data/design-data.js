@@ -2710,7 +2710,7 @@ window.UE5_DESIGN_DATA = {
       "title": "Noclip Documentaries",
       "type": "Developer documentaries",
       "category": "professional",
-      "url": "https://www.noclip.video/doclist",
+      "url": "https://www.youtube.com/NoclipVideo",
       "note": "Free documentaries about how games are actually made, with developers discussing design decisions, production constraints and iteration on shipped games.",
       "license": "WATCH / REFERENCE",
       "bestFor": "Developer voices and production context",
