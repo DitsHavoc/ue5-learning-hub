@@ -1,6 +1,10 @@
-# Current release — v3.41.2
+# Current release — v3.41.3
 
-**Theory Case Study Diversity Pass.** Keeps the v3.41.1 Guided Paths system intact while rebuilding the 24 Game Design Theory case studies so every lesson uses a different game. Adds OMORI, Jet Set Radio, Journey, Baldur’s Gate 3, Papers Please, XCOM 2, Mario Kart 8 Deluxe, Stardew Valley, Street Fighter 6, Portal, Forza Motorsport, Half-Life 2, Firewatch, HITMAN, A Short Hike, Hades, Left 4 Dead and more, with expanded professional/developer/official reading and video material. Existing Theory IDs, XP and progress are preserved. See `RELEASE-NOTES-v3.41.2.md` and `THEORY-DIVERSITY-QA-v3.41.2.md`.
+**Theory Case Study Parity + Watch It In Action.** Brings all 24 unique Game Design Theory case studies up to the same teaching standard: a bespoke three-point design breakdown, a designer question, at least three written professional/official/developer sources, and a purpose-picked gameplay/trailer/developer video where it adds value. Fifteen YouTube sources are click-to-load through privacy-enhanced embeds; nine lessons link to the strongest official/developer/professional media page instead. No video player or thumbnail loads on lesson open. Existing Theory IDs, quizzes, tasks, XP, progress and Guided Paths are preserved. See `RELEASE-NOTES-v3.41.3.md` and `THEORY-CASE-STUDY-PARITY-QA-v3.41.3.md`.
+
+## Previous release — v3.41.2
+
+**Theory Case Study Diversity Pass.** Rebuilt the 24 Game Design Theory case studies so every lesson uses a different game, including OMORI and Jet Set Radio, while preserving lesson IDs, XP and progress.
 
 ## Previous release — v3.41.1
 

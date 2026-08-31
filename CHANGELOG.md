@@ -1,3 +1,13 @@
+## v3.41.3 — Theory Case Study Parity + Watch It In Action — 31 Aug 2026
+
+- Gives all 24 Theory lessons a bespoke case-study breakdown with three game-specific design observations and one designer question.
+- Adds a purpose-picked WATCH IT IN ACTION block to all 24 lessons.
+- Uses 15 click-to-load YouTube sources and 9 official/developer/professional media-page links; no player, thumbnail or autoplay request occurs on lesson open.
+- Raises every lesson to at least three written professional/developer/official sources in addition to its watch resource.
+- Keeps OMORI on Environmental Storytelling and Jet Set Radio on Game Feel & Feedback, with the same parity standard applied to every other game.
+- Preserves all lesson IDs, quizzes, tasks, XP, progress, Revision and Guided Path references.
+- No database migration, new table, new XP event type or routine Supabase read.
+
 ## v3.41.2 — Theory Case Study Diversity Pass — 31 Aug 2026
 
 - Replaces repeated Theory case studies with 24 distinct games across the 24 lessons.

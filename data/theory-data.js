@@ -1,5 +1,5 @@
 window.UE5_THEORY_DATA = {
-  "version": "3.41.2",
+  "version": "3.41.3",
   "buildDate": "2026-08-31",
   "xp": 25,
   "passPercent": 67,
@@ -169,7 +169,24 @@ window.UE5_THEORY_DATA = {
           "feedback": "A cheap prototype answers design questions while changes are still easy."
         }
       ],
-      "duration": "15–20 min"
+      "duration": "15–20 min",
+      "caseStudy": {
+        "intro": "INSIDE is useful because almost none of its identity depends on a feature list. Its effect comes from a tightly controlled relationship between verbs, information, threat and space.",
+        "observations": [
+          "The player has a deliberately small verb set. Running, jumping, grabbing and pushing become interesting because the context around those actions keeps changing.",
+          "The world communicates danger and possibility visually. There is almost no HUD telling the player what an object is for; animation, staging and cause-and-effect do that work.",
+          "New situations recombine familiar rules instead of constantly adding unrelated mechanics. The design gets richer without the control scheme becoming larger."
+        ],
+        "question": "If you removed INSIDE’s art style and story, which rules and information choices would still create tension?"
+      },
+      "watch": {
+        "kind": "Official trailer",
+        "title": "INSIDE Trailer 2016 — Playdead",
+        "url": "https://www.youtube.com/watch?v=E0V2rPVQWfM",
+        "youtubeId": "E0V2rPVQWfM",
+        "watchFor": "How much of the game is communicated through staging, animation, threat and simple actions rather than UI or a feature list.",
+        "question": "Which design rule can you infer from the footage without anybody explaining it? "
+      }
     },
     {
       "id": "core-gameplay-loops",
@@ -276,7 +293,23 @@ window.UE5_THEORY_DATA = {
           "feedback": "The loop helps separate essential play from platform-specific detail."
         }
       ],
-      "duration": "15–20 min"
+      "duration": "15–20 min",
+      "caseStudy": {
+        "intro": "Death Stranding turns an activity that could have been a simple objective marker—deliver cargo—into a loop of preparation, route choice, execution, evaluation and improved future capability.",
+        "observations": [
+          "Preparation matters before movement begins: cargo weight, tools, footwear, route and expected terrain change what the next journey will feel like.",
+          "Traversal is the play, not empty travel between encounters. Balance, terrain reading, ladders, ropes and vehicles continuously ask for small decisions.",
+          "A completed delivery feeds the next loop through ratings, network connection, equipment and shared structures, so the next journey starts from a changed state."
+        ],
+        "question": "Where does the loop create a new decision for the next delivery instead of simply giving the player a bigger number?"
+      },
+      "watch": {
+        "kind": "Official gameplay & trailers",
+        "title": "Death Stranding videos — PlayStation",
+        "url": "https://www.playstation.com/en-gb/games/death-stranding/",
+        "watchFor": "Preparation, cargo, terrain reading, traversal tools and the way completed journeys feed future journeys.",
+        "question": "Where can you see the loop changing the player’s next decision? "
+      }
     },
     {
       "id": "mda-framework",
@@ -326,6 +359,12 @@ window.UE5_THEORY_DATA = {
           "url": "https://www.gdcvault.com/play/1017700/Designing",
           "note": "Jenova Chen explains the experiments, failures and design decisions used to realise Journey’s emotional arc.",
           "kind": "Developer talk"
+        },
+        {
+          "title": "Journey — thatgamecompany",
+          "url": "https://thatgamecompany.com/journey/",
+          "note": "The creator’s official overview emphasises anonymous companionship, the mountain goal and the game’s deliberately minimal interaction model.",
+          "kind": "Official"
         }
       ],
       "task": {
@@ -375,7 +414,23 @@ window.UE5_THEORY_DATA = {
           "feedback": "MDA encourages changing rules to produce the desired behaviour and experience."
         }
       ],
-      "duration": "15–20 min"
+      "duration": "15–20 min",
+      "caseStudy": {
+        "intro": "Journey is unusually clear for MDA analysis because its mechanics are sparse, while the behaviour and emotional experience created from them are much richer.",
+        "observations": [
+          "Mechanics: movement, jumping/gliding, cloth interaction and one wordless call give the player only a few direct actions.",
+          "Dynamics: anonymous players wait, follow, separate, help, copy and communicate through movement because conventional chat and identity are absent.",
+          "Aesthetics: those dynamics support wonder, companionship, vulnerability, loneliness and loss without the game needing a dialogue choice labelled “be kind”."
+        ],
+        "question": "Which emotional part of Journey is designed directly, and which part emerges from players using the mechanics together?"
+      },
+      "watch": {
+        "kind": "Official trailer",
+        "title": "Journey — first trailer from thatgamecompany / PlayStation",
+        "url": "https://blog.playstation.com/2010/12/10/thatgamecompany-shares-journeys-first-trailer/",
+        "watchFor": "The extremely small set of visible mechanics and the emotional tone created around them.",
+        "question": "Separate one thing the player can DO from one thing the sequence makes the player FEEL. "
+      }
     },
     {
       "id": "pillars-and-abstraction",
@@ -481,7 +536,24 @@ window.UE5_THEORY_DATA = {
           "feedback": "The best simplification starts by identifying which variables genuinely affect play."
         }
       ],
-      "duration": "15–20 min"
+      "duration": "15–20 min",
+      "caseStudy": {
+        "intro": "Control has a lot competing for attention—telekinesis, gunplay, investigation, horror, bureaucracy and an impossible building—so coherence depends on strong creative principles.",
+        "observations": [
+          "The Oldest House, supernatural bureaucracy and altered objects all support the same “ordinary institution meets impossible phenomenon” identity.",
+          "Combat powers reinforce that identity: launching chunks of the environment makes the world itself feel unstable and usable.",
+          "Side material, architecture, UI language and mission structure can vary widely while still feeling like Control because they return to the same core pillars."
+        ],
+        "question": "Which feature could you remove from Control without damaging its pillars, and which removal would make it stop feeling like Control?"
+      },
+      "watch": {
+        "kind": "Official gameplay trailer",
+        "title": "Control — Gameplay Trailer",
+        "url": "https://www.youtube.com/watch?v=jnO4oaSRZj8",
+        "youtubeId": "jnO4oaSRZj8",
+        "watchFor": "How powers, destruction, architecture, colour, sound and supernatural bureaucracy all reinforce the same identity.",
+        "question": "Which repeated design idea connects the combat to the world rather than leaving them as separate features? "
+      }
     },
     {
       "id": "player-agency",
@@ -588,7 +660,24 @@ window.UE5_THEORY_DATA = {
           "feedback": "The interface offers choice, but the game state does not meaningfully respond."
         }
       ],
-      "duration": "15–20 min"
+      "duration": "15–20 min",
+      "caseStudy": {
+        "intro": "Baldur’s Gate 3 is a strong agency example because the game recognises different intentions through overlapping systems instead of restricting every problem to one authored solution.",
+        "observations": [
+          "Dialogue, stealth, combat, positioning, objects, spells and environmental systems can all become ways of approaching the same situation.",
+          "Agency is reinforced when the world acknowledges what happened—characters react, later situations change and consequences persist beyond the button press.",
+          "Failure can create a new state rather than simply a reload prompt. A poor roll or unintended outcome may redirect the story and still be playable."
+        ],
+        "question": "Find one moment where the game accepts a player solution the designer could not present as a single menu option."
+      },
+      "watch": {
+        "kind": "Gameplay + developer interview",
+        "title": "Baldur’s Gate 3 gameplay explained with Larian",
+        "url": "https://www.youtube.com/watch?v=rHzXgnvNCT4",
+        "youtubeId": "rHzXgnvNCT4",
+        "watchFor": "Alternative approaches, environmental interaction, stealth and how system rules create options beyond a dialogue menu.",
+        "question": "Which moment demonstrates recognised player intent rather than simply a large number of buttons? "
+      }
     },
     {
       "id": "meaningful-choice",
@@ -695,7 +784,23 @@ window.UE5_THEORY_DATA = {
           "feedback": "A dominant option often means the choice lacks credible trade-offs."
         }
       ],
-      "duration": "15–20 min"
+      "duration": "15–20 min",
+      "caseStudy": {
+        "intro": "Papers, Please makes tiny administrative decisions meaningful by connecting them to time pressure, income, rules and human consequences.",
+        "observations": [
+          "Every extra check costs time, so being careful has an economic price rather than being an obviously correct strategy.",
+          "Rules change and accumulate, turning familiar document checks into new trade-offs instead of repeating the exact same puzzle.",
+          "Individual travellers create pressure against the system: helping someone may feel morally right while threatening the inspector’s wages or family."
+        ],
+        "question": "Which choice would become meaningless if the family economy or daily time limit disappeared?"
+      },
+      "watch": {
+        "kind": "Official trailer",
+        "title": "Papers, Please — creator press kit trailers",
+        "url": "https://papersplea.se/presskit/",
+        "watchFor": "The tension between speed, accuracy, changing rules and the human consequences of a stamp.",
+        "question": "What makes “approve or deny” more than a binary button choice? "
+      }
     },
     {
       "id": "risk-reward",
@@ -742,16 +847,16 @@ window.UE5_THEORY_DATA = {
           "kind": "Developer talk"
         },
         {
-          "title": "Darkest Dungeon: A Design Postmortem — GDC video",
-          "url": "https://www.youtube.com/watch?v=0IUaGQhlPwo",
-          "note": "Free official GDC recording of the Red Hook design postmortem.",
-          "kind": "Video"
-        },
-        {
           "title": "Cards, Dice, and RNGs: Using Randomness in Games — GDC Vault",
           "url": "https://www.gdcvault.com/play/1028984/Cards-Dice-and-RNGs-Using",
           "note": "Useful wider reading on how risk interacts with uncertainty.",
           "kind": "Further reading"
+        },
+        {
+          "title": "Darkest Dungeon — Red Hook Studios",
+          "url": "https://www.darkestdungeon.com/darkest-dungeon/about/",
+          "note": "Red Hook’s official overview foregrounds stress, physical vulnerability, famine and the emotional cost of continuing an expedition.",
+          "kind": "Official"
         }
       ],
       "task": {
@@ -801,7 +906,24 @@ window.UE5_THEORY_DATA = {
           "feedback": "Players need enough information to own the choice."
         }
       ],
-      "duration": "15–20 min"
+      "duration": "15–20 min",
+      "caseStudy": {
+        "intro": "Darkest Dungeon makes greed visible by letting the player decide how long to expose an increasingly damaged party to danger.",
+        "observations": [
+          "Health, stress, light, supplies and inventory space all deteriorate or become constrained as an expedition continues.",
+          "The reward for continuing is tangible—loot, progress and opportunity—but so is the possibility of losing expensive or emotionally valued heroes.",
+          "Retreat is a real design option. The player is deciding when to stop, not only whether they can win the next fight."
+        ],
+        "question": "What information does Darkest Dungeon give you before asking “one more room?”, and what uncertainty remains?"
+      },
+      "watch": {
+        "kind": "Developer postmortem",
+        "title": "Darkest Dungeon: A Design Postmortem — GDC",
+        "url": "https://www.youtube.com/watch?v=0IUaGQhlPwo",
+        "youtubeId": "0IUaGQhlPwo",
+        "watchFor": "How stress, afflictions, loss and retreat create pressure around the decision to continue.",
+        "question": "Which cost makes a tempting reward genuinely risky rather than simply difficult to obtain? "
+      }
     },
     {
       "id": "randomness-uncertainty",
@@ -852,6 +974,12 @@ window.UE5_THEORY_DATA = {
           "url": "https://www.gdcvault.com/play/1028984/Cards-Dice-and-RNGs-Using",
           "note": "Professional background on different uses of randomness in games.",
           "kind": "Developer talk"
+        },
+        {
+          "title": "XCOM 2 — 2K official game page",
+          "url": "https://store.2k.com/game/buy-xcom-2-pc",
+          "note": "Official overview of concealment, tactical flexibility, soldier classes and the combat systems surrounding each uncertain shot.",
+          "kind": "Official"
         }
       ],
       "task": {
@@ -901,7 +1029,23 @@ window.UE5_THEORY_DATA = {
           "feedback": "Mitigation lets player decisions meaningfully interact with uncertainty."
         }
       ],
-      "duration": "15–20 min"
+      "duration": "15–20 min",
+      "caseStudy": {
+        "intro": "XCOM 2 makes probability part of tactical planning by showing many odds before the player commits, then asking them to build a turn that can survive an uncertain result.",
+        "observations": [
+          "Displayed hit chances turn randomness into information the player can reason about instead of a hidden surprise.",
+          "Cover, flanking, elevation, explosives and ability choice let the player modify odds before taking the roll.",
+          "Good plans contain fallbacks. The interesting skill is often deciding what happens if the 80–90% action fails."
+        ],
+        "question": "When does XCOM ask the player to manage randomness, and when does it simply ask them to accept it?"
+      },
+      "watch": {
+        "kind": "Official gameplay media",
+        "title": "XCOM 2 — 2K screenshots & videos",
+        "url": "https://store.2k.com/game/buy-xcom-2-pc",
+        "watchFor": "Displayed hit chances, positioning, cover and the tactical choices made before a random outcome is resolved.",
+        "question": "What can the player change before the roll, and what remains uncertain? "
+      }
     },
     {
       "id": "feedback-loops",
@@ -1008,7 +1152,23 @@ window.UE5_THEORY_DATA = {
           "feedback": "If leadership is constantly erased, success stops feeling consequential."
         }
       ],
-      "duration": "15–20 min"
+      "duration": "15–20 min",
+      "caseStudy": {
+        "intro": "Mario Kart 8 Deluxe is useful for studying balancing feedback because race position changes the kinds of recovery tools likely to matter without simply handing victory to the player in last place.",
+        "observations": [
+          "Players ahead and behind experience different item pressures, so the state of the race affects the resources entering the system.",
+          "Recovery tools can compress gaps and keep more racers relevant, counteracting a runaway lead: a negative-feedback effect.",
+          "Driving skill, route knowledge and item timing still matter, so the balancing system changes opportunity rather than guaranteeing an outcome."
+        ],
+        "question": "Which Mario Kart system pushes against a growing lead, and which systems still allow a strong player to preserve one?"
+      },
+      "watch": {
+        "kind": "Official gameplay video",
+        "title": "Mario Kart 8 Deluxe — Nintendo",
+        "url": "https://www.nintendo.com/en-gb/Games/Nintendo-Switch-games/Mario-Kart-8-Deluxe-1173281.html",
+        "watchFor": "How race position, items and recovery opportunities keep pressure between racers while driving skill remains relevant.",
+        "question": "Find one system that pushes against a runaway lead without simply deciding the winner. "
+      }
     },
     {
       "id": "resources-economies",
@@ -1115,7 +1275,24 @@ window.UE5_THEORY_DATA = {
           "feedback": "Caps can keep resources circulating rather than accumulating forever."
         }
       ],
-      "duration": "15–20 min"
+      "duration": "15–20 min",
+      "caseStudy": {
+        "intro": "Stardew Valley creates an economy from overlapping scarce resources rather than gold alone. A day is a budget of time, energy, money, space and seasonal opportunity.",
+        "observations": [
+          "Crops, fishing, mining and animals generate different resources on different timescales, so income sources compete for the player’s attention.",
+          "Seeds, buildings, tool upgrades and crafting act as sinks that remove resources now in exchange for future capability.",
+          "Time and energy make opportunity cost visible: spending the afternoon in the mine means not watering, fishing, socialising or exploring elsewhere."
+        ],
+        "question": "Which Stardew resource would most radically change the economy if it became unlimited?"
+      },
+      "watch": {
+        "kind": "Official trailer",
+        "title": "Stardew Valley Trailer — ConcernedApe",
+        "url": "https://www.youtube.com/watch?v=ot7uXNQskhs",
+        "youtubeId": "ot7uXNQskhs",
+        "watchFor": "How many resources are being managed at once: money, time, energy, crops, materials, space and relationships.",
+        "question": "Which resource creates the clearest opportunity cost in the footage? "
+      }
     },
     {
       "id": "balance-counterplay",
@@ -1222,7 +1399,24 @@ window.UE5_THEORY_DATA = {
           "feedback": "Counterplay gives the other side a meaningful response."
         }
       ],
-      "duration": "15–20 min"
+      "duration": "15–20 min",
+      "caseStudy": {
+        "intro": "Street Fighter 6 shows that balance is not sameness. Characters can be deliberately unequal in range, speed and tools as long as strong options have costs, timings and responses.",
+        "observations": [
+          "The shared Drive Gauge powers offence, defence and movement, so using a strong option also changes what the player can afford next.",
+          "Burnout turns resource overspending into a new temporary game state with different risks, rather than only subtracting points from a meter.",
+          "Counterplay is readable in timing and spacing: a powerful move is healthier when the opponent has a meaningful response to learn and execute."
+        ],
+        "question": "Choose one strong option in Street Fighter 6. What does the opponent need to know or do for that option to feel fair?"
+      },
+      "watch": {
+        "kind": "Official gameplay",
+        "title": "Street Fighter 6 — Ed Gameplay Trailer",
+        "url": "https://www.youtube.com/watch?v=g9DsCc8CsA4",
+        "youtubeId": "g9DsCc8CsA4",
+        "watchFor": "Spacing, attack commitment, defensive answers and use of the shared Drive system during exchanges.",
+        "question": "Choose one strong action. What visible opportunity does the opponent have to answer it? "
+      }
     },
     {
       "id": "progression-difficulty",
@@ -1329,7 +1523,24 @@ window.UE5_THEORY_DATA = {
           "feedback": "Player knowledge and mastery are genuine progression."
         }
       ],
-      "duration": "15–20 min"
+      "duration": "15–20 min",
+      "caseStudy": {
+        "intro": "Elden Ring mixes demanding combat with unusually flexible progression. Difficulty can be answered through execution, knowledge, route choice, equipment, levels, summons or simply returning later.",
+        "observations": [
+          "The open world lets players redirect themselves when one encounter is currently beyond their skill or build.",
+          "Failure teaches attack timing, positioning and enemy behaviour, so player knowledge progresses even when character stats do not.",
+          "Character progression provides additional solutions—upgrades, build changes, spirit summons and equipment—without requiring every player to solve challenge in the same way."
+        ],
+        "question": "Which parts of Elden Ring difficulty are solved by player learning, and which can be solved by changing the character or route?"
+      },
+      "watch": {
+        "kind": "Official gameplay reveal",
+        "title": "ELDEN RING — Official Gameplay Reveal",
+        "url": "https://www.youtube.com/watch?v=E3Huy2cdih0",
+        "youtubeId": "E3Huy2cdih0",
+        "watchFor": "Different routes, enemy scales, movement options, summons and approaches that let players respond to challenge in more than one way.",
+        "question": "Which challenge looks execution-based, and which could be answered by preparation or route choice? "
+      }
     },
     {
       "id": "game-feel-feedback",
@@ -1440,7 +1651,24 @@ window.UE5_THEORY_DATA = {
           "feedback": "Juice works when it reinforces the action and hierarchy."
         }
       ],
-      "duration": "15–20 min"
+      "duration": "15–20 min",
+      "caseStudy": {
+        "intro": "Jet Set Radio makes movement expressive by stacking control response, animation, sound, camera, music and visual style around the same player actions.",
+        "observations": [
+          "Grinding turns movement into a readable rhythm through speed, rail attachment, animation and sound rather than merely changing the character’s coordinates.",
+          "Tagging interrupts traversal with a bold, performative interaction that gives success a visual and musical identity appropriate to the fantasy.",
+          "The soundtrack, cel-shaded art and exaggerated motion all point toward the same rebellious tone, so feedback feels authored rather than added as generic “juice”."
+        ],
+        "question": "Mute the clip in your head: what feedback would still sell the action? Then imagine the visuals removed: what would the audio still communicate?"
+      },
+      "watch": {
+        "kind": "Official trailer",
+        "title": "Jet Set Radio Trailer — SEGA",
+        "url": "https://www.youtube.com/watch?v=ih2BoI0BH_Q",
+        "youtubeId": "ih2BoI0BH_Q",
+        "watchFor": "Grinding, tagging, camera, animation, sound and music all firing around movement.",
+        "question": "Count the feedback layers attached to one successful movement or tag action. "
+      }
     },
     {
       "id": "pacing-tension-flow",
@@ -1492,6 +1720,12 @@ window.UE5_THEORY_DATA = {
           "url": "https://gameinformer.com/exclusive-feature/2023/02/08/how-resident-evil-4s-directors-approached-designing-the-remake",
           "note": "The directors explain how they revisited familiar encounters without losing the character of the original.",
           "kind": "Developer interview"
+        },
+        {
+          "title": "Resident Evil 4 trailer and gameplay — PlayStation Blog / Capcom",
+          "url": "https://blog.playstation.com/2023/02/23/resident-evil-4-trailer-debuts-new-action-gameplay-announces-mercenaries-mode-demo/",
+          "note": "Capcom’s promotion producer introduces gameplay footage showing the remake changing encounter pressure, enemy types and familiar sequences.",
+          "kind": "Official gameplay"
         }
       ],
       "task": {
@@ -1541,7 +1775,24 @@ window.UE5_THEORY_DATA = {
           "feedback": "Flow is useful, but it is not the only explanation of engagement."
         }
       ],
-      "duration": "15–20 min"
+      "duration": "15–20 min",
+      "caseStudy": {
+        "intro": "Resident Evil 4 Remake repeatedly changes pressure before one type of encounter can become normal. Combat intensity is framed by exploration, resource decisions, quieter anticipation and sudden escalation.",
+        "observations": [
+          "Village encounters create peaks through enemy count, space pressure and changing threats, then release that pressure so the player can recover and reassess.",
+          "Resource scarcity links pacing to behaviour: a quiet room matters more after ammunition and healing have been drained by a demanding fight.",
+          "The remake preserves recognisable beats while changing layouts, enemy behaviour and timing, showing that pacing is a relationship between events—not an exact script of seconds."
+        ],
+        "question": "Mark one tension rise, one peak and one release in the footage. What changes mechanically at each point?"
+      },
+      "watch": {
+        "kind": "Official trailer",
+        "title": "Resident Evil 4 — 3rd Trailer",
+        "url": "https://www.youtube.com/watch?v=Id2EaldBaWw",
+        "youtubeId": "Id2EaldBaWw",
+        "watchFor": "Changes in enemy pressure, space, tempo, threat type and moments of release between intense beats.",
+        "question": "Where does the sequence deliberately change pace before one kind of pressure becomes normal? "
+      }
     },
     {
       "id": "onboarding",
@@ -1648,7 +1899,24 @@ window.UE5_THEORY_DATA = {
           "feedback": "The goal is appropriate teaching, not a ban on words."
         }
       ],
-      "duration": "15–20 min"
+      "duration": "15–20 min",
+      "caseStudy": {
+        "intro": "Portal teaches an unfamiliar spatial mechanic by controlling what the player can see, touch and combine before asking for more complex reasoning.",
+        "observations": [
+          "Early chambers isolate one idea at a time, reducing the number of possible explanations when something works or fails.",
+          "The player sees portals and their consequences before being given full control of both portal colours, so observation precedes mastery.",
+          "Later chambers recombine previously learned ideas instead of replacing them, turning tutorial knowledge into genuine problem-solving."
+        ],
+        "question": "Where does Portal stop explaining a rule and start asking the player to prove they understand it?"
+      },
+      "watch": {
+        "kind": "Official trailer",
+        "title": "Official Portal Trailer — Valve",
+        "url": "https://www.youtube.com/watch?v=-cO_DIVuSyQ",
+        "youtubeId": "-cO_DIVuSyQ",
+        "watchFor": "How the trailer communicates the portal rule through visible cause-and-effect rather than a long verbal explanation.",
+        "question": "What would a new player understand about portals after watching this even without playing? "
+      }
     },
     {
       "id": "accessibility-inclusive-design",
@@ -1761,7 +2029,24 @@ window.UE5_THEORY_DATA = {
           "feedback": "Early planning avoids expensive rework and often improves general usability."
         }
       ],
-      "duration": "15–20 min"
+      "duration": "15–20 min",
+      "caseStudy": {
+        "intro": "Forza Motorsport’s Blind Driving Assists are a useful accessibility case because they translate spatial driving information into another sensory channel rather than merely lowering difficulty.",
+        "observations": [
+          "Audio cues communicate steering, track position, braking and corner information that is normally carried heavily by vision.",
+          "Assists are configurable, recognising that players with the same broad impairment may need different combinations of support.",
+          "The feature was developed with consultation and testing, showing accessibility as an iterative design problem rather than a final checklist."
+        ],
+        "question": "Which information is being translated, and which player decision remains theirs after the assist communicates it?"
+      },
+      "watch": {
+        "kind": "Official developer demonstration",
+        "title": "Forza Motorsport — Blind Driving Assists",
+        "url": "https://www.youtube.com/watch?v=T7aVUqmQ_Sc",
+        "youtubeId": "T7aVUqmQ_Sc",
+        "watchFor": "Which visual driving information is translated into audio and how the player still retains control of decisions.",
+        "question": "What information is assisted, and what skill or choice remains with the player? "
+      }
     },
     {
       "id": "affordances-signifiers",
@@ -1868,7 +2153,24 @@ window.UE5_THEORY_DATA = {
           "feedback": "Consistency reduces guesswork and supports fluent play."
         }
       ],
-      "duration": "15–20 min"
+      "duration": "15–20 min",
+      "caseStudy": {
+        "intro": "Half-Life 2 uses physics objects, familiar forms and environmental staging to make interaction possibilities readable before the player knows the implementation behind them.",
+        "observations": [
+          "Objects look liftable, breakable, movable or dangerous because their form and physical behaviour agree with familiar expectations.",
+          "The gravity gun expands the meaning of existing props: once the rule is learned, ordinary objects become potential tools, shields or weapons.",
+          "False or weak affordances become immediately noticeable because the game otherwise trains players to trust physical cause and effect."
+        ],
+        "question": "Find an object whose appearance suggests an action before the game explicitly tells the player what to do with it."
+      },
+      "watch": {
+        "kind": "Official developer documentary",
+        "title": "Half-Life 2: 20th Anniversary Documentary — Valve",
+        "url": "https://www.youtube.com/watch?v=YCjNT9qGjh4",
+        "youtubeId": "YCjNT9qGjh4",
+        "watchFor": "Jump to the physics chapter around 34:40. Look at how familiar objects, physical response and the gravity gun teach what the world allows.",
+        "question": "Which object suggests its use before a tutorial explicitly names that use? "
+      }
     },
     {
       "id": "guidance-sightlines",
@@ -1975,7 +2277,23 @@ window.UE5_THEORY_DATA = {
           "feedback": "HUD can support navigation, but it can also mask spatial readability problems."
         }
       ],
-      "duration": "15–20 min"
+      "duration": "15–20 min",
+      "caseStudy": {
+        "intro": "Firewatch needs its wilderness to feel open while still delivering authored story beats. Guidance therefore comes from terrain, landmarks, gates, dialogue goals and composition rather than a corridor.",
+        "observations": [
+          "Distinct landmarks and silhouettes give players stable orientation points in spaces that otherwise share similar natural materials.",
+          "Paths, elevation and blocked routes narrow possibilities locally without making the whole world feel linear.",
+          "The map and compass support deliberate navigation, letting uncertainty remain part of the experience while preventing aimless wandering."
+        ],
+        "question": "Which cue tells the player where to look next without behaving like a floating quest arrow?"
+      },
+      "watch": {
+        "kind": "Official trailers",
+        "title": "Firewatch — Campo Santo media",
+        "url": "https://www.firewatchgame.com/media/",
+        "watchFor": "Landmarks, path framing, elevation, colour and environmental boundaries that make a natural space navigable.",
+        "question": "Which visual cue gives direction without looking like a UI instruction? "
+      }
     },
     {
       "id": "environmental-storytelling",
@@ -2082,7 +2400,24 @@ window.UE5_THEORY_DATA = {
           "feedback": "Environmental evidence can prepare decisions as well as world-build."
         }
       ],
-      "duration": "15–20 min"
+      "duration": "15–20 min",
+      "caseStudy": {
+        "intro": "OMORI makes space part of its narrative structure. Places do not only locate events; they represent memory, avoidance and changing relationships between the player and what happened.",
+        "observations": [
+          "White Space is defined as much by absence and repetition as by objects, making emptiness itself meaningful information.",
+          "Headspace exaggerates colour, fantasy and familiarity, while Faraway Town uses a more grounded everyday structure; the contrast changes how identical themes are read.",
+          "Returning to familiar locations after new knowledge or events lets small environmental differences carry narrative weight without a separate exposition scene."
+        ],
+        "question": "Choose one OMORI location. What does its layout, repetition or absence communicate before dialogue explains it?"
+      },
+      "watch": {
+        "kind": "Official trailer",
+        "title": "OMORI Trailer — OMOCAT",
+        "url": "https://www.youtube.com/watch?v=erzgjfU271g",
+        "youtubeId": "erzgjfU271g",
+        "watchFor": "The contrast between worlds, repeated imagery, empty space and objects that feel emotionally loaded before their meaning is explained.",
+        "question": "What does one location communicate through absence, repetition or contrast rather than dialogue? "
+      }
     },
     {
       "id": "emergent-gameplay",
@@ -2189,7 +2524,24 @@ window.UE5_THEORY_DATA = {
           "feedback": "System combinations can create varied outcomes without bespoke content for each one."
         }
       ],
-      "duration": "15–20 min"
+      "duration": "15–20 min",
+      "caseStudy": {
+        "intro": "HITMAN builds locations from interacting rules—disguises, suspicion, schedules, accidents, restricted zones and tools—then lets players combine them into plans the level does not need to script one-by-one.",
+        "observations": [
+          "NPC schedules create predictable opportunities, but distractions and player interference can push those routines into unexpected states.",
+          "Disguises change access and suspicion rules, turning the same physical space into different gameplay depending on the current identity.",
+          "Accidents, objects, crowds and security systems overlap, allowing a solution to emerge from several simple systems rather than one bespoke “correct” assassination."
+        ],
+        "question": "Find a moment where two independent systems interact to create an opportunity the player can exploit."
+      },
+      "watch": {
+        "kind": "Developer talk",
+        "title": "Level Design in HITMAN: Guiding Players in a Non-Linear Sandbox — GDC",
+        "url": "https://www.youtube.com/watch?v=hc8_W2PERZE",
+        "youtubeId": "hc8_W2PERZE",
+        "watchFor": "How level structure guides players while disguises, NPC routines, opportunities and systemic rules preserve freedom.",
+        "question": "Where can a player create a plan by combining systems instead of following one authored sequence? "
+      }
     },
     {
       "id": "scope-constraints",
@@ -2241,6 +2593,12 @@ window.UE5_THEORY_DATA = {
           "url": "https://www.gamedeveloper.com/design/finding-smart-shortcuts-in-a-short-hike-postmortem-unlocking-the-vault-4",
           "note": "A concise breakdown of the postmortem’s lessons on limitations, stretch goals and finishing a small game.",
           "kind": "Developer article"
+        },
+        {
+          "title": "A Short Hike — official press kit",
+          "url": "https://www.ashorthike.com/press/index.html",
+          "note": "Creator Adam Robinson-Yu’s own press kit contains trailer, b-roll, screenshots and the concise feature set behind the tiny open world.",
+          "kind": "Official"
         }
       ],
       "task": {
@@ -2290,7 +2648,23 @@ window.UE5_THEORY_DATA = {
           "feedback": "Constraints can sharpen creative decisions by reducing irrelevant possibilities."
         }
       ],
-      "duration": "15–20 min"
+      "duration": "15–20 min",
+      "caseStudy": {
+        "intro": "A Short Hike demonstrates how a deliberately small project can feel generous by concentrating effort on a compact world, a few expressive movement systems and optional discoveries.",
+        "observations": [
+          "The island is small enough for locations to be reused, crossed from different angles and learned by the player instead of requiring enormous content volume.",
+          "Climbing, gliding and feathers make traversal itself enjoyable, so the same terrain can support exploration without needing a new mechanic in every area.",
+          "Optional characters and activities enrich the route to the summit while remaining cuttable or non-critical to the central goal."
+        ],
+        "question": "Which feature makes the small world feel richer without dramatically increasing production scope?"
+      },
+      "watch": {
+        "kind": "Official trailer & b-roll",
+        "title": "A Short Hike — official press kit",
+        "url": "https://www.ashorthike.com/press/index.html",
+        "watchFor": "How a compact world is made dense through traversal, revisiting spaces, optional activities and a small number of reusable mechanics.",
+        "question": "Which element adds perceived richness without requiring a huge amount of unique content? "
+      }
     },
     {
       "id": "prototyping",
@@ -2397,7 +2771,24 @@ window.UE5_THEORY_DATA = {
           "feedback": "Useful prototypes are capable of telling you the idea does not work."
         }
       ],
-      "duration": "15–20 min"
+      "duration": "15–20 min",
+      "caseStudy": {
+        "intro": "Hades used Early Access as a long-running playable prototype environment: Supergiant exposed unfinished systems to real players, observed behaviour and repeatedly changed the game before treating it as complete.",
+        "observations": [
+          "Updates changed balance, progression, content and presentation while the core loop remained playable enough to generate useful evidence.",
+          "The team could test assumptions with real player behaviour rather than relying only on internal confidence about what would work.",
+          "Early Access was designed into the production plan, so feedback and iteration were part of development rather than a marketing event at the end."
+        ],
+        "question": "What design question can a rough playable build answer that a design document cannot?"
+      },
+      "watch": {
+        "kind": "Development documentary",
+        "title": "Hades: Developing Hell #01 — Noclip",
+        "url": "https://www.youtube.com/watch?v=JzyE9hi912c",
+        "youtubeId": "JzyE9hi912c",
+        "watchFor": "The state of the game at Early Access launch, what the team is uncertain about and why showing unfinished work creates useful evidence.",
+        "question": "Which decision is being tested by players rather than treated as final? "
+      }
     },
     {
       "id": "playtesting-iteration",
@@ -2505,7 +2896,23 @@ window.UE5_THEORY_DATA = {
           "feedback": "Specific observation, change and retest evidence demonstrates iteration."
         }
       ],
-      "duration": "15–20 min"
+      "duration": "15–20 min",
+      "caseStudy": {
+        "intro": "Left 4 Dead is a classic example of observation-led iteration. Valve repeatedly put the game in front of people outside the team and changed what players failed to read, understand or do.",
+        "observations": [
+          "The team watched behaviour rather than asking testers whether they “liked” a feature and treating opinion alone as proof.",
+          "Visual hierarchy and route communication changed when players missed threats or navigational information the developers thought was obvious.",
+          "Repeated tests separated one-person mistakes from patterns, giving the team evidence for where the design—not the tester—needed to change."
+        ],
+        "question": "What is the difference between “the tester played badly” and evidence that the game failed to communicate?"
+      },
+      "watch": {
+        "kind": "Developer video",
+        "title": "How Valve uses biofeedback to make better games — GDC / Game Developer",
+        "url": "https://www.gamedeveloper.com/design/video-how-valve-uses-biofeedback-to-make-better-games",
+        "watchFor": "How Valve measures what players actually do and experience, then uses that evidence alongside conventional observation.",
+        "question": "What evidence could contradict a tester saying “it was fine”? "
+      }
     },
     {
       "id": "translating-between-media",
@@ -2643,7 +3050,23 @@ window.UE5_THEORY_DATA = {
           "sourceUrl": "https://contentiongames.com/games/slay/",
           "sourceTitle": "Contention Games — Slay the Spire: The Board Game"
         }
-      ]
+      ],
+      "caseStudy": {
+        "intro": "Slay the Spire: The Board Game succeeds by preserving the decision structure of deckbuilding while replacing calculations and automation that would be tedious at a table.",
+        "observations": [
+          "Damage, status effects and enemy behaviour are compressed into values, cards, cubes and tokens that people can update without a computer.",
+          "The recognisable loop—fight, choose rewards, build the deck, manage risk, climb—survives even though many numbers and effects are simplified.",
+          "Co-operative play is a new tabletop dynamic: adaptation adds something appropriate to people sharing a physical table instead of copying the solo digital experience literally."
+        ],
+        "question": "Identify one automated digital task the board game replaces. What physical component or rule now carries that job?"
+      },
+      "watch": {
+        "kind": "Tabletop gameplay tutorial",
+        "title": "Slay the Spire: The Board Game — solo tutorial & playthrough",
+        "url": "https://boardgamegeek.com/video/517475/slay-the-spire-the-board-game/slay-the-spire-the-board-game-solo-tutorial-and-pl",
+        "watchFor": "What the physical version tracks with cards, cubes, boards and tokens that the videogame calculates automatically.",
+        "question": "Find one rule that was simplified or made physical so human players can operate it at the table. "
+      }
     }
   ]
 };

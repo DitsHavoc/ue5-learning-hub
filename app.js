@@ -1331,14 +1331,24 @@ function theoryExampleCard(x){
 function theorySources(l){
   return `<div class="theory-source-grid">${(l.sources||[]).map(s=>{const u=safeUrl(s.url);return u?`<a class="theory-source-card" href="${esc(u)}" target="_blank" rel="noopener"><span>${esc(s.kind||'Further reading')}</span><strong>${esc(s.title)}</strong>${s.note?`<p>${esc(s.note)}</p>`:''}<b>Open source ↗</b></a>`:''}).join('')}</div>`;
 }
+function theoryCaseStudy(l){
+  const c=l?.caseStudy;if(!c)return '';
+  const game=l?.example?.game||'Case study';
+  return `<section class="theory-case-study"><div class="theory-case-study-head"><span class="eyebrow">CASE STUDY BREAKDOWN • ${esc(game)}</span><h2>Read the design, not just the game</h2><p>${esc(c.intro||'')}</p></div><div class="theory-case-study-grid">${(c.observations||[]).map((x,i)=>`<article><span>${String(i+1).padStart(2,'0')}</span><p>${esc(x)}</p></article>`).join('')}</div>${c.question?`<div class="theory-designer-question"><b>DESIGNER QUESTION</b><p>${esc(c.question)}</p></div>`:''}</section>`;
+}
+function theoryWatch(l){
+  const w=l?.watch;if(!w)return '';
+  const url=safeUrl(w.url||''),youtubeId=/^[A-Za-z0-9_-]{6,20}$/.test(String(w.youtubeId||''))?String(w.youtubeId):'';
+  return `<section class="theory-watch"><div class="theory-watch-copy"><span class="eyebrow">▶ WATCH IT IN ACTION • ${esc(w.kind||'Video')}</span><h2>${esc(w.title||'See the design in motion')}</h2><div class="theory-watch-prompt"><b>WATCH FOR</b><p>${esc(w.watchFor||'Watch for the design principle operating during real play.')}</p></div>${w.question?`<div class="theory-watch-question"><b>AFTER WATCHING</b><p>${esc(w.question)}</p></div>`:''}</div><div class="theory-watch-stage" data-theory-watch-stage>${youtubeId?`<div class="theory-watch-placeholder"><span class="theory-watch-play-icon">▶</span><strong>Load video when you are ready</strong><p>The player is not loaded until you press Play.</p><button class="button primary" type="button" data-action="load-theory-video" data-youtube="${esc(youtubeId)}" data-title="${esc(w.title||'Theory case study video')}">▶ Play here</button>${url?`<a class="button ghost small" href="${esc(url)}" target="_blank" rel="noopener">Open source ↗</a>`:''}</div>`:(url?`<div class="theory-watch-placeholder external"><span class="theory-watch-play-icon">↗</span><strong>Watch on the source site</strong><p>This source is kept on its official, developer or professional host.</p><a class="button primary" href="${esc(url)}" target="_blank" rel="noopener">Open video / media page ↗</a></div>`:'')}</div></section>`;
+}
 function theoryQuizReview(l,s){
   if(!s?.answers)return '';
   return `<div class="theory-quiz-review">${l.quiz.map((q,i)=>{const selected=s.answers[i],ok=selected===q.correct;return `<article class="${ok?'correct':'wrong'}"><span>${ok?'✓ Correct':'× Review'}</span><strong>${esc(q.q)}</strong><p><b>Your answer:</b> ${esc(q.options[selected]??'No answer')}</p><p><b>Correct:</b> ${esc(q.options[q.correct])}</p><small>${esc(q.feedback)}</small></article>`}).join('')}</div>`;
 }
 function theoryPage(){
   const done=(state.theoryCompleted||[]).length,total=THEORY.lessons.length,pct=total?Math.round(done/total*100):0,lab=THEORY.lab;
-  return `<div class="page-head theory-page-head"><div class="breadcrumb"><a href="#/">Home</a> / Game Design Theory</div><span class="eyebrow">SYSTEMS • PLAYERS • BALANCE • EXPERIENCE • PROCESS</span><h1>◈ Game Design Theory</h1><p class="muted">Learn why games work, not just how to build them. Every lesson uses a different game case study, then moves from the idea to a practical task and a scenario quiz.</p></div>
-  <section class="theory-dashboard"><div><span class="eyebrow">YOUR THEORY PROGRESS</span><h2>${done}/${total} lessons • ${done*THEORY.xp}/${total*THEORY.xp} XP earned</h2><div class="progress"><span style="width:${pct}%"></span></div></div><div class="theory-method"><span>UNDERSTAND</span><b>→</b><span>SEE IT</span><b>→</b><span>TRY IT</span><b>→</b><span>QUIZ</span><b>→</b><span>APPLY</span></div></section>
+  return `<div class="page-head theory-page-head"><div class="breadcrumb"><a href="#/">Home</a> / Game Design Theory</div><span class="eyebrow">SYSTEMS • PLAYERS • BALANCE • EXPERIENCE • PROCESS</span><h1>◈ Game Design Theory</h1><p class="muted">Learn why games work, not just how to build them. Every lesson uses a different game case study, breaks down what the design is doing, then lets you watch the principle in action before you try it yourself.</p></div>
+  <section class="theory-dashboard"><div><span class="eyebrow">YOUR THEORY PROGRESS</span><h2>${done}/${total} lessons • ${done*THEORY.xp}/${total*THEORY.xp} XP earned</h2><div class="progress"><span style="width:${pct}%"></span></div></div><div class="theory-method"><span>UNDERSTAND</span><b>→</b><span>SEE IT</span><b>→</b><span>WATCH</span><b>→</b><span>TRY IT</span><b>→</b><span>QUIZ</span><b>→</b><span>APPLY</span></div></section>
   <section class="theory-lab" id="boardGameLab"><div class="theory-lab-mark">🎲</div><div><span class="eyebrow">OPTIONAL PRACTICAL DESIGN LAB</span><h2>${esc(lab.title)}</h2><p>${esc(lab.intro)}</p><div class="callout good"><b>TABLETOP ADAPTATION PROJECT?</b> Your teacher may ask you to complete this lab before your group commits to its design.</div><div class="theory-lab-columns"><div><h3>How to run it</h3><ol>${lab.rules.map(x=>`<li>${esc(x)}</li>`).join('')}</ol></div><div><h3>Design evidence to collect</h3><ul>${lab.prompts.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div></div><div class="callout"><b>EVIDENCE:</b> ${esc(lab.evidence)}</div><p class="muted"><b>Why try it?</b> ${esc(lab.note)}</p></div></section>
   <div class="study-toolbar theory-toolbar"><input id="theorySearch" type="search" enterkeyhint="search" placeholder="Search agency, balance, pacing, playtesting…"><div class="filter-row"><button class="filter active" data-theory-filter="all">All <b>${total}</b></button>${THEORY.paths.map(p=>`<button class="filter" data-theory-filter="${esc(p.id)}">${p.icon} ${esc(p.title)}</button>`).join('')}</div><span class="study-result-count" id="theoryResultCount">${total} lessons</span></div>
   <div class="theory-path-overview">${THEORY.paths.map(p=>{const x=theoryPathProgress(p.id);return `<article><span>${p.icon}</span><div><strong>${esc(p.title)}</strong><p>${esc(p.short)}</p><div class="progress"><span style="width:${x.pct}%"></span></div><small>${x.done}/${x.total} complete</small></div></article>`}).join('')}</div>
@@ -1351,7 +1361,7 @@ function theoryLessonPage(id){
   <section class="theory-definition"><div><span class="eyebrow">THE IDEA</span><h2>What is it?</h2><p>${esc(l.definition)}</p></div><div><span class="eyebrow">WHY IT MATTERS</span><h2>Why should a designer care?</h2><p>${esc(l.why)}</p></div></section>
   ${theoryDiagram(l.diagram)}
   <section class="content-card"><span class="eyebrow">KEY IDEAS</span><h2>What to remember</h2><div class="theory-key-grid">${(l.keyIdeas||[]).map((x,i)=>`<article><span>${String(i+1).padStart(2,'0')}</span><p>${esc(x)}</p></article>`).join('')}</div></section>
-  ${theoryExampleCard(l.example)}${l.examples?.length?`<section class="section"><div class="section-head"><div><span class="eyebrow">COMPARE REAL ADAPTATIONS</span><h2>What survived the conversion?</h2><p>Do not copy components. Identify the principle the designers preserved.</p></div></div><div class="theory-example-grid">${l.examples.map(theoryExampleCard).join('')}</div></section>`:''}
+  ${theoryExampleCard(l.example)}${theoryCaseStudy(l)}${theoryWatch(l)}${l.examples?.length?`<section class="section"><div class="section-head"><div><span class="eyebrow">COMPARE REAL ADAPTATIONS</span><h2>What survived the conversion?</h2><p>Do not copy components. Identify the principle the designers preserved.</p></div></div><div class="theory-example-grid">${l.examples.map(theoryExampleCard).join('')}</div></section>`:''}
   <section class="theory-warning"><div><span>⚠</span><h2>Common design traps</h2></div><ul>${(l.mistakes||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></section>
   <section class="theory-task"><div><span class="eyebrow">APPLY IT • ${esc(l.task.title)}</span><h2>${esc(l.task.brief)}</h2><ol>${(l.task.steps||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ol><div class="callout good"><b>EVIDENCE:</b> ${esc(l.task.evidence)}</div>${l.task.stretch?`<div class="callout"><b>STRETCH:</b> ${esc(l.task.stretch)}</div>`:''}</div></section>
   ${theoryApplyNext(l.id)}
@@ -3286,6 +3296,24 @@ document.addEventListener('click',async e=>{
     iframe.setAttribute('allowfullscreen','');
     iframe.referrerPolicy='strict-origin-when-cross-origin';
     shell.replaceChildren(iframe);
+  }
+  else if(a==='load-theory-video'){
+    const stage=b.closest('[data-theory-watch-stage]');
+    if(!stage)return;
+    const id=String(b.dataset.youtube||'');
+    if(!/^[A-Za-z0-9_-]{6,20}$/.test(id)){toast('Video source was blocked for safety.');return}
+    const src=safeVideoEmbed(`https://www.youtube-nocookie.com/embed/${id}?rel=0&modestbranding=1`);
+    if(!src){toast('Video source was blocked for safety.');return}
+    const iframe=document.createElement('iframe');
+    iframe.className='theory-watch-iframe';
+    iframe.src=src;
+    iframe.title=b.dataset.title||'Game Design Theory video';
+    iframe.loading='lazy';
+    iframe.allow='accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen';
+    iframe.setAttribute('allowfullscreen','');
+    iframe.referrerPolicy='strict-origin-when-cross-origin';
+    stage.classList.add('loaded');
+    stage.replaceChildren(iframe);
   }
   else if(a==='close-image'){closeImageLightbox();}
   else if(a==='scroll'){document.getElementById(b.dataset.target)?.scrollIntoView({behavior:'smooth',block:'start'});}
