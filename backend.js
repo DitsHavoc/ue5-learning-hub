@@ -8,16 +8,20 @@ const emailAuthEnabled = configured && cfg.emailAuthEnabled !== false;
 const PENDING_CLASS_KEY = 'ue5hub:v3:pending-class-code';
 const PENDING_TEACHER_KEY = 'ue5hub:v3:pending-teacher-code';
 const PENDING_TEACHER_INVITE_KEY = 'ue5hub:v3:pending-teacher-invite';
+function localProgressState(){
+  try{return JSON.parse(localStorage.getItem('ue5hub:v2:progress')||'null')||{}}catch(e){return {}}
+}
 function localCompletionIds(){
-  let local=null;
-  try{local=JSON.parse(localStorage.getItem('ue5hub:v2:progress')||'null')}catch(e){}
-  const ids=[...(local?.completed||[]),...(local?.tutorialCompleted||[]).map(id=>`tutorial:${id}`),...(local?.chapterBuildCompleted||[]).map(id=>`chapter:${id}`),...(local?.designBuildCompleted||[]).map(id=>`designbuild:${id}`),...(local?.designSourceCompleted||[]).map(id=>`designsource:${id}`),...(local?.modelVideoCompleted||[]).map(id=>`modelvideo:${id}`),...(local?.modelTheoryCompleted||[]).map(id=>`modeltheory:${id}`),...(local?.modelFoundationFinal?[`modelfoundation:final`]:[]),...(local?.modelLessonCompleted||[]).map(id=>`model:${id}`),...(local?.modelBuildCompleted||[]).map(id=>`modelbuild:${id}`),...(local?.modelFixCompleted||[]).map(id=>`modelfix:${id}`),...(local?.sculptCompleted||[]).map(id=>`sculpt:${id}`),...(local?.blockCompleted||[]).map(id=>`block:${id}`)];
+  const local=localProgressState();
+  const ids=[...(local?.completed||[]),...(local?.tutorialCompleted||[]).map(id=>`tutorial:${id}`),...(local?.chapterBuildCompleted||[]).map(id=>`chapter:${id}`),...(local?.designBuildCompleted||[]).map(id=>`designbuild:${id}`),...(local?.designSourceCompleted||[]).map(id=>`designsource:${id}`),...(local?.theoryCompleted||[]).map(id=>`theory:${id}`),...(local?.modelVideoCompleted||[]).map(id=>`modelvideo:${id}`),...(local?.modelTheoryCompleted||[]).map(id=>`modeltheory:${id}`),...(local?.modelFoundationFinal?[`modelfoundation:final`]:[]),...(local?.modelLessonCompleted||[]).map(id=>`model:${id}`),...(local?.modelBuildCompleted||[]).map(id=>`modelbuild:${id}`),...(local?.modelFixCompleted||[]).map(id=>`modelfix:${id}`),...(local?.sculptCompleted||[]).map(id=>`sculpt:${id}`),...(local?.blockCompleted||[]).map(id=>`block:${id}`)];
   return [...new Set(ids)].sort();
 }
+function localPathwayCheckpointIds(){return [...new Set(localProgressState()?.pathwayCheckpoints||[])].sort()}
+function localProgressFingerprint(){return `${localCompletionIds().join('|')}||pathways:${localPathwayCheckpointIds().join('|')}`}
 function localProgressMarkerKey(api){return `ue5hub:v3:migrated-progress:${api.user?.id||'guest'}`;}
 function markLocalProgressSynced(api){
   if(!api.user)return;
-  try{localStorage.setItem(localProgressMarkerKey(api),localCompletionIds().join('|'));}catch(e){}
+  try{localStorage.setItem(localProgressMarkerKey(api),localProgressFingerprint());}catch(e){}
 }
 const client = configured ? window.supabase.createClient(cfg.url, cfg.publishableKey) : null;
 
@@ -455,18 +459,19 @@ const api = {
   async signOut(){ if(client) await client.auth.signOut(); },
   async migrateLocalProgress(){
     if(!client||!this.user)return;
-    const unique=localCompletionIds();
-    if(!unique.length)return;
-    const markerKey=localProgressMarkerKey(this),fingerprint=unique.join('|');
+    const unique=localCompletionIds(),pathways=localPathwayCheckpointIds();
+    if(!unique.length&&!pathways.length)return;
+    const markerKey=localProgressMarkerKey(this),fingerprint=localProgressFingerprint();
     if(localStorage.getItem(markerKey)===fingerprint)return;
-    const rows=unique.map(id=>({user_id:this.user.id,lesson_id:id,completed:true,completed_at:new Date().toISOString()}));
+    const now=new Date().toISOString();
+    const rows=[...unique.map(id=>({user_id:this.user.id,lesson_id:id,completed:true,completed_at:now})),...pathways.map(id=>({user_id:this.user.id,lesson_id:`pathway:${id}`,completed:false,completed_at:now}))];
     const {error}=await client.from('lesson_progress').upsert(rows,{onConflict:'user_id,lesson_id'});
     if(error)console.warn('Progress migration',error.message);else localStorage.setItem(markerKey,fingerprint);
   },
   async getLessonProgress({force=false}={}){
     if(!client||!this.user)return [];
     return cachedRead(this,'lesson-progress',300000,async()=>{
-      const {data,error}=await client.from('lesson_progress').select('lesson_id,completed').eq('user_id',this.user.id);
+      const {data,error}=await client.from('lesson_progress').select('lesson_id,completed,completed_at').eq('user_id',this.user.id);
       if(error){console.warn(error.message);return []} return data||[];
     },{force});
   },
@@ -478,6 +483,17 @@ const api = {
     invalidateReadCache(this,'lesson-progress');
     markLocalProgressSynced(this);
     if(completed)await this.refreshXpSummary({force:true});
+    return true;
+  },
+  async setPathwayCheckpointComplete(checkpointId,completed){
+    if(!client||!this.user)return false;
+    const lessonId=`pathway:${String(checkpointId||'').trim()}`;
+    // Keep completed=false deliberately: pathway checkpoints are synced markers, not XP-bearing lessons.
+    const row={user_id:this.user.id,lesson_id:lessonId,completed:false,completed_at:completed?new Date().toISOString():null};
+    const {error}=await client.from('lesson_progress').upsert(row,{onConflict:'user_id,lesson_id'});
+    if(error)throw error;
+    invalidateReadCache(this,'lesson-progress');
+    markLocalProgressSynced(this);
     return true;
   },
   async refreshXpSummary({force=false}={}){
@@ -498,6 +514,14 @@ const api = {
     const cleanPeriod=period==='all'?'all':'week';
     return cachedRead(this,`leaderboard:${classId}:${cleanPeriod}`,60000,async()=>{
       const {data,error}=await client.rpc('get_class_leaderboard',{p_class_id:classId,p_period:cleanPeriod});
+      if(error)throw error;return data||[];
+    },{force});
+  },
+  async getHubLeaderboard(period='week',{force=false}={}){
+    if(!client||!this.user)throw new Error('Sign in to view the leaderboard.');
+    const cleanPeriod=period==='all'?'all':'week';
+    return cachedRead(this,`hub-leaderboard:${cleanPeriod}`,60000,async()=>{
+      const {data,error}=await client.rpc('get_hub_leaderboard',{p_period:cleanPeriod});
       if(error)throw error;return data||[];
     },{force});
   },
@@ -1200,19 +1224,6 @@ const api = {
     const {error}=await client.from('class_members').delete().eq('class_id',classId).eq('user_id',userId);
     if(error)throw error;invalidateClassReads(this);return true;
   },
-  async moveClassMember(fromClassId,toClassId,userId){
-    if(!client||!this.user||this.profile?.role!=='teacher')throw new Error('Teacher access required.');
-    const fromId=String(fromClassId||''),toId=String(toClassId||''),studentId=String(userId||'');
-    if(!fromId||!toId||!studentId)throw new Error('Choose a student and destination class.');
-    if(fromId===toId)throw new Error('Choose a different class.');
-
-    // Add the destination membership first so a failed move never strands the student outside both classes.
-    const {error:addError}=await client.from('class_members').upsert({class_id:toId,user_id:studentId},{onConflict:'class_id,user_id'});
-    if(addError)throw addError;
-    const {error:removeError}=await client.from('class_members').delete().eq('class_id',fromId).eq('user_id',studentId);
-    if(removeError)throw new Error(`Student was added to the new class, but could not be removed from the old one: ${removeError.message}`);
-    invalidateClassReads(this);return true;
-  },
   async addClassTeacher(classId,teacherId){
     if(!client||!this.user||this.profile?.role!=='teacher')throw new Error('Teacher access required.');
     if(!teacherId)throw new Error('Choose a teacher first.');
@@ -1442,7 +1453,7 @@ const api = {
       const [{data:profiles,error:pErr},{data:teachers,error:tErr},{data:progress,error:prErr}]=await Promise.all([
         memberIds.length?client.from('profiles').select('id,display_name,role').in('id',memberIds).order('display_name'):Promise.resolve({data:[],error:null}),
         teacherIds.length?client.from('profiles').select('id,display_name,role').in('id',teacherIds).order('display_name'):Promise.resolve({data:[],error:null}),
-        memberIds.length?client.from('lesson_progress').select('user_id,lesson_id,completed').in('user_id',memberIds).eq('completed',true):Promise.resolve({data:[],error:null})
+        memberIds.length?client.from('lesson_progress').select('user_id,lesson_id,completed,completed_at,updated_at').in('user_id',memberIds):Promise.resolve({data:[],error:null})
       ]);
       if(pErr||tErr||prErr)throw pErr||tErr||prErr;
       return {profiles:profiles||[],teachers:teachers||[],progress:progress||[],classes:[classInfo]};
