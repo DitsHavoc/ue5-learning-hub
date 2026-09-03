@@ -1,0 +1,503 @@
+/* v3.42.6 — Final Visual QA + Identity
+   FINAL visual refinement layer.
+   No routes, learning content, XP, Supabase, classes, Theory, Guided Paths,
+   roster controls or application logic are changed.
+
+   Goals:
+   - finish typography hierarchy
+   - improve readability/accessibility
+   - make nested content feel less "card in a card"
+   - standardise imagery and focus states
+   - make teacher/data screens feel more operational
+   - tighten mobile behaviour
+   - keep the approved flatter v3.42.5 visual direction
+*/
+
+/* -------------------------------------------------------------------------
+   1. TYPE + READABILITY
+   ------------------------------------------------------------------------- */
+
+:root{
+  --vf-text:#f2f5f8;
+  --vf-muted:#9aa8b6;
+  --vf-muted-strong:#aab6c2;
+  --vf-surface:#0b1118;
+  --vf-surface-2:#090f15;
+  --vf-line:#27323d;
+  --vf-line-strong:#384653;
+  --vf-focus:#74bdff;
+}
+
+body{
+  color:var(--vf-text);
+  text-rendering:optimizeLegibility;
+  -webkit-font-smoothing:antialiased;
+}
+
+p,
+li{
+  text-wrap:pretty;
+}
+
+h1,h2,h3{
+  text-wrap:balance;
+}
+
+h1{
+  line-height:1.02;
+  font-weight:780;
+}
+
+h2{
+  line-height:1.12;
+  font-weight:760;
+}
+
+h3{
+  line-height:1.22;
+  font-weight:740;
+}
+
+.muted,
+.section-head p,
+.page-head p,
+.portal-path-card p,
+.theory-card p,
+.designer-module-card p,
+.model-build-copy p,
+.guided-path-card p{
+  color:var(--vf-muted);
+}
+
+/* Tiny all-caps labels remain useful, but should not feel like unreadable UI dust. */
+.eyebrow,
+.deep-label,
+.portal-kicker,
+.task-label,
+.nav-heading,
+.meta-line small,
+.model-video-next small,
+.foundation-card-copy>span,
+.theory-source-card>span,
+.designer-research-card .eyebrow{
+  font-size:max(10px,.625rem);
+  line-height:1.35;
+}
+
+.eyebrow,
+.deep-label,
+.portal-kicker{
+  letter-spacing:.12em;
+}
+
+.nav-heading{
+  letter-spacing:.15em;
+}
+
+/* -------------------------------------------------------------------------
+   2. CONSISTENT INTERACTION LANGUAGE
+   ------------------------------------------------------------------------- */
+
+a,
+button,
+input,
+select,
+textarea,
+summary{
+  -webkit-tap-highlight-color:transparent;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible{
+  outline:2px solid var(--vf-focus);
+  outline-offset:2px;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+  border-color:#477397!important;
+  box-shadow:0 0 0 1px rgba(116,189,255,.18)!important;
+}
+
+.button{
+  min-height:36px;
+}
+
+.button.primary{
+  font-weight:800;
+}
+
+.link-button:hover,
+.button:hover{
+  text-decoration:none;
+}
+
+::selection{
+  background:rgba(67,169,255,.28);
+  color:#fff;
+}
+
+/* No more "everything floats upward" feeling. */
+.portal-path-card:hover,
+.theory-card:hover,
+.designer-module-card:hover,
+.building-block-card:hover,
+.quick-tutorial-card:hover,
+.chapter-build-card:hover,
+.guided-path-card:hover,
+.foundation-chapter-card:hover,
+.model-build-card.visual:hover,
+.model-industry-card:hover,
+.resource-library-card:hover,
+.resource-feature-strip>a:hover,
+.news-card:hover{
+  transform:none!important;
+}
+
+/* -------------------------------------------------------------------------
+   3. PAGE IDENTITY — ACCENT AS NAVIGATION, NOT DECORATION
+   ------------------------------------------------------------------------- */
+
+/* A short accent rule makes the four core curriculum areas immediately legible. */
+.programming-page-head,
+.theory-page-head,
+.designer-page-head,
+.model-page-head.revamped{
+  position:relative;
+}
+
+.programming-page-head:before,
+.theory-page-head:before,
+.designer-page-head:before,
+.model-page-head.revamped:before{
+  content:"";
+  position:absolute;
+  left:-3px;
+  top:18px;
+  bottom:18px;
+  width:3px;
+  pointer-events:none;
+}
+
+.programming-page-head:before{background:var(--vr-unreal)}
+.theory-page-head:before{background:var(--vr-theory)}
+.designer-page-head:before{background:var(--vr-design)}
+.model-page-head.revamped:before{background:var(--vr-model)}
+
+/* Avoid a double-heavy left edge now the identity rule is explicit. */
+.programming-page-head,
+.theory-page-head,
+.designer-page-head,
+.model-page-head.revamped{
+  border-left-width:1px;
+}
+
+/* Keep area icons visually related even when the glyph itself is emoji/symbol based. */
+.portal-path-icon,
+.theory-card-icon,
+.designer-module-icon,
+.foundation-card-number,
+.foundation-map-node>span,
+.model-video-next>span,
+.next-unlock-icon,
+.equipped-badge-icon{
+  box-shadow:none!important;
+  line-height:1;
+}
+
+/* -------------------------------------------------------------------------
+   4. LESS "CARD INSIDE CARD"
+   ------------------------------------------------------------------------- */
+
+/* Inner explanatory blocks should read like sections within a tool panel. */
+.theory-lab-columns>div,
+.designer-principles>div,
+.designer-analysis-grid>div,
+.model-thinking-grid article,
+.critique-feedback-grid>div,
+.resource-license-grid>div{
+  background:transparent!important;
+  border-left:0;
+  border-right:0;
+  border-bottom:0;
+  border-radius:0!important;
+  padding-left:0;
+  padding-right:0;
+}
+
+/* Preserve separation without adding another floating box. */
+.theory-lab-columns>div,
+.designer-principles>div,
+.designer-analysis-grid>div,
+.model-thinking-grid article,
+.critique-feedback-grid>div,
+.resource-license-grid>div{
+  border-top-color:#27323d;
+}
+
+/* Compact grids feel more like documentation/reference tables. */
+.designer-analysis-grid,
+.theory-key-grid,
+.model-quality-grid,
+.critique-feedback-grid{
+  gap:7px;
+}
+
+.theory-key-grid article,
+.model-quality-grid article{
+  padding:11px 12px;
+}
+
+/* -------------------------------------------------------------------------
+   5. IMAGE / MEDIA TREATMENT
+   ------------------------------------------------------------------------- */
+
+.visual,
+.visual-flow-card,
+.zoomable-image,
+.theory-example-image,
+.theory-watch-stage,
+.designer-case-image,
+.designer-industry-video,
+.model-build-thumb,
+.model-build-hero-image,
+.model-hero-reference-stack{
+  border-radius:4px!important;
+}
+
+.visual figcaption,
+.visual-flow-card figcaption,
+.zoomable-image figcaption,
+.model-book-reference figcaption{
+  background:#080d12;
+  border-top-color:#26313c;
+  color:#98a8b7;
+  font-size:10px;
+  line-height:1.45;
+}
+
+.visual img,
+.visual-flow-card img,
+.zoomable-image img,
+.theory-example-image img,
+.designer-case-image img,
+.model-build-thumb img,
+.model-build-hero-image img{
+  transition:none!important;
+}
+
+/* Media should be the visual focus, not a glow around the media. */
+.visual,
+.visual-flow-card,
+.zoomable-image,
+.theory-example-image,
+.theory-watch-stage,
+.designer-case-image,
+.model-build-thumb,
+.model-build-hero-image{
+  box-shadow:none!important;
+}
+
+/* -------------------------------------------------------------------------
+   6. STAFF / DATA SCREENS — DENSER APPLICATION UI
+   ------------------------------------------------------------------------- */
+
+.classes-hub-toolbar,
+.teacher-admin-section,
+.teacher-class-pulse,
+.critique-toolbar,
+.leaderboard-toolbar{
+  border-color:#2b3742;
+}
+
+.classes-hub-card,
+.class-card,
+.teacher-class-pulse,
+.critique-post-card,
+.leaderboard-row{
+  border-color:#27323d;
+}
+
+.teacher-pulse-table th,
+.class-snapshot-table th{
+  font-size:9px;
+  letter-spacing:.08em;
+  color:#91a2b2;
+  padding:9px 10px;
+}
+
+.teacher-pulse-table td,
+.class-snapshot-table td{
+  font-size:10px;
+  padding:10px;
+}
+
+.teacher-pulse-table td b,
+.class-snapshot-table td b{
+  font-size:12px;
+}
+
+.teacher-pulse-table td small,
+.class-snapshot-table td small{
+  font-size:9px;
+}
+
+.class-member,
+.classes-hub-code,
+.class-code-panel{
+  border-radius:4px!important;
+}
+
+/* Form controls read as controls, not cards. */
+.critique-toolbar select,
+.critique-post-composer select,
+.critique-post-composer input,
+.critique-post-composer textarea,
+.critique-feedback-form textarea,
+.critique-owner-tools input,
+.leaderboard-toolbar select,
+.classes-join-panel input{
+  min-height:40px;
+  background:#080e14;
+  border-color:#2b3742;
+}
+
+/* Status chips are allowed, but keep them compact and rectangular. */
+.teacher-activity,
+.path-mini,
+.sync-chip,
+.source-progress-chip,
+.request-status,
+.project-type-pill,
+.critique-area,
+.critique-needs-chip,
+.critique-improved-chip,
+.you-chip{
+  border-radius:3px!important;
+}
+
+/* -------------------------------------------------------------------------
+   7. EMPTY / LOADING / ERROR STATES
+   ------------------------------------------------------------------------- */
+
+.empty,
+.news-empty,
+.news-loading,
+.critique-no-feedback,
+.home-leaderboard-empty{
+  background:#090f15;
+  border-color:#2a3641;
+}
+
+.empty,
+.news-empty{
+  border-left:3px solid #536475;
+}
+
+.news-loading{
+  border-left:3px solid var(--vr-amber);
+}
+
+.boot-error{
+  border-radius:4px;
+  box-shadow:none;
+}
+
+/* -------------------------------------------------------------------------
+   8. MOBILE / PORTRAIT QA
+   ------------------------------------------------------------------------- */
+
+@media(max-width:850px){
+  main{
+    padding-left:20px;
+    padding-right:20px;
+  }
+
+  .section{
+    margin-top:32px;
+  }
+
+  .section-head{
+    align-items:flex-start;
+  }
+
+  .portal-path-card,
+  .theory-card,
+  .designer-module-card,
+  .guided-path-card{
+    min-height:0;
+  }
+}
+
+@media(max-width:650px){
+  main{
+    padding:22px 15px 64px;
+  }
+
+  .topbar{
+    padding-left:12px;
+    padding-right:12px;
+    gap:8px;
+  }
+
+  .global-search input{
+    font-size:16px; /* prevents mobile browser input zoom */
+  }
+
+  .global-search kbd{
+    display:none;
+  }
+
+  .portal-hero,
+  .programming-page-head,
+  .theory-page-head,
+  .designer-page-head,
+  .model-page-head.revamped,
+  .news-page-head{
+    padding:20px 17px;
+  }
+
+  .programming-page-head:before,
+  .theory-page-head:before,
+  .designer-page-head:before,
+  .model-page-head.revamped:before{
+    top:14px;
+    bottom:14px;
+  }
+
+  .button{
+    min-height:40px;
+  }
+
+  .teacher-pulse-table,
+  .class-snapshot-table{
+    min-width:780px;
+  }
+
+  .theory-lab,
+  .designer-manifesto,
+  .model-foundations-launch,
+  .model-video-course-launch,
+  .critique-post-composer{
+    padding-left:16px;
+    padding-right:16px;
+  }
+}
+
+/* Respect OS accessibility preferences and keep this deliberately restrained. */
+@media(prefers-reduced-motion:reduce){
+  *,
+  *:before,
+  *:after{
+    scroll-behavior:auto!important;
+    transition-duration:.001ms!important;
+    animation-duration:.001ms!important;
+    animation-iteration-count:1!important;
+  }
+}
