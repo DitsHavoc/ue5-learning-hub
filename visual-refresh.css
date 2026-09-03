@@ -1,4 +1,4 @@
-/* v3.42.4 — Visual Trial
+/* v3.42.5 — Sitewide Visual Polish
    A deliberately light-touch de-template / de-material pass.
    No layout logic, routes, data, Supabase or learning content is changed. */
 
@@ -255,4 +255,533 @@ body{
 @media(max-width:650px){
   .portal-hero,.portal-hero.portal-hero-clean{padding:23px 20px}
   .portal-class-shortcut,.guided-home-cta,.home-leaderboard{border-left-width:2px}
+}
+
+
+/* ========================================================================
+   v3.42.5 — Sitewide technical polish
+   Same Hub, same routes, same content, same data. This layer only carries
+   the flatter visual language from Home into the learning and staff areas.
+   ======================================================================== */
+
+:root{
+  --vr-unreal:#43a9ff;
+  --vr-theory:#62c79f;
+  --vr-design:#b985ef;
+  --vr-model:#60cdbb;
+  --vr-amber:#d7b04f;
+  --vr-danger:#d36c78;
+}
+
+/* General hierarchy: flatter surfaces, fewer floating cards, smaller radii. */
+.page-head h1{font-weight:780;letter-spacing:-.035em}
+.section-head{border-bottom:1px solid #202a34;padding-bottom:10px}
+.section-head h2{font-weight:760}
+.content-card,
+.stat,
+.lesson-row,
+.continue-card,
+.callout,
+.offline-note,
+.empty{
+  border-radius:5px;
+  box-shadow:none;
+}
+.content-card{background:#0b1118}
+.stat{background:#0b1118}
+.lesson-row{background:#0a1016}
+.lesson-row:hover{background:#0d141b;transform:none}
+.lesson-num{border-radius:4px}
+.tag{border-radius:3px;background:#0c131a}
+.mode-toggle{border-radius:5px;background:#090f15}
+.mode-toggle button{border-radius:3px}
+.quiz,.task,.goal,.concept,.steps li{border-radius:4px;background:#0a1016}
+.quiz-option{border-radius:4px;background:#0c131a}
+.quiz-option:hover{transform:none}
+.visual,.visual-flow-card,.visual-zoom{border-radius:5px}
+.visual-kind-badge,.zoom-hint{border-radius:3px}
+
+/* Core lesson pages now read more like documentation than a dashboard. */
+.lesson-hero{
+  border-radius:6px;
+  background:#0b1118;
+  border-color:#2a3948;
+  border-left:3px solid var(--vr-unreal);
+  box-shadow:none;
+}
+.lesson-meta{border-left-color:#283441}
+.lesson-layout{gap:18px}
+.inline-exercise,
+.deep-dive,
+.official-ref-block,
+.motion-media-story,
+.inline-visual-story{
+  border-radius:6px;
+  box-shadow:none;
+}
+.official-ref-card,
+.motion-media-card,
+.anatomy-item,
+.tool-locate,
+.deep-section{
+  border-radius:5px;
+  box-shadow:none;
+}
+
+/* ------------------------------------------------------------------------
+   Unreal Learning / Building Blocks / Quick Tutorials
+   ------------------------------------------------------------------------ */
+.programming-page-head{
+  max-width:none;
+  padding:25px 27px;
+  border:1px solid #2b3946;
+  border-left:3px solid var(--vr-unreal);
+  border-radius:6px;
+  background:#0b1118;
+  box-shadow:none;
+}
+.unreal-learning-ladder{gap:8px}
+.unreal-learning-ladder>a{
+  border-radius:5px;
+  background:#0b1118;
+  box-shadow:none;
+  transition:background .12s,border-color .12s;
+}
+.unreal-learning-ladder>a:hover{background:#0e151d;transform:none}
+.unreal-learning-ladder>a>span{border-radius:4px;background:#0e1922}
+.programming-continue{
+  border-radius:6px;
+  background:#0b1118;
+  border-color:#2b3d4d;
+  border-left:3px solid var(--vr-unreal);
+  box-shadow:none;
+}
+
+.building-block-card{
+  border-radius:5px;
+  background:#0b1118;
+  box-shadow:none;
+  transition:background .12s,border-color .12s;
+}
+.building-block-card:hover{background:#0e151d;transform:none}
+.building-block-card code,.block-detail-hero code{border-radius:3px}
+.block-tier{border-radius:3px}
+.block-detail-hero{
+  border-radius:6px;
+  background:#0b1118;
+  border-left:3px solid #5edad4;
+  box-shadow:none;
+}
+.block-practice li,.block-related-links a,.block-use-chip,.block-cheat-sheet>div{
+  border-radius:4px;
+  background:#0a1016;
+}
+.block-practice li>span{border-radius:3px}
+.block-check{border-radius:0 4px 4px 0}
+.tutorial-block-strip,.lesson-block-strip,.tutorial-blocks-bridge,.block-useful-first{
+  border-radius:5px;
+  background:#0b1118;
+}
+
+.tutorial-library-head{
+  max-width:none;
+  padding:24px 26px;
+  border:1px solid #2a3947;
+  border-left:3px solid var(--vr-unreal);
+  border-radius:6px;
+  background:#0b1118;
+}
+.tutorial-library-tools,
+.tutorial-family-hero,
+.tutorial-hero,
+.tutorial-complete-box,
+.tutorial-result,
+.practical-first-card,
+.chapter-build-card,
+.quick-tutorial-card{
+  border-radius:5px;
+  box-shadow:none;
+}
+.tutorial-library-tools{background:#0a1016}
+.quick-tutorial-card,.chapter-build-card{background:#0b1118}
+.quick-tutorial-card:hover,.chapter-build-card:hover{transform:none;background:#0e151d}
+.quick-tutorial-icon,.chapter-build-icon{border-radius:4px}
+.tutorial-filter,.tutorial-tag-row span,.tutorial-family-outcomes span,.tutorial-card-detail-badge{
+  border-radius:3px;
+}
+.tutorial-step{
+  border-radius:5px;
+  background:#0a1016;
+  box-shadow:none;
+}
+.tutorial-step-number{border-radius:3px}
+.guided-where,.guided-do,.guided-see,.guided-reason,.guided-check,.guided-fix{border-radius:0}
+
+/* ------------------------------------------------------------------------
+   Game Design Theory — keep the green identity, lose the glow/card stack.
+   ------------------------------------------------------------------------ */
+.theory-page-head{
+  max-width:none;
+  padding:25px 27px;
+  border:1px solid #294038;
+  border-left:3px solid var(--vr-theory);
+  border-radius:6px;
+  background:#0b1118;
+}
+.theory-dashboard{
+  border-radius:6px;
+  background:#0b1118;
+  box-shadow:none;
+  border-left:3px solid var(--vr-theory);
+}
+.theory-method span{border-radius:3px;background:#0d1915}
+.theory-lab{
+  border-radius:6px;
+  background:#111009;
+  box-shadow:none;
+  border-left:3px solid var(--vr-amber);
+}
+.theory-lab-mark{border-radius:4px;background:#11140f}
+.theory-lab-columns>div{border-radius:4px;background:#0d0f0d}
+.theory-toolbar,.study-toolbar{border-radius:5px;box-shadow:none}
+.study-toolbar input,.study-toolbar select,.filter{border-radius:4px}
+.theory-path-overview article{
+  border-radius:5px;
+  background:#0a1116;
+}
+.theory-card{
+  border-radius:5px;
+  background:#0b1118;
+  box-shadow:none;
+  transition:background .12s,border-color .12s;
+}
+.theory-card:hover{transform:none;background:#0e151b}
+.theory-card.done{background:#0d1713}
+.theory-card-icon{border-radius:4px;background:#0e1915}
+.theory-card-case{border-radius:3px;background:#0c1713}
+.theory-lesson-hero{
+  border-radius:6px;
+  background:#0b1118;
+  border-left:3px solid var(--vr-theory);
+  box-shadow:none;
+}
+.theory-status{border-radius:4px;background:#090f14}
+.theory-definition>div,
+.theory-diagram-card,
+.theory-key-grid article,
+.theory-example-card,
+.theory-warning,
+.theory-task,
+.theory-source-card,
+.theory-quiz-section,
+.theory-quiz-form fieldset,
+.theory-quiz-review article,
+.theory-case-study,
+.theory-case-study-grid article,
+.theory-watch,
+.theory-watch-prompt,
+.theory-watch-question,
+.theory-watch-stage{
+  border-radius:5px;
+  box-shadow:none;
+}
+.theory-definition>div,.theory-example-card,.theory-source-card,.theory-quiz-section{background:#0b1118}
+.theory-diagram-card,.theory-case-study{background:#0b1512}
+.theory-warning{background:#151013}
+.theory-task{background:#14130d}
+.theory-watch{background:#0b1118}
+.theory-key-grid article,.theory-case-study-grid article{background:#09100f}
+.theory-diagram-flow strong,.theory-quiz-form label{border-radius:4px}
+.theory-watch-play-icon{box-shadow:none}
+.theory-designer-question{border-radius:0 4px 4px 0}
+
+/* ------------------------------------------------------------------------
+   Designer Studio — content and game imagery do the visual work now.
+   ------------------------------------------------------------------------ */
+.designer-page-head{
+  max-width:none;
+  padding:25px 27px;
+  border:1px solid #3b3347;
+  border-left:3px solid var(--vr-design);
+  border-radius:6px;
+  background:#0b1118;
+}
+.designer-page-head h1{font-size:clamp(40px,5vw,64px)}
+.designer-stats{gap:7px}
+.designer-stats>div{
+  border-radius:4px;
+  background:#0a1016;
+  box-shadow:none;
+}
+.designer-manifesto{
+  border-radius:6px;
+  background:#0b1118;
+  box-shadow:none;
+  border-left:3px solid var(--vr-design);
+}
+.designer-rule-stack span{border-radius:0 3px 3px 0;background:#0a1016}
+.designer-module-card{
+  border-radius:5px;
+  background:#0b1118;
+  box-shadow:none;
+  transition:background .12s,border-color .12s;
+}
+.designer-module-card:hover{transform:none;background:#0e151d}
+.designer-module-icon{border-radius:4px;background:#151321}
+.designer-reference-strip,
+.designer-resource-card,
+.designer-module-hero,
+.designer-principles,
+.designer-principles>div,
+.designer-analysis-grid>div,
+.designer-studio-build,
+.designer-build-phases article,
+.designer-deep-card,
+.designer-case-card,
+.designer-research-card,
+.designer-industry-card,
+.designer-constraint-card,
+.designer-pro-resource,
+.designer-black-box,
+.designer-build-phase-rich{
+  border-radius:5px!important;
+  box-shadow:none!important;
+}
+.designer-reference-strip,.designer-resource-card,.designer-module-hero,.designer-studio-build{background:#0b1118}
+.designer-principles,.designer-analysis-grid>div,.designer-build-phases article{background:#0a1016}
+.designer-module-hero{border-left:3px solid var(--vr-design)}
+.designer-studio-build{border-left:3px solid var(--vr-design)}
+.designer-build-phases article>span,.designer-build-phase-rich .designer-build-phase-num{border-radius:3px}
+.designer-deep-card:hover,.designer-resource-card:hover,.designer-pro-resource:hover{transform:none}
+.designer-case-card,.designer-research-card,.designer-industry-card,.designer-constraint-card{background:#0a1016}
+.designer-industry-video,.designer-case-image,.designer-video-play{border-radius:4px}
+.source-xp-complete{border-radius:3px}
+.designer-black-box{background:#0b1118}
+
+/* Resource Library follows the same workstation-like treatment. */
+.resource-license-guide,
+.resource-license-grid>div,
+.resource-feature-strip>a,
+.resource-library-card,
+.resource-classroom-rule{
+  border-radius:5px;
+  box-shadow:none;
+}
+.resource-license-guide,.resource-classroom-rule{background:#0b1118}
+.resource-license-grid>div,.resource-feature-strip>a,.resource-library-card{background:#0a1016}
+.resource-feature-strip>a:hover,.resource-library-card:hover{transform:none;background:#0d141b}
+.resource-license,.resource-best{border-radius:3px}
+
+/* ------------------------------------------------------------------------
+   3D Modelling — closer to a DCC/tool reference panel than a landing page.
+   ------------------------------------------------------------------------ */
+.model-page-head.revamped{
+  max-width:none;
+  padding:25px 27px;
+  border-radius:6px;
+  background:#0b1118;
+  border-color:#29433f;
+  border-left:3px solid var(--vr-model);
+  box-shadow:none;
+}
+.model-page-head.revamped:after{display:none}
+.model-rebuild-copy,
+.model-hero-reference-stack{
+  border-radius:5px;
+  background:#0b1118;
+  box-shadow:none;
+}
+.model-principle-chips span{border-radius:3px}
+.model-loop-track article{
+  border-radius:4px;
+  background:#0a1116;
+  box-shadow:none;
+}
+.model-loop-track article:before{background:var(--vr-model)}
+.model-build-card.visual,
+.model-industry-card,
+.model-thinking,
+.model-thinking-grid article,
+.model-build-hero.revamped,
+.model-variation-challenge,
+.model-quality-grid article,
+.model-critique-bridge{
+  border-radius:5px;
+  box-shadow:none;
+}
+.model-build-card.visual,.model-industry-card,.model-thinking,.model-build-hero.revamped{background:#0b1118}
+.model-build-card.visual:hover,.model-industry-card:hover{transform:none;box-shadow:none}
+.model-build-thumb>span,.model-build-hero-image span,.model-thinking-badge{border-radius:3px}
+.model-watch-for{border-radius:4px;background:#091017}
+.model-quality-grid span,.model-variation-challenge>span{border-radius:3px}
+.model-critique-bridge{background:#0b1118;border-left:3px solid var(--vr-unreal)}
+
+.model-foundations-launch{
+  border-radius:6px;
+  background:#0b1118;
+  border-left:3px solid var(--vr-model);
+  box-shadow:none;
+}
+.model-foundations-launch:before{display:none}
+.model-foundations-launch.complete{background:#0b1412}
+.foundation-launch-progress>div,
+.foundation-map-node,
+.foundation-module-hero,
+.foundation-chapter-hero,
+.foundation-module-seal,
+.foundation-chapter-status,
+.foundation-chapter-card,
+.foundation-final-card,
+.foundation-big-idea,
+.foundation-theory-copy article,
+.foundation-theory-visual,
+.foundation-axis-visual,
+.foundation-axis-caption span,
+.foundation-quiz-panel,
+.foundation-question,
+.foundation-options label>span,
+.foundation-review article,
+.foundation-final-hero,
+.foundation-locked-page{
+  border-radius:5px;
+  box-shadow:none;
+}
+.foundation-launch-progress>div,.foundation-map-node,.foundation-chapter-card,.foundation-theory-copy article,.foundation-question,.foundation-review article{background:#0a1016}
+.foundation-map-node>span,.foundation-card-number,.foundation-theory-copy article>span,.foundation-question legend>span{border-radius:3px}
+.foundation-module-hero,.foundation-chapter-hero,.foundation-quiz-panel,.foundation-final-hero{background:#0b1118}
+.foundation-module-stats span,.foundation-lock-badge{border-radius:3px}
+.foundation-origin-note{border-radius:0 4px 4px 0}
+.foundation-chapter-card:hover{transform:none;background:#0d151b}
+
+.model-video-course-launch,
+.model-video-page-hero,
+.model-video-next,
+.model-video-course-rule,
+.model-video-card,
+.model-video-focus,
+.model-video-task{
+  border-radius:5px;
+  box-shadow:none;
+}
+.model-video-course-launch,.model-video-page-hero,.model-video-card{background:#0b1118}
+.model-video-course-launch{border-left:3px solid #8f78c7}
+.model-video-page-hero{border-left:3px solid #8f78c7}
+.model-video-next,.model-video-course-rule,.model-video-focus,.model-video-task{background:#0a1016}
+.model-video-launch-stats span{border-radius:3px}
+.model-video-next>span,.model-video-number{border-radius:3px}
+
+/* ------------------------------------------------------------------------
+   Critique Board — flatter collaboration workspace, clearer evidence focus.
+   ------------------------------------------------------------------------ */
+.critique-toolbar,
+.critique-stats>div,
+.critique-post-composer,
+.critique-post-card,
+.critique-owner-tools,
+.critique-feedback,
+.critique-feedback-grid>div,
+.critique-feedback-form,
+.critique-no-feedback,
+.critique-already{
+  border-radius:5px;
+  box-shadow:none;
+}
+.critique-toolbar,.critique-post-card,.critique-feedback{background:#0b1118}
+.critique-stats>div,.critique-owner-tools,.critique-feedback-grid>div{background:#0a1016}
+.critique-post-composer{background:#0b1118;border-left:3px solid var(--vr-unreal)}
+.critique-post-card.critique-spotlight{box-shadow:inset 3px 0 0 #64d9ff}
+.critique-toolbar select,.critique-post-composer select,.critique-post-composer input,.critique-post-composer textarea,.critique-feedback-form textarea,.critique-owner-tools input{border-radius:4px}
+.critique-area,.critique-needs-chip,.critique-improved-chip,.critique-image-stage .zoomable-image small{border-radius:3px}
+.critique-question{border-radius:0 4px 4px 0}
+.critique-image-stage .zoomable-image,.critique-image-missing{border-radius:4px}
+
+/* ------------------------------------------------------------------------
+   Leaderboard / Classes / Teacher — make the data surfaces feel operational.
+   ------------------------------------------------------------------------ */
+.leaderboard-toolbar,
+.leaderboard-period-tabs,
+.podium-card,
+.leaderboard-spotlights article,
+.leaderboard-row,
+.your-rank-card,
+.leaderboard-rules,
+.leaderboard-rule-grid span{
+  border-radius:5px;
+  box-shadow:none;
+}
+.leaderboard-toolbar,.podium-card,.leaderboard-spotlights article,.leaderboard-row,.leaderboard-rules{background:#0b1118}
+.podium-card.place-1{box-shadow:inset 0 3px 0 #d7b04f}
+.leaderboard-row.is-you{background:#0c151c;box-shadow:inset 3px 0 0 var(--vr-unreal)}
+.leaderboard-period-tabs button{border-radius:3px}
+.you-chip{border-radius:3px}
+
+.classes-hub-toolbar,
+.classes-hub-card,
+.classes-hub-count,
+.classes-hub-code,
+.classes-join-panel,
+.teacher-class-pulse,
+.teacher-admin-section,
+.teacher-stat,
+.class-card,
+.class-code-panel,
+.class-member{
+  border-radius:5px;
+  box-shadow:none;
+}
+.classes-hub-toolbar,.classes-hub-card,.classes-join-panel,.teacher-class-pulse,.teacher-admin-section,.class-card{background:#0b1118}
+.classes-hub-code,.class-code-panel,.class-member{background:#0a1016}
+.teacher-class-pulse-head{background:#0a1016}
+.teacher-activity,.path-mini{border-radius:3px}
+.teacher-pulse-table th,.class-snapshot-table th{background:#090f15}
+.teacher-pulse-table tbody tr:hover td,.class-snapshot-table tbody tr:hover td{background:#0c131a}
+
+/* Guided Paths get the same flatter structure without changing their logic. */
+.guided-paths-rule,
+.guided-path-card,
+.guided-existing-course,
+.guided-free-explore,
+.guided-path-hero,
+.guided-outcome,
+.guided-step,
+.guided-choice-option,
+.guided-group-item,
+.guided-group-details,
+.theory-apply-link-grid>a{
+  border-radius:5px;
+  box-shadow:none;
+}
+.guided-paths-rule,.guided-path-card,.guided-existing-course,.guided-free-explore,.guided-path-hero,.guided-step{background:#0b1118}
+.guided-path-hero{border-left:3px solid var(--vr-design)}
+.guided-path-icon,.guided-step-num,.guided-choice-option>span,.guided-group-item>span,.theory-apply-link-grid>a>span{border-radius:3px}
+.guided-path-progress,.guided-state{border-radius:3px}
+.guided-path-card:hover,.guided-choice-option:hover,.guided-group-item:hover,.theory-apply-link-grid>a:hover{transform:none;background:#0e151d}
+
+/* News and reference tools: keep imagery, flatten the framing. */
+.news-page-head{
+  padding:24px 26px;
+  border-radius:6px;
+  background:#0b1118;
+  border-left:3px solid var(--vr-amber);
+  box-shadow:none;
+}
+.news-card,.news-loading,.news-empty,.news-comments-panel{border-radius:5px;box-shadow:none}
+.news-card{background:#0b1118}
+.news-card:hover .news-card-media>img{transform:none}
+.news-category-pill,.news-action{border-radius:3px}
+.snippet-policy,.snippet-programming-cta,.tutorial-snippet-bridge{border-radius:5px;background:#0b1118}
+.snippet-bank-head h1{background:none;color:inherit;-webkit-text-fill-color:initial}
+
+/* Forms and status controls: small radii rather than pill-heavy UI. */
+input,select,textarea{border-radius:4px!important}
+.sync-chip,.source-progress-chip,.request-status,.project-type-pill{border-radius:3px!important}
+
+/* Keep avatars, level rings and truly circular indicators circular. */
+.hub-avatar,.account-dot,.level-ring,.level-ring>div,.podium-avatar,.leaderboard-avatar,.foundation-score,.theory-watch-play-icon{border-radius:50%!important}
+
+/* Mobile: preserve the flatter style without squeezing content. */
+@media(max-width:760px){
+  .programming-page-head,.theory-page-head,.designer-page-head,.model-page-head.revamped,.news-page-head{padding:21px 19px}
+  .model-foundations-launch{border-radius:5px}
+  .designer-page-head h1{font-size:38px}
 }
