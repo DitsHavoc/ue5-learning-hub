@@ -1,4 +1,4 @@
-/* v3.43.0 — Prison Cell Guided Path + practical lesson method
+/* v3.43.1 — Prison Cell Guided Path + practical lesson method
    Additive data patch only.
    Runs after design-data.js + pathway-data.js and before app.js.
 
@@ -17,7 +17,7 @@
   const PATHWAYS = window.UE5_PATHWAY_DATA;
 
   if (!DESIGN || !PATHWAYS) {
-    console.warn('[v3.43.0] Prison Cell learning patch skipped: design/pathway data unavailable.');
+    console.warn('[v3.43.1] Prison Cell learning patch skipped: design/pathway data unavailable.');
     return;
   }
 
@@ -27,7 +27,7 @@
   function patchTutorial(id, patch) {
     const tutorial = findTutorial(id);
     if (!tutorial) {
-      console.warn(`[v3.43.0] Could not patch missing tutorial: ${id}`);
+      console.warn(`[v3.43.1] Could not patch missing tutorial: ${id}`);
       return null;
     }
     Object.assign(tutorial, patch);
@@ -93,7 +93,12 @@
           'If the project already contains a level supplied by your teacher, use that rather than making a second one.',
           'If Play does not spawn the normal character, stop and compare your project/template with the teacher demonstration before building.'
         ],
-        visual: null
+        visual: {
+          src: 'assets/tutorials/prison-cell/greybox-01-third-person-template.webp',
+          caption: 'Choose Games → Third Person. Use Blueprint and follow the project settings shown in the live lesson, then give the project a sensible name.',
+          sourceTitle: 'Teacher classroom capture — Unreal Engine',
+          kind: 'local'
+        }
       },
       {
         title: 'Prove you can control one cube before building a room',
@@ -327,7 +332,12 @@
           'If you cannot find Geometry, use the Add/Place Actors search and search for Geometry or Box Brush.',
           'If your college build labels the placement panel slightly differently, follow the teacher’s live location — the actor type is the important part.'
         ],
-        visual: null
+        visual: {
+          src: 'assets/tutorials/prison-cell/geometry-01-find-geometry.webp',
+          caption: 'Open the Geometry category to find Box, Cylinder, Stairs and the other Geometry Brush shapes. For a simple wall or cutter, start with Box.',
+          sourceTitle: 'Teacher classroom capture — Unreal Engine',
+          kind: 'local'
+        }
       },
       {
         title: 'Place an Additive brush and keep it on the grid',
@@ -339,7 +349,12 @@
         troubleshoot: [
           'If the brush appears in the wrong place, select it and use clean Transform values rather than dragging from far away.'
         ],
-        visual: null
+        visual: {
+          src: 'assets/tutorials/prison-cell/geometry-02-brush-size.webp',
+          caption: 'Use Brush Settings to enter clean X, Y and Z dimensions. Deliberate values are much easier to edit than random freehand stretching.',
+          sourceTitle: 'Teacher classroom capture — Unreal Engine',
+          kind: 'local'
+        }
       },
       {
         title: 'Use a Subtractive brush to cut one opening',
@@ -352,7 +367,12 @@
           'If nothing is cut, confirm the solid brush is Additive, the cutter is Subtractive, and the two brushes actually overlap.',
           'Brush order matters. A subtraction cannot remove solid space that did not exist when the operation was evaluated.'
         ],
-        visual: null
+        visual: {
+          src: 'assets/tutorials/prison-cell/geometry-03-additive-subtractive.webp',
+          caption: 'Brush Type controls the operation: Additive creates solid brush space; Subtractive removes brush space.',
+          sourceTitle: 'Teacher classroom capture — Unreal Engine',
+          kind: 'local'
+        }
       },
       {
         title: 'Keep the opening simple and test it',
@@ -364,7 +384,12 @@
         troubleshoot: [
           'If the brush becomes hard to reason about, simplify it rather than adding more overlapping cuts.'
         ],
-        visual: null
+        visual: {
+          src: 'assets/tutorials/prison-cell/geometry-04-finished-doorway.webp',
+          caption: 'The orange wireframe is the Subtractive brush. Where it overlaps the Additive wall, Unreal removes that space and leaves a usable doorway.',
+          sourceTitle: 'Teacher classroom capture — Unreal Engine',
+          kind: 'local'
+        }
       },
       {
         title: 'OPTIONAL ADVANCED — edit the brush shape directly',
@@ -377,7 +402,12 @@
           'If you lose control of the shape, Undo and return to the working simple brush.',
           'Do not make tiny off-grid vertex edits just because the mode allows it.'
         ],
-        visual: null
+        visual: {
+          src: 'assets/tutorials/prison-cell/geometry-05-brush-editing.webp',
+          caption: 'Brush Editing exposes the brush shape for direct editing. Move faces, edges or vertices carefully, keep edits snapped, and only use the mode once the simple blockout already works.',
+          sourceTitle: 'Teacher classroom capture — Unreal Engine',
+          kind: 'local'
+        }
       }
     ],
     mistakes: [
@@ -715,5 +745,5 @@
   PATHWAYS.version = '3.43.0';
   PATHWAYS.buildDate = '2026-09-04';
 
-  console.info('[v3.43.0] Prison Cell Guided Path + practical lesson method loaded.');
+  console.info('[v3.43.1] Prison Cell Guided Path + practical lesson method loaded.');
 })();
