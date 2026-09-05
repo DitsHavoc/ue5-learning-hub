@@ -1,4 +1,4 @@
-/* v3.43.2 — Prison Cell Guided Path + practical lesson method
+/* v3.43.3 — Prison Cell Guided Path + practical lesson method
    Additive data patch only.
    Runs after design-data.js + pathway-data.js and before app.js.
 
@@ -18,7 +18,7 @@
   const PATHWAYS = window.UE5_PATHWAY_DATA;
 
   if (!DESIGN || !THEORY || !PATHWAYS) {
-    console.warn('[v3.43.2] Prison Cell learning patch skipped: design/theory/pathway data unavailable.');
+    console.warn('[v3.43.3] Prison Cell learning patch skipped: design/theory/pathway data unavailable.');
     return;
   }
 
@@ -28,7 +28,7 @@
   function patchTutorial(id, patch) {
     const tutorial = findTutorial(id);
     if (!tutorial) {
-      console.warn(`[v3.43.2] Could not patch missing tutorial: ${id}`);
+      console.warn(`[v3.43.3] Could not patch missing tutorial: ${id}`);
       return null;
     }
     Object.assign(tutorial, patch);
@@ -40,6 +40,17 @@
     const index = DESIGN.tutorials.findIndex(t => t.id === tutorial.id);
     if (index >= 0) DESIGN.tutorials[index] = tutorial;
     else DESIGN.tutorials.push(tutorial);
+  }
+
+  function appendStepVisuals(tutorialId, stepTitle, visuals) {
+    const tutorial = findTutorial(tutorialId);
+    const step = tutorial?.steps?.find(s => !Array.isArray(s) && s.title === stepTitle);
+    if (!step) {
+      console.warn(`[v3.43.3] Could not attach classroom visual: ${tutorialId} → ${stepTitle}`);
+      return;
+    }
+    const existing = Array.isArray(step.visual) ? step.visual : (step.visual ? [step.visual] : []);
+    step.visual = [...existing, ...visuals];
   }
 
   function insertTutorialId(moduleId, tutorialId, afterId = null) {
@@ -243,7 +254,7 @@
       {
         title: 'Build the room shell with simple shapes',
         where: 'Add (+) → Shapes → Cube → duplicate with Ctrl+W or Alt-drag → Details → Transform',
-        do: 'Build a floor and four walls from cubes. Follow the dimensions used in the live lesson. If you are working independently, begin with a small believable room rather than a giant hall — roughly 4.5 m × 6 m with a ceiling around 3 m is a useful prison-cell starting point, not a rule.',
+        do: 'Build a floor and four walls from cubes. Unreal’s default distance unit is centimetres: 1 Unreal Unit (uu) = 1 cm, so 100 uu = 1 metre. Follow the dimensions used in the live lesson. If you are working independently, begin with a small believable room rather than a giant hall — roughly 4.5 m × 6 m with a ceiling around 3 m is a useful prison-cell starting point, not a rule.',
         why: 'The shell establishes enclosure, movement space and human proportion. Those decisions are cheap to change now and expensive after detailed art exists.',
         see: 'From the editor camera it reads as a room; from Play mode it feels like a human-sized space rather than a miniature or warehouse.',
         check: 'Walk to every wall in Play mode. Look at the ceiling and corners from the player camera.',
@@ -451,12 +462,13 @@
       {
         title: 'Know when to use a Geometry Brush',
         where: 'Level Editor → Add / Place Actors → Geometry',
-        do: 'Use Geometry Brushes only for fast blockout/prototyping in this exercise. Keep your normal Shape actors if they already solve the job cleanly.',
+        do: 'Use Geometry Brushes only for fast blockout/prototyping in this exercise. A Cube from Shapes is a Static Mesh actor; a Box from Geometry is a Geometry Brush. Keep normal Shape actors if they already solve the job cleanly. Use Geometry Brushes when you specifically need brush behaviour such as Additive/Subtractive.',
         why: 'Geometry Brushes are useful for quickly proving space and openings. They are not a reason to turn an early blockout into the final finished environment.',
         see: 'You can tell the difference between a normal Shape/Static Mesh actor and a Geometry Brush actor.',
         check: 'Before continuing, point to the Geometry section rather than dragging another normal Cube from Shapes.',
         troubleshoot: [
           'If you cannot find Geometry, use the Add/Place Actors search and search for Geometry or Box Brush.',
+          'A Subtractive Geometry Brush does not cut a normal Shape/Static Mesh cube. If nothing happens, first check what type of actor you placed.',
           'If your college build labels the placement panel slightly differently, follow the teacher’s live location — the actor type is the important part.'
         ],
         visual: {
@@ -881,10 +893,68 @@
     why: 'Use a real player test to drive one final environment revision.'
   });
 
-  DESIGN.version = '3.43.2';
-  THEORY.version = '3.43.2';
-  PATHWAYS.version = '3.43.2';
+
+  // -----------------------------------------------------------------------
+  // 5. CLASSROOM SCREENSHOT PASS — WHAT STUDENTS ACTUALLY SEE
+  // -----------------------------------------------------------------------
+
+  appendStepVisuals('greybox-room', 'Start from a playable Third Person level and save it', [
+    {src:'assets/tutorials/prison-cell/greybox-02-play-controls.webp',caption:'Press Play before you build. If the Third Person character does not spawn and move normally, fix that first rather than discovering it after the room is finished.',sourceTitle:'Teacher classroom capture — Unreal Engine',kind:'local'}
+  ]);
+
+  appendStepVisuals('geometry-brush-blockout', 'Place an Additive brush and keep it on the grid', [
+    {src:'assets/tutorials/prison-cell/geometry-06-selected-brush.webp',caption:'A selected Box Geometry Brush in the viewport. Keep the transform gizmo visible and move the brush in deliberate snapped steps.',sourceTitle:'Teacher classroom capture — Unreal Engine',kind:'local'},
+    {src:'assets/tutorials/prison-cell/geometry-07-transform-panel.webp',caption:'The selected Geometry Brush also has normal Location, Rotation and Scale controls in Details. Use clean values rather than tiny accidental offsets or rotations.',sourceTitle:'Teacher classroom capture — Unreal Engine',kind:'local'}
+  ]);
+
+  appendStepVisuals('player-scale', 'Use the actual player as your scale reference', [
+    {src:'assets/tutorials/prison-cell/scale-01-character-reference.webp',caption:'Keep the mannequin/Third Person character beside the blockout while judging size. The player is a much better human-scale reference than the floating editor camera.',sourceTitle:'Teacher classroom capture — Unreal Engine',kind:'local'}
+  ]);
+
+  appendStepVisuals('player-scale', 'Test the entrance with the character and camera', [
+    {src:'assets/tutorials/prison-cell/scale-02-doorway-reference.webp',caption:'Check the doorway beside the character, then test it in Play mode. A doorway can look generous in the editor but still catch the character capsule or third-person camera.',sourceTitle:'Teacher classroom capture — Unreal Engine',kind:'local'}
+  ]);
+
+  appendStepVisuals('ambientcg-material-import', 'Download a sensible resolution and unzip it', [
+    {src:'assets/tutorials/prison-cell/material-01-ambientcg-download.webp',caption:'On ambientCG, choose the material you actually need and use a sensible classroom download such as 2K PNG unless the teacher asks for something different. Bigger is not automatically better.',sourceTitle:'Teacher classroom capture — ambientCG',kind:'local'}
+  ]);
+
+  appendStepVisuals('ambientcg-material-import', 'Identify only the maps you need', [
+    {src:'assets/tutorials/prison-cell/material-02-extracted-maps.webp',caption:'An ambientCG download contains several map types. For this beginner workflow, identify Color/Base Color, Roughness and NormalDX first. Do not import every file just because it exists.',sourceTitle:'Teacher classroom capture — ambientCG download',kind:'local'}
+  ]);
+
+  appendStepVisuals('ambientcg-material-import', 'Import the textures and check the normal map', [
+    {src:'assets/tutorials/prison-cell/material-03-materialx-warning.webp',caption:'If Unreal opens this MaterialX Import Content window, you selected the .mtlx file. For this beginner guide, Cancel and import the image maps (Color, Roughness and NormalDX) instead.',sourceTitle:'Teacher classroom capture — Unreal Engine',kind:'local'}
+  ]);
+
+  const ambientImport = findTutorial('ambientcg-material-import')?.steps?.find(s => !Array.isArray(s) && s.title === 'Import the textures and check the normal map');
+  if (ambientImport && !ambientImport.troubleshoot?.some(x => x.includes('MaterialX Import Content'))) {
+    ambientImport.troubleshoot = ambientImport.troubleshoot || [];
+    ambientImport.troubleshoot.push('If the MaterialX Import Content window appears, you selected the .mtlx file. Cancel it for this lesson and import the image texture maps instead.');
+  }
+
+  appendStepVisuals('ambientcg-material-import', 'Create the material and connect the core PBR maps', [
+    {src:'assets/tutorials/prison-cell/material-04-pbr-graph.webp',caption:'Keep the first material graph simple: colour → Base Color, roughness → Roughness, and NormalDX → Normal. Metallic is not a shininess control.',sourceTitle:'Teacher classroom capture — Unreal Engine Material Editor',kind:'local'}
+  ]);
+
+  appendStepVisuals('ambientcg-material-import', 'Apply it in the prison cell and judge scale', [
+    {src:'assets/tutorials/prison-cell/material-05-applied-scale.webp',caption:'Judge the material at player scale. The mannequin gives you a useful reference for whether the floor tiles are physically believable; fix tiling rather than downloading a larger texture.',sourceTitle:'Teacher classroom capture — Unreal Engine',kind:'local'}
+  ]);
+
+  appendStepVisuals('horror-lighting', 'Create one anticipation pool', [
+    {src:'assets/tutorials/prison-cell/lighting-01-light-placement.webp',caption:'Place one light for a clear job: reveal a route edge, doorway or area of anticipation. Do not add lights everywhere just because the scene is dark.',sourceTitle:'Teacher classroom capture — Unreal Engine',kind:'local'},
+    {src:'assets/tutorials/prison-cell/lighting-02-light-settings.webp',caption:'Adjust the selected light in Details. Intensity and Attenuation Radius are useful starting controls; change one thing at a time and judge the result from the player camera.',sourceTitle:'Teacher classroom capture — Unreal Engine',kind:'local'}
+  ]);
+
+  appendStepVisuals('post-process-mood', 'Add and name the global volume', [
+    {src:'assets/tutorials/prison-cell/postprocess-01-outliner.webp',caption:'Use the Outliner to select the PostProcessVolume. A clear name such as PPV_Global makes it much easier to find later.',sourceTitle:'Teacher classroom capture — Unreal Engine',kind:'local'},
+    {src:'assets/tutorials/prison-cell/postprocess-02-details.webp',caption:'With the PostProcessVolume selected, use Details to reach Exposure, Color Grading and the other Post Process settings. Keep the first pass restrained: lighting should already work before grading.',sourceTitle:'Teacher classroom capture — Unreal Engine',kind:'local'}
+  ]);
+
+  DESIGN.version = '3.43.3';
+  THEORY.version = '3.43.3';
+  PATHWAYS.version = '3.43.3';
   PATHWAYS.buildDate = '2026-09-05';
 
-  console.info('[v3.43.2] Prison Cell Guided Path + practical lesson method loaded.');
+  console.info('[v3.43.3] Prison Cell Guided Path + practical lesson method loaded.');
 })();
