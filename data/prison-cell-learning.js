@@ -1,4 +1,4 @@
-/* v3.43.1 — Prison Cell Guided Path + practical lesson method
+/* v3.43.2 — Prison Cell Guided Path + practical lesson method
    Additive data patch only.
    Runs after design-data.js + pathway-data.js and before app.js.
 
@@ -14,10 +14,11 @@
   'use strict';
 
   const DESIGN = window.UE5_DESIGN_DATA;
+  const THEORY = window.UE5_THEORY_DATA;
   const PATHWAYS = window.UE5_PATHWAY_DATA;
 
-  if (!DESIGN || !PATHWAYS) {
-    console.warn('[v3.43.1] Prison Cell learning patch skipped: design/pathway data unavailable.');
+  if (!DESIGN || !THEORY || !PATHWAYS) {
+    console.warn('[v3.43.2] Prison Cell learning patch skipped: design/theory/pathway data unavailable.');
     return;
   }
 
@@ -27,7 +28,7 @@
   function patchTutorial(id, patch) {
     const tutorial = findTutorial(id);
     if (!tutorial) {
-      console.warn(`[v3.43.1] Could not patch missing tutorial: ${id}`);
+      console.warn(`[v3.43.2] Could not patch missing tutorial: ${id}`);
       return null;
     }
     Object.assign(tutorial, patch);
@@ -58,12 +59,138 @@
     else PATHWAYS.paths.push(path);
   }
 
+  function upsertTheoryLesson(lesson) {
+    THEORY.lessons = THEORY.lessons || [];
+    const current = THEORY.lessons.findIndex(x => x.id === lesson.id);
+    if (current >= 0) {
+      THEORY.lessons[current] = lesson;
+      return;
+    }
+    const firstSpace = THEORY.lessons.findIndex(x => x.path === 'space');
+    if (firstSpace >= 0) THEORY.lessons.splice(firstSpace, 0, lesson);
+    else THEORY.lessons.push(lesson);
+  }
+
   function addApplyLink(theoryId, link) {
     PATHWAYS.applyLinks = PATHWAYS.applyLinks || {};
     const links = PATHWAYS.applyLinks[theoryId] || [];
     if (!links.some(x => x.href === link.href)) links.push(link);
     PATHWAYS.applyLinks[theoryId] = links;
   }
+
+  // -----------------------------------------------------------------------
+  // 0. THEORY THAT EARNS ITS PLACE IN THE PRACTICAL PROJECT
+  // -----------------------------------------------------------------------
+
+  upsertTheoryLesson({
+    id: 'greyboxing-spatial-prototyping',
+    title: 'Greyboxing, Scale & Spatial Prototyping',
+    path: 'space',
+    icon: '▦',
+    short: 'Use simple geometry to test scale, movement, layout and readability before finished art makes changes expensive.',
+    definition: 'Greyboxing (also called blockout) is a low-detail spatial prototype built from simple shapes so a designer can test layout, human scale, movement, sightlines and readability before committing time to finished art.',
+    why: 'A beautifully modelled room can still fail if the doorway is too tight, the furniture blocks movement or the space feels enormous from the player camera. Greyboxing lets you find those problems while walls and props are still cheap shapes that can be moved in seconds.',
+    keyIdeas: [
+      'Greyboxing is design work, not a bad-looking version of the final level.',
+      'Use the player character and player camera as the real scale test; the editor camera can make normal spaces feel misleadingly small or large.',
+      'Correctly sized objects can still create a bad layout if the remaining movement space is cramped, confusing or unusable.',
+      'Simple shapes let you test affordances and readability: openings should look usable, barriers should look like barriers, and important routes should be understandable.',
+      'A successful greybox changes after playtesting. Finding a problem is evidence that the prototype is doing its job.',
+      'Keep a clean blockout version so later modelling, materials and lighting can be compared against the spatial design that came first.'
+    ],
+    mistakes: [
+      'Treating greyboxing as decoration with grey materials instead of a test of space and movement.',
+      'Judging proportions only from a floating editor camera.',
+      'Adding detailed models before the layout has survived a player test.',
+      'Changing the player scale to rescue a badly proportioned environment.',
+      'Refusing to change the first layout because time has already been spent on it.'
+    ],
+    diagram: {
+      title: 'Cheap decisions before expensive decisions',
+      nodes: ['INTENT','SIMPLE SPACE','PLAYTEST','OBSERVE','CHANGE','RETEST','ART LATER'],
+      caption: 'Block out the idea, experience it as the player, change what the test reveals, then spend time on final assets only after the space is working.'
+    },
+    example: {
+      game: 'PRISON CELL BLOCKOUT',
+      title: 'The ugly version answers the important questions',
+      body: 'A prison-cell blockout does not need a finished toilet, bed or bars. Simple boxes can already tell you whether the room feels oppressive or accidentally huge, whether the player can enter, whether the furniture leaves useful movement space and whether the bars read as a boundary.',
+      src: 'assets/tutorials/prison-cell/geometry-04-finished-doorway.webp',
+      sourceUrl: 'https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-01-project-setup-and-level-blockout-in-unreal-engine',
+      sourceTitle: 'Teacher classroom capture — workflow supported by Epic Games UE5.8 blockout documentation'
+    },
+    sources: [
+      {
+        title: 'Project Setup and Level Blockout — Epic Games',
+        url: 'https://dev.epicgames.com/documentation/en-us/unreal-engine/designer-01-project-setup-and-level-blockout-in-unreal-engine',
+        note: 'Current UE5.8 learning material describes blockout/grayboxing as using simple shapes to focus on layout and playability, catch design issues early and iterate quickly before final art.',
+        kind: 'Official Unreal Engine 5.8 documentation'
+      },
+      {
+        title: 'Placing Actors — Epic Games',
+        url: 'https://dev.epicgames.com/documentation/unreal-engine/placing-actors-in-unreal-engine',
+        note: 'Current UE5.8 reference distinguishes simple Shapes from Geometry Brushes and describes Geometry as useful for quickly blocking out or prototyping a level.',
+        kind: 'Official Unreal Engine 5.8 documentation'
+      }
+    ],
+    task: {
+      title: 'Test the cell as a level designer',
+      brief: 'Use your prison-cell greybox as evidence. Do not add polish for this task — test the space you already have.',
+      steps: [
+        'Identify one scale decision: for example ceiling height, doorway size, bed length or table height.',
+        'Identify one movement decision: for example the gap between the bed and toilet or the route through the entrance.',
+        'Identify one readability decision: for example whether the entrance, bars or usable route is obvious from the player camera.',
+        'Press Play and test all three from the normal Third Person view.',
+        'Change at least one thing because of what the test revealed.'
+      ],
+      evidence: 'One before/after screenshot pair plus the sentence: “When I played it, ___ felt wrong, so I changed ___.”',
+      stretch: 'Give the level to another student without explaining the layout. Watch where they move and what they hesitate at. Does their behaviour match what you intended?'
+    },
+    quiz: [
+      {
+        q: 'What is the main purpose of a greybox?',
+        options: [
+          'To make a finished level using only grey materials',
+          'To test spatial design while changes are still quick and cheap',
+          'To avoid playtesting until the art is finished',
+          'To decide the final texture resolution'
+        ],
+        correct: 1,
+        feedback: 'A greybox is a spatial prototype: it lets you test layout, scale, movement and readability before expensive polish.'
+      },
+      {
+        q: 'Your prison cell looks correctly sized from the editor camera but feels enormous in Play mode. Which view should drive the design decision?',
+        options: [
+          'The editor camera because it shows more of the room',
+          'The player camera because that is how the space is experienced',
+          'Whichever view makes the screenshot look better',
+          'Neither — change the character scale instead'
+        ],
+        correct: 1,
+        feedback: 'The player experience gets the final vote. Use the actual character/camera to judge human scale.'
+      },
+      {
+        q: 'A bed and toilet are individually believable sizes, but the player cannot comfortably move between them. What has the greybox revealed?',
+        options: [
+          'The 3D models need more polygons',
+          'The remaining movement space/layout is not working',
+          'The materials need more roughness',
+          'The room needs Post Process'
+        ],
+        correct: 1,
+        feedback: 'Correct object scale does not guarantee a usable layout. Greyboxing exposes the relationships and clearances between objects.'
+      }
+    ],
+    duration: '10–15 min',
+    caseStudy: {
+      intro: 'The prison cell is deliberately small enough that every object affects the space. That makes it a useful level-design exercise: a few simple shapes can reveal proportion, circulation and readability problems immediately.',
+      observations: [
+        'The Third Person character gives the room a human reference. Ceiling height, bars, furniture and openings can be judged against a body rather than against the editor grid alone.',
+        'Furniture is not just decoration. Its footprint creates routes, bottlenecks and dead space, so moving a placeholder can change the player experience before its final model even exists.',
+        'The clean greybox becomes a contract for later 3D work: finished assets should replace tested placeholders without silently breaking the scale and movement that were already proven.'
+      ],
+      question: 'If all materials and lighting disappeared from your cell, which spatial decisions would still make it feel believable and readable?'
+    }
+  });
 
   // -----------------------------------------------------------------------
   // 1. EXISTING GUIDE QA
@@ -611,6 +738,11 @@
         actionLabel: 'Plan ready'
       },
       {
+        type: 'theory',
+        id: 'greyboxing-spatial-prototyping',
+        why: 'LEARN • A short design lesson before the build: understand what greyboxing is actually testing — scale, movement, layout and readability — so the simple shapes have a purpose.'
+      },
+      {
         type: 'tutorial',
         id: 'greybox-room',
         why: 'MAKE • Follow the live Unreal demonstration, then use this guide to recover any missed steps: Third Person project, transforms, room shell, simple placeholders and Play-mode testing.'
@@ -725,6 +857,14 @@
     ]
   }, true);
 
+  addApplyLink('greyboxing-spatial-prototyping', {
+    icon: '▦',
+    title: 'Prison Cell: Greybox → Game-Ready',
+    meta: 'Guided Path • apply this theory now',
+    href: '#/pathways/prison-cell',
+    why: 'Use the prison-cell blockout to test scale, movement and readability immediately instead of leaving the theory on the page.'
+  });
+
   addApplyLink('affordances-signifiers', {
     icon: '▦',
     title: 'Prison Cell: Greybox → Game-Ready',
@@ -741,9 +881,10 @@
     why: 'Use a real player test to drive one final environment revision.'
   });
 
-  DESIGN.version = '3.43.0';
-  PATHWAYS.version = '3.43.0';
-  PATHWAYS.buildDate = '2026-09-04';
+  DESIGN.version = '3.43.2';
+  THEORY.version = '3.43.2';
+  PATHWAYS.version = '3.43.2';
+  PATHWAYS.buildDate = '2026-09-05';
 
-  console.info('[v3.43.1] Prison Cell Guided Path + practical lesson method loaded.');
+  console.info('[v3.43.2] Prison Cell Guided Path + practical lesson method loaded.');
 })();
