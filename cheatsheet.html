@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#071019">
   <title>UE5 Cheat Sheet • Learning Hub</title>
   <link rel="icon" href="favicon.ico" sizes="any">
-  <link rel="stylesheet" href="cheatsheet.css?v=3.44.3">
+  <link rel="stylesheet" href="cheatsheet.css?v=3.44.4">
 </head>
 <body>
   <header class="cheat-topbar">
@@ -43,25 +43,81 @@
     </section>
 
     <div class="quick-jump">
-      <a href="#editor">Editor</a><a href="#blueprint">Blueprint</a><a href="#data">Data</a><a href="#debug">Debug</a><a href="#materials">Materials</a><a href="#level">Level Design</a><a href="#naming">Naming</a><a href="#stuck">If Stuck</a>
+      <a href="#editor">Keyboard</a><a href="#blueprint">Blueprint</a><a href="#data">Data</a><a href="#debug">Debug</a><a href="#materials">Materials</a><a href="#level">Level Design</a><a href="#naming">Naming</a><a href="#stuck">If Stuck</a>
     </div>
 
     <section class="cheat-grid" id="cheatGrid">
-      <article class="cheat-card" id="editor" data-search="editor viewport shortcuts move rotate scale focus duplicate save undo grid units transform play stop wasd">
-        <div class="card-head"><span>01</span><h2>Editor Basics</h2></div>
-        <table>
-          <tr><th>W</th><td>Move</td></tr>
-          <tr><th>E</th><td>Rotate</td></tr>
-          <tr><th>R</th><td>Scale</td></tr>
-          <tr><th>F</th><td>Focus/frame the selected Actor</td></tr>
-          <tr><th>RMB + WASD</th><td>Fly the editor camera</td></tr>
-          <tr><th>Ctrl + Z</th><td>Undo</td></tr>
-          <tr><th>Ctrl + W</th><td>Duplicate selected Actor</td></tr>
-          <tr><th>Alt + drag</th><td>Duplicate while moving</td></tr>
-          <tr><th>Ctrl + S</th><td>Save</td></tr>
-        </table>
-        <div class="remember"><b>Remember:</b> select the Actor first; Details edits the selected thing.</div>
-      </article>
+      <article class="cheat-card wide" id="editor" data-search="editor viewport keyboard shortcuts hotkeys move rotate scale focus duplicate save undo camera navigation snapping game view immersive lit unlit wireframe hide actors blueprint nodes breakpoint comment">
+<div class="card-head"><span>01</span><h2>Keyboard Shortcuts — the ones worth knowing</h2></div>
+<p class="example"><b>Default Unreal Engine shortcuts.</b> These can be changed in <b>Edit → Editor Preferences → Keyboard Shortcuts</b>.</p>
+
+<div class="shortcut-groups">
+<section><h3>Transform & selection</h3><div class="shortcut-grid">
+<kbd>W</kbd><span>Move / Translate</span>
+<kbd>E</kbd><span>Rotate</span>
+<kbd>R</kbd><span>Scale</span>
+<kbd>Spacebar</kbd><span>Cycle Move → Rotate → Scale</span>
+<kbd>F</kbd><span>Focus/frame selected Actor</span>
+<kbd>Ctrl + LMB</kbd><span>Add Actor to selection</span>
+<kbd>Ctrl + W</kbd><span>Duplicate selected Actor in the Level</span>
+<kbd>Alt + drag gizmo</kbd><span>Duplicate while transforming</span>
+<kbd>H</kbd><span>Hide selected Actor</span>
+<kbd>Ctrl + H</kbd><span>Show hidden Actors</span>
+<kbd>Shift + E</kbd><span>Select Actors using the same Static Mesh</span>
+<kbd>End</kbd><span>Snap selected Actor to nearest surface</span>
+<kbd>V + move</kbd><span>Vertex snapping while translating</span>
+<kbd>Ctrl + `</kbd><span>Toggle World / Local coordinate space</span>
+</div></section>
+
+<section><h3>Viewport navigation</h3><div class="shortcut-grid">
+<kbd>RMB + W/A/S/D</kbd><span>Fly camera forward/left/back/right</span>
+<kbd>RMB + E / Q</kbd><span>Fly camera up / down</span>
+<kbd>RMB + Mouse Wheel</kbd><span>Change fly-camera speed</span>
+<kbd>Alt + LMB drag</kbd><span>Orbit around focused pivot</span>
+<kbd>Alt + RMB drag</kbd><span>Dolly toward / away from pivot</span>
+<kbd>Alt + MMB drag</kbd><span>Track/pan around pivot</span>
+<kbd>MMB drag</kbd><span>Pan viewport without rotation</span>
+<kbd>Mouse Wheel</kbd><span>Move camera forward/back in increments</span>
+</div></section>
+
+<section><h3>Viewport display</h3><div class="shortcut-grid">
+<kbd>G</kbd><span>Game View — hide editor-only icons/gizmos</span>
+<kbd>F11</kbd><span>Immersive / full-screen viewport</span>
+<kbd>Ctrl + R</kbd><span>Toggle realtime viewport playback</span>
+<kbd>Alt + 2</kbd><span>Wireframe view</span>
+<kbd>Alt + 3</kbd><span>Unlit view</span>
+<kbd>Alt + 4</kbd><span>Lit view</span>
+<kbd>Ctrl + S</kbd><span>Save</span>
+<kbd>Ctrl + Z</kbd><span>Undo</span>
+</div></section>
+
+<section><h3>Blueprint Editor</h3><div class="shortcut-grid">
+<kbd>Ctrl + C / V</kbd><span>Copy / paste selected nodes</span>
+<kbd>Ctrl + D</kbd><span>Duplicate selected Blueprint nodes</span>
+<kbd>Delete</kbd><span>Delete selected nodes</span>
+<kbd>F2</kbd><span>Rename selected node / comment title</span>
+<kbd>C</kbd><span>Add Comment box around selected nodes</span>
+<kbd>F9</kbd><span>Toggle breakpoint on selected node</span>
+<kbd>Ctrl + Shift + F9</kbd><span>Clear all Blueprint breakpoints</span>
+<kbd>Alt + LMB on pin</kbd><span>Break all connections on that pin</span>
+<kbd>Ctrl + LMB drag pin</kbd><span>Move all existing connections to another pin</span>
+</div></section>
+
+<section><h3>Fast Blueprint node creation</h3><div class="shortcut-grid">
+<kbd>B + LMB</kbd><span>Create Branch</span>
+<kbd>D + LMB</kbd><span>Create Delay</span>
+<kbd>S + LMB</kbd><span>Create Sequence</span>
+<kbd>G + LMB</kbd><span>Create Gate</span>
+<kbd>F + LMB</kbd><span>Create For Each Loop</span>
+<kbd>M + LMB</kbd><span>Create MultiGate</span>
+<kbd>N + LMB</kbd><span>Create Do N</span>
+<kbd>O + LMB</kbd><span>Create Do Once</span>
+<kbd>P + LMB</kbd><span>Create Event BeginPlay</span>
+</div></section>
+</div>
+
+<div class="remember"><b>Don't memorise the whole wall.</b> Start with W/E/R, F, Ctrl+W, Alt-drag, End, G and the Blueprint shortcuts you actually use.</div>
+</article>
 
       <article class="cheat-card" data-search="unreal units uu centimetres cm metre meters transform location rotation scale grid snap">
         <div class="card-head"><span>02</span><h2>Units & Transforms</h2></div>
@@ -251,7 +307,7 @@
     </section>
   </main>
 
-  <footer class="cheat-page-footer">UE5 Learning Hub • v3.44.3 • Quick reference for classroom use</footer>
+  <footer class="cheat-page-footer">UE5 Learning Hub • v3.44.4 • Quick reference for classroom use</footer>
 
   <script>
     const input = document.getElementById('cheatSearch');
