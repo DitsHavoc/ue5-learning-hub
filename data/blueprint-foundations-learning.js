@@ -1,4 +1,4 @@
-/* v3.44.1 — Blueprint Foundations Lab
+/* v3.44.3 — Blueprint Foundations Lab
    Additive data patch only.
    Runs after the core Course / Building Blocks / Tutorials / Pathways data and
    after the Prison Cell patch, but before app.js.
@@ -21,7 +21,7 @@
   const PATHWAYS = window.UE5_PATHWAY_DATA;
 
   if (!DATA || !BLOCKS || !TOOLS || !PATHWAYS) {
-    console.warn('[v3.44.1] Blueprint Foundations Lab skipped: core learning data unavailable.');
+    console.warn('[v3.44.3] Blueprint Foundations Lab skipped: core learning data unavailable.');
     return;
   }
 
@@ -64,7 +64,7 @@
     const tutorial = (TOOLS.tutorials || []).find(x => x.id === tutorialId);
     const step = tutorial?.steps?.find(x => x.title === stepTitle);
     if (!step) {
-      console.warn(`[v3.44.1] Screenshot target missing: ${tutorialId} → ${stepTitle}`);
+      console.warn(`[v3.44.3] Screenshot target missing: ${tutorialId} → ${stepTitle}`);
       return;
     }
     const current = Array.isArray(step.visual) ? step.visual : (step.visual ? [step.visual] : []);
@@ -108,7 +108,7 @@
     difficulty: 'Beginner',
     icon: '▦',
     featured: true,
-    summary: 'Create common Blueprint variable types in one safe Actor, use Get and Set correctly, and explain what kind of game information each type represents.',
+    summary: 'Create common Blueprint variable types in one safe Actor, use Get and Set correctly, and choose the type from what the information means — not from habit or pin colour.',
     uses: ['Boolean', 'Integer', 'Float', 'Text', 'Vector', 'Object Reference', 'Get', 'Set'],
     referenceLesson: 'variables',
     buildingBlocks: ['variables-types', 'object-class-references'],
@@ -266,6 +266,161 @@
     prescriptive: true
   });
 
+
+  // -----------------------------------------------------------------------
+  // 1B. STATE, INSTANCES, OWNERSHIP & DEBUG FLOW
+  // -----------------------------------------------------------------------
+
+  upsertTutorial({
+    id: 'bp-lab-state-flow',
+    title: 'Understand State, Instances & Blueprint Flow',
+    category: 'blueprint-foundations-lab',
+    duration: '25–35 min',
+    difficulty: 'Beginner',
+    icon: '◎',
+    summary: 'Prove the difference between a default value and a runtime value, see how two instances of the same Blueprint can hold different data, read execution versus data wires, and use a simple predict → test → trace debugging routine.',
+    uses: ['Default Value', 'Runtime State', 'Instance Editable', 'Execution Pins', 'Data Pins', 'Print String', 'Ownership'],
+    referenceLesson: 'variables',
+    buildingBlocks: ['variables-types', 'events-execution'],
+    starterValues: [
+      'Health default = 100.0',
+      'BeginPlay runtime Health = 75.0',
+      'KeysRequired = Integer, Instance Editable',
+      'DoorLocked = Boolean',
+      'Debug routine: PREDICT → TEST → TRACE → CHANGE → RETEST'
+    ],
+    steps: [
+      {
+        title: 'PREDICT a default value before Play changes it',
+        where: 'BP_DataLab → select Health → Details → Default Value',
+        do: 'Set Health Default Value = 100. Before pressing Play, write one prediction: “Health starts at 100.” Do not test yet.',
+        why: 'A default value is the starting value used when an instance is created. Prediction forces you to understand what you expect before Unreal shows you the answer.',
+        see: 'Health = 100 in the Blueprint defaults.',
+        check: 'You can say what value Health should have before any runtime Set node changes it.',
+        troubleshoot: [
+          'If Default Value is missing, Compile and select the variable again.'
+        ],
+        visual: null
+      },
+      {
+        title: 'Change the value at runtime',
+        where: 'Event Graph → Event BeginPlay → Set Health → Print String',
+        do: 'Connect BeginPlay → Set Health = 75 → Print String Health. Compile. PREDICT the printed value, then Play.',
+        why: 'The Blueprint default still says 100, but the running instance changes to 75 when BeginPlay executes. Runtime state is the value the game currently holds.',
+        see: 'Play prints 75 even though the Blueprint Default Value remains 100.',
+        check: 'Explain this sentence: “100 is the default; 75 is the runtime value after BeginPlay.”',
+        troubleshoot: [
+          'If it prints 100, follow the white execution wire and make sure Set Health runs before Print String.',
+          'Stopping Play resets the temporary runtime state; it does not rewrite the Blueprint default.'
+        ],
+        visual: {
+          src: 'assets/tutorials/blueprint-foundations/variables-03-get-set-bool.webp',
+          caption: 'This screenshot uses a Boolean, but the same rule applies to every variable: Get reads the current value; Set changes the runtime value when its execution pin runs.',
+          sourceTitle: 'Teacher classroom capture — Unreal Engine',
+          kind: 'local'
+        }
+      },
+      {
+        title: 'Give two instances of one Blueprint different values',
+        where: 'BP_DataLab → create Integer KeysRequired → enable Instance Editable → Level Editor',
+        do: 'Create KeysRequired as Integer, enable Instance Editable and Compile. Place two BP_DataLab Actors in the level. Set one placed instance to KeysRequired = 2 and the other to KeysRequired = 5.',
+        why: 'A Blueprint Class is the recipe. Each placed instance can hold its own editable data without needing a new Blueprint class.',
+        see: 'Two BP_DataLab instances use the same class but show different KeysRequired values in Details.',
+        check: 'Answer: do you now have two Blueprint classes or one class with two instances?',
+        troubleshoot: [
+          'If KeysRequired is not visible on the placed Actor, enable Instance Editable and Compile.',
+          'Changing an instance value in the Level does not automatically change the Class Default for every other instance.'
+        ],
+        visual: {
+          src: 'assets/tutorials/blueprint-foundations/references-02-instance-details.webp',
+          caption: 'Placed Blueprint instances expose Instance Editable properties in the Level Details panel. Your property will be KeysRequired rather than the Object Reference shown here.',
+          sourceTitle: 'Teacher classroom capture — Unreal Engine',
+          kind: 'local'
+        }
+      },
+      {
+        title: 'Read execution wires and data wires differently',
+        where: 'BP_DataLab → Event Graph → make a simple Branch using DoorLocked',
+        do: 'Create BeginPlay → Branch. Connect Get DoorLocked to the Branch Condition. Trace the graph with your finger: first follow the white execution wire, then identify the coloured data wire feeding Condition.',
+        why: 'White execution wires answer “when / what runs next?”. Coloured data wires answer “what information is this node using?”. Confusing the two makes Blueprint graphs much harder to read.',
+        see: 'A white execution route reaches Branch while a coloured Boolean wire supplies the Condition.',
+        check: 'Point to the graph and say which wire controls flow and which wire carries data.',
+        troubleshoot: [
+          'A data value does not automatically make a node execute. The execution path still needs to reach the node.',
+          'A Branch Condition must receive a Boolean value.'
+        ],
+        visual: {
+          src: 'assets/tutorials/blueprint-foundations/logic-01-compare-branch.webp',
+          caption: 'White wires carry execution flow. Coloured wires carry data. Here the comparison creates Boolean data for Branch Condition; the white pins decide which route runs.',
+          sourceTitle: 'Teacher classroom capture — Unreal Engine',
+          kind: 'local'
+        }
+      },
+      {
+        title: 'Put state near the thing it describes',
+        where: 'No new nodes → short architecture task',
+        do: 'Choose the most sensible first home for each piece of state and write one reason: DoorLocked, PlayerHealth, KeysOwned, TargetDoor, PlayerScore. Use “the thing that owns/needs this information” as your starting rule.',
+        why: 'Variable type is only half the decision. Good Blueprint structure also asks which object should own the data.',
+        see: 'Five ownership choices with reasons.',
+        check: 'A sensible starting point is: DoorLocked → Door; PlayerHealth → Character or Health Component; KeysOwned → Player/Inventory; TargetDoor → the controller/switch that needs the reference; PlayerScore → player-focused game state such as PlayerState in a networked game. Context can change the final answer.',
+        troubleshoot: [
+          'Do not put everything in the Character just because it is easy to find.',
+          'Avoid the Level Blueprint as the default home for reusable gameplay state.'
+        ],
+        visual: null
+      },
+      {
+        title: 'Use PREDICT → TEST → TRACE → CHANGE → RETEST',
+        where: 'Any small graph from this lab',
+        do: 'Deliberately make one expectation wrong: for example set DoorLocked = True but predict the unlocked route. Play. Observe the result. TRACE the white execution path and the Boolean data into Branch. CHANGE the value or logic, then RETEST.',
+        why: 'Debugging is not random node swapping. A repeatable loop makes mistakes useful evidence.',
+        see: 'You can identify exactly which value or node caused the unexpected result.',
+        check: 'Before asking for help, you can state: what you predicted, what actually happened, and the first value/node you traced.',
+        troubleshoot: [
+          'Use Print String to expose a value when you cannot tell what the graph currently holds.',
+          'Compile before Play so you are testing the graph you think you changed.'
+        ],
+        visual: null
+      },
+      {
+        title: 'PROVE — explain state without using node colours',
+        where: 'Short spoken or written check',
+        do: 'Explain four terms in your own words: Default Value, Runtime Value, Instance Value, Variable Owner. Then explain white execution wire vs coloured data wire.',
+        why: 'These ideas transfer to every Blueprint system you build later.',
+        see: 'A short explanation that describes behaviour, not colours.',
+        check: 'Another student could understand your explanation without seeing your graph.',
+        troubleshoot: []
+      }
+    ],
+    mistakes: [
+      'Assuming a runtime Set permanently changes the Blueprint Class Default.',
+      'Assuming two placed instances must share every editable value.',
+      'Treating coloured data wires as if they control execution order.',
+      'Putting unrelated state into one giant Character or Level Blueprint.',
+      'Changing random nodes before making a prediction or tracing the existing flow.'
+    ],
+    makeItYours: [
+      'Give three door instances different KeysRequired values from one reusable Blueprint class.',
+      'Use Print String to expose a value that changes more than once during Play.',
+      'Pick one variable from your current game project and justify which Blueprint should own it.'
+    ],
+    worksWhen: [
+      'You can distinguish default, runtime and instance values.',
+      'You can read execution flow separately from data flow.',
+      'You can justify a sensible owner for game state.',
+      'You use prediction and tracing before random fixes.'
+    ],
+    studentRecipe: [
+      'Health default 100 → BeginPlay Set 75 → predict and prove the runtime value.',
+      'Make KeysRequired Instance Editable → place two BP_DataLab instances → set 2 and 5.',
+      'Build a tiny Branch and trace white execution vs coloured data wires.',
+      'Complete the variable-ownership task.',
+      'Use PREDICT → TEST → TRACE → CHANGE → RETEST on one deliberate mistake.'
+    ],
+    source: null,
+    prescriptive: true
+  });
+
   // -----------------------------------------------------------------------
   // 2. DATA → TEST → DECISION → ACTION
   // -----------------------------------------------------------------------
@@ -304,10 +459,10 @@
       {
         title: 'Give True and False different outcomes',
         where: 'Branch → True and False execution pins',
-        do: 'True → Print String “Door can open”. False → Print String “Need more keys”. Compile and Play.',
+        do: 'True → Print String “Door can open”. False → Print String “Need more keys”. Before Play, PREDICT which route should run from the current values. Compile, Play and compare the result with your prediction.',
         why: 'A decision matters only when the outcomes actually differ.',
         see: 'With KeysOwned = 2 and KeysRequired = 3, the False message prints.',
-        check: 'Change KeysOwned to 3. Play again and prove the True route now runs.',
+        check: 'Change KeysOwned to 3. Predict again, Play again and prove the True route now runs. If your prediction is wrong, trace the values into the comparison before changing nodes.',
         troubleshoot: [
           'If both messages run, check that they are connected to different Branch outputs rather than chained together.'
         ],
@@ -1000,14 +1155,16 @@
         visual: null
       },
       {
-        title: 'PROVE — change the requirement and explain the design',
-        where: 'Play test + short explanation',
-        do: 'Change KeysRequired from 2 to 4 without rebuilding the graph. Test failure and success. Then explain: one variable type choice, one comparison, one reference, one Function and your Array/Enum choice.',
-        why: 'A Level 4 programmer should be able to justify the structure and adapt it, not only reproduce it.',
-        see: 'The same system works under the new requirement.',
-        check: 'You can answer “Why did you use this?” for every required concept.',
+        title: 'MAKE → BREAK → FIX → EXPLAIN',
+        where: 'Working access-control system → changed brief',
+        do: 'First prove the system works with KeysRequired = 2. Then BREAK the brief on purpose: (1) change the requirement to 4 keys; (2) duplicate the setup so three doors can use the same logic with different TargetDoor references; (3) if you used an Enum, add Jammed as a new state — or if you used an Array, add a fourth indicator without another copy of the action node. FIX the system without rebuilding it from scratch. Finally explain one variable type choice, one comparison, one reference, one Function and your Array/Enum choice.',
+        why: 'Maintainable programming survives a changed requirement. The point is not that Version 1 worked; it is that the structure lets Version 2 change safely.',
+        see: 'The system still works after the requirement changes, reused Blueprint instances target different doors, and the chosen Array/Enum extension grows without copy-paste logic.',
+        check: 'You can show the working result and answer “Why did you use this?” for every required concept. You can also identify which parts changed and which parts did not need rewriting.',
         troubleshoot: [
-          'If changing KeysRequired forces you to rewrite multiple nodes, find the hard-coded copies and replace them with the variable.'
+          'If changing KeysRequired forces you to rewrite multiple nodes, find hard-coded copies and replace them with the variable.',
+          'If three doors require three different Blueprint classes, check whether the difference could instead be Instance Editable data/references.',
+          'If adding one Array item requires another action node, the loop is not doing the scalable work yet.'
         ],
         visual: null
       }
@@ -1212,8 +1369,8 @@
     icon: '◇',
     title: 'Blueprint Foundations: Data → Logic → Systems',
     kicker: 'STATE • TYPES • DECISIONS • REFERENCES • STRUCTURE',
-    summary: 'Refresh the programming basics by building tiny Blueprint proofs. Choose data from meaning, turn it into decisions, communicate between Actors and organise systems without copy-paste logic.',
-    outcome: 'A small access-control Blueprint system plus evidence that you can choose and explain variable types, comparisons, references, Functions, collections and states.',
+    summary: 'Refresh the programming basics by building tiny Blueprint proofs. Choose data from meaning, understand runtime state and ownership, turn data into decisions, communicate between Actors, debug from evidence and organise systems without copy-paste logic.',
+    outcome: 'A small access-control Blueprint system plus evidence that you can choose and explain variable types, state/ownership, execution flow, comparisons, references, Functions, collections and named states — then adapt the system when the brief changes.',
     audience: 'Built for Level 4 Games students revisiting Blueprint fundamentals, but useful for anyone who can follow nodes and now needs to understand why they are choosing them.',
     steps: [
       {
@@ -1222,7 +1379,7 @@
         title: 'Start rule — do not copy nodes you cannot explain',
         icon: '◎',
         area: 'Blueprint Foundations Lab',
-        description: 'For every lab use the same routine: WATCH / LEARN → MAKE → TEST → CHANGE → EXPLAIN. If your version only works because it matches the teacher screen, you are not finished.',
+        description: 'For every lab use the same routine: WATCH / LEARN → MAKE → PREDICT → TEST → TRACE → CHANGE → RETEST → EXPLAIN. If your version only works because it matches the teacher screen, you are not finished.',
         actionLabel: 'I understand the rule'
       },
       {
@@ -1246,6 +1403,31 @@
         actionLabel: 'Type choices explained'
       },
       {
+        type: 'tutorial',
+        id: 'bp-lab-state-flow',
+        why: 'MAKE • Prove default vs runtime state, change data per placed instance, read execution vs data wires, decide variable ownership and practise PREDICT → TEST → TRACE.'
+      },
+      {
+        type: 'checkpoint',
+        id: 'bp-foundations-debug-habit',
+        title: 'PROVE — explain before you fix',
+        icon: '⌁',
+        area: 'Debugging habit',
+        href: '#/tutorial/bp-lab-state-flow',
+        description: 'Show one bug or deliberate wrong result. Before changing the graph, state: (1) what you predicted, (2) what actually happened, (3) the first value/node you traced, and (4) what evidence made you choose the fix.',
+        actionLabel: 'Prediction + trace explained'
+      },
+      {
+        type: 'checkpoint',
+        id: 'bp-foundations-quiz-variables',
+        title: 'QUICK CHECK — Variables & State',
+        icon: '?',
+        area: 'Required knowledge check',
+        href: 'blueprint-checks.html#variables',
+        description: 'Complete the required practical proof list, then score at least 4/5 on the Variables & State check before moving on.',
+        actionLabel: 'Open required steps + quiz'
+      },
+      {
         type: 'lesson',
         id: 'branches',
         why: 'LEARN • Refresh Boolean questions, comparisons and Branch before you start combining conditions.'
@@ -1256,9 +1438,29 @@
         why: 'MAKE • Build DATA → TEST → DECISION → ACTION and decide when Branch or Select is the cleaner node.'
       },
       {
+        type: 'checkpoint',
+        id: 'bp-foundations-quiz-logic',
+        title: 'QUICK CHECK — Logic & Branching',
+        icon: '?',
+        area: 'Required knowledge check',
+        href: 'blueprint-checks.html#logic',
+        description: 'Show both outcomes of your comparison/Branch graph, then score at least 4/5 on the Logic check.',
+        actionLabel: 'Open required steps + quiz'
+      },
+      {
         type: 'tutorial',
         id: 'bp-lab-object-reference',
         why: 'MAKE • Prove the difference between knowing a class/type and holding a reference to one specific Actor in the level.'
+      },
+      {
+        type: 'checkpoint',
+        id: 'bp-foundations-quiz-references',
+        title: 'QUICK CHECK — References',
+        icon: '?',
+        area: 'Required knowledge check',
+        href: 'blueprint-checks.html#references',
+        description: 'Prove a placed Blueprint controls the intended Actor and handles None safely, then score at least 4/5.',
+        actionLabel: 'Open required steps + quiz'
       },
       {
         type: 'lesson',
@@ -1271,14 +1473,44 @@
         why: 'MAKE • Deliberately create duplication, then remove it with a Function and prove one rule change updates every caller.'
       },
       {
+        type: 'checkpoint',
+        id: 'bp-foundations-quiz-functions',
+        title: 'QUICK CHECK — Functions',
+        icon: '?',
+        area: 'Required knowledge check',
+        href: 'blueprint-checks.html#functions',
+        description: 'Show that repeated logic exists once and different callers pass different inputs, then score at least 4/5.',
+        actionLabel: 'Open required steps + quiz'
+      },
+      {
         type: 'tutorial',
         id: 'bp-lab-array-foreach',
         why: 'MAKE • Replace Target1 / Target2 / Target3 thinking with one collection and one For Each Loop.'
       },
       {
+        type: 'checkpoint',
+        id: 'bp-foundations-quiz-arrays',
+        title: 'QUICK CHECK — Arrays & Loops',
+        icon: '?',
+        area: 'Required knowledge check',
+        href: 'blueprint-checks.html#arrays',
+        description: 'Add another target without adding another action node, then score at least 4/5 on Arrays & Loops.',
+        actionLabel: 'Open required steps + quiz'
+      },
+      {
         type: 'tutorial',
         id: 'bp-lab-enum-state',
         why: 'MAKE • Replace competing state Booleans with one readable Enum when only one named state should be active.'
+      },
+      {
+        type: 'checkpoint',
+        id: 'bp-foundations-quiz-enums',
+        title: 'QUICK CHECK — Enums & State',
+        icon: '?',
+        area: 'Required knowledge check',
+        href: 'blueprint-checks.html#enums',
+        description: 'Add a new named state and prove Switch on Enum handles it, then score at least 4/5.',
+        actionLabel: 'Open required steps + quiz'
       },
       {
         type: 'tutorial',
@@ -1287,12 +1519,22 @@
       },
       {
         type: 'checkpoint',
+        id: 'bp-foundations-quiz-structured-data',
+        title: 'QUICK CHECK — Structs & Maps',
+        icon: '?',
+        area: 'Required knowledge check',
+        href: 'blueprint-checks.html#structured-data',
+        description: 'Build one Struct and one key → value Map, then score at least 4/5 on the data-organisation check.',
+        actionLabel: 'Open required steps + quiz'
+      },
+      {
+        type: 'checkpoint',
         id: 'bp-foundations-code-clinic',
-        title: 'PROVE — fix three weak designs',
+        title: 'CODE DOCTOR — diagnose six weak designs',
         icon: '⚒',
         area: 'Programming judgement',
-        description: 'Explain the better structure for each: (1) IsIdle + IsOpening + IsOpen + IsClosing can conflict; (2) Target1 through Target8 all receive the same action; (3) the same damage calculation is copied into five places. Name the problem and the Blueprint feature you would use to improve it.',
-        actionLabel: 'Three designs diagnosed'
+        description: 'For each example name the problem, the better Blueprint structure and WHY: (1) Health is stored as Text; (2) IsIdle + IsOpening + IsOpen + IsClosing can all become true; (3) Target1 through Target8 all receive the same action; (4) the same damage calculation is copied into five places; (5) an Object Reference still says None but the graph uses it anyway; (6) KeysRequired = 3 is typed directly into four different comparison nodes. Fix the design on paper before touching Unreal.',
+        actionLabel: 'Six designs diagnosed'
       },
       {
         type: 'tutorial',
@@ -1306,8 +1548,19 @@
         icon: '✓',
         area: 'Level 4 evidence',
         href: '#/tutorial/bp-lab-final-system',
-        description: 'Show the working system and answer five questions: What state are you storing? Why those types? What Boolean question drives the Branch? What exact Actor does the reference point to? Why did you use the Function and your Array/Enum? Then change one requirement and prove the system still works.',
-        actionLabel: 'System demonstrated + explained'
+        description: 'Show the working system, then accept a changed brief. Change the key requirement, reuse the system with multiple door instances/references, and grow the Array/Enum extension without copy-paste logic. Explain: What state are you storing? Who owns it? Why those types? What Boolean question drives the Branch? What exact Actor does the reference point to? Why did you use the Function and your Array/Enum? Finish by showing what changed and what did not need rewriting.',
+        actionLabel: 'MAKE → BREAK → FIX → EXPLAIN complete'
+      }
+      ,
+      {
+        type: 'checkpoint',
+        id: 'bp-foundations-final-quiz',
+        title: 'FINAL CHECK — Blueprint Foundations',
+        icon: '★',
+        area: 'Required knowledge check',
+        href: 'blueprint-checks.html#final',
+        description: 'Complete the final practical proof list and score at least 8/10 on the scenario-based Blueprint Foundations check.',
+        actionLabel: 'Take final 10-question check'
       }
     ]
   });
@@ -1315,6 +1568,8 @@
   // Link these new labs back from the existing Building Blocks.
   [
     ['variables-types', 'bp-lab-variable-types'],
+    ['variables-types', 'bp-lab-state-flow'],
+    ['events-execution', 'bp-lab-state-flow'],
     ['variables-types', 'bp-lab-data-decisions'],
     ['branches-switches', 'bp-lab-data-decisions'],
     ['object-class-references', 'bp-lab-object-reference'],
@@ -1325,7 +1580,7 @@
     ['arrays-sets-maps', 'bp-lab-struct-map']
   ].forEach(([blockId, tutorialId]) => addBlockTutorial(blockId, tutorialId));
 
-  TOOLS.version = '3.44.1';
-  PATHWAYS.version = '3.44.1';
-  PATHWAYS.buildDate = '2026-09-05';
+  TOOLS.version = '3.44.3';
+  PATHWAYS.version = '3.44.3';
+  PATHWAYS.buildDate = '2026-09-06';
 })();

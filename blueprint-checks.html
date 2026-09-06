@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#071019">
+<title>Blueprint Required Checks • UE5 Learning Hub</title>
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="stylesheet" href="blueprint-checks.css?v=3.44.3">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html#/"><span>◇</span><div><b>Blueprint Checks</b><small>UE5 Learning Hub</small></div></a>
+  <nav><a href="index.html#/pathways/blueprint-foundations-lab">Blueprint Path</a><a href="cheatsheet.html">UE5 Cheat Sheet</a><a href="index.html#/">← Hub</a></nav>
+</header>
+<main>
+<section class="hero">
+  <div><span class="eyebrow">LEVEL 4 • REQUIRED PROOF • SHORT QUIZZES</span><h1>Build it. Prove it. Check it.</h1>
+  <p>The practical work is the main evidence. The quizzes simply check that you understand the decisions you just made.</p></div>
+  <div class="overall"><strong data-overall>0 / 8</strong><span>checks passed</span><div><i data-overall-bar></i></div><button data-clear>Clear my local checks</button></div>
+</section>
+<section class="rule"><b>Required rhythm:</b><span>MAKE → PREDICT → TEST → PROVE → QUICK CHECK</span><small>Formal assessment and submissions still stay where your teacher tells you to submit them.</small></section>
+<nav class="jumps"><a href="#variables">01 Variables & State</a><a href="#logic">02 Logic & Branching</a><a href="#references">03 References</a><a href="#functions">04 Functions</a><a href="#arrays">05 Arrays & Loops</a><a href="#enums">06 Enums & State</a><a href="#structured-data">07 Structs & Maps</a><a href="#final">08 Final Blueprint Foundations Check</a></nav>
+
+    <section class="check-section" id="variables" data-section="variables" data-pass="4">
+      <div class="check-head">
+        <span class="section-num">01</span><div><span class="eyebrow">REQUIRED PRACTICAL + KNOWLEDGE CHECK</span><h2>Variables & State</h2><p>Choose data from meaning, then prove you understand default, runtime and instance values.</p></div>
+        <div class="section-status" data-status>NOT PASSED</div>
+      </div>
+      <div class="check-columns">
+        <article class="proof-panel">
+          <span class="panel-label">A • REQUIRED PRACTICAL PROOF</span>
+          <h3>Show these before moving on</h3>
+          <p class="muted">Tick these only after you have actually built/tested them. The tick list is a self-check, not formal assessment.</p>
+          <div class="proof-list"><label class="proof-item"><input type="checkbox" data-proof="0"><span><b>01</b>Create Bool, Integer, Float, Text, Vector and Object Reference variables in BP_DataLab.</span></label><label class="proof-item"><input type="checkbox" data-proof="1"><span><b>02</b>Use Get and Set and explain the difference without mentioning pin colour.</span></label><label class="proof-item"><input type="checkbox" data-proof="2"><span><b>03</b>Set Health default = 100, then change it to 75 at BeginPlay and prove the runtime value.</span></label><label class="proof-item"><input type="checkbox" data-proof="3"><span><b>04</b>Place two instances of the same Blueprint with different Instance Editable KeysRequired values.</span></label><label class="proof-item"><input type="checkbox" data-proof="4"><span><b>05</b>Explain where one piece of state should live and why (for example DoorLocked → Door).</span></label></div>
+          <div class="proof-progress"><span data-proof-count>0/5 complete</span><div><i data-proof-bar></i></div></div>
+        </article>
+        <article class="quiz-panel">
+          <span class="panel-label">B • QUICK CHECK</span>
+          <h3>5 questions • pass 4/5</h3>
+          <p class="muted">Scenario questions, not definition bingo. Submit, read the feedback, then retry if needed.</p>
+          <form class="quiz-form"><div class="quiz-q" data-q="0" data-correct="1" data-explain="Ammo remaining is a whole-number count, so Integer fits the meaning.">
+          <p><b>1.</b> A weapon currently has 17 rounds in its magazine. Which type is the best starting choice?</p><div class="answers"><label class="answer"><input type="radio" name="variables_q0" value="0"><span>A. Boolean</span></label><label class="answer"><input type="radio" name="variables_q0" value="1"><span>B. Integer</span></label><label class="answer"><input type="radio" name="variables_q0" value="2"><span>C. Float</span></label><label class="answer"><input type="radio" name="variables_q0" value="3"><span>D. Text</span></label></div><div class="explanation" hidden></div>
+        </div><div class="quiz-q" data-q="1" data-correct="1" data-explain="The Class Default remains 100, but runtime state becomes 75 after Set executes.">
+          <p><b>2.</b> Health has a Class Default of 100. BeginPlay executes Set Health = 75. What value does the running instance hold after BeginPlay?</p><div class="answers"><label class="answer"><input type="radio" name="variables_q1" value="0"><span>A. 100</span></label><label class="answer"><input type="radio" name="variables_q1" value="1"><span>B. 75</span></label><label class="answer"><input type="radio" name="variables_q1" value="2"><span>C. Both at once</span></label><label class="answer"><input type="radio" name="variables_q1" value="3"><span>D. It becomes Text</span></label></div><div class="explanation" hidden></div>
+        </div><div class="quiz-q" data-q="2" data-correct="1" data-explain="Get reads the current stored value. Set changes it.">
+          <p><b>3.</b> What does Get do?</p><div class="answers"><label class="answer"><input type="radio" name="variables_q2" value="0"><span>A. Changes the variable</span></label><label class="answer"><input type="radio" name="variables_q2" value="1"><span>B. Reads the current value</span></label><label class="answer"><input type="radio" name="variables_q2" value="2"><span>C. Creates a new variable type</span></label><label class="answer"><input type="radio" name="variables_q2" value="3"><span>D. Executes a Branch</span></label></div><div class="explanation" hidden></div>
+        </div><div class="quiz-q" data-q="3" data-correct="1" data-explain="Instances can override Instance Editable values while sharing the same Blueprint Class.">
+          <p><b>4.</b> Two placed Actors use the same Blueprint Class. Can Instance Editable variables be different on each?</p><div class="answers"><label class="answer"><input type="radio" name="variables_q3" value="0"><span>A. No, they must match</span></label><label class="answer"><input type="radio" name="variables_q3" value="1"><span>B. Yes</span></label><label class="answer"><input type="radio" name="variables_q3" value="2"><span>C. Only for Booleans</span></label><label class="answer"><input type="radio" name="variables_q3" value="3"><span>D. Only in C++</span></label></div><div class="explanation" hidden></div>
+        </div><div class="quiz-q" data-q="4" data-correct="1" data-explain="Keep state close to the thing/system it describes and uses.">
+          <p><b>5.</b> Where is PlayerHealth most sensibly owned as a starting design?</p><div class="answers"><label class="answer"><input type="radio" name="variables_q4" value="0"><span>A. Any random level Actor</span></label><label class="answer"><input type="radio" name="variables_q4" value="1"><span>B. Character or a Health Component</span></label><label class="answer"><input type="radio" name="variables_q4" value="2"><span>C. A door</span></label><label class="answer"><input type="radio" name="variables_q4" value="3"><span>D. Always the Level Blueprint</span></label></div><div class="explanation" hidden></div>
+        </div>
+            <div class="quiz-actions"><button type="submit">Check answers</button><button type="button" class="ghost" data-reset>Reset quiz</button></div>
+            <div class="quiz-result" data-result hidden></div>
+          </form>
+        </article>
+      </div>
+      <div class="move-on" data-move-on hidden><b>✓ READY TO MOVE ON</b><span>Required proof ticked and quiz pass achieved.</span></div>
+    </section>
+    <section class="check-section" id="logic" data-section="logic" data-pass="4">
+      <div class="check-head">
+        <span class="section-num">02</span><div><span class="eyebrow">REQUIRED PRACTICAL + KNOWLEDGE CHECK</span><h2>Logic & Branching</h2><p>Read data, ask a Boolean question, then choose behaviour.</p></div>
+        <div class="section-status" data-status>NOT PASSED</div>
+      </div>
+      <div class="check-columns">
+        <article class="proof-panel">
+          <span class="panel-label">A • REQUIRED PRACTICAL PROOF</span>
+          <h3>Show these before moving on</h3>
+          <p class="muted">Tick these only after you have actually built/tested them. The tick list is a self-check, not formal assessment.</p>
+          <div class="proof-list"><label class="proof-item"><input type="checkbox" data-proof="0"><span><b>01</b>Build KeysOwned >= KeysRequired → Branch.</span></label><label class="proof-item"><input type="checkbox" data-proof="1"><span><b>02</b>Predict which route should run before pressing Play.</span></label><label class="proof-item"><input type="checkbox" data-proof="2"><span><b>03</b>Test one failing value and one passing value.</span></label><label class="proof-item"><input type="checkbox" data-proof="3"><span><b>04</b>Use Select once to choose a displayed value without splitting execution.</span></label><label class="proof-item"><input type="checkbox" data-proof="4"><span><b>05</b>Trace the white execution wire separately from the coloured data wire.</span></label></div>
+          <div class="proof-progress"><span data-proof-count>0/5 complete</span><div><i data-proof-bar></i></div></div>
+        </article>
+        <article class="quiz-panel">
+          <span class="panel-label">B • QUICK CHECK</span>
+          <h3>5 questions • pass 4/5</h3>
+          <p class="muted">Scenario questions, not definition bingo. Submit, read the feedback, then retry if needed.</p>
+          <form class="quiz-form"><div class="quiz-q" data-q="0" data-correct="1" data-explain="Comparisons return a True/False Boolean result.">
+          <p><b>1.</b> What type of value does KeysOwned >= KeysRequired return?</p><div class="answers"><label class="answer"><input type="radio" name="logic_q0" value="0"><span>A. Integer</span></label><label class="answer"><input type="radio" name="logic_q0" value="1"><span>B. Boolean</span></label><label class="answer"><input type="radio" name="logic_q0" value="2"><span>C. Vector</span></label><label class="answer"><input type="radio" name="logic_q0" value="3"><span>D. Object Reference</span></label></div><div class="explanation" hidden></div>
+        </div><div class="quiz-q" data-q="1" data-correct="1" data-explain="2 is not greater than or equal to 3, so the condition is False.">
+          <p><b>2.</b> KeysOwned = 2 and KeysRequired = 3. Which Branch route runs for KeysOwned >= KeysRequired?</p><div class="answers"><label class="answer"><input type="radio" name="logic_q1" value="0"><span>A. True</span></label><label class="answer"><input type="radio" name="logic_q1" value="1"><span>B. False</span></label><label class="answer"><input type="radio" name="logic_q1" value="2"><span>C. Both</span></label><label class="answer"><input type="radio" name="logic_q1" value="3"><span>D. Neither</span></label></div><div class="explanation" hidden></div>
+        </div><div class="quiz-q" data-q="2" data-correct="0" data-explain="Branch Condition needs a Boolean value.">
+          <p><b>3.</b> What must feed a Branch Condition?</p><div class="answers"><label class="answer"><input type="radio" name="logic_q2" value="0"><span>A. A Boolean</span></label><label class="answer"><input type="radio" name="logic_q2" value="1"><span>B. A white execution wire only</span></label><label class="answer"><input type="radio" name="logic_q2" value="2"><span>C. An Actor Class</span></label><label class="answer"><input type="radio" name="logic_q2" value="3"><span>D. A Struct</span></label></div><div class="explanation" hidden></div>
+        </div><div class="quiz-q" data-q="3" data-correct="1" data-explain="Select chooses a value without splitting execution flow.">
+          <p><b>4.</b> You only need to choose between the words LOCKED and OPEN before one Print String. Which is usually cleaner?</p><div class="answers"><label class="answer"><input type="radio" name="logic_q3" value="0"><span>A. Two copied Branches</span></label><label class="answer"><input type="radio" name="logic_q3" value="1"><span>B. Select</span></label><label class="answer"><input type="radio" name="logic_q3" value="2"><span>C. For Each Loop</span></label><label class="answer"><input type="radio" name="logic_q3" value="3"><span>D. Cast</span></label></div><div class="explanation" hidden></div>
+        </div><div class="quiz-q" data-q="4" data-correct="1" data-explain="White wires show when/what executes next.">
+          <p><b>5.</b> In Blueprint, what do white wires mainly represent?</p><div class="answers"><label class="answer"><input type="radio" name="logic_q4" value="0"><span>A. Texture data</span></label><label class="answer"><input type="radio" name="logic_q4" value="1"><span>B. Execution flow</span></label><label class="answer"><input type="radio" name="logic_q4" value="2"><span>C. Only Boolean values</span></label><label class="answer"><input type="radio" name="logic_q4" value="3"><span>D. Variable ownership</span></label></div><div class="explanation" hidden></div>
+        </div>
+            <div class="quiz-actions"><button type="submit">Check answers</button><button type="button" class="ghost" data-reset>Reset quiz</button></div>
+            <div class="quiz-result" data-result hidden></div>
+          </form>
+        </article>
+      </div>
+      <div class="move-on" data-move-on hidden><b>✓ READY TO MOVE ON</b><span>Required proof ticked and quiz pass achieved.</span></div>
+    </section>
+    <section class="check-section" id="references" data-section="references" data-pass="4">
+      <div class="check-head">
+        <span class="section-num">03</span><div><span class="eyebrow">REQUIRED PRACTICAL + KNOWLEDGE CHECK</span><h2>References</h2><p>Know the difference between this exact object and this type of object.</p></div>
+        <div class="section-status" data-status>NOT PASSED</div>
+      </div>
+      <div class="check-columns">
+        <article class="proof-panel">
+          <span class="panel-label">A • REQUIRED PRACTICAL PROOF</span>
+          <h3>Show these before moving on</h3>
+          <p class="muted">Tick these only after you have actually built/tested them. The tick list is a self-check, not formal assessment.</p>
+          <div class="proof-list"><label class="proof-item"><input type="checkbox" data-proof="0"><span><b>01</b>Create BP_LabTarget and BP_LabController.</span></label><label class="proof-item"><input type="checkbox" data-proof="1"><span><b>02</b>Create an Instance Editable BP_LabTarget Object Reference on the controller.</span></label><label class="proof-item"><input type="checkbox" data-proof="2"><span><b>03</b>Assign the target on a placed instance using Details/eyedropper.</span></label><label class="proof-item"><input type="checkbox" data-proof="3"><span><b>04</b>Use Is Valid and prove the None case gives a controlled warning rather than an Accessed None error.</span></label><label class="proof-item"><input type="checkbox" data-proof="4"><span><b>05</b>Duplicate the setup and prove two controller instances can point to two different target instances.</span></label></div>
+          <div class="proof-progress"><span data-proof-count>0/5 complete</span><div><i data-proof-bar></i></div></div>
+        </article>
+        <article class="quiz-panel">
+          <span class="panel-label">B • QUICK CHECK</span>
+          <h3>5 questions • pass 4/5</h3>
+          <p class="muted">Scenario questions, not definition bingo. Submit, read the feedback, then retry if needed.</p>
+          <form class="quiz-form"><div class="quiz-q" data-q="0" data-correct="1" data-explain="Object References point to a specific live object/Actor.">
+          <p><b>1.</b> An Object Reference means…</p><div class="answers"><label class="answer"><input type="radio" name="references_q0" value="0"><span>A. A type/recipe</span></label><label class="answer"><input type="radio" name="references_q0" value="1"><span>B. One specific live object/instance</span></label><label class="answer"><input type="radio" name="references_q0" value="2"><span>C. A list of objects</span></label><label class="answer"><input type="radio" name="references_q0" value="3"><span>D. A text label</span></label></div><div class="explanation" hidden></div>
+        </div><div class="quiz-q" data-q="1" data-correct="1" data-explain="A Class Reference represents the class/type, not one particular instance.">
+          <p><b>2.</b> A Class Reference means…</p><div class="answers"><label class="answer"><input type="radio" name="references_q1" value="0"><span>A. A specific placed Actor</span></label><label class="answer"><input type="radio" name="references_q1" value="1"><span>B. A type/recipe</span></label><label class="answer"><input type="radio" name="references_q1" value="2"><span>C. A runtime Float</span></label><label class="answer"><input type="radio" name="references_q1" value="3"><span>D. A Branch result</span></label></div><div class="explanation" hidden></div>
+        </div><div class="quiz-q" data-q="2" data-correct="1" data-explain="None usually means no compatible object has been assigned.">
+          <p><b>3.</b> A placed reference field says None. What is the first thing to check?</p><div class="answers"><label class="answer"><input type="radio" name="references_q2" value="0"><span>A. Increase player speed</span></label><label class="answer"><input type="radio" name="references_q2" value="1"><span>B. Assign the intended Actor</span></label><label class="answer"><input type="radio" name="references_q2" value="2"><span>C. Add a For Each Loop</span></label><label class="answer"><input type="radio" name="references_q2" value="3"><span>D. Change it to Text</span></label></div><div class="explanation" hidden></div>
+        </div><div class="quiz-q" data-q="3" data-correct="1" data-explain="Casting is not a search. You need a reference first.">
+          <p><b>4.</b> What does Casting do?</p><div class="answers"><label class="answer"><input type="radio" name="references_q3" value="0"><span>A. Finds any Actor in the level automatically</span></label><label class="answer"><input type="radio" name="references_q3" value="1"><span>B. Tests/converts a reference you already have</span></label><label class="answer"><input type="radio" name="references_q3" value="2"><span>C. Creates an Array</span></label><label class="answer"><input type="radio" name="references_q3" value="3"><span>D. Saves the project</span></label></div><div class="explanation" hidden></div>
+        </div><div class="quiz-q" data-q="4" data-correct="0" data-explain="Instance Editable exposes the property on placed instances.">
+          <p><b>5.</b> Why make a reference Instance Editable?</p><div class="answers"><label class="answer"><input type="radio" name="references_q4" value="0"><span>A. So each placed instance can choose a target</span></label><label class="answer"><input type="radio" name="references_q4" value="1"><span>B. To turn it into a Float</span></label><label class="answer"><input type="radio" name="references_q4" value="2"><span>C. To remove the target</span></label><label class="answer"><input type="radio" name="references_q4" value="3"><span>D. To avoid compiling</span></label></div><div class="explanation" hidden></div>
+        </div>
+            <div class="quiz-actions"><button type="submit">Check answers</button><button type="button" class="ghost" data-reset>Reset quiz</button></div>
+            <div class="quiz-result" data-result hidden></div>
+          </form>
+        </article>
+      </div>
+      <div class="move-on" data-move-on hidden><b>✓ READY TO MOVE ON</b><span>Required proof ticked and quiz pass achieved.</span></div>
+    </section>
+    <section class="check-section" id="functions" data-section="functions" data-pass="4">
+      <div class="check-head">
+        <span class="section-num">04</span><div><span class="eyebrow">REQUIRED PRACTICAL + KNOWLEDGE CHECK</span><h2>Functions</h2><p>Put repeated logic in one named place and pass changing values in as inputs.</p></div>
+        <div class="section-status" data-status>NOT PASSED</div>
+      </div>
+      <div class="check-columns">
+        <article class="proof-panel">
+          <span class="panel-label">A • REQUIRED PRACTICAL PROOF</span>
+          <h3>Show these before moving on</h3>
+          <p class="muted">Tick these only after you have actually built/tested them. The tick list is a self-check, not formal assessment.</p>
+          <div class="proof-list"><label class="proof-item"><input type="checkbox" data-proof="0"><span><b>01</b>Create duplicated damage logic first so the problem is visible.</span></label><label class="proof-item"><input type="checkbox" data-proof="1"><span><b>02</b>Move the shared calculation into ApplyDamage(DamageAmount).</span></label><label class="proof-item"><input type="checkbox" data-proof="2"><span><b>03</b>Call the Function with at least two different DamageAmount inputs.</span></label><label class="proof-item"><input type="checkbox" data-proof="3"><span><b>04</b>Change one rule inside the Function and prove every caller changes.</span></label><label class="proof-item"><input type="checkbox" data-proof="4"><span><b>05</b>Explain when a Custom Event is more suitable than a normal Function.</span></label></div>
+          <div class="proof-progress"><span data-proof-count>0/5 complete</span><div><i data-proof-bar></i></div></div>
+        </article>
+        <article class="quiz-panel">
+          <span class="panel-label">B • QUICK CHECK</span>
+          <h3>5 questions • pass 4/5</h3>
+          <p class="muted">Scenario questions, not definition bingo. Submit, read the feedback, then retry if needed.</p>
+          <form class="quiz-form"><div class="quiz-q" data-q="0" data-correct="1" data-explain="A Function gives one authoritative reusable implementation.">
+          <p><b>1.</b> The same damage calculation appears in five places. Best first improvement?</p><div class="answers"><label class="answer"><input type="radio" name="functions_q0" value="0"><span>A. Copy it a sixth time</span></label><label class="answer"><input type="radio" name="functions_q0" value="1"><span>B. Move the shared job into a Function</span></label><label class="answer"><input type="radio" name="functions_q0" value="2"><span>C. Turn Health into Text</span></label><label class="answer"><input type="radio" name="functions_q0" value="3"><span>D. Add five Branches</span></label></div><div class="explanation" hidden></div>
+        </div><div class="quiz-q" data-q="1" data-correct="0" data-explain="Inputs let the reusable job work with different data each call.">
+          <p><b>2.</b> Why give ApplyDamage a DamageAmount input?</p><div class="answers"><label class="answer"><input type="radio" name="functions_q1" value="0"><span>A. So callers can pass different values</span></label><label class="answer"><input type="radio" name="functions_q1" value="1"><span>B. To make it an Array</span></label><label class="answer"><input type="radio" name="functions_q1" value="2"><span>C. To stop it compiling</span></label><label class="answer"><input type="radio" name="functions_q1" value="3"><span>D. To find an Actor</span></label></div><div class="explanation" hidden></div>
+        </div><div class="quiz-q" data-q="2" data-correct="1" data-explain="Normal Blueprint Functions do not support latent Delay flow.">
+          <p><b>3.</b> Which is more suitable for a timed sequence that needs Delay?</p><div class="answers"><label class="answer"><input type="radio" name="functions_q2" value="0"><span>A. A normal Function</span></label><label class="answer"><input type="radio" name="functions_q2" value="1"><span>B. A Custom Event / event-style flow</span></label><label class="answer"><input type="radio" name="functions_q2" value="2"><span>C. An Integer</span></label><label class="answer"><input type="radio" name="functions_q2" value="3"><span>D. A Struct only</span></label></div><div class="explanation" hidden></div>
+        </div><div class="quiz-q" data-q="3" data-correct="1" data-explain="Centralising a rule reduces inconsistent copies.">
+          <p><b>4.</b> If one change inside a Function updates every caller, what benefit are you seeing?</p><div class="answers"><label class="answer"><input type="radio" name="functions_q3" value="0"><span>A. Duplication</span></label><label class="answer"><input type="radio" name="functions_q3" value="1"><span>B. Maintainability/reuse</span></label><label class="answer"><input type="radio" name="functions_q3" value="2"><span>C. Casting</span></label><label class="answer"><input type="radio" name="functions_q3" value="3"><span>D. Level streaming</span></label></div><div class="explanation" hidden></div>
+        </div><div class="quiz-q" data-q="4" data-correct="0" data-explain="A focused, well-named job is easier to understand and reuse.">
+          <p><b>5.</b> What should a good Function usually have?</p><div class="answers"><label class="answer"><input type="radio" name="functions_q4" value="0"><span>A. One clear job</span></label><label class="answer"><input type="radio" name="functions_q4" value="1"><span>B. Every mechanic in the game</span></label><label class="answer"><input type="radio" name="functions_q4" value="2"><span>C. No name</span></label><label class="answer"><input type="radio" name="functions_q4" value="3"><span>D. Random unrelated nodes</span></label></div><div class="explanation" hidden></div>
+        </div>
+            <div class="quiz-actions"><button type="submit">Check answers</button><button type="button" class="ghost" data-reset>Reset quiz</button></div>
+            <div class="quiz-result" data-result hidden></div>
+          </form>
+        </article>
+      </div>
+      <div class="move-on" data-move-on hidden><b>✓ READY TO MOVE ON</b><span>Required proof ticked and quiz pass achieved.</span></div>
+    </section>
+    <section class="check-section" id="arrays" data-section="arrays" data-pass="4">
+      <div class="check-head">
+        <span class="section-num">05</span><div><span class="eyebrow">REQUIRED PRACTICAL + KNOWLEDGE CHECK</span><h2>Arrays & Loops</h2><p>Store many same-type values in one collection and process them without copy/paste graphs.</p></div>
+        <div class="section-status" data-status>NOT PASSED</div>
+      </div>
+      <div class="check-columns">
+        <article class="proof-panel">
+          <span class="panel-label">A • REQUIRED PRACTICAL PROOF</span>
+          <h3>Show these before moving on</h3>
+          <p class="muted">Tick these only after you have actually built/tested them. The tick list is a self-check, not formal assessment.</p>
+          <div class="proof-list"><label class="proof-item"><input type="checkbox" data-proof="0"><span><b>01</b>Create an Instance Editable Actor Object Reference Array called Targets.</span></label><label class="proof-item"><input type="checkbox" data-proof="1"><span><b>02</b>Assign three placed target Actors.</span></label><label class="proof-item"><input type="checkbox" data-proof="2"><span><b>03</b>Use Targets → For Each Loop → Array Element → one action.</span></label><label class="proof-item"><input type="checkbox" data-proof="3"><span><b>04</b>Use Length and Get index 0 once so you understand the collection.</span></label><label class="proof-item"><input type="checkbox" data-proof="4"><span><b>05</b>Add Target_D without adding another copy of the action node.</span></label></div>
+          <div class="proof-progress"><span data-proof-count>0/5 complete</span><div><i data-proof-bar></i></div></div>
+        </article>
+        <article class="quiz-panel">
+          <span class="panel-label">B • QUICK CHECK</span>
+          <h3>5 questions • pass 4/5</h3>
+          <p class="muted">Scenario questions, not definition bingo. Submit, read the feedback, then retry if needed.</p>
+          <form class="quiz-form"><div class="quiz-q" data-q="0" data-correct="1" data-explain="Arrays store multiple values of the same type in order.">
+          <p><b>1.</b> What is an Array?</p><div class="answers"><label class="answer"><input type="radio" name="arrays_q0" value="0"><span>A. One True/False value</span></label><label class="answer"><input type="radio" name="arrays_q0" value="1"><span>B. An ordered collection of values of the same type</span></label><label class="answer"><input type="radio" name="arrays_q0" value="2"><span>C. A Function input only</span></label><label class="answer"><input type="radio" name="arrays_q0" value="3"><span>D. A material</span></label></div><div class="explanation" hidden></div>
+        </div><div class="quiz-q" data-q="1" data-correct="1" data-explain="Array indexes start at 0, so Length 4 has indexes 0–3.">
+          <p><b>2.</b> An Array has Length 4. What are its valid indexes?</p><div class="answers"><label class="answer"><input type="radio" name="arrays_q1" value="0"><span>A. 1,2,3,4</span></label><label class="answer"><input type="radio" name="arrays_q1" value="1"><span>B. 0,1,2,3</span></label><label class="answer"><input type="radio" name="arrays_q1" value="2"><span>C. 0,1,2,3,4</span></label><label class="answer"><input type="radio" name="arrays_q1" value="3"><span>D. 4 only</span></label></div><div class="explanation" hidden></div>
+        </div><div class="quiz-q" data-q="2" data-correct="1" data-explain="Array Element is the item being processed on that iteration.">
+          <p><b>3.</b> Inside For Each Loop, which pin gives the current item?</p><div class="answers"><label class="answer"><input type="radio" name="arrays_q2" value="0"><span>A. Completed</span></label><label class="answer"><input type="radio" name="arrays_q2" value="1"><span>B. Array Element</span></label><label class="answer"><input type="radio" name="arrays_q2" value="2"><span>C. Branch Condition</span></label><label class="answer"><input type="radio" name="arrays_q2" value="3"><span>D. Class</span></label></div><div class="explanation" hidden></div>
+        </div><div class="quiz-q" data-q="3" data-correct="1" data-explain="The loop should scale through data, not copied logic.">
+          <p><b>4.</b> You add a fourth light to the Array. What should happen to the action graph?</p><div class="answers"><label class="answer"><input type="radio" name="arrays_q3" value="0"><span>A. Add a fourth copy of the action node</span></label><label class="answer"><input type="radio" name="arrays_q3" value="1"><span>B. No new copy should be needed</span></label><label class="answer"><input type="radio" name="arrays_q3" value="2"><span>C. Delete the loop</span></label><label class="answer"><input type="radio" name="arrays_q3" value="3"><span>D. Convert the Array to Text</span></label></div><div class="explanation" hidden></div>
+        </div><div class="quiz-q" data-q="4" data-correct="1" data-explain="Length is the number of entries, not the last index.">
+          <p><b>5.</b> What does Array Length return for four assigned items?</p><div class="answers"><label class="answer"><input type="radio" name="arrays_q4" value="0"><span>A. 3</span></label><label class="answer"><input type="radio" name="arrays_q4" value="1"><span>B. 4</span></label><label class="answer"><input type="radio" name="arrays_q4" value="2"><span>C. 5</span></label><label class="answer"><input type="radio" name="arrays_q4" value="3"><span>D. A Boolean</span></label></div><div class="explanation" hidden></div>
+        </div>
+            <div class="quiz-actions"><button type="submit">Check answers</button><button type="button" class="ghost" data-reset>Reset quiz</button></div>
+            <div class="quiz-result" data-result hidden></div>
+          </form>
+        </article>
+      </div>
+      <div class="move-on" data-move-on hidden><b>✓ READY TO MOVE ON</b><span>Required proof ticked and quiz pass achieved.</span></div>
+    </section>
+    <section class="check-section" id="enums" data-section="enums" data-pass="4">
+      <div class="check-head">
+        <span class="section-num">06</span><div><span class="eyebrow">REQUIRED PRACTICAL + KNOWLEDGE CHECK</span><h2>Enums & State</h2><p>Use readable named states when exactly one choice from a controlled list should be active.</p></div>
+        <div class="section-status" data-status>NOT PASSED</div>
+      </div>
+      <div class="check-columns">
+        <article class="proof-panel">
+          <span class="panel-label">A • REQUIRED PRACTICAL PROOF</span>
+          <h3>Show these before moving on</h3>
+          <p class="muted">Tick these only after you have actually built/tested them. The tick list is a self-check, not formal assessment.</p>
+          <div class="proof-list"><label class="proof-item"><input type="checkbox" data-proof="0"><span><b>01</b>Explain one impossible combination caused by IsLocked/IsClosed/IsOpening/IsOpen Booleans.</span></label><label class="proof-item"><input type="checkbox" data-proof="1"><span><b>02</b>Create E_DoorState with Locked, Closed, Opening and Open.</span></label><label class="proof-item"><input type="checkbox" data-proof="2"><span><b>03</b>Create one DoorState variable using the Enum.</span></label><label class="proof-item"><input type="checkbox" data-proof="3"><span><b>04</b>Use Switch on E_DoorState.</span></label><label class="proof-item"><input type="checkbox" data-proof="4"><span><b>05</b>Add Jammed and give it its own route.</span></label></div>
+          <div class="proof-progress"><span data-proof-count>0/5 complete</span><div><i data-proof-bar></i></div></div>
+        </article>
+        <article class="quiz-panel">
+          <span class="panel-label">B • QUICK CHECK</span>
+          <h3>5 questions • pass 4/5</h3>
+          <p class="muted">Scenario questions, not definition bingo. Submit, read the feedback, then retry if needed.</p>
+          <form class="quiz-form"><div class="quiz-q" data-q="0" data-correct="1" data-explain="An Enum avoids contradictory combinations such as Locked and Open both being true.">
+          <p><b>1.</b> Why is an Enum often better than four Booleans for mutually-exclusive door states?</p><div class="answers"><label class="answer"><input type="radio" name="enums_q0" value="0"><span>A. It is always faster</span></label><label class="answer"><input type="radio" name="enums_q0" value="1"><span>B. One Enum variable can hold one named state at a time</span></label><label class="answer"><input type="radio" name="enums_q0" value="2"><span>C. Enums are colours</span></label><label class="answer"><input type="radio" name="enums_q0" value="3"><span>D. It removes all logic</span></label></div><div class="explanation" hidden></div>
+        </div><div class="quiz-q" data-q="1" data-correct="0" data-explain="Switch on Enum exposes a route for each named value.">
+          <p><b>2.</b> Which node is a natural match for several named Enum states?</p><div class="answers"><label class="answer"><input type="radio" name="enums_q1" value="0"><span>A. Switch on Enum</span></label><label class="answer"><input type="radio" name="enums_q1" value="1"><span>B. For Each Loop</span></label><label class="answer"><input type="radio" name="enums_q1" value="2"><span>C. Print String only</span></label><label class="answer"><input type="radio" name="enums_q1" value="3"><span>D. Vector + Vector</span></label></div><div class="explanation" hidden></div>
+        </div><div class="quiz-q" data-q="2" data-correct="1" data-explain="One Enum variable stores one selected value at a time.">
+          <p><b>3.</b> Can one Enum variable be Locked and Open simultaneously?</p><div class="answers"><label class="answer"><input type="radio" name="enums_q2" value="0"><span>A. Yes</span></label><label class="answer"><input type="radio" name="enums_q2" value="1"><span>B. No</span></label><label class="answer"><input type="radio" name="enums_q2" value="2"><span>C. Only in Play mode</span></label><label class="answer"><input type="radio" name="enums_q2" value="3"><span>D. Only if Instance Editable</span></label></div><div class="explanation" hidden></div>
+        </div><div class="quiz-q" data-q="3" data-correct="1" data-explain="If the meaning is genuinely two-state, Boolean is simpler.">
+          <p><b>4.</b> You only need IsPowered: yes/no. Best type?</p><div class="answers"><label class="answer"><input type="radio" name="enums_q3" value="0"><span>A. Enum with 20 entries</span></label><label class="answer"><input type="radio" name="enums_q3" value="1"><span>B. Boolean</span></label><label class="answer"><input type="radio" name="enums_q3" value="2"><span>C. Map</span></label><label class="answer"><input type="radio" name="enums_q3" value="3"><span>D. Struct</span></label></div><div class="explanation" hidden></div>
+        </div><div class="quiz-q" data-q="4" data-correct="0" data-explain="The graph handling the Enum needs to account for the new state.">
+          <p><b>5.</b> You add Jammed to E_DoorState. What should you check next?</p><div class="answers"><label class="answer"><input type="radio" name="enums_q4" value="0"><span>A. The Switch has/refreshes the new route</span></label><label class="answer"><input type="radio" name="enums_q4" value="1"><span>B. Delete the Enum</span></label><label class="answer"><input type="radio" name="enums_q4" value="2"><span>C. Turn it into a Float</span></label><label class="answer"><input type="radio" name="enums_q4" value="3"><span>D. Nothing can ever change</span></label></div><div class="explanation" hidden></div>
+        </div>
+            <div class="quiz-actions"><button type="submit">Check answers</button><button type="button" class="ghost" data-reset>Reset quiz</button></div>
+            <div class="quiz-result" data-result hidden></div>
+          </form>
+        </article>
+      </div>
+      <div class="move-on" data-move-on hidden><b>✓ READY TO MOVE ON</b><span>Required proof ticked and quiz pass achieved.</span></div>
+    </section>
+    <section class="check-section" id="structured-data" data-section="structured-data" data-pass="4">
+      <div class="check-head">
+        <span class="section-num">07</span><div><span class="eyebrow">REQUIRED PRACTICAL + KNOWLEDGE CHECK</span><h2>Structs & Maps</h2><p>Choose the data shape from how the information belongs together and how you need to retrieve it.</p></div>
+        <div class="section-status" data-status>NOT PASSED</div>
+      </div>
+      <div class="check-columns">
+        <article class="proof-panel">
+          <span class="panel-label">A • REQUIRED PRACTICAL PROOF</span>
+          <h3>Show these before moving on</h3>
+          <p class="muted">Tick these only after you have actually built/tested them. The tick list is a self-check, not formal assessment.</p>
+          <div class="proof-list"><label class="proof-item"><input type="checkbox" data-proof="0"><span><b>01</b>Create ST_ItemData with DisplayName, Value, Weight and IsQuestItem.</span></label><label class="proof-item"><input type="checkbox" data-proof="1"><span><b>02</b>Create CurrentItem and Break ST_ItemData.</span></label><label class="proof-item"><input type="checkbox" data-proof="2"><span><b>03</b>Create AmmoByType as Name → Integer Map.</span></label><label class="proof-item"><input type="checkbox" data-proof="3"><span><b>04</b>Use Find for Pistol and Shotgun keys.</span></label><label class="proof-item"><input type="checkbox" data-proof="4"><span><b>05</b>Explain Array vs Struct vs Map for at least three examples.</span></label></div>
+          <div class="proof-progress"><span data-proof-count>0/5 complete</span><div><i data-proof-bar></i></div></div>
+        </article>
+        <article class="quiz-panel">
+          <span class="panel-label">B • QUICK CHECK</span>
+          <h3>5 questions • pass 4/5</h3>
+          <p class="muted">Scenario questions, not definition bingo. Submit, read the feedback, then retry if needed.</p>
+          <form class="quiz-form"><div class="quiz-q" data-q="0" data-correct="0" data-explain="A Struct groups related fields describing one concept.">
+          <p><b>1.</b> Name, Damage, Weight and AmmoType all describe one weapon. Best structure?</p><div class="answers"><label class="answer"><input type="radio" name="structured-data_q0" value="0"><span>A. Struct</span></label><label class="answer"><input type="radio" name="structured-data_q0" value="1"><span>B. Four unrelated Branches</span></label><label class="answer"><input type="radio" name="structured-data_q0" value="2"><span>C. One Boolean</span></label><label class="answer"><input type="radio" name="structured-data_q0" value="3"><span>D. For Each Loop</span></label></div><div class="explanation" hidden></div>
+        </div><div class="quiz-q" data-q="1" data-correct="0" data-explain="A Map provides key → value lookup.">
+          <p><b>2.</b> You want to look up ammo amount by the key 'Shotgun'. Best container?</p><div class="answers"><label class="answer"><input type="radio" name="structured-data_q1" value="0"><span>A. Map</span></label><label class="answer"><input type="radio" name="structured-data_q1" value="1"><span>B. Boolean</span></label><label class="answer"><input type="radio" name="structured-data_q1" value="2"><span>C. Rotator</span></label><label class="answer"><input type="radio" name="structured-data_q1" value="3"><span>D. Branch</span></label></div><div class="explanation" hidden></div>
+        </div><div class="quiz-q" data-q="2" data-correct="0" data-explain="An Array preserves ordered entries.">
+          <p><b>3.</b> Patrol points must be visited in order. Best starting container?</p><div class="answers"><label class="answer"><input type="radio" name="structured-data_q2" value="0"><span>A. Array</span></label><label class="answer"><input type="radio" name="structured-data_q2" value="1"><span>B. Struct only</span></label><label class="answer"><input type="radio" name="structured-data_q2" value="2"><span>C. Boolean</span></label><label class="answer"><input type="radio" name="structured-data_q2" value="3"><span>D. Text</span></label></div><div class="explanation" hidden></div>
+        </div><div class="quiz-q" data-q="3" data-correct="0" data-explain="Maps associate unique keys with values.">
+          <p><b>4.</b> Pistol → 12 and Shotgun → 4 is an example of…</p><div class="answers"><label class="answer"><input type="radio" name="structured-data_q3" value="0"><span>A. Key → value Map data</span></label><label class="answer"><input type="radio" name="structured-data_q3" value="1"><span>B. A Branch</span></label><label class="answer"><input type="radio" name="structured-data_q3" value="2"><span>C. A Vector</span></label><label class="answer"><input type="radio" name="structured-data_q3" value="3"><span>D. A Cast</span></label></div><div class="explanation" hidden></div>
+        </div><div class="quiz-q" data-q="4" data-correct="0" data-explain="Related fields are easier to keep together as one Struct per item.">
+          <p><b>5.</b> Why can four parallel Arrays for ItemName, Value, Weight and QuestFlag be risky?</p><div class="answers"><label class="answer"><input type="radio" name="structured-data_q4" value="0"><span>A. They can become misaligned</span></label><label class="answer"><input type="radio" name="structured-data_q4" value="1"><span>B. Arrays cannot store data</span></label><label class="answer"><input type="radio" name="structured-data_q4" value="2"><span>C. They always crash</span></label><label class="answer"><input type="radio" name="structured-data_q4" value="3"><span>D. They cannot be saved</span></label></div><div class="explanation" hidden></div>
+        </div>
+            <div class="quiz-actions"><button type="submit">Check answers</button><button type="button" class="ghost" data-reset>Reset quiz</button></div>
+            <div class="quiz-result" data-result hidden></div>
+          </form>
+        </article>
+      </div>
+      <div class="move-on" data-move-on hidden><b>✓ READY TO MOVE ON</b><span>Required proof ticked and quiz pass achieved.</span></div>
+    </section>
+    <section class="check-section" id="final" data-section="final" data-pass="8">
+      <div class="check-head">
+        <span class="section-num">08</span><div><span class="eyebrow">REQUIRED PRACTICAL + KNOWLEDGE CHECK</span><h2>Final Blueprint Foundations Check</h2><p>Ten scenario questions after MAKE → BREAK → FIX → EXPLAIN.</p></div>
+        <div class="section-status" data-status>NOT PASSED</div>
+      </div>
+      <div class="check-columns">
+        <article class="proof-panel">
+          <span class="panel-label">A • REQUIRED PRACTICAL PROOF</span>
+          <h3>Show these before moving on</h3>
+          <p class="muted">Tick these only after you have actually built/tested them. The tick list is a self-check, not formal assessment.</p>
+          <div class="proof-list"><label class="proof-item"><input type="checkbox" data-proof="0"><span><b>01</b>Build the access-control system and prove success/failure.</span></label><label class="proof-item"><input type="checkbox" data-proof="1"><span><b>02</b>Change KeysRequired from 2 to 4 without rebuilding the graph.</span></label><label class="proof-item"><input type="checkbox" data-proof="2"><span><b>03</b>Reuse the system across multiple door instances with different TargetDoor references.</span></label><label class="proof-item"><input type="checkbox" data-proof="3"><span><b>04</b>Grow the Array or Enum extension without copy/paste logic.</span></label><label class="proof-item"><input type="checkbox" data-proof="4"><span><b>05</b>Explain variable choice, ownership, comparison, reference, Function and Array/Enum choice.</span></label></div>
+          <div class="proof-progress"><span data-proof-count>0/5 complete</span><div><i data-proof-bar></i></div></div>
+        </article>
+        <article class="quiz-panel">
+          <span class="panel-label">B • QUICK CHECK</span>
+          <h3>10 questions • pass 8/10</h3>
+          <p class="muted">Scenario questions, not definition bingo. Submit, read the feedback, then retry if needed.</p>
+          <form class="quiz-form"><div class="quiz-q" data-q="0" data-correct="0" data-explain="A genuine two-state fact fits a Boolean.">
+          <p><b>1.</b> A door is either locked or unlocked. Best basic variable type?</p><div class="answers"><label class="answer"><input type="radio" name="final_q0" value="0"><span>A. Boolean</span></label><label class="answer"><input type="radio" name="final_q0" value="1"><span>B. Vector</span></label><label class="answer"><input type="radio" name="final_q0" value="2"><span>C. Struct</span></label><label class="answer"><input type="radio" name="final_q0" value="3"><span>D. Map</span></label></div><div class="explanation" hidden></div>
+        </div><div class="quiz-q" data-q="1" data-correct="1" data-explain="4 is greater than or equal to 4.">
+          <p><b>2.</b> KeysOwned = 4, KeysRequired = 4. What does >= return?</p><div class="answers"><label class="answer"><input type="radio" name="final_q1" value="0"><span>A. False</span></label><label class="answer"><input type="radio" name="final_q1" value="1"><span>B. True</span></label><label class="answer"><input type="radio" name="final_q1" value="2"><span>C. An Integer</span></label><label class="answer"><input type="radio" name="final_q1" value="3"><span>D. None</span></label></div><div class="explanation" hidden></div>
+        </div><div class="quiz-q" data-q="2" data-correct="1" data-explain="Check the missing reference before rewriting logic.">
+          <p><b>3.</b> Your placed TargetDoor reference says None. What should you do first?</p><div class="answers"><label class="answer"><input type="radio" name="final_q2" value="0"><span>A. Add another Branch</span></label><label class="answer"><input type="radio" name="final_q2" value="1"><span>B. Assign/check the reference</span></label><label class="answer"><input type="radio" name="final_q2" value="2"><span>C. Change DoorLocked to Float</span></label><label class="answer"><input type="radio" name="final_q2" value="3"><span>D. Create eight variables</span></label></div><div class="explanation" hidden></div>
+        </div><div class="quiz-q" data-q="3" data-correct="1" data-explain="Array + loop scales through data.">
+          <p><b>4.</b> Eight lights receive the same action and the list may grow. Best approach?</p><div class="answers"><label class="answer"><input type="radio" name="final_q3" value="0"><span>A. Eight separate variables/actions</span></label><label class="answer"><input type="radio" name="final_q3" value="1"><span>B. Array + For Each Loop</span></label><label class="answer"><input type="radio" name="final_q3" value="2"><span>C. Eight Enums</span></label><label class="answer"><input type="radio" name="final_q3" value="3"><span>D. Eight Struct assets</span></label></div><div class="explanation" hidden></div>
+        </div><div class="quiz-q" data-q="4" data-correct="1" data-explain="An Enum represents one named state from a controlled list.">
+          <p><b>5.</b> Locked, Closed, Opening, Open and Jammed should be mutually exclusive. Best state model?</p><div class="answers"><label class="answer"><input type="radio" name="final_q4" value="0"><span>A. Five Booleans</span></label><label class="answer"><input type="radio" name="final_q4" value="1"><span>B. Enum</span></label><label class="answer"><input type="radio" name="final_q4" value="2"><span>C. Float</span></label><label class="answer"><input type="radio" name="final_q4" value="3"><span>D. Text messages only</span></label></div><div class="explanation" hidden></div>
+        </div><div class="quiz-q" data-q="5" data-correct="0" data-explain="One Function is easier to maintain and change consistently.">
+          <p><b>6.</b> The damage formula is copied into five graphs. What should you consider?</p><div class="answers"><label class="answer"><input type="radio" name="final_q5" value="0"><span>A. A reusable Function</span></label><label class="answer"><input type="radio" name="final_q5" value="1"><span>B. More copies</span></label><label class="answer"><input type="radio" name="final_q5" value="2"><span>C. A Texture</span></label><label class="answer"><input type="radio" name="final_q5" value="3"><span>D. A Level Blueprint for everything</span></label></div><div class="explanation" hidden></div>
+        </div><div class="quiz-q" data-q="6" data-correct="1" data-explain="The running instance now holds 75.">
+          <p><b>7.</b> A default is 100 but BeginPlay sets 75. After BeginPlay, what is runtime state?</p><div class="answers"><label class="answer"><input type="radio" name="final_q6" value="0"><span>A. 100</span></label><label class="answer"><input type="radio" name="final_q6" value="1"><span>B. 75</span></label><label class="answer"><input type="radio" name="final_q6" value="2"><span>C. Both at the same time</span></label><label class="answer"><input type="radio" name="final_q6" value="3"><span>D. The Blueprint will not compile</span></label></div><div class="explanation" hidden></div>
+        </div><div class="quiz-q" data-q="7" data-correct="0" data-explain="White wires represent execution order/flow.">
+          <p><b>8.</b> Which statement about white Blueprint wires is correct?</p><div class="answers"><label class="answer"><input type="radio" name="final_q7" value="0"><span>A. They mainly carry execution flow</span></label><label class="answer"><input type="radio" name="final_q7" value="1"><span>B. They are always Float data</span></label><label class="answer"><input type="radio" name="final_q7" value="2"><span>C. They store Text</span></label><label class="answer"><input type="radio" name="final_q7" value="3"><span>D. They are Object References</span></label></div><div class="explanation" hidden></div>
+        </div><div class="quiz-q" data-q="8" data-correct="0" data-explain="A Struct groups related fields into one reusable data type.">
+          <p><b>9.</b> Name, Value, Weight and IsQuestItem describe one item. What groups those fields?</p><div class="answers"><label class="answer"><input type="radio" name="final_q8" value="0"><span>A. Struct</span></label><label class="answer"><input type="radio" name="final_q8" value="1"><span>B. Branch</span></label><label class="answer"><input type="radio" name="final_q8" value="2"><span>C. Cast</span></label><label class="answer"><input type="radio" name="final_q8" value="3"><span>D. For Each Loop</span></label></div><div class="explanation" hidden></div>
+        </div><div class="quiz-q" data-q="9" data-correct="1" data-explain="Reusable classes plus instance data/references reduce unnecessary duplicated logic.">
+          <p><b>10.</b> The brief changes from one door to three doors. A maintainable solution should ideally…</p><div class="answers"><label class="answer"><input type="radio" name="final_q9" value="0"><span>A. Create three entirely different systems</span></label><label class="answer"><input type="radio" name="final_q9" value="1"><span>B. Reuse the same Blueprint class with different instance data/references where appropriate</span></label><label class="answer"><input type="radio" name="final_q9" value="2"><span>C. Hard-code every door name</span></label><label class="answer"><input type="radio" name="final_q9" value="3"><span>D. Move everything into Text variables</span></label></div><div class="explanation" hidden></div>
+        </div>
+            <div class="quiz-actions"><button type="submit">Check answers</button><button type="button" class="ghost" data-reset>Reset quiz</button></div>
+            <div class="quiz-result" data-result hidden></div>
+          </form>
+        </article>
+      </div>
+      <div class="move-on" data-move-on hidden><b>✓ READY TO MOVE ON</b><span>Required proof ticked and quiz pass achieved.</span></div>
+    </section>
+<section class="finish">
+  <span class="eyebrow">WHEN ALL EIGHT ARE GREEN</span><h2>You have completed the Blueprint Foundations checks.</h2>
+  <p>That does not mean “you know Blueprint forever”. It means you can now recognise the core patterns, build small systems, diagnose common mistakes and explain why you chose the structure.</p>
+  <div><a href="index.html#/pathways/blueprint-foundations-lab">← Back to Blueprint Foundations</a><a href="cheatsheet.html">Open UE5 Cheat Sheet →</a></div>
+</section>
+</main>
+<footer>UE5 Learning Hub • v3.44.3 • Local self-check progress only</footer>
+<script src="blueprint-checks.js?v=3.44.3"></script>
+</body></html>

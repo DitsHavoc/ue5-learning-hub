@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="UE5 Learning Hub quick-reference cheat sheet for Unreal Editor, Blueprint, materials, level design and debugging.">
+  <meta name="theme-color" content="#071019">
+  <title>UE5 Cheat Sheet • Learning Hub</title>
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="stylesheet" href="cheatsheet.css?v=3.44.3">
+</head>
+<body>
+  <header class="cheat-topbar">
+    <a class="cheat-brand" href="index.html#/">
+      <span class="brand-mark">U</span>
+      <span><b>UE5</b><small>Learning Hub</small></span>
+    </a>
+    <nav>
+      <a href="index.html#/blocks">Building Blocks</a>
+      <a href="index.html#/tutorials">Quick Tutorials</a>
+      <a href="index.html#/pathways">Guided Paths</a><a href="blueprint-checks.html">Blueprint Checks</a>
+      <a href="index.html#/">← Hub</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="cheat-hero">
+      <div>
+        <span class="eyebrow">QUICK REFERENCE • NOT A COURSE</span>
+        <h1>UE5 Cheat Sheet</h1>
+        <p>Forgot a shortcut, variable type, Blueprint pattern or what a material input actually does? Look it up here, then get back to making.</p>
+      </div>
+      <div class="hero-actions">
+        <label class="search-box"><span>⌕</span><input id="cheatSearch" type="search" placeholder="Search: Branch, Vector, roughness, duplicate…"></label>
+        <button id="printSheet" type="button">Print / Save PDF</button>
+      </div>
+    </section>
+
+    <section class="rule-strip">
+      <b>When stuck:</b>
+      <span>PREDICT → TEST → TRACE → CHANGE → RETEST</span>
+      <span class="rule-note">Do not change random nodes until you know what you expected and what actually happened.</span>
+    </section>
+
+    <div class="quick-jump">
+      <a href="#editor">Editor</a><a href="#blueprint">Blueprint</a><a href="#data">Data</a><a href="#debug">Debug</a><a href="#materials">Materials</a><a href="#level">Level Design</a><a href="#naming">Naming</a><a href="#stuck">If Stuck</a>
+    </div>
+
+    <section class="cheat-grid" id="cheatGrid">
+      <article class="cheat-card" id="editor" data-search="editor viewport shortcuts move rotate scale focus duplicate save undo grid units transform play stop wasd">
+        <div class="card-head"><span>01</span><h2>Editor Basics</h2></div>
+        <table>
+          <tr><th>W</th><td>Move</td></tr>
+          <tr><th>E</th><td>Rotate</td></tr>
+          <tr><th>R</th><td>Scale</td></tr>
+          <tr><th>F</th><td>Focus/frame the selected Actor</td></tr>
+          <tr><th>RMB + WASD</th><td>Fly the editor camera</td></tr>
+          <tr><th>Ctrl + Z</th><td>Undo</td></tr>
+          <tr><th>Ctrl + W</th><td>Duplicate selected Actor</td></tr>
+          <tr><th>Alt + drag</th><td>Duplicate while moving</td></tr>
+          <tr><th>Ctrl + S</th><td>Save</td></tr>
+        </table>
+        <div class="remember"><b>Remember:</b> select the Actor first; Details edits the selected thing.</div>
+      </article>
+
+      <article class="cheat-card" data-search="unreal units uu centimetres cm metre meters transform location rotation scale grid snap">
+        <div class="card-head"><span>02</span><h2>Units & Transforms</h2></div>
+        <div class="big-fact"><b>1 Unreal Unit (uu) = 1 cm</b><small>100 uu = 1 metre</small></div>
+        <ul>
+          <li><b>Location</b> = where it is.</li>
+          <li><b>Rotation</b> = which way it faces.</li>
+          <li><b>Scale</b> = how large it is relative to the original.</li>
+          <li>Use grid/rotation snapping for clean blockouts.</li>
+          <li>Judge human scale from the player character/camera, not only the floating editor camera.</li>
+        </ul>
+      </article>
+
+      <article class="cheat-card" data-search="compile save play stop blueprint loop test edit runtime">
+        <div class="card-head"><span>03</span><h2>The UE5 Build/Test Loop</h2></div>
+        <div class="flow"><span>EDIT</span><b>→</b><span>COMPILE</span><b>→</b><span>SAVE</span><b>→</b><span>PLAY</span><b>→</b><span>OBSERVE</span><b>→</b><span>CHANGE</span></div>
+        <ul>
+          <li><b>Compile</b> checks/applies Blueprint graph changes.</li>
+          <li><b>Save</b> writes the asset/project data.</li>
+          <li><b>Play</b> proves behaviour in the running game.</li>
+          <li>Stopping Play normally discards temporary runtime state changes.</li>
+        </ul>
+      </article>
+
+      <article class="cheat-card" id="blueprint" data-search="blueprint execution white wire data pin branch get set flow coloured colored pins">
+        <div class="card-head"><span>04</span><h2>Reading Blueprint Wires</h2></div>
+        <div class="two-rule">
+          <div><strong>WHITE EXECUTION WIRES</strong><p>When / what runs next.</p></div>
+          <div><strong>COLOURED DATA WIRES</strong><p>What information a node receives/returns.</p></div>
+        </div>
+        <div class="pattern"><code>DATA → TEST → DECISION → ACTION</code></div>
+        <p>Example: <code>KeysOwned ≥ KeysRequired → Branch → Open / Locked</code></p>
+      </article>
+
+      <article class="cheat-card" id="data" data-search="variables bool boolean integer int float text string name vector rotator transform object class reference types">
+        <div class="card-head"><span>05</span><h2>Common Variable Types</h2></div>
+        <table>
+          <tr><th>Boolean</th><td>True/False — DoorLocked, IsAlive</td></tr>
+          <tr><th>Integer</th><td>Whole count — Keys, Ammo, Lives</td></tr>
+          <tr><th>Float</th><td>Decimal/range — Health, Time, Speed</td></tr>
+          <tr><th>Text</th><td>Player-facing words/messages</td></tr>
+          <tr><th>Vector</th><td>X/Y/Z — position, direction, offset</td></tr>
+          <tr><th>Rotator</th><td>Pitch/Yaw/Roll orientation</td></tr>
+          <tr><th>Transform</th><td>Location + Rotation + Scale together</td></tr>
+          <tr><th>Object Ref</th><td>One specific live object/Actor</td></tr>
+          <tr><th>Class Ref</th><td>A type/recipe that could be spawned/selected</td></tr>
+        </table>
+        <div class="remember"><b>Choose the type from what the information means.</b> Pin colour is a clue, not the reason.</div>
+      </article>
+
+      <article class="cheat-card" data-search="default runtime instance editable owner ownership state class instance variable blueprint">
+        <div class="card-head"><span>06</span><h2>State: Default vs Runtime vs Instance</h2></div>
+        <ul>
+          <li><b>Class Default</b> — starting value in the Blueprint asset.</li>
+          <li><b>Runtime Value</b> — what the running instance currently holds after Set nodes/gameplay changes.</li>
+          <li><b>Instance Value</b> — a placed Actor can override Instance Editable properties without creating a new class.</li>
+          <li><b>Owner</b> — keep state near the thing it describes/uses.</li>
+        </ul>
+        <p class="example">DoorLocked → Door. Health → Character/Health Component. TargetDoor → the controller/switch that needs it.</p>
+      </article>
+
+      <article class="cheat-card" data-search="get set comparison branch select switch enum decision greater less equal boolean">
+        <div class="card-head"><span>07</span><h2>Core Logic Nodes</h2></div>
+        <table>
+          <tr><th>Get</th><td>Read the current value.</td></tr>
+          <tr><th>Set</th><td>Change the stored value.</td></tr>
+          <tr><th>Comparison</th><td>Ask a question: &gt; &lt; == &gt;= &lt;=.</td></tr>
+          <tr><th>Branch</th><td>Choose True or False execution.</td></tr>
+          <tr><th>Select</th><td>Choose a value without splitting execution flow.</td></tr>
+          <tr><th>Switch on Enum</th><td>Choose a named route from several states.</td></tr>
+        </table>
+      </article>
+
+      <article class="cheat-card" data-search="references object reference class reference instance editable eyedropper is valid accessed none cast casting find actor">
+        <div class="card-head"><span>08</span><h2>References & Communication</h2></div>
+        <ul>
+          <li><b>Object Reference</b> = this exact Actor/object.</li>
+          <li><b>Class Reference</b> = this type of object.</li>
+          <li><b>Instance Editable</b> lets a placed Blueprint choose its target in Details.</li>
+          <li><b>Is Valid</b> before using a reference that may be None/destroyed.</li>
+          <li><b>Casting does not find an object.</b> It tests/converts a reference you already have.</li>
+        </ul>
+        <div class="warning"><b>Accessed None?</b> First check whether the reference was actually assigned.</div>
+      </article>
+
+      <article class="cheat-card" data-search="function custom event macro delay reusable input output refactor duplicate logic">
+        <div class="card-head"><span>09</span><h2>Functions & Events</h2></div>
+        <ul>
+          <li><b>Function</b> — one named reusable job/calculation; use inputs/outputs for changing data.</li>
+          <li><b>Custom Event</b> — an execution entry point; useful for event-style/latent flow such as sequences that use Delay.</li>
+          <li><b>Repeated calculation?</b> Refactor it instead of copying five versions.</li>
+          <li><b>Hard-coded value repeated?</b> Promote it to meaningful data/variable when appropriate.</li>
+        </ul>
+      </article>
+
+      <article class="cheat-card" data-search="array foreach for each loop set map struct enum collection container index length find key value">
+        <div class="card-head"><span>10</span><h2>Collections & Structured Data</h2></div>
+        <table>
+          <tr><th>Array</th><td>Ordered list. Index starts at 0.</td></tr>
+          <tr><th>For Each Loop</th><td>Run the same logic once for every Array item.</td></tr>
+          <tr><th>Set</th><td>Collection of unique values.</td></tr>
+          <tr><th>Map</th><td>Key → value lookup, e.g. Pistol → 12.</td></tr>
+          <tr><th>Enum</th><td>One named choice/state from a controlled list.</td></tr>
+          <tr><th>Struct</th><td>Group related fields describing one thing.</td></tr>
+        </table>
+      </article>
+
+      <article class="cheat-card" id="debug" data-search="debug debugging print string breakpoint compile error accessed none predict test trace bug">
+        <div class="card-head"><span>11</span><h2>Debugging Habit</h2></div>
+        <ol class="debug-list">
+          <li><b>PREDICT</b> what should happen.</li>
+          <li><b>TEST</b> in Play.</li>
+          <li><b>OBSERVE</b> what actually happened.</li>
+          <li><b>TRACE</b> execution and the values feeding the decision.</li>
+          <li><b>CHANGE</b> one justified thing.</li>
+          <li><b>RETEST</b>.</li>
+        </ol>
+        <p><b>Useful first tools:</b> Compile messages, Print String, breakpoints, watching the exact variable/reference you think is wrong.</p>
+      </article>
+
+      <article class="cheat-card" id="materials" data-search="material pbr base color basecolor roughness metallic metal normal normaldx ambientcg texture 2k">
+        <div class="card-head"><span>12</span><h2>PBR Material Quick Check</h2></div>
+        <table>
+          <tr><th>Base Color</th><td>Surface colour/albedo.</td></tr>
+          <tr><th>Roughness</th><td>0 = smooth/sharp reflections; 1 = rough/diffuse reflections.</td></tr>
+          <tr><th>Metallic</th><td>Usually 0 for non-metal, 1 for metal. Not a “shininess” slider.</td></tr>
+          <tr><th>Normal</th><td>Small surface-direction detail without extra geometry.</td></tr>
+        </table>
+        <p class="example">ambientCG beginner workflow: Color/BaseColor → Base Color, Roughness → Roughness, NormalDX → Normal. 2K is a sensible classroom starting point.</p>
+      </article>
+
+      <article class="cheat-card" id="level" data-search="greybox blockout level design geometry brush additive subtractive player scale playtest doorway grid materials lighting">
+        <div class="card-head"><span>13</span><h2>Greybox / Level Design</h2></div>
+        <ul>
+          <li>Build the space with simple geometry <b>before</b> final art.</li>
+          <li>Test scale with the actual player.</li>
+          <li>Test movement gaps, entrances, camera clearance and route readability.</li>
+          <li>Geometry Brush <b>Additive</b> creates brush space; <b>Subtractive</b> removes brush space.</li>
+          <li>A Subtractive Geometry Brush does not cut a normal Shape/Static Mesh cube.</li>
+          <li>Keep a clean greybox version before materials/lighting/model replacement.</li>
+        </ul>
+      </article>
+
+      <article class="cheat-card" id="naming" data-search="naming prefix bp bpi wbp abp ia imc sm sk m mi t enum struct dt">
+        <div class="card-head"><span>14</span><h2>Useful Naming Prefixes</h2></div>
+        <div class="prefix-grid">
+          <code>BP_</code><span>Blueprint Class</span>
+          <code>BPI_</code><span>Blueprint Interface</span>
+          <code>WBP_</code><span>Widget Blueprint</span>
+          <code>ABP_</code><span>Animation Blueprint</span>
+          <code>IA_</code><span>Input Action</span>
+          <code>IMC_</code><span>Input Mapping Context</span>
+          <code>E_</code><span>Enum</span>
+          <code>ST_</code><span>Struct</span>
+          <code>DT_</code><span>Data Table</span>
+          <code>SM_</code><span>Static Mesh</span>
+          <code>SK_</code><span>Skeletal Mesh</span>
+          <code>M_ / MI_</code><span>Material / Material Instance</span>
+          <code>T_</code><span>Texture</span>
+        </div>
+        <div class="remember">Prefixes are for humans and organisation — they are not magic Unreal requires.</div>
+      </article>
+
+      <article class="cheat-card wide" id="stuck" data-search="stuck error nothing happens accessed none wrong value branch loop array material doorway collision troubleshooting">
+        <div class="card-head"><span>15</span><h2>If It Doesn't Work — Check This First</h2></div>
+        <div class="trouble-grid">
+          <div><b>Nothing happens</b><span>Is the Event firing? Follow the white execution wire. Compile. Print a message at the start.</span></div>
+          <div><b>Wrong Branch route</b><span>Print/check the data feeding Condition. Read the comparison left → right.</span></div>
+          <div><b>Accessed None</b><span>The Object Reference is probably unassigned/invalid. Check Details and Is Valid.</span></div>
+          <div><b>Only one Array item changes</b><span>Use For Each Loop and act on Array Element, not one fixed reference.</span></div>
+          <div><b>Subtractive brush does nothing</b><span>Confirm you are cutting Additive Geometry Brush space, not a normal Static Mesh Shape.</span></div>
+          <div><b>Material looks gigantic</b><span>Fix tiling/UV scale. Downloading an 8K texture does not make the physical pattern smaller.</span></div>
+          <div><b>Graph is copied everywhere</b><span>Look for a Function, Array, Enum, Struct, reusable Actor class or editable data opportunity.</span></div>
+          <div><b>Still stuck</b><span>State your prediction, actual result and first thing you traced — then use the Hub guide or ask for help.</span></div>
+        </div>
+      </article>
+    </section>
+
+    <p id="noResults" class="no-results" hidden>No cheat-sheet card matches that search.</p>
+
+    <section class="cheat-footer-links">
+      <a href="index.html#/pathways/blueprint-foundations-lab"><b>◇ Blueprint Foundations</b><span>Practise the programming ideas →</span></a>
+      <a href="index.html#/pathways/prison-cell"><b>▦ Prison Cell Path</b><span>Practise level design / materials →</span></a>
+      <a href="index.html#/blocks"><b>🧱 Building Blocks</b><span>Learn one Unreal concept →</span></a>
+      <a href="index.html#/tutorials"><b>🛠 Quick Tutorials</b><span>Find a step-by-step build →</span></a>
+      <a href="blueprint-checks.html"><b>✓ Blueprint Checks</b><span>Required proof + mini quizzes →</span></a>
+    </section>
+  </main>
+
+  <footer class="cheat-page-footer">UE5 Learning Hub • v3.44.3 • Quick reference for classroom use</footer>
+
+  <script>
+    const input = document.getElementById('cheatSearch');
+    const cards = [...document.querySelectorAll('.cheat-card')];
+    const none = document.getElementById('noResults');
+    input.addEventListener('input', () => {
+      const q = input.value.trim().toLowerCase();
+      let visible = 0;
+      cards.forEach(card => {
+        const hay = (card.dataset.search + ' ' + card.innerText).toLowerCase();
+        const show = !q || hay.includes(q);
+        card.hidden = !show;
+        if (show) visible++;
+      });
+      none.hidden = visible !== 0;
+    });
+    document.getElementById('printSheet').addEventListener('click', () => window.print());
+  </script>
+</body>
+</html>
