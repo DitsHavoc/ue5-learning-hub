@@ -1,4 +1,4 @@
-/* v3.44.3 — Blueprint Foundations Lab
+/* v3.44.5 — Blueprint Foundations Lab
    Additive data patch only.
    Runs after the core Course / Building Blocks / Tutorials / Pathways data and
    after the Prison Cell patch, but before app.js.
@@ -21,7 +21,7 @@
   const PATHWAYS = window.UE5_PATHWAY_DATA;
 
   if (!DATA || !BLOCKS || !TOOLS || !PATHWAYS) {
-    console.warn('[v3.44.3] Blueprint Foundations Lab skipped: core learning data unavailable.');
+    console.warn('[v3.44.5] Blueprint Foundations Lab skipped: core learning data unavailable.');
     return;
   }
 
@@ -64,7 +64,7 @@
     const tutorial = (TOOLS.tutorials || []).find(x => x.id === tutorialId);
     const step = tutorial?.steps?.find(x => x.title === stepTitle);
     if (!step) {
-      console.warn(`[v3.44.3] Screenshot target missing: ${tutorialId} → ${stepTitle}`);
+      console.warn(`[v3.44.5] Screenshot target missing: ${tutorialId} → ${stepTitle}`);
       return;
     }
     const current = Array.isArray(step.visual) ? step.visual : (step.visual ? [step.visual] : []);
@@ -1011,20 +1011,21 @@
       },
       {
         title: 'Create a Map when the lookup itself has meaning',
-        where: 'BP_DataLab → + Variable → Integer → container type Map → Key Type Name',
-        do: 'Create AmmoByType as a Map with Name keys and Integer values. Compile. Add Pistol → 12 and Shotgun → 4 as default entries.',
+        where: 'BP_DataLab → + Variable → choose Name → container menu Map → Value Type Integer',
+        do: 'Create AmmoByType. Set its key type to Name, change the container from Single to Map, then set the value type to Integer. Compile. Add Pistol → 12 and Shotgun → 4 as default entries.',
         why: 'A Map stores key → value relationships. You can ask for Shotgun directly instead of remembering that Shotgun happens to be Array index 1.',
         see: 'AmmoByType contains named keys with integer quantities.',
         check: 'Explain the relationship in plain English: Pistol maps to 12; Shotgun maps to 4.',
         troubleshoot: [
-          'Map keys should be unique. If you need duplicates in an ordered list, an Array is a different shape of data.'
+          'Map keys should be unique. If you need duplicates in an ordered list, an Array is a different shape of data.',
+          'For this beginner example use Name as the key. A Struct such as ST_ItemData is better used as a Map value, for example Name → ST_ItemData.'
         ],
         visual: null
       },
       {
         title: 'Use Find to retrieve by key',
         where: 'Event Graph → Get AmmoByType → Find',
-        do: 'Find the key Pistol and print the returned value. Then Find Shotgun and print its value.',
+        do: 'Drag AmmoByType into the graph as Get, drag from the Map pin and choose Find. Set the key to Pistol and print the returned Integer. Then Find Shotgun. Use the Found Boolean when the key might not exist.',
         why: 'Maps are useful when you know the meaningful key and want the associated value.',
         see: 'Pistol returns 12 and Shotgun returns 4.',
         check: 'Change Shotgun to 6 in the Map and prove Find returns 6 without changing an index.',
@@ -1213,8 +1214,8 @@
   });
 
   addStepVisual('bp-lab-variable-types', 'Create an Object Reference for one specific Actor', {
-    src: 'assets/tutorials/blueprint-foundations/references-01-variable-details.webp',
-    caption: 'An Object Reference variable selected in Details. This example points to a Third Person Blueprint; in the lab choose the target class you actually need. Instance Editable is what makes the reference assignable on a placed instance.',
+    src: 'assets/tutorials/blueprint-foundations/refs-03-bp-lab-target-variable.webp',
+    caption: 'ActorSelect is now an exact BP_LabTarget Object Reference. The open-eye icon shows it is Instance Editable, so each placed controller can point at a different BP_LabTarget instance.',
     sourceTitle: 'Teacher classroom capture — Unreal Engine',
     kind: 'local'
   });
@@ -1227,29 +1228,47 @@
   });
 
   addStepVisual('bp-lab-data-decisions', 'Build the pattern: DATA → TEST → DECISION → ACTION', {
-    src: 'assets/tutorials/blueprint-foundations/logic-01-compare-branch.webp',
-    caption: 'Keys Owned and Keys Required are compared with >=. The comparison produces a red Boolean result, which feeds the Branch Condition. DATA → TEST → DECISION.',
+    src: 'assets/tutorials/blueprint-foundations/logic-02-correct-compare-branch.webp',
+    caption: 'KeysOwned feeds one side of >= and KeysRequired feeds the other. The comparison returns a Boolean, which feeds Branch Condition: DATA → TEST → DECISION.',
     sourceTitle: 'Teacher classroom capture — Unreal Engine',
     kind: 'local'
   });
 
   addStepVisual('bp-lab-object-reference', 'Create the controller and expose a reference', {
-    src: 'assets/tutorials/blueprint-foundations/references-01-variable-details.webp',
-    caption: 'Select the reference variable and enable Instance Editable. The exact class shown here is only an example; your lab variable should point to BP_LabTarget.',
+    src: 'assets/tutorials/blueprint-foundations/refs-03-bp-lab-target-variable.webp',
+    caption: 'This is the exact target type used by the lab: ActorSelect is a BP_LabTarget Object Reference and is Instance Editable.',
     sourceTitle: 'Teacher classroom capture — Unreal Engine',
     kind: 'local'
   });
 
   addStepVisual('bp-lab-object-reference', 'Assign the exact target in the level', {
-    src: 'assets/tutorials/blueprint-foundations/references-02-instance-details.webp',
-    caption: 'This is the placed Blueprint instance in the level. If the reference field still says None, nothing has been assigned yet — use the dropdown or eyedropper to choose the intended Actor.',
+    src: 'assets/tutorials/blueprint-foundations/refs-04-bp-lab-target-picker.webp',
+    caption: 'On the placed controller, Actor Select currently says None. Use Pick Actor from scene / the eyedropper to assign the exact BP_LabTarget instance.',
     sourceTitle: 'Teacher classroom capture — Unreal Engine',
     kind: 'local'
   });
 
-  addTutorialReference('bp-lab-function-refactor', {
-    src: 'assets/tutorials/blueprint-foundations/functions-01-apply-damage-node.webp',
-    caption: 'Unreal’s built-in Apply Damage call is an example of a Function-style node with inputs and an output. It is not the custom ApplyDamage Function built in this lab, but it shows the same idea: one named callable job with data passed into it.',
+  addStepVisual('bp-lab-function-refactor', 'Create ApplyDamage as a Function', {
+    src: 'assets/tutorials/blueprint-foundations/functions-02-custom-entry.webp',
+    caption: 'The custom ApplyDamage Function entry node. This is your own Function, not Unreal’s built-in Apply Damage gameplay node.',
+    sourceTitle: 'Teacher classroom capture — Unreal Engine',
+    kind: 'local'
+  });
+  addStepVisual('bp-lab-function-refactor', 'Create ApplyDamage as a Function', {
+    src: 'assets/tutorials/blueprint-foundations/functions-03-custom-input-details.webp',
+    caption: 'Function Details showing the DamageAmount input. This classroom capture uses Integer; the lab text uses Float so fractional damage is possible. The important idea is the same: changing data enters through a named Function input.',
+    sourceTitle: 'Teacher classroom capture — Unreal Engine',
+    kind: 'local'
+  });
+  addStepVisual('bp-lab-function-refactor', 'Create ApplyDamage as a Function', {
+    src: 'assets/tutorials/blueprint-foundations/functions-04-custom-calculation.webp',
+    caption: 'Inside ApplyDamage: Current Health and Damage Amount feed the calculation, then Set Current Health stores the result. One calculation now lives in one authoritative place.',
+    sourceTitle: 'Teacher classroom capture — Unreal Engine',
+    kind: 'local'
+  });
+  addStepVisual('bp-lab-function-refactor', 'Call the same Function with different inputs', {
+    src: 'assets/tutorials/blueprint-foundations/functions-05-custom-call.webp',
+    caption: 'A call to the custom Apply Damage Function. The caller supplies the Target and Damage Amount; the Function owns the repeated calculation.',
     sourceTitle: 'Teacher classroom capture — Unreal Engine',
     kind: 'local'
   });
@@ -1271,6 +1290,61 @@
   addStepVisual('bp-lab-array-foreach', 'Use For Each Loop to process every target', {
     src: 'assets/tutorials/blueprint-foundations/arrays-02-for-each-loop.webp',
     caption: 'Connect the Array into For Each Loop. Loop Body runs once per item, Array Element is the current item, Array Index tells you its position, and Completed fires once after the whole Array is finished.',
+    sourceTitle: 'Teacher classroom capture — Unreal Engine',
+    kind: 'local'
+  });
+
+  addStepVisual('bp-lab-struct-map', 'Create one Struct that describes one item', {
+    src: 'assets/tutorials/blueprint-foundations/structs-01-create-structure.webp',
+    caption: 'Create a Structure asset from the Blueprint asset menu, then give it a clear ST_ name.',
+    sourceTitle: 'Teacher classroom capture — Unreal Engine',
+    kind: 'local'
+  });
+  addStepVisual('bp-lab-struct-map', 'Create one Struct that describes one item', {
+    src: 'assets/tutorials/blueprint-foundations/structs-02-asset.webp',
+    caption: 'The finished ST_ItemData Structure asset in the Content Drawer.',
+    sourceTitle: 'Teacher classroom capture — Unreal Engine',
+    kind: 'local'
+  });
+  addStepVisual('bp-lab-struct-map', 'Create one Struct that describes one item', {
+    src: 'assets/tutorials/blueprint-foundations/structs-03-fields.webp',
+    caption: 'ST_ItemData with DisplayName Text, Value Integer, Weight Float and IsQuestItem Boolean. These four fields travel together because they describe one item.',
+    sourceTitle: 'Teacher classroom capture — Unreal Engine',
+    kind: 'local'
+  });
+  addStepVisual('bp-lab-struct-map', 'Create and read an ST_ItemData variable', {
+    src: 'assets/tutorials/blueprint-foundations/structs-04-select-type.webp',
+    caption: 'After saving ST_ItemData, select it from the Blueprint variable type picker.',
+    sourceTitle: 'Teacher classroom capture — Unreal Engine',
+    kind: 'local'
+  });
+  addStepVisual('bp-lab-struct-map', 'Create and read an ST_ItemData variable', {
+    src: 'assets/tutorials/blueprint-foundations/structs-06-item-defaults.webp',
+    caption: 'A variable using ST_ItemData exposes the Struct members together in Default Value. This classroom variable is called Items; your lab can call the single current item CurrentItem.',
+    sourceTitle: 'Teacher classroom capture — Unreal Engine',
+    kind: 'local'
+  });
+  addStepVisual('bp-lab-struct-map', 'Create a Map when the lookup itself has meaning', {
+    src: 'assets/tutorials/blueprint-foundations/maps-02-container-menu.webp',
+    caption: 'Start with the Name key type, then use the container menu to change Single to Map.',
+    sourceTitle: 'Teacher classroom capture — Unreal Engine',
+    kind: 'local'
+  });
+  addStepVisual('bp-lab-struct-map', 'Create a Map when the lookup itself has meaning', {
+    src: 'assets/tutorials/blueprint-foundations/maps-03-name-integer-defaults.webp',
+    caption: 'AmmoByType is a Name → Integer Map. The default entries make the relationship visible: Pistol → 12 and Shotgun → 4.',
+    sourceTitle: 'Teacher classroom capture — Unreal Engine',
+    kind: 'local'
+  });
+  addStepVisual('bp-lab-struct-map', 'Use Find to retrieve by key', {
+    src: 'assets/tutorials/blueprint-foundations/maps-04-find-search.webp',
+    caption: 'Drag from the AmmoByType Map pin and search Find under Map actions.',
+    sourceTitle: 'Teacher classroom capture — Unreal Engine',
+    kind: 'local'
+  });
+  addStepVisual('bp-lab-struct-map', 'Use Find to retrieve by key', {
+    src: 'assets/tutorials/blueprint-foundations/maps-05-find-pistol.webp',
+    caption: 'Find looks up a meaningful key. Here the key is Pistol; the node returns the stored Integer value and a Found Boolean.',
     sourceTitle: 'Teacher classroom capture — Unreal Engine',
     kind: 'local'
   });
@@ -1318,20 +1392,20 @@
     kind: 'local'
   });
   addBlockVisual('branches-switches', {
-    src: 'assets/tutorials/blueprint-foundations/logic-01-compare-branch.webp',
-    caption: 'A numeric comparison outputs a Boolean, and Branch uses that True/False result to choose an execution route.',
+    src: 'assets/tutorials/blueprint-foundations/logic-02-correct-compare-branch.webp',
+    caption: 'KeysOwned >= KeysRequired produces the Boolean that Branch uses to choose True or False execution.',
     sourceTitle: 'Teacher classroom capture — Unreal Engine',
     kind: 'local'
   });
   addBlockVisual('object-class-references', {
-    src: 'assets/tutorials/blueprint-foundations/references-01-variable-details.webp',
-    caption: 'Object Reference variable with Instance Editable enabled. This lets a placed Blueprint instance point at a specific compatible Actor.',
+    src: 'assets/tutorials/blueprint-foundations/refs-03-bp-lab-target-variable.webp',
+    caption: 'Exact BP_LabTarget Object Reference with Instance Editable enabled. Each placed controller can be assigned a specific target Actor.',
     sourceTitle: 'Teacher classroom capture — Unreal Engine',
     kind: 'local'
   });
   addBlockVisual('object-class-references', {
-    src: 'assets/tutorials/blueprint-foundations/references-02-instance-details.webp',
-    caption: 'On a placed instance, None means no Object Reference has been assigned yet. Use the dropdown or eyedropper to choose the actual Actor.',
+    src: 'assets/tutorials/blueprint-foundations/refs-04-bp-lab-target-picker.webp',
+    caption: 'On the placed controller, None means the reference has not been assigned. Pick Actor from scene / the eyedropper assigns the real target.',
     sourceTitle: 'Teacher classroom capture — Unreal Engine',
     kind: 'local'
   });
@@ -1356,6 +1430,31 @@
   addBlockVisual('enums', {
     src: 'assets/tutorials/blueprint-foundations/enums-04-switch.webp',
     caption: 'Switch on Enum exposes one execution route for each named Enum value.',
+    sourceTitle: 'Teacher classroom capture — Unreal Engine',
+    kind: 'local'
+  });
+
+  addBlockVisual('functions-events-macros', {
+    src: 'assets/tutorials/blueprint-foundations/functions-04-custom-calculation.webp',
+    caption: 'A real custom ApplyDamage Function keeps the health calculation in one place and receives changing data through an input.',
+    sourceTitle: 'Teacher classroom capture — Unreal Engine',
+    kind: 'local'
+  });
+  addBlockVisual('structs', {
+    src: 'assets/tutorials/blueprint-foundations/structs-03-fields.webp',
+    caption: 'ST_ItemData groups four related fields into one reusable data type.',
+    sourceTitle: 'Teacher classroom capture — Unreal Engine',
+    kind: 'local'
+  });
+  addBlockVisual('arrays-sets-maps', {
+    src: 'assets/tutorials/blueprint-foundations/maps-03-name-integer-defaults.webp',
+    caption: 'A Name → Integer Map stores meaningful key/value pairs such as Pistol → 12 and Shotgun → 4.',
+    sourceTitle: 'Teacher classroom capture — Unreal Engine',
+    kind: 'local'
+  });
+  addBlockVisual('arrays-sets-maps', {
+    src: 'assets/tutorials/blueprint-foundations/maps-05-find-pistol.webp',
+    caption: 'Find retrieves the value stored against a key and reports whether that key was found.',
     sourceTitle: 'Teacher classroom capture — Unreal Engine',
     kind: 'local'
   });
@@ -1580,7 +1679,7 @@
     ['arrays-sets-maps', 'bp-lab-struct-map']
   ].forEach(([blockId, tutorialId]) => addBlockTutorial(blockId, tutorialId));
 
-  TOOLS.version = '3.44.3';
-  PATHWAYS.version = '3.44.3';
+  TOOLS.version = '3.44.5';
+  PATHWAYS.version = '3.44.5';
   PATHWAYS.buildDate = '2026-09-06';
 })();
