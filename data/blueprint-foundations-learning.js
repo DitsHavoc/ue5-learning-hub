@@ -1,4 +1,4 @@
-/* v3.44.0 — Blueprint Foundations Lab
+/* v3.44.1 — Blueprint Foundations Lab
    Additive data patch only.
    Runs after the core Course / Building Blocks / Tutorials / Pathways data and
    after the Prison Cell patch, but before app.js.
@@ -21,7 +21,7 @@
   const PATHWAYS = window.UE5_PATHWAY_DATA;
 
   if (!DATA || !BLOCKS || !TOOLS || !PATHWAYS) {
-    console.warn('[v3.44.0] Blueprint Foundations Lab skipped: core learning data unavailable.');
+    console.warn('[v3.44.1] Blueprint Foundations Lab skipped: core learning data unavailable.');
     return;
   }
 
@@ -58,6 +58,32 @@
     sourceTitle: 'Teacher classroom capture — Unreal Engine',
     kind: 'local'
   };
+
+
+  function addStepVisual(tutorialId, stepTitle, visual) {
+    const tutorial = (TOOLS.tutorials || []).find(x => x.id === tutorialId);
+    const step = tutorial?.steps?.find(x => x.title === stepTitle);
+    if (!step) {
+      console.warn(`[v3.44.1] Screenshot target missing: ${tutorialId} → ${stepTitle}`);
+      return;
+    }
+    const current = Array.isArray(step.visual) ? step.visual : (step.visual ? [step.visual] : []);
+    step.visual = [...current, visual];
+  }
+
+  function addTutorialReference(tutorialId, visual) {
+    const tutorial = (TOOLS.tutorials || []).find(x => x.id === tutorialId);
+    if (!tutorial) return;
+    tutorial.referenceImages = tutorial.referenceImages || [];
+    if (!tutorial.referenceImages.some(v => v.src === visual.src)) tutorial.referenceImages.push(visual);
+  }
+
+  function addBlockVisual(blockId, visual) {
+    const block = (BLOCKS.blocks || []).find(x => x.id === blockId);
+    if (!block) return;
+    const current = Array.isArray(block.visual) ? block.visual : (block.visual ? [block.visual] : []);
+    if (!current.some(v => v.src === visual.src)) block.visual = [...current, visual];
+  }
 
   // -----------------------------------------------------------------------
   // CATEGORY
@@ -112,7 +138,7 @@
       {
         title: 'Create a Boolean for a yes/no fact',
         where: 'BP_DataLab → My Blueprint → Variables → + Variable → variable type dropdown',
-        do: 'Create DoorLocked as a Boolean. Compile, then set its Default Value to True.',
+        do: 'Create DoorLocked as a Boolean. The type menu contains many options — ignore the ones you do not need today. Compile, then set its Default Value to True.',
         why: 'A Boolean represents exactly two states: True/False, yes/no, enabled/disabled. It is ideal when the question really has only two answers.',
         see: 'DoorLocked appears in My Blueprint and its default is checked/True.',
         check: 'Say the question the variable answers: “Is the door locked?”',
@@ -173,7 +199,7 @@
       {
         title: 'Create an Object Reference for one specific Actor',
         where: 'My Blueprint → Variables → + Variable → choose Actor Object Reference → Details',
-        do: 'Create TargetActor as an Actor Object Reference. Enable Instance Editable using the eye icon, then Compile.',
+        do: 'Create TargetActor as an Actor Object Reference. Enable Instance Editable using the eye/Instance Editable control, then Compile. The placed instance will then expose a field where you can assign the specific Actor.',
         why: 'An Object Reference points at a particular live object. This is how one Blueprint can store “that exact door”, “that exact light” or another specific Actor.',
         see: 'TargetActor has an object-reference field and is Instance Editable.',
         check: 'Explain the difference: Actor Class means a type of Actor; Actor Object Reference means one actual Actor instance.',
@@ -607,7 +633,7 @@
       {
         title: 'Create one Array variable instead of Target1, Target2, Target3',
         where: 'BP_ArrayController → My Blueprint → + Variable → Actor Object Reference → container icon → Array',
-        do: 'Name the variable Targets. Enable Instance Editable and Compile. Place BP_ArrayController in the level.',
+        do: 'Name the variable Targets. Use the small container control beside the variable type to change Single → Array. Enable Instance Editable and Compile. Place BP_ArrayController in the level.',
         why: 'An Array stores an ordered collection of values of the same type under one variable.',
         see: 'The placed controller exposes an expandable Targets list.',
         check: 'Add three entries and assign Target_A, Target_B and Target_C.',
@@ -1017,6 +1043,166 @@
     prescriptive: true
   });
 
+
+  // -----------------------------------------------------------------------
+  // CLASSROOM SCREENSHOT PASS — REAL UE5 UI AT THE POINT OF NEED
+  // -----------------------------------------------------------------------
+
+  addStepVisual('bp-lab-variable-types', 'Create a Boolean for a yes/no fact', {
+    src: 'assets/tutorials/blueprint-foundations/variables-01-type-picker.webp',
+    caption: 'Open the variable type picker from My Blueprint. Unreal offers many types; for this lab focus on Boolean, Integer, Float, Text, Vector and Object Reference. Choose from what the data means, not from the pin colour.',
+    sourceTitle: 'Teacher classroom capture — Unreal Engine',
+    kind: 'local'
+  });
+
+  addStepVisual('bp-lab-variable-types', 'Create an Object Reference for one specific Actor', {
+    src: 'assets/tutorials/blueprint-foundations/references-01-variable-details.webp',
+    caption: 'An Object Reference variable selected in Details. This example points to a Third Person Blueprint; in the lab choose the target class you actually need. Instance Editable is what makes the reference assignable on a placed instance.',
+    sourceTitle: 'Teacher classroom capture — Unreal Engine',
+    kind: 'local'
+  });
+
+  addStepVisual('bp-lab-variable-types', 'Use Get to read and Set to change state', {
+    src: 'assets/tutorials/blueprint-foundations/variables-03-get-set-bool.webp',
+    caption: 'The larger Set node changes Door Locked?; the smaller Get node reads its current value. Both red data pins show that Door Locked? is a Boolean.',
+    sourceTitle: 'Teacher classroom capture — Unreal Engine',
+    kind: 'local'
+  });
+
+  addStepVisual('bp-lab-data-decisions', 'Build the pattern: DATA → TEST → DECISION → ACTION', {
+    src: 'assets/tutorials/blueprint-foundations/logic-01-compare-branch.webp',
+    caption: 'Keys Owned and Keys Required are compared with >=. The comparison produces a red Boolean result, which feeds the Branch Condition. DATA → TEST → DECISION.',
+    sourceTitle: 'Teacher classroom capture — Unreal Engine',
+    kind: 'local'
+  });
+
+  addStepVisual('bp-lab-object-reference', 'Create the controller and expose a reference', {
+    src: 'assets/tutorials/blueprint-foundations/references-01-variable-details.webp',
+    caption: 'Select the reference variable and enable Instance Editable. The exact class shown here is only an example; your lab variable should point to BP_LabTarget.',
+    sourceTitle: 'Teacher classroom capture — Unreal Engine',
+    kind: 'local'
+  });
+
+  addStepVisual('bp-lab-object-reference', 'Assign the exact target in the level', {
+    src: 'assets/tutorials/blueprint-foundations/references-02-instance-details.webp',
+    caption: 'This is the placed Blueprint instance in the level. If the reference field still says None, nothing has been assigned yet — use the dropdown or eyedropper to choose the intended Actor.',
+    sourceTitle: 'Teacher classroom capture — Unreal Engine',
+    kind: 'local'
+  });
+
+  addTutorialReference('bp-lab-function-refactor', {
+    src: 'assets/tutorials/blueprint-foundations/functions-01-apply-damage-node.webp',
+    caption: 'Unreal’s built-in Apply Damage call is an example of a Function-style node with inputs and an output. It is not the custom ApplyDamage Function built in this lab, but it shows the same idea: one named callable job with data passed into it.',
+    sourceTitle: 'Teacher classroom capture — Unreal Engine',
+    kind: 'local'
+  });
+
+  addStepVisual('bp-lab-array-foreach', 'Create one Array variable instead of Target1, Target2, Target3', {
+    src: 'assets/tutorials/blueprint-foundations/variables-02-container-menu.webp',
+    caption: 'The small container menu beside Variable Type changes a variable from Single to Array. Single stores one value; Array stores many values of the same type.',
+    sourceTitle: 'Teacher classroom capture — Unreal Engine',
+    kind: 'local'
+  });
+
+  addStepVisual('bp-lab-array-foreach', 'Create one Array variable instead of Target1, Target2, Target3', {
+    src: 'assets/tutorials/blueprint-foundations/arrays-01-vector-array-details.webp',
+    caption: 'This screenshot shows a Vector Array so the Array container icon is easy to recognise. For this lab use an Actor Object Reference Array instead — the container idea is the same.',
+    sourceTitle: 'Teacher classroom capture — Unreal Engine',
+    kind: 'local'
+  });
+
+  addStepVisual('bp-lab-array-foreach', 'Use For Each Loop to process every target', {
+    src: 'assets/tutorials/blueprint-foundations/arrays-02-for-each-loop.webp',
+    caption: 'Connect the Array into For Each Loop. Loop Body runs once per item, Array Element is the current item, Array Index tells you its position, and Completed fires once after the whole Array is finished.',
+    sourceTitle: 'Teacher classroom capture — Unreal Engine',
+    kind: 'local'
+  });
+
+  addStepVisual('bp-lab-enum-state', 'Create E_DoorState', {
+    src: 'assets/tutorials/blueprint-foundations/enums-01-create-enum.webp',
+    caption: 'In the Content Drawer create/search for an Enumeration asset. Give it a useful name such as E_DoorState rather than leaving a generic test name.',
+    sourceTitle: 'Teacher classroom capture — Unreal Engine',
+    kind: 'local'
+  });
+
+  addStepVisual('bp-lab-enum-state', 'Create E_DoorState', {
+    src: 'assets/tutorials/blueprint-foundations/enums-02-enum-asset.webp',
+    caption: 'A custom Enum is just a controlled list of named choices. This example uses Yes / No / Maybe; your door lab should use Locked / Closed / Opening / Open.',
+    sourceTitle: 'Teacher classroom capture — Unreal Engine',
+    kind: 'local'
+  });
+
+  addStepVisual('bp-lab-enum-state', 'Create one DoorState variable', {
+    src: 'assets/tutorials/blueprint-foundations/enums-03-variable-type.webp',
+    caption: 'After saving the Enum asset, find it by name in the variable type picker. Selecting it makes the variable use your custom named states.',
+    sourceTitle: 'Teacher classroom capture — Unreal Engine',
+    kind: 'local'
+  });
+
+  addStepVisual('bp-lab-enum-state', 'Use Switch on E_DoorState', {
+    src: 'assets/tutorials/blueprint-foundations/enums-04-switch.webp',
+    caption: 'Feed the Enum value into Selection on Switch on Enum. Only the matching named execution output runs. Your door version will show Locked, Closed, Opening and Open instead of this Yes / No / Maybe example.',
+    sourceTitle: 'Teacher classroom capture — Unreal Engine',
+    kind: 'local'
+  });
+
+  // Reuse the same authentic classroom screenshots in the underlying Building Blocks
+  // so students see the real UI even when they arrive via a concept page rather than the pathway.
+  addBlockVisual('variables-types', {
+    src: 'assets/tutorials/blueprint-foundations/variables-01-type-picker.webp',
+    caption: 'Current classroom variable type picker. The list is large; learn the types when a game-data problem actually needs them.',
+    sourceTitle: 'Teacher classroom capture — Unreal Engine',
+    kind: 'local'
+  });
+  addBlockVisual('variables-types', {
+    src: 'assets/tutorials/blueprint-foundations/variables-03-get-set-bool.webp',
+    caption: 'Get reads a variable; Set changes it. This Boolean example makes the difference visible.',
+    sourceTitle: 'Teacher classroom capture — Unreal Engine',
+    kind: 'local'
+  });
+  addBlockVisual('branches-switches', {
+    src: 'assets/tutorials/blueprint-foundations/logic-01-compare-branch.webp',
+    caption: 'A numeric comparison outputs a Boolean, and Branch uses that True/False result to choose an execution route.',
+    sourceTitle: 'Teacher classroom capture — Unreal Engine',
+    kind: 'local'
+  });
+  addBlockVisual('object-class-references', {
+    src: 'assets/tutorials/blueprint-foundations/references-01-variable-details.webp',
+    caption: 'Object Reference variable with Instance Editable enabled. This lets a placed Blueprint instance point at a specific compatible Actor.',
+    sourceTitle: 'Teacher classroom capture — Unreal Engine',
+    kind: 'local'
+  });
+  addBlockVisual('object-class-references', {
+    src: 'assets/tutorials/blueprint-foundations/references-02-instance-details.webp',
+    caption: 'On a placed instance, None means no Object Reference has been assigned yet. Use the dropdown or eyedropper to choose the actual Actor.',
+    sourceTitle: 'Teacher classroom capture — Unreal Engine',
+    kind: 'local'
+  });
+  addBlockVisual('arrays-sets-maps', {
+    src: 'assets/tutorials/blueprint-foundations/variables-02-container-menu.webp',
+    caption: 'The container control changes a Single variable into an Array (or another supported container type).',
+    sourceTitle: 'Teacher classroom capture — Unreal Engine',
+    kind: 'local'
+  });
+  addBlockVisual('arrays-sets-maps', {
+    src: 'assets/tutorials/blueprint-foundations/arrays-02-for-each-loop.webp',
+    caption: 'For Each Loop processes every Array entry using one reusable Loop Body.',
+    sourceTitle: 'Teacher classroom capture — Unreal Engine',
+    kind: 'local'
+  });
+  addBlockVisual('enums', {
+    src: 'assets/tutorials/blueprint-foundations/enums-02-enum-asset.webp',
+    caption: 'A custom Enum asset stores one controlled list of readable named choices.',
+    sourceTitle: 'Teacher classroom capture — Unreal Engine',
+    kind: 'local'
+  });
+  addBlockVisual('enums', {
+    src: 'assets/tutorials/blueprint-foundations/enums-04-switch.webp',
+    caption: 'Switch on Enum exposes one execution route for each named Enum value.',
+    sourceTitle: 'Teacher classroom capture — Unreal Engine',
+    kind: 'local'
+  });
+
   // -----------------------------------------------------------------------
   // PATHWAY
   // -----------------------------------------------------------------------
@@ -1139,7 +1325,7 @@
     ['arrays-sets-maps', 'bp-lab-struct-map']
   ].forEach(([blockId, tutorialId]) => addBlockTutorial(blockId, tutorialId));
 
-  TOOLS.version = '3.44.0';
-  PATHWAYS.version = '3.44.0';
+  TOOLS.version = '3.44.1';
+  PATHWAYS.version = '3.44.1';
   PATHWAYS.buildDate = '2026-09-05';
 })();
