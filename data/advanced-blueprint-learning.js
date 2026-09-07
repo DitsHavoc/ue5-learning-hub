@@ -1,4 +1,4 @@
-/* v3.44.9 — Blueprint Drive Harvest
+/* v3.44.10 — Blueprint Drive Harvest + Quick Tutorial Visibility Fix
    Additive learning + visual patch only.
 
    Uses authentic classroom/reference Unreal screenshots from the connected
@@ -43,6 +43,13 @@
     const i = TOOLS.tutorials.findIndex(x => x.id === tutorial.id);
     if (i >= 0) TOOLS.tutorials[i] = tutorial;
     else TOOLS.tutorials.push(tutorial);
+  }
+
+  function upsertFamily(family) {
+    TOOLS.families = TOOLS.families || [];
+    const i = TOOLS.families.findIndex(x => x.id === family.id);
+    if (i >= 0) TOOLS.families[i] = family;
+    else TOOLS.families.push(family);
   }
 
   function addBlockTutorial(blockId, tutorialId) {
@@ -666,6 +673,48 @@
   });
 
   // -------------------------------------------------------------------
+  // QUICK TUTORIAL LIBRARY FAMILIES
+  // The Quick Tutorials page renders recipe families, not loose tutorials.
+  // v3.44.10 makes the v3.44.9 Drive-harvest tutorials visible in that library.
+  // -------------------------------------------------------------------
+  upsertFamily({
+    id: 'procedural-level-tools',
+    title: 'Procedural Level Tools',
+    icon: '▦',
+    category: 'blueprint-tools',
+    summary: 'Build reusable editor-time level tools with Construction Script, instancing and Splines.',
+    members: ['bp-procedural-grid', 'bp-spline-instances'],
+    featured: true
+  });
+
+  upsertFamily({
+    id: 'editor-automation-tools',
+    title: 'Editor Automation',
+    icon: '⌖',
+    category: 'blueprint-tools',
+    summary: 'Automate repetitive level-editing jobs with small Editor Utility actions.',
+    members: ['bp-editor-align-tool']
+  });
+
+  upsertFamily({
+    id: 'variant-manager-configurator',
+    title: 'Variant Manager Configurator',
+    icon: '◇',
+    category: 'blueprint-tools',
+    summary: 'Read a real configurator architecture using Variant Manager, Structs, references and UMG.',
+    members: ['bp-variant-configurator-anatomy']
+  });
+
+  upsertFamily({
+    id: 'modular-umg-dispatchers',
+    title: 'Modular UMG & Event Dispatchers',
+    icon: '▤',
+    category: 'ui',
+    summary: 'Build cleaner reusable UI by broadcasting child selections and binding listeners through Event Dispatchers.',
+    members: ['bp-modular-umg-dispatchers']
+  });
+
+  // -------------------------------------------------------------------
   // BUILDING BLOCK CONNECTIONS
   // -------------------------------------------------------------------
   [
@@ -706,7 +755,7 @@
   addBlockVisual('dispatchers',
     V('umg-09-main-bind-and-rebroadcast.webp', 'A parent Widget listens to one dispatcher and can re-broadcast a higher-level event.'));
 
-  TOOLS.version = '3.44.9';
+  TOOLS.version = '3.44.10';
   TOOLS.buildDate = '2026-09-07';
-  console.info('[v3.44.9] Blueprint Drive Harvest loaded: 5 tutorials + curated reference visuals.');
+  console.info('[v3.44.10] Blueprint Drive Harvest loaded: 5 tutorials + 4 visible Quick Tutorial families + curated reference visuals.');
 })();
