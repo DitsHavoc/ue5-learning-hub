@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 550" role="img" aria-labelledby="title desc">
+  <title id="title">Prison escape cutscene trigger flow</title>
+  <desc id="desc">The player enters the exit trigger, is verified by a cast, passes through Do Once, plays the Level Sequence, then regains gameplay control.</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#cbd8e5"/></marker></defs>
+  <rect width="1400" height="550" rx="30" fill="#0b1119"/>
+  <g font-family="Arial, sans-serif">
+    <text x="55" y="61" fill="#edf3fb" font-size="28" font-weight="700">Trigger_PrisonEscape — gameplay to Sequencer and back</text>
+    <text x="55" y="92" fill="#8195ac" font-size="16">Prove the sequence works on its own first, then connect this one-shot handoff.</text>
+
+    <g transform="translate(48 160)">
+      <rect width="220" height="172" rx="16" fill="#24151a" stroke="#e55a68" stroke-width="3"/>
+      <text x="24" y="40" fill="#ff9ca6" font-size="13" font-weight="700">EXIT BOUNDARY</text>
+      <text x="24" y="82" fill="#fff0f2" font-size="19" font-weight="700">Actor Begin Overlap</text>
+      <text x="24" y="119" fill="#cdb9bd" font-size="14">Trigger is beyond</text>
+      <text x="24" y="141" fill="#cdb9bd" font-size="14">the open door</text>
+    </g>
+    <path d="M268 246 L304 246" stroke="#cbd8e5" stroke-width="4" marker-end="url(#arrow)"/>
+
+    <g transform="translate(315 160)">
+      <rect width="220" height="172" rx="16" fill="#10252d" stroke="#44a8c4" stroke-width="3"/>
+      <text x="24" y="40" fill="#77cee6" font-size="13" font-weight="700">FILTER</text>
+      <text x="24" y="82" fill="#effcff" font-size="19" font-weight="700">Cast To Player</text>
+      <text x="24" y="119" fill="#a7c8d1" font-size="14">Object = Other Actor</text>
+      <text x="24" y="143" fill="#a7c8d1" font-size="14">Continue on success</text>
+    </g>
+    <path d="M535 246 L571 246" stroke="#cbd8e5" stroke-width="4" marker-end="url(#arrow)"/>
+
+    <g transform="translate(582 160)">
+      <rect width="190" height="172" rx="16" fill="#13271e" stroke="#71dfa4" stroke-width="3"/>
+      <text x="24" y="40" fill="#80e6ae" font-size="13" font-weight="700">ONE SHOT</text>
+      <text x="24" y="82" fill="#ecfff3" font-size="20" font-weight="700">Do Once</text>
+      <text x="24" y="119" fill="#a8c8b6" font-size="14">Stops repeat</text>
+      <text x="24" y="141" fill="#a8c8b6" font-size="14">boundary crossings</text>
+    </g>
+    <path d="M772 246 L808 246" stroke="#cbd8e5" stroke-width="4" marker-end="url(#arrow)"/>
+
+    <g transform="translate(819 160)">
+      <rect width="265" height="172" rx="16" fill="#332815" stroke="#d9a84b" stroke-width="3"/>
+      <text x="24" y="40" fill="#f4ca75" font-size="13" font-weight="700">LEVEL SEQUENCE ACTOR</text>
+      <text x="24" y="82" fill="#fff8e6" font-size="19" font-weight="700">LS_PrisonEscape</text>
+      <text x="24" y="119" fill="#d7c59d" font-size="14">Sequence Player → Play</text>
+      <text x="24" y="143" fill="#d7c59d" font-size="14">Auto Play off • Don’t Loop</text>
+    </g>
+    <path d="M1084 246 L1120 246" stroke="#cbd8e5" stroke-width="4" marker-end="url(#arrow)"/>
+
+    <g transform="translate(1131 160)">
+      <rect width="221" height="172" rx="16" fill="#142033" stroke="#4e97d5" stroke-width="3"/>
+      <text x="24" y="40" fill="#83b9e7" font-size="13" font-weight="700">FINISHED</text>
+      <text x="24" y="82" fill="#eef7ff" font-size="19" font-weight="700">Return control</text>
+      <text x="24" y="119" fill="#a9c5dc" font-size="14">Gameplay camera, move</text>
+      <text x="24" y="141" fill="#a9c5dc" font-size="14">and look all work again</text>
+    </g>
+
+    <rect x="55" y="385" width="1290" height="108" rx="14" fill="#111b27" stroke="#26384c"/>
+    <text x="82" y="418" fill="#7fbff4" font-size="13" font-weight="700">SEQUENCER MUST ALREADY PASS</text>
+    <text x="82" y="448" fill="#d8e3ee" font-size="16">One Cine Camera is bound to Camera Cuts for the full 5–8 second range; there are no gaps.</text>
+    <text x="82" y="475" fill="#d8e3ee" font-size="16">After playback, cross the trigger again: the sequence must not replay during that Play session.</text>
+  </g>
+</svg>

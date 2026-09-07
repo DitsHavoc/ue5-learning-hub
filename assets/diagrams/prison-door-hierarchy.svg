@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" role="img" aria-labelledby="title desc">
+  <title id="title">Prison door component hierarchy and hinge setup</title>
+  <desc id="desc">Door is attached beneath DoorHinge so rotating the hinge opens the door from its edge while DoorFrame and DoorTrigger remain still.</desc>
+  <rect width="1200" height="560" rx="30" fill="#0b1119"/>
+  <g font-family="Arial, sans-serif">
+    <text x="55" y="61" fill="#edf3fb" font-size="28" font-weight="700">BP_PrisonDoor — build the pivot before the animation</text>
+    <text x="55" y="92" fill="#8195ac" font-size="16">The component hierarchy decides what moves and what stays still.</text>
+
+    <rect x="55" y="135" width="470" height="350" rx="18" fill="#111b27" stroke="#31465c" stroke-width="2"/>
+    <text x="82" y="174" fill="#7fbff4" font-size="13" font-weight="700">COMPONENTS</text>
+    <rect x="82" y="197" width="415" height="50" rx="10" fill="#1a2a3a" stroke="#49647f"/>
+    <text x="105" y="229" fill="#edf5fd" font-size="18" font-weight="700">DefaultSceneRoot</text>
+    <path d="M110 247 L110 429" stroke="#4d6882" stroke-width="3"/>
+    <path d="M110 277 L143 277" stroke="#4d6882" stroke-width="3"/>
+    <rect x="143" y="253" width="330" height="48" rx="10" fill="#17232f" stroke="#3b5268"/>
+    <text x="164" y="283" fill="#dce8f3" font-size="17">DoorFrame</text>
+    <path d="M110 337 L143 337" stroke="#4d6882" stroke-width="3"/>
+    <rect x="143" y="313" width="330" height="48" rx="10" fill="#202036" stroke="#8d72c4" stroke-width="2"/>
+    <text x="164" y="343" fill="#f0eaff" font-size="17" font-weight="700">DoorHinge</text>
+    <path d="M172 361 L172 397 L205 397" stroke="#8d72c4" stroke-width="3"/>
+    <rect x="205" y="373" width="268" height="48" rx="10" fill="#1d2b25" stroke="#56b982" stroke-width="2"/>
+    <text x="226" y="403" fill="#eafff2" font-size="17" font-weight="700">Door</text>
+    <path d="M110 457 L143 457" stroke="#4d6882" stroke-width="3"/>
+    <rect x="143" y="433" width="330" height="48" rx="10" fill="#2b1a20" stroke="#d25c72"/>
+    <text x="164" y="463" fill="#ffeef2" font-size="17">DoorTrigger</text>
+
+    <rect x="570" y="135" width="575" height="350" rx="18" fill="#111b27" stroke="#31465c" stroke-width="2"/>
+    <text x="597" y="174" fill="#7fbff4" font-size="13" font-weight="700">TOP VIEW / PIVOT TEST</text>
+    <rect x="625" y="230" width="360" height="44" rx="8" fill="#243240" stroke="#5b7185"/>
+    <text x="802" y="258" fill="#b7c7d6" font-size="14" text-anchor="middle">Door frame / wall</text>
+    <circle cx="680" cy="296" r="13" fill="#d8aa52" stroke="#ffe19a" stroke-width="3"/>
+    <text x="706" y="301" fill="#f5d38a" font-size="15" font-weight="700">DoorHinge at edge</text>
+    <rect x="680" y="292" width="330" height="28" rx="6" fill="#356948" stroke="#70d79d" stroke-width="2" opacity=".9"/>
+    <text x="1018" y="313" fill="#70d79d" font-size="13">CLOSED 0°</text>
+    <path d="M680 306 L680 445" stroke="#66b88b" stroke-width="27" stroke-linecap="round" opacity=".52"/>
+    <text x="699" y="437" fill="#70d79d" font-size="13">OPEN 90°</text>
+    <path d="M813 341 A150 150 0 0 1 708 426" fill="none" stroke="#d8aa52" stroke-width="4" stroke-dasharray="8 7"/>
+    <text x="845" y="392" fill="#f2cf84" font-size="15">Rotate DoorHinge,</text>
+    <text x="845" y="414" fill="#f2cf84" font-size="15">not the whole Actor</text>
+
+    <text x="600" y="462" fill="#a8b8c7" font-size="14">The hinge point stays fixed while the Door child swings.</text>
+    <rect x="55" y="507" width="1090" height="35" rx="9" fill="#15211b" stroke="#315b43"/>
+    <text x="600" y="530" fill="#bff4d4" font-size="15" text-anchor="middle"><tspan font-weight="700">Quick proof:</tspan> rotate DoorHinge to 30°, check one door edge stays beside the frame, then Undo.</text>
+  </g>
+</svg>

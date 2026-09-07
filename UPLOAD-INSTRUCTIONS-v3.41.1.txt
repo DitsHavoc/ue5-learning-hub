@@ -1,0 +1,33 @@
+UE5 LEARNING HUB v3.41.1 — GUIDED PATHS TEACHING PASS
+======================================================
+
+NO SUPABASE SQL IS REQUIRED FOR THIS RELEASE.
+
+If v3.41.0 was NOT uploaded:
+Use the v3.41.1 GitHub Upload ZIP. It contains the full Guided Paths feature plus these fixes and can be applied over the v3.40.0 baseline.
+
+If v3.41.0 WAS uploaded:
+The same v3.41.1 GitHub Upload ZIP is safe to use; replace the included files.
+
+Files changed by the Guided Paths feature / teaching pass:
+- index.html
+- app.js
+- backend.js
+- styles.css
+- data/pathway-data.js
+- README.md
+- CHANGELOG.md
+- RELEASE-NOTES-v3.41.1.md
+- GUIDED-PATHS-QA-v3.41.1.md
+
+After upload:
+1. Hard refresh the live site (Ctrl+F5).
+2. Confirm footer/version label shows v3.41.1.
+3. Open Guided Paths.
+4. Confirm only 3 paths appear.
+5. Open Digital Game → Tabletop and confirm practical checkpoints are required for path percentage.
+6. Open Create a Gameplay Mechanic and confirm Interaction shows Traces first and Checkpoint shows Framework first.
+7. Mark one pathway checkpoint complete while signed in; confirm XP does NOT increase.
+8. Refresh and confirm the checkpoint remains complete.
+
+No new tables, Storage rules or migrations are needed.

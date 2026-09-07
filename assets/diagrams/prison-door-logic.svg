@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 650" role="img" aria-labelledby="title desc">
+  <title id="title">Prison door access and opening logic</title>
+  <desc id="desc">The door trigger checks the overlapping player and branches on HasPrisonKey. False displays a locked message. True runs a Timeline and Lerp Rotator to rotate DoorHinge once.</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#cbd8e5"/></marker></defs>
+  <rect width="1400" height="650" rx="30" fill="#0b1119"/>
+  <g font-family="Arial, sans-serif">
+    <text x="55" y="61" fill="#edf3fb" font-size="28" font-weight="700">BP_PrisonDoor — locked and unlocked paths</text>
+    <text x="55" y="92" fill="#8195ac" font-size="16">HasPrisonKey makes the decision. TL_OpenDoor performs the motion.</text>
+
+    <rect x="55" y="225" width="220" height="145" rx="16" fill="#24151a" stroke="#e55a68" stroke-width="3"/>
+    <text x="78" y="258" fill="#ff9ca6" font-size="13" font-weight="700">DOORTRIGGER</text>
+    <text x="78" y="295" fill="#fff0f2" font-size="18" font-weight="700">Begin Overlap</text>
+    <text x="78" y="329" fill="#cdb9bd" font-size="14">Other Actor →</text>
+    <path d="M275 297 L316 297" stroke="#cbd8e5" stroke-width="4" marker-end="url(#arrow)"/>
+
+    <rect x="327" y="225" width="245" height="145" rx="16" fill="#10252d" stroke="#44a8c4" stroke-width="3"/>
+    <text x="350" y="258" fill="#77cee6" font-size="13" font-weight="700">PLAYER CHECK</text>
+    <text x="350" y="295" fill="#effcff" font-size="18" font-weight="700">Cast To Player</text>
+    <text x="350" y="329" fill="#a7c8d1" font-size="14">Get HasPrisonKey</text>
+    <path d="M572 297 L613 297" stroke="#cbd8e5" stroke-width="4" marker-end="url(#arrow)"/>
+
+    <rect x="624" y="193" width="235" height="208" rx="16" fill="#20182d" stroke="#956ed1" stroke-width="3"/>
+    <text x="649" y="232" fill="#c8a9f2" font-size="13" font-weight="700">BRANCH CONDITION</text>
+    <text x="649" y="280" fill="#fff" font-size="20" font-weight="700">HasPrisonKey?</text>
+    <text x="774" y="330" fill="#71dfa4" font-size="14" font-weight="700">TRUE</text>
+    <text x="770" y="378" fill="#ff8995" font-size="14" font-weight="700">FALSE</text>
+
+    <path d="M859 351 C925 351 925 480 991 480" stroke="#ff8995" stroke-width="5" fill="none" marker-end="url(#arrow)"/>
+    <rect x="1004" y="423" width="335" height="115" rx="16" fill="#2a171b" stroke="#ff8995" stroke-width="3"/>
+    <text x="1030" y="456" fill="#ff9da6" font-size="13" font-weight="700">FALSE / LOCKED</text>
+    <text x="1030" y="491" fill="#fff0f2" font-size="19" font-weight="700">Print locked message</text>
+    <text x="1030" y="518" fill="#bca6a9" font-size="14">Door stays closed</text>
+
+    <path d="M859 330 C905 330 905 165 951 165" stroke="#71dfa4" stroke-width="5" fill="none" marker-end="url(#arrow)"/>
+    <rect x="964" y="116" width="160" height="98" rx="14" fill="#13271e" stroke="#71dfa4" stroke-width="3"/>
+    <text x="989" y="150" fill="#80e6ae" font-size="13" font-weight="700">TRUE</text>
+    <text x="989" y="184" fill="#ecfff3" font-size="19" font-weight="700">Do Once</text>
+    <path d="M1124 165 L1155 165" stroke="#71dfa4" stroke-width="4" marker-end="url(#arrow)"/>
+    <rect x="1166" y="116" width="173" height="98" rx="14" fill="#332815" stroke="#d9a84b" stroke-width="3"/>
+    <text x="1191" y="150" fill="#f4ca75" font-size="13" font-weight="700">TIMELINE</text>
+    <text x="1191" y="182" fill="#fff8e6" font-size="17" font-weight="700">TL_OpenDoor</text>
+
+    <path d="M1253 214 L1253 272" stroke="#cbd8e5" stroke-width="4" marker-end="url(#arrow)"/>
+    <rect x="1050" y="285" width="289" height="102" rx="14" fill="#172231" stroke="#5687b5" stroke-width="3"/>
+    <text x="1075" y="319" fill="#8dc5f3" font-size="13" font-weight="700">UPDATE</text>
+    <text x="1075" y="350" fill="#eef7ff" font-size="17" font-weight="700">Lerp Rotator 0° → 90°</text>
+    <text x="1075" y="374" fill="#a9bfd2" font-size="13">Alpha = 0 → 1 over 1.2 s</text>
+
+    <path d="M1050 337 C980 337 980 297 910 297" stroke="#cbd8e5" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+    <rect x="730" y="445" width="260" height="105" rx="14" fill="#172b22" stroke="#62c88f" stroke-width="3"/>
+    <text x="756" y="479" fill="#80e6ae" font-size="13" font-weight="700">APPLY RESULT</text>
+    <text x="756" y="512" fill="#effff5" font-size="17" font-weight="700">Set Relative Rotation</text>
+    <text x="756" y="536" fill="#a8c8b6" font-size="13">Target = DoorHinge</text>
+    <path d="M910 297 C860 297 860 420 860 445" stroke="#cbd8e5" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+
+    <rect x="55" y="577" width="1284" height="40" rx="10" fill="#111b27" stroke="#26384c"/>
+    <text x="697" y="602" fill="#c4d2df" font-size="15" text-anchor="middle"><tspan fill="#fff" font-weight="700">Test in this order:</tspan> door before key → collect key → same door opens once from its hinge.</text>
+  </g>
+</svg>

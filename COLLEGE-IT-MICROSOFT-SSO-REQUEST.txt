@@ -1,0 +1,37 @@
+UE5 Learning Hub — Microsoft Entra SSO request
+
+We are developing an educational Unreal Engine 5 Learning Hub for students.
+
+We would like students and staff to authenticate using their existing college Microsoft 365 / Microsoft Entra ID account rather than creating separate usernames and passwords.
+
+Requested setup:
+
+• App registration name: UE5 Learning Hub
+• Supported account type: Accounts in this organisational directory only (single tenant)
+• Authentication method: Microsoft Entra ID OAuth / OpenID Connect via Supabase Auth
+• Required basic identity scope: email
+• No access required to Outlook mail, OneDrive files, SharePoint files or Teams content
+• Users will authenticate using the college's existing Microsoft sign-in and MFA policies
+
+The application is hosted at:
+https://ue5-learning-hub.onrender.com
+
+Microsoft's OAuth callback will be the Supabase Auth callback:
+https://<SUPABASE-PROJECT-REF>.supabase.co/auth/v1/callback
+
+We will need:
+• Application (client) ID
+• Directory (tenant) ID
+• A client secret entered directly into the Supabase authentication provider configuration
+
+The client secret will NOT be stored in the public website or GitHub repository.
+
+The application uses the authenticated identity for:
+• lesson completion/progress
+• student game-project milestone progress
+• private student/teacher lesson feedback
+• student tutorial/feature requests and voting
+
+The application does not require Microsoft Graph permissions beyond basic sign-in identity for this design.
+
+Please let us know if any additional college information-governance or application-approval process is required.

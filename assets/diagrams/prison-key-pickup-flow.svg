@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 520" role="img" aria-labelledby="title desc">
+  <title id="title">Prison key pickup Blueprint flow</title>
+  <desc id="desc">The pickup collision overlaps the player, casts to the player character, sets HasPrisonKey true, prints feedback, then destroys the key actor.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#cbd8e5"/></marker>
+  </defs>
+  <rect width="1400" height="520" rx="30" fill="#0b1119"/>
+  <g font-family="Arial, sans-serif">
+    <text x="55" y="61" fill="#edf3fb" font-size="28" font-weight="700">BP_PrisonKey — collection flow</text>
+    <text x="55" y="92" fill="#8195ac" font-size="16">Store the lasting state on the player before destroying the pickup.</text>
+
+    <g transform="translate(44 165)">
+      <rect width="235" height="190" rx="16" fill="#24151a" stroke="#e55a68" stroke-width="3"/>
+      <rect width="235" height="48" rx="16" fill="#8d2731"/><rect y="34" width="235" height="14" fill="#8d2731"/>
+      <text x="22" y="31" fill="#fff" font-size="17" font-weight="700">OVERLAP EVENT</text>
+      <text x="22" y="84" fill="#fff0f2" font-size="18" font-weight="700">PickupCollision</text>
+      <text x="22" y="111" fill="#cdb9bd" font-size="15">On Component</text>
+      <text x="22" y="133" fill="#cdb9bd" font-size="15">Begin Overlap</text>
+      <text x="22" y="168" fill="#ff9ca6" font-size="13" font-weight="700">OTHER ACTOR →</text>
+    </g>
+    <path d="M279 260 L315 260" stroke="#cbd8e5" stroke-width="4" marker-end="url(#arrow)"/>
+
+    <g transform="translate(326 165)">
+      <rect width="235" height="190" rx="16" fill="#10252d" stroke="#44a8c4" stroke-width="3"/>
+      <rect width="235" height="48" rx="16" fill="#17677d"/><rect y="34" width="235" height="14" fill="#17677d"/>
+      <text x="22" y="31" fill="#fff" font-size="17" font-weight="700">PLAYER CHECK</text>
+      <text x="22" y="84" fill="#effcff" font-size="18" font-weight="700">Cast To</text>
+      <text x="22" y="110" fill="#effcff" font-size="18" font-weight="700">BP_ThirdPersonCharacter</text>
+      <text x="22" y="148" fill="#a7c8d1" font-size="14">Object = Other Actor</text>
+    </g>
+    <path d="M561 260 L597 260" stroke="#cbd8e5" stroke-width="4" marker-end="url(#arrow)"/>
+
+    <g transform="translate(608 165)">
+      <rect width="235" height="190" rx="16" fill="#1c2027" stroke="#5fbd91" stroke-width="3"/>
+      <rect width="235" height="48" rx="16" fill="#28764e"/><rect y="34" width="235" height="14" fill="#28764e"/>
+      <text x="22" y="31" fill="#fff" font-size="17" font-weight="700">SET PLAYER STATE</text>
+      <text x="22" y="91" fill="#ecfff4" font-size="20" font-weight="700">HasPrisonKey</text>
+      <text x="22" y="126" fill="#77e2a8" font-size="25" font-weight="700">TRUE</text>
+      <text x="22" y="162" fill="#a8c8b6" font-size="14">Target = cast player</text>
+    </g>
+    <path d="M843 260 L879 260" stroke="#cbd8e5" stroke-width="4" marker-end="url(#arrow)"/>
+
+    <g transform="translate(890 165)">
+      <rect width="190" height="190" rx="16" fill="#142033" stroke="#4e97d5" stroke-width="3"/>
+      <rect width="190" height="48" rx="16" fill="#245f91"/><rect y="34" width="190" height="14" fill="#245f91"/>
+      <text x="20" y="31" fill="#fff" font-size="17" font-weight="700">FEEDBACK</text>
+      <text x="20" y="90" fill="#eef7ff" font-size="19" font-weight="700">Print String</text>
+      <text x="20" y="125" fill="#a9c5dc" font-size="15">“Key collected”</text>
+      <text x="20" y="162" fill="#83b9e7" font-size="13">PROTOTYPE PROOF</text>
+    </g>
+    <path d="M1080 260 L1116 260" stroke="#cbd8e5" stroke-width="4" marker-end="url(#arrow)"/>
+
+    <g transform="translate(1127 165)">
+      <rect width="229" height="190" rx="16" fill="#24151a" stroke="#e55a68" stroke-width="3"/>
+      <rect width="229" height="48" rx="16" fill="#8d2731"/><rect y="34" width="229" height="14" fill="#8d2731"/>
+      <text x="20" y="31" fill="#fff" font-size="17" font-weight="700">REMOVE PICKUP</text>
+      <text x="20" y="91" fill="#fff0f2" font-size="20" font-weight="700">Destroy Actor</text>
+      <text x="20" y="126" fill="#ff9ca6" font-size="18" font-weight="700">Target = Self</text>
+      <text x="20" y="162" fill="#cdb9bd" font-size="14">Do this last</text>
+    </g>
+
+    <rect x="55" y="405" width="1290" height="64" rx="12" fill="#111b27" stroke="#26384c"/>
+    <text x="80" y="432" fill="#71dfa4" font-size="14" font-weight="700">PASS CONDITION</text>
+    <text x="80" y="454" fill="#c4d2df" font-size="16">The Boolean changes False → True on the Character, then only BP_PrisonKey disappears.</text>
+  </g>
+</svg>

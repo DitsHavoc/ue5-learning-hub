@@ -1,0 +1,42 @@
+UE5 LEARNING HUB v3.41.0 — GUIDED PATHS
+=========================================
+
+WHAT THIS RELEASE DOES
+- Adds 4 optional Guided Paths.
+- Adds Theory → practical cross-links.
+- Keeps all normal Hub areas freely accessible.
+- Reuses existing completion IDs and XP.
+- Requires NO Supabase migration.
+
+GITHUB UPLOAD
+Upload/replace these runtime files in the same paths:
+
+ROOT
+- index.html
+- app.js
+- styles.css
+
+DATA
+- data/pathway-data.js   (NEW)
+
+Optional repository documentation included in the GitHub ZIP:
+- README.md
+- CHANGELOG.md
+- RELEASE-NOTES-v3.41.0.md
+- GUIDED-PATHS-QA-v3.41.0.md
+
+IMPORTANT
+- Do not delete existing data/assets.
+- Upload pathway-data.js inside the existing data folder.
+- No SQL needs to be run.
+- Existing v3.40 Theory XP migration remains as previously deployed.
+
+QUICK LIVE CHECK AFTER DEPLOY
+1. Home shows “Try a Guided Path”.
+2. Sidebar → Guided Paths opens the new landing page.
+3. Open all four path cards.
+4. Check a Theory lesson such as Player Agency: “Put this into practice” should appear.
+5. Search “playable level” or “tabletop”.
+6. Confirm normal Unreal / Theory / Designer / 3D pages still open directly.
+
+Browser visual testing could not be completed in the build container because Chromium hung with environment/DBus errors. Static syntax/reference validation passed; see GUIDED-PATHS-QA-v3.41.0.md.
