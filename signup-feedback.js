@@ -1,4 +1,4 @@
-/* UE5 Learning Hub v3.47.0 — visible student signup feedback
+/* UE5 Learning Hub v3.47.1 — visible student signup feedback
    Fixes the classroom problem where an auth error was hidden behind the modal.
 */
 (() => {
@@ -93,5 +93,5 @@
     }
   },true);
 
-  console.info('[signup-feedback] v3.47.0 active');
+  console.info('[signup-feedback] v3.47.1 active');
 })();

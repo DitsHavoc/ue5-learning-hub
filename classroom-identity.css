@@ -250,28 +250,6 @@ input,select,textarea{
   color:var(--ci-muted)!important;
 }
 
-.classroom-origin-strip{
-  display:flex;
-  align-items:center;
-  gap:8px 16px;
-  flex-wrap:wrap;
-  padding:9px 0;
-  margin:0 0 10px;
-  border-bottom:1px solid #20272d;
-  color:#8f9ca7;
-  font-size:12px;
-}
-.classroom-origin-strip strong{
-  color:#d9e2e8;
-  font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
-  font-size:10px;
-  letter-spacing:.08em;
-}
-.classroom-origin-strip span+span::before{
-  content:"/";
-  margin-right:16px;
-  color:#48545e;
-}
 
 .journey-start-grid{
   gap:7px!important;
@@ -507,8 +485,6 @@ input,select,textarea{
   .journey-browse-grid .portal-path-icon{width:42px!important;height:42px!important}
 }
 @media(max-width:720px){
-  .classroom-origin-strip span+span::before{display:none}
-  .classroom-origin-strip{display:grid;gap:3px}
   .journey-start-grid{grid-template-columns:1fr!important}
   .journey-browse-grid .portal-path-card{display:block!important}
   .journey-browse-grid .portal-path-icon{
@@ -530,4 +506,23 @@ input,select,textarea{
 .portal-hero-mark{
   filter:none!important;
   box-shadow:none!important;
+}
+
+/* v3.47.1 — low-key authorship / disclosure */
+.classroom-footer-meta{
+  margin-left:auto;
+  color:#5f6b75;
+  font-size:9px;
+  line-height:1.4;
+  white-space:nowrap;
+}
+.classroom-footer-meta .classroom-about-link{
+  color:#788691!important;
+  border-bottom:0;
+  text-decoration:underline;
+  text-underline-offset:2px;
+}
+.classroom-footer-meta .classroom-about-link:hover{color:#b8c5cf!important}
+@media(max-width:760px){
+  .classroom-footer-meta{margin-left:0;white-space:normal}
 }

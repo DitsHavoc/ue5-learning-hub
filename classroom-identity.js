@@ -1,4 +1,4 @@
-/* UE5 Learning Hub v3.47.0 — Classroom Identity
+/* UE5 Learning Hub v3.47.1 — Low-key Authorship
    Presentation-only layer. Makes the Hub feel like a maintained course tool,
    not a generic generated dashboard.
 */
@@ -47,18 +47,6 @@
     if(brandSmall)brandSmall.textContent='Games Development';
   }
 
-  function addOriginStrip(){
-    const hero=document.querySelector('#app .portal-hero-clean');
-    if(!hero || document.querySelector('.classroom-origin-strip'))return;
-    hero.insertAdjacentHTML('afterend',
-      `<div class="classroom-origin-strip" aria-label="About this course resource">
-        <strong>CLASSROOM BUILD</strong>
-        <span>Built for our Games Development classes</span>
-        <span>Maintained by Dits</span>
-        <span>Changed from student feedback</span>
-        <span>Real Unreal / 3ds Max captures</span>
-      </div>`);
-  }
 
   function tidyHome(){
     const app=document.querySelector('#app');
@@ -71,7 +59,6 @@
       if(eyebrow)eyebrow.textContent='GAMES DEVELOPMENT / COURSE HUB';
       if(h1)h1.textContent='UE5 Learning Hub';
       if(p)p.textContent='Course tools, lesson support and reference. Start with the class task, continue your own work, or find the thing you need.';
-      addOriginStrip();
     }
 
     const focus=app.querySelector('.journey-start-card.class-focus .journey-card-kicker');
@@ -156,9 +143,9 @@
 
   function tidyFooter(){
     const footer=document.querySelector('footer');
-    if(!footer || footer.querySelector('.classroom-about-link'))return;
+    if(!footer || footer.querySelector('.classroom-footer-meta'))return;
     footer.insertAdjacentHTML('beforeend',
-      `<a class="classroom-about-link" href="about-hub.html">About this Hub</a>`);
+      `<span class="classroom-footer-meta">Course-built • shaped by student feedback • <a class="classroom-about-link" href="about-hub.html">About</a></span>`);
   }
 
   function scrubVisibleSculptLinks(){
@@ -185,5 +172,5 @@
   window.addEventListener('hashchange',queue);
   document.addEventListener('DOMContentLoaded',queue,{once:true});
   queue();
-  console.info('[classroom-identity] v3.47.0 active');
+  console.info('[classroom-identity] v3.47.1 active');
 })();
