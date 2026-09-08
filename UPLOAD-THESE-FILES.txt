@@ -1,8 +1,13 @@
-UE5 Learning Hub v3.46.2 — Remove Sculpt Playground
+UE5 Learning Hub v3.47.0 — Classroom Identity
 
 UPLOAD / REPLACE:
 - index.html
-- journey-cleanup.js
-- journey-cleanup.css
 
-No database change required.
+UPLOAD NEW:
+- classroom-identity.css
+- classroom-identity.js
+- signup-feedback.js
+- about-hub.html
+
+No database change is required.
+Do not replace app.js, backend.js, roster-controls.js or any learning-data files.
