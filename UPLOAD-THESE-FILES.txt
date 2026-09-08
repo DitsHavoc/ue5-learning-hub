@@ -1,10 +1,15 @@
-UE5 Learning Hub v3.47.1 — Low-key Authorship
+UE5 Learning Hub v3.48.0 — Light Workspace
 
 UPLOAD / REPLACE:
 - index.html
+- about-hub.html
+
+UPLOAD NEW:
+- light-workspace.css
+
+KEEP the existing v3.47.1 files:
 - classroom-identity.css
 - classroom-identity.js
 - signup-feedback.js
-- about-hub.html
 
 No database change required.

@@ -1,0 +1,662 @@
+/* UE5 Learning Hub v3.48.0 — Light Workspace
+   Dark navigation + light learning surface.
+   Inspired by professional learning/documentation tools rather than dark tech dashboards.
+   Additive presentation layer only.
+*/
+
+:root{
+  --lw-page:#eef1f4;
+  --lw-work:#f5f6f7;
+  --lw-surface:#ffffff;
+  --lw-surface-2:#f8f9fa;
+  --lw-surface-3:#edf1f4;
+  --lw-line:#d4d9de;
+  --lw-line-strong:#b9c2ca;
+  --lw-text:#20262c;
+  --lw-muted:#68747e;
+  --lw-muted-2:#87929b;
+  --lw-blue:#156fae;
+  --lw-blue-hover:#0f5f98;
+  --lw-blue-soft:#e8f3fb;
+  --lw-green:#23784d;
+  --lw-green-soft:#eaf5ef;
+  --lw-amber:#8a5b0a;
+  --lw-amber-soft:#fff5df;
+  --lw-red:#a13b47;
+  --lw-red-soft:#faecee;
+  --lw-sidebar:#15191e;
+  --lw-sidebar-2:#1b2026;
+  --lw-sidebar-line:#303740;
+}
+
+/* -------------------------------------------------------------------------
+   1. WORKSPACE / APP CHROME
+   ------------------------------------------------------------------------- */
+
+html,
+body{
+  background:var(--lw-page)!important;
+  color:var(--lw-text)!important;
+}
+
+body{
+  background-image:none!important;
+}
+
+.page{
+  background:var(--lw-work)!important;
+}
+
+main{
+  color:var(--lw-text)!important;
+}
+
+.topbar{
+  background:rgba(255,255,255,.97)!important;
+  border-bottom:1px solid var(--lw-line)!important;
+  color:var(--lw-text)!important;
+  backdrop-filter:none!important;
+}
+
+footer{
+  background:#e9edf0!important;
+  border-top:1px solid var(--lw-line)!important;
+  color:#69747d!important;
+}
+
+.version-badge{
+  background:#fff!important;
+  border-color:var(--lw-line-strong)!important;
+  color:#6a7680!important;
+}
+.version-badge b{color:#20262c!important}
+.version-dot{background:#36905f!important}
+
+/* Keep the navigation deliberately dark. */
+.sidebar{
+  background:var(--lw-sidebar)!important;
+  border-right:1px solid #252b31!important;
+  color:#fff!important;
+}
+.brand{
+  border-bottom-color:var(--lw-sidebar-line)!important;
+}
+.brand-copy strong{color:#f4f6f8!important}
+.brand-copy small{color:#8e9aa5!important}
+.brand-orbit{
+  background:#20262d!important;
+  border-color:#56616b!important;
+}
+.nav-heading{
+  color:#77838d!important;
+}
+.nav a{
+  color:#c0c8cf!important;
+}
+.nav a:hover{
+  background:var(--lw-sidebar-2)!important;
+  color:#fff!important;
+}
+.nav a.active{
+  background:#202831!important;
+  color:#fff!important;
+  box-shadow:inset 2px 0 0 #4aa9e8!important;
+}
+.nav a::before{
+  background:#11161b!important;
+  border-color:#39424b!important;
+  color:#91a0ac!important;
+}
+.nav a small{color:#77848f!important}
+.side-progress{
+  background:#11161b!important;
+  border-color:#313943!important;
+  color:#d8dee3!important;
+}
+.side-progress small{color:#788590!important}
+
+/* -------------------------------------------------------------------------
+   2. SEARCH / TOP STATUS / ACCOUNT
+   ------------------------------------------------------------------------- */
+
+.global-search>span{color:#7b8791!important}
+.global-search input{
+  background:#f6f7f8!important;
+  border-color:#cfd5da!important;
+  color:#20262c!important;
+}
+.global-search input::placeholder{color:#87929b!important}
+.global-search input:focus{
+  background:#fff!important;
+  border-color:#76aeda!important;
+  box-shadow:0 0 0 2px rgba(21,111,174,.10)!important;
+}
+.global-search kbd{
+  background:#fff!important;
+  border-color:#cbd2d8!important;
+  color:#6d7780!important;
+}
+.search-panel{
+  background:#fff!important;
+  border-color:#cbd2d8!important;
+  box-shadow:0 12px 35px rgba(27,36,45,.14)!important;
+}
+.search-result{
+  color:#20262c!important;
+  border-bottom-color:#e3e6e9!important;
+  background:#fff!important;
+}
+.search-result:hover{background:#f1f6fa!important}
+.search-result small{color:#6e7983!important}
+
+.top-status span,
+.account-button,
+.notification-button{
+  background:#fff!important;
+  border-color:#d2d8dd!important;
+  color:#5f6b75!important;
+}
+.top-status b{color:#20262c!important}
+.account-button:hover{border-color:#9cabb7!important}
+
+/* -------------------------------------------------------------------------
+   3. TYPOGRAPHY
+   ------------------------------------------------------------------------- */
+
+h1,h2,h3,h4,strong{
+  color:var(--lw-text);
+}
+p,li{
+  color:var(--lw-muted);
+}
+.muted,
+.section-head p,
+.page-head p{
+  color:var(--lw-muted)!important;
+}
+
+.eyebrow,
+.deep-label,
+.portal-kicker,
+.journey-card-kicker,
+.task-label{
+  color:var(--lw-blue)!important;
+}
+
+/* -------------------------------------------------------------------------
+   4. WHITE WORK SURFACES
+   ------------------------------------------------------------------------- */
+
+.hero,
+.portal-hero,
+.portal-path-card,
+.portal-resource-home,
+.portal-mission-card,
+.portal-player-card,
+.compact-player-card,
+.guided-home-cta,
+.guided-path-card,
+.guided-path-hero,
+.guided-paths-rule,
+.guided-existing-course,
+.guided-free-explore,
+.content-card,
+.task,
+.quiz,
+.path-card,
+.lesson-row,
+.continue-card,
+.stat,
+.theory-card,
+.designer-module-card,
+.building-block-card,
+.quick-tutorial-card,
+.chapter-build-card,
+.foundation-chapter-card,
+.model-build-card,
+.resource-library-card,
+.home-leaderboard,
+.journey-start-card,
+.journey-support-strip,
+.journey-focus-admin,
+.journey-focus-form,
+.journey-focus-schedule,
+.journey-path-focus,
+.journey-session-target,
+.progress-player-banner,
+.badge-card,
+.project-panel,
+.class-card,
+.classes-hub-card,
+.critique-post-card,
+.news-card,
+.cloud-callout,
+.empty,
+.news-empty,
+.news-loading,
+.critique-no-feedback,
+.home-leaderboard-empty{
+  background:var(--lw-surface)!important;
+  background-image:none!important;
+  border-color:var(--lw-line)!important;
+  color:var(--lw-text)!important;
+  box-shadow:none!important;
+}
+
+.portal-path-card:hover,
+.guided-path-card:hover,
+.theory-card:hover,
+.designer-module-card:hover,
+.building-block-card:hover,
+.quick-tutorial-card:hover,
+.news-card:hover,
+.lesson-row:hover{
+  background:#f9fbfc!important;
+  border-color:var(--lw-line-strong)!important;
+}
+
+.journey-start-card.quiet{opacity:1!important}
+.journey-start-card.class-focus{border-top-color:var(--lw-blue)!important}
+.journey-start-card.personal,
+.journey-start-card.explore{border-top-color:#9ca8b1!important}
+
+.journey-start-card p,
+.journey-browse-head p,
+.journey-support-strip p,
+.portal-path-card p,
+.guided-home-cta p,
+.guided-path-card p,
+.home-leaderboard p{
+  color:var(--lw-muted)!important;
+}
+
+/* -------------------------------------------------------------------------
+   5. HOME PAGE
+   ------------------------------------------------------------------------- */
+
+.journey-home-ready .portal-hero-clean{
+  background:transparent!important;
+  border:0!important;
+  border-bottom:1px solid var(--lw-line)!important;
+}
+.journey-home-ready .portal-hero-clean h1{color:#1d2329!important}
+.journey-home-ready .portal-hero-clean p{color:#64707a!important}
+
+.journey-browse-head{
+  border-top-color:var(--lw-line)!important;
+}
+
+.journey-browse-grid .portal-path-icon{
+  background:#f0f3f5!important;
+  border-color:#cbd2d8!important;
+  color:#44515b!important;
+}
+.journey-browse-grid .portal-path-card>strong{
+  color:var(--lw-blue)!important;
+}
+.journey-support-strip a{
+  background:#f7f8f9!important;
+  border-color:#d5dade!important;
+  color:#39444d!important;
+}
+.journey-support-strip a:hover{
+  background:var(--lw-blue-soft)!important;
+  border-color:#95bfdd!important;
+  color:#174f76!important;
+}
+.home-leaderboard{
+  border-left-color:#9eabb4!important;
+}
+
+/* -------------------------------------------------------------------------
+   6. BUTTONS / FORMS
+   ------------------------------------------------------------------------- */
+
+.button{
+  background:#f6f7f8!important;
+  border-color:#c9d0d6!important;
+  color:#273039!important;
+}
+.button:hover{
+  background:#edf1f4!important;
+  border-color:#aeb8c0!important;
+}
+.button.primary{
+  background:var(--lw-blue)!important;
+  border-color:var(--lw-blue)!important;
+  color:#fff!important;
+}
+.button.primary:hover{
+  background:var(--lw-blue-hover)!important;
+  border-color:var(--lw-blue-hover)!important;
+}
+.button.success{
+  background:var(--lw-green-soft)!important;
+  border-color:#9ac4aa!important;
+  color:var(--lw-green)!important;
+}
+.button.danger{
+  background:var(--lw-red-soft)!important;
+  border-color:#d7aab0!important;
+  color:var(--lw-red)!important;
+}
+.button.ghost{
+  background:#fff!important;
+  color:#46525c!important;
+}
+.link-button{color:#52616c!important}
+
+input,
+select,
+textarea,
+.project-input,
+.project-textarea,
+.critique-toolbar select,
+.critique-post-composer select,
+.critique-post-composer input,
+.critique-post-composer textarea,
+.critique-feedback-form textarea,
+.critique-owner-tools input,
+.leaderboard-toolbar select,
+.classes-join-panel input,
+.journey-focus-form input,
+.journey-focus-form select,
+.journey-focus-form textarea{
+  background:#fff!important;
+  border-color:#c8d0d6!important;
+  color:#20262c!important;
+}
+input::placeholder,
+textarea::placeholder{color:#8b969f!important}
+input:focus,
+select:focus,
+textarea:focus{
+  border-color:#6fa8d2!important;
+  box-shadow:0 0 0 2px rgba(21,111,174,.10)!important;
+}
+
+.auth-tabs{
+  background:#edf1f4!important;
+  border-color:#d2d8dd!important;
+}
+.auth-tabs button{
+  color:#68747e!important;
+}
+.auth-tabs button.active{
+  background:#fff!important;
+  color:#20262c!important;
+}
+.modal{
+  background:#fff!important;
+  border-color:#cbd3d9!important;
+  color:#20262c!important;
+  box-shadow:0 24px 70px rgba(26,35,44,.18)!important;
+}
+.modal-backdrop{
+  background:rgba(26,31,36,.55)!important;
+}
+.modal-close{color:#66727c!important}
+.auth-message{color:#68747e!important}
+
+/* -------------------------------------------------------------------------
+   7. LESSONS / THEORY / DESIGN / MODEL
+   ------------------------------------------------------------------------- */
+
+.lesson-hero,
+.guided-path-hero,
+.programming-page-head,
+.theory-page-head,
+.designer-page-head,
+.model-page-head.revamped,
+.news-page-head{
+  background:#fff!important;
+  border-color:var(--lw-line)!important;
+  color:var(--lw-text)!important;
+}
+.lesson-hero{border-top-color:var(--lw-blue)!important}
+.lesson-hero p{color:#67737d!important}
+.lesson-meta{border-color:#d6dbe0!important}
+.meta-line small{color:#77838d!important}
+.meta-line strong{color:#283038!important}
+
+.content-card p,
+.content-card li{
+  color:#4f5b64!important;
+}
+.goal,
+.concept,
+.steps li,
+.task,
+.quiz,
+.requirement,
+.theory-key-grid article,
+.model-quality-grid article,
+.model-thinking-grid article,
+.designer-analysis-grid>div,
+.theory-lab-columns>div{
+  background:#f8f9fa!important;
+  border-color:#d9dee2!important;
+  color:#46515a!important;
+}
+.goal::before{color:var(--lw-green)!important}
+.concept strong{color:#20262c!important}
+
+.lesson-nav{
+  background:#fff!important;
+  border-color:#d5dade!important;
+}
+.lesson-nav-label{color:#77838d!important}
+.section-button{
+  color:#58656f!important;
+  background:transparent!important;
+}
+.section-button:hover{background:#eef3f6!important}
+.section-button.active{
+  background:var(--lw-blue-soft)!important;
+  color:#155783!important;
+}
+
+/* Guided path current step */
+.guided-sequence .journey-path-now,
+.guided-step.current{
+  background:#fff!important;
+  border-color:#8fb9d6!important;
+  box-shadow:inset 3px 0 0 var(--lw-blue)!important;
+}
+.guided-sequence .journey-path-next{
+  background:#fbfcfd!important;
+  border-color:#bdc6cd!important;
+}
+
+/* -------------------------------------------------------------------------
+   8. STATUS / TAGS / QUIZZES
+   ------------------------------------------------------------------------- */
+
+.tag,
+.portal-chip-row span,
+.sync-chip,
+.path-mini,
+.request-status,
+.project-type-pill,
+.critique-area,
+.you-chip{
+  background:#eef1f4!important;
+  border-color:#d4d9de!important;
+  color:#59656e!important;
+}
+.tag.beginner{
+  background:var(--lw-green-soft)!important;
+  color:var(--lw-green)!important;
+  border-color:#b2d2bd!important;
+}
+.tag.intermediate{
+  background:var(--lw-amber-soft)!important;
+  color:var(--lw-amber)!important;
+  border-color:#e5c98f!important;
+}
+
+.quiz-option{
+  background:#fff!important;
+  border-color:#cfd6dc!important;
+  color:#36414a!important;
+}
+.quiz-option:hover{
+  background:#f3f7fa!important;
+  border-color:#9cb7ca!important;
+}
+.quiz-option.correct{
+  background:var(--lw-green-soft)!important;
+  color:var(--lw-green)!important;
+  border-color:#8fc2a2!important;
+}
+.quiz-option.wrong{
+  background:var(--lw-red-soft)!important;
+  color:var(--lw-red)!important;
+  border-color:#d6a0a7!important;
+}
+.quiz-feedback{color:#66727c!important}
+
+/* -------------------------------------------------------------------------
+   9. TABLES / TEACHER / COMMUNITY
+   ------------------------------------------------------------------------- */
+
+.teacher-admin-section,
+.teacher-class-pulse,
+.classes-hub-toolbar,
+.critique-toolbar,
+.leaderboard-toolbar,
+.class-code-panel,
+.classes-hub-code,
+.class-member{
+  background:#fff!important;
+  border-color:#d4d9de!important;
+  color:#29323a!important;
+}
+.teacher-pulse-table th,
+.class-snapshot-table th{
+  background:#eef1f4!important;
+  color:#66737d!important;
+  border-color:#d5dade!important;
+}
+.teacher-pulse-table td,
+.class-snapshot-table td{
+  background:#fff!important;
+  color:#34404a!important;
+  border-color:#e0e4e7!important;
+}
+.teacher-pulse-table td b,
+.class-snapshot-table td b{color:#20262c!important}
+
+/* -------------------------------------------------------------------------
+   10. IMAGES / CAPTIONS
+   ------------------------------------------------------------------------- */
+
+.visual,
+.visual-flow-card,
+.zoomable-image,
+.theory-example-image,
+.designer-case-image,
+.model-build-thumb,
+.model-build-hero-image{
+  background:#e9edf0!important;
+  border-color:#c5ccd2!important;
+}
+.visual img,
+.visual-flow-card img,
+.zoomable-image img{
+  background:#dfe4e8!important;
+}
+.visual figcaption,
+.visual-flow-card figcaption,
+.zoomable-image figcaption{
+  background:#f3f5f6!important;
+  color:#65717b!important;
+  border-top-color:#cbd2d8!important;
+}
+
+/* -------------------------------------------------------------------------
+   11. CLASSROOM / ABOUT / SIGNUP
+   ------------------------------------------------------------------------- */
+
+.classroom-context-strip{
+  background:#f6f8f9!important;
+  border-color:#d4d9de!important;
+  border-left-color:#8f9da8!important;
+}
+.classroom-context-strip strong{color:#216995!important}
+.classroom-context-strip span{color:#5d6973!important}
+.classroom-about-link{color:#5d6b75!important}
+
+.signup-hotfix-status{
+  background:#eef4f8!important;
+  color:#35434d!important;
+  border-color:#adc6d8!important;
+}
+.signup-hotfix-status.working{
+  background:#eef6fb!important;
+  border-color:#80add0!important;
+}
+.signup-hotfix-status.good{
+  background:var(--lw-green-soft)!important;
+  color:var(--lw-green)!important;
+  border-color:#9fc7ad!important;
+}
+.signup-hotfix-status.bad{
+  background:var(--lw-red-soft)!important;
+  color:var(--lw-red)!important;
+  border-color:#d4a5ab!important;
+}
+
+.toast{
+  background:#fff!important;
+  color:#27313a!important;
+  border-color:#bdc7ce!important;
+  box-shadow:0 10px 28px rgba(31,40,48,.15)!important;
+}
+.toast.badge-toast{
+  background:#fff!important;
+  border-color:#a9b9c5!important;
+  color:#27313a!important;
+}
+
+/* -------------------------------------------------------------------------
+   12. ABOUT PAGE
+   ------------------------------------------------------------------------- */
+
+.about-shell{color:var(--lw-text)!important}
+.about-back{color:var(--lw-blue)!important}
+.about-head,
+.about-section{border-color:var(--lw-line)!important}
+.about-head p,
+.about-section p,
+.about-section li{color:#59656f!important}
+.about-fact{
+  background:#fff!important;
+  border-color:var(--lw-line)!important;
+}
+.about-fact strong{color:#20262c!important}
+.about-fact span{color:#64717b!important}
+
+/* -------------------------------------------------------------------------
+   13. MOBILE
+   ------------------------------------------------------------------------- */
+
+@media(max-width:760px){
+  .topbar{background:#fff!important}
+  .sidebar{
+    background:var(--lw-sidebar)!important;
+    box-shadow:20px 0 50px rgba(20,28,34,.22)!important;
+  }
+}
+
+/* Avoid inherited decorative shadows from older layers. */
+.portal-path-card,
+.content-card,
+.guided-path-card,
+.lesson-hero,
+.modal,
+.journey-start-card,
+.news-card,
+.class-card{
+  text-shadow:none!important;
+}
