@@ -1,15 +1,17 @@
-UE5 Learning Hub v3.48.0 — Light Workspace
+UE5 Learning Hub v3.48.3 — Consistent Reference Navigation
 
 UPLOAD / REPLACE:
 - index.html
-- about-hub.html
+- cheatsheet.html
+- blueprint-checks.html
 
 UPLOAD NEW:
-- light-workspace.css
+- standalone-shell.css
+- standalone-shell.js
 
-KEEP the existing v3.47.1 files:
-- classroom-identity.css
-- classroom-identity.js
-- signup-feedback.js
+KEEP:
+- cheatsheet.css
+- blueprint-checks.css
+- blueprint-checks.js
 
-No database change required.
+No database changes.

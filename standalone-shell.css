@@ -1,0 +1,283 @@
+/* UE5 Learning Hub v3.48.3 — Shared standalone shell
+   Makes UE5 Cheat Sheet and Blueprint Checks feel like part of the same Hub.
+*/
+
+:root{
+  --ss-bg:#20242a;
+  --ss-panel:#272c32;
+  --ss-panel-2:#23282e;
+  --ss-line:#3b424a;
+  --ss-line-strong:#4a535d;
+  --ss-text:#e4e7e9;
+  --ss-muted:#9da7af;
+  --ss-blue:#3d8ec9;
+  --ss-sidebar:#121519;
+}
+
+html,body{
+  background:var(--ss-bg)!important;
+  color:var(--ss-text)!important;
+}
+body.standalone-shell-ready{
+  margin:0!important;
+  padding:0 0 0 248px!important;
+  min-height:100vh;
+}
+
+/* Hide the old mini-navs: full Hub navigation is now always available. */
+body.standalone-shell-ready > .cheat-topbar[hidden],
+body.standalone-shell-ready > header.topbar[hidden]{
+  display:none!important;
+}
+
+/* Full Hub navigation */
+.standalone-sidebar{
+  position:fixed;
+  z-index:300;
+  inset:0 auto 0 0;
+  width:248px;
+  padding:18px 13px 16px;
+  box-sizing:border-box;
+  overflow-y:auto;
+  background:var(--ss-sidebar);
+  border-right:1px solid #272d33;
+  color:#fff;
+}
+.standalone-brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:0 7px 14px;
+  margin-bottom:8px;
+  border-bottom:1px solid #2c333a;
+  color:#fff;
+  text-decoration:none;
+}
+.standalone-brand-mark{
+  width:36px;height:36px;
+  display:grid;place-items:center;
+  border:1px solid #505a64;
+  background:#1a2026;
+  border-radius:3px;
+  font-weight:900;
+}
+.standalone-brand b{display:block;letter-spacing:.04em}
+.standalone-brand small{display:block;color:#88949e;font-size:10px;margin-top:1px}
+
+.standalone-nav{display:grid;gap:1px}
+.standalone-nav-heading{
+  margin:14px 8px 5px;
+  color:#707c86;
+  font:700 9px/1.3 ui-monospace,SFMono-Regular,Consolas,monospace;
+  text-transform:uppercase;
+  letter-spacing:.13em;
+}
+.standalone-nav a{
+  min-height:36px;
+  display:flex;
+  align-items:center;
+  gap:9px;
+  padding:6px 8px;
+  color:#bac2c8;
+  text-decoration:none;
+  border-radius:2px;
+  font:650 12px/1.25 Inter,ui-sans-serif,system-ui,sans-serif;
+}
+.standalone-nav a:hover{background:#191d22;color:#fff}
+.standalone-nav a.active{
+  background:#20262c;
+  color:#fff;
+  box-shadow:inset 2px 0 0 var(--ss-blue);
+}
+.standalone-nav-code{
+  width:34px;min-width:34px;height:22px;
+  display:grid;place-items:center;
+  border:1px solid #353d45;
+  background:#101418;
+  color:#8c99a3;
+  border-radius:2px;
+  font:700 8px/1 ui-monospace,SFMono-Regular,Consolas,monospace;
+  letter-spacing:.03em;
+}
+.standalone-side-note{
+  margin:18px 7px 0;
+  padding:11px 8px;
+  border-top:1px solid #2c333a;
+  color:#74818b;
+  font:700 9px/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;
+  letter-spacing:.1em;
+}
+.standalone-side-note span{font-family:Inter,ui-sans-serif,system-ui,sans-serif;font-weight:500;letter-spacing:0}
+
+/* Shared topbar */
+.hub-shell-bar{
+  position:fixed;
+  z-index:250;
+  left:248px;right:0;top:0;
+  height:58px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:0 22px;
+  box-sizing:border-box;
+  background:#1a1e23;
+  border-bottom:1px solid var(--ss-line);
+}
+.hub-shell-crumb{
+  display:flex;
+  align-items:baseline;
+  gap:8px;
+  min-width:0;
+}
+.hub-shell-crumb span{
+  color:#7f8a93;
+  font:700 9px/1 ui-monospace,SFMono-Regular,Consolas,monospace;
+  text-transform:uppercase;
+  letter-spacing:.11em;
+}
+.hub-shell-crumb strong{
+  color:#edf0f2;
+  font:750 14px/1.2 Inter,ui-sans-serif,system-ui,sans-serif;
+}
+.hub-shell-actions{
+  margin-left:auto;
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+.hub-shell-actions a{
+  padding:7px 9px;
+  border:1px solid #3c454d;
+  background:#242a30;
+  border-radius:3px;
+  color:#b9c4cc;
+  text-decoration:none;
+  font:650 11px/1 Inter,ui-sans-serif,system-ui,sans-serif;
+}
+.hub-shell-actions a:hover{background:#30373e;color:#fff}
+.hub-shell-actions .hub-return{
+  border-color:#4279a0;
+  color:#a9d5f2;
+}
+.standalone-menu{
+  display:none;
+  border:1px solid #3c454d;
+  background:#242a30;
+  color:#fff;
+  border-radius:3px;
+  width:36px;height:34px;
+  cursor:pointer;
+}
+
+/* Let each specialist page keep its own layout/content, but give it the Hub shell. */
+body.standalone-shell-ready > main{
+  box-sizing:border-box!important;
+  width:auto!important;
+  max-width:1420px!important;
+  margin:0 auto!important;
+  padding-top:84px!important;
+  padding-left:24px!important;
+  padding-right:24px!important;
+}
+body.standalone-shell-ready > footer{
+  box-sizing:border-box!important;
+  color:#7e8992!important;
+  border-top:1px solid var(--ss-line)!important;
+}
+
+/* Normalise the large page surfaces toward the current graphite Hub. */
+body.standalone-cheat .cheat-hero,
+body.standalone-cheat .cheat-card,
+body.standalone-cheat .rule-strip,
+body.standalone-cheat .quick-jump,
+body.standalone-cheat .cheat-next,
+body.standalone-checks .hero,
+body.standalone-checks .rule,
+body.standalone-checks .visual-check-strip,
+body.standalone-checks .jumps,
+body.standalone-checks .check-section,
+body.standalone-checks .proof-panel,
+body.standalone-checks .quiz-panel,
+body.standalone-checks .finish{
+  background:#272c32!important;
+  background-image:none!important;
+  border-color:#3b424a!important;
+  box-shadow:none!important;
+  color:#e4e7e9!important;
+}
+
+body.standalone-cheat h1,
+body.standalone-cheat h2,
+body.standalone-cheat h3,
+body.standalone-checks h1,
+body.standalone-checks h2,
+body.standalone-checks h3{
+  color:#e8ebed!important;
+  text-shadow:none!important;
+}
+body.standalone-cheat p,
+body.standalone-cheat li,
+body.standalone-checks p,
+body.standalone-checks li,
+body.standalone-checks .muted{
+  color:#abb4bb!important;
+}
+body.standalone-cheat .eyebrow,
+body.standalone-checks .eyebrow,
+body.standalone-checks .panel-label{
+  color:#79b3dc!important;
+}
+
+body.standalone-cheat .quick-jump a,
+body.standalone-checks .jumps a{
+  background:#22272c!important;
+  border-color:#3c444c!important;
+  color:#b8c1c8!important;
+}
+body.standalone-cheat .quick-jump a:hover,
+body.standalone-checks .jumps a:hover{
+  background:#2d343a!important;
+  color:#fff!important;
+}
+
+body.standalone-checks .answer,
+body.standalone-checks .proof-item,
+body.standalone-checks .quiz-q{
+  background:#23282d!important;
+  border-color:#3a4249!important;
+  color:#c4cbd0!important;
+}
+body.standalone-checks button,
+body.standalone-cheat button{
+  border-radius:3px!important;
+}
+
+/* Keep real screenshots prominent. */
+body.standalone-checks .visual-check-thumbs img,
+body.standalone-cheat img{
+  box-shadow:none!important;
+}
+
+/* Mobile: same menu behaviour as the main Hub. */
+@media(max-width:820px){
+  body.standalone-shell-ready{padding-left:0!important}
+  .standalone-sidebar{
+    width:min(86vw,300px);
+    transform:translateX(-100%);
+    transition:transform .18s ease;
+    box-shadow:none;
+  }
+  .standalone-sidebar.open{
+    transform:none;
+    box-shadow:24px 0 55px rgba(0,0,0,.45);
+  }
+  .hub-shell-bar{left:0;padding:0 12px}
+  .standalone-menu{display:inline-grid;place-items:center}
+  .hub-shell-crumb span{display:none}
+  .hub-shell-actions a:not(.hub-return){display:none}
+  body.standalone-shell-ready > main{
+    padding-top:78px!important;
+    padding-left:14px!important;
+    padding-right:14px!important;
+  }
+}
