@@ -1,11 +1,11 @@
-/* v3.46.1 — Navigation + Link Hotfix
+/* v3.46.2 — Remove Sculpt Playground
    Student Journey + Class Focus + learning-flow refinement layer.
    Does not replace core learning data, app.js, backend.js, roster controls or existing progress logic.
 */
 (() => {
   'use strict';
 
-  const VERSION = '3.46.1';
+  const VERSION = '3.46.2';
   const WORK_KEY = 'ue5hub:v345:personal-work';
   const NAV_KEY = 'ue5hub:v345:nav-groups';
   const FOCUS_CACHE_MS = 20000;
@@ -72,7 +72,11 @@
   }
 
   function currentWork() {
-    try { return JSON.parse(localStorage.getItem(WORK_KEY) || 'null'); }
+    try {
+      const item = JSON.parse(localStorage.getItem(WORK_KEY) || 'null');
+      if (item?.href && /^#\/sculpt(?:\/|$)/.test(item.href)) return null;
+      return item;
+    }
     catch (_) { return null; }
   }
 
@@ -81,7 +85,6 @@
     if (/^#\/modeling/.test(hash)) return '3D Modelling';
     if (/^#\/design/.test(hash)) return 'Designer Studio';
     if (/^#\/theory/.test(hash)) return 'Game Design Theory';
-    if (/^#\/sculpt/.test(hash)) return 'Sculpt';
     if (/^#\/tutorial/.test(hash)) return 'Quick Tutorial';
     if (/^#\/lesson/.test(hash) || /^#\/programming/.test(hash) || /^#\/path\//.test(hash)) return 'Unreal Learning';
     if (/^#\/chapter-build/.test(hash)) return 'Chapter Build';
@@ -90,7 +93,7 @@
   }
 
   function isMeaningfulWorkRoute(hash) {
-    if (['#/programming','#/theory','#/design','#/modeling','#/sculpt'].includes(hash)) return true;
+    if (['#/programming','#/theory','#/design','#/modeling'].includes(hash)) return true;
     return [
       '#/pathways/','#/lesson/','#/path/','#/tutorial/','#/tutorial-family/',
       '#/design/','#/modeling/','#/theory/','#/chapter-build/'
@@ -303,6 +306,8 @@
       }
       // v3.46.1: keep every browse destination visible. Students should not
       // have to discover another reveal control to find Sculpt or News.
+      const sculptCard = grid.querySelector('.portal-path-card[href="#/sculpt"]');
+      if (sculptCard) sculptCard.remove();
       [...grid.querySelectorAll('.portal-path-card')].forEach(card=>{
         card.hidden=false;
         card.classList.remove('journey-secondary-browse-card');
@@ -394,7 +399,7 @@
 
   function classifySearch(href='') {
     if (/^#\/(lesson|path\/|programming|theory)/.test(href)) return ['LEARN','Learn the idea or system'];
-    if (/^#\/(tutorial|chapter-build|design|modeling|sculpt)/.test(href)) return ['MAKE','Build or apply something'];
+    if (/^#\/(tutorial|chapter-build|design|modeling)/.test(href)) return ['MAKE','Build or apply something'];
     if (/^#\/(blocks|revision|critique|glossary)/.test(href)) return ['FIX / CHECK','Unstick or test yourself'];
     return ['REFERENCE','Look something up'];
   }
@@ -402,6 +407,7 @@
   function groupSearchResults() {
     const panel=$('#searchPanel');
     if (!panel || panel.hidden || panel.dataset.grouping==='1') return;
+    [...panel.children].filter(x=>x.matches?.('a.search-result[href^="#/sculpt"]')).forEach(x=>x.remove());
     const results=[...panel.children].filter(x=>x.matches?.('a.search-result'));
     if (results.length<2) return;
     panel.dataset.grouping='1';
@@ -531,6 +537,7 @@
     // Do not hide sections behind headings or a "More areas" reveal.
     nav.dataset.journeyReady = '1';
     nav.querySelector('.journey-more-areas')?.remove();
+    nav.querySelector('a[href="#/sculpt"]')?.remove();
 
     $$('#mainNav a').forEach(link => {
       link.classList.remove('journey-nav-hidden','journey-main-extra-hidden');
@@ -552,7 +559,6 @@
       {href:'#/theory',title:'Game Design Theory',kind:'theory',label:'◈ Game Design Theory'},
       {href:'#/design',title:'Designer Studio',kind:'design',label:'✦ Designer Studio'},
       {href:'#/modeling',title:'3D Modelling Studio',kind:'modeling',label:'⬡ 3D Modelling Studio'},
-      {href:'#/sculpt',title:'Sculpt Playground',kind:'sculpt',label:'🗿 Sculpt Playground'},
       {href:'#/tutorials',title:'Quick Tutorials',kind:'tutorial',label:'🛠 Quick Tutorials'},
       {href:'#/revision',title:'Revision Quizzes',kind:'revision',label:'↻ Revision Quizzes'},
       {href:'blueprint-checks.html',title:'Blueprint Checks',kind:'reference',label:'✓ Blueprint Checks'},

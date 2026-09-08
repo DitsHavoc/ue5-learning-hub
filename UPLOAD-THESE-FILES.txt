@@ -1,9 +1,8 @@
-UE5 Learning Hub v3.46.1 — Navigation + Link Hotfix
+UE5 Learning Hub v3.46.2 — Remove Sculpt Playground
 
 UPLOAD / REPLACE:
 - index.html
-- journey-cleanup.css
 - journey-cleanup.js
+- journey-cleanup.css
 
-No database change is required.
-Do NOT re-run the Class Focus migration.
+No database change required.
