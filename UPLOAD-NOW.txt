@@ -1,0 +1,10 @@
+EMERGENCY HOTFIX v3.48.1
+
+REPLACE THESE TWO FILES ONLY:
+- index.html
+- light-workspace.css
+
+That is all.
+
+This changes the bright v3.48.0 workspace back to a dark graphite studio/documentation palette.
+No database or JavaScript changes.
