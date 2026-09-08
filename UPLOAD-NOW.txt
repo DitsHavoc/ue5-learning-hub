@@ -1,10 +1,8 @@
-EMERGENCY HOTFIX v3.48.1
+v3.48.2 — Guided Paths Tidy
 
-REPLACE THESE TWO FILES ONLY:
+REPLACE:
 - index.html
 - light-workspace.css
 
-That is all.
-
-This changes the bright v3.48.0 workspace back to a dark graphite studio/documentation palette.
-No database or JavaScript changes.
+Removes the large "THE RULE / Guidance, not another course system" panel from Guided Paths.
+No JS, content data, progress or database changes.

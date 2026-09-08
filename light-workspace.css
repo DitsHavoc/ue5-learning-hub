@@ -503,3 +503,15 @@ input:focus,select:focus,textarea:focus{
     box-shadow:18px 0 48px rgba(0,0,0,.38)!important;
   }
 }
+
+
+/* v3.48.2 — Guided Paths tidy
+   The large explanatory "THE RULE / Guidance, not another course system" panel
+   repeats information already clear from the page intro and path cards.
+*/
+.guided-paths-rule{
+  display:none!important;
+}
+.guided-paths-head{
+  margin-bottom:18px!important;
+}
