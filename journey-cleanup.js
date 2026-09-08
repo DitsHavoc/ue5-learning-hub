@@ -1,11 +1,11 @@
-/* v3.46.0 — Learning Flow Pass
+/* v3.46.1 — Navigation + Link Hotfix
    Student Journey + Class Focus + learning-flow refinement layer.
    Does not replace core learning data, app.js, backend.js, roster controls or existing progress logic.
 */
 (() => {
   'use strict';
 
-  const VERSION = '3.46.0';
+  const VERSION = '3.46.1';
   const WORK_KEY = 'ue5hub:v345:personal-work';
   const NAV_KEY = 'ue5hub:v345:nav-groups';
   const FOCUS_CACHE_MS = 20000;
@@ -231,8 +231,9 @@
     </article>`;
   }
 
-  async function renderJourneyStart(host) {
+  async function renderJourneyStart(host,{force=false}={}) {
     if (!host || host.dataset.loading === '1') return;
+    if (!force && host.dataset.journeyRendered === '1') return;
     host.dataset.loading = '1';
     host.innerHTML = `<article class="journey-start-card class-focus quiet loading"><span class="journey-card-kicker">📌 CLASS FOCUS</span><h2>Loading class focus…</h2></article>${personalWorkMarkup()}${exploreMarkup()}`;
     const focus = await classFocusMarkup();
@@ -240,6 +241,7 @@
     const first = host.firstElementChild;
     if (first) first.outerHTML = focus;
     host.dataset.loading = '0';
+    host.dataset.journeyRendered = '1';
   }
 
   function supportStripMarkup() {
@@ -297,16 +299,16 @@
     if (grid) {
       grid.classList.add('journey-browse-grid');
       if (!grid.previousElementSibling?.classList?.contains('journey-browse-head')) {
-        grid.insertAdjacentHTML('beforebegin', `<section class="journey-browse-head"><div><span class="eyebrow">BROWSE LEARNING</span><h2>Choose an area</h2><p>Four main destinations first. Everything else is still here when you need it.</p></div></section>`);
+        grid.insertAdjacentHTML('beforebegin', `<section class="journey-browse-head"><div><span class="eyebrow">BROWSE LEARNING</span><h2>Choose an area</h2><p>All main learning areas stay visible — nothing important is hidden behind another click.</p></div></section>`);
       }
-      const secondary=[...grid.querySelectorAll('.portal-path-card')].filter(x=>['#/sculpt','#/news'].includes(x.getAttribute('href')));
-      secondary.forEach(x=>x.classList.add('journey-secondary-browse-card'));
-      if (secondary.length && !app.querySelector('[data-journey-more-browse]')) {
-        grid.insertAdjacentHTML('afterend', `<button class="journey-more-browse" type="button" data-journey-more-browse><span>More areas</span><small>Sculpt • News & Industry</small><b>▾</b></button>`);
-      }
-      const more=app.querySelector('[data-journey-more-browse]');
-      if (more) secondary.forEach(x=>x.hidden=!more.classList.contains('open'));
-      if (!app.querySelector('.journey-support-strip')) (more||grid).insertAdjacentHTML('afterend', supportStripMarkup());
+      // v3.46.1: keep every browse destination visible. Students should not
+      // have to discover another reveal control to find Sculpt or News.
+      [...grid.querySelectorAll('.portal-path-card')].forEach(card=>{
+        card.hidden=false;
+        card.classList.remove('journey-secondary-browse-card');
+      });
+      app.querySelector('[data-journey-more-browse]')?.remove();
+      if (!app.querySelector('.journey-support-strip')) grid.insertAdjacentHTML('afterend', supportStripMarkup());
     }
 
     const resource = app.querySelector('.portal-resource-home');
@@ -512,72 +514,36 @@
   }
 
   function ensureActiveNavVisible() {
-    const href = activeHref();
-    $$('.nav-heading[data-journey-group]').forEach(heading => {
-      const links = headingLinks(heading);
-      if (links.some(link => link.getAttribute('href') === href)) setNavGroup(heading, true, false);
+    const nav = $('#mainNav');
+    if (!nav) return;
+    $$('#mainNav a').forEach(link => {
+      link.classList.remove('journey-nav-hidden','journey-main-extra-hidden');
+      link.hidden = false;
     });
-    const active = $$('#mainNav a').find(link=>link.getAttribute('href')===href);
-    if (active?.classList.contains('journey-main-extra-hidden')) {
-      const more = $('#mainNav .journey-more-areas');
-      ['critique','sculpt','news'].map(id=>$(`#mainNav [data-route="${id}"]`)).filter(Boolean).forEach(x=>x.classList.remove('journey-main-extra-hidden'));
-      if (more) {
-        more.classList.add('open');
-        const mark=more.querySelector('b');if(mark)mark.textContent='▴';
-      }
-    }
+    nav.querySelector('.journey-more-areas')?.remove();
   }
 
   function enhanceSidebar() {
     const nav = $('#mainNav');
-    if (!nav || nav.dataset.journeyReady === '1') {
-      ensureActiveNavVisible();
-      return;
-    }
+    if (!nav) return;
+
+    // v3.46.1: every student-facing destination stays visible.
+    // Do not hide sections behind headings or a "More areas" reveal.
     nav.dataset.journeyReady = '1';
+    nav.querySelector('.journey-more-areas')?.remove();
 
-    // Keep five core destinations visible; tuck the extra main-area destinations behind one small reveal.
-    const modeling = nav.querySelector('[data-route="modeling"]');
-    const extraLinks = ['critique','sculpt','news'].map(id=>nav.querySelector(`[data-route="${id}"]`)).filter(Boolean);
-    if (modeling && extraLinks.length) {
-      const more = document.createElement('button');
-      more.type = 'button';
-      more.className = 'journey-more-areas';
-      more.innerHTML = `<span>More areas</span><b>▾</b>`;
-      modeling.insertAdjacentElement('afterend', more);
-      const state = navState();
-      const apply = open => {
-        more.classList.toggle('open', open);
-        more.querySelector('b').textContent = open ? '▴' : '▾';
-        extraLinks.forEach(x=>x.classList.toggle('journey-main-extra-hidden', !open));
-        const next = navState(); next.moreAreas = open; saveNavState(next);
-      };
-      apply(Boolean(state.moreAreas));
-      more.addEventListener('click', ()=>apply(!more.classList.contains('open')));
-    }
-
-    const defaults = {
-      'main-areas': true,
-      'unreal-learning': true,
-      'study-tools': false,
-      'reference': false,
-      'community-progress': false
-    };
-    const state = navState();
-
-    $$('.nav-heading', nav).forEach((heading, index) => {
-      const key = heading.textContent.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') || `group-${index}`;
-      heading.dataset.journeyGroup = key;
-      heading.setAttribute('role','button');
-      heading.setAttribute('tabindex','0');
-      const current = Object.prototype.hasOwnProperty.call(state,key) ? Boolean(state[key]) : (defaults[key] ?? true);
-      setNavGroup(heading,current,false);
-      const toggle = () => setNavGroup(heading, heading.classList.contains('collapsed'));
-      heading.addEventListener('click',toggle);
-      heading.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle();}});
+    $$('#mainNav a').forEach(link => {
+      link.classList.remove('journey-nav-hidden','journey-main-extra-hidden');
+      link.hidden = false;
     });
 
-    ensureActiveNavVisible();
+    $$('.nav-heading', nav).forEach(heading => {
+      heading.classList.remove('collapsed');
+      heading.removeAttribute('data-journey-group');
+      heading.removeAttribute('role');
+      heading.removeAttribute('tabindex');
+      heading.removeAttribute('aria-expanded');
+    });
   }
 
   function focusTargetOptions() {

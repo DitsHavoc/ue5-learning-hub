@@ -1,13 +1,9 @@
-UE5 Learning Hub v3.46.0 — Learning Flow Pass
+UE5 Learning Hub v3.46.1 — Navigation + Link Hotfix
 
-UPLOAD / REPLACE THESE 3 FILES:
+UPLOAD / REPLACE:
 - index.html
 - journey-cleanup.css
 - journey-cleanup.js
 
-DO NOT re-run the Supabase SQL migration.
-The Class Focus database migration from v3.45.0 is already installed.
-The SQL file in /supabase is included only as a schema record.
-
-This release does not replace app.js, backend.js, roster-controls.js,
-or any Prison / Blueprint / learning-data files.
+No database change is required.
+Do NOT re-run the Class Focus migration.

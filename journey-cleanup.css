@@ -1,4 +1,4 @@
-/* v3.46.0 — Learning Flow Pass
+/* v3.46.1 — Navigation + Link Hotfix
    Additive only. Keeps the existing visual identity while reducing front-page choice overload.
 */
 
@@ -274,3 +274,17 @@
 
 @media(max-width:920px){.journey-orientation{grid-template-columns:1fr}.journey-orientation>div{border-left:0;border-top:1px solid rgba(125,157,184,.16)}.journey-orientation>div:first-child{border-top:0}.journey-path-focus{grid-template-columns:1fr}.journey-path-next-box{border-left:0;border-top:1px solid rgba(125,157,184,.18);padding:9px 0 0}.journey-path-controls{justify-content:flex-start}.journey-focus-quickbar{grid-template-columns:1fr}.journey-focus-quick-actions{justify-content:flex-start}}
 @media(max-width:600px){.journey-home-ready .portal-hero-clean h1{font-size:34px}.journey-browse-grid .portal-path-card p{font-size:.84rem}.journey-support-strip{padding:12px}.journey-support-strip nav{display:grid;grid-template-columns:1fr 1fr;width:100%}.journey-support-strip a{display:block}.journey-path-focus{padding:12px}.journey-session-target{display:grid}.journey-focus-quick-actions{display:grid;grid-template-columns:1fr 1fr}.journey-focus-quick-actions label{grid-column:1/-1}.journey-focus-quick-actions select{max-width:none;flex:1}.journey-focus-quick-actions [data-focus-quick="copy"]{grid-column:1/-1}.journey-search-group-head span{display:none}}
+
+
+/* v3.46.1 — visibility / click hotfix */
+#mainNav .journey-nav-hidden,
+#mainNav .journey-main-extra-hidden{display:flex!important}
+#mainNav .journey-more-areas{display:none!important}
+.journey-secondary-browse-card[hidden]{display:block!important}
+.journey-browse-grid .portal-path-card.news{
+  display:block!important;
+  border-color:rgba(87,215,255,.34)!important;
+}
+.journey-browse-grid .portal-path-card.news .portal-path-icon{
+  border-color:rgba(87,215,255,.38);
+}
