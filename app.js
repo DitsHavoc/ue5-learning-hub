@@ -1408,6 +1408,8 @@ async function saveCareerProfileData(patch,message='Career evidence saved.'){
   state.careerProfile={version:1,...current,...patch,updatedAt:new Date().toISOString()};
   saveState();
   if(BACKEND.user){try{await BACKEND.saveCareerProfile(state.careerProfile)}catch(err){toast('Saved locally; cloud career sync failed.');return}}
+  const autoCompleted=await completeReadyCareerChaptersFromSavedScores();
+  if(autoCompleted.length)return;
   toast(message);
 }
 function careerRequirementStatus(ch,p=careerProfile()){
@@ -1438,6 +1440,25 @@ function careerRequirementStatus(ch,p=careerProfile()){
   if(ch.id==='plan')return {ready:Boolean(p.goals?.sixMonth&&p.goals?.twelveMonth&&p.goals?.twentyFourMonth),label:p.goals?.sixMonth&&p.goals?.twelveMonth&&p.goals?.twentyFourMonth?'6 / 12 / 24-month plan saved':'Save all three career goals'};
   return {ready:true,label:'Ready'};
 }
+async function completeReadyCareerChaptersFromSavedScores(){
+  const ready=(CAREERS.chapters||[]).filter(ch=>{
+    const score=careerScore(ch.id),best=Number(score?.bestPct||score?.pct||0);
+    return !careerDone(ch.id)&&best>=CAREERS.passPercent&&careerRequirementStatus(ch).ready;
+  });
+  if(!ready.length)return [];
+  const before=localUnlockedBadgeIds();
+  state.careerCompleted=[...new Set([...(state.careerCompleted||[]),...ready.map(ch=>ch.id)])];
+  saveState();
+  if(BACKEND.user){
+    for(const ch of ready){
+      try{await BACKEND.setLessonComplete(`theory:industry-${ch.id}`,true)}
+      catch(err){toast('Completed locally; cloud chapter sync failed.');}
+    }
+  }
+  const names=ready.map(ch=>ch.title).join(', '),xp=ready.length*CAREERS.xp;
+  badgeUnlockAfter(before,`${names} complete • +${xp} XP`);
+  return ready;
+}
 function careerSourceCards(items=[]){
   return `<div class="career-source-grid">${items.map(x=>{const u=safeUrl(x.url);return u?`<a class="career-source-card" href="${esc(u)}" target="_blank" rel="noopener"><span>${esc(x.kind||'Professional source')}</span><strong>${esc(x.title)}</strong><p>${esc(x.note||'Open the original source and use it as evidence.')}</p><b>Open source ↗</b></a>`:''}).join('')}</div>`;
 }
@@ -1453,8 +1474,10 @@ function careerQuizReview(ch,s){
   return `<div class="theory-quiz-review career-quiz-review">${ch.quiz.map((q,i)=>{const selected=s.answers[i],ok=selected===q.correct;return `<article class="${ok?'correct':'wrong'}"><span>${ok?'✓ Correct':'× Review'}</span><strong>${esc(q.q)}</strong><p><b>Your answer:</b> ${esc(q.options[selected]??'No answer')}</p><p><b>Best answer:</b> ${esc(q.options[q.correct])}</p><small>${esc(q.feedback)}</small></article>`}).join('')}</div>`;
 }
 function careerQuiz(ch){
-  const s=careerScore(ch.id),done=careerDone(ch.id),req=careerRequirementStatus(ch),best=s?.bestPct||s?.pct||0;
-  return `<section class="theory-quiz-section career-quiz-section"><div class="section-head"><div><span class="eyebrow">SCENARIO CHECK • ${CAREERS.passPercent}% PASS</span><h2>Can you use the industry thinking?</h2><p>${req.ready?(done?'Already complete. Retake whenever you want; XP is only awarded once.':'The checkpoint is saved. Pass the scenarios to complete this chapter.'):`The quiz unlocks after the required Hub checkpoint: ${esc(req.label)}.`}</p></div><span class="career-ready-chip ${req.ready?'ready':'waiting'}">${req.ready?'✓ READY':'◌ CHECKPOINT'}${best?` • Best ${best}%`:''}</span></div><form class="theory-quiz-form" data-action-form="career-quiz" data-career="${esc(ch.id)}">${ch.quiz.map((q,qi)=>`<fieldset><legend>${qi+1}. ${esc(q.q)}</legend>${q.options.map((o,oi)=>`<label><input type="radio" name="q${qi}" value="${oi}" required ${req.ready?'':'disabled'}><span>${esc(o)}</span></label>`).join('')}</fieldset>`).join('')}<button class="button primary" type="submit" ${req.ready?'':'disabled'}>${done?'Retake scenario check':'Check answers & complete chapter'} →</button></form>${careerQuizReview(ch,s)}</section>`;
+  const s=careerScore(ch.id),done=careerDone(ch.id),req=careerRequirementStatus(ch),best=s?.bestPct||s?.pct||0,quizPassed=best>=CAREERS.passPercent;
+  const message=done?'Already complete. Retake whenever you want; XP is only awarded once.':req.ready?'The checkpoint is saved. Pass the scenarios to complete this chapter.':quizPassed?`You have passed the scenario check. Finish the Hub checkpoint to complete the chapter: ${esc(req.label)}.`:`You can take the scenario check now. Chapter completion needs both a pass and the Hub checkpoint: ${esc(req.label)}.`;
+  const chip=done?'✓ COMPLETE':quizPassed&&!req.ready?'✓ QUIZ PASSED':req.ready?'✓ CHECKPOINT READY':'◌ CHECKPOINT REQUIRED';
+  return `<section class="theory-quiz-section career-quiz-section"><div class="section-head"><div><span class="eyebrow">SCENARIO CHECK • ${CAREERS.passPercent}% PASS</span><h2>Can you use the industry thinking?</h2><p>${message}</p></div><span class="career-ready-chip ${done||req.ready||quizPassed?'ready':'waiting'}">${chip}${best?` • Best ${best}%`:''}</span></div><form class="theory-quiz-form" data-action-form="career-quiz" data-career="${esc(ch.id)}">${ch.quiz.map((q,qi)=>`<fieldset><legend>${qi+1}. ${esc(q.q)}</legend>${q.options.map((o,oi)=>`<label><input type="radio" name="q${qi}" value="${oi}" required><span>${esc(o)}</span></label>`).join('')}</fieldset>`).join('')}<button class="button primary" type="submit">${done?'Retake scenario check':req.ready?'Check answers & complete chapter':'Check answers'} →</button></form>${careerQuizReview(ch,s)}</section>`;
 }
 function careerProfileMini(){
   const p=careerProfile(),role=careerRole(p.targetRole),challenge=careerChallenge(p.challenge?.id),signals=p.signals||{},top=Object.entries(signals).sort((a,b)=>b[1]-a[1])[0];
@@ -3828,10 +3851,10 @@ document.addEventListener('submit',async e=>{
     e.preventDefault();const fd=new FormData(e.target);await saveCareerProfileData({goals:{sixMonth:String(fd.get('sixMonth')||'').trim(),twelveMonth:String(fd.get('twelveMonth')||'').trim(),twentyFourMonth:String(fd.get('twentyFourMonth')||'').trim()}},'6 / 12 / 24-month career plan saved.');route({preserveScroll:true});return;
   }
   if(e.target.dataset.actionForm==='career-quiz'){
-    e.preventDefault();const ch=careerChapter(e.target.dataset.career);if(!ch)return;const req=careerRequirementStatus(ch);if(!req.ready){toast(`Complete the Hub checkpoint first: ${req.label}`);return}
+    e.preventDefault();const ch=careerChapter(e.target.dataset.career);if(!ch)return;const req=careerRequirementStatus(ch);
     const fd=new FormData(e.target),answers=ch.quiz.map((_,i)=>{const v=fd.get(`q${i}`);return v===null?NaN:Number(v)});if(answers.some(Number.isNaN)){toast('Answer every question first.');return}
-    const correct=ch.quiz.reduce((n,q,i)=>n+(answers[i]===q.correct?1:0),0),total=ch.quiz.length,pct=Math.round(correct/total*100),old=careerScore(ch.id),bestPct=Math.max(old?.bestPct||old?.pct||0,pct),passed=pct>=CAREERS.passPercent,firstPass=passed&&!careerDone(ch.id),before=firstPass?localUnlockedBadgeIds():null;
-    state.careerScores={...(state.careerScores||{}),[ch.id]:{answers,correct,total,pct,bestPct,at:new Date().toISOString()}};if(firstPass)state.careerCompleted=[...new Set([...(state.careerCompleted||[]),ch.id])];saveState();if(firstPass&&BACKEND.user){try{await BACKEND.setLessonComplete(`theory:industry-${ch.id}`,true)}catch(err){toast('Passed locally; cloud sync failed.')}}if(firstPass){badgeUnlockAfter(before,`Industry & Careers chapter passed • +${CAREERS.xp} XP`);finishInlineUpdate(true)}else{toast(passed?'Passed again — XP was already awarded.':`${pct}% — review the scenario feedback and retry.`);route({preserveScroll:true})}return;
+    const correct=ch.quiz.reduce((n,q,i)=>n+(answers[i]===q.correct?1:0),0),total=ch.quiz.length,pct=Math.round(correct/total*100),old=careerScore(ch.id),bestPct=Math.max(old?.bestPct||old?.pct||0,pct),passed=pct>=CAREERS.passPercent,firstPass=passed&&req.ready&&!careerDone(ch.id),before=firstPass?localUnlockedBadgeIds():null;
+    state.careerScores={...(state.careerScores||{}),[ch.id]:{answers,correct,total,pct,bestPct,at:new Date().toISOString()}};if(firstPass)state.careerCompleted=[...new Set([...(state.careerCompleted||[]),ch.id])];saveState();if(firstPass&&BACKEND.user){try{await BACKEND.setLessonComplete(`theory:industry-${ch.id}`,true)}catch(err){toast('Passed locally; cloud sync failed.')}}if(firstPass){badgeUnlockAfter(before,`Industry & Careers chapter passed • +${CAREERS.xp} XP`);finishInlineUpdate(true)}else if(passed&&!req.ready){toast(`Quiz passed — finish the Hub checkpoint to complete the chapter: ${req.label}`);route({preserveScroll:true})}else{toast(passed?'Passed again — XP was already awarded.':`${pct}% — review the scenario feedback and retry.`);route({preserveScroll:true})}return;
   }
   if(e.target.dataset.actionForm==='theory-quiz'){
     e.preventDefault();const l=theoryLesson(e.target.dataset.theory);if(!l)return;
