@@ -1,13 +1,16 @@
-// UE5 Learning Hub v3.50.0 — Landscape Master Guide
-// Adds one long-form classroom recovery tutorial without changing existing IDs or progress keys.
+// UE5 Learning Hub v3.50.1 — Landscape Master Guide
+// Long-form Unreal Learning recovery tutorial. One authoritative guide; Designer Studio links to it rather than duplicating it.
 (() => {
+  const tools = window.UE5_TUTORIAL_DATA;
   const design = window.UE5_DESIGN_DATA;
-  if (!design || !Array.isArray(design.tutorials) || !Array.isArray(design.modules)) return;
+  if (!tools || !Array.isArray(tools.tutorials) || !design || !Array.isArray(design.modules)) return;
   const tutorial = {
   "id": "landscape-master-guide",
   "title": "Landscape: From Blank Terrain to Playable Environment",
-  "category": "design-landscape",
-  "designModule": "landscape",
+  "category": "world",
+  "designModule": null,
+  "unrealHome": true,
+  "libraryHidden": true,
   "duration": "90–120 min",
   "difficulty": "Beginner → Advanced",
   "summary": "Build one UE5.8 practice Landscape from a flat grid into a sculpted, painted, populated and play-tested environment, then finish with non-destructive Edit Layers and a procedural spline road. Every screenshot in this guide was captured from the real classroom workflow.",
@@ -754,7 +757,7 @@
     "The spline road remains painted/deformed after editor guides are hidden and can still be reshaped by moving spline control points.",
     "You can explain the difference between Landscape material layers, Edit Layers, Landscape Splines and optional Spline Mesh geometry."
   ],
-  "icon": "≈",
+  "icon": "🏔",
   "featured": true,
   "referenceImages": [],
   "source": {
@@ -763,9 +766,10 @@
   },
   "prescriptive": true
 };
-  if (!design.tutorials.some(t => t.id === tutorial.id)) design.tutorials.push(tutorial);
+  if (!tools.tutorials.some(t => t.id === tutorial.id)) tools.tutorials.push(tutorial);
+  // Defensive cleanup: if an older runtime ever injected this ID into Designer Studio, remove it there.
   const landscape = design.modules.find(m => m.id === 'landscape');
-  if (landscape && Array.isArray(landscape.tutorials) && !landscape.tutorials.includes(tutorial.id)) {
-    landscape.tutorials.unshift(tutorial.id);
+  if (landscape && Array.isArray(landscape.tutorials)) {
+    landscape.tutorials = landscape.tutorials.filter(id => id !== tutorial.id);
   }
 })();
