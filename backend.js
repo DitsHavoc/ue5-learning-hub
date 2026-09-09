@@ -13,7 +13,7 @@ function localProgressState(){
 }
 function localCompletionIds(){
   const local=localProgressState();
-  const ids=[...(local?.completed||[]),...(local?.tutorialCompleted||[]).map(id=>`tutorial:${id}`),...(local?.chapterBuildCompleted||[]).map(id=>`chapter:${id}`),...(local?.designBuildCompleted||[]).map(id=>`designbuild:${id}`),...(local?.designSourceCompleted||[]).map(id=>`designsource:${id}`),...(local?.theoryCompleted||[]).map(id=>`theory:${id}`),...(local?.modelVideoCompleted||[]).map(id=>`modelvideo:${id}`),...(local?.modelTheoryCompleted||[]).map(id=>`modeltheory:${id}`),...(local?.modelFoundationFinal?[`modelfoundation:final`]:[]),...(local?.modelLessonCompleted||[]).map(id=>`model:${id}`),...(local?.modelBuildCompleted||[]).map(id=>`modelbuild:${id}`),...(local?.modelFixCompleted||[]).map(id=>`modelfix:${id}`),...(local?.sculptCompleted||[]).map(id=>`sculpt:${id}`),...(local?.blockCompleted||[]).map(id=>`block:${id}`)];
+  const ids=[...(local?.completed||[]),...(local?.tutorialCompleted||[]).map(id=>`tutorial:${id}`),...(local?.chapterBuildCompleted||[]).map(id=>`chapter:${id}`),...(local?.designBuildCompleted||[]).map(id=>`designbuild:${id}`),...(local?.designSourceCompleted||[]).map(id=>`designsource:${id}`),...(local?.theoryCompleted||[]).map(id=>`theory:${id}`),...(local?.careerCompleted||[]).map(id=>`theory:industry-${id}`),...(local?.modelVideoCompleted||[]).map(id=>`modelvideo:${id}`),...(local?.modelTheoryCompleted||[]).map(id=>`modeltheory:${id}`),...(local?.modelFoundationFinal?[`modelfoundation:final`]:[]),...(local?.modelLessonCompleted||[]).map(id=>`model:${id}`),...(local?.modelBuildCompleted||[]).map(id=>`modelbuild:${id}`),...(local?.modelFixCompleted||[]).map(id=>`modelfix:${id}`),...(local?.sculptCompleted||[]).map(id=>`sculpt:${id}`),...(local?.blockCompleted||[]).map(id=>`block:${id}`)];
   return [...new Set(ids)].sort();
 }
 function localPathwayCheckpointIds(){return [...new Set(localProgressState()?.pathwayCheckpoints||[])].sort()}
@@ -471,9 +471,24 @@ const api = {
   async getLessonProgress({force=false}={}){
     if(!client||!this.user)return [];
     return cachedRead(this,'lesson-progress',300000,async()=>{
-      const {data,error}=await client.from('lesson_progress').select('lesson_id,completed,completed_at').eq('user_id',this.user.id);
-      if(error){console.warn(error.message);return []} return data||[];
+      // Keep routine progress reads lean. The career profile is the only row that needs its JSON payload.
+      const [{data:progress,error:pErr},{data:career,error:cErr}]=await Promise.all([
+        client.from('lesson_progress').select('lesson_id,completed,completed_at,updated_at').eq('user_id',this.user.id).neq('lesson_id','career:profile'),
+        client.from('lesson_progress').select('lesson_id,completed,completed_at,updated_at,quiz').eq('user_id',this.user.id).eq('lesson_id','career:profile').maybeSingle()
+      ]);
+      if(pErr||cErr){console.warn((pErr||cErr).message);return []}
+      return [...(progress||[]),...(career?[career]:[])];
     },{force});
+  },
+  async saveCareerProfile(profile){
+    if(!client||!this.user)return false;
+    const payload=profile&&typeof profile==='object'?profile:{};
+    const row={user_id:this.user.id,lesson_id:'career:profile',completed:false,completed_at:null,quiz:payload,updated_at:new Date().toISOString()};
+    const {error}=await client.from('lesson_progress').upsert(row,{onConflict:'user_id,lesson_id'});
+    if(error)throw error;
+    invalidateReadCache(this,'lesson-progress');
+    invalidateReadCache(this,'teacher-class:');
+    return true;
   },
   async setLessonComplete(lessonId,completed){
     if(!client||!this.user)return false;
@@ -1450,13 +1465,14 @@ const api = {
       if(cErr)throw cErr;if(!classInfo)return {profiles:[],teachers:[],progress:[],classes:[]};
       const memberIds=[...new Set((classInfo.class_members||[]).map(x=>x.user_id).filter(Boolean))];
       const teacherIds=[...new Set([classInfo.teacher_id,...(classInfo.class_teachers||[]).map(x=>x.teacher_id)].filter(Boolean))];
-      const [{data:profiles,error:pErr},{data:teachers,error:tErr},{data:progress,error:prErr}]=await Promise.all([
+      const [{data:profiles,error:pErr},{data:teachers,error:tErr},{data:progress,error:prErr},{data:careerProfiles,error:cpErr}]=await Promise.all([
         memberIds.length?client.from('profiles').select('id,display_name,role').in('id',memberIds).order('display_name'):Promise.resolve({data:[],error:null}),
         teacherIds.length?client.from('profiles').select('id,display_name,role').in('id',teacherIds).order('display_name'):Promise.resolve({data:[],error:null}),
-        memberIds.length?client.from('lesson_progress').select('user_id,lesson_id,completed,completed_at,updated_at').in('user_id',memberIds):Promise.resolve({data:[],error:null})
+        memberIds.length?client.from('lesson_progress').select('user_id,lesson_id,completed,completed_at,updated_at').in('user_id',memberIds).neq('lesson_id','career:profile'):Promise.resolve({data:[],error:null}),
+        memberIds.length?client.from('lesson_progress').select('user_id,lesson_id,completed,completed_at,updated_at,quiz').in('user_id',memberIds).eq('lesson_id','career:profile'):Promise.resolve({data:[],error:null})
       ]);
-      if(pErr||tErr||prErr)throw pErr||tErr||prErr;
-      return {profiles:profiles||[],teachers:teachers||[],progress:progress||[],classes:[classInfo]};
+      if(pErr||tErr||prErr||cpErr)throw pErr||tErr||prErr||cpErr;
+      return {profiles:profiles||[],teachers:teachers||[],progress:[...(progress||[]),...(careerProfiles||[])],classes:[classInfo]};
     },{force});
   },
 

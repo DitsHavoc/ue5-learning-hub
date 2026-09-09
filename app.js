@@ -9,6 +9,7 @@ const TOOLS = window.UE5_TUTORIAL_DATA;
 const SNIPPETS = window.UE5_SNIPPET_DATA;
 const DESIGN = window.UE5_DESIGN_DATA;
 const THEORY = window.UE5_THEORY_DATA;
+const CAREERS = window.UE5_INDUSTRY_CAREERS_DATA;
 const PATHWAYS = window.UE5_PATHWAY_DATA;
 const NEWS = window.UE5_NEWS_DATA;
 const MODEL = window.UE5_MODELING_DATA;
@@ -30,7 +31,7 @@ DESIGN.tutorials.forEach(t=>{if(!knownTutorials.has(t.id))TOOLS.tutorials.push(t
 DESIGN.modules.forEach(m=>m.tutorials.forEach(id=>{const t=TOOLS.tutorials.find(x=>x.id===id);if(t&&!t.designModule)t.designModule=m.id}));
 
 
-if (!DATA || !BLOCKS || !PROJECT || !TOOLS || !SNIPPETS || !DESIGN || !THEORY || !PATHWAYS || !NEWS || !MODEL || !MODEL_FOUNDATIONS || !MODEL_VIDEOS || !SCULPT || !STUDY || !BACKEND) {
+if (!DATA || !BLOCKS || !PROJECT || !TOOLS || !SNIPPETS || !DESIGN || !THEORY || !CAREERS || !PATHWAYS || !NEWS || !MODEL || !MODEL_FOUNDATIONS || !MODEL_VIDEOS || !SCULPT || !STUDY || !BACKEND) {
   const e = document.querySelector('#bootError');
   if (e) e.hidden = false;
   return;
@@ -192,7 +193,7 @@ function syncProjectRichEditors(root=document){
 }
 
 function loadState(){
-  const clean={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],designSourceCompleted:[],theoryCompleted:[],theoryScores:{},modelVideoCompleted:[],modelTheoryCompleted:[],modelTheoryScores:{},modelFoundationFinal:false,modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[],blockCompleted:[],pathwayCheckpoints:[]};
+  const clean={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],designSourceCompleted:[],theoryCompleted:[],theoryScores:{},careerCompleted:[],careerScores:{},careerProfile:{version:1,updatedAt:null,roleInterests:{},signals:{},hardSkills:[],softSkills:[],vacancies:[],trafficLights:[],goals:{}},modelVideoCompleted:[],modelTheoryCompleted:[],modelTheoryScores:{},modelFoundationFinal:false,modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[],blockCompleted:[],pathwayCheckpoints:[]};
   try{
     const current=JSON.parse(localStorage.getItem(STORE)||'null');
     if(current) return {...clean,...current};
@@ -320,7 +321,7 @@ function mechanic(id){return PROJECT.mechanics[id]}
 function completedLessons(){return DATA.lessons.filter(l=>state.completed.includes(l.id))}
 function totalXp(){
   if(BACKEND.user&&!isTeacher()&&BACKEND.xpSummary&&Number.isFinite(Number(BACKEND.xpSummary.all_time_xp)))return Number(BACKEND.xpSummary.all_time_xp);
-  return (state.blockCompleted||[]).length*25+(state.tutorialCompleted||[]).length*25+completedLessons().reduce((n,l)=>n+l.xp,0)+TOOLS.chapterBuilds.filter(b=>state.chapterBuildCompleted.includes(b.path)).reduce((n,b)=>n+(b.xp||0),0)+(state.designBuildCompleted||[]).length*300+(state.designSourceCompleted||[]).length*20+(state.theoryCompleted||[]).length*(THEORY.xp||25)+(state.modelVideoCompleted||[]).length*(MODEL_VIDEOS.xp||20)+(state.modelTheoryCompleted||[]).length*(MODEL_FOUNDATIONS.chapterXp||20)+(state.modelFoundationFinal?(MODEL_FOUNDATIONS.finalXp||100):0)+(state.modelLessonCompleted||[]).length*100+(state.modelBuildCompleted||[]).length*250+(state.modelFixCompleted||[]).length*75+(state.sculptCompleted||[]).reduce((n,id)=>n+(SCULPT.practices.find(x=>x.id===id)?.xp||0),0)
+  return (state.blockCompleted||[]).length*25+(state.tutorialCompleted||[]).length*25+completedLessons().reduce((n,l)=>n+l.xp,0)+TOOLS.chapterBuilds.filter(b=>state.chapterBuildCompleted.includes(b.path)).reduce((n,b)=>n+(b.xp||0),0)+(state.designBuildCompleted||[]).length*300+(state.designSourceCompleted||[]).length*20+(state.theoryCompleted||[]).length*(THEORY.xp||25)+(state.careerCompleted||[]).length*(CAREERS.xp||25)+(state.modelVideoCompleted||[]).length*(MODEL_VIDEOS.xp||20)+(state.modelTheoryCompleted||[]).length*(MODEL_FOUNDATIONS.chapterXp||20)+(state.modelFoundationFinal?(MODEL_FOUNDATIONS.finalXp||100):0)+(state.modelLessonCompleted||[]).length*100+(state.modelBuildCompleted||[]).length*250+(state.modelFixCompleted||[]).length*75+(state.sculptCompleted||[]).reduce((n,id)=>n+(SCULPT.practices.find(x=>x.id===id)?.xp||0),0)
 }
 function level(){
   const xp=totalXp(),n=Math.floor(xp/500)+1,into=xp%500;
@@ -482,7 +483,17 @@ async function syncCloudProgress(){
     state.chapterBuildCompleted=[...new Set([...(state.chapterBuildCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('chapter:')).map(id=>id.slice(8))])];
     state.designBuildCompleted=[...new Set([...(state.designBuildCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('designbuild:')).map(id=>id.slice(12))])];
     state.designSourceCompleted=[...new Set([...(state.designSourceCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('designsource:')).map(id=>id.slice(13))])];
-    state.theoryCompleted=[...new Set([...(state.theoryCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('theory:')).map(id=>id.slice(7))])];
+    const careerCloudIds=new Set((CAREERS.chapters||[]).map(ch=>`theory:industry-${ch.id}`));
+    state.careerCompleted=[...new Set([...(state.careerCompleted||[]),...cloudCompleted.filter(id=>careerCloudIds.has(id)).map(id=>id.replace(/^theory:industry-/,''))])];
+    const theoryIds=new Set((THEORY.lessons||[]).map(x=>x.id));
+    state.theoryCompleted=[...new Set([...(state.theoryCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('theory:')&&!careerCloudIds.has(id)).map(id=>id.slice(7)).filter(id=>theoryIds.has(id))])];
+    const cloudCareerRow=rows.find(r=>r.lesson_id==='career:profile'&&r.quiz&&typeof r.quiz==='object');
+    if(cloudCareerRow){
+      const localAt=Date.parse(state.careerProfile?.updatedAt||0)||0,cloudAt=Date.parse(cloudCareerRow.quiz?.updatedAt||cloudCareerRow.updated_at||0)||0;
+      if(cloudAt>=localAt)state.careerProfile={version:1,...(state.careerProfile||{}),...(cloudCareerRow.quiz||{})};
+    }else if(state.careerProfile?.updatedAt){
+      try{await BACKEND.saveCareerProfile(state.careerProfile)}catch(err){console.warn('Career profile initial sync',err.message)}
+    }
     state.modelVideoCompleted=[...new Set([...(state.modelVideoCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('modelvideo:')).map(id=>id.slice(11))])];
     state.modelTheoryCompleted=[...new Set([...(state.modelTheoryCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('modeltheory:')).map(id=>id.slice(12))])];
     state.modelFoundationFinal=state.modelFoundationFinal||cloudCompleted.includes('modelfoundation:final');
@@ -1358,6 +1369,7 @@ function theoryQuizReview(l,s){
 function theoryPage(){
   const done=(state.theoryCompleted||[]).length,total=THEORY.lessons.length,pct=total?Math.round(done/total*100):0,lab=THEORY.lab;
   return `<div class="page-head theory-page-head"><div class="breadcrumb"><a href="#/">Home</a> / Game Design Theory</div><span class="eyebrow">SYSTEMS • PLAYERS • BALANCE • EXPERIENCE • PROCESS</span><h1>◈ Game Design Theory</h1><p class="muted">Learn why games work, not just how to build them. Every lesson uses a different game case study, breaks down what the design is doing, then lets you watch the principle in action before you try it yourself.</p></div>
+  ${careerHubPromo()}
   <section class="theory-dashboard"><div><span class="eyebrow">YOUR THEORY PROGRESS</span><h2>${done}/${total} lessons • ${done*THEORY.xp}/${total*THEORY.xp} XP earned</h2><div class="progress"><span style="width:${pct}%"></span></div></div><div class="theory-method"><span>UNDERSTAND</span><b>→</b><span>SEE IT</span><b>→</b><span>WATCH</span><b>→</b><span>TRY IT</span><b>→</b><span>QUIZ</span><b>→</b><span>APPLY</span></div></section>
   <section class="theory-lab" id="boardGameLab"><div class="theory-lab-mark">🎲</div><div><span class="eyebrow">OPTIONAL PRACTICAL DESIGN LAB</span><h2>${esc(lab.title)}</h2><p>${esc(lab.intro)}</p><div class="callout good"><b>TABLETOP ADAPTATION PROJECT?</b> Your teacher may ask you to complete this lab before your group commits to its design.</div><div class="theory-lab-columns"><div><h3>How to run it</h3><ol>${lab.rules.map(x=>`<li>${esc(x)}</li>`).join('')}</ol></div><div><h3>Design evidence to collect</h3><ul>${lab.prompts.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div></div><div class="callout"><b>EVIDENCE:</b> ${esc(lab.evidence)}</div><p class="muted"><b>Why try it?</b> ${esc(lab.note)}</p></div></section>
   <div class="study-toolbar theory-toolbar"><input id="theorySearch" type="search" enterkeyhint="search" placeholder="Search agency, balance, pacing, playtesting…"><div class="filter-row"><button class="filter active" data-theory-filter="all">All <b>${total}</b></button>${THEORY.paths.map(p=>`<button class="filter" data-theory-filter="${esc(p.id)}">${p.icon} ${esc(p.title)}</button>`).join('')}</div><span class="study-result-count" id="theoryResultCount">${total} lessons</span></div>
@@ -1378,6 +1390,143 @@ function theoryLessonPage(id){
   <section class="section"><div class="section-head"><div><span class="eyebrow">GO DEEPER</span><h2>Further reading & professional sources</h2><p>These are here when you want the full theory, original paper, industry talk or real rule set. They are not required to earn the lesson XP.</p></div></div>${theorySources(l)}</section>
   <section class="theory-quiz-section"><div class="section-head"><div><span class="eyebrow">SCENARIO CHECK • ${THEORY.passPercent}% PASS</span><h2>Can you use the idea?</h2><p>${done?'You have already passed this lesson. Retake it any time; XP is only awarded once.':'Answer every question. A pass marks the lesson complete and awards XP.'}</p></div>${s?`<span class="sync-chip">Best ${s.bestPct||s.pct}%</span>`:''}</div><form class="theory-quiz-form" data-action-form="theory-quiz" data-theory="${esc(l.id)}">${l.quiz.map((q,qi)=>`<fieldset><legend>${qi+1}. ${esc(q.q)}</legend>${q.options.map((o,oi)=>`<label><input type="radio" name="q${qi}" value="${oi}" required><span>${esc(o)}</span></label>`).join('')}</fieldset>`).join('')}<button class="button primary" type="submit">${done?'Retake scenario check':'Check answers & complete lesson'} →</button></form>${theoryQuizReview(l,s)}</section>
   <nav class="theory-lesson-nav"><div>${prev?`<a class="button ghost" href="#/theory/${prev.id}">← ${esc(prev.title)}</a>`:`<a class="button ghost" href="#/theory">← Theory home</a>`}</div><div>${next?`<a class="button primary" href="#/theory/${next.id}">${esc(next.title)} →</a>`:`<a class="button primary" href="#/theory">Theory dashboard →</a>`}</div></nav>`;
+}
+
+
+function careerChapter(id){return (CAREERS.chapters||[]).find(x=>x.id===id)}
+function careerRole(id){return (CAREERS.roles||[]).find(x=>x.id===id)}
+function careerChallenge(id){return (CAREERS.challenges||[]).find(x=>x.id===id)}
+function careerDone(id){return (state.careerCompleted||[]).includes(id)}
+function careerScore(id){return (state.careerScores||{})[id]||null}
+function careerProfile(){return state.careerProfile||{version:1,roleInterests:{},signals:{},hardSkills:[],softSkills:[],vacancies:[],trafficLights:[],goals:{}}}
+function careerChapterProgress(){const total=(CAREERS.chapters||[]).length,done=(CAREERS.chapters||[]).filter(ch=>careerDone(ch.id)).length;return {done,total,pct:total?Math.round(done/total*100):0}}
+function careerProfileHasContent(p=careerProfile()){
+  return Boolean(p.updatedAt||p.targetRole||p.industryEvidence?.game||Object.keys(p.roleInterests||{}).length||p.reflection?.completed||p.challenge?.id||p.goals?.sixMonth);
+}
+async function saveCareerProfileData(patch,message='Career evidence saved.'){
+  const current=careerProfile();
+  state.careerProfile={version:1,...current,...patch,updatedAt:new Date().toISOString()};
+  saveState();
+  if(BACKEND.user){try{await BACKEND.saveCareerProfile(state.careerProfile)}catch(err){toast('Saved locally; cloud career sync failed.');return}}
+  toast(message);
+}
+function careerRequirementStatus(ch,p=careerProfile()){
+  if(!ch)return {ready:false,label:'Checkpoint not found'};
+  const interests=Object.keys(p.roleInterests||{}).length;
+  const vacancies=(p.vacancies||[]).filter(v=>v?.company&&v?.title).length;
+  if(ch.id==='industry')return {ready:Boolean(p.industryEvidence?.game&&p.industryEvidence?.cluster),label:p.industryEvidence?.game&&p.industryEvidence?.cluster?'Credits + cluster saved':'Save a game investigation + UK cluster'};
+  if(ch.id==='people')return {ready:interests>=3,label:interests>=3?`${interests} role reactions saved`:`React to ${Math.max(0,3-interests)} more role${3-interests===1?'':'s'}`};
+  if(ch.id==='you'){
+    const hardEvidence=(p.hardSkills||[]).some(x=>Number(x?.level||0)>0&&String(x?.evidence||'').trim());
+    const softEvidence=(p.softSkills||[]).some(x=>Number(x?.level||0)>0&&String(x?.evidence||'').trim());
+    const ready=Boolean(p.reflection?.completed&&hardEvidence&&softEvidence&&p.peerFeedback?.strength&&p.peerFeedback?.improve);
+    return {ready,label:ready?'Reflection + hard/soft evidence + peer check saved':'Complete reflection • evidence one hard + one soft skill • save peer feedback'};
+  }
+  if(ch.id==='routes'){
+    const predicted=Object.keys(p.storyChoices||{}).length>0,ready=Boolean(predicted&&p.careerStoryLesson);
+    return {ready,label:ready?'Career prediction + personal lesson saved':'Predict at least one story + save one lesson'};
+  }
+  if(ch.id==='reality'){
+    const hasRed=(p.trafficLights||[]).some(x=>x?.status==='red'&&String(x?.requirement||'').trim());
+    const ready=Boolean(p.targetRole&&vacancies>=3&&hasRed&&p.biggestGap);
+    return {ready,label:ready?'Role + 3 vacancies + evidenced RED gap saved':`Choose role • ${vacancies}/3 vacancies • identify at least one RED requirement`};
+  }
+  if(ch.id==='prove'){
+    const ready=Boolean(p.challenge?.id&&p.challenge?.requirement&&p.challenge?.scopeCut);
+    return {ready,label:ready?'Targeted challenge + evidence purpose saved':'Choose a challenge • requirement it proves • deliberate scope cut'};
+  }
+  if(ch.id==='plan')return {ready:Boolean(p.goals?.sixMonth&&p.goals?.twelveMonth&&p.goals?.twentyFourMonth),label:p.goals?.sixMonth&&p.goals?.twelveMonth&&p.goals?.twentyFourMonth?'6 / 12 / 24-month plan saved':'Save all three career goals'};
+  return {ready:true,label:'Ready'};
+}
+function careerSourceCards(items=[]){
+  return `<div class="career-source-grid">${items.map(x=>{const u=safeUrl(x.url);return u?`<a class="career-source-card" href="${esc(u)}" target="_blank" rel="noopener"><span>${esc(x.kind||'Professional source')}</span><strong>${esc(x.title)}</strong><p>${esc(x.note||'Open the original source and use it as evidence.')}</p><b>Open source ↗</b></a>`:''}).join('')}</div>`;
+}
+function careerCases(items=[]){
+  return `<div class="career-case-grid">${items.map(x=>`<article class="career-case-card"><div class="career-case-icon">${esc(x.icon||'◈')}</div><div><span class="eyebrow">${esc(x.kicker||'CASE STUDY')}</span><h3>${esc(x.title)}</h3><p>${esc(x.body)}</p><div class="career-case-question"><b>SO WHAT?</b><p>${esc(x.question||'What does this reveal about working in games?')}</p></div>${safeUrl(x.sourceUrl)?`<a class="link-button" href="${esc(safeUrl(x.sourceUrl))}" target="_blank" rel="noopener">${esc(x.sourceTitle||'Open source')} ↗</a>`:''}</div></article>`).join('')}</div>`;
+}
+function careerWatchCards(items=[]){
+  if(!items.length)return '';
+  return `<div class="career-watch-grid">${items.map(w=>{const id=/^[A-Za-z0-9_-]{6,20}$/.test(String(w.youtubeId||''))?w.youtubeId:'';return `<article class="career-watch-card"><div class="theory-watch-stage career-watch-stage" data-theory-watch-stage>${id?`<img src="https://i.ytimg.com/vi/${esc(id)}/hqdefault.jpg" alt="${esc(w.title)} video thumbnail" loading="lazy"><div class="career-watch-overlay"><button class="button primary" type="button" data-action="load-theory-video" data-youtube="${esc(id)}" data-title="${esc(w.title)}">▶ Play here</button></div>`:''}</div><div><span class="eyebrow">▶ ${esc(w.kind||'VIDEO')}</span><h3>${esc(w.title)}</h3><div class="career-watch-for"><b>WATCH FOR</b><p>${esc(w.watchFor||'Watch the people and production decisions, not just the game.')}</p></div>${safeUrl(w.url)?`<a class="link-button" href="${esc(safeUrl(w.url))}" target="_blank" rel="noopener">Open on source ↗</a>`:''}</div></article>`}).join('')}</div>`;
+}
+function careerQuizReview(ch,s){
+  if(!s?.answers)return '';
+  return `<div class="theory-quiz-review career-quiz-review">${ch.quiz.map((q,i)=>{const selected=s.answers[i],ok=selected===q.correct;return `<article class="${ok?'correct':'wrong'}"><span>${ok?'✓ Correct':'× Review'}</span><strong>${esc(q.q)}</strong><p><b>Your answer:</b> ${esc(q.options[selected]??'No answer')}</p><p><b>Best answer:</b> ${esc(q.options[q.correct])}</p><small>${esc(q.feedback)}</small></article>`}).join('')}</div>`;
+}
+function careerQuiz(ch){
+  const s=careerScore(ch.id),done=careerDone(ch.id),req=careerRequirementStatus(ch),best=s?.bestPct||s?.pct||0;
+  return `<section class="theory-quiz-section career-quiz-section"><div class="section-head"><div><span class="eyebrow">SCENARIO CHECK • ${CAREERS.passPercent}% PASS</span><h2>Can you use the industry thinking?</h2><p>${req.ready?(done?'Already complete. Retake whenever you want; XP is only awarded once.':'The checkpoint is saved. Pass the scenarios to complete this chapter.'):`The quiz unlocks after the required Hub checkpoint: ${esc(req.label)}.`}</p></div><span class="career-ready-chip ${req.ready?'ready':'waiting'}">${req.ready?'✓ READY':'◌ CHECKPOINT'}${best?` • Best ${best}%`:''}</span></div><form class="theory-quiz-form" data-action-form="career-quiz" data-career="${esc(ch.id)}">${ch.quiz.map((q,qi)=>`<fieldset><legend>${qi+1}. ${esc(q.q)}</legend>${q.options.map((o,oi)=>`<label><input type="radio" name="q${qi}" value="${oi}" required ${req.ready?'':'disabled'}><span>${esc(o)}</span></label>`).join('')}</fieldset>`).join('')}<button class="button primary" type="submit" ${req.ready?'':'disabled'}>${done?'Retake scenario check':'Check answers & complete chapter'} →</button></form>${careerQuizReview(ch,s)}</section>`;
+}
+function careerProfileMini(){
+  const p=careerProfile(),role=careerRole(p.targetRole),challenge=careerChallenge(p.challenge?.id),signals=p.signals||{},top=Object.entries(signals).sort((a,b)=>b[1]-a[1])[0];
+  if(!careerProfileHasContent(p))return `<div class="career-profile-empty"><span>◎</span><div><strong>Your profile will build here</strong><p>Your role reactions, work-style signals, vacancy evidence and portfolio challenge are saved as you move through the seven chapters.</p></div></div>`;
+  return `<div class="career-profile-mini"><div><small>TARGET ROLE</small><strong>${esc(role?.title||'Still exploring')}</strong></div><div><small>STRONGEST CURRENT SIGNAL</small><strong>${top?esc({technical:'Technical / systems',design:'Design / player experience',visual:'Visual / craft',production:'Production / organisation'}[top[0]]||top[0]):'Not measured yet'}</strong></div><div><small>BIGGEST GAP</small><strong>${esc(p.biggestGap||'Not chosen yet')}</strong></div><div><small>PORTFOLIO CHALLENGE</small><strong>${esc(challenge?.title||'Not selected yet')}</strong></div></div>`;
+}
+function careerHubPromo(){
+  const x=careerChapterProgress();
+  return `<section class="career-theory-promo"><div><span class="eyebrow">📌 LEVEL 4 • INDUSTRY & CAREERS</span><h2>Find Your Place in the Games Industry</h2><p>Use this pathway alongside the live Assignment 1 presentation. The presentation tells the stories; the Hub is where you investigate, make decisions, save evidence and build your career profile.</p><div class="career-promo-method"><span>LISTEN</span><b>→</b><span>INVESTIGATE</span><b>→</b><span>REFLECT</span><b>→</b><span>PROVE</span></div></div><div class="career-promo-progress"><strong>${x.done}/${x.total}</strong><span>chapters complete</span><div class="progress"><span style="width:${x.pct}%"></span></div><a class="button primary" href="#/industry-careers">${x.done?'Continue pathway':'Start the pathway'} →</a></div></section>`;
+}
+function careerHubPage(){
+  const x=careerChapterProgress(),p=careerProfile();
+  return `<div class="page-head career-page-head"><div class="breadcrumb"><a href="#/">Home</a> / <a href="#/theory">Theory</a> / Industry & Careers</div><span class="eyebrow">📌 LEVEL 4 REQUIRED PATHWAY • ASSIGNMENT 1</span><h1>◎ ${esc(CAREERS.title)}</h1><p>${esc(CAREERS.subtitle)}</p></div>
+  <section class="career-dashboard"><div><span class="eyebrow">YOUR PATHWAY</span><h2>${x.done}/${x.total} chapters • ${x.done*CAREERS.xp}/${x.total*CAREERS.xp} XP</h2><div class="progress"><span style="width:${x.pct}%"></span></div><p>Use this live with the presentation. A chapter only completes after its required checkpoint is saved and the scenario check is passed.</p></div>${careerProfileMini()}</section>
+  <section class="career-how"><span class="eyebrow">HOW THIS WORKS IN CLASS</span><div class="career-how-flow"><span>🎤 TEACH</span><b>→</b><span>🎮 STORY</span><b>→</b><span>💬 DISCUSS</span><b>→</b><span>◎ HUB CHECKPOINT</span><b>→</b><span>✓ SAVE EVIDENCE</span></div><p>The Hub does not replace the presentation. It catches the parts that are better when you investigate, choose, test yourself and leave useful evidence behind.</p></section>
+  <div class="career-chapter-grid">${(CAREERS.chapters||[]).map(ch=>{const done=careerDone(ch.id),req=careerRequirementStatus(ch),score=careerScore(ch.id);return `<a class="career-chapter-card ${done?'done':''}" href="#/industry-careers/${ch.id}"><span class="career-chapter-number">${done?'✓':String(ch.order).padStart(2,'0')}</span><div><span class="eyebrow">PRESENTATION SLIDES ${esc(ch.slides)} • +${CAREERS.xp} XP</span><h2>${esc(ch.icon)} ${esc(ch.title)}</h2><p>${esc(ch.short)}</p><div class="career-card-foot"><span class="${req.ready?'ready':'waiting'}">${req.ready?'✓ checkpoint saved':'◌ '+esc(req.label)}</span><b>${score?`Best ${score.bestPct||score.pct}%`:'Open chapter →'}</b></div></div></a>`}).join('')}</div>
+  <section class="career-assignment-preview"><div><span class="eyebrow">WHERE THIS IS HEADING</span><h2>Your Assignment 1 evidence grows as you go</h2><p>By the end you should have a specific target role, real employer and vacancy evidence, a hard/soft skills audit, a Green / Amber / Red gap analysis, a targeted portfolio challenge and a 6 / 12 / 24-month plan.</p></div><div>${careerProfileMini()}</div></section>`;
+}
+function careerIndustryActivity(){
+  const p=careerProfile(),v=p.industryEvidence||{};
+  return `<section class="career-activity"><div class="career-activity-head"><span class="eyebrow">◎ HUB CHECKPOINT 1A • CREDITS ARCHAEOLOGY</span><h2>Who actually made one game?</h2><p>Use the game credits and at least one studio/publisher source. Do not guess from the logo on the box.</p></div><form data-action-form="career-industry"><div class="career-form-grid"><label>Game<input name="game" required value="${esc(v.game||'')}" placeholder="e.g. Alan Wake 2"></label><label>Lead developer<input name="developer" value="${esc(v.developer||'')}" placeholder="Who is publicly credited as lead?"></label><label>Publisher<input name="publisher" value="${esc(v.publisher||'')}" placeholder="Who published it?"></label><label>Engine / key technology<input name="engine" value="${esc(v.engine||'')}" placeholder="Unreal, proprietary, middleware…"></label><label class="wide">External studios / hidden contributors<textarea name="external" required placeholder="Name at least two where possible. What did they contribute?">${esc(v.external||'')}</textarea></label><label class="wide">Your conclusion<textarea name="conclusion" required placeholder="How useful is the phrase ‘the developer’ for this production?">${esc(v.conclusion||'')}</textarea></label></div><div class="career-map-bridge"><div><span class="eyebrow">◎ HUB CHECKPOINT 1B • UK GAMES MAP</span><h3>Find one real UK cluster</h3><p>Open the UK Games Map, pick an area and explain what might be holding the cluster together.</p></div><a class="button ghost" href="https://ukie.org.uk/uk-games-map" target="_blank" rel="noopener">Open UK Games Map ↗</a></div><div class="career-form-grid"><label>Cluster / area<input name="cluster" required value="${esc(v.cluster||'')}" placeholder="Guildford, Leamington, Dundee…"></label><label>Studios / organisations found<input name="clusterStudios" value="${esc(v.clusterStudios||'')}" placeholder="3–5 names"></label><label class="wide">Why here?<textarea name="clusterInsight" required placeholder="People, previous studios, education, transport, specialist knowledge, local network…">${esc(v.clusterInsight||'')}</textarea></label></div><button class="button primary" type="submit">Save industry evidence ✓</button></form></section>`;
+}
+function careerRoleExplorer(){
+  const p=careerProfile(),interests=p.roleInterests||{},disciplines=[...new Set((CAREERS.roles||[]).map(r=>r.discipline))];
+  return `<section class="career-activity"><div class="career-activity-head"><span class="eyebrow">◎ HUB CHECKPOINT • ROLE EXPLORER</span><h2>Do not choose by job title. Choose by the problem.</h2><p>Open the roles. For at least three, decide whether the day-to-day problems sound like something you would actually want to solve.</p></div><div class="career-role-filters">${disciplines.map(d=>`<span>${esc(d)}</span>`).join('')}</div><div class="career-role-grid">${CAREERS.roles.map(r=>{const mark=interests[r.id]||'';return `<article class="career-role-card ${mark?`interest-${mark}`:''}"><div class="career-role-top"><span>${esc(r.icon)}</span><div><small>${esc(r.discipline)}</small><h3>${esc(r.title)}</h3></div></div><div class="career-role-problem"><b>THE PROBLEM</b><p>${esc(r.problem)}</p></div><details><summary>What does this person actually do?</summary><p>${esc(r.does)}</p><p><b>Works with:</b> ${esc(r.collaborators)}</p><div class="career-skill-columns"><div><b>Hard skills</b><ul>${r.hard.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><div><b>Soft skills</b><ul>${r.soft.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div></div><div class="callout good"><b>PORTFOLIO SIGNAL:</b> ${esc(r.portfolio)}</div><a class="link-button" href="${esc(safeUrl(r.source))}" target="_blank" rel="noopener">Read a professional role source ↗</a></details><div class="career-interest-buttons"><button type="button" data-action="career-role-interest" data-role="${r.id}" data-interest="definite" class="${mark==='definite'?'active':''}">♥ Definitely</button><button type="button" data-action="career-role-interest" data-role="${r.id}" data-interest="maybe" class="${mark==='maybe'?'active':''}">? Maybe</button><button type="button" data-action="career-role-interest" data-role="${r.id}" data-interest="no" class="${mark==='no'?'active':''}">× Not for me</button></div></article>`}).join('')}</div></section>`;
+}
+function careerSignalBars(signals={}){
+  const labels={technical:'Technical / systems',design:'Design / player experience',visual:'Visual / craft',production:'Production / organisation'};const max=Math.max(1,...Object.values(signals).map(Number));
+  return `<div class="career-signal-bars">${Object.keys(labels).map(k=>`<div><span>${labels[k]}</span><div class="career-signal-track"><i style="width:${Math.round((Number(signals[k]||0)/max)*100)}%"></i></div><b>${Number(signals[k]||0)}</b></div>`).join('')}</div>`;
+}
+function careerSelfActivity(){
+  const p=careerProfile(),ref=p.reflection||{},hard=Object.fromEntries((p.hardSkills||[]).map(x=>[x.name,x])),soft=Object.fromEntries((p.softSkills||[]).map(x=>[x.name,x]));
+  return `<section class="career-activity"><div class="career-activity-head"><span class="eyebrow">◎ HUB CHECKPOINT • YOU AS A DEVELOPER</span><h2>Personality-style reflection — without pretending it can choose your career</h2><p>This is a work-style warm-up, not MBTI and not a diagnosis. It spots patterns in the problems you say you enjoy. Your actual evidence matters more.</p></div>${ref.completed?`<div class="career-results"><div><span class="eyebrow">YOUR CURRENT SIGNALS</span><h3>What your answers leaned towards</h3><p>Use this as a hypothesis. Compare it with your projects, skills and what other people say about working with you.</p></div>${careerSignalBars(p.signals||{})}</div>`:''}<form data-action-form="career-reflection"><div class="career-reflection-grid">${CAREERS.reflectionQuestions.map((q,qi)=>`<fieldset><legend>${qi+1}. ${esc(q.q)}</legend>${q.options.map((o,oi)=>`<label><input type="radio" name="r${qi}" value="${oi}" required><span>${esc(o[0])}</span></label>`).join('')}</fieldset>`).join('')}</div><button class="button primary" type="submit">Build my work-style snapshot →</button></form><div class="career-mbti-note"><span>🧠</span><div><strong>Already know an MBTI / 16-type result?</strong><p>Bring it into the discussion if you want — but do not let four letters allocate your career. Ask whether it matches your actual behaviour, evidence and peer feedback. The Hub deliberately does not store or use a personality label to recommend jobs.</p></div></div>
+  <form data-action-form="career-skills" class="career-skills-form"><div class="career-activity-head compact"><span class="eyebrow">HARD + SOFT SKILLS AUDIT</span><h2>Evidence beats confidence</h2><p>0 = no evidence yet • 1 = beginning • 2 = working evidence • 3 = strong/repeatable evidence. Add a short example wherever you can.</p></div><div class="career-audit-columns"><div><h3>Hard skills</h3>${CAREERS.hardSkills.map((name,i)=>{const x=hard[name]||{};return `<div class="career-audit-row"><label>${esc(name)}<select name="hard_level_${i}"><option value="0" ${Number(x.level||0)===0?'selected':''}>0 — none yet</option><option value="1" ${Number(x.level||0)===1?'selected':''}>1 — beginning</option><option value="2" ${Number(x.level||0)===2?'selected':''}>2 — working evidence</option><option value="3" ${Number(x.level||0)===3?'selected':''}>3 — strong evidence</option></select></label><input name="hard_evidence_${i}" value="${esc(x.evidence||'')}" placeholder="What proves it?"></div>`}).join('')}</div><div><h3>Soft skills</h3>${CAREERS.softSkills.map((name,i)=>{const x=soft[name]||{};return `<div class="career-audit-row"><label>${esc(name)}<select name="soft_level_${i}"><option value="0" ${Number(x.level||0)===0?'selected':''}>0 — no evidence</option><option value="1" ${Number(x.level||0)===1?'selected':''}>1 — beginning</option><option value="2" ${Number(x.level||0)===2?'selected':''}>2 — working evidence</option><option value="3" ${Number(x.level||0)===3?'selected':''}>3 — strong evidence</option></select></label><input name="soft_evidence_${i}" value="${esc(x.evidence||'')}" placeholder="When did this change an outcome?"></div>`}).join('')}</div></div><button class="button primary" type="submit">Save skills evidence ✓</button></form>
+  <form data-action-form="career-peer" class="career-peer-form"><div><span class="eyebrow">PEER REALITY CHECK</span><h2>Ask somebody who has actually worked with you</h2><p>Do other people experience you the way you experience yourself?</p></div><div class="career-form-grid"><label>What do they rely on you for?<textarea name="strength" required>${esc(p.peerFeedback?.strength||'')}</textarea></label><label>What should you improve?<textarea name="improve" required>${esc(p.peerFeedback?.improve||'')}</textarea></label><label class="wide">What role do you naturally take in a group?<input name="naturalRole" value="${esc(p.peerFeedback?.naturalRole||'')}" placeholder="Problem solver, organiser, finisher, idea tester, specialist…"></label></div><button class="button primary" type="submit">Save peer feedback ✓</button></form></section>`;
+}
+function careerStoriesActivity(){
+  const p=careerProfile();
+  return `<section class="career-activity"><div class="career-activity-head"><span class="eyebrow">◎ HUB CHECKPOINT • CAREER STORY PREDICTIONS</span><h2>Predict first. Reveal second.</h2><p>The point is not to guess perfectly. It is to notice which skills and pieces of evidence survive when a career changes direction.</p></div><div class="career-story-grid">${CAREERS.stories.map(st=>`<article class="career-story-card" data-career-story="${st.id}"><span class="eyebrow">REAL CAREER STORY</span><h3>${esc(st.title)}</h3><p>${esc(st.start)}</p><div class="career-story-question"><b>YOUR CALL</b><p>${esc(st.question)}</p>${st.options.map((o,i)=>`<button type="button" data-action="career-story-choice" data-story="${st.id}" data-choice="${i}">${String.fromCharCode(65+i)} — ${esc(o)}</button>`).join('')}</div><div class="career-story-reveal" data-story-reveal hidden></div><a class="link-button" href="${esc(safeUrl(st.source))}" target="_blank" rel="noopener">Original source ↗</a></article>`).join('')}</div><form data-action-form="career-story-lesson" class="career-story-lesson"><label><span class="eyebrow">SAVE ONE LESSON FOR YOURSELF</span><textarea name="lesson" required placeholder="Example: Mel's route makes me think QA or another adjacent role is not automatically a dead end, as long as I keep building evidence for the role I actually want.">${esc(p.careerStoryLesson||'')}</textarea></label><button class="button primary" type="submit">Save career-story lesson ✓</button></form></section>`;
+}
+function careerRealityActivity(){
+  const p=careerProfile(),vac=[...(p.vacancies||[])];while(vac.length<3)vac.push({});const lights=p.trafficLights||[];
+  return `<section class="career-activity"><div class="career-activity-head"><span class="eyebrow">◎ HUB CHECKPOINT • REAL MARKET EVIDENCE</span><h2>Stop researching imaginary jobs</h2><p>Choose one specific role. Then compare three vacancies at similar levels where possible. Current jobs change, so save the evidence rather than relying on the link being live forever.</p></div><form data-action-form="career-target-role" class="career-target-role"><label>Target role<select name="targetRole" required><option value="">Choose a specific role…</option>${CAREERS.roles.map(r=>`<option value="${r.id}" ${p.targetRole===r.id?'selected':''}>${esc(r.title)}</option>`).join('')}</select></label><label>Why does the day-to-day work fit you?<textarea name="targetReason" required>${esc(p.targetReason||'')}</textarea></label><button class="button primary" type="submit">Save target role ✓</button></form><div class="career-live-source-row"><a href="https://gidb.uk/" target="_blank" rel="noopener">GIDB ↗</a><a href="https://www.gamesjobsdirect.com/jobs-in-uk" target="_blank" rel="noopener">Games Jobs Direct ↗</a><a href="https://www.workwithindies.com/" target="_blank" rel="noopener">Work With Indies ↗</a><a href="https://ukie.org.uk/uk-games-map" target="_blank" rel="noopener">UK Games Map ↗</a></div><form data-action-form="career-vacancies"><div class="career-vacancy-grid">${vac.slice(0,3).map((v,i)=>`<fieldset><legend>Vacancy ${i+1}</legend><label>Company<input name="company_${i}" required value="${esc(v.company||'')}"></label><label>Job title<input name="title_${i}" required value="${esc(v.title||'')}"></label><label>Link<input name="url_${i}" type="url" value="${esc(v.url||'')}" placeholder="https://…"></label><label>Hard / technical requirements<textarea name="hard_${i}" required placeholder="Separate important requirements with commas">${esc(v.hard||'')}</textarea></label><label>Soft / professional requirements<textarea name="soft_${i}" required>${esc(v.soft||'')}</textarea></label><label>Portfolio / software / anything surprising<textarea name="notes_${i}" required>${esc(v.notes||'')}</textarea></label></fieldset>`).join('')}</div><button class="button primary" type="submit">Save three vacancy snapshots ✓</button></form><form data-action-form="career-gap" class="career-gap-form"><div class="career-activity-head compact"><span class="eyebrow">GREEN / AMBER / RED</span><h2>Turn vacancy requirements into evidence</h2><p>Add up to five repeated requirements. GREEN = I can prove it. AMBER = some evidence. RED = I cannot currently prove it.</p></div><div class="career-light-grid">${[0,1,2,3,4].map(i=>{const x=lights[i]||{};return `<div class="career-light-row"><input name="req_${i}" value="${esc(x.requirement||'')}" placeholder="Repeated requirement"><select name="status_${i}"><option value="">—</option><option value="green" ${x.status==='green'?'selected':''}>GREEN — prove it</option><option value="amber" ${x.status==='amber'?'selected':''}>AMBER — partial</option><option value="red" ${x.status==='red'?'selected':''}>RED — no evidence</option></select><input name="evidence_${i}" value="${esc(x.evidence||'')}" placeholder="Evidence or gap"></div>`}).join('')}</div><label>Most important RED gap<textarea name="biggestGap" required placeholder="Which missing requirement would make the biggest difference?">${esc(p.biggestGap||'')}</textarea></label><button class="button primary" type="submit">Save reality check ✓</button></form></section>`;
+}
+function careerChallengeCards(){
+  const p=careerProfile(),selected=p.challenge?.id,role=p.targetRole;
+  return `<section class="career-activity"><div class="career-activity-head"><span class="eyebrow">◎ HUB CHECKPOINT • TARGETED PORTFOLIO PIECE</span><h2>Do not begin with “what would be fun to make?”</h2><p>Begin with the RED / AMBER evidence you need. The cards highlight challenges that fit your selected role, but you can still choose another if you can justify it.</p></div><div class="career-challenge-grid">${CAREERS.challenges.map(c=>{const fit=!role||c.roles.includes(role);return `<article class="career-challenge-card ${selected===c.id?'selected':''} ${fit?'fit':''}"><span class="career-challenge-icon">${esc(c.icon)}</span><div><span class="eyebrow">${fit&&role?'SUGGESTED FOR YOUR ROLE':'PORTFOLIO CHALLENGE'}</span><h3>${esc(c.title)}</h3><p>${esc(c.brief)}</p><details><summary>Evidence to capture</summary><ul>${c.evidence.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></details><button type="button" class="button ${selected===c.id?'success':'ghost'}" data-action="career-select-challenge" data-challenge="${c.id}">${selected===c.id?'✓ Selected':'Choose this challenge'}</button></div></article>`}).join('')}</div><form data-action-form="career-challenge-requirement" class="career-challenge-requirement"><label>Which employer requirement will this piece prove?<textarea name="requirement" required placeholder="Example: ‘Ability to greybox and iterate playable spaces using Unreal Engine.’">${esc(p.challenge?.requirement||'')}</textarea></label><label>What will you deliberately NOT build, so this stays finishable?<textarea name="scopeCut" required placeholder="Example: No final environment art; the evidence is Level Design, not a full environment.">${esc(p.challenge?.scopeCut||'')}</textarea></label><button class="button primary" type="submit" ${selected?'':'disabled'}>Save challenge purpose ✓</button></form></section>`;
+}
+function careerSummaryText(){
+  const p=careerProfile(),role=careerRole(p.targetRole),challenge=careerChallenge(p.challenge?.id),signals=p.signals||{},top=Object.entries(signals).sort((a,b)=>b[1]-a[1])[0];
+  const interested=Object.entries(p.roleInterests||{}).filter(([,v])=>v==='definite'||v==='maybe').map(([id,v])=>`${careerRole(id)?.title||id} (${v})`).join(', ');
+  const vacancies=(p.vacancies||[]).filter(v=>v.company&&v.title).map((v,i)=>`${i+1}. ${v.title} — ${v.company}`).join('\n');
+  const lights=(p.trafficLights||[]).filter(x=>x.requirement).map(x=>`- ${String(x.status||'').toUpperCase()}: ${x.requirement}${x.evidence?` — ${x.evidence}`:''}`).join('\n');
+  return `MY PLACE IN THE GAMES INDUSTRY\n\nTarget role: ${role?.title||'Still exploring'}\nWhy: ${p.targetReason||'Not written yet'}\n\nRoles I investigated: ${interested||'Not recorded yet'}\nStrongest work-style signal: ${top?({technical:'Technical / systems',design:'Design / player experience',visual:'Visual / craft',production:'Production / organisation'}[top[0]]||top[0]):'Not measured yet'}\nPeer strength: ${p.peerFeedback?.strength||'Not recorded yet'}\nPeer improvement: ${p.peerFeedback?.improve||'Not recorded yet'}\n\nVacancy evidence:\n${vacancies||'Not recorded yet'}\n\nGreen / Amber / Red:\n${lights||'Not recorded yet'}\n\nBiggest current gap: ${p.biggestGap||'Not chosen yet'}\n\nTargeted portfolio piece: ${challenge?.title||'Not selected yet'}\nRequirement it proves: ${p.challenge?.requirement||'Not recorded yet'}\nScope I will cut: ${p.challenge?.scopeCut||'Not recorded yet'}\n\n6 months: ${p.goals?.sixMonth||'Not written yet'}\n12 months: ${p.goals?.twelveMonth||'Not written yet'}\n24 months: ${p.goals?.twentyFourMonth||'Not written yet'}\n\nCareer-story lesson: ${p.careerStoryLesson||'Not written yet'}`;
+}
+function careerPlanActivity(){
+  const p=careerProfile(),g=p.goals||{};
+  return `<section class="career-activity"><div class="career-activity-head"><span class="eyebrow">◎ HUB CHECKPOINT • 6 / 12 / 24 MONTHS</span><h2>Make the next move measurable</h2><p>Every useful goal should create evidence. “Improve Unreal” is not a plan. Name what you will produce, by when, and what it will prove.</p></div><form data-action-form="career-goals"><div class="career-goal-grid"><label><span>6 MONTHS</span><textarea name="sixMonth" required placeholder="What can realistically change this academic year?">${esc(g.sixMonth||'')}</textarea></label><label><span>12 MONTHS</span><textarea name="twelveMonth" required placeholder="What should your skills and portfolio contain?">${esc(g.twelveMonth||'')}</textarea></label><label><span>24 MONTHS</span><textarea name="twentyFourMonth" required placeholder="What is the realistic next professional / education stage?">${esc(g.twentyFourMonth||'')}</textarea></label></div><button class="button primary" type="submit">Save career plan ✓</button></form><div class="career-summary-box"><div><span class="eyebrow">ASSIGNMENT 1 STARTER SUMMARY</span><h2>The Hub has been collecting your evidence</h2><p>Copy this into your own working document, then turn it into proper Level 4 analysis. It is a starting structure, not a finished submission.</p></div><pre>${esc(careerSummaryText())}</pre><button class="button ghost" type="button" data-action="career-copy-summary">Copy my career summary</button></div></section>`;
+}
+function careerChapterActivity(ch){
+  if(ch.id==='industry')return careerIndustryActivity();
+  if(ch.id==='people')return careerRoleExplorer();
+  if(ch.id==='you')return careerSelfActivity();
+  if(ch.id==='routes')return careerStoriesActivity();
+  if(ch.id==='reality')return careerRealityActivity();
+  if(ch.id==='prove')return careerChallengeCards();
+  if(ch.id==='plan')return careerPlanActivity();
+  return '';
+}
+function careerChapterPage(id){
+  const ch=careerChapter(id);if(!ch)return notFound();const idx=CAREERS.chapters.indexOf(ch),prev=CAREERS.chapters[idx-1],next=CAREERS.chapters[idx+1],done=careerDone(ch.id),req=careerRequirementStatus(ch);
+  return `<div class="breadcrumb"><a href="#/">Home</a> / <a href="#/industry-careers">Industry & Careers</a> / ${esc(ch.title)}</div><section class="career-chapter-hero"><div><span class="eyebrow">CHAPTER ${ch.order}/7 • PRESENTATION SLIDES ${esc(ch.slides)} • +${CAREERS.xp} XP</span><h1>${esc(ch.icon)} ${esc(ch.title)}</h1><p>${esc(ch.short)}</p><div class="career-big-question"><b>BIG QUESTION</b><span>${esc(ch.question)}</span></div></div><div class="career-checkpoint-panel ${req.ready?'ready':''}"><span>◎ LIVE HUB CHECKPOINT</span><strong>${req.ready?'✓ Evidence ready':esc(req.label)}</strong><p>${esc(ch.checkpoint)}</p>${done?'<b class="career-done-mark">✓ Chapter complete</b>':''}</div></section><section class="career-key-section"><span class="eyebrow">RECOVERY NOTES • IF YOU MISSED THE LIVE DELIVERY</span><h2>The ideas you need</h2><div class="career-key-grid">${ch.keyIdeas.map((x,i)=>`<article><span>${String(i+1).padStart(2,'0')}</span><p>${esc(x)}</p></article>`).join('')}</div></section><section class="section"><div class="section-head"><div><span class="eyebrow">REAL INDUSTRY STORIES</span><h2>People, studios and projects make the theory visible</h2><p>Use the question on each card. The story matters because of what it reveals about work.</p></div></div>${careerCases(ch.cases||[])}</section>${careerWatchCards(ch.watches||[])}${careerChapterActivity(ch)}<section class="section"><div class="section-head"><div><span class="eyebrow">GO DEEPER</span><h2>Professional sources</h2><p>Use original studio, industry, practitioner and careers sources wherever possible.</p></div></div>${careerSourceCards(ch.sources||[])}</section>${careerQuiz(ch)}<nav class="theory-lesson-nav career-chapter-nav"><div>${prev?`<a class="button ghost" href="#/industry-careers/${prev.id}">← ${esc(prev.title)}</a>`:`<a class="button ghost" href="#/industry-careers">← Pathway home</a>`}</div><div>${next?`<a class="button primary" href="#/industry-careers/${next.id}">${esc(next.title)} →</a>`:`<a class="button primary" href="#/industry-careers">Career pathway dashboard →</a>`}</div></nav>`;
 }
 
 
@@ -2533,7 +2682,7 @@ function classCheckpointRows(o,memberIds,items){
 function studentCompletedContent(o,userId){
   const completed=new Set(o.progress.filter(p=>p.user_id===userId&&p.completed).map(p=>p.lesson_id));
   const list=(items,prefix='')=>items.filter(x=>completed.has(prefix+x.id)).map(x=>`<li>${esc(x.title)}</li>`).join('');
-  const core=list(DATA.lessons),blocks=list(BLOCKS.blocks,'block:'),tutorials=list(TOOLS.tutorials,'tutorial:'),theory=list(THEORY.lessons,'theory:'),modelTheory=list(MODEL_FOUNDATIONS.chapters,'modeltheory:')+(completed.has('modelfoundation:final')?'<li>Model Doctor</li>':''),model=list(MODEL.lessons,'model:'),sculpt=list(SCULPT.practices,'sculpt:'),design=list(DESIGN.modules.map(m=>({id:m.id,title:m.build?.title||m.title})),'designbuild:'),designSources=list(designSourceItems(),'designsource:'),modelVideos=list(modelVideoItems(),'modelvideo:'),modelBuild=list(MODEL.builds||[],'modelbuild:'),modelFix=list(MODEL.fixes||[],'modelfix:'),chapters=TOOLS.chapterBuilds.filter(x=>completed.has(`chapter:${x.path}`)).map(x=>`<li>${esc(x.title)}</li>`).join('');
+  const core=list(DATA.lessons),blocks=list(BLOCKS.blocks,'block:'),tutorials=list(TOOLS.tutorials,'tutorial:'),theory=list(THEORY.lessons,'theory:'),careers=(CAREERS.chapters||[]).filter(x=>completed.has(`theory:industry-${x.id}`)).map(x=>`<li>${esc(x.title)}</li>`).join(''),modelTheory=list(MODEL_FOUNDATIONS.chapters,'modeltheory:')+(completed.has('modelfoundation:final')?'<li>Model Doctor</li>':''),model=list(MODEL.lessons,'model:'),sculpt=list(SCULPT.practices,'sculpt:'),design=list(DESIGN.modules.map(m=>({id:m.id,title:m.build?.title||m.title})),'designbuild:'),designSources=list(designSourceItems(),'designsource:'),modelVideos=list(modelVideoItems(),'modelvideo:'),modelBuild=list(MODEL.builds||[],'modelbuild:'),modelFix=list(MODEL.fixes||[],'modelfix:'),chapters=TOOLS.chapterBuilds.filter(x=>completed.has(`chapter:${x.path}`)).map(x=>`<li>${esc(x.title)}</li>`).join('');
   const pathStatus=PATHWAYS.paths.map(p=>{const x=guidedPathProgressForStudent(p,o.progress,userId);return `<li>${p.icon} ${esc(p.title)} — ${x.done}/${x.total} (${x.pct}%)</li>`}).join('');
   return `<div class="student-content-detail">
     <div><strong>Guided Paths</strong><ul>${pathStatus}</ul></div>
@@ -2541,6 +2690,7 @@ function studentCompletedContent(o,userId){
     <div><strong>Core lessons</strong><ul>${core||'<li class="muted">None completed yet.</li>'}</ul></div>
     <div><strong>Practical builds</strong><ul>${tutorials||'<li class="muted">None completed yet.</li>'}</ul></div>
     <div><strong>Game Design Theory</strong><ul>${theory||'<li class="muted">None completed yet.</li>'}</ul></div>
+    <div><strong>Industry & Careers</strong><ul>${careers||'<li class="muted">None completed yet.</li>'}</ul></div>
     <div><strong>Designer Studio</strong><ul>${design||'<li class="muted">None completed yet.</li>'}</ul></div>
     <div><strong>Designer industry sources</strong><ul>${designSources||'<li class="muted">None completed yet.</li>'}</ul></div>
     <div><strong>3D Foundations</strong><ul>${modelTheory||'<li class="muted">None completed yet.</li>'}</ul></div><div><strong>3D Videos</strong><ul>${modelVideos||'<li class="muted">None completed yet.</li>'}</ul></div><div><strong>3D / Sculpt</strong><ul>${model+modelBuild+modelFix+sculpt||'<li class="muted">None completed yet.</li>'}</ul></div>
@@ -2556,13 +2706,14 @@ async function renderTeacherClass(classId){
     const memberIds=(c.class_members||[]).map(m=>m.user_id);
     const members=(o.profiles||[]).filter(p=>memberIds.includes(p.id)).sort((a,b)=>a.display_name.localeCompare(b.display_name));
     const progress=o.progress||[];
+    const careerProfileFor=uid=>progress.find(p=>p.user_id===uid&&p.lesson_id==='career:profile')?.quiz||{};
     const done=(uid,id)=>progress.some(p=>p.user_id===uid&&p.lesson_id===id&&p.completed);
     const count=(uid,items,prefix='')=>items.filter(x=>done(uid,prefix+x.id)).length;
     const teacherNames=Object.fromEntries((o.teachers||[]).map(t=>[t.id,t.display_name]));
     const teacherIds=(c.class_teachers||[]).map(t=>t.teacher_id);
     const weeklyBy=Object.fromEntries((weeklyRows||[]).map(r=>[r.user_id,r]));
     const lastActivity=uid=>{
-      const times=progress.filter(r=>r.user_id===uid&&(r.completed||r.completed_at)).map(r=>new Date(r.completed_at||r.updated_at||0).getTime()).filter(Number.isFinite);
+      const times=progress.filter(r=>r.user_id===uid&&(r.completed||r.completed_at||r.lesson_id==='career:profile')).map(r=>new Date(r.completed_at||r.updated_at||0).getTime()).filter(Number.isFinite);
       return times.length?new Date(Math.max(...times)).toISOString():null;
     };
     const checkpointItems=[];const checkpointSeen=new Set();
@@ -2577,6 +2728,8 @@ async function renderTeacherClass(classId){
     const tutorialDone=memberIds.reduce((n,uid)=>n+count(uid,TOOLS.tutorials,'tutorial:'),0);
     const theoryTotal=THEORY.lessons.length*memberIds.length;
     const theoryDone=memberIds.reduce((n,uid)=>n+count(uid,THEORY.lessons,'theory:'),0);
+    const careerTotal=CAREERS.chapters.length*memberIds.length;
+    const careerDoneCount=memberIds.reduce((n,uid)=>n+CAREERS.chapters.filter(ch=>done(uid,`theory:industry-${ch.id}`)).length,0);
     const designDone=memberIds.reduce((n,uid)=>n+count(uid,DESIGN.modules.map(m=>({id:m.id})),'designbuild:'),0);
     const modelDone=memberIds.reduce((n,uid)=>n+count(uid,MODEL.lessons,'model:')+count(uid,MODEL_FOUNDATIONS.chapters,'modeltheory:')+(done(uid,'modelfoundation:final')?1:0),0);
     const checkpointDone=memberIds.reduce((n,uid)=>n+checkpointItems.filter(x=>progress.some(r=>r.user_id===uid&&r.lesson_id===`pathway:${x.id}`&&r.completed_at)).length,0);
@@ -2587,21 +2740,24 @@ async function renderTeacherClass(classId){
         <div class="teacher-stat"><small>Core lessons</small><strong>${lessonDone}</strong><span>of ${lessonTotal||0} student completions</span></div>
         <div class="teacher-stat"><small>Practical builds</small><strong>${tutorialDone}</strong><span>of ${tutorialTotal||0} student completions</span></div>
         <div class="teacher-stat"><small>Game Design Theory</small><strong>${theoryDone}</strong><span>of ${theoryTotal||0} student completions</span></div>
+        <div class="teacher-stat"><small>Industry & Careers</small><strong>${careerDoneCount}</strong><span>of ${careerTotal||0} chapter completions</span></div>
         <div class="teacher-stat"><small>Designer builds</small><strong>${designDone}</strong></div>
         <div class="teacher-stat"><small>3D learning</small><strong>${modelDone}</strong></div>
         <div class="teacher-stat"><small>Guided checkpoints</small><strong>${checkpointDone}</strong><span>required path evidence</span></div>
       </div>
 
-      <section class="section class-snapshot-section"><div class="section-head"><div><span class="eyebrow">AT-A-GLANCE</span><h2>Student learning snapshot</h2><p>The fast scan: core progress, Theory, Designer Studio, 3D, Guided Paths, this week's XP and recent activity.</p></div><a class="button small ghost" href="#/leaderboard">🏆 Full leaderboard</a></div><div class="class-snapshot-scroll"><table class="class-snapshot-table"><thead><tr><th>Student</th><th>Unreal</th><th>Theory</th><th>Designer</th><th>3D / Sculpt</th><th>Guided Paths</th><th>Week XP</th><th>Streak</th><th>Last activity</th></tr></thead><tbody>${members.map(p=>{
-        const core=count(p.id,DATA.lessons),tutorials=count(p.id,TOOLS.tutorials,'tutorial:'),chapters=count(p.id,TOOLS.chapterBuilds.map(x=>({id:x.path})),'chapter:'),theory=count(p.id,THEORY.lessons,'theory:'),design=count(p.id,DESIGN.modules.map(m=>({id:m.id})),'designbuild:'),sources=count(p.id,designSourceItems(),'designsource:'),foundation=count(p.id,MODEL_FOUNDATIONS.chapters,'modeltheory:')+(done(p.id,'modelfoundation:final')?1:0),modelVideos=count(p.id,modelVideoItems(),'modelvideo:'),model=count(p.id,MODEL.lessons,'model:'),buildX=count(p.id,MODEL.builds||[],'modelbuild:'),modelFix=count(p.id,MODEL.fixes||[],'modelfix:'),sculpt=count(p.id,SCULPT.practices,'sculpt:'),xp=weeklyBy[p.id];
+      <section class="section class-snapshot-section"><div class="section-head"><div><span class="eyebrow">AT-A-GLANCE</span><h2>Student learning snapshot</h2><p>The fast scan: core progress, Theory, Designer Studio, 3D, Guided Paths, this week's XP and recent activity.</p></div><a class="button small ghost" href="#/leaderboard">🏆 Full leaderboard</a></div><div class="class-snapshot-scroll"><table class="class-snapshot-table"><thead><tr><th>Student</th><th>Unreal</th><th>Theory</th><th>Industry</th><th>Designer</th><th>3D / Sculpt</th><th>Guided Paths</th><th>Week XP</th><th>Streak</th><th>Last activity</th></tr></thead><tbody>${members.map(p=>{
+        const core=count(p.id,DATA.lessons),tutorials=count(p.id,TOOLS.tutorials,'tutorial:'),chapters=count(p.id,TOOLS.chapterBuilds.map(x=>({id:x.path})),'chapter:'),theory=count(p.id,THEORY.lessons,'theory:'),career=CAREERS.chapters.filter(ch=>done(p.id,`theory:industry-${ch.id}`)).length,design=count(p.id,DESIGN.modules.map(m=>({id:m.id})),'designbuild:'),sources=count(p.id,designSourceItems(),'designsource:'),foundation=count(p.id,MODEL_FOUNDATIONS.chapters,'modeltheory:')+(done(p.id,'modelfoundation:final')?1:0),modelVideos=count(p.id,modelVideoItems(),'modelvideo:'),model=count(p.id,MODEL.lessons,'model:'),buildX=count(p.id,MODEL.builds||[],'modelbuild:'),modelFix=count(p.id,MODEL.fixes||[],'modelfix:'),sculpt=count(p.id,SCULPT.practices,'sculpt:'),xp=weeklyBy[p.id];
         const pathChips=PATHWAYS.paths.map(path=>{const x=guidedPathProgressForStudent(path,progress,p.id);return `<span class="path-mini ${x.pct===100?'done':''}" title="${esc(path.title)}">${path.icon} ${x.pct}%</span>`}).join('');
-        return `<tr><td><strong>${esc(p.display_name)}</strong></td><td><b>${core}/${DATA.lessons.length}</b><small>${tutorials} practical • ${chapters} chapter</small></td><td><b>${theory}/${THEORY.lessons.length}</b></td><td><b>${design}/${DESIGN.modules.length}</b><small>${sources} source tasks</small></td><td><b>${foundation}/${MODEL_FOUNDATIONS.chapters.length+1}</b><small>${modelVideos}/${MODEL_VIDEOS.videos.length} Max videos • ${model}/${MODEL.lessons.length} lessons • ${buildX} Build X • ${modelFix} fixes • ${sculpt} sculpt</small></td><td><div class="path-mini-row">${pathChips}</div></td><td><b>${Number(xp?.weekly_xp||0).toLocaleString()}</b></td><td>${xp?.current_streak?`🔥 ${xp.current_streak}`:'—'}</td><td><span class="teacher-activity ${lastActivity(p.id)?'active':''}">${teacherActivityLabel(lastActivity(p.id))}</span></td></tr>`;
+        return `<tr><td><strong>${esc(p.display_name)}</strong></td><td><b>${core}/${DATA.lessons.length}</b><small>${tutorials} practical • ${chapters} chapter</small></td><td><b>${theory}/${THEORY.lessons.length}</b></td><td><b>${career}/${CAREERS.chapters.length}</b><small>${esc(careerRole(careerProfileFor(p.id).targetRole)?.title||'exploring')}</small></td><td><b>${design}/${DESIGN.modules.length}</b><small>${sources} source tasks</small></td><td><b>${foundation}/${MODEL_FOUNDATIONS.chapters.length+1}</b><small>${modelVideos}/${MODEL_VIDEOS.videos.length} Max videos • ${model}/${MODEL.lessons.length} lessons • ${buildX} Build X • ${modelFix} fixes • ${sculpt} sculpt</small></td><td><div class="path-mini-row">${pathChips}</div></td><td><b>${Number(xp?.weekly_xp||0).toLocaleString()}</b></td><td>${xp?.current_streak?`🔥 ${xp.current_streak}`:'—'}</td><td><span class="teacher-activity ${lastActivity(p.id)?'active':''}">${teacherActivityLabel(lastActivity(p.id))}</span></td></tr>`;
       }).join('')}</tbody></table></div></section>
+
+      <section class="section teacher-career-snapshot"><div class="section-head"><div><span class="eyebrow">LIVE LEVEL 4 CAREER VIEW</span><h2>Industry & Careers snapshot</h2><p>Use this while the class is working: target role, current RED gap and chosen portfolio challenge come from each student's saved Hub evidence.</p></div><a class="button small ghost" href="#/industry-careers">Open pathway</a></div><div class="teacher-career-grid">${members.map(p=>{const cp=careerProfileFor(p.id),role=careerRole(cp.targetRole),challenge=careerChallenge(cp.challenge?.id),completed=CAREERS.chapters.filter(ch=>done(p.id,`theory:industry-${ch.id}`)).length,top=Object.entries(cp.signals||{}).sort((a,b)=>b[1]-a[1])[0];const signal=top?({technical:'Technical / systems',design:'Design / player experience',visual:'Visual / craft',production:'Production / organisation'}[top[0]]||top[0]):'Not profiled';return `<article><div><strong>${esc(p.display_name)}</strong><span>${completed}/${CAREERS.chapters.length} chapters</span></div><dl><dt>Target</dt><dd>${esc(role?.title||'Exploring')}</dd><dt>Signal</dt><dd>${esc(signal)}</dd><dt>RED gap</dt><dd>${esc(cp.biggestGap||'Not identified')}</dd><dt>Challenge</dt><dd>${esc(challenge?.title||'Not selected')}</dd></dl></article>`}).join('')}</div></section>
 
       <section class="section"><div class="section-head"><div><h2>Student detail</h2><p>Open a student to see exact completed content and all three Guided Path percentages.</p></div><span class="sync-chip">${members.length} student${members.length===1?'':'s'}</span></div>
         <div class="class-student-grid">${members.length?members.map(p=>{
-          const core=count(p.id,DATA.lessons),blocks=count(p.id,BLOCKS.blocks,'block:'),tutorials=count(p.id,TOOLS.tutorials,'tutorial:'),theory=count(p.id,THEORY.lessons,'theory:'),design=count(p.id,DESIGN.modules.map(m=>({id:m.id})),'designbuild:'),model=count(p.id,MODEL_FOUNDATIONS.chapters,'modeltheory:')+(done(p.id,'modelfoundation:final')?1:0)+count(p.id,MODEL.lessons,'model:')+count(p.id,SCULPT.practices,'sculpt:'),chapters=count(p.id,TOOLS.chapterBuilds.map(x=>({id:x.path})),'chapter:');
-          return `<article class="class-student-card"><div class="class-student-head">${avatarMarkup('sm',p.display_name)}<div><h3>${esc(p.display_name)}</h3><span>${core}/${DATA.lessons.length} core lessons</span></div></div><div class="class-student-stats"><span><b>${blocks}</b> blocks</span><span><b>${tutorials}</b> tutorials</span><span><b>${theory}</b> theory</span><span><b>${design}</b> design builds</span><span><b>${model}</b> 3D/sculpt</span><span><b>${chapters}</b> chapter builds</span></div><details><summary>View completed content</summary>${studentCompletedContent(o,p.id)}</details></article>`;
+          const core=count(p.id,DATA.lessons),blocks=count(p.id,BLOCKS.blocks,'block:'),tutorials=count(p.id,TOOLS.tutorials,'tutorial:'),theory=count(p.id,THEORY.lessons,'theory:'),career=CAREERS.chapters.filter(ch=>done(p.id,`theory:industry-${ch.id}`)).length,design=count(p.id,DESIGN.modules.map(m=>({id:m.id})),'designbuild:'),model=count(p.id,MODEL_FOUNDATIONS.chapters,'modeltheory:')+(done(p.id,'modelfoundation:final')?1:0)+count(p.id,MODEL.lessons,'model:')+count(p.id,SCULPT.practices,'sculpt:'),chapters=count(p.id,TOOLS.chapterBuilds.map(x=>({id:x.path})),'chapter:');
+          return `<article class="class-student-card"><div class="class-student-head">${avatarMarkup('sm',p.display_name)}<div><h3>${esc(p.display_name)}</h3><span>${core}/${DATA.lessons.length} core lessons</span></div></div><div class="class-student-stats"><span><b>${blocks}</b> blocks</span><span><b>${tutorials}</b> tutorials</span><span><b>${theory}</b> theory</span><span><b>${career}</b> industry</span><span><b>${design}</b> design builds</span><span><b>${model}</b> 3D/sculpt</span><span><b>${chapters}</b> chapter builds</span></div><details><summary>View completed content</summary>${studentCompletedContent(o,p.id)}</details></article>`;
         }).join(''):'<div class="empty"><h3>No students yet.</h3><p>Students will appear here after joining this class.</p></div>'}</div>
       </section>
       <section class="section class-learning-content"><div class="section-head"><div><span class="eyebrow">CLASS CONTENT</span><h2>What has this class completed?</h2><p>Every row shows how many students have completed that piece of Hub learning. Guided Path checkpoints are tracked separately because they deliberately award no XP.</p></div></div>
@@ -2609,6 +2765,7 @@ async function renderTeacherClass(classId){
         <details open class="class-content-group"><summary>🧠 Core System Lessons <span>${DATA.lessons.length} lessons</span></summary><div>${classProgressRows(o,memberIds,DATA.lessons)}</div></details>
         <details class="class-content-group"><summary>🛠 Practical builds <span>${TOOLS.tutorials.length} outcomes</span></summary><div>${classProgressRows(o,memberIds,TOOLS.tutorials,'tutorial:')}</div></details>
         <details class="class-content-group"><summary>◈ Game Design Theory <span>${THEORY.lessons.length} lessons</span></summary><div>${classProgressRows(o,memberIds,THEORY.lessons,'theory:')}</div></details>
+        <details open class="class-content-group"><summary>◎ Industry & Careers <span>${CAREERS.chapters.length} chapters</span></summary><div>${classProgressRows(o,memberIds,CAREERS.chapters.map(ch=>({id:`industry-${ch.id}`,title:ch.title,duration:`Slides ${ch.slides}`})),'theory:')}</div></details>
         <details class="class-content-group"><summary>🎨 Designer Studio Builds <span>${DESIGN.modules.length} builds</span></summary><div>${classProgressRows(o,memberIds,DESIGN.modules.map(m=>({id:m.id,title:m.build?.title||m.title})),'designbuild:')}</div></details>
         <details class="class-content-group"><summary>🎬 Designer Industry Sources <span>${designSourceItems().length} source tasks</span></summary><div>${classProgressRows(o,memberIds,designSourceItems(),'designsource:')}</div></details>
         <details class="class-content-group"><summary>↠ Guided Path Checkpoints <span>${checkpointItems.length} practical checkpoints</span></summary><div>${classCheckpointRows(o,memberIds,checkpointItems)}</div></details>
@@ -2906,6 +3063,8 @@ function route(options={}){
   else if(parts[0]==='modeling'&&parts[1]==='build'&&parts[2]){app.innerHTML=modelingBuildPage(parts[2]);activate('modeling')}
   else if(parts[0]==='modeling'&&parts[1]==='fix'&&parts[2]){app.innerHTML=modelingFixPage(parts[2]);activate('modeling')}
   else if(parts[0]==='modeling'){app.innerHTML=modelingPage();activate('modeling')}
+  else if(parts[0]==='industry-careers'&&parts[1]){app.innerHTML=careerChapterPage(parts[1]);activate('industry-careers')}
+  else if(parts[0]==='industry-careers'){app.innerHTML=careerHubPage();activate('industry-careers')}
   else if(parts[0]==='theory'&&parts[1]){app.innerHTML=theoryLessonPage(parts[1]);activate('theory')}
   else if(parts[0]==='theory'){app.innerHTML=theoryPage();activate('theory')}
   else if(parts[0]==='design'&&parts[1]){app.innerHTML=designModulePage(parts[1]);activate('design')}
@@ -3414,6 +3573,24 @@ document.addEventListener('click',async e=>{
     stage.classList.add('loaded');
     stage.replaceChildren(iframe);
   }
+  else if(a==='career-role-interest'){
+    const role=b.dataset.role,interest=b.dataset.interest;if(!careerRole(role)||!['definite','maybe','no'].includes(interest))return;
+    const p=careerProfile(),next={...(p.roleInterests||{}),[role]:interest};
+    await saveCareerProfileData({roleInterests:next},`${careerRole(role).title}: ${interest==='definite'?'definitely interested':interest==='maybe'?'maybe':'not for me'} saved.`);route({preserveScroll:true});
+  }
+  else if(a==='career-story-choice'){
+    const st=(CAREERS.stories||[]).find(x=>x.id===b.dataset.story);if(!st)return;const choice=Number(b.dataset.choice),card=b.closest('[data-career-story]'),out=card?.querySelector('[data-story-reveal]');if(!out)return;
+    out.hidden=false;out.className=`career-story-reveal ${choice===st.correct?'correct':'consider'}`;out.innerHTML=`<b>${choice===st.correct?'✓ Strong call':'↻ Useful prediction — now compare'}</b><p>${esc(st.reveal)}</p>`;
+    card.querySelectorAll('[data-action="career-story-choice"]').forEach(x=>x.disabled=true);
+    const p=careerProfile(),storyChoices={...(p.storyChoices||{}),[st.id]:{choice,at:new Date().toISOString()}};
+    await saveCareerProfileData({storyChoices},'Prediction saved — now decide what the career story means for you.');
+  }
+  else if(a==='career-select-challenge'){
+    const ch=careerChallenge(b.dataset.challenge);if(!ch)return;const p=careerProfile();await saveCareerProfileData({challenge:{...(p.challenge||{}),id:ch.id,status:'selected'}},`${ch.title} selected.`);route({preserveScroll:true});
+  }
+  else if(a==='career-copy-summary'){
+    try{await navigator.clipboard.writeText(careerSummaryText());toast('Career summary copied — use it as a starting structure, not a finished submission.')}catch(err){toast('Clipboard blocked by the browser.')}
+  }
   else if(a==='close-image'){closeImageLightbox();}
   else if(a==='scroll'){document.getElementById(b.dataset.target)?.scrollIntoView({behavior:'smooth',block:'start'});}
   else if(a==='complete') await setLessonComplete(b.dataset.lesson);
@@ -3617,6 +3794,44 @@ document.addEventListener('submit',async e=>{
     e.preventDefault();
     toast('That brief is over the 6,000 character limit. Shorten it before saving.');
     return;
+  }
+  if(e.target.dataset.actionForm==='career-industry'){
+    e.preventDefault();const fd=new FormData(e.target);await saveCareerProfileData({industryEvidence:{game:String(fd.get('game')||'').trim(),developer:String(fd.get('developer')||'').trim(),publisher:String(fd.get('publisher')||'').trim(),engine:String(fd.get('engine')||'').trim(),external:String(fd.get('external')||'').trim(),conclusion:String(fd.get('conclusion')||'').trim(),cluster:String(fd.get('cluster')||'').trim(),clusterStudios:String(fd.get('clusterStudios')||'').trim(),clusterInsight:String(fd.get('clusterInsight')||'').trim()}},'Industry evidence saved.');route({preserveScroll:true});return;
+  }
+  if(e.target.dataset.actionForm==='career-reflection'){
+    e.preventDefault();const fd=new FormData(e.target),signals={technical:0,design:0,visual:0,production:0},answers=[];
+    for(let i=0;i<CAREERS.reflectionQuestions.length;i++){const raw=fd.get(`r${i}`);if(raw===null){toast('Answer every reflection question first.');return}const oi=Number(raw),opt=CAREERS.reflectionQuestions[i].options[oi];answers.push(oi);if(opt?.[1] in signals)signals[opt[1]]++}
+    await saveCareerProfileData({reflection:{completed:true,answers,at:new Date().toISOString()},signals},'Work-style snapshot saved — now challenge it with your actual evidence.');route({preserveScroll:true});return;
+  }
+  if(e.target.dataset.actionForm==='career-skills'){
+    e.preventDefault();const fd=new FormData(e.target),hardSkills=CAREERS.hardSkills.map((name,i)=>({name,level:Number(fd.get(`hard_level_${i}`)||0),evidence:String(fd.get(`hard_evidence_${i}`)||'').trim()})),softSkills=CAREERS.softSkills.map((name,i)=>({name,level:Number(fd.get(`soft_level_${i}`)||0),evidence:String(fd.get(`soft_evidence_${i}`)||'').trim()}));await saveCareerProfileData({hardSkills,softSkills},'Hard + soft skills evidence saved.');route({preserveScroll:true});return;
+  }
+  if(e.target.dataset.actionForm==='career-peer'){
+    e.preventDefault();const fd=new FormData(e.target);await saveCareerProfileData({peerFeedback:{strength:String(fd.get('strength')||'').trim(),improve:String(fd.get('improve')||'').trim(),naturalRole:String(fd.get('naturalRole')||'').trim()}},'Peer reality check saved.');route({preserveScroll:true});return;
+  }
+  if(e.target.dataset.actionForm==='career-story-lesson'){
+    e.preventDefault();const fd=new FormData(e.target);await saveCareerProfileData({careerStoryLesson:String(fd.get('lesson')||'').trim()},'Career-story lesson saved.');route({preserveScroll:true});return;
+  }
+  if(e.target.dataset.actionForm==='career-target-role'){
+    e.preventDefault();const fd=new FormData(e.target),role=String(fd.get('targetRole')||'');if(!careerRole(role)){toast('Choose a specific role first.');return}await saveCareerProfileData({targetRole:role,targetReason:String(fd.get('targetReason')||'').trim()},`${careerRole(role).title} saved as your current working target — you can change it later.`);route({preserveScroll:true});return;
+  }
+  if(e.target.dataset.actionForm==='career-vacancies'){
+    e.preventDefault();const fd=new FormData(e.target),vacancies=[0,1,2].map(i=>({company:String(fd.get(`company_${i}`)||'').trim(),title:String(fd.get(`title_${i}`)||'').trim(),url:String(fd.get(`url_${i}`)||'').trim(),hard:String(fd.get(`hard_${i}`)||'').trim(),soft:String(fd.get(`soft_${i}`)||'').trim(),notes:String(fd.get(`notes_${i}`)||'').trim()}));await saveCareerProfileData({vacancies},'Three vacancy snapshots saved.');route({preserveScroll:true});return;
+  }
+  if(e.target.dataset.actionForm==='career-gap'){
+    e.preventDefault();const fd=new FormData(e.target),trafficLights=[0,1,2,3,4].map(i=>({requirement:String(fd.get(`req_${i}`)||'').trim(),status:String(fd.get(`status_${i}`)||''),evidence:String(fd.get(`evidence_${i}`)||'').trim()})).filter(x=>x.requirement);await saveCareerProfileData({trafficLights,biggestGap:String(fd.get('biggestGap')||'').trim()},'Green / Amber / Red evidence saved.');route({preserveScroll:true});return;
+  }
+  if(e.target.dataset.actionForm==='career-challenge-requirement'){
+    e.preventDefault();const p=careerProfile();if(!p.challenge?.id){toast('Choose a portfolio challenge first.');return}const fd=new FormData(e.target);await saveCareerProfileData({challenge:{...p.challenge,requirement:String(fd.get('requirement')||'').trim(),scopeCut:String(fd.get('scopeCut')||'').trim(),status:'selected'}},'Portfolio challenge purpose saved.');route({preserveScroll:true});return;
+  }
+  if(e.target.dataset.actionForm==='career-goals'){
+    e.preventDefault();const fd=new FormData(e.target);await saveCareerProfileData({goals:{sixMonth:String(fd.get('sixMonth')||'').trim(),twelveMonth:String(fd.get('twelveMonth')||'').trim(),twentyFourMonth:String(fd.get('twentyFourMonth')||'').trim()}},'6 / 12 / 24-month career plan saved.');route({preserveScroll:true});return;
+  }
+  if(e.target.dataset.actionForm==='career-quiz'){
+    e.preventDefault();const ch=careerChapter(e.target.dataset.career);if(!ch)return;const req=careerRequirementStatus(ch);if(!req.ready){toast(`Complete the Hub checkpoint first: ${req.label}`);return}
+    const fd=new FormData(e.target),answers=ch.quiz.map((_,i)=>{const v=fd.get(`q${i}`);return v===null?NaN:Number(v)});if(answers.some(Number.isNaN)){toast('Answer every question first.');return}
+    const correct=ch.quiz.reduce((n,q,i)=>n+(answers[i]===q.correct?1:0),0),total=ch.quiz.length,pct=Math.round(correct/total*100),old=careerScore(ch.id),bestPct=Math.max(old?.bestPct||old?.pct||0,pct),passed=pct>=CAREERS.passPercent,firstPass=passed&&!careerDone(ch.id),before=firstPass?localUnlockedBadgeIds():null;
+    state.careerScores={...(state.careerScores||{}),[ch.id]:{answers,correct,total,pct,bestPct,at:new Date().toISOString()}};if(firstPass)state.careerCompleted=[...new Set([...(state.careerCompleted||[]),ch.id])];saveState();if(firstPass&&BACKEND.user){try{await BACKEND.setLessonComplete(`theory:industry-${ch.id}`,true)}catch(err){toast('Passed locally; cloud sync failed.')}}if(firstPass){badgeUnlockAfter(before,`Industry & Careers chapter passed • +${CAREERS.xp} XP`);finishInlineUpdate(true)}else{toast(passed?'Passed again — XP was already awarded.':`${pct}% — review the scenario feedback and retry.`);route({preserveScroll:true})}return;
   }
   if(e.target.dataset.actionForm==='theory-quiz'){
     e.preventDefault();const l=theoryLesson(e.target.dataset.theory);if(!l)return;
@@ -4016,6 +4231,8 @@ function buildGlobalSearchIndex(){
   (THEORY.lessons||[]).forEach(t=>add({
     title:t.title,meta:`Game Design Theory • ${theoryPath(t.path)?.title||'Theory'} • +${THEORY.xp} XP`,href:`#/theory/${t.id}`,icon:t.icon||'◈',kind:'theory',data:deepSearchText(t)
   }));
+  (CAREERS.chapters||[]).forEach(ch=>add({title:ch.title,meta:`Industry & Careers • Level 4 • Chapter ${ch.order}`,href:`#/industry-careers/${ch.id}`,icon:ch.icon||'◎',kind:'career',data:deepSearchText(ch)}));
+  (CAREERS.roles||[]).forEach(r=>add({title:r.title,meta:`Industry & Careers • ${r.discipline} role`,href:'#/industry-careers/people',icon:r.icon||'◉',kind:'career-role',data:deepSearchText(r)}));
   (PATHWAYS.paths||[]).forEach(p=>add({title:p.title,meta:'Guided Path • optional route through existing Hub content',href:`#/pathways/${p.id}`,icon:p.icon||'↠',kind:'guided-path',data:deepSearchText(p)}));
     (DESIGN.modules||[]).forEach(m=>add({
     title:m.title,meta:'Designer Studio • Discipline',href:`#/design/${m.id}`,icon:m.icon||'◆',kind:'design',data:deepSearchText(m)
@@ -4056,6 +4273,7 @@ function buildGlobalSearchIndex(){
     ['Blueprint Snippet Bank','Official Epic paste assists and reusable Blueprint graph helpers','#/snippets','⚡'],
     ['Quick Tutorials','Recipe families and practical UE5 build outcomes','#/tutorials','🛠'],
     ['Game Design Theory','Core loops, MDA, agency, choices, balance, pacing, accessibility, prototyping, playtesting and adaptation','#/theory','◈'],
+    ['Industry & Careers','Level 4 games industry roles, hard and soft skills, career evidence, vacancies and portfolio planning','#/industry-careers','◎'],
     ['Designer Studio','Level design, lighting, materials, terrain, cinematic and environment design','#/design','◆'],
     ['Critique Board','Class studio wall, screenshots, peer feedback, structured critique and improvement','#/critique','💬'],
     ['Resource Library','Free assets, CC0 textures, HDRIs, sound libraries, level explorers, UI reference, documentaries and professional talks','#/resources','🧰'],
@@ -4114,7 +4332,7 @@ function setupSearch(){
 $('#menuButton').addEventListener('click',()=>$('#sidebar').classList.toggle('open'));
 $('#resetProgress').addEventListener('click',()=>{
   if(confirm('Reset all locally saved lesson progress, XP and game-project status on this browser?')){
-    state={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],designSourceCompleted:[],theoryCompleted:[],theoryScores:{},modelVideoCompleted:[],modelTheoryCompleted:[],modelTheoryScores:{},modelFoundationFinal:false,modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[],blockCompleted:[],pathwayCheckpoints:[]};
+    state={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],designSourceCompleted:[],theoryCompleted:[],theoryScores:{},careerCompleted:[],careerScores:{},careerProfile:{version:1,updatedAt:null,roleInterests:{},signals:{},hardSkills:[],softSkills:[],vacancies:[],trafficLights:[],goals:{}},modelVideoCompleted:[],modelTheoryCompleted:[],modelTheoryScores:{},modelFoundationFinal:false,modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[],blockCompleted:[],pathwayCheckpoints:[]};
     projectState={project_title:'Signal Lost',theme:PROJECT.themes[0],pitch:'',mechanics:{}};
     saveState();saveProjectState();route();toast('Local progress reset.');
   }
