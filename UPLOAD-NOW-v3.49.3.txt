@@ -1,0 +1,16 @@
+UE5 LEARNING HUB v3.49.3 — SECRET STUDIO PROTOCOL
+
+Apply over the current v3.49.2 site root.
+
+REPLACE / ADD:
+- index.html
+- app.js
+- industry-careers.css
+- data/industry-careers-data.js
+
+No database migration.
+No backend.js change.
+No new images or external media.
+
+After deploy, hard-refresh and confirm the Hub badge reads v3.49.3.
+Open #/industry-careers/industry and scroll to the very bottom, after the scenario check. The Secret Studio Protocol should appear immediately before the previous/next chapter navigation.

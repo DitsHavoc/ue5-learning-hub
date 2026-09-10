@@ -1,6 +1,6 @@
 window.UE5_INDUSTRY_CAREERS_DATA = {
-  version: '3.49.0',
-  buildDate: '2026-09-09',
+  version: '3.49.3',
+  buildDate: '2026-09-10',
   title: 'Find Your Place in the Games Industry',
   subtitle: 'Level 4 • Industry roles, real careers, skills, evidence and your next move',
   xp: 25,
@@ -10,13 +10,186 @@ window.UE5_INDUSTRY_CAREERS_DATA = {
       id: 'industry', order: 1, icon: '⌘', title: 'The Industry', slides: '5–39', time: '45–70 min across live delivery',
       question: 'What does the games industry actually look like?',
       short: 'Follow a real game through the ecosystem, investigate co-development and map the UK clusters where studios grow.',
-      checkpoint: 'Save one credits investigation and one UK cluster finding before taking the scenario check.',
+      checkpoint: 'Save one credits investigation and one UK cluster finding. The scenario check can be taken before or after; both are needed to complete the chapter.',
       keyIdeas: [
         'A modern game is usually produced by a network of organisations rather than one isolated studio.',
         'Credits are useful primary evidence for hidden co-development, outsourcing, QA, localisation and technology partners.',
         'Studio scale changes specialisation, communication, hierarchy and the kind of responsibility an individual developer carries.',
         'UK clusters grow because experience moves through people: studios train talent, talent moves, and new studios form.'
       ],
+      realityChecks: [
+        {
+          id:'who-made-it',
+          q:'A store page lists one developer and one publisher. Who actually made the game?',
+          options:[
+            'The named developer — everyone else is support.',
+            'The publisher, because they paid for it.',
+            'Potentially a wider network of internal teams, co-development studios, outsourcers, middleware, localisation and QA partners.',
+            'Whoever owns the IP.'
+          ],
+          correct:2,
+          optionFeedback:[
+            'That is the common shortcut. Full credits can reveal many other companies doing substantial development work.',
+            'Publishers can fund, market and distribute a game, but that does not mean publisher staff created every asset, system or test build.',
+            'Strong call. Modern game production is often distributed, which is why the full credits are better evidence than the logo on the store page.',
+            'Ownership and authorship are different. An IP owner can control the property without personally producing every part of the game.'
+          ],
+          reveal:'The phrase “the developer” can hide a much bigger production network. Credits are one of the best places to see the real pipeline.',
+          caseTitle:'SUMO DIGITAL — CO-DEVELOPMENT IN PLAIN SIGHT',
+          caseText:'Sumo Digital openly offers full development, co-development, porting, engineering and live operations. A studio can contribute major parts of a shipped game without being the name most players remember.',
+          sourceTitle:'Sumo Digital — Co-development',
+          sourceUrl:'https://www.sumo-digital.com/our-services/co-development/'
+        },
+        {
+          id:'bigger-better',
+          q:'A 500-person studio should be able to make a better game than a studio with fewer than 20 people. True?',
+          options:[
+            'Yes — more people should always mean a better game.',
+            'Usually yes, because every extra specialist automatically improves quality.',
+            'No — scale changes capacity and specialisation, but it does not guarantee quality.',
+            'No — small teams are always more creative than large ones.'
+          ],
+          correct:2,
+          optionFeedback:[
+            'More people can increase capacity, but they also increase coordination, cost and communication overhead. Quality is not a headcount formula.',
+            'Specialists can raise quality in particular areas, but only if the project, direction and production system let their work fit together.',
+            'Exactly. Team size changes what is possible and how work is organised; it does not produce quality automatically.',
+            'That just flips the stereotype. Small teams can move quickly, but they also have fewer people, less redundancy and less specialist coverage.'
+          ],
+          reveal:'Team size is a production variable, not a quality score.',
+          caseTitle:'HADES — FEWER THAN 20 EMPLOYEES',
+          caseText:'Supergiant described Hades as being made by an independent studio with fewer than 20 employees while delivering more than 22,000 lines of fully voiced dialogue.',
+          sourceTitle:'GDC Vault — Breathing Life into Greek Myth: The Dialogue of Hades',
+          sourceUrl:'https://www.gdcvault.com/play/1026975/Breathing-Life-into-Greek-Myth'
+        },
+        {
+          id:'big-owner-safe',
+          q:'A giant parent company buys a studio. What is the safest conclusion about the employees?',
+          options:[
+            'Their jobs are now safer because the parent company has more money.',
+            'Their jobs are now less safe because acquisitions are always bad.',
+            'There is not enough information: deeper pockets can help, but strategy, debt, performance and restructuring can still put jobs at risk.',
+            'Nothing changes except the logo.'
+          ],
+          correct:2,
+          optionFeedback:[
+            'More capital can help, but ownership does not guarantee a particular studio will remain strategically important.',
+            'Acquisitions can also fund growth, technology, distribution and projects that might otherwise be impossible. “Always bad” is too simple.',
+            'Strongest answer. Acquisition changes power and resources, but the consequences depend on what the parent company does next.',
+            'Ownership can change budgets, reporting lines, IP control, project approval and even whether the studio continues to exist.'
+          ],
+          reveal:'The useful question is not “are acquisitions good?” but “good for whom, under what conditions, and who carries the risk?”',
+          caseTitle:'EMBRACER — GROWTH, THEN RESTRUCTURING',
+          caseText:'After years of expansion, Embracer launched a major restructuring programme in 2023. Its 2023/24 annual report records a cumulative headcount reduction of 1,583 during that programme, alongside divestments and project write-downs.',
+          sourceTitle:'Embracer Group — Annual Report 2023/24',
+          sourceUrl:'https://embracer.com/wp-content/uploads/2024/06/Embracer-Group-publishes-Annual-Report-20232024-240620.pdf'
+        },
+        {
+          id:'shipped-healthy',
+          q:'A studio has just shipped a big commercial game. Does that prove the company itself is financially healthy?',
+          options:[
+            'Yes — shipping a major game means the company has made it.',
+            'Usually yes — publishers would stop the launch if the studio was in trouble.',
+            'No — a studio can ship a real product and still have dangerous debt, cash-flow or financing problems.',
+            'Only if the Metacritic score is high.'
+          ],
+          correct:2,
+          optionFeedback:[
+            'Shipping proves that a product reached market. It does not reveal the company’s debt, cash position, burn rate or obligations.',
+            'A publisher can release a game while the developer is under serious financial pressure. Publishing and studio finances are not the same thing.',
+            'Exactly. A finished game is evidence of production, not automatically evidence of a healthy balance sheet.',
+            'Critical reception and company solvency are different measures.'
+          ],
+          reveal:'A game can look successful from the outside while the business behind it is under severe pressure.',
+          caseTitle:'38 STUDIOS — KINGDOMS OF AMALUR',
+          caseText:'Kingdoms of Amalur: Reckoning launched in February 2012. Rhode Island had backed 38 Studios with $75 million of taxable revenue bonds; the company filed for Chapter 7 bankruptcy on 7 June 2012.',
+          sourceTitle:'State of Rhode Island — 38 Studios bond disclosure',
+          sourceUrl:'https://treasury.ri.gov/sites/g/files/xkgbur646/files/assets/55b05bcdd4c9610651019c44/State_of_RI_GO_Bonds_2014_Series_B_C_D_.pdf'
+        },
+        {
+          id:'sunk-cost',
+          q:'A game has already cost more than $100 million and is years late. Is the money already spent a good reason to keep funding it?',
+          options:[
+            'Yes — otherwise all the previous spending was wasted.',
+            'Yes — expensive games are too big to cancel.',
+            'No — past spending is already gone. The next decision should depend on future costs, benefits, obligations and alternatives.',
+            'No — any delayed project should be cancelled immediately.'
+          ],
+          correct:2,
+          optionFeedback:[
+            'That is the classic sunk-cost trap. Money already spent cannot be recovered by spending more simply because it was spent.',
+            '“Too big to cancel” can become an emotional argument rather than a financial one. Sometimes continuation is right, but it needs future-looking evidence.',
+            'Correct. Past cost matters as history, but the decision should be about what happens from this point onward.',
+            'Delay alone is not enough. Contracts, expected revenue, strategic value and the remaining work all matter.'
+          ],
+          reveal:'Sunk cost does not mean “cancel it”. It means do not justify the next pound purely because of the pounds already gone.',
+          caseTitle:'SKULL AND BONES — DEVELOPMENT HELL',
+          caseText:'Kotaku reported that Skull and Bones began in 2013 as a multiplayer expansion to Assassin’s Creed IV: Black Flag, changed direction repeatedly and had reportedly cost Ubisoft more than $120 million by 2021. That figure came from sources familiar with the project, not an Ubisoft financial disclosure.',
+          sourceTitle:'Kotaku — Inside Ubisoft Singapore’s struggle to ship Skull and Bones',
+          sourceUrl:'https://kotaku.com/first-it-was-an-assassins-creed-expansion-now-its-ubis-1847326742'
+        },
+        {
+          id:'headline-context',
+          q:'A headline says: “Rockstar worked 100-hour weeks on Red Dead Redemption 2.” What should you conclude first?',
+          options:[
+            'The whole development team definitely worked 100-hour weeks.',
+            'The story proves crunch is fake because Rockstar denied it.',
+            'Check the original wording, who “we” referred to, the time period, and what other workers reported.',
+            '100-hour weeks are acceptable if the game reviews well.'
+          ],
+          correct:2,
+          optionFeedback:[
+            'The famous quote was later clarified as referring to a four-person senior writing team during three intense weeks, not the whole studio.',
+            'The clarification narrows the specific 100-hour claim, but it does not erase wider reporting and employee accounts about overtime and pressure.',
+            'Exactly. This is source literacy: separate the headline, the clarification and the wider evidence before making a claim.',
+            'Review scores do not answer whether working conditions were voluntary, sustainable, compensated or fairly distributed.'
+          ],
+          reveal:'Good industry analysis often begins by slowing down a dramatic headline and checking exactly what the evidence supports.',
+          caseTitle:'RED DEAD REDEMPTION 2 — THE 100-HOUR HEADLINE',
+          caseText:'Dan Houser’s “100-hour weeks” remark was later clarified as three intense weeks for a four-person senior writing team. Contemporary reporting also collected a range of employee accounts about crunch, making the story more complicated than either “everyone did 100 hours” or “there was no crunch”.',
+          sourceTitle:'Ars Technica — Rockstar developers speak out about the 100-hour comment',
+          sourceUrl:'https://arstechnica.com/gaming/2018/10/red-dead-redemption-2-devs-say-quoted-100-hour-weeks-arent-the-norm/'
+        },
+        {
+          id:'goldeneye-team',
+          q:'GoldenEye 007 became one of the defining Nintendo 64 games. What is the best estimate of the core development team?',
+          options:[
+            'Around 12 people.',
+            'Around 60 people.',
+            'Around 150 people.',
+            'More than 500 people.'
+          ],
+          correct:0,
+          optionFeedback:[
+            'Yes. The Guardian’s retrospective describes GoldenEye as being built by 12 young people — tiny by modern AAA expectations.',
+            'A reasonable modern guess, but still far too high for this project.',
+            'That sounds plausible for a much later large production, not GoldenEye.',
+            'That is modern mega-production scale, not the 1997 Rare team.'
+          ],
+          reveal:'Historical comparisons are useful because job specialisation and team scale have changed dramatically.',
+          caseTitle:'GOLDENEYE 007 — 12 PEOPLE, HUGE INFLUENCE',
+          caseText:'The Guardian describes GoldenEye as built by 12 young people. Its four-player multiplayer was also added late in development, showing how small teams can produce outsized influence — at a cost, because the same retrospective also describes punishing working conditions.',
+          sourceTitle:'The Guardian — The game’s Bond: the making of GoldenEye 007',
+          sourceUrl:'https://www.theguardian.com/games/2022/aug/19/nintendo-64-n64-goldeneye-007-rare-james-bond-making-of'
+        }
+      ],
+      industryDebate: {
+        id:'magnum-opus',
+        title:'Your Magnum Opus',
+        prompt:'You have spent seven years on a game. Release is eight weeks away. You genuinely believe another 10–15 hours a week could make your part of it exceptional. Would you do it?',
+        options:[
+          'Absolutely. This may be the best work I ever make.',
+          'Yes, but only for a short and clearly defined period.',
+          'Only if the extra time is paid or returned as time off.',
+          'No. The production plan should not depend on extra hours.',
+          'I need more information before deciding.'
+        ],
+        pressure:'Now add this: everyone else is staying late, your lead works until midnight, the overtime is described as optional, you do not own the studio or the IP, and saying no might make you worry about how committed you look.',
+        afterPrompt:'With that extra context, what is your position now?',
+        takeaway:'Passion is something a developer gives. Crunch becomes a management problem when the production system comes to depend on people repeatedly giving more than their contracted time.',
+        sourceTitle:'Ars Technica — Red Dead Redemption 2 crunch discussion',
+        sourceUrl:'https://arstechnica.com/gaming/2018/10/red-dead-redemption-2-devs-say-quoted-100-hour-weeks-arent-the-norm/'
+      },
       cases: [
         {
           icon: '⚙', kicker: 'CO-DEVELOPMENT', title: 'Sumo Digital — the developer hiding in plain sight',
@@ -58,7 +231,7 @@ window.UE5_INDUSTRY_CAREERS_DATA = {
       id: 'people', order: 2, icon: '◉', title: 'The People Who Make Games', slides: '40–81', time: '60–90 min across role delivery',
       question: 'What do people actually do inside a development team?',
       short: 'Explore roles through the problems they solve, the people they collaborate with and the evidence employers expect.',
-      checkpoint: 'Rate at least three roles as DEFINITELY / MAYBE / NOT FOR ME before taking the scenario check.',
+      checkpoint: 'Rate at least three roles as DEFINITELY / MAYBE / NOT FOR ME. The scenario check can be taken before or after; both are needed to complete the chapter.',
       keyIdeas: [
         'A job title only becomes useful when you understand responsibility, collaborators, decisions and daily problems.',
         'Large studios often create narrower specialisms; small teams often require broader ownership.',
