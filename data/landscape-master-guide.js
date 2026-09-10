@@ -1,4 +1,4 @@
-// UE5 Learning Hub v3.50.1 — Landscape Master Guide
+// UE5 Learning Hub v3.50.2 — Landscape Master Guide
 // Long-form Unreal Learning recovery tutorial. One authoritative guide; Designer Studio links to it rather than duplicating it.
 (() => {
   const tools = window.UE5_TUTORIAL_DATA;
@@ -11,6 +11,14 @@
   "designModule": null,
   "unrealHome": true,
   "libraryHidden": true,
+  "unrealSection": "Landscape & World Building",
+  "unrealIntroTitle": "Build the Landscape in one controlled practice map",
+  "unrealCallout": "Work in order: this is a long-form recovery guide, not a menu of random tips. Start at Stage 1, prove each checkpoint, then move on. The diagnostic colours and test foliage are deliberately simple so you can see what Unreal is doing.",
+  "unrealNextEyebrow": "NEXT • DESIGN THE ENVIRONMENT",
+  "unrealNextTitle": "Now use the tools for a reason",
+  "unrealNextText": "This guide teaches the Unreal Landscape workflow. Designer Studio keeps the design/art thinking separate: route readability, landmarks, terrain composition, believable foliage and the final Project Nature/Fab art pass.",
+  "unrealNextHref": "#/design/landscape",
+  "unrealNextLabel": "Open Landscape, Terrain & Foliage →",
   "duration": "90–120 min",
   "difficulty": "Beginner → Advanced",
   "summary": "Build one UE5.8 practice Landscape from a flat grid into a sculpted, painted, populated and play-tested environment, then finish with non-destructive Edit Layers and a procedural spline road. Every screenshot in this guide was captured from the real classroom workflow.",
