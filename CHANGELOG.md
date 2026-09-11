@@ -1,3 +1,14 @@
+## v3.51.0 — Learning Flow Cleanup — 11 Sep 2026
+- Reunified the v3.50.2 Landscape/Sequencer branch with the later v3.49.3 Industry Reality Check + Secret Studio Protocol changes into one canonical build.
+- Added **Master Guides** as an explicit third stage inside Unreal Learning and surfaced them again from Quick Tutorials.
+- Landscape and Sequencer remain single-source technical workflows with Designer Studio cross-links instead of duplicated tutorials.
+- Added five Landscape and five Sequencer knowledge questions and connected both Master Guides to central Revision.
+- Expanded central Revision to six areas: Unreal Systems, Unreal Master Guides, Game Design Theory, Industry & Careers, Designer Studio and 3D Foundations.
+- Industry & Careers now reuses its existing chapter scenario questions inside central Revision.
+- Quick Tutorials, Max videos and Sculpt remain evidence-by-doing practicals; their UI now explains this and points back to the appropriate Revision area instead of adding duplicate mini-quizzes.
+- Rebuilt Homework around six guided routes using **Learn → Do → Check → Bring Back**, while preserving the searchable individual task bank and Teams-copy workflow.
+- No database migration or backend change.
+
 ## v3.42.2 — Designer Practical Clarity — 31 Aug 2026
 - Audited/refined all 47 native Designer Studio Quick Tutorials: 268 practical steps across Level Design, Environment Art, Materials, Lighting, Landscape, Cinematics, Audio and Polish/Optimisation.
 - Standardised practical steps around WHERE TO WORK, DO THIS, YOU SHOULD SEE, WHY, TEST / CHECK and step-specific recovery guidance.

@@ -17,7 +17,8 @@
   <link rel="stylesheet" href="journey-cleanup.css?v=3.46.2">
   <link rel="stylesheet" href="classroom-identity.css?v=3.47.1">
   <link rel="stylesheet" href="light-workspace.css?v=3.48.2">
-  <link rel="stylesheet" href="industry-careers.css?v=3.49.3">
+  <link rel="stylesheet" href="industry-careers.css?v=3.51.0">
+  <link rel="stylesheet" href="learning-flow.css?v=3.51.0">
 </head>
 <body>
   <div id="bootError" class="boot-error" hidden>
@@ -37,7 +38,7 @@
         <a href="#/classes" data-route="classes" id="classesNav" class="classes-nav" hidden>🏫 <span id="classesNavLabel">Classes</span><small id="classesNavSub">Students • codes • progress</small></a>
         <div class="nav-heading">Main areas</div>
         <a href="#/pathways" data-route="pathways" class="pathways-nav">↠ <span>Guided Paths</span><small>Optional • what to learn next</small></a>
-        <a href="#/programming" data-route="programming" class="programming-nav">⌘ <span>Unreal Learning</span><small>building blocks • systems • tutorials</small></a>
+        <a href="#/programming" data-route="programming" class="programming-nav">⌘ <span>Unreal Learning</span><small>blocks • systems • master guides • recipes</small></a>
         <a href="#/theory" data-route="theory" class="theory-nav">◈ <span>Game Design Theory</span><small>Players • systems • balance • process</small></a>
         <a href="#/industry-careers" data-route="industry-careers" class="industry-careers-nav">◎ <span>Industry & Careers</span><small>Level 4 • roles • skills • portfolio</small></a>
         <a href="#/design" data-route="design" class="design-nav">✦ <span>Designer Studio</span><small>Levels • art • lighting • audio</small></a>
@@ -51,8 +52,8 @@
 
         <div class="nav-heading">Study tools</div>
         <a href="#/challenges" data-route="challenges">🔥 <span>Challenge Board</span><small>Unreal • design • 3D</small></a>
-        <a href="#/homework" data-route="homework">⌂ <span>Homework</span><small>Independent study • copy to Teams</small></a>
-        <a href="#/revision" data-route="revision">↻ <span>Revision Quizzes</span><small>Unreal • design • 3D theory</small></a>
+        <a href="#/homework" data-route="homework">⌂ <span>Homework</span><small>guided study paths • Teams-ready</small></a>
+        <a href="#/revision" data-route="revision">↻ <span>Revision Quizzes</span><small>Unreal • industry • design • 3D</small></a>
         <a href="blueprint-checks.html" class="blueprint-checks-nav">✓ <span>Blueprint Checks</span><small>Required proofs • quick quizzes</small></a>
 
         <div class="nav-heading">Reference</div>
@@ -105,7 +106,7 @@
 
   <div class="version-badge" title="Build version">
     <span class="version-dot"></span>
-    UE5 HUB <b>v3.49.3</b> <span id="modeBadge">• LOCAL</span>
+    UE5 HUB <b>v3.51.0</b> <span id="modeBadge">• LOCAL</span>
   </div>
 
   <div class="modal-backdrop" id="authModal" hidden>
@@ -139,8 +140,10 @@
   <script src="data/tutorial-data.js?v=3.36.0"></script>
   <script src="data/snippet-data.js?v=3.34.21"></script>
   <script src="data/design-data.js?v=3.42.2"></script>
+  <script src="data/landscape-master-guide.js?v=3.51.0"></script>
+  <script src="data/sequencer-master-guide.js?v=3.51.0"></script>
   <script src="data/theory-data.js?v=3.42.1"></script>
-  <script src="data/industry-careers-data.js?v=3.49.3"></script>
+  <script src="data/industry-careers-data.js?v=3.51.0"></script>
   <script src="data/pathway-data.js?v=3.42.1"></script>
   <script src="data/prison-cell-learning.js?v=3.43.3"></script>
   <script src="data/prison-cell-units-fix.js?v=3.44.6"></script>
@@ -156,7 +159,7 @@
   <script src="data/study-data.js?v=3.39.0"></script>
   <script src="data/supabase-config.js?v=3.32.2"></script>
   <script src="backend.js?v=3.49.0"></script>
-  <script src="app.js?v=3.49.3"></script>
+  <script src="app.js?v=3.51.0"></script>
   <script src="roster-controls.js?v=3.42.3"></script>
   <script src="journey-cleanup.js?v=3.46.2"></script>
   <script src="signup-feedback.js?v=3.47.1"></script>

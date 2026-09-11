@@ -1,4 +1,4 @@
-// UE5 Learning Hub v3.50.2 — Landscape Master Guide
+// UE5 Learning Hub v3.51.0 — Landscape Master Guide
 // Long-form Unreal Learning recovery tutorial. One authoritative guide; Designer Studio links to it rather than duplicating it.
 (() => {
   const tools = window.UE5_TUTORIAL_DATA;
@@ -739,6 +739,38 @@
           "kind": "local"
         }
       ]
+    }
+  ],
+  "quiz": [
+    {
+      "q": "You need to reshape terrain and then paint a Dirt route. Which Landscape tabs match those jobs?",
+      "options": ["Manage then Foliage", "Sculpt then Paint", "Paint then Manage", "Edit Layers then Sculpt"],
+      "correct": 1,
+      "feedback": "Sculpt changes terrain height/shape. Paint applies Landscape material layers such as Dirt, Grass and Rock. Manage is mainly for creating/configuring the Landscape."
+    },
+    {
+      "q": "A student adds small noisy hills everywhere before deciding where the player should travel. What is the stronger workflow?",
+      "options": ["Keep the noise and fix the route with collision", "Start broad: establish the playable route and large forms first", "Add foliage so the route becomes obvious", "Increase Landscape resolution before sculpting"],
+      "correct": 1,
+      "feedback": "Route-first broad sculpting makes navigation and scale readable before detail. Noise is much easier to add later than to design around."
+    },
+    {
+      "q": "Which statement about Landscape material layers and Landscape Edit Layers is correct?",
+      "options": ["They are two names for the same system", "Material layers control only foliage; Edit Layers control paint", "Material layers blend surfaces; Edit Layers organise non-destructive terrain/paint changes", "Edit Layers are only available after using Splines"],
+      "correct": 2,
+      "feedback": "Grass/Dirt/Rock are material paint layers. Landscape Edit Layers are a separate non-destructive organisation system for sculpt/paint changes."
+    },
+    {
+      "q": "Foliage keeps appearing across the Dirt path. What is the most maintainable fix?",
+      "options": ["Hand-delete every plant after each paint change", "Set foliage Radius to 0", "Use the Dirt Landscape layer as a foliage exclusion rule", "Raise the road above the foliage"],
+      "correct": 2,
+      "feedback": "A Landscape-layer exclusion keeps the route clear automatically as the painted path changes, instead of relying on repeated manual cleanup."
+    },
+    {
+      "q": "You hide Landscape spline editor guides and the road paint/deformation remains. What does that prove?",
+      "options": ["The selected spline gizmos were the final road mesh", "The Landscape spline affected the Landscape; optional Spline Mesh geometry is a separate choice", "The road is now baked and can never be edited", "The Landscape material was converted into a Static Mesh"],
+      "correct": 1,
+      "feedback": "Landscape Splines can deform terrain and paint a layer. The visible editor guides are not the road itself, and a Spline Mesh is optional separate geometry."
     }
   ],
   "mistakes": [

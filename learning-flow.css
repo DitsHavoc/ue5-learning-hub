@@ -1,0 +1,45 @@
+/* UE5 Learning Hub v3.51.0 — Learning Flow Cleanup
+   Additive UX layer: Master Guides, Revision coverage and guided Homework Paths. */
+
+.unreal-learning-ladder.five-step{grid-template-columns:repeat(5,minmax(0,1fr))}
+.unreal-learning-ladder>a,.unreal-learning-ladder>button{display:grid;grid-template-columns:38px 1fr;gap:10px;padding:17px;border:1px solid var(--g-line,var(--line));border-radius:15px;background:var(--g-panel,#272c32);color:inherit;text-decoration:none;text-align:left;font:inherit;cursor:pointer}
+.unreal-learning-ladder>a:hover,.unreal-learning-ladder>button:hover{border-color:var(--g-line-strong,#4a535d);background:var(--g-panel-2,#2d333a)}
+.unreal-learning-ladder>a>span,.unreal-learning-ladder>button>span{display:grid;place-items:center;width:34px;height:34px;border-radius:9px;background:rgba(61,142,201,.13);color:var(--g-text,#e4e7e9);font-weight:900}
+.unreal-learning-ladder>button small,.unreal-learning-ladder>button h2,.unreal-learning-ladder>button p,.unreal-learning-ladder>button strong{font-family:inherit}
+
+.master-guide-strip,.master-guides-programming{margin:22px 0}
+.master-guide-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.master-guide-card{display:grid;grid-template-columns:50px 1fr auto;gap:14px;align-items:start;border:1px solid var(--g-line,var(--line));background:var(--g-panel,#272c32);border-radius:16px;padding:18px;color:inherit;text-decoration:none;min-width:0}
+.master-guide-card:hover{border-color:var(--g-line-strong,#4a535d);background:var(--g-panel-2,#2d333a)}
+.master-guide-card.done{border-color:rgba(103,173,131,.55)}
+.master-guide-icon{width:48px;height:48px;display:grid;place-items:center;border-radius:13px;background:var(--g-panel-3,#23282e);font-size:24px}
+.master-guide-card small{display:block;color:var(--g-muted,#a2abb2);font-size:11px;text-transform:uppercase;letter-spacing:.06em}
+.master-guide-card h3{margin:5px 0 7px;font-size:18px}
+.master-guide-card p{margin:0;color:var(--g-muted,#a2abb2);font-size:13px;line-height:1.55}
+.master-guide-card>strong{font-size:12px;white-space:nowrap;color:var(--g-text,#e4e7e9)}
+.master-guide-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:11px}
+.master-guide-meta span{border:1px solid var(--g-line,#3b424a);border-radius:999px;padding:5px 8px;font-size:10px;color:var(--g-muted,#a2abb2);background:var(--g-panel-3,#23282e)}
+
+.tutorial-revision-bridge{display:flex;justify-content:space-between;gap:18px;align-items:center;border-left:4px solid var(--g-blue,#3d8ec9)}
+.tutorial-revision-bridge.practical{border-left-color:var(--g-amber,#d0a45a)}
+.tutorial-revision-bridge h2{margin:5px 0 7px}.tutorial-revision-bridge p{margin:0;color:var(--g-muted,#a2abb2);max-width:760px}
+
+.homework-paths-wrap{margin:20px 0 24px}
+.homework-path-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.homework-path-card{display:grid;grid-template-columns:46px 1fr;gap:13px;border:1px solid var(--g-line,#3b424a);background:var(--g-panel,#272c32);border-radius:16px;padding:17px;color:inherit;text-decoration:none}
+.homework-path-card:hover{background:var(--g-panel-2,#2d333a);border-color:var(--g-line-strong,#4a535d)}
+.homework-path-card>span{width:44px;height:44px;display:grid;place-items:center;border-radius:12px;background:var(--g-panel-3,#23282e);font-size:22px}
+.homework-path-card small{color:var(--g-muted,#a2abb2);font-size:10px;text-transform:uppercase;letter-spacing:.07em}
+.homework-path-card h3{margin:4px 0 6px;font-size:17px}.homework-path-card p{margin:0 0 10px;color:var(--g-muted,#a2abb2);font-size:12px;line-height:1.5}.homework-path-card strong{font-size:11px}
+.homework-browse-divider{margin:34px 0 16px;padding-top:24px;border-top:1px solid var(--g-line,#3b424a)}.homework-browse-divider h2{margin:4px 0 5px}.homework-browse-divider p{margin:0;color:var(--g-muted,#a2abb2)}
+.homework-path-sequence{display:grid;gap:12px;max-width:1000px;margin:20px 0}
+.homework-path-step{display:grid;grid-template-columns:54px 1fr;gap:14px;border:1px solid var(--g-line,#3b424a);background:var(--g-panel,#272c32);border-radius:16px;padding:17px}
+.homework-path-step-number{width:50px;height:50px;display:grid;place-items:center;border-radius:13px;background:var(--g-panel-3,#23282e);font-weight:900}
+.homework-path-step small{color:var(--g-blue,#3d8ec9);font-size:10px;font-weight:900;letter-spacing:.12em}.homework-path-step h3{margin:4px 0 6px}.homework-path-step p{margin:0 0 12px;color:var(--g-muted,#a2abb2);line-height:1.55}.homework-path-finish{display:flex;justify-content:space-between;gap:18px;align-items:center}.homework-path-finish h2{margin:5px 0 7px}.homework-path-finish p{margin:0;color:var(--g-muted,#a2abb2)}
+
+.revision-coverage-note{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:0 0 20px}.revision-coverage-note>div{border:1px solid var(--g-line,#3b424a);background:var(--g-panel,#272c32);border-radius:14px;padding:15px}.revision-coverage-note strong{display:block;margin-bottom:5px}.revision-coverage-note span{display:block;color:var(--g-muted,#a2abb2);font-size:12px;line-height:1.55}
+.revision-area-picker-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+
+@media(max-width:1250px){.unreal-learning-ladder.five-step{grid-template-columns:repeat(3,minmax(0,1fr))}.homework-path-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:900px){.master-guide-grid,.homework-path-grid,.revision-coverage-note{grid-template-columns:1fr}.tutorial-revision-bridge,.homework-path-finish{align-items:flex-start;flex-direction:column}.unreal-learning-ladder.five-step{grid-template-columns:1fr 1fr}}
+@media(max-width:620px){.unreal-learning-ladder.five-step{grid-template-columns:1fr}.master-guide-card{grid-template-columns:44px 1fr}.master-guide-card>strong{grid-column:2}.homework-path-step{grid-template-columns:42px 1fr}.homework-path-step-number{width:40px;height:40px}}

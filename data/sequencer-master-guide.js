@@ -1,4 +1,4 @@
-// UE5 Learning Hub v3.50.2 — Sequencer Master Guide
+// UE5 Learning Hub v3.51.0 — Sequencer Master Guide
 // Long-form Unreal Learning workflow. Designer Studio remains the place for cinematic design decisions.
 (() => {
   const tools = window.UE5_TUTORIAL_DATA;
@@ -380,6 +380,38 @@
           "sourceTitle": "Virtual Filmmaking — licensed college reference"
         }
       ]
+    }
+  ],
+  "quiz": [
+    {
+      "q": "You have two Cine Cameras in Sequencer. What determines which camera the audience actually sees at a given time?",
+      "options": ["Whichever camera is selected in the Outliner", "The Camera Cuts track", "The camera with the longest focal length", "The active editor viewport"],
+      "correct": 1,
+      "feedback": "Camera Cuts chooses the active camera for the sequence. Moving or keyframing a Cine Camera does not make it the viewed shot by itself."
+    },
+    {
+      "q": "A camera Transform has one key at frame 0 and another at frame 90. What is Sequencer doing between them?",
+      "options": ["Deleting the first value", "Holding frame 0 until frame 90", "Interpolating between the keyed values according to the curve/interpolation", "Rendering two separate videos"],
+      "correct": 2,
+      "feedback": "Keys store values at specific times; Sequencer calculates the values between them using the chosen interpolation/curve."
+    },
+    {
+      "q": "Why is changing focal length more than simply zooming in or out?",
+      "options": ["It can change the spatial/compositional feel and apparent relationship of foreground/background", "It changes the sequence frame rate", "It automatically sets focus distance", "It switches the active Camera Cut"],
+      "correct": 0,
+      "feedback": "Focal length changes field of view and visual compression, so it affects how a shot feels and how space reads, not just how large the subject appears."
+    },
+    {
+      "q": "Your cutscene feels rushed when rendered even though scrubbing looked fine. What should you check before rendering again?",
+      "options": ["Only increase output resolution", "Watch normal-speed playback and verify the working/playback range", "Add more Transform keys", "Replace Cine Cameras with the editor camera"],
+      "correct": 1,
+      "feedback": "Timing has to be judged at playback speed. Check the sequence range, shot duration and pacing before spending time on a final render."
+    },
+    {
+      "q": "Movie Render Queue outputs the wrong camera. What is the first Sequencer thing to inspect?",
+      "options": ["Landscape collision", "Camera Cuts bindings/sections", "The Actor's mobility setting", "The project default pawn"],
+      "correct": 1,
+      "feedback": "If the rendered viewpoint is wrong, confirm the Camera Cuts track is bound to the intended Cine Camera and covers the correct time range."
     }
   ],
   "mistakes": [

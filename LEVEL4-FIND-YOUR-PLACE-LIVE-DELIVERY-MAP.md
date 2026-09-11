@@ -11,14 +11,6 @@ The repeated rhythm is:
 **Presentation:** slides 5–39  
 **Hub:** `#/industry-careers/industry`
 
-**v3.49.2 Watch Along starter — Industry Reality Check**
-- Use the first-instinct cards *before* fully revealing the answer in the presentation.
-- The student's first answer is saved and then explained with a real case.
-- Teacher class view shows an aggregate Class Pulse with no student names.
-- Suggested early cards: Who Made It? → Bigger = Better? → Big Owner = Safer?
-- Return to 38 Studios, Skull and Bones, RDR2 and GoldenEye as those anecdotes naturally fit the delivery.
-- **Your Magnum Opus** is an optional two-stage crunch debate; it is not a chapter gate or graded quiz.
-
 Pause for the Hub when the class has enough context to investigate rather than guess.
 
 **Required checkpoint**
@@ -29,11 +21,6 @@ Pause for the Hub when the class has enough context to investigate rather than g
 > How useful is the phrase “the developer” when one released game may depend on many companies?
 
 **Complete when:** checkpoint saved + 4/5 scenario questions correct.
-
-**Session 1 hidden reading check**
-- At the very end of the Industry page, students who actually read to the bottom receive the **Secret Studio Protocol**: quietly walk to the door, do one slow turn, return to their seat and continue as if nothing happened.
-- If moving around is not practical, the accessible alternative is one silent thumbs-up to the teacher.
-- No XP, no button and no completion gate. The physical response is the joke and the listening/reading check.
 
 ---
 
