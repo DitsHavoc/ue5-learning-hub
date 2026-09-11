@@ -1,0 +1,36 @@
+/* UE5 Learning Hub v3.52.0 — Unreal Designer application layer */
+.unreal-designer-nav{position:relative}
+.unreal-designer-nav::after{content:'APPLY';font-size:.55rem;letter-spacing:.08em;padding:.12rem .28rem;border:1px solid color-mix(in srgb,var(--accent,#9d7cff) 42%,transparent);border-radius:999px;margin-left:auto;opacity:.78}
+.ud-hero{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(260px,.55fr);gap:1rem;align-items:stretch;margin-bottom:1.25rem}
+.ud-hero>div,.ud-hero-aside{border:1px solid var(--g-line,rgba(255,255,255,.12));background:var(--g-panel,rgba(255,255,255,.035));border-radius:18px;padding:1.25rem}
+.ud-hero h1{font-size:clamp(2rem,5vw,4.4rem);line-height:.95;margin:.3rem 0 .75rem;max-width:11ch}
+.ud-hero p{max-width:70ch}
+.ud-hero-aside{display:grid;gap:.8rem;align-content:center}
+.ud-hero-aside div{display:grid;grid-template-columns:auto 1fr;gap:.65rem;align-items:center;padding:.65rem .75rem;border-radius:13px;background:rgba(255,255,255,.035)}
+.ud-hero-aside b{font-size:1.3rem}.ud-hero-aside span{color:var(--g-muted,#9da9b8);font-size:.82rem}
+.ud-loop{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.8rem;margin:1.1rem 0 1.5rem}
+.ud-loop article{padding:1rem;border:1px solid var(--g-line,rgba(255,255,255,.12));border-radius:16px;background:var(--g-panel,rgba(255,255,255,.035))}
+.ud-loop small{display:block;color:var(--g-muted,#9da9b8);letter-spacing:.08em;font-weight:800}.ud-loop h3{margin:.3rem 0}.ud-loop p{margin:0;color:var(--g-muted,#9da9b8)}
+.ud-track-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+.ud-track-card{display:grid;grid-template-columns:auto 1fr auto;gap:1rem;align-items:start;text-decoration:none;color:inherit;padding:1.1rem;border:1px solid var(--g-line,rgba(255,255,255,.12));border-radius:18px;background:var(--g-panel,rgba(255,255,255,.035));transition:.18s transform,.18s border-color,.18s background}
+.ud-track-card:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--accent,#9d7cff) 48%,transparent);background:rgba(255,255,255,.055)}
+.ud-track-icon{width:44px;height:44px;display:grid;place-items:center;border-radius:13px;background:rgba(255,255,255,.06);font-size:1.4rem}
+.ud-track-card h3{margin:.25rem 0 .4rem}.ud-track-card p{margin:0;color:var(--g-muted,#9da9b8)}
+.ud-track-meta{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.75rem}.ud-track-meta span{font-size:.72rem;border:1px solid var(--g-line,rgba(255,255,255,.12));border-radius:999px;padding:.23rem .48rem;color:var(--g-muted,#9da9b8)}
+.ud-track-open{font-weight:800;white-space:nowrap}.ud-track-card.done .ud-track-icon{box-shadow:0 0 0 2px rgba(95,227,161,.25)}
+.ud-expansion-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.85rem}
+.ud-expansion-card{padding:1rem;border:1px dashed var(--g-line,rgba(255,255,255,.15));border-radius:16px;background:rgba(255,255,255,.022)}
+.ud-expansion-card h3{margin:.3rem 0}.ud-expansion-card p{color:var(--g-muted,#9da9b8)}
+.ud-expansion-status{font-size:.68rem;font-weight:900;letter-spacing:.08em}.ud-expansion-links{display:flex;gap:.4rem;flex-wrap:wrap;margin:.75rem 0}.ud-expansion-links a{font-size:.72rem;text-decoration:none;border:1px solid var(--g-line,rgba(255,255,255,.12));border-radius:999px;padding:.25rem .48rem;color:inherit}
+.ud-track-hero{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(260px,.75fr);gap:1rem;margin-bottom:1rem}
+.ud-track-hero>div{padding:1.2rem;border:1px solid var(--g-line,rgba(255,255,255,.12));border-radius:18px;background:var(--g-panel,rgba(255,255,255,.035))}
+.ud-track-hero h1{margin:.25rem 0 .6rem}.ud-track-hero p{color:var(--g-muted,#9da9b8)}
+.ud-progress-box{display:grid;gap:.7rem;align-content:start}.ud-progress-box strong{font-size:1.8rem}.ud-progress-box span{color:var(--g-muted,#9da9b8)}
+.ud-route{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.7rem;margin:1rem 0 1.4rem}.ud-route article{padding:.9rem;border-radius:14px;border:1px solid var(--g-line,rgba(255,255,255,.12));background:rgba(255,255,255,.025)}.ud-route b{display:block;font-size:.72rem;letter-spacing:.08em}.ud-route h3{margin:.25rem 0}.ud-route p{margin:0;color:var(--g-muted,#9da9b8);font-size:.9rem}
+.ud-master-guides{margin:1rem 0}.ud-technical-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem}
+.ud-build-brief{border:1px solid color-mix(in srgb,var(--accent,#9d7cff) 38%,var(--g-line,rgba(255,255,255,.12)));border-radius:18px;padding:1.2rem;background:linear-gradient(145deg,rgba(157,124,255,.08),rgba(255,255,255,.02));margin-top:1rem}
+.ud-build-brief-head{display:flex;justify-content:space-between;gap:1rem;align-items:start}.ud-build-brief h2{margin:.3rem 0}.ud-build-brief p{max-width:75ch}.ud-build-phase-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.7rem;margin:1rem 0}.ud-build-phase-grid article{padding:.8rem;border:1px solid var(--g-line,rgba(255,255,255,.12));border-radius:13px;background:rgba(0,0,0,.08)}.ud-build-phase-grid span{font-size:.72rem;font-weight:900;color:var(--g-muted,#9da9b8)}.ud-build-phase-grid h3{font-size:.98rem;margin:.25rem 0}.ud-build-evidence{display:grid;grid-template-columns:1fr auto;gap:1rem;align-items:end}.ud-build-evidence ul{margin:.5rem 0 0;padding-left:1.2rem}
+.ud-bridge{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:1rem;align-items:center;padding:1.05rem 1.15rem;margin:1rem 0;border-radius:16px;border:1px solid color-mix(in srgb,var(--accent,#9d7cff) 42%,var(--g-line,rgba(255,255,255,.12)));background:linear-gradient(135deg,rgba(157,124,255,.08),rgba(255,255,255,.025))}.ud-bridge h2{margin:.25rem 0}.ud-bridge p{margin:0;color:var(--g-muted,#9da9b8);max-width:72ch}.ud-bridge-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:.5rem}
+.portal-path-card.unreal-designer{border-color:color-mix(in srgb,var(--accent,#9d7cff) 32%,var(--g-line,rgba(255,255,255,.12)))}
+@media(max-width:980px){.ud-hero,.ud-track-hero{grid-template-columns:1fr}.ud-loop,.ud-route{grid-template-columns:repeat(2,minmax(0,1fr))}.ud-expansion-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:680px){.ud-track-grid,.ud-technical-grid,.ud-build-phase-grid,.ud-expansion-grid,.ud-loop,.ud-route{grid-template-columns:1fr}.ud-track-card{grid-template-columns:auto 1fr}.ud-track-open{grid-column:2}.ud-bridge,.ud-build-evidence{grid-template-columns:1fr}.ud-bridge-actions{justify-content:flex-start}.unreal-designer-nav::after{display:none}}

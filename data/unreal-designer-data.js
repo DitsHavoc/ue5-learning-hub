@@ -1,0 +1,22 @@
+window.UE5_UNREAL_DESIGNER_DATA = {
+  version: '3.52.0',
+  buildDate: '11 Sep 2026',
+  strapline: 'Turn design theory into playable Unreal work.',
+  tracks: [
+    {id:'world-design',moduleId:'world-design',icon:'◇',shortTitle:'Level Design',focus:'Turn routes, landmarks, pacing and player decisions into a readable greybox.',masterGuideIds:[],evidence:'A playable greybox, player-height proof and one change made after a silent playtest.'},
+    {id:'environment',moduleId:'environment',icon:'▦',shortTitle:'Environment & Set Dressing',focus:'Use props, modular kits, decals and hierarchy to communicate story without burying the route.',masterGuideIds:[],evidence:'A before/after environment pass that shows what each prop cluster is doing for the player.'},
+    {id:'materials',moduleId:'materials',icon:'◫',shortTitle:'Materials & Surfaces',focus:'Use PBR values, material instances, emissive surfaces and cost-aware choices to create readable surfaces.',masterGuideIds:[],evidence:'A small material set with clear purpose, sensible variation and one optimisation check.'},
+    {id:'lighting',moduleId:'lighting',icon:'✺',shortTitle:'Lighting & Atmosphere',focus:'Use light, exposure, fog and post process to direct attention and create mood without destroying readability.',masterGuideIds:[],evidence:'The same scene under two deliberate moods plus a player-view comparison explaining the choices.'},
+    {id:'landscape',moduleId:'landscape',icon:'🏔',shortTitle:'Landscape & World Building',focus:'Shape terrain around routes, traversal, landmarks and believable world structure — then art-pass it.',masterGuideIds:['landscape-master-guide'],evidence:'A player-height landscape route, material/foliage pass and one revision made after traversal testing.'},
+    {id:'cinematics',moduleId:'cinematics',icon:'🎬',shortTitle:'Cinematics & Sequencer',focus:'Make shot purpose, framing, lens choice, pacing and continuity visible in a short playable sequence.',masterGuideIds:['sequencer-master-guide'],evidence:'A short rendered sequence plus one shot/timing change justified from critique or playback.'},
+    {id:'audio',moduleId:'audio',icon:'♫',shortTitle:'Audio & Sound Design',focus:'Build space, feedback, tension and off-screen information with layered, spatial and varied audio.',masterGuideIds:[],evidence:'A playable soundscape where the listener can identify space, direction or state without looking at the screen.'},
+    {id:'polish',moduleId:'polish',icon:'✦',shortTitle:'Polish & Optimisation',focus:'Improve presentation without hiding broken fundamentals, then prove the scene still performs and reads clearly.',masterGuideIds:[],evidence:'A controlled before/after polish pass with one profiling or complexity check and one deliberate cut.'}
+  ],
+  expansionTracks: [
+    {id:'vfx-niagara',icon:'✹',title:'VFX & Niagara',status:'STARTER RECIPES LIVE',summary:'Gameplay feedback, impacts, fog, weather, trails, environmental effects and readable spectacle.',starterTutorialIds:['niagara-impact','silent-hill-fog','weather-readability'],next:'Build a full VFX theory + application track around timing, silhouette, colour language, gameplay readability and performance.'},
+    {id:'ui-ux',icon:'▣',title:'UI / UX',status:'STARTER RECIPES LIVE',summary:'HUDs, prompts, information hierarchy, feedback, menus and accessibility.',starterTutorialIds:['basic-hud','interaction-prompt'],next:'Add shipped-game analysis, accessibility decisions and an applied HUD/interaction challenge.'},
+    {id:'game-feel',icon:'⚡',title:'Game Feel & Feedback',status:'STARTER RECIPES LIVE',summary:'Camera shake, sound, VFX, timing and layered feedback that make an action readable and satisfying.',starterTutorialIds:['camera-shake','sound-feedback','niagara-impact'],next:'Create a dedicated “one action, three feedback layers” designer challenge and revision set.'},
+    {id:'procedural',icon:'⌘',title:'Procedural / PCG Worlds',status:'STARTER RECIPE LIVE',summary:'Use procedural tools without sacrificing authored routes, safe spaces or intentional composition.',starterTutorialIds:['pcg-safe-route'],next:'Expand into PCG foundations, rule-driven dressing, biome logic and performance-aware generation.'},
+    {id:'animation',icon:'↝',title:'Animation & Character Motion',status:'PLANNED',summary:'Retargeting, state machines, montages, IK, Control Rig and animation choices that communicate gameplay.',starterTutorialIds:[],next:'Build the track when the next classroom animation workflow is captured and verified.'}
+  ]
+};
