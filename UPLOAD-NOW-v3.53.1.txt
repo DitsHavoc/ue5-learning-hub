@@ -1,0 +1,14 @@
+UE5 LEARNING HUB v3.53.1 — GITHUB SEARCH & SURFACING HOTFIX
+
+MINIMAL FILES TO REPLACE
+1. index.html
+2. app.js
+
+POST-DEPLOY CHECK
+1. Hard refresh.
+2. Confirm badge reads v3.53.1.
+3. Search for: github
+4. Confirm “GitHub + Unreal Team Workflow” appears.
+5. Open Unreal Learning and confirm the prominent GitHub team-workflow card is visible.
+6. Confirm Landscape and Sequencer Master Guides remain visible.
+7. Confirm Industry & Careers → The People Who Make Games still links to the GitHub guide.
