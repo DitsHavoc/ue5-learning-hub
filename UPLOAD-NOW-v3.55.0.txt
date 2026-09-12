@@ -1,0 +1,34 @@
+UE5 Learning Hub v3.55.0 — The Last Light Studio Lesson
+
+BASELINE REQUIRED
+-----------------
+Your live site should already be v3.54.0 (Power Jam Programmer).
+
+RECOMMENDED UPLOAD
+------------------
+Use: UE5-Learning-Hub-v3.55.0-LAST-LIGHT-STUDIO-MINIMAL.zip
+
+Extract/copy its contents over the existing site root. Preserve the folder structure.
+
+The patch changes/adds only:
+  app.js
+  index.html
+  last-light-studio.css
+  data/last-light-studio.js
+  RELEASE-NOTES-v3.55.0.md
+  LAST-LIGHT-STUDIO-QA-v3.55.0.md
+  UPLOAD-NOW-v3.55.0.txt
+
+DO NOT delete the existing data/assets folders first. This is an overlay patch.
+
+NO DATABASE / SUPABASE MIGRATION IS REQUIRED.
+
+QUICK CHECK AFTER DEPLOY
+------------------------
+1. Footer shows v3.55.0.
+2. Designer Studio → Environment Art & Set Dressing shows “The Last Light — Abandoned Lighthouse”.
+3. Open the project and confirm the reference images, theory cards and six lessons appear.
+4. Check Unreal Learning still shows GitHub + Unreal Team Workflow and Power Jam Programmer.
+5. Check Landscape and Sequencer Master Guides still open.
+
+If you want a clean complete upload instead, use the FULL zip.
