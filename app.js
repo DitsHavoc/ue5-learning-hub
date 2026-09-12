@@ -84,6 +84,7 @@ let state = loadState();
 let projectState = loadProjectState();
 let profilePrefs = loadProfilePrefs();
 let lessonMode = 'guided';
+let studioStageView = null;
 let authView = 'signin';
 let revisionSession = null;
 let blocksTier = 'core';
@@ -194,7 +195,7 @@ function syncProjectRichEditors(root=document){
 }
 
 function loadState(){
-  const clean={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],designSourceCompleted:[],theoryCompleted:[],theoryScores:{},careerCompleted:[],careerScores:{},careerProfile:{version:1,updatedAt:null,roleInterests:{},signals:{},hardSkills:[],softSkills:[],vacancies:[],trafficLights:[],goals:{},industryBeliefs:{},industryDebate:{}},modelVideoCompleted:[],modelTheoryCompleted:[],modelTheoryScores:{},modelFoundationFinal:false,modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[],blockCompleted:[],pathwayCheckpoints:[]};
+  const clean={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],designSourceCompleted:[],theoryCompleted:[],theoryScores:{},careerCompleted:[],careerScores:{},careerProfile:{version:1,updatedAt:null,roleInterests:{},signals:{},hardSkills:[],softSkills:[],vacancies:[],trafficLights:[],goals:{},industryBeliefs:{},industryDebate:{}},modelVideoCompleted:[],modelTheoryCompleted:[],modelTheoryScores:{},modelFoundationFinal:false,modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[],blockCompleted:[],pathwayCheckpoints:[],studioStepCompleted:[]};
   try{
     const current=JSON.parse(localStorage.getItem(STORE)||'null');
     if(current) return {...clean,...current};
@@ -503,6 +504,7 @@ async function syncCloudProgress(){
     state.modelFixCompleted=[...new Set([...(state.modelFixCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('modelfix:')).map(id=>id.slice(9))])];
     state.sculptCompleted=[...new Set([...(state.sculptCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('sculpt:')).map(id=>id.slice(7))])];
     state.pathwayCheckpoints=[...new Set([...(state.pathwayCheckpoints||[]),...rows.filter(r=>r.lesson_id?.startsWith('pathway:')&&r.completed_at).map(r=>r.lesson_id.slice(8))])];
+    state.studioStepCompleted=[...new Set([...(state.studioStepCompleted||[]),...rows.filter(r=>r.lesson_id?.startsWith('studiostep:')&&r.completed_at).map(r=>r.lesson_id.slice(11))])];
     await BACKEND.refreshXpSummary();
     saveState();
     // Projects are Teams-first from v3.39.3. The old Signal Lost practice state remains local-only
@@ -915,37 +917,66 @@ function tutorialReferenceVisuals(t){
 }
 
 
-function studioProjectReferences(t){
-  const xs=t.referenceImages||[];if(!xs.length)return '';
-  const real=xs.filter(v=>v.kind==='real-world'),games=xs.filter(v=>v.kind==='game'||v.kind==='reference');
-  const grid=(items,label,title,intro)=>items.length?`<section class="tutorial-reference-story studio-reference-story"><div class="visual-story-head"><span class="deep-label">${esc(label)}</span><h2>${esc(title)}</h2><p>${esc(intro)}</p></div><div class="visual-story-grid">${items.map((v,i)=>zoomableImage({src:v.src,alt:`${t.title} ${label.toLowerCase()} ${i+1}`,caption:v.caption||'',sourceUrl:v.sourceUrl||'',sourceTitle:v.sourceTitle||'',kind:v.kind||'reference',eager:i===0})).join('')}</div></section>`:'';
-  return `<section class="section studio-reference-section"><div class="section-head"><div><span class="eyebrow">02 • STUDY BEFORE YOU BUILD</span><h2>Reference is evidence, not decoration</h2><p>Look for route, scale, silhouette, depth, lighting and cause-and-effect. <b>Steal the principle, not the picture.</b></p></div></div>${grid(real,'REAL-WORLD COAST','How real coastal places organise scale and routes','Reality gives you believable proportions, terrain logic and the small functional details that make a place feel used.')}${grid(games,'SHIPPED GAME REFERENCE','How games turn landscape into experience','Games simplify, exaggerate and frame reality for the player. Identify the decision that makes each image readable, then make a different scene using the same principle.')}</section>`;
+function studioStageKey(tutorialId,index){return `${tutorialId}:${index}`}
+function studioStageCount(t){return (t.studioFlow||[]).length||((t.steps||[]).length+1)}
+function studioStageDone(t,index){
+  if(tutorialDone(t.id))return true; // Legacy/final completion must never relock an existing student.
+  return (state.studioStepCompleted||[]).includes(studioStageKey(t.id,index));
 }
-function studioProjectTheory(t){
-  const xs=t.theory||[];if(!xs.length)return '';
-  return `<section class="section studio-theory-section"><div class="section-head"><div><span class="eyebrow">03 • DESIGN THEORY</span><h2>Eight checks that make the scene read</h2><p>Do not memorise art jargon. Use each principle as a practical test while you build.</p></div></div><div class="studio-theory-grid">${xs.map((x,i)=>`<article class="studio-theory-card"><span class="studio-theory-num">${String(i+1).padStart(2,'0')}</span><h3>${esc(x.title)}</h3><p>${esc(x.body)}</p><div><b>QUICK TEST</b><span>${esc(x.test)}</span></div></article>`).join('')}</div>${t.theorySource?`<a class="studio-theory-source" href="${esc(t.theorySource.url)}" target="_blank" rel="noopener"><div><span class="eyebrow">DEVELOPER COMMENTARY</span><strong>${esc(t.theorySource.title)}</strong><p>${esc(t.theorySource.note)}</p></div><b>Open source ↗</b></a>`:''}</section>`;
+function studioStageUnlocked(t,index){return isTeacher()||index===0||studioStageDone(t,index-1)||tutorialDone(t.id)}
+function studioFirstIncomplete(t){const n=studioStageCount(t);for(let i=0;i<n;i++)if(!studioStageDone(t,i))return i;return Math.max(0,n-1)}
+function studioCurrentStage(t){
+  const n=studioStageCount(t),requested=studioStageView?.tutorialId===t.id?Number(studioStageView.index):-1;
+  if(Number.isInteger(requested)&&requested>=0&&requested<n&&studioStageUnlocked(t,requested))return requested;
+  return studioFirstIncomplete(t);
+}
+function studioStageProgress(t){const n=studioStageCount(t),done=Array.from({length:n},(_,i)=>studioStageDone(t,i)).filter(Boolean).length;return {done,total:n,pct:n?Math.round(done/n*100):0}}
+function studioProjectStageRail(t,current){
+  const flow=t.studioFlow||[];
+  return `<section class="studio-flow-shell"><div class="studio-flow-top"><div><span class="eyebrow">YOUR TWO-WEEK ROUTE</span><h2>One job at a time</h2><p>Finish the current stage to unlock the next. Completed stages stay open so you can revisit them.</p></div><div class="studio-flow-score"><strong>${studioStageProgress(t).done}/${studioStageProgress(t).total}</strong><span>stages complete</span></div></div><div class="studio-flow-progress"><span style="width:${studioStageProgress(t).pct}%"></span></div><div class="studio-stage-rail">${flow.map((x,i)=>{const done=studioStageDone(t,i),unlocked=studioStageUnlocked(t,i),active=i===current;return `<button class="studio-stage-tab ${done?'complete':''} ${active?'active':''} ${!unlocked?'locked':''}" ${unlocked?`data-action="studio-stage-open" data-tutorial="${esc(t.id)}" data-stage="${i}"`:'disabled'}><span>${done?'✓':unlocked?String(i+1).padStart(2,'0'):'🔒'}</span><div><b>${esc(x.label)}</b><small>${esc(x.short||x.title)}</small></div></button>`}).join('')}</div></section>`;
+}
+function studioProjectReferences(t,indexes=[]){
+  const xs=(indexes||[]).map(i=>({...(t.referenceImages||[])[i],_i:i})).filter(x=>x.src);if(!xs.length)return '';
+  return `<section class="studio-stage-block studio-reference-section"><div class="studio-stage-block-head"><span class="eyebrow">REFERENCE FOR THIS STAGE</span><h2>Look for the decision, not something to copy</h2><p><b>Steal the principle, not the picture.</b> These images are here because they connect directly to this stage.</p></div><div class="visual-story-grid studio-stage-reference-grid">${xs.map((v,i)=>zoomableImage({src:v.src,alt:`${t.title} reference ${v._i+1}`,caption:v.caption||'',sourceUrl:v.sourceUrl||'',sourceTitle:v.sourceTitle||'',kind:v.kind||'reference',eager:i===0})).join('')}</div></section>`;
+}
+function studioProjectTheory(t,indexes=[]){
+  const xs=(indexes||[]).map(i=>({...(t.theory||[])[i],_i:i})).filter(x=>x.title);if(!xs.length)return '';
+  return `<section class="studio-stage-block studio-theory-section"><div class="studio-stage-block-head"><span class="eyebrow">DESIGN CHECKS FOR THIS STAGE</span><h2>Use the theory while you build</h2><p>No vocabulary test. Each principle gives you something practical to check in the scene.</p></div><div class="studio-theory-grid">${xs.map(x=>`<article class="studio-theory-card"><span class="studio-theory-num">${String(x._i+1).padStart(2,'0')}</span><h3>${esc(x.title)}</h3><p>${esc(x.body)}</p><div><b>QUICK TEST</b><span>${esc(x.test)}</span></div></article>`).join('')}</div></section>`;
 }
 function studioProjectResources(t){
   const xs=t.resources||[];if(!xs.length)return '';
-  return `<section class="section studio-resource-section"><div class="section-head"><div><span class="eyebrow">04 • SHARED ASSET POOL + RECOVERY GUIDES</span><h2>Everyone gets the same ingredients</h2><p>Asset hunting is not the task. Browse these from Lesson 1 so you know what exists, but final dressing waits until the Lesson 3 blockout checkpoint.</p></div></div><div class="studio-resource-grid">${xs.map(r=>{const internal=String(r.url||'').startsWith('#/'),tag=r.url?'a':'article',attrs=r.url?` href="${esc(r.url)}"${internal?'':' target="_blank" rel="noopener"'}`:'';return `<${tag} class="studio-resource-card"${attrs}><span class="eyebrow">${esc(r.type)}</span><h3>${esc(r.title)}</h3><p>${esc(r.note)}</p>${r.bestFor?`<div class="studio-resource-best"><b>BEST FOR</b><span>${esc(r.bestFor)}</span></div>`:''}${r.status?`<small>${esc(r.status)}</small>`:''}${r.url?`<strong>${internal?'Open Hub guide →':'Open listing ↗'}</strong>`:''}</${tag}>`}).join('')}</div><div class="callout warn studio-asset-rule"><b>Asset rule:</b> Fab links were checked as free on 12 September 2026. If a price appears later, do not buy anything for this task — use the college copy or ask for a substitute. Use individual assets, not supplied demo levels.</div></section>`;
+  return `<details class="studio-resource-shelf" id="studioAssetShelf"><summary><div><span class="eyebrow">SHARED ASSET SHELF • AVAILABLE FROM DAY 1</span><strong>Open the approved free assets + Hub recovery guides</strong><small>${xs.length} resources • browse now, dress after the Lesson 3 checkpoint</small></div><span class="studio-shelf-chevron">⌄</span></summary><div class="studio-resource-body"><div class="callout good studio-toolbox-rule"><b>Toolbox, not a checklist:</b> pick assets that support the same visual style and your story. You do not get extra credit for using everything.</div><div class="studio-resource-grid">${xs.map(r=>{const internal=String(r.url||'').startsWith('#/'),tag=r.url?'a':'article',attrs=r.url?` href="${esc(r.url)}"${internal?'':' target="_blank" rel="noopener"'}`:'';return `<${tag} class="studio-resource-card"${attrs}><span class="eyebrow">${esc(r.type)}</span><h3>${esc(r.title)}</h3><p>${esc(r.note)}</p>${r.bestFor?`<div class="studio-resource-best"><b>BEST FOR</b><span>${esc(r.bestFor)}</span></div>`:''}${r.status?`<small>${esc(r.status)}</small>`:''}${r.url?`<strong>${internal?'Open Hub guide →':'Open Fab listing ↗'}</strong>`:''}</${tag}>`}).join('')}</div><div class="callout warn studio-asset-rule"><b>Asset rule:</b> Fab links were checked as free on 12 September 2026. If a price appears later, do not buy it for this task — ask for a substitute. Use individual assets, never a supplied demo scene as your submission.</div></div></details>`;
 }
 function studioProjectIntro(t){
   const b=t.studioBrief;if(!b)return '';
-  return `<section class="content-card studio-project-brief"><span class="eyebrow">01 • THE STUDIO BRIEF</span><h2>${esc(t.studioIntroTitle||t.title)}</h2><blockquote>${esc(b.story)}</blockquote><div class="studio-brief-grid"><div><b>SCALE</b><p>${esc(b.scale)}</p></div><div><b>ROUTE</b><p>${esc(b.route)}</p></div></div><div class="studio-must-grid">${(b.mustHave||[]).map((x,i)=>`<span><b>${String(i+1).padStart(2,'0')}</b>${esc(x)}</span>`).join('')}</div><div class="callout good"><b>NON-NEGOTIABLE:</b> ${esc(b.hardRule)}</div></section>`;
+  return `<section class="content-card studio-project-brief"><span class="eyebrow">THE STUDIO BRIEF</span><h2>${esc(t.studioIntroTitle||t.title)}</h2><blockquote>${esc(b.story)}</blockquote><div class="studio-brief-grid"><div><b>SCALE</b><p>${esc(b.scale)}</p></div><div><b>ROUTE</b><p>${esc(b.route)}</p></div></div><div class="studio-must-grid">${(b.mustHave||[]).map((x,i)=>`<span><b>${String(i+1).padStart(2,'0')}</b>${esc(x)}</span>`).join('')}</div><div class="callout good"><b>NON-NEGOTIABLE:</b> ${esc(b.hardRule)}</div></section>`;
+}
+function studioProjectFinishCards(t,module){
+  return `<section class="tutorial-three-col studio-finish-grid"><div class="content-card"><span class="eyebrow">COMMON MISTAKES</span><h2>If it goes weak</h2><ul>${(t.mistakes||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><div class="content-card"><span class="eyebrow">MAKE IT YOURS</span><h2>Same brief, different story</h2><ul>${(t.makeItYours||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><div class="content-card"><span class="eyebrow">DEFINITION OF DONE</span><h2>It works when…</h2>${requirements(t.worksWhen||[])}</div></section>
+  <section class="content-card tutorial-revision-bridge practical"><div><span class="eyebrow">CHECK • DESIGN JUDGEMENT</span><h2>Can you explain why the scene works?</h2><p>The practical build is the proof. Use the Environment Art & Set Dressing revision questions to test the judgement behind focal point, route, scale, dressing and atmosphere.</p></div><button class="button ghost" data-action="revision-topic-start" data-revision-topic-id="design:${esc(t.designModule)}" data-revision-count="5">Revise ${esc(module?.title||'Environment Art & Set Dressing')} →</button></section>`;
+}
+function studioProjectStage(t,index,module){
+  const flow=(t.studioFlow||[])[index];if(!flow)return '';
+  const done=studioStageDone(t,index),isFinal=index===studioStageCount(t)-1,step=Number.isInteger(flow.stepIndex)?t.steps?.[flow.stepIndex]:null;
+  return `<section class="studio-stage-panel" id="studioStagePanel"><div class="studio-stage-hero"><div><span class="eyebrow">${esc(flow.label)} • STAGE ${index+1} OF ${studioStageCount(t)}</span><h2>${esc(flow.title)}</h2><p>${esc(flow.subtitle||'')}</p></div><span class="studio-stage-state ${done?'complete':''}">${done?'✓ Complete':'Current mission'}</span></div>
+    ${index===0?studioProjectIntro(t):''}
+    ${studioProjectReferences(t,flow.referenceIndexes||[])}
+    ${studioProjectTheory(t,flow.theoryIndexes||[])}
+    ${step?`<section class="studio-stage-block studio-build-mission"><div class="studio-stage-block-head"><span class="eyebrow">TODAY'S BUILD</span><h2>${esc(step.title)}</h2></div><div class="tutorial-step-list">${renderTutorialStep(step,flow.stepIndex,true)}</div></section>`:''}
+    ${flow.assetPrompt?`<div class="callout good studio-open-assets"><b>Now open the asset shelf above.</b> Replace your approved blockout selectively. Keep the layout that passed the checkpoint — the assets serve the design, not the other way around. <button class="button small ghost" data-action="open-studio-assets">Open asset shelf ↑</button></div>`:''}
+    ${flow.finishPrompt?studioProjectFinishCards(t,module):''}
+    <div class="studio-stage-actions"><div><b>${done?'Stage complete.':'Before you continue'}</b><p>${done?'You can revisit this stage at any time. Use the route above to move between completed work.':'Only mark this complete when you have actually passed the check in this stage. The next stage will then unlock.'}</p></div>${done&&!isFinal?`<button class="button ghost" data-action="studio-stage-open" data-tutorial="${esc(t.id)}" data-stage="${Math.min(index+1,studioStageCount(t)-1)}">Go to next stage →</button>`:`<button class="button ${done?'success':'primary'}" data-action="complete-studio-step" data-tutorial="${esc(t.id)}" data-stage="${index}" ${done?'disabled':''}>${done?(isFinal?'✓ Project complete':'✓ Stage complete'):(isFinal?'✓ Finish studio project':'✓ Complete stage → unlock next')}</button>`}</div>
+  </section>`;
 }
 function studioProjectPage(t){
-  const done=tutorialDone(t.id),module=designModule(t.designModule);
+  const done=tutorialDone(t.id),module=designModule(t.designModule),current=studioCurrentStage(t),progress=studioStageProgress(t);
   return `<div class="breadcrumb"><a href="#/">Dashboard</a> / <a href="#/design">Designer Studio</a> / <a href="#/design/${esc(t.designModule)}">${esc(module?.title||'Environment Art & Set Dressing')}</a> / ${esc(t.title)}</div>
-  <section class="tutorial-hero studio-project-hero"><div><span class="eyebrow">◈ ENVIRONMENT ART & SET DRESSING • STUDIO PROJECT • ${esc(t.duration)} • ${esc(t.difficulty)}</span><h1>${t.icon} ${esc(t.title)}</h1><p>${esc(t.summary)}</p><div class="tutorial-tag-row large">${t.uses.map(x=>`<span>${esc(x)}</span>`).join('')}</div></div><div class="tutorial-complete-box"><strong>${done?'✓ Studio lesson complete':'Plan → Blockout → Art Pass → Present'}</strong><p>${done?'You marked this studio lesson complete. Reopen it anytime for the workflow and references.':'Six lessons, one small place. Do not skip the blockout gate: the finished art must grow from a readable player-scale layout.'}</p><button class="button ${done?'success':'primary'}" data-action="complete-tutorial" data-tutorial="${esc(t.id)}">${done?'✓ Studio lesson complete':'Mark studio lesson complete'}</button></div></section>
+  <section class="tutorial-hero studio-project-hero"><div><span class="eyebrow">◈ ENVIRONMENT ART & SET DRESSING • STUDIO PROJECT • ${esc(t.duration)} • ${esc(t.difficulty)}</span><h1>${t.icon} ${esc(t.title)}</h1><p>${esc(t.summary)}</p><div class="tutorial-tag-row large">${t.uses.map(x=>`<span>${esc(x)}</span>`).join('')}</div></div><div class="tutorial-complete-box"><strong>${done?'✓ Studio project complete':`${progress.done}/${progress.total} stages complete`}</strong><p>${done?'Reopen any completed stage whenever you need the workflow or references.':'The lesson now reveals one job at a time. Complete the current stage to unlock the next.'}</p><div class="progress"><span style="width:${progress.pct}%"></span></div></div></section>
   <article class="tutorial-detail studio-project-page">
-    ${studioProjectIntro(t)}
-    ${studioProjectReferences(t)}
-    ${studioProjectTheory(t)}
+    ${studioProjectStageRail(t,current)}
     ${studioProjectResources(t)}
-    <section class="content-card practical-first-card"><span class="eyebrow">05 • TWO-WEEK WORKFLOW</span><h2>Work through all six lessons in order</h2><p class="muted studio-workflow-intro">Each lesson has one job. Finish its check before moving on; the art pass is deliberately locked behind the blockout review.</p><div class="tutorial-step-list">${t.steps.map((step,i)=>renderTutorialStep(step,i,true)).join('')}</div></section>
-    <section class="tutorial-three-col"><div class="content-card"><span class="eyebrow">06 • COMMON MISTAKES</span><h2>If it goes weak</h2><ul>${t.mistakes.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><div class="content-card"><span class="eyebrow">07 • MAKE IT YOURS</span><h2>Same brief, different story</h2><ul>${t.makeItYours.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><div class="content-card"><span class="eyebrow">08 • DEFINITION OF DONE</span><h2>It works when…</h2>${requirements(t.worksWhen)}</div></section>
-    <section class="content-card tutorial-revision-bridge practical"><div><span class="eyebrow">CHECK • DESIGN JUDGEMENT</span><h2>Can you explain why the scene works?</h2><p>The practical build is the proof. Use the Environment Art & Set Dressing revision questions to test the judgement behind focal point, route, scale, dressing and atmosphere.</p></div><button class="button ghost" data-action="revision-topic-start" data-revision-topic-id="design:${esc(t.designModule)}" data-revision-count="5">Revise ${esc(module?.title||'Environment Art & Set Dressing')} →</button></section>
-    <section class="content-card tutorial-next studio-project-next"><div><span class="eyebrow">FINISH • CRITIQUE THE PLACE</span><h2>Show the decision, not just the render</h2><p>Bring the plan, the approved blockout and the finished player-view result together. The useful question is not “does it look good?” — it is “can another player read the route, focal point and story I intended?”</p></div><div class="tutorial-next-links"><a class="button" href="#/design/${esc(t.designModule)}">Back to ${esc(module?.title||'Environment Art & Set Dressing')} →</a><a class="button ghost" href="#/critique">Post a screenshot for critique →</a></div></section>
+    ${studioProjectStage(t,current,module)}
+    ${done?`<section class="content-card tutorial-next studio-project-next"><div><span class="eyebrow">FINISH • CRITIQUE THE PLACE</span><h2>Show the decision, not just the render</h2><p>Bring the plan, approved blockout and finished player-view result together. Ask whether another player can read the route, focal point and story you intended.</p></div><div class="tutorial-next-links"><a class="button" href="#/design/${esc(t.designModule)}">Back to ${esc(module?.title||'Environment Art & Set Dressing')} →</a><a class="button ghost" href="#/critique">Post a screenshot for critique →</a></div></section>`:''}
   </article>`;
 }
 
@@ -3569,6 +3600,32 @@ async function setPathwayCheckpointComplete(id){
   toast(was?'Pathway checkpoint marked incomplete.':'Pathway checkpoint complete ✓');finishInlineUpdate(!was);
 }
 
+async function setStudioStepComplete(tutorialId,index){
+  const t=tutorial(tutorialId),i=Number(index);if(!t?.studioProject||!Number.isInteger(i))return;
+  if(!studioStageUnlocked(t,i)){toast('Finish the previous stage first.');return}
+  const key=studioStageKey(t.id,i);
+  if(!studioStageDone(t,i)){
+    state.studioStepCompleted=[...new Set([...(state.studioStepCompleted||[]),key])];saveState();
+    if(BACKEND.user){try{await BACKEND.setStudioStepComplete(key,true)}catch(e){toast('Stage saved locally; cloud sync failed.')}}
+  }
+  const final=i===studioStageCount(t)-1;
+  if(final){
+    if(!tutorialDone(t.id)){
+      const before=localUnlockedBadgeIds();
+      state.tutorialCompleted=[...new Set([...(state.tutorialCompleted||[]),t.id])];saveState();
+      if(BACKEND.user){try{await BACKEND.setLessonComplete(`tutorial:${t.id}`,true)}catch(e){toast('Project saved locally; cloud sync failed.')}}
+      badgeUnlockAfter(before,'Studio project complete ✓');
+    }
+    studioStageView={tutorialId:t.id,index:i};
+    toast('The Last Light complete ✓');
+  }else{
+    studioStageView={tutorialId:t.id,index:i+1};
+    toast(`${t.studioFlow?.[i+1]?.label||'Next stage'} unlocked ✓`);
+  }
+  route({preserveScroll:true});
+  requestAnimationFrame(()=>document.getElementById('studioStagePanel')?.scrollIntoView({behavior:'smooth',block:'start'}));
+}
+
 async function setMechanicStatus(id,status){
   const old=projectState.mechanics[id]||{};
   projectState.mechanics[id]={...old,status};
@@ -3866,6 +3923,13 @@ document.addEventListener('click',async e=>{
   else if(a==='complete') await setLessonComplete(b.dataset.lesson);
   else if(a==='complete-block') await setBlockComplete(b.dataset.block);
   else if(a==='block-filter'){blocksTier=b.dataset.tier||'core';route();}
+  else if(a==='open-studio-assets'){
+    const shelf=document.getElementById('studioAssetShelf');if(shelf){shelf.open=true;shelf.scrollIntoView({behavior:'smooth',block:'start'});}
+  }
+  else if(a==='studio-stage-open'){
+    const t=tutorial(b.dataset.tutorial),i=Number(b.dataset.stage);if(t?.studioProject&&studioStageUnlocked(t,i)){studioStageView={tutorialId:t.id,index:i};route({preserveScroll:true});requestAnimationFrame(()=>document.getElementById('studioStagePanel')?.scrollIntoView({behavior:'smooth',block:'start'}));}
+  }
+  else if(a==='complete-studio-step') await setStudioStepComplete(b.dataset.tutorial,b.dataset.stage);
   else if(a==='complete-tutorial') await setTutorialComplete(b.dataset.tutorial);
   else if(a==='complete-chapter-build') await setChapterBuildComplete(b.dataset.path);
   else if(a==='complete-design-build') await setDesignBuildComplete(b.dataset.designModule);
@@ -4615,7 +4679,7 @@ function setupSearch(){
 $('#menuButton').addEventListener('click',()=>$('#sidebar').classList.toggle('open'));
 $('#resetProgress').addEventListener('click',()=>{
   if(confirm('Reset all locally saved lesson progress, XP and game-project status on this browser?')){
-    state={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],designSourceCompleted:[],theoryCompleted:[],theoryScores:{},careerCompleted:[],careerScores:{},careerProfile:{version:1,updatedAt:null,roleInterests:{},signals:{},hardSkills:[],softSkills:[],vacancies:[],trafficLights:[],goals:{},industryBeliefs:{},industryDebate:{}},modelVideoCompleted:[],modelTheoryCompleted:[],modelTheoryScores:{},modelFoundationFinal:false,modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[],blockCompleted:[],pathwayCheckpoints:[]};
+    state={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],designSourceCompleted:[],theoryCompleted:[],theoryScores:{},careerCompleted:[],careerScores:{},careerProfile:{version:1,updatedAt:null,roleInterests:{},signals:{},hardSkills:[],softSkills:[],vacancies:[],trafficLights:[],goals:{},industryBeliefs:{},industryDebate:{}},modelVideoCompleted:[],modelTheoryCompleted:[],modelTheoryScores:{},modelFoundationFinal:false,modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[],blockCompleted:[],pathwayCheckpoints:[],studioStepCompleted:[]};
     projectState={project_title:'Signal Lost',theme:PROJECT.themes[0],pitch:'',mechanics:{}};
     saveState();saveProjectState();route();toast('Local progress reset.');
   }

@@ -1,4 +1,4 @@
-// UE5 Learning Hub v3.55.0 — The Last Light studio project
+// UE5 Learning Hub v3.55.1 — The Last Light studio project
 // Designer Studio long-form environment task: reference → plan → blockout → art pass → story/mood → Sequencer.
 (() => {
   const design = window.UE5_DESIGN_DATA;
@@ -153,33 +153,89 @@
       {
         type: 'COLLEGE ASSET',
         title: 'Project Nature',
-        note: 'Use the college-provided library for coherent rocks, foliage and natural surface dressing. Keep the visual language consistent rather than mixing five unrelated nature packs.',
+        note: 'Use the college-provided library for coherent rocks, foliage and natural surface dressing. Keep the visual language consistent rather than mixing unrelated nature packs.',
         bestFor: 'Landscape material, rocks, foliage and natural dressing',
         status: 'Available in the college project/library'
       },
       {
-        type: 'FREE FAB',
+        type: 'CORE • FREE FAB',
         title: 'Lighthouse',
-        note: 'Animated lighthouse model intended for seaside environments. Supplied as FBX/glTF/GLB/USDZ, so import it rather than expecting an Unreal project.',
-        bestFor: 'The shared hero landmark',
-        status: 'Verified Free • 12 Sep 2026',
+        note: 'The shared hero landmark. It is supplied as FBX/glTF/GLB/USDZ, so import it rather than expecting a complete Unreal project.',
+        bestFor: 'The lighthouse focal point',
+        status: 'Verified Free • 12 Sep 2026 • Not AI generated',
         url: 'https://www.fab.com/listings/42454f1c-67a2-4460-bd41-741aeb6ecf3f'
       },
       {
-        type: 'FREE FAB',
-        title: 'Free Medieval Environment Props Collection',
-        note: 'A useful neutral prop library: barrels, crates, fences, logs, rocks, buckets, sacks, lanterns, campfire, ladder and more. Use individual assets as ingredients, not as a theme.',
-        bestFor: 'Functional prop clusters and story clues',
-        status: 'Verified Free • 12 Sep 2026',
-        url: 'https://www.fab.com/listings/e1ca7a68-3914-4756-aa15-b7133167b45c'
+        type: 'OPTIONAL MIXED STYLE • FREE FAB',
+        title: 'Free Prop Bundle',
+        note: 'A large Unreal-ready prop pool with barrels, boxes, furniture, boards, ladders, lanterns, torches and other useful pieces. Choose only what supports your story.',
+        bestFor: 'Storage, work areas, keeper spaces and story clues',
+        status: 'Verified Free • Unreal Engine format • 12 Sep 2026 • Not AI generated',
+        url: 'https://www.fab.com/listings/f0e98745-eba7-40dd-81c2-2d160598d042'
       },
       {
-        type: 'OPTIONAL FREE FAB',
-        title: 'FREE 4x4km Coastal Landscape Sample',
-        note: 'Useful as a material/terrain reference only. The class scene is deliberately tiny: do not submit the supplied large landscape or demo work as your own environment.',
-        bestFor: 'Landscape-material reference and coastal ideas',
-        status: 'Verified Free • 12 Sep 2026',
-        url: 'https://www.fab.com/listings/fe1373c0-969d-4ebf-a8f0-9468fd29d239'
+        type: 'COASTAL • FREE FAB',
+        title: 'Wooden Rowboat',
+        note: 'A realistic PBR rowboat at real-world dimensions. Use it only if your story needs a boat; it should not become the main focal point.',
+        bestFor: 'Jetty, shoreline, escape or abandonment clue',
+        status: 'Verified Free • FBX/OBJ • 12 Sep 2026',
+        url: 'https://www.fab.com/listings/59573310-9be8-459f-98cb-954a66e5ef2c'
+      },
+      {
+        type: 'COASTAL DETAIL • FREE FAB',
+        title: 'Rope Coil — Quixel Megascans',
+        note: 'Photoreal nautical rope. One or two pieces can sell a working coastal location better than scattering random props everywhere.',
+        bestFor: 'Dock, boat and work-area detail',
+        status: 'Verified Free • 12 Sep 2026 • Not AI generated',
+        url: 'https://www.fab.com/listings/8ec7aab4-8be8-442e-95ab-840a8fa32932'
+      },
+      {
+        type: 'COASTAL DETAIL • FREE FAB',
+        title: 'CC0 Anchor',
+        note: 'A free CC0 PBR anchor that gives you a strong nautical story prop without forcing the scene into a pirate theme.',
+        bestFor: 'Shoreline, jetty or abandoned work-area clue',
+        status: 'Verified Free • CC0 • 12 Sep 2026 • Not AI generated',
+        url: 'https://www.fab.com/listings/b712dcf2-787f-4aab-ac78-dcae4e9fbe81'
+      },
+      {
+        type: 'WORK AREA • FREE FAB',
+        title: 'Wooden Pallet — Quixel Megascans',
+        note: 'Photoreal weathered pallet at real-world scale. Useful for making a storage/work zone feel functional without inventing complicated architecture.',
+        bestFor: 'Storage clusters, crates and working-area composition',
+        status: 'Verified Free • 12 Sep 2026 • Not AI generated',
+        url: 'https://www.fab.com/listings/6622c5d8-691b-4f1b-a29c-80c0e9d54af8'
+      },
+      {
+        type: 'WORK AREA • FREE FAB',
+        title: 'Wooden Barrel — Quixel Megascans',
+        note: 'A photoreal, weathered barrel with real-world dimensions. Good as a scale cue or functional prop cluster; do not carpet the scene with them.',
+        bestFor: 'Scale, storage and believable coastal clutter',
+        status: 'Verified Free • 12 Sep 2026 • Not AI generated',
+        url: 'https://www.fab.com/listings/a9d0d237-ef5b-47f3-b153-f6b4ab9733f1'
+      },
+      {
+        type: 'COASTAL DETAIL • FREE FAB',
+        title: 'Old Wooden Bucket — Quixel Megascans',
+        note: 'A weathered photoreal bucket that fits a believable working lighthouse or coastal store area. Use it because somebody would have needed it, not to fill empty space.',
+        bestFor: 'Functional dressing and lived-in detail',
+        status: 'Verified Free • 12 Sep 2026 • Not AI generated',
+        url: 'https://www.fab.com/listings/5926b83c-555d-4fa6-903a-9b2571ea996e'
+      },
+      {
+        type: 'STORY PROP • FREE FAB',
+        title: 'Old Lantern',
+        note: 'A simple old lantern that can support the keeper story, provide a practical light source or become a deliberate abandoned clue.',
+        bestFor: 'Story clue and motivated lighting',
+        status: 'Verified Free • FBX • 12 Sep 2026 • Not AI generated',
+        url: 'https://www.fab.com/listings/17f4af61-5f14-45cf-a33c-3dc810997a21'
+      },
+      {
+        type: 'OPTIONAL STYLE • FREE FAB',
+        title: 'GanzSe FREE Camping Props',
+        note: 'Tents, campfires, lanterns, crates, barrels and travel props. This pack is stylised/low-poly, so only use it if your whole scene supports that visual style.',
+        bestFor: 'A consistent stylised interpretation — not mixed into a realistic scene',
+        status: 'Verified Free • Unreal Engine format • 12 Sep 2026 • Not AI generated',
+        url: 'https://www.fab.com/listings/d03138fe-7e29-4b3d-9ea8-8ba67f24f845'
       },
       {
         type: 'HUB GUIDE',
@@ -194,6 +250,43 @@
         note: 'Use this in Lesson 6 for Cine Cameras, Camera Cuts, keyframes, focus and Movie Render Queue.',
         bestFor: 'The final 10–20 second presentation',
         url: '#/tutorial/sequencer-master-guide'
+      }
+    ],
+    studioFlow: [
+      {
+        label: 'START HERE', short: 'Brief', title: 'Understand the place before you touch Unreal',
+        subtitle: 'Read the brief, study a few references and decide what the environment needs to communicate.',
+        referenceIndexes: [0,3,5], theoryIndexes: [0,1]
+      },
+      {
+        label: 'LESSON 1', short: 'Plan', title: 'Plan the route, story and reveal',
+        subtitle: 'Turn reference into decisions: player route, focal point, story clues and one planned reveal.',
+        stepIndex: 0, referenceIndexes: [0,1,2,3], theoryIndexes: [0,1,2,3]
+      },
+      {
+        label: 'LESSON 2', short: 'Blockout', title: 'Build the scene at human scale',
+        subtitle: 'Landscape, water and simple forms only. Make the route work before the art arrives.',
+        stepIndex: 1, referenceIndexes: [1,5,6], theoryIndexes: [1,3,4]
+      },
+      {
+        label: 'LESSON 3', short: 'Review', title: 'Prove the blockout works',
+        subtitle: 'Test it silently, fix the route and scale, then earn the art pass.',
+        stepIndex: 2, referenceIndexes: [5,6], theoryIndexes: [0,1,3,4]
+      },
+      {
+        label: 'LESSON 4', short: 'Art Pass', title: 'Replace the blockout without losing the design',
+        subtitle: 'Use the shared asset shelf selectively. Every asset should support place, function or story.',
+        stepIndex: 3, referenceIndexes: [0,2,3], theoryIndexes: [6], assetPrompt: true
+      },
+      {
+        label: 'LESSON 5', short: 'Story + Mood', title: 'Make the place tell the story',
+        subtitle: 'Use connected clues, lighting and atmosphere to make the disappearance feel intentional.',
+        stepIndex: 4, referenceIndexes: [3,4,7], theoryIndexes: [5,6,7]
+      },
+      {
+        label: 'LESSON 6', short: 'Present', title: 'Polish and present the environment',
+        subtitle: 'Fix the final read, then present the scene with a short Sequencer edit.',
+        stepIndex: 5, referenceIndexes: [7,3], theoryIndexes: [0,2,7], finishPrompt: true
       }
     ],
     steps: [

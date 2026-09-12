@@ -17,7 +17,8 @@ function localCompletionIds(){
   return [...new Set(ids)].sort();
 }
 function localPathwayCheckpointIds(){return [...new Set(localProgressState()?.pathwayCheckpoints||[])].sort()}
-function localProgressFingerprint(){return `${localCompletionIds().join('|')}||pathways:${localPathwayCheckpointIds().join('|')}`}
+function localStudioStepIds(){return [...new Set(localProgressState()?.studioStepCompleted||[])].sort()}
+function localProgressFingerprint(){return `${localCompletionIds().join('|')}||pathways:${localPathwayCheckpointIds().join('|')}||studio:${localStudioStepIds().join('|')}`}
 function localProgressMarkerKey(api){return `ue5hub:v3:migrated-progress:${api.user?.id||'guest'}`;}
 function markLocalProgressSynced(api){
   if(!api.user)return;
@@ -459,12 +460,12 @@ const api = {
   async signOut(){ if(client) await client.auth.signOut(); },
   async migrateLocalProgress(){
     if(!client||!this.user)return;
-    const unique=localCompletionIds(),pathways=localPathwayCheckpointIds();
-    if(!unique.length&&!pathways.length)return;
+    const unique=localCompletionIds(),pathways=localPathwayCheckpointIds(),studioSteps=localStudioStepIds();
+    if(!unique.length&&!pathways.length&&!studioSteps.length)return;
     const markerKey=localProgressMarkerKey(this),fingerprint=localProgressFingerprint();
     if(localStorage.getItem(markerKey)===fingerprint)return;
     const now=new Date().toISOString();
-    const rows=[...unique.map(id=>({user_id:this.user.id,lesson_id:id,completed:true,completed_at:now})),...pathways.map(id=>({user_id:this.user.id,lesson_id:`pathway:${id}`,completed:false,completed_at:now}))];
+    const rows=[...unique.map(id=>({user_id:this.user.id,lesson_id:id,completed:true,completed_at:now})),...pathways.map(id=>({user_id:this.user.id,lesson_id:`pathway:${id}`,completed:false,completed_at:now})),...studioSteps.map(id=>({user_id:this.user.id,lesson_id:`studiostep:${id}`,completed:false,completed_at:now}))];
     const {error}=await client.from('lesson_progress').upsert(rows,{onConflict:'user_id,lesson_id'});
     if(error)console.warn('Progress migration',error.message);else localStorage.setItem(markerKey,fingerprint);
   },
@@ -504,6 +505,17 @@ const api = {
     if(!client||!this.user)return false;
     const lessonId=`pathway:${String(checkpointId||'').trim()}`;
     // Keep completed=false deliberately: pathway checkpoints are synced markers, not XP-bearing lessons.
+    const row={user_id:this.user.id,lesson_id:lessonId,completed:false,completed_at:completed?new Date().toISOString():null};
+    const {error}=await client.from('lesson_progress').upsert(row,{onConflict:'user_id,lesson_id'});
+    if(error)throw error;
+    invalidateReadCache(this,'lesson-progress');
+    markLocalProgressSynced(this);
+    return true;
+  },
+  async setStudioStepComplete(stepId,completed){
+    if(!client||!this.user)return false;
+    const lessonId=`studiostep:${String(stepId||'').trim()}`;
+    // Studio stages are synced progress markers only. The final tutorial row handles the normal completion/XP semantics.
     const row={user_id:this.user.id,lesson_id:lessonId,completed:false,completed_at:completed?new Date().toISOString():null};
     const {error}=await client.from('lesson_progress').upsert(row,{onConflict:'user_id,lesson_id'});
     if(error)throw error;
