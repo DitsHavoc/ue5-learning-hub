@@ -1,6 +1,14 @@
-# Current release — v3.51.0
+# Current release — v3.54.0
 
-**Learning Flow Cleanup.** Reunifies the Landscape + Sequencer and Industry & Careers release branches, turns Landscape and Sequencer into explicit Unreal Learning **Master Guides**, connects knowledge areas into one Revision bank, and adds structured **Learn → Do → Check → Bring Back** Homework Paths. Practical recipes remain practical rather than gaining repetitive mini-quizzes. No database migration required. See `RELEASE-NOTES-v3.51.0.md` and `LEARNING-FLOW-QA-v3.51.0.md`.
+**Power Jam Programmer Guide.** Adds a photographed complete-beginner Blueprint Master Guide for the two-person jam: PowerStates Map → ActivatePower → HasPower → reusable Power Switch → powered Door → testing → POWER_B reuse → GitHub handover. It also connects the GitHub team guide directly into the mechanic and surfaces both from Unreal Learning and Industry & Careers. No database migration required. See `RELEASE-NOTES-v3.54.0.md` and `POWER-JAM-PROGRAMMER-QA-v3.54.0.md`.
+
+## Previous release — v3.53.1
+
+**GitHub Search & Surfacing Hotfix.** Rebuilds global search at query time and gives the GitHub + Unreal team workflow a prominent Unreal Learning entry.
+
+## Previous release — v3.52.0
+
+**Unreal Designer.** Connects Designer Studio theory to existing Unreal recipes, Master Guides and applied builds.
 
 ## Previous release — v3.50.2
 

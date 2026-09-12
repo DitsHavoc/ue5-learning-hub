@@ -1,0 +1,24 @@
+UE5 LEARNING HUB v3.54.0 — POWER JAM PROGRAMMER GUIDE
+
+RECOMMENDED BASELINE
+Deploy over v3.53.1.
+
+MINIMAL FILES TO ADD / REPLACE
+1. index.html
+2. app.js
+3. data/github-unreal-team-guide.js
+4. data/power-jam-programmer-guide.js                      [NEW]
+5. assets/power-jam-programmer/                            [NEW — 27 PNGs]
+
+NO DATABASE MIGRATION
+NO backend.js CHANGE
+
+POST-DEPLOY CHECK
+1. Hard refresh.
+2. Confirm badge reads v3.54.0.
+3. Search `power jam` and open the new guide.
+4. Unreal Learning → Master Guides → confirm ⚡ Power Jam Programmer appears.
+5. Check PowerStates, ActivatePower, HasPower, switch and door screenshots load.
+6. Industry & Careers → People → confirm GitHub + Programmer jam buttons.
+7. GitHub guide → bottom CTA should open the Programmer guide.
+8. Confirm Landscape, Sequencer, GitHub and existing Industry content remain present.
