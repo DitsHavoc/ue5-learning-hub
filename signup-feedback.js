@@ -1,97 +1,190 @@
-/* UE5 Learning Hub v3.47.1 — visible student signup feedback
-   Fixes the classroom problem where an auth error was hidden behind the modal.
+/* UE5 Learning Hub v3.56.0 — LOCAL ONLY / PRIVACY LOCKDOWN
+   This replaces the old signup helper while keeping the existing script path.
+   It removes account/cloud UI and converts account-backed areas to local/static equivalents.
 */
 (() => {
   'use strict';
 
-  function status(form,message,kind=''){
-    let box=form.querySelector('.signup-hotfix-status');
-    if(!box){
-      box=document.createElement('div');
-      box.className='signup-hotfix-status';
-      form.appendChild(box);
-    }
-    box.className=`signup-hotfix-status ${kind}`.trim();
-    box.textContent=message;
-    box.scrollIntoView({block:'nearest'});
-  }
+  const VERSION = '3.56.0';
+  const BLOCKED_PREFIXES = ['#/classes', '#/teacher', '#/requests', '#/projects'];
 
-  function friendly(err){
-    const raw=String(err?.message||err||'Could not create account.');
-    const low=raw.toLowerCase();
-    if(err?.status===429 || low.includes('rate limit') || low.includes('too many requests')){
-      return 'Too many accounts are being created at once. Wait 60–90 seconds, then try again once.';
-    }
-    if(low.includes('already registered') || low.includes('already been registered') || low.includes('user already exists')){
-      return 'That email already has a Learning Hub account. Use Sign in instead.';
-    }
-    if(low.includes('class') && (low.includes('invalid') || low.includes('not accepting'))){
-      return 'That class code is not valid or is not currently accepting students. Check it with your teacher.';
-    }
-    if(low.includes('failed to fetch') || low.includes('network')){
-      return 'The signup request could not reach the server. Check the connection, then try again.';
-    }
-    return raw;
-  }
+  const style = document.createElement('style');
+  style.id = 'localOnlyPrivacyCss';
+  style.textContent = `
+    #accountButton,#notificationButton,#authModal,#classesNav,#teacherNav,
+    .leaderboard-nav,[data-route="leaderboard"],[data-route="requests"]{display:none!important}
+    [data-action="open-auth"],[data-action="news-save"],[data-action="news-vote"],[data-action="news-discuss"],
+    [data-news-filter="saved"]{display:none!important}
+    .local-only-notice{border:1px solid var(--line,#263746);padding:10px 12px;margin:12px 0;background:rgba(255,255,255,.025);font-size:13px}
+    .local-only-notice b{display:block;margin-bottom:3px}
+    .local-only-critique-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .local-only-critique-grid article{border:1px solid var(--line,#263746);padding:14px;background:rgba(255,255,255,.02)}
+    .local-only-critique-grid h3{margin-top:0}
+    @media(max-width:760px){.local-only-critique-grid{grid-template-columns:1fr}}
+  `;
+  document.head.appendChild(style);
 
-  document.addEventListener('submit',async event=>{
-    const form=event.target.closest?.('form[data-action-form="auth-signup"]');
-    if(!form)return;
-
-    event.preventDefault();
-    event.stopImmediatePropagation();
-
-    if(!form.checkValidity()){
-      form.reportValidity();
-      status(form,'Check the highlighted field and try again.','bad');
-      return;
-    }
-
-    const fd=new FormData(form);
-    const password=String(fd.get('password')||'');
-    const confirm=String(fd.get('confirm')||'');
-    if(password.length<8){status(form,'Use a password of at least 8 characters.','bad');return}
-    if(password!==confirm){status(form,'The two passwords do not match.','bad');return}
-
-    const backend=window.UE5_BACKEND;
-    if(!backend?.signUpEmail){
-      status(form,'Learning Hub signup is unavailable. Refresh the page and try again.','bad');
-      return;
-    }
-
-    const btn=form.querySelector('button[type="submit"]');
-    const old=btn?.textContent||'Create account';
-    if(btn){btn.disabled=true;btn.textContent='Creating account…'}
-    status(form,'Checking the class code and creating your account…','working');
-
-    try{
-      const result=await Promise.race([
-        backend.signUpEmail({
-          displayName:fd.get('displayName'),
-          email:fd.get('email'),
-          password,
-          classCode:fd.get('classCode')
-        }),
-        new Promise((_,reject)=>setTimeout(
-          ()=>reject(new Error('The signup request timed out. Check the connection and try again.')),
-          25000
-        ))
-      ]);
-
-      if(result?.needsConfirmation){
-        status(form,'Account created. Check your email, confirm it, then return and sign in. Your class code is saved.','good');
-        if(btn){btn.disabled=true;btn.textContent='Account created'}
-      }else{
-        status(form,`Account created. Joined ${result?.classInfo?.class_name||'your class'}.`,'good');
-        if(btn){btn.disabled=true;btn.textContent='Account created'}
-        setTimeout(()=>location.reload(),900);
+  function clearOldAccountCache() {
+    const exact = [
+      'ue5hub:v3:pending-class-code',
+      'ue5hub:v3:pending-teacher-code',
+      'ue5hub:v3:pending-teacher-invite'
+    ];
+    exact.forEach(k => { try { localStorage.removeItem(k); } catch (_) {} });
+    try {
+      for (let i = localStorage.length - 1; i >= 0; i--) {
+        const key = localStorage.key(i) || '';
+        if (key.startsWith('sb-') || key.startsWith('ue5hub:v3:migrated-progress:')) {
+          localStorage.removeItem(key);
+        }
       }
-    }catch(err){
-      status(form,friendly(err),'bad');
-      if(btn){btn.disabled=false;btn.textContent=old}
-      console.warn('[signup-feedback]',err);
-    }
-  },true);
+    } catch (_) {}
+  }
 
-  console.info('[signup-feedback] v3.47.1 active');
+  function blockedHash(hash = location.hash || '#/') {
+    return BLOCKED_PREFIXES.some(prefix => hash === prefix || hash.startsWith(prefix + '/'));
+  }
+
+  function guardRoute() {
+    const hash = location.hash || '#/';
+    if (hash === '#/leaderboard' || hash.startsWith('#/leaderboard/')) {
+      location.replace('#/progress');
+      return true;
+    }
+    if (blockedHash(hash)) {
+      location.replace('#/');
+      return true;
+    }
+    return false;
+  }
+
+  function staticCritiquePage() {
+    if ((location.hash || '#/') !== '#/critique') return;
+    const app = document.querySelector('#app');
+    if (!app || app.dataset.localOnlyCritique === '1') return;
+    app.dataset.localOnlyCritique = '1';
+    app.innerHTML = `
+      <div class="page-head">
+        <div class="breadcrumb"><a href="#/">Home</a> / Critique Guide</div>
+        <span class="eyebrow">PEER REVIEW • NO UPLOADS • NO ACCOUNTS</span>
+        <h1>Critique Guide</h1>
+        <p class="muted">Use these prompts while looking at a classmate's work in person or through the college-approved place your teacher gives you. Nothing is posted or stored in the Hub.</p>
+      </div>
+      <section class="section local-only-critique-grid">
+        <article><h3>1 • What is working?</h3><p>Name one specific thing that communicates clearly, feels good to use, or supports the intended experience.</p></article>
+        <article><h3>2 • What is unclear?</h3><p>Point to one place where you hesitated, misunderstood the intention, or could not tell what to do next.</p></article>
+        <article><h3>3 • What would you change?</h3><p>Suggest one realistic improvement. Explain why it would improve the player's experience rather than just saying you prefer it.</p></article>
+        <article><h3>4 • What should be tested?</h3><p>Choose one thing the creator should test next and say what evidence would show that the change worked.</p></article>
+      </section>
+      <section class="content-card"><h2>Keep feedback where college expects it</h2><p>Give verbal feedback in class or use Microsoft Teams when your teacher asks you to record it. The Learning Hub is now a learning resource only.</p></section>`;
+  }
+
+  function scrubChrome() {
+    ['accountButton','notificationButton','authModal','classesNav','teacherNav'].forEach(id => {
+      const node = document.getElementById(id);
+      if (node) { node.hidden = true; node.style.display = 'none'; node.setAttribute('aria-hidden','true'); }
+    });
+
+    document.querySelectorAll('[data-route="leaderboard"],[data-route="requests"]').forEach(n => n.remove());
+
+    const critique = document.querySelector('[data-route="critique"]');
+    if (critique) {
+      const label = critique.querySelector('span');
+      const sub = critique.querySelector('small');
+      if (label) label.textContent = 'Critique Guide';
+      if (sub) sub.textContent = 'Peer review prompts • no uploads';
+    }
+
+    document.querySelectorAll('.nav-heading').forEach(h => {
+      if (h.textContent.trim() === 'Community & progress') h.textContent = 'Progress & support';
+    });
+
+    const mode = document.getElementById('modeBadge');
+    if (mode) mode.textContent = '• LOCAL ONLY';
+    const badge = document.querySelector('.version-badge b');
+    if (badge) badge.textContent = `v${VERSION}`;
+  }
+
+  function scrubPage(root = document) {
+    root.querySelectorAll?.('[data-action="open-auth"],[data-action="news-save"],[data-action="news-vote"],[data-action="news-discuss"],[data-news-filter="saved"]')
+      .forEach(n => n.remove());
+
+    const comments = root.querySelector?.('#comments');
+    if (comments && comments.dataset.localOnly !== '1') {
+      comments.dataset.localOnly = '1';
+      comments.innerHTML = `<span class="eyebrow">ASK / REFLECT</span><h2>Questions & teacher feedback</h2><div class="local-only-notice"><b>Nothing is sent from this page.</b>Ask in class or use Microsoft Teams when your teacher asks you to record a question or reflection.</div>`;
+    }
+
+    const focus = root.querySelector?.('.journey-start-card.class-focus');
+    if (focus && /sign in for your class|loading class focus|class focus unavailable/i.test(focus.textContent || '')) {
+      focus.classList.add('quiet');
+      focus.innerHTML = `<span class="journey-card-kicker">📌 TODAY'S CLASS TASK</span><h2>Follow the task from your teacher</h2><p>Class accounts and server-based Class Focus have been removed. Use the task shown in class or Microsoft Teams, then use the Hub for the skills you need.</p>`;
+    }
+
+    const hero = root.querySelector?.('.portal-hero.portal-hero-clean p');
+    if (hero && /class focus/i.test(hero.textContent || '')) {
+      hero.textContent = 'Follow today’s class task, continue your own work, or explore. The Hub helps after you choose a direction.';
+    }
+
+    const sourceNote = root.querySelector?.('.news-source-note p');
+    if (sourceNote) sourceNote.textContent = 'The live feed links to external publishers. Saving, voting and Hub discussion have been removed; no student interaction data is stored by the Hub.';
+
+    root.querySelectorAll?.('.sync-chip').forEach(chip => {
+      if (/account|cloud/i.test(chip.textContent || '')) {
+        chip.classList.remove('cloud');
+        chip.textContent = '● Saved on this browser';
+      }
+    });
+
+    root.querySelectorAll?.('.project-login-gate,.news-comment-signin').forEach(node => {
+      if (/sign in|account/i.test(node.textContent || '')) node.remove();
+    });
+  }
+
+  function footerNotice() {
+    const footer = document.querySelector('footer');
+    if (!footer || footer.querySelector('.local-only-footer')) return;
+    const note = document.createElement('small');
+    note.className = 'epic-disclaimer local-only-footer';
+    note.textContent = 'Privacy: no Learning Hub accounts. Progress and preferences stay on this browser only. Formal work and feedback stay in Microsoft Teams.';
+    footer.appendChild(note);
+  }
+
+  function enforce() {
+    if (guardRoute()) return;
+    scrubChrome();
+    staticCritiquePage();
+    scrubPage(document);
+    footerNotice();
+  }
+
+  document.addEventListener('click', event => {
+    const auth = event.target.closest?.('[data-action="open-auth"]');
+    if (auth) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      return;
+    }
+    const link = event.target.closest?.('a[href^="#/"]');
+    const href = link?.getAttribute('href') || '';
+    if (href === '#/leaderboard' || href.startsWith('#/leaderboard/')) {
+      event.preventDefault();
+      location.hash = '#/progress';
+    } else if (blockedHash(href)) {
+      event.preventDefault();
+      location.hash = '#/';
+    }
+  }, true);
+
+  window.addEventListener('hashchange', () => setTimeout(enforce, 0));
+
+  const observer = new MutationObserver(() => {
+    clearTimeout(observer.timer);
+    observer.timer = setTimeout(enforce, 0);
+  });
+  observer.observe(document.documentElement, {subtree:true, childList:true});
+
+  clearOldAccountCache();
+  enforce();
+  console.info('[UE5 Hub] v3.56.0 privacy lockdown active — local-only learning resource');
 })();
