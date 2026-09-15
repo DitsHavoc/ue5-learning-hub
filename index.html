@@ -66,9 +66,9 @@
         <a href="#/glossary" data-route="glossary">? <span>Glossary</span></a>
 
         <div class="nav-heading">Community & progress</div>
-        <a href="#/leaderboard" data-route="leaderboard" class="leaderboard-nav">🏆 <span>Leaderboard</span><small>Hub + class XP • weekly • streaks</small></a>
+        <a href="#/leaderboard" data-route="leaderboard" class="leaderboard-nav" style="display:none" aria-hidden="true">🏆 <span>Leaderboard</span><small>Hub + class XP • weekly • streaks</small></a>
         <a href="#/progress" data-route="progress" class="project-nav">◎ <span>My Progress</span><small>Learning • XP • badges</small></a>
-        <a href="#/requests" data-route="requests" class="project-nav">✦ <span>Feature Requests</span><small>Ideas & teacher replies</small></a>
+        <a href="#/requests" data-route="requests" class="project-nav" style="display:none" aria-hidden="true">✦ <span>Feature Requests</span><small>Ideas & teacher replies</small></a>
         <a href="#/teacher" data-route="teacher" id="teacherNav" hidden>▣ <span>Teacher</span></a>
       </nav>
 
@@ -92,8 +92,8 @@
           <span><b id="topDone">0</b> complete</span>
           <span><b id="topXp">0</b> <span id="topXpUnit">XP</span></span>
         </div>
-        <button class="notification-button" id="notificationButton" data-action="open-progress" title="Notifications">🔔 <b id="notificationCount" hidden>0</b></button>
-        <button class="account-button" id="accountButton" data-action="open-auth">
+        <button class="notification-button" id="notificationButton" data-action="open-progress" title="Notifications" style="display:none" aria-hidden="true">🔔 <b id="notificationCount" hidden>0</b></button>
+        <button class="account-button" id="accountButton" data-action="open-auth" style="display:none" aria-hidden="true">
           <span class="account-dot"></span><span id="accountText">LOCAL MODE</span>
         </button>
       </header>
@@ -109,18 +109,17 @@
 
   <div class="version-badge" title="Build version">
     <span class="version-dot"></span>
-    UE5 HUB <b>v3.55.1</b> <span id="modeBadge">• LOCAL</span>
+    UE5 HUB <b>v3.56.0</b> <span id="modeBadge">• LOCAL ONLY</span>
   </div>
 
-  <div class="modal-backdrop" id="authModal" hidden>
+  <div class="modal-backdrop" id="authModal" hidden style="display:none" aria-hidden="true">
     <section class="modal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
       <button class="modal-close" data-action="close-auth" aria-label="Close">×</button>
-      <span class="eyebrow">Learning Hub accounts</span>
-      <h2 id="authTitle">Save progress everywhere</h2>
+      <span class="eyebrow">Learning Hub accounts removed</span>
+      <h2 id="authTitle">Local-only mode</h2>
       <div id="authBody"></div>
     </section>
   </div>
-
 
   <div class="modal-backdrop image-lightbox" id="imageLightbox" hidden>
     <section class="image-lightbox-dialog" role="dialog" aria-modal="true" aria-label="Expanded lesson image">
@@ -137,7 +136,6 @@
 
   <div class="toast" id="toast" aria-live="polite"></div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="data/course-data.js?v=3.39.2"></script>
   <script src="data/building-block-data.js?v=3.36.0"></script>
   <script src="data/tutorial-data.js?v=3.36.0"></script>
@@ -164,12 +162,12 @@
   <script src="data/modeling-video-data.js?v=3.38.1"></script>
   <script src="data/sculpt-data.js?v=3.32.2"></script>
   <script src="data/study-data.js?v=3.39.0"></script>
-  <script src="data/supabase-config.js?v=3.32.2"></script>
-  <script src="backend.js?v=3.49.0"></script>
+  <script src="data/supabase-config.js?v=3.56.0"></script>
+  <script src="backend.js?v=3.56.0"></script>
   <script src="app.js?v=3.55.1"></script>
   <script src="roster-controls.js?v=3.42.3"></script>
   <script src="journey-cleanup.js?v=3.46.2"></script>
-  <script src="signup-feedback.js?v=3.47.1"></script>
+  <script src="signup-feedback.js?v=3.56.0"></script>
   <script src="classroom-identity.js?v=3.47.1"></script>
 </body>
 </html>
