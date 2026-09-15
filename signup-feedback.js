@@ -5,7 +5,7 @@
 (() => {
   'use strict';
 
-  const VERSION = '3.56.1';
+  const VERSION = '3.56.2';
   const BLOCKED_PREFIXES = [
     '#/classes', '#/teacher', '#/requests', '#/projects',
     '#/leaderboard', '#/progress', '#/critique'
@@ -16,7 +16,7 @@
   style.textContent = `
     #accountButton,#notificationButton,#authModal,#classesNav,#teacherNav,
     .leaderboard-nav,[data-route="leaderboard"],[data-route="requests"],
-    [data-route="progress"],[data-route="critique"]{display:none!important}
+    [data-route="progress"],[data-route="critique"],.local-only-retired-nav{display:none!important}
     [data-action="open-auth"],[data-action="news-save"],[data-action="news-vote"],[data-action="news-discuss"],
     [data-news-filter="saved"],a[href="#/progress"],a[href="#/critique"]{display:none!important}
     .journey-start-card.class-focus{display:none!important}
@@ -60,8 +60,6 @@
   function cleanHome() {
     if ((location.hash || '#/') !== '#/' && (location.hash || '#/') !== '#') return;
 
-    document.querySelectorAll('.journey-start-card.class-focus').forEach(n => n.remove());
-
     const personal = document.querySelector('.journey-start-card.personal .journey-card-kicker');
     const explore = document.querySelector('.journey-start-card.explore .journey-card-kicker');
     if (personal) personal.textContent = '01 / CONTINUE';
@@ -84,12 +82,11 @@
     });
 
     document.querySelectorAll(
-      '[data-route="leaderboard"],[data-route="requests"],[data-route="progress"],[data-route="critique"]'
-    ).forEach(n => n.remove());
-
-    document.querySelectorAll('.nav-heading').forEach(h => {
-      const t = h.textContent.trim().toLowerCase();
-      if (t === 'community & progress' || t === 'progress & support') h.remove();
+      '[data-route="leaderboard"],[data-route="requests"],[data-route="progress"],[data-route="critique"],.local-only-retired-nav'
+    ).forEach(n => {
+      n.hidden = true;
+      n.style.display = 'none';
+      n.setAttribute('aria-hidden','true');
     });
 
     const mode = document.getElementById('modeBadge');
@@ -170,5 +167,5 @@
 
   clearOldAccountCache();
   enforce();
-  console.info('[UE5 Hub] v3.56.1 local-only cleanup active');
+  console.info('[UE5 Hub] v3.56.2 homepage hotfix active');
 })();
