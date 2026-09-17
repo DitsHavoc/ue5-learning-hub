@@ -1,0 +1,26 @@
+UE5 LEARNING HUB v3.56.3 — PROGRAMMER SKILL MISSION
+BASELINE REQUIRED: v3.56.2 LOCAL ONLY
+
+UPLOAD / COPY THESE FILES OVER THE EXISTING SITE ROOT:
+  app.js
+  index.html
+  skill-missions.css
+  data/programmer-skill-mission.js
+
+The ZIP also contains release/QA notes for reference.
+
+IMPORTANT:
+- This is an OVERLAY patch.
+- Do not delete the existing site first.
+- Keep the existing data and assets folders.
+- No database / Supabase migration is required.
+- Local-only mode remains enabled.
+
+QUICK CHECK:
+1. Version badge = v3.56.3 • LOCAL ONLY
+2. Unreal Learning → Programmer Skill Missions
+3. Open “Escape Room: Arrays & Maps”
+4. Stage 00 is available
+5. Mark Stage 00 working → Stage 01 unlocks
+6. Refresh → progress remains
+7. Reset local progress → mission progress resets

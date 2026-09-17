@@ -1,0 +1,88 @@
+
+/* UE5 Learning Hub v3.56.3 — Programmer Skill Missions */
+.skill-mission-section{margin-top:26px}
+.skill-mission-grid{display:grid;grid-template-columns:1fr;gap:16px}
+.skill-mission-card{display:grid;grid-template-columns:74px minmax(0,1fr) auto;gap:18px;align-items:center;padding:22px;border:1px solid rgba(111,138,174,.28);border-radius:18px;background:linear-gradient(135deg,rgba(55,84,126,.18),rgba(10,16,25,.7));text-decoration:none;color:inherit;box-shadow:0 14px 34px rgba(0,0,0,.12)}
+.skill-mission-card:hover{transform:translateY(-2px);border-color:rgba(116,167,255,.55)}
+.skill-mission-card.done{border-color:rgba(93,199,142,.55)}
+.skill-mission-card-icon{display:grid;place-items:center;width:62px;height:62px;border-radius:16px;background:rgba(116,167,255,.14);border:1px solid rgba(116,167,255,.35);font-size:30px;font-weight:800}
+.skill-mission-card-copy h3{font-size:24px;margin:4px 0 7px}
+.skill-mission-card-copy p{margin:0 0 12px;max-width:900px}
+.skill-mission-progress-row{display:flex;align-items:center;gap:12px;margin-top:12px}
+.skill-mission-progress-row .progress{flex:1;max-width:420px}
+.skill-mission-card>strong{white-space:nowrap}
+
+.skill-mission-hero{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:24px;align-items:stretch;margin:18px 0 20px;padding:28px;border-radius:22px;border:1px solid rgba(116,167,255,.28);background:radial-gradient(circle at top left,rgba(79,121,190,.22),transparent 45%),rgba(10,16,25,.78)}
+.skill-mission-hero h1{font-size:clamp(34px,5vw,58px);line-height:1.02;margin:7px 0 12px}
+.skill-mission-hero p{font-size:16px;line-height:1.65;max-width:900px}
+.skill-mission-progress{display:flex;flex-direction:column;justify-content:center;gap:7px;padding:18px;border-radius:16px;background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.08)}
+.skill-mission-progress strong{font-size:34px}
+.skill-mission-progress span,.skill-mission-progress small{opacity:.78}
+.skill-mission-rulebar{display:grid;grid-template-columns:minmax(260px,.8fr) minmax(0,1.4fr);gap:22px;padding:22px;border-radius:18px;margin-bottom:20px;background:rgba(65,96,142,.12);border:1px solid rgba(116,167,255,.2)}
+.skill-mission-rulebar h2{margin:4px 0}
+.skill-rule-chips{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.skill-rule-chips span{padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.07);font-size:13px;line-height:1.45}
+.skill-game-brief{margin-bottom:20px}
+.skill-flow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:16px 0 22px}
+.skill-flow span{padding:9px 12px;border-radius:999px;background:rgba(116,167,255,.1);border:1px solid rgba(116,167,255,.25);font-weight:700;font-size:12px}
+.skill-flow b{opacity:.45}
+
+.skill-mission-layout{display:grid;grid-template-columns:270px minmax(0,1fr);gap:22px;align-items:start}
+.skill-stage-rail{position:sticky;top:86px;display:flex;flex-direction:column;gap:7px;padding:12px;border-radius:16px;background:rgba(10,16,25,.58);border:1px solid rgba(255,255,255,.08)}
+.skill-rail-head{display:flex;justify-content:space-between;align-items:end;padding:8px 8px 12px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:2px}
+.skill-rail-head small{opacity:.6;font-weight:700}
+.skill-rail-head strong{font-size:22px}
+.skill-stage-link{display:grid;grid-template-columns:34px minmax(0,1fr);gap:9px;align-items:center;padding:10px;border-radius:11px;text-decoration:none;color:inherit;border:1px solid transparent}
+.skill-stage-link>span{display:grid;place-items:center;width:30px;height:30px;border-radius:9px;background:rgba(255,255,255,.06);font-size:11px;font-weight:800}
+.skill-stage-link strong{display:block;font-size:12px;line-height:1.25}
+.skill-stage-link small{display:block;margin-top:2px;font-size:10px;opacity:.58}
+.skill-stage-link:hover{background:rgba(116,167,255,.08)}
+.skill-stage-link.current{background:rgba(116,167,255,.12);border-color:rgba(116,167,255,.38)}
+.skill-stage-link.done>span{background:rgba(81,178,123,.17);color:#8ee2ae}
+.skill-stage-link.locked{opacity:.42}
+.skill-stage-main{min-width:0}
+.skill-stage-hero{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(260px,.65fr);gap:18px;padding:24px;border-radius:18px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);margin-bottom:16px}
+.skill-stage-hero.done{border-color:rgba(81,178,123,.38)}
+.skill-stage-hero h2{font-size:32px;margin:5px 0 8px}
+.skill-stage-why{padding:16px;border-radius:14px;background:rgba(116,167,255,.08);border:1px solid rgba(116,167,255,.16)}
+.skill-stage-why span,.skill-step-field span,.skill-done-when small{display:block;font-size:10px;letter-spacing:.12em;font-weight:800;opacity:.72;margin-bottom:5px}
+.skill-step-list{display:flex;flex-direction:column;gap:13px}
+.skill-step-card{display:grid;grid-template-columns:48px minmax(0,1fr);gap:14px;padding:18px;border-radius:15px;background:rgba(255,255,255,.026);border:1px solid rgba(255,255,255,.075)}
+.skill-step-num{display:grid;place-items:center;width:42px;height:42px;border-radius:12px;background:rgba(116,167,255,.11);border:1px solid rgba(116,167,255,.23);font-weight:900}
+.skill-step-body h3{margin:2px 0 12px;font-size:20px}
+.skill-step-field{margin-top:9px;padding:11px 12px;border-radius:10px}
+.skill-step-field p{margin:0;line-height:1.55}
+.skill-step-field.where{background:rgba(118,126,152,.08)}
+.skill-step-field.do{background:rgba(116,167,255,.08)}
+.skill-step-field.check{background:rgba(82,185,124,.08)}
+.skill-step-field.why{background:rgba(202,169,90,.07)}
+.skill-stage-test{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,.55fr);gap:16px;margin:18px 0;padding:20px;border-radius:17px;background:rgba(82,185,124,.075);border:1px solid rgba(82,185,124,.22)}
+.skill-stage-test h2{margin:4px 0 8px}
+.skill-stage-test ul,.skill-troubleshoot ul,.skill-challenges ul{margin:10px 0 0;padding-left:20px}
+.skill-stage-test li,.skill-troubleshoot li,.skill-challenges li{margin:7px 0;line-height:1.5}
+.skill-done-when{display:flex;flex-direction:column;justify-content:center;padding:16px;border-radius:13px;background:rgba(0,0,0,.14)}
+.skill-done-when strong{font-size:15px;line-height:1.5}
+.skill-troubleshoot{margin:14px 0}
+.skill-troubleshoot summary{cursor:pointer;font-weight:800}
+.skill-challenges{margin:14px 0}
+.skill-stage-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:18px 0 38px;padding-top:16px;border-top:1px solid rgba(255,255,255,.08)}
+.skill-locked-stage{text-align:center;padding:42px}
+.skill-locked-stage .button{margin-top:16px}
+
+@media (max-width:980px){
+  .skill-mission-hero,.skill-mission-rulebar,.skill-stage-hero,.skill-stage-test{grid-template-columns:1fr}
+  .skill-mission-layout{grid-template-columns:1fr}
+  .skill-stage-rail{position:static;display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+  .skill-rail-head{grid-column:1/-1}
+  .skill-rule-chips{grid-template-columns:1fr}
+}
+@media (max-width:680px){
+  .skill-mission-card{grid-template-columns:52px minmax(0,1fr)}
+  .skill-mission-card>strong{grid-column:2}
+  .skill-mission-card-icon{width:48px;height:48px;font-size:24px}
+  .skill-stage-rail{grid-template-columns:1fr}
+  .skill-step-card{grid-template-columns:1fr}
+  .skill-step-num{width:38px;height:38px}
+  .skill-stage-actions{align-items:stretch;flex-direction:column}
+  .skill-stage-actions .button{width:100%;text-align:center}
+}
