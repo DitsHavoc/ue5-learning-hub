@@ -1,0 +1,28 @@
+UE5 LEARNING HUB — v3.57.1 LEVEL 4 FIX
+
+RECOMMENDED:
+  UE5-Learning-Hub-v3.57.1-LEVEL4-PROGRAMMER-IMAGE-FIX-MINIMAL.zip
+
+This patch is cumulative and can be uploaded over either v3.56.2 or v3.57.0.
+
+Upload/extract the CONTENTS into the site root, preserving folders, and allow replacement of existing files.
+
+Files in the minimal patch:
+  index.html
+  app.js
+  level4-specialist.css
+  skill-missions.css
+  data/level4-specialist-projects.js
+  data/programmer-skill-mission.js
+  RELEASE-NOTES-v3.57.1.md
+  UPLOAD-NOW-v3.57.1.txt
+
+After upload + hard refresh, check:
+  1. badge reads v3.57.1
+  2. Level 4 Specialist Projects opens
+  3. Programming opens "Escape Room: Arrays & Maps"
+  4. completing Mission 1 unlocks Structs & Data Tables
+  5. completing Mission 2 unlocks Functions & Reusable Logic
+  6. Level 4 pages show a reference image; if a remote reference is blocked, a local Hub fallback appears instead
+
+No database migration is required.

@@ -1,5 +1,5 @@
 window.LEVEL4_SPECIALIST_PROJECTS = {
-  version: '3.57.0',
+  version: '3.57.1',
   intro: {
     title: 'Level 4 Specialist Projects',
     kicker: 'Choose ONE pathway',
@@ -10,9 +10,11 @@ window.LEVEL4_SPECIALIST_PROJECTS = {
       id:'what-happened-here', icon:'✦', title:'What Happened Here?', role:'Environment / Level Design', time:'1–2 weeks',
       strap:'Tell a story through a place. No exposition dump. Make the player read the scene.',
       outcome:'A small, believable Unreal environment built primarily from the What Remains of Edith Finch asset library, communicating a before / event / after story through composition, props, light, sound and player guidance.',
-      heroImage:'https://images.steamusercontent.com/ugc/16481460338892297344/046D5035109AA286D15F535C62B89A8F9D546900/?ima=fit&imcolor=%23000000&impolicy=Letterbox&imw=1024&letterbox=false',
-      heroAlt:'What Remains of Edith Finch attic room showing dense personal set dressing and storytelling props.',
-      imageCredit:'Community screenshot – What Remains of Edith Finch', imageLink:'https://steamcommunity.com/app/501300/screenshots/',
+      heroImage:'https://upload.wikimedia.org/wikipedia/commons/3/33/Empty_Room_%28Unsplash%29.jpg',
+      heroFallback:'assets/tutorials/prison-cell/lighting-01-light-placement.webp',
+      heroAlt:'A real interior seen through a dark hallway, with furniture and lighting creating a strong focal area.',
+      imageCaption:'Real-world reference: notice how doorway framing, contrast and object placement naturally pull your eye deeper into the room. Your environment should guide attention this deliberately.',
+      imageCredit:'Stephen Caserta — Empty Room (CC0), Wikimedia Commons', imageLink:'https://commons.wikimedia.org/wiki/File:Empty_Room_(Unsplash).jpg',
       theory:[
         {label:'GDC: What Happened Here? Environmental Storytelling',url:'https://www.gdcvault.com/play/1012696/What-Happened-Here-Environmental'},
         {label:'Official What Remains of Edith Finch page',url:'https://www.annapurna.com/interactive/what-remains-of-edith-finch'},
@@ -36,9 +38,11 @@ window.LEVEL4_SPECIALIST_PROJECTS = {
       id:'2d-visual-development', icon:'◈', title:'Visual Development Pack', role:'2D Art', time:'1–2 weeks',
       strap:'Develop a visual idea instead of jumping straight to one finished painting.',
       outcome:'A coherent visual-development pack for an original game idea: references, thumbnails, shape/value exploration, colour direction, props or character/creature exploration and one polished key image.',
-      heroImage:'https://cdn.kwork.com/files/portfolio/t3/16/c4a2792edce40c8afc4aa72d62d27a18b30b6351-1701300890.jpg',
-      heroAlt:'Storyboard and shot planning panels showing how small exploratory images communicate composition before final production.',
-      imageCredit:'Storyboard example – used as a process reference', imageLink:'https://kwork.com/illustrations/30374452/i-will-create-storyboards-for-your-film-or-animation-or-ad',
+      heroImage:'https://upload.wikimedia.org/wikipedia/commons/8/84/Storyboard.jpg',
+      heroFallback:'assets/tutorials/sequencer-master/virtual-filmmaking-p439.webp',
+      heroAlt:'A hand-drawn storyboard sheet showing multiple quick frames used to explore a visual sequence before final production.',
+      imageCaption:'Process reference: small rough drawings are useful because ideas are cheap to change. Your thumbnails should solve composition and shape before you spend time polishing.',
+      imageCredit:'Heloise Magny — Storyboard example (Public Domain), Wikimedia Commons', imageLink:'https://commons.wikimedia.org/wiki/File:Storyboard.jpg',
       theory:[
         {label:'ArtStation: Environment Thumbnails Study',url:'https://www.artstation.com/artwork/qbmgz'},
         {label:'ArtStation: Environment Concept Art – development from thumbnails',url:'https://www.artstation.com/artwork/5Xxl5A'},
@@ -62,9 +66,14 @@ window.LEVEL4_SPECIALIST_PROJECTS = {
       id:'3d-hero-prop', icon:'⬡', title:'Hero Prop', role:'3D Art', time:'1–2 weeks',
       strap:'One excellent game-ready asset. Reference it properly, build it properly, present it properly.',
       outcome:'A high-quality hero prop taken through reference, blockout, modelling, UVs, texturing/materials, engine import and portfolio presentation.',
-      heroImage:'https://www.asaradiomuseo.fi/ASA827/07_ASA827.jpg',
-      heroAlt:'Real vintage radio showing materials, construction, wear, controls and manufacturing details useful for 3D reference.',
-      imageCredit:'Real-world reference example – ASA 827 radio', imageLink:'https://www.asaradiomuseo.fi/ASA827.htm',
+      heroImage:'https://upload.wikimedia.org/wikipedia/commons/a/a3/Vintage_Radio.jpg',
+      heroFallback:'assets/modeling/stages/barrel-overview.png',
+      heroAlt:'A real vintage radio with exposed coils, valves, controls and a wooden body.',
+      imageCaption:'Real-world reference: separate the object into primary body, secondary functional parts and small tertiary detail. Model construction first; scratches come later.',
+      imageCredit:'Sven — Vintage Radio (CC BY 4.0), Wikimedia Commons', imageLink:'https://commons.wikimedia.org/wiki/File:Vintage_Radio.jpg',
+      secondaryImage:'assets/modeling/stages/barrel-overview.png',
+      secondaryAlt:'A game-ready prop modelling reference from the Hub.',
+      secondaryCaption:'Game-art reference: compare the real object above with a simplified production asset. Strong proportions and readable forms matter before surface detail.',
       theory:[
         {label:'Polycount: AAA game-ready hero prop pipeline breakdown',url:'https://polycount.com/discussion/237029/breakdown-of-the-aaa-pipeline-for-game-ready-realistic-hero-props'},
         {label:'Epic: Materials and Material Instances',url:'https://dev.epicgames.com/documentation/unreal-engine/artist-03-create-materials-and-material-instances'},
@@ -88,9 +97,14 @@ window.LEVEL4_SPECIALIST_PROJECTS = {
       id:'technical-audio', icon:'◉', title:'Build a Game Sound Library', role:'Technical Audio', time:'1–2 weeks',
       strap:'Record sounds, clean them, create variations and organise them so another developer can actually use them.',
       outcome:'An original, edited and clearly catalogued game-audio library containing Foley, object interactions, material sounds, ambience and designed/layered effects.',
-      heroImage:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Foley_Room_at_the_Sound_Design_Campus_%28cropped%29.jpg/440px-Foley_Room_at_the_Sound_Design_Campus_%28cropped%29.jpg',
-      heroAlt:'Foley artist recording an impact with a microphone in a dedicated sound room.',
-      imageCredit:'Foley recording – Wikimedia Commons', imageLink:'https://commons.wikimedia.org/wiki/File:Foley_Room_at_the_Sound_Design_Campus_(cropped).jpg',
+      heroImage:'https://upload.wikimedia.org/wikipedia/commons/3/3c/Zoom_H5.jpg',
+      heroFallback:'assets/book/best-practices/sequencer-audio-tracks.webp',
+      heroAlt:'A Zoom H5 portable field recorder with stereo microphones.',
+      imageCaption:'Real-world reference: clean game audio starts at capture. Monitor levels, microphone position and unwanted background sound before trying to repair recordings later.',
+      imageCredit:'SkywalkerPL — Zoom H5 (CC BY 4.0), Wikimedia Commons', imageLink:'https://commons.wikimedia.org/wiki/File:Zoom_H5.jpg',
+      secondaryImage:'assets/book/best-practices/sequencer-audio-tracks.webp',
+      secondaryAlt:'Unreal Engine Sequencer audio tracks.',
+      secondaryCaption:'Engine reference: the finished library is not just a folder of WAV files. Sounds should be named and organised so another developer can quickly place and time them in-game.',
       theory:[
         {label:'GameSound.org – game audio learning resources',url:'https://www.gamesound.org/'},
         {label:'Epic: Audio in Unreal Engine',url:'https://dev.epicgames.com/documentation/unreal-engine/audio-in-unreal-engine'},
@@ -114,11 +128,14 @@ window.LEVEL4_SPECIALIST_PROJECTS = {
       id:'sequencer-cinematic', icon:'▶', title:'Sequencer Cinematic', role:'Cinematics / Animation', time:'1–2 weeks',
       strap:'Use the Edith Finch assets as your film set. Direct a short story through camera, timing, staging, light and sound.',
       outcome:'A 30–60 second in-engine cinematic built in Unreal Sequencer using existing assets, with 5–10 planned shots and at least one animated prop, event or environmental change.',
-      heroImage:'https://images.steamusercontent.com/ugc/16481460338892297344/046D5035109AA286D15F535C62B89A8F9D546900/?ima=fit&imcolor=%23000000&impolicy=Letterbox&imw=1024&letterbox=false',
-      heroAlt:'What Remains of Edith Finch interior used as visual inspiration for staging, light, framing and cinematic storytelling.',
-      imageCredit:'Community screenshot – What Remains of Edith Finch', imageLink:'https://steamcommunity.com/app/501300/screenshots/',
-      secondaryImage:'https://cdn.kwork.com/files/portfolio/t3/16/c4a2792edce40c8afc4aa72d62d27a18b30b6351-1701300890.jpg',
+      heroImage:'assets/tutorials/sequencer-master/virtual-filmmaking-p439.webp',
+      heroAlt:'Unreal Engine cinematic camera and Sequencer reference from the Hub.',
+      imageCaption:'Unreal reference: treat the Edith Finch assets as a film set. Frame only what the audience needs, then use camera position, lens choice and timing to control the reveal.',
+      imageCredit:'UE5 Sequencer reference — existing Hub guide', imageLink:'#/tutorial/sequencer-master-guide',
+      secondaryImage:'https://upload.wikimedia.org/wikipedia/commons/8/84/Storyboard.jpg',
+      secondaryFallback:'assets/tutorials/sequencer-master/virtual-filmmaking-p437.webp',
       secondaryAlt:'Storyboard panels demonstrating planned shot size and framing.',
+      secondaryCaption:'Storyboard before Sequencer: decide what each shot communicates, its size and approximate duration before polishing camera moves.',
       theory:[
         {label:'Epic UE5.8: Cinematics and Sequencer',url:'https://dev.epicgames.com/documentation/unreal-engine/cinematics-and-movie-making-in-unreal-engine'},
         {label:'Epic UE5.8: Sequencer Basics',url:'https://dev.epicgames.com/documentation/unreal-engine/how-to-make-movies-in-unreal-engine'},
@@ -139,26 +156,32 @@ window.LEVEL4_SPECIALIST_PROJECTS = {
       stretch:'Build one moment twice with different camera/edit choices and compare how the audience interpretation changes.'
     },
     {
-      id:'programming', icon:'⌘', title:'Programming Missions', role:'Gameplay Programming', time:'Choose from existing tasks',
-      strap:'Use the programming missions already in the Hub. Pick a system that makes you think, test and debug.',
-      outcome:'A working Unreal gameplay system from the existing programming task bank, with evidence of planning, implementation, testing and debugging.',
-      heroImage:'', heroAlt:'', imageCredit:'', imageLink:'',
+      id:'programming', icon:'⌘', title:'Programmer Skill Missions', role:'Gameplay Programming', time:'Three linked guided builds',
+      href:'#/skill-mission/arrays-maps-escape-room/start',
+      strap:'Build one small Escape Room step by step: Arrays & Maps → Structs & Data Tables → Functions.',
+      outcome:'A complete solo Blueprint Escape Room. First make the game work with an Inventory Array and item-information Map, then refactor the same project into structured Data Table content and reusable Functions.',
+      heroImage:'assets/tutorials/blueprint-foundations/maps-02-container-menu.webp',
+      heroAlt:'Unreal Blueprint variable container menu showing collection types used for Arrays and Maps.',
+      imageCaption:'Start small and finish the whole game. Mission 1 takes you from an empty Third Person project to battery → generator → key → locked exit → win screen before the later missions improve the architecture.',
+      imageCredit:'UE5 Arrays & Maps reference — existing Hub guide', imageLink:'#/block/arrays-sets-maps',
+      secondaryImage:'assets/tutorials/blueprint-foundations/structs-03-fields.webp',
+      secondaryFallback:'assets/power-jam-programmer/03-powerstates-map-type.png',
+      secondaryAlt:'Unreal Structure fields used to group related data.',
+      secondaryCaption:'The same game then grows with you: Mission 2 moves item data into Structs/Data Tables; Mission 3 extracts repeated logic into Functions instead of starting over.',
       theory:[
-        {label:'Open Unreal Learning',url:'#/programming'},
-        {label:'Power Jam Programmer Guide',url:'#/tutorial/power-jam-programmer'},
-        {label:'Building Blocks reference',url:'#/blocks'}
+        {label:'Start Mission 1 — Escape Room: Arrays & Maps',url:'#/skill-mission/arrays-maps-escape-room/start'},
+        {label:'Building Block — Arrays, Sets & Maps',url:'#/block/arrays-sets-maps'},
+        {label:'Building Block — Structs',url:'#/block/structs'},
+        {label:'Building Block — Data Tables',url:'#/block/data-tables'},
+        {label:'Building Block — Functions, Custom Events & Macros',url:'#/block/functions-events-macros'}
       ],
-      learn:['Blueprint/system design','Breaking problems into steps','Testing','Debugging','Readable implementation','Explaining why a solution works'],
+      learn:['Arrays and inventory state','Maps and key → value data','Branches and game flow','Widgets and start/win screens','Structs and Data Tables','Functions and reusable logic','Testing one stage before unlocking the next'],
       stages:[
-        {n:'01',title:'Choose the mission',do:'Pick one of the programming tasks already provided. Choose something that extends your skill rather than repeating a system you can already make from memory.',why:'The task should create learning, not just output.',check:'You can name the new technical idea you expect to practise.',fix:'Move up a level if you already know the complete solution.'},
-        {n:'02',title:'Define the behaviour',do:'Write the player-facing behaviour and success conditions before opening Blueprint.',why:'Programming becomes easier when “working” has a testable definition.',check:'You have a short list of observable pass/fail behaviours.',fix:'Replace vague goals like “make it good” with actions and states.'},
-        {n:'03',title:'Break it into parts',do:'Identify events, state/data, decisions, reusable functions and communication between Blueprints.',why:'Decomposition prevents a single giant graph.',check:'You can build/test one part independently.',fix:'If the plan is one long sequence of nodes, separate responsibilities.'},
-        {n:'04',title:'Build the smallest working version',do:'Get the core loop functioning before UI, VFX or polish.',why:'A thin working slice exposes logic problems early.',check:'The system performs its main job in-game.',fix:'Use Print String, breakpoints and watch values before adding more nodes.'},
-        {n:'05',title:'Test edge cases',do:'Try unexpected order, repeated input, missing references, boundary values and restart/reset behaviour.',why:'Robust systems survive player behaviour you did not imagine.',check:'You have found and fixed at least one failure case.',fix:'If you cannot break it, ask somebody else to try.'},
-        {n:'06',title:'Refactor and explain',do:'Rename variables/functions, remove duplication, comment decisions and capture evidence of the final logic.',why:'Readable code is part of the outcome.',check:'Another programmer can follow the system without you narrating every node.',fix:'If the graph needs a paragraph-long comment, simplify the graph.'}
+        {n:'01',title:'Mission 1 — Arrays & Maps: build the complete Escape Room',do:'Start with the Third Person template and follow the guided mission from the room blockout through Start Menu, Battery pickup, Inventory Array, Generator, Key, item-description Map, locked Exit and Win Screen.',why:'You learn the containers inside a complete playable loop instead of isolated node exercises.',check:'You can start, collect the Battery, power the Generator, collect the Key, unlock the Exit, win and restart.',fix:'Do not jump ahead. Each mission page has its own DO THIS / WHY / CHECK steps; fix the current test before unlocking the next stage.'},
+        {n:'02',title:'Mission 2 — Structs & Data Tables: stop hard-coding',do:'Continue the same project. Group item fields in a Struct and move repeated item content into a Data Table so Blueprints ask for data instead of storing every value separately.',why:'This turns a one-off prototype into a system that can grow without duplicating variables and branches everywhere.',check:'Adding or changing an item is mainly a data edit rather than rewriting several Blueprints.',fix:'If item names, descriptions or properties are still scattered through graphs, move the content back to the shared data source.'},
+        {n:'03',title:'Mission 3 — Functions: stop repeating logic',do:'Continue the Escape Room again. Identify repeated logic, convert appropriate pieces into clearly named Functions and test that behaviour has not changed.',why:'Reusable functions make the project easier to read, debug and expand.',check:'Repeated implementation has reduced and another programmer can understand the important function names without tracing every wire.',fix:'Do not make one giant function. Give each function one clear job and keep game state where it belongs.'}
       ],
-      deliver:['Working system','Short behaviour/success plan','Testing evidence','At least one documented bug + fix','Readable final Blueprint/code','Short explanation of key decisions'],
-      stretch:'Let another programmer review the solution and make one refactor based on their feedback.'
-    }
-  ]
+      deliver:['One working Escape Room built from start screen to win screen','Mission 1 completed: Arrays & Maps','Mission 2 completed: Structs & Data Tables','Mission 3 completed: Functions & reusable logic','Stage-by-stage testing evidence','Readable final Blueprint structure'],
+      stretch:'After all three missions, add one new item or puzzle element using the data-driven/reusable system without rebuilding the original logic.'
+    }  ]
 };

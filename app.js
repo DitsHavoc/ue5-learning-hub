@@ -19,6 +19,7 @@ const MODEL_VIDEOS = window.UE5_MODELING_VIDEOS;
 const SCULPT = window.UE5_SCULPT_DATA;
 const STUDY = window.UE5_STUDY_DATA;
 const BACKEND = window.UE5_BACKEND;
+const SKILL_MISSIONS = window.UE5_SKILL_MISSIONS || {missions:[]};
 
 // V3.19 deepens Designer Studio using the same Quick Tutorial recipe system so students can
 // search programming and design help from one place while still having a dedicated design curriculum.
@@ -1924,6 +1925,109 @@ function dashboard(){
 }
 
 
+const SKILL_MISSION_STORE='ue5hub:skill-missions:v1';
+function skillMission(id){return (SKILL_MISSIONS.missions||[]).find(x=>x.id===id)}
+function loadSkillMissionState(){
+  try{
+    const raw=JSON.parse(localStorage.getItem(SKILL_MISSION_STORE)||'{}');
+    return raw&&typeof raw==='object'?raw:{};
+  }catch(e){return {}}
+}
+function saveSkillMissionState(value){
+  try{localStorage.setItem(SKILL_MISSION_STORE,JSON.stringify(value))}catch(e){}
+}
+function skillMissionDoneStages(id){
+  const s=loadSkillMissionState(),rows=s[id]?.completedStages;
+  return Array.isArray(rows)?rows:[];
+}
+function skillMissionStageDone(id,stageId){return skillMissionDoneStages(id).includes(stageId)}
+function skillMissionProgress(id){
+  const m=skillMission(id);if(!m)return {done:0,total:0,pct:0,complete:false};
+  const done=m.stages.filter(s=>skillMissionStageDone(id,s.id)).length,total=m.stages.length;
+  return {done,total,pct:total?Math.round(done/total*100):0,complete:done===total};
+}
+function skillMissionPrereqMet(m){
+  if(!m?.requiresMission)return true;
+  return skillMissionProgress(m.requiresMission).complete;
+}
+function skillMissionStageUnlocked(m,index){
+  if(!skillMissionPrereqMet(m))return false;
+  if(index<=0)return true;
+  return skillMissionStageDone(m.id,m.stages[index-1].id);
+}
+function skillMissionNextIndex(m){
+  const i=m.stages.findIndex(s=>!skillMissionStageDone(m.id,s.id));
+  if(i<0)return Math.max(0,m.stages.length-1);
+  return Math.max(0,i);
+}
+function skillMissionCard(m){
+  const p=skillMissionProgress(m.id),next=m.stages[skillMissionNextIndex(m)],ready=skillMissionPrereqMet(m),req=m.requiresMission?skillMission(m.requiresMission):null;
+  return `<a class="skill-mission-card ${p.complete?'done':''} ${ready?'':'locked'}" href="#/skill-mission/${m.id}/${next?.id||m.stages[0]?.id||''}">
+    <div class="skill-mission-card-icon">${ready?(m.icon||'⌘'):'🔒'}</div>
+    <div class="skill-mission-card-copy"><span class="eyebrow">${esc(m.discipline||'Programmer')} SKILL MISSION${m.sequence?` ${m.sequence}`:''} • ${esc(m.duration||'Guided build')}</span><h3>${esc(m.title)}</h3><p>${esc(m.subtitle||m.summary||'')}</p><div class="tutorial-tag-row">${(m.skills||[]).slice(0,6).map(x=>`<span>${esc(x)}</span>`).join('')}</div><div class="skill-mission-progress-row"><div class="progress"><span style="width:${p.pct}%"></span></div><small>${ready?`${p.done}/${p.total} stages complete`:`Unlocks after ${esc(req?.title||'the previous mission')}`}</small></div></div>
+    <strong>${p.complete?'✓ Revisit mission':ready?'Start / continue →':'🔒 Locked'}</strong>
+  </a>`;
+}
+function skillMissionFlow(items){
+  if(!items?.length)return '';
+  return `<div class="skill-flow">${items.map((x,i)=>`<span>${esc(x)}</span>${i<items.length-1?'<b>→</b>':''}`).join('')}</div>`;
+}
+function skillMissionStep(step,i){
+  return `<article class="skill-step-card"><div class="skill-step-num">${String(i+1).padStart(2,'0')}</div><div class="skill-step-body"><h3>${esc(step.title)}</h3>
+    <div class="skill-step-field where"><span>WHERE TO WORK</span><p>${esc(step.where||'')}</p></div>
+    <div class="skill-step-field do"><span>DO THIS</span><p>${esc(step.do||'')}</p></div>
+    <div class="skill-step-field check"><span>TEST / CHECK</span><p>${esc(step.check||'')}</p></div>
+    <div class="skill-step-field why"><span>WHY</span><p>${esc(step.why||'')}</p></div>
+  </div></article>`;
+}
+function skillMissionPage(id,requestedStage){
+  const m=skillMission(id);if(!m)return notFound();
+  const p=skillMissionProgress(id);
+  if(!skillMissionPrereqMet(m)){
+    const req=skillMission(m.requiresMission),rp=skillMissionProgress(m.requiresMission),ri=req?skillMissionNextIndex(req):0,rstage=req?.stages?.[ri];
+    return `<div class="breadcrumb"><a href="#/">Home</a> / <a href="#/programming">Unreal Learning</a> / ${esc(m.title)}</div>
+    <section class="skill-mission-hero"><div><span class="eyebrow">${esc(m.discipline)} SKILL MISSION${m.sequence?` ${m.sequence}`:''} • NEXT IN PATH</span><h1>🔒 ${esc(m.title)}</h1><p>${esc(m.summary)}</p></div><div class="skill-mission-progress"><strong>LOCKED</strong><span>Finish Mission ${Math.max(1,(m.sequence||2)-1)} first</span></div></section>
+    <section class="content-card skill-locked-stage"><span class="eyebrow">YOUR NEXT PROGRAMMER STEP</span><h2>Finish ${esc(req?.title||'the previous Skill Mission')} first.</h2><p>This mission continues the game you already built. Complete the previous mission so you arrive here with a working Escape Room to refactor.</p>${req&&rstage?`<p><strong>Previous mission progress:</strong> ${rp.done}/${rp.total} stages complete.</p><a class="button primary" href="#/skill-mission/${req.id}/${rstage.id}">Continue Mission ${Math.max(1,(m.sequence||2)-1)} →</a>`:`<a class="button ghost" href="#/programming">Back to Programmer Skill Missions</a>`}</section>`;
+  }
+  let index=requestedStage?m.stages.findIndex(s=>s.id===requestedStage):skillMissionNextIndex(m);
+  if(index<0)index=skillMissionNextIndex(m);
+  const stage=m.stages[index],unlocked=skillMissionStageUnlocked(m,index),done=skillMissionStageDone(id,stage.id);
+  const latest=skillMissionNextIndex(m),latestStage=m.stages[latest];
+  const rail=m.stages.map((s,i)=>{
+    const sd=skillMissionStageDone(id,s.id),su=skillMissionStageUnlocked(m,i),current=i===index;
+    return su?`<a class="skill-stage-link ${sd?'done':''} ${current?'current':''}" href="#/skill-mission/${m.id}/${s.id}"><span>${sd?'✓':String(i).padStart(2,'0')}</span><div><strong>${esc(s.title.replace(/^.*?—\s*/,'').replace(/^.*?-\s*/,''))}</strong><small>${sd?'Complete':current?'Working now':'Unlocked'}</small></div></a>`:`<div class="skill-stage-link locked"><span>🔒</span><div><strong>${esc(s.title.replace(/^.*?—\s*/,'').replace(/^.*?-\s*/,''))}</strong><small>Finish the previous stage</small></div></div>`;
+  }).join('');
+  if(!unlocked){
+    return `<div class="breadcrumb"><a href="#/">Home</a> / <a href="#/programming">Unreal Learning</a> / ${esc(m.title)}</div>
+    <section class="skill-mission-hero"><div><span class="eyebrow">${esc(m.discipline)} SKILL MISSION${m.sequence?` ${m.sequence}`:''} • SOLO</span><h1>${m.icon||'⌘'} ${esc(m.title)}</h1><p>${esc(m.summary)}</p></div><div class="skill-mission-progress"><strong>${p.done}/${p.total}</strong><span>stages complete</span><div class="progress"><span style="width:${p.pct}%"></span></div></div></section>
+    <div class="skill-mission-layout"><aside class="skill-stage-rail">${rail}</aside><section class="content-card skill-locked-stage"><span class="eyebrow">🔒 NOT YET</span><h2>Finish the previous stage first.</h2><p>This mission is intentionally sequential so you test each system before building the next one on top.</p><a class="button primary" href="#/skill-mission/${m.id}/${latestStage.id}">Continue current stage →</a></section></div>`;
+  }
+  const next=m.stages[index+1],prev=m.stages[index-1];
+  return `<div class="breadcrumb"><a href="#/">Home</a> / <a href="#/programming">Unreal Learning</a> / ${esc(m.title)}</div>
+  <section class="skill-mission-hero"><div><span class="eyebrow">${esc(m.discipline)} SKILL MISSION${m.sequence?` ${m.sequence}`:''} • SOLO • ${esc(m.duration)}</span><h1>${m.icon||'⌘'} ${esc(m.title)}</h1><p>${esc(m.summary)}</p><div class="tutorial-tag-row large">${(m.skills||[]).map(x=>`<span>${esc(x)}</span>`).join('')}</div></div><div class="skill-mission-progress"><strong>${p.done}/${p.total}</strong><span>stages complete</span><div class="progress"><span style="width:${p.pct}%"></span></div><small>${p.complete?'Mission complete — revisit any stage.':'Finish one stage, test it, then unlock the next.'}</small></div></section>
+  <section class="skill-mission-rulebar"><div><span class="deep-label">THE RULE</span><h2>One programmer. One complete game.</h2><p>Basic shapes are enough. Do not move on until the current test works.</p></div><div class="skill-rule-chips">${(m.rules||[]).map(x=>`<span>✓ ${esc(x)}</span>`).join('')}</div></section>
+  ${index===0?`<section class="content-card skill-game-brief"><span class="eyebrow">THE WHOLE GAME</span><h2>What you are building</h2><p>${esc(m.subtitle)}</p>${skillMissionFlow(m.gameFlow)}</section>`:''}
+  <div class="skill-mission-layout"><aside class="skill-stage-rail"><div class="skill-rail-head"><small>MISSION PROGRESS</small><strong>${p.pct}%</strong></div>${rail}</aside>
+  <main class="skill-stage-main">
+    <section class="skill-stage-hero ${done?'done':''}"><div><span class="eyebrow">STAGE ${String(index).padStart(2,'0')} OF ${String(m.stages.length-1).padStart(2,'0')}${done?' • ✓ COMPLETE':''}</span><h2>${esc(stage.title)}</h2><p>${esc(stage.goal)}</p></div><div class="skill-stage-why"><span>WHY THIS STAGE EXISTS</span><p>${esc(stage.why)}</p></div></section>
+    ${skillMissionFlow(stage.flow)}
+    <section class="skill-step-list">${(stage.steps||[]).map(skillMissionStep).join('')}</section>
+    <section class="skill-stage-test"><div><span class="eyebrow">STOP & TEST</span><h2>Do not continue until these work</h2><ul>${(stage.test||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><div class="skill-done-when"><small>STAGE IS DONE WHEN</small><strong>${esc(stage.doneWhen||'Everything above works.')}</strong></div></section>
+    ${(stage.common||[]).length?`<details class="content-card skill-troubleshoot"><summary>⚠ If yours does not work</summary><ul>${stage.common.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></details>`:''}
+    ${(stage.challenges||[]).length?`<section class="content-card skill-challenges"><span class="eyebrow">FINISHED THE CORE GAME?</span><h2>Independent upgrades</h2><p>Choose one after the complete play-through works.</p><ul>${stage.challenges.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></section>`:''}
+    <section class="skill-stage-actions">${prev?`<a class="button ghost" href="#/skill-mission/${m.id}/${prev.id}">← Previous stage</a>`:'<span></span>'}${done?(next?`<a class="button primary" href="#/skill-mission/${m.id}/${next.id}">Next stage →</a>`:`<a class="button success" href="#/programming">✓ Mission complete</a>`):`<button class="button primary" data-action="complete-skill-stage" data-mission="${m.id}" data-stage="${stage.id}">${next?'✓ This stage works — unlock next':'✓ Full game tested — complete mission'}</button>`}</section>
+  </main></div>`;
+}
+function completeSkillMissionStage(missionId,stageId){
+  const m=skillMission(missionId);if(!m)return;
+  const i=m.stages.findIndex(s=>s.id===stageId);if(i<0||!skillMissionStageUnlocked(m,i))return;
+  const all=loadSkillMissionState(),row=all[missionId]||{completedStages:[]},set=new Set(Array.isArray(row.completedStages)?row.completedStages:[]);
+  set.add(stageId);row.completedStages=[...set];all[missionId]=row;saveSkillMissionState(all);
+  const next=m.stages[i+1];
+  toast(next?'Stage complete — next stage unlocked.':'Skill Mission complete — you built the whole game.');
+  if(next)location.hash=`#/skill-mission/${m.id}/${next.id}`;else route();
+}
+
 function programmingPage(){
   const i=level(),n=nextLesson(),np=pathProgress(n.path),pb=pendingUnlockedBuild(),blocksDone=(state.blockCompleted||[]).length,coreBlocks=BLOCKS.blocks.filter(b=>b.tier==='core'),coreDone=coreBlocks.filter(b=>blockDone(b.id)).length;
   const guides=unrealMasterGuides();
@@ -1932,6 +2036,7 @@ function programmingPage(){
   <section class="content-card tutorial-next github-team-home-card"><div><span class="eyebrow">PAIR JAM • TEAM SETUP + PROGRAMMER ROUTE</span><h2>🔀 GitHub first. ⚡ Then build the Power mechanic.</h2><p>For the two-person jam, get the same project safely onto both PCs first. Then the Programmer follows the photographed Power Jam guide while the Designer owns the main level.</p></div><div class="tutorial-next-links"><a class="button primary" href="#/tutorial/github-unreal-team-workflow">🔀 GitHub team setup →</a><a class="button" href="#/tutorial/power-jam-programmer">⚡ Programmer mechanic guide →</a></div></section>
   <section class="section master-guides-programming" id="master-guides"><div class="section-head"><div><span class="eyebrow">03 • FULL WORKFLOWS</span><h2>🧭 Unreal Master Guides</h2><p>These are part of Unreal Learning — not separate mini-sites. Each guide has one authoritative start-to-finish workflow, clear checkpoints and a focused Revision check. Engine guides may also bridge into Unreal Designer application tasks.</p></div><a class="button ghost" href="#/tutorials">See Quick Tutorials →</a></div><div class="master-guide-grid">${guides.map(masterGuideCard).join('')}</div></section>
   <section class="programming-continue"><div><span class="eyebrow">CONTINUE CORE SYSTEMS • ${esc(path(n.path).title)}</span><h2>${esc(n.title)}</h2><p>${esc(n.short)}</p><div class="path-meta"><span>${n.duration} • ${n.xp} XP</span><span>${np.pct}% path complete</span></div><div class="progress"><span style="width:${np.pct}%"></span></div></div><div class="programming-continue-actions"><a class="button primary" href="${pb?`#/chapter-build/${pb.path}`:`#/lesson/${n.id}`}">${pb?`🎮 Build: ${esc(pb.title)}`:'▶ Continue core lesson'}</a><a class="button ghost" href="#/blocks">🧱 Building Blocks</a></div></section>
+  ${(SKILL_MISSIONS.missions||[]).length?`<section class="section skill-mission-section"><div class="section-head"><div><span class="eyebrow">LEVEL 4 • SOLO PROGRAMMER BUILDS</span><h2>⌘ Programmer Skill Missions</h2><p>Build one small Escape Room step by step. Mission 1 makes it work with Arrays & Maps; Mission 2 replaces hard-coded content with Structs & Data Tables; Mission 3 refactors repeated logic into Functions.</p></div></div><div class="skill-mission-grid">${SKILL_MISSIONS.missions.map(skillMissionCard).join('')}</div></section>`:''}
   <section class="snippet-programming-cta integrated"><div><span class="eyebrow">⚡ EPIC PASTE ASSISTS</span><h2>Learn the system first; use the shortcut at the right moment.</h2><p>Use the official Epic paste assists inside the relevant Unreal Learning lessons and recipe families. The standalone bank remains a searchable reference shelf when you need to find one directly.</p></div><a class="button ghost" href="#/snippets">Search the reference bank →</a></section>
   <div class="stat-grid programming-stats"><div class="stat"><small>Building Blocks</small><strong>${blocksDone}/${BLOCKS.blocks.length}</strong></div><div class="stat"><small>Core lessons</small><strong>${completedLessons().length}/${DATA.lessons.length}</strong></div><div class="stat"><small>Master Guides</small><strong>${guides.filter(t=>tutorialDone(t.id)).length}/${guides.length}</strong></div><div class="stat"><small>Total XP</small><strong>${i.xp}</strong></div></div>
   <section class="section"><div class="section-head"><div><span class="eyebrow">WHEN YOU WANT THE DEEPER VERSION</span><h2>Core System Lessons</h2><p>These are not prerequisites for every tutorial. Follow them in order as a course, or open the system your project needs.</p></div></div><div class="path-grid">${DATA.paths.map(p=>{const x=pathProgress(p.id);return `<a class="path-card" href="#/path/${p.id}"><div class="path-icon">${p.icon}</div><h3>${esc(p.title)}</h3><p>${esc(p.description)}</p><div class="path-meta"><span>${x.done}/${x.total} lessons</span><span>${x.pct}%</span></div><div class="progress"><span style="width:${x.pct}%"></span></div></a>`}).join('')}</div></section>
@@ -3299,13 +3404,13 @@ function level4SpecialistHub(){
   if(!data)return `<div class="empty">Level 4 project data could not load.</div>`;
   return `<div class="level4-shell">
     <section class="level4-hero"><div class="level4-kicker">${esc(data.intro.kicker)}</div><h1>${esc(data.intro.title)}</h1><p>${esc(data.intro.summary)}</p><div class="level4-warning"><strong>One pathway only.</strong> Choose the discipline you want to develop or show in your portfolio. The goal is one strong specialist outcome, not a quick attempt at every option.</div></section>
-    <section class="level4-choice-grid">${data.projects.map(p=>`<a class="level4-choice" href="#/level4/${p.id}"><div class="icon">${p.icon}</div><h2>${esc(p.title)}</h2><div class="role">${esc(p.role)} · ${esc(p.time)}</div><p>${esc(p.strap)}</p><div class="go">Open pathway →</div></a>`).join('')}</section>
+    <section class="level4-choice-grid">${data.projects.map(p=>`<a class="level4-choice" href="${p.href||`#/level4/${p.id}`}"><div class="icon">${p.icon}</div><h2>${esc(p.title)}</h2><div class="role">${esc(p.role)} · ${esc(p.time)}</div><p>${esc(p.strap)}</p><div class="go">Open pathway →</div></a>`).join('')}</section>
   </div>`;
 }
 function level4SpecialistProjectPage(id){
  const p=level4ProjectData(id); if(!p)return notFound();
- const visual=p.heroImage?`<figure class="level4-visual"><img src="${p.heroImage}" alt="${esc(p.heroAlt||'Reference image')}" loading="lazy"><figcaption><a href="${p.imageLink}" target="_blank" rel="noopener">${esc(p.imageCredit||'Reference image')} ↗</a></figcaption></figure>`:'';
- const secondary=p.secondaryImage?`<figure class="level4-visual level4-secondary"><img src="${p.secondaryImage}" alt="${esc(p.secondaryAlt||'Additional process reference')}" loading="lazy"><figcaption>Process reference: plan the shot before polishing it.</figcaption></figure>`:'';
+ const visual=p.heroImage?`<figure class="level4-visual"><img src="${p.heroImage}" alt="${esc(p.heroAlt||'Reference image')}" loading="lazy" ${p.heroFallback?`onerror="this.onerror=null;this.src='${p.heroFallback}'"`:''}><figcaption>${p.imageCaption?`<span class="level4-image-caption">${esc(p.imageCaption)}</span>`:''}${p.imageLink?`<a href="${p.imageLink}" ${p.imageLink.startsWith('#/')?'':'target="_blank" rel="noopener"'}>${esc(p.imageCredit||'Reference image')}${p.imageLink.startsWith('#/')?'':' ↗'}</a>`:esc(p.imageCredit||'Reference image')}</figcaption></figure>`:'';
+ const secondary=p.secondaryImage?`<figure class="level4-visual level4-secondary"><img src="${p.secondaryImage}" alt="${esc(p.secondaryAlt||'Additional process reference')}" loading="lazy" ${p.secondaryFallback?`onerror="this.onerror=null;this.src='${p.secondaryFallback}'"`:''}><figcaption>${esc(p.secondaryCaption||'Process reference: study the example before polishing your own work.')}</figcaption></figure>`:'';
  return `<div class="level4-shell"><a class="level4-back" href="#/level4">← Level 4 Specialist Projects</a>
  <section class="level4-project-head ${p.heroImage?'':'no-image'}"><div class="level4-project-copy"><div class="level4-kicker">${p.icon} ${esc(p.role)}</div><h1>${esc(p.title)}</h1><div class="meta"><span class="level4-pill">Choose-one specialist task</span><span class="level4-pill">${esc(p.time)}</span></div><p class="level4-outcome"><strong>Outcome:</strong> ${esc(p.outcome)}</p></div>${visual}</section>
  <section class="level4-section"><h2>What you will practise</h2><div class="level4-learn">${p.learn.map(x=>`<span>${esc(x)}</span>`).join('')}</div></section>
@@ -3333,6 +3438,7 @@ function route(options={}){
   else if(parts[0]==='pathways'){app.innerHTML=guidedPathsPage();activate('pathways')}
   else if(parts[0]==='level4'&&parts[1]){app.innerHTML=level4SpecialistProjectPage(parts[1]);activate('level4')}
   else if(parts[0]==='level4'){app.innerHTML=level4SpecialistHub();activate('level4')}
+  else if(parts[0]==='skill-mission'&&parts[1]){app.innerHTML=skillMissionPage(parts[1],parts[2]);activate('programming')}
   else if(parts[0]==='programming'){app.innerHTML=programmingPage();activate('programming')}
   else if(parts[0]==='blocks'){app.innerHTML=blocksPage();activate('blocks')}
   else if(parts[0]==='block'&&parts[1]){app.innerHTML=blockPage(parts[1]);activate('blocks')}
@@ -3957,6 +4063,7 @@ document.addEventListener('click',async e=>{
   else if(a==='complete-studio-step') await setStudioStepComplete(b.dataset.tutorial,b.dataset.stage);
   else if(a==='complete-tutorial') await setTutorialComplete(b.dataset.tutorial);
   else if(a==='complete-chapter-build') await setChapterBuildComplete(b.dataset.path);
+  else if(a==='complete-skill-stage') completeSkillMissionStage(b.dataset.mission,b.dataset.stage);
   else if(a==='complete-design-build') await setDesignBuildComplete(b.dataset.designModule);
   else if(a==='complete-design-source') await setDesignSourceComplete(b.dataset.sourceKey);
   else if(a==='complete-model-video') await setModelVideoComplete(b.dataset.modelVideo);

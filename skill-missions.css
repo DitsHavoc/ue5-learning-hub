@@ -1,10 +1,14 @@
 
-/* UE5 Learning Hub v3.56.3 — Programmer Skill Missions */
+/* UE5 Learning Hub v3.56.4 — Programmer Skill Missions */
 .skill-mission-section{margin-top:26px}
 .skill-mission-grid{display:grid;grid-template-columns:1fr;gap:16px}
 .skill-mission-card{display:grid;grid-template-columns:74px minmax(0,1fr) auto;gap:18px;align-items:center;padding:22px;border:1px solid rgba(111,138,174,.28);border-radius:18px;background:linear-gradient(135deg,rgba(55,84,126,.18),rgba(10,16,25,.7));text-decoration:none;color:inherit;box-shadow:0 14px 34px rgba(0,0,0,.12)}
 .skill-mission-card:hover{transform:translateY(-2px);border-color:rgba(116,167,255,.55)}
 .skill-mission-card.done{border-color:rgba(93,199,142,.55)}
+
+.skill-mission-card.locked{opacity:.72;border-style:dashed;background:linear-gradient(135deg,rgba(92,100,115,.11),rgba(10,16,25,.72))}
+.skill-mission-card.locked:hover{transform:none;border-color:rgba(160,170,188,.36)}
+.skill-mission-card.locked .skill-mission-card-icon{background:rgba(255,255,255,.045);border-color:rgba(255,255,255,.11);font-size:22px}
 .skill-mission-card-icon{display:grid;place-items:center;width:62px;height:62px;border-radius:16px;background:rgba(116,167,255,.14);border:1px solid rgba(116,167,255,.35);font-size:30px;font-weight:800}
 .skill-mission-card-copy h3{font-size:24px;margin:4px 0 7px}
 .skill-mission-card-copy p{margin:0 0 12px;max-width:900px}

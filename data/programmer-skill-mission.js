@@ -1,5 +1,5 @@
 window.UE5_SKILL_MISSIONS = {
-  "version": "3.56.3",
+  "version": "3.57.1",
   "missions": [
     {
       "id": "arrays-maps-escape-room",
@@ -656,6 +656,1350 @@ window.UE5_SKILL_MISSIONS = {
             "Create a second Map such as DoorCodes: Office → 2418, Storage → 6731.",
             "Add a five-minute countdown and a GAME OVER screen.",
             "Add sounds and better visual feedback without changing the core logic."
+          ]
+        }
+      ],
+      "sequence": 1
+    },
+    {
+      "id": "structs-data-tables-item-system",
+      "sequence": 2,
+      "requiresMission": "arrays-maps-escape-room",
+      "discipline": "Programmer",
+      "icon": "▦",
+      "title": "Stop Hard-Coding: Structs & Data Tables",
+      "subtitle": "Upgrade your Escape Room into a data-driven item system without rebuilding the game from scratch.",
+      "duration": "3–5 hours",
+      "difficulty": "Guided solo refactor",
+      "summary": "Your Escape Room works, but item names and descriptions are scattered through Blueprints. Keep the same game and rebuild the item data properly: define ST_ItemData, create DT_ItemData, migrate the inventory to row names, then make one reusable BP_ItemPickup that can become a Coin, Fuse, Wrench or future item just by changing data.",
+      "skills": [
+        "Structs",
+        "Data Tables",
+        "Row Names",
+        "Get Data Table Row",
+        "Break Struct",
+        "Name Arrays",
+        "Add Unique",
+        "Instance Editable",
+        "Refactoring",
+        "Data-driven design"
+      ],
+      "rules": [
+        "Continue the Escape Room from Mission 1. Do not start a different project.",
+        "Keep the old working system until the replacement has passed its test.",
+        "Change data first, then migrate one gameplay system at a time.",
+        "Do not delete the old Map or String Array until nothing uses them."
+      ],
+      "gameFlow": [
+        "Audit old hard-coding",
+        "Create ST_ItemData",
+        "Build DT_ItemData",
+        "Create InventoryRows",
+        "Migrate pickups",
+        "Migrate puzzle checks",
+        "Build generic pickup",
+        "Add item using data only",
+        "Remove old system",
+        "Full regression test"
+      ],
+      "stages": [
+        {
+          "id": "start",
+          "number": 0,
+          "title": "Start Here — Prove Mission 1 Still Works",
+          "goal": "Open the completed Escape Room, test it from start to finish and identify the hard-coded item information you are about to replace.",
+          "why": "Refactoring is safer when you begin from a known working version. If the game is already broken, you cannot tell whether Mission 2 caused the problem.",
+          "steps": [
+            {
+              "title": "Open the same Escape Room project",
+              "where": "Unreal Engine → your EscapeRoom project from Mission 1",
+              "do": "Open LV_EscapeRoom. Use File → Save All before changing anything.",
+              "check": "The correct level is open and all Mission 1 Blueprints are present.",
+              "why": "Mission 2 improves the existing project instead of creating another disconnected exercise."
+            },
+            {
+              "title": "Run one clean play-through",
+              "where": "LV_EscapeRoom → Play",
+              "do": "Start from the Main Menu. Collect Battery → power Generator → collect Key → open Exit → reach Win screen → Play Again.",
+              "check": "The complete game works without editing anything during Play.",
+              "why": "This gives you a working baseline before the refactor."
+            },
+            {
+              "title": "Find the old item storage",
+              "where": "BP_ThirdPersonCharacter",
+              "do": "Locate the old Inventory String Array and ItemDescriptions Map. Also inspect BP_Battery, BP_Key, BP_Generator and BP_ExitDoor for typed words such as Battery, Key and pickup messages.",
+              "check": "You can point to at least three places where item information is typed directly into Blueprint logic.",
+              "why": "This is the hard-coding problem the new system will solve."
+            },
+            {
+              "title": "Do not delete anything yet",
+              "where": "All Mission 1 Blueprints",
+              "do": "Leave Inventory and ItemDescriptions connected. You will build the replacement beside them and remove the old system only after the new one works.",
+              "check": "The original game still compiles exactly as before.",
+              "why": "Keeping the old path temporarily gives you a safe fallback while migrating."
+            }
+          ],
+          "test": [
+            "Mission 1 still completes from Main Menu to Win screen.",
+            "Inventory and ItemDescriptions still exist.",
+            "You have identified where Battery/Key information is hard-coded."
+          ],
+          "doneWhen": "You have a known-good Escape Room and understand what data will be moved out of the Blueprint graphs.",
+          "common": [
+            "If Mission 1 is broken, fix it before continuing.",
+            "Do not duplicate the whole project unless your normal class workflow requires a backup; Save All is enough for this mission.",
+            "Do not remove ItemDescriptions yet."
+          ]
+        },
+        {
+          "id": "struct",
+          "number": 1,
+          "title": "Create ST_ItemData",
+          "goal": "Create one Struct that defines the information every item is allowed to store.",
+          "why": "A Struct groups related values into one organised data shape. Every Data Table row will follow this same structure.",
+          "steps": [
+            {
+              "title": "Create a Data folder",
+              "where": "Content Drawer → your project content folder",
+              "do": "Create a folder named Data and open it.",
+              "check": "You have a clean place for the Struct and Data Table.",
+              "why": "Keeping data assets together makes the system easier to find and maintain."
+            },
+            {
+              "title": "Create the Struct asset",
+              "where": "Content Drawer → Add (+) → Blueprints → Structure",
+              "do": "Create a User Defined Structure named ST_ItemData and open it.",
+              "check": "ST_ItemData opens in the Structure editor.",
+              "why": "This asset defines the columns each item row will contain."
+            },
+            {
+              "title": "Add DisplayName and Description",
+              "where": "ST_ItemData",
+              "do": "Add DisplayName of type Text and Description of type Text.",
+              "check": "Both fields appear with Text as their type.",
+              "why": "The internal row ID can stay code-friendly while player-facing text can be readable."
+            },
+            {
+              "title": "Add the feedback messages",
+              "where": "ST_ItemData",
+              "do": "Add PickupMessage of type Text and UseMessage of type Text.",
+              "check": "The Struct now has four Text fields.",
+              "why": "Pickup/use wording should be content data rather than typed repeatedly into graphs."
+            },
+            {
+              "title": "Add gameplay metadata",
+              "where": "ST_ItemData",
+              "do": "Add IsQuestItem of type Boolean and Value of type Integer. Save the Struct.",
+              "check": "ST_ItemData contains exactly DisplayName, Description, PickupMessage, UseMessage, IsQuestItem and Value.",
+              "why": "The same row can now hold both player-facing information and simple gameplay metadata."
+            }
+          ],
+          "flow": [
+            "ST_ItemData",
+            "DisplayName",
+            "Description",
+            "PickupMessage",
+            "UseMessage",
+            "IsQuestItem",
+            "Value"
+          ],
+          "test": [
+            "ST_ItemData exists in the Data folder.",
+            "All six fields use the correct types.",
+            "The Struct saves without errors."
+          ],
+          "doneWhen": "ST_ItemData is a saved six-field definition for every inventory item.",
+          "common": [
+            "Use Text for player-facing wording, not String.",
+            "IsQuestItem must be Boolean and Value must be Integer.",
+            "If later nodes do not update after changing the Struct, Save/Compile affected assets again."
+          ]
+        },
+        {
+          "id": "data-table",
+          "number": 2,
+          "title": "Create DT_ItemData and Your First Rows",
+          "goal": "Create a Data Table based on ST_ItemData and fill it with Battery, ExitKey, Coin and Fuse rows.",
+          "why": "The Struct defines the shape; the Data Table stores many actual items that use that shape.",
+          "steps": [
+            {
+              "title": "Create DT_ItemData",
+              "where": "Content Drawer → Data → Add (+) → Miscellaneous → Data Table",
+              "do": "Choose ST_ItemData when Unreal asks for the Row Structure. Name the new asset DT_ItemData and open it.",
+              "check": "The table columns match the fields in ST_ItemData.",
+              "why": "Every row in this table now follows the same item definition."
+            },
+            {
+              "title": "Add the Battery row",
+              "where": "DT_ItemData → Add row",
+              "do": "Row Name = Battery. DisplayName = Battery. Description = A heavy battery. It looks powerful enough to run the generator. PickupMessage = Battery collected! UseMessage = The battery powers the generator. IsQuestItem = True. Value = 0.",
+              "check": "Battery appears as a row and all six values are filled correctly.",
+              "why": "This moves Battery information into one authoritative record."
+            },
+            {
+              "title": "Add the ExitKey row",
+              "where": "DT_ItemData → Add row",
+              "do": "Row Name = ExitKey. DisplayName = Exit Key. Description = A small metal key. It looks like it belongs to the exit door. PickupMessage = Exit Key collected! UseMessage = The key unlocks the exit. IsQuestItem = True. Value = 0.",
+              "check": "The internal ID is ExitKey while the player-facing DisplayName is Exit Key.",
+              "why": "Row Name can be stable and code-friendly without controlling the text the player sees."
+            },
+            {
+              "title": "Add Coin and Fuse rows",
+              "where": "DT_ItemData → Add row",
+              "do": "Coin: DisplayName Old Coin; Description An old coin. It does not seem useful, but it might be worth something.; PickupMessage Old Coin collected!; UseMessage There is nowhere obvious to use this.; IsQuestItem False; Value 100. Fuse: DisplayName Fuse; Description A replacement electrical fuse.; PickupMessage Fuse collected!; UseMessage This looks like part of an electrical system.; IsQuestItem True; Value 0.",
+              "check": "DT_ItemData now has Battery, ExitKey, Coin and Fuse rows.",
+              "why": "Multiple rows prove the table is a reusable content store rather than a Battery-only trick."
+            },
+            {
+              "title": "Save the table",
+              "where": "DT_ItemData",
+              "do": "Save DT_ItemData and close/reopen it once.",
+              "check": "All four rows and their values are still present.",
+              "why": "You want to catch an unsaved table before any Blueprint depends on it."
+            }
+          ],
+          "flow": [
+            "ST_ItemData",
+            "DT_ItemData",
+            "Battery",
+            "ExitKey",
+            "Coin",
+            "Fuse"
+          ],
+          "test": [
+            "DT_ItemData uses ST_ItemData as its row structure.",
+            "Exactly four starter rows exist: Battery, ExitKey, Coin, Fuse.",
+            "ExitKey is the Row Name but Exit Key is the DisplayName."
+          ],
+          "doneWhen": "You have one Data Table holding four complete item records.",
+          "common": [
+            "Choose ST_ItemData when creating the Data Table; do not create a table with the wrong row structure.",
+            "Row Names must match exactly later, including spelling.",
+            "Do not put spaces in ExitKey Row Name for this mission."
+          ]
+        },
+        {
+          "id": "inventory-rows",
+          "number": 3,
+          "title": "Create InventoryRows and Prove Data Lookup Works",
+          "goal": "Create a Name Array for Data Table row IDs and successfully retrieve the Battery record in Blueprint.",
+          "why": "The inventory only needs to remember which item rows the player owns. The Data Table can supply the rest of the information when needed.",
+          "steps": [
+            {
+              "title": "Create InventoryRows",
+              "where": "BP_ThirdPersonCharacter → My Blueprint",
+              "do": "Create a variable named InventoryRows. Type = Name. Change the container type to Array. Compile.",
+              "check": "InventoryRows shows a Name pin type and Array container icon.",
+              "why": "Names match the Row Name input used by Data Table lookups."
+            },
+            {
+              "title": "Create a temporary lookup test",
+              "where": "BP_ThirdPersonCharacter → Event Graph",
+              "do": "Add a temporary T keyboard event. Add Get Data Table Row. Set Data Table = DT_ItemData and Row Name = Battery.",
+              "check": "Get Data Table Row exposes Row Found, Row Not Found and an Out Row matching ST_ItemData.",
+              "why": "A tiny isolated test proves the table connection before you change real gameplay."
+            },
+            {
+              "title": "Read the returned Struct",
+              "where": "BP_ThirdPersonCharacter → temporary T test",
+              "do": "From Out Row create Break ST_ItemData. From Description, connect to Print String. If Unreal needs a conversion, use the Text-to-String conversion it offers. Connect T execution through Get Data Table Row Row Found to Print String.",
+              "check": "The execution path only prints after Row Found.",
+              "why": "Break ST_ItemData exposes each field stored in the returned row."
+            },
+            {
+              "title": "Run the lookup",
+              "where": "LV_EscapeRoom → Play",
+              "do": "Press T once.",
+              "check": "The screen prints: A heavy battery. It looks powerful enough to run the generator.",
+              "why": "This proves Blueprint is reading live item content from DT_ItemData."
+            },
+            {
+              "title": "Delete only the temporary T test",
+              "where": "BP_ThirdPersonCharacter",
+              "do": "After the test works, delete the temporary T chain. Keep InventoryRows.",
+              "check": "The graph is clean and InventoryRows remains.",
+              "why": "Real gameplay will now perform the lookups."
+            }
+          ],
+          "flow": [
+            "Row Name: Battery",
+            "Get Data Table Row",
+            "Row Found",
+            "Break ST_ItemData",
+            "Description",
+            "Print"
+          ],
+          "test": [
+            "InventoryRows is an empty Name Array.",
+            "The Battery row can be retrieved with Get Data Table Row.",
+            "The Battery Description prints correctly."
+          ],
+          "doneWhen": "The character can successfully retrieve and read ST_ItemData from DT_ItemData.",
+          "common": [
+            "Use the Row Found execution output, not Row Not Found.",
+            "If Battery is not found, check the exact Row Name in DT_ItemData.",
+            "If Break ST_ItemData does not appear, confirm DT_ItemData really uses ST_ItemData."
+          ]
+        },
+        {
+          "id": "migrate-pickups",
+          "number": 4,
+          "title": "Migrate Battery and Exit Key",
+          "goal": "Make the original pickups use InventoryRows and pull their pickup messages from the Data Table.",
+          "why": "This is the first real migration: game behaviour stays the same, but its content comes from data instead of typed graph text.",
+          "steps": [
+            {
+              "title": "Upgrade BP_Battery inventory storage",
+              "where": "BP_Battery → overlap logic",
+              "do": "Keep the existing overlap and Cast. From the player, Get InventoryRows → Add Unique. Item = Battery. Leave the old Inventory chain nearby until this new path is tested.",
+              "check": "The Battery row ID is added to InventoryRows only once.",
+              "why": "Add Unique prevents accidental duplicate ownership of the same row ID."
+            },
+            {
+              "title": "Read the Battery pickup message",
+              "where": "BP_Battery → after Add Unique",
+              "do": "Add Get Data Table Row: DT_ItemData, Row Name Battery. From Row Found → Break ST_ItemData → PickupMessage → Print String (use Text-to-String conversion if required) → Destroy Actor.",
+              "check": "The Print node no longer contains the words Battery collected! typed directly into it.",
+              "why": "Changing the table should now change the message without editing BP_Battery."
+            },
+            {
+              "title": "Test Battery before removing old logic",
+              "where": "LV_EscapeRoom → Play",
+              "do": "Collect Battery. Confirm the message appears. Temporarily inspect InventoryRows if needed with a breakpoint/watch or a simple debug loop.",
+              "check": "InventoryRows contains Battery and the pickup disappears.",
+              "why": "You migrate one system safely before deleting its previous path."
+            },
+            {
+              "title": "Upgrade BP_Key",
+              "where": "BP_Key → overlap logic",
+              "do": "Repeat the same pattern using InventoryRows → Add Unique with Item = ExitKey. Get DT_ItemData row ExitKey and print its PickupMessage before Destroy Actor.",
+              "check": "Collecting the physical Key prints Exit Key collected! from the table and stores ExitKey in InventoryRows.",
+              "why": "The internal row ID and player-facing name are now properly separated."
+            },
+            {
+              "title": "Prove the message is data-driven",
+              "where": "DT_ItemData → Battery row",
+              "do": "Temporarily change Battery PickupMessage to Power Cell acquired! Save and Play. Collect Battery, then change it back to Battery collected! after the proof.",
+              "check": "The new wording appears without changing BP_Battery.",
+              "why": "This is direct evidence that the Blueprint is reading data rather than hard-coded text."
+            }
+          ],
+          "flow": [
+            "Overlap",
+            "Cast to Player",
+            "InventoryRows",
+            "Add Unique Row Name",
+            "Get DT_ItemData Row",
+            "PickupMessage",
+            "Print",
+            "Destroy"
+          ],
+          "test": [
+            "Battery adds Battery to InventoryRows.",
+            "Key adds ExitKey to InventoryRows.",
+            "Both pickup messages come from DT_ItemData.",
+            "Changing a table message changes the game without graph edits."
+          ],
+          "doneWhen": "Both original pickups behave exactly as before but their identity/message now comes through the new data system.",
+          "common": [
+            "Exit Key pickup stores ExitKey, not Key.",
+            "Do not connect both old and new inventory paths permanently; once the new test passes, the old pickup add can be disconnected/removed.",
+            "If the message does not change after editing the table, Save DT_ItemData before Play."
+          ]
+        },
+        {
+          "id": "migrate-puzzle",
+          "number": 5,
+          "title": "Migrate the Generator, Exit and Inventory Display",
+          "goal": "Move the remaining game logic onto InventoryRows and use DT_ItemData to display owned item information.",
+          "why": "A refactor is only real when the complete game depends on the new system, not just the pickups.",
+          "steps": [
+            {
+              "title": "Upgrade the Generator check",
+              "where": "BP_Generator",
+              "do": "Replace the old Inventory Contains Battery check with InventoryRows → Contains → Battery. On success, Remove Item Battery from InventoryRows. Keep the existing PowerOn = True, light and feedback behaviour.",
+              "check": "Generator without Battery fails; with Battery succeeds; Battery is removed from InventoryRows.",
+              "why": "The puzzle now asks about row IDs rather than old String inventory entries."
+            },
+            {
+              "title": "Upgrade the Exit check",
+              "where": "BP_ExitDoor",
+              "do": "Replace the old Inventory Contains Key check with InventoryRows → Contains → ExitKey. Keep the existing PowerOn AND Key condition and door-opening logic.",
+              "check": "Power only = locked; ExitKey only = locked; Power + ExitKey = opens.",
+              "why": "The final puzzle gate is now using the new inventory system."
+            },
+            {
+              "title": "Upgrade the I inventory loop",
+              "where": "BP_ThirdPersonCharacter → I key debug/display chain",
+              "do": "Replace the old Inventory Array with InventoryRows → For Each Loop. For each Array Element, call Get Data Table Row with DT_ItemData and connect Array Element to Row Name.",
+              "check": "Each stored row name successfully reaches Row Found.",
+              "why": "The array stores only IDs; the Data Table supplies the human-readable information."
+            },
+            {
+              "title": "Display real item information",
+              "where": "Inside the InventoryRows For Each Loop",
+              "do": "Break ST_ItemData. Use Format Text with {Name}: {Description}. Connect DisplayName and Description. Send the formatted result to Print String, converting Text to String if needed.",
+              "check": "Owning ExitKey prints something like Exit Key: A small metal key... rather than just ExitKey.",
+              "why": "One lookup now gives the inventory all player-facing data it needs."
+            },
+            {
+              "title": "Regression-test the original puzzle",
+              "where": "LV_EscapeRoom → Play",
+              "do": "Collect Battery → press I → use Generator → press I → collect Key → press I → open Exit.",
+              "check": "Battery disappears from the displayed inventory when consumed; Exit Key remains; the door opens correctly.",
+              "why": "This proves the new data path supports the complete Mission 1 loop."
+            }
+          ],
+          "flow": [
+            "InventoryRows",
+            "Contains / Remove",
+            "Puzzle logic",
+            "For Each Loop",
+            "Get Data Table Row",
+            "DisplayName + Description"
+          ],
+          "test": [
+            "Generator uses InventoryRows Battery.",
+            "Exit uses InventoryRows ExitKey.",
+            "I displays Data Table names/descriptions.",
+            "The original escape path still works."
+          ],
+          "doneWhen": "All existing gameplay checks use InventoryRows and the inventory display reads item details from DT_ItemData.",
+          "common": [
+            "Use ExitKey in the door check, not the old Key string.",
+            "If Battery remains after powering the Generator, Remove Item is probably still connected to the old Array.",
+            "If I prints Row Names only, make sure Get Data Table Row and Break ST_ItemData are inside the For Each Loop body."
+          ]
+        },
+        {
+          "id": "generic-pickup",
+          "number": 6,
+          "title": "Build One Reusable BP_ItemPickup",
+          "goal": "Create one pickup Blueprint that can represent different items by changing an Instance Editable Row Name.",
+          "why": "A data-driven system becomes genuinely useful when new content stops requiring a new near-identical Blueprint class every time.",
+          "steps": [
+            {
+              "title": "Create BP_ItemPickup",
+              "where": "Content Drawer → Blueprint Class → Actor",
+              "do": "Create BP_ItemPickup. Add a Static Mesh and Sphere Collision.",
+              "check": "The Actor has visible geometry and an overlap component.",
+              "why": "This will become the reusable pickup class for many item rows."
+            },
+            {
+              "title": "Create ItemRow",
+              "where": "BP_ItemPickup → My Blueprint",
+              "do": "Create variable ItemRow. Type = Name. Enable Instance Editable (open-eye icon / Instance Editable in Details). Compile.",
+              "check": "Placed BP_ItemPickup instances expose ItemRow in their Details panel.",
+              "why": "Each placed instance can point at a different Data Table row without changing the Blueprint graph."
+            },
+            {
+              "title": "Add the selected row to the player",
+              "where": "BP_ItemPickup → Sphere Collision → On Component Begin Overlap",
+              "do": "Cast Other Actor to BP_ThirdPersonCharacter. Get InventoryRows → Add Unique. Connect ItemRow into the Item input instead of typing a fixed row name.",
+              "check": "The Add Unique Item pin is fed by the ItemRow variable.",
+              "why": "The same logic can now collect any row name assigned to the placed instance."
+            },
+            {
+              "title": "Read the selected row data",
+              "where": "BP_ItemPickup → after Add Unique",
+              "do": "Get Data Table Row using DT_ItemData. Connect ItemRow to Row Name. Row Found → Break ST_ItemData → PickupMessage → Print String → Destroy Actor.",
+              "check": "No item-specific name or message is typed into this graph.",
+              "why": "Both identity and feedback now come from the selected data row."
+            },
+            {
+              "title": "Handle bad data",
+              "where": "BP_ItemPickup → Get Data Table Row",
+              "do": "From Row Not Found, Print String: ERROR: Item data not found! Do not Destroy Actor on the failure path.",
+              "check": "A bad ItemRow gives a clear error and leaves the pickup available to inspect/fix.",
+              "why": "Reusable systems need a useful failure state, not silent breakage."
+            }
+          ],
+          "flow": [
+            "Placed BP_ItemPickup",
+            "ItemRow",
+            "Add Unique",
+            "Get DT_ItemData Row",
+            "Row Found → message + destroy",
+            "Row Not Found → error"
+          ],
+          "test": [
+            "ItemRow is Instance Editable.",
+            "The graph contains no fixed Battery/Key/Coin identity.",
+            "Row Found collects and destroys; Row Not Found reports an error."
+          ],
+          "doneWhen": "One generic pickup Blueprint can collect any valid DT_ItemData row selected on the placed instance.",
+          "common": [
+            "ItemRow must be Name, not String.",
+            "Remember to enable Instance Editable before looking for ItemRow on a placed Actor.",
+            "Do not Destroy Actor from Row Not Found or the broken item will vanish before you can debug it."
+          ]
+        },
+        {
+          "id": "data-only-items",
+          "number": 7,
+          "title": "Prove New Items Can Be Mostly Data",
+          "goal": "Use BP_ItemPickup to add Coin, Fuse and a brand-new Wrench without creating new item pickup Blueprint classes.",
+          "why": "This is the proof that you have moved from one-off hard-coding to reusable code plus editable content data.",
+          "steps": [
+            {
+              "title": "Place a Coin instance",
+              "where": "LV_EscapeRoom → drag BP_ItemPickup into the level",
+              "do": "Select the placed Actor and set ItemRow = Coin. Use any simple mesh/material that makes it recognisable.",
+              "check": "Play → collect it → Old Coin collected! appears → press I → Old Coin and its description appear.",
+              "why": "The generic Blueprint is now driven by the Coin row."
+            },
+            {
+              "title": "Place a Fuse instance",
+              "where": "LV_EscapeRoom → duplicate the placed BP_ItemPickup",
+              "do": "Move the duplicate elsewhere and set ItemRow = Fuse. Change its simple mesh/material/scale if useful; do not edit the Blueprint graph.",
+              "check": "It prints Fuse collected! and I displays the Fuse description.",
+              "why": "A second item proves this is genuinely reusable."
+            },
+            {
+              "title": "Create a brand-new Wrench row",
+              "where": "DT_ItemData",
+              "do": "Add Row Name Wrench. DisplayName = Maintenance Wrench. Description = A heavy wrench left by the maintenance crew. PickupMessage = Maintenance Wrench collected! UseMessage = There is nothing to repair here yet. IsQuestItem = False. Value = 50. Save.",
+              "check": "Wrench exists as a complete new row.",
+              "why": "You are adding content before writing any new pickup logic."
+            },
+            {
+              "title": "Add the Wrench without coding a new pickup",
+              "where": "LV_EscapeRoom",
+              "do": "Duplicate BP_ItemPickup again and set ItemRow = Wrench. Do not open the BP_ItemPickup graph.",
+              "check": "Play → collect Wrench → correct message appears → I displays Maintenance Wrench and its description.",
+              "why": "This proves new item content can be introduced through data and an existing reusable system."
+            },
+            {
+              "title": "Perform the missing-row test",
+              "where": "One temporary BP_ItemPickup instance",
+              "do": "Set ItemRow = ThisDoesNotExist and Play. Touch it, observe the error, then delete/fix the temporary test instance.",
+              "check": "ERROR: Item data not found! appears and the bad pickup does not silently disappear.",
+              "why": "You have proved both the success path and the failure path."
+            }
+          ],
+          "flow": [
+            "Add/choose table row",
+            "Place same BP_ItemPickup",
+            "Set ItemRow",
+            "Play",
+            "Correct row data appears"
+          ],
+          "test": [
+            "Coin works from the generic pickup.",
+            "Fuse works from the generic pickup.",
+            "Wrench is added without a new pickup Blueprint class.",
+            "A missing row produces the planned error."
+          ],
+          "doneWhen": "At least three different items use BP_ItemPickup and Wrench was added by changing data plus an instance setting, not by writing a new pickup graph.",
+          "common": [
+            "Save DT_ItemData after adding Wrench.",
+            "Type Row Names exactly.",
+            "Different meshes are optional; the programming proof is the shared BP_ItemPickup logic."
+          ]
+        },
+        {
+          "id": "clean-old-system",
+          "number": 8,
+          "title": "Remove the Old Hard-Coded System",
+          "goal": "Safely delete the original String Inventory and ItemDescriptions Map after proving nothing still depends on them.",
+          "why": "A refactor is unfinished if both old and new systems remain active. Duplicate state causes bugs and confuses future work.",
+          "steps": [
+            {
+              "title": "Search for old Inventory use",
+              "where": "BP_ThirdPersonCharacter, BP_Battery, BP_Key, BP_Generator, BP_ExitDoor",
+              "do": "Inspect each relevant graph. Make sure all live item checks/adds/removes now use InventoryRows rather than the old Inventory String Array.",
+              "check": "No gameplay execution path depends on old Inventory.",
+              "why": "Deleting a variable while something still uses it will create broken nodes."
+            },
+            {
+              "title": "Search for ItemDescriptions use",
+              "where": "BP_ThirdPersonCharacter and any inventory display logic",
+              "do": "Confirm descriptions now come from Get Data Table Row and Break ST_ItemData, not the old Map Find node.",
+              "check": "No live graph reads ItemDescriptions.",
+              "why": "DT_ItemData has replaced the description Map."
+            },
+            {
+              "title": "Delete ItemDescriptions",
+              "where": "BP_ThirdPersonCharacter → My Blueprint",
+              "do": "Delete the unused ItemDescriptions variable. Compile and fix any remaining references if Unreal reports them.",
+              "check": "The character compiles with no ItemDescriptions variable.",
+              "why": "The description data now has one source of truth."
+            },
+            {
+              "title": "Delete the old Inventory String Array",
+              "where": "BP_ThirdPersonCharacter → My Blueprint",
+              "do": "Delete the unused Inventory variable. Compile. If anything breaks, undo and migrate that remaining use to InventoryRows first.",
+              "check": "The character and dependent Blueprints compile without the old Inventory.",
+              "why": "InventoryRows is now the only runtime inventory ID list."
+            },
+            {
+              "title": "Clean and label the new graphs",
+              "where": "Changed Blueprint Event Graphs",
+              "do": "Delete disconnected test nodes. Add comment boxes such as ADD ITEM TO INVENTORY, LOOK UP ITEM DATA, CHECK GENERATOR REQUIREMENT, CHECK EXIT REQUIREMENTS and DISPLAY INVENTORY. Save All.",
+              "check": "There are no obvious disconnected migration leftovers and each major system is readable.",
+              "why": "Readable graphs make the next refactor—Functions—much easier."
+            }
+          ],
+          "test": [
+            "Old Inventory String Array is gone.",
+            "ItemDescriptions Map is gone.",
+            "All affected Blueprints compile.",
+            "InventoryRows + DT_ItemData are the only active item data path."
+          ],
+          "doneWhen": "The project has one clean item system instead of old and new versions running side-by-side.",
+          "common": [
+            "If deleting a variable creates errors, Undo and migrate the remaining reference first.",
+            "Do not delete PowerOn; that state is not part of the item-data migration.",
+            "Do not delete DT_ItemData rows simply because an item is optional."
+          ]
+        },
+        {
+          "id": "final-test",
+          "number": 9,
+          "title": "Final Test — Prove the Game Is Data Driven",
+          "goal": "Complete the Escape Room using only the new system and prove you can add or edit content without rewriting item pickup logic.",
+          "why": "The mission is complete only when the refactored architecture survives a full player journey and a data-only content change.",
+          "steps": [
+            {
+              "title": "Run the full original game loop",
+              "where": "LV_EscapeRoom → Play",
+              "do": "Main Menu → Start → try Generator early → collect Battery → press I → power Generator → collect Exit Key → press I → test Exit → escape → Win screen → Play Again.",
+              "check": "The complete original game works with the old Inventory/Map deleted.",
+              "why": "The refactor must preserve player behaviour."
+            },
+            {
+              "title": "Check optional generic items",
+              "where": "During the same play-through",
+              "do": "Collect Coin, Fuse and Wrench. Press I after collecting them.",
+              "check": "Each item displays the correct DT_ItemData DisplayName and Description.",
+              "why": "The generic pickup and table must work beyond the two original quest items."
+            },
+            {
+              "title": "Prove the Data Table is authoritative",
+              "where": "DT_ItemData → Wrench row",
+              "do": "Change Wrench Value from 50 to 75 and slightly alter its Description. Save. Play again and inspect Wrench through I. Do not edit BP_ItemPickup.",
+              "check": "The new Description appears immediately from the same pickup Blueprint.",
+              "why": "Game content can now change independently of the reusable pickup code."
+            },
+            {
+              "title": "Explain the architecture",
+              "where": "Your project / to your teacher or partner",
+              "do": "Be able to explain this chain in your own words: ItemRow Name → InventoryRows → DT_ItemData → ST_ItemData → DisplayName/Description/other fields.",
+              "check": "You can describe what the Struct does, what the Data Table does and why the Array only stores row IDs.",
+              "why": "Understanding the relationship matters more than memorising node names."
+            },
+            {
+              "title": "Make one independent data extension",
+              "where": "ST_ItemData / DT_ItemData",
+              "do": "Choose ONE: add Weight Float; add Icon Texture2D; add Category Name/Text; or add another useful data field. Update at least two rows and display/use the new field somewhere simple.",
+              "check": "Your new field is visible in the Struct, table rows and one Blueprint lookup.",
+              "why": "Adapting the system independently is stronger evidence than copying the supplied rows."
+            }
+          ],
+          "flow": [
+            "Struct defines shape",
+            "Data Table stores content",
+            "InventoryRows stores IDs",
+            "Blueprint looks up row",
+            "Reusable systems use returned data"
+          ],
+          "test": [
+            "The whole Escape Room still completes.",
+            "Old Inventory and ItemDescriptions are gone.",
+            "Coin/Fuse/Wrench use one BP_ItemPickup class.",
+            "Editing row data changes the game without editing pickup logic.",
+            "One independent data field has been added and used."
+          ],
+          "doneWhen": "You can complete the game, add/edit item content through DT_ItemData and explain why this is better than hard-coding each item across Blueprint graphs.",
+          "common": [
+            "Do not call the mission complete if BP_ItemPickup still contains fixed item-specific values.",
+            "If a row fails, test the exact Row Name and Row Not Found path before changing unrelated Blueprints.",
+            "Keep the game behaviour stable; this mission is an architecture upgrade, not a redesign."
+          ],
+          "challenges": [
+            "Add an Icon Texture2D field to ST_ItemData and prepare each item for a future visual inventory.",
+            "Add Weight as Float and calculate the total weight of everything in InventoryRows.",
+            "Use Value to calculate the total sell value of optional loot.",
+            "Add Category as Name or an Enum later and separate Quest, Valuable and Tool items.",
+            "Replace old BP_Battery/BP_Key placed actors with BP_ItemPickup instances once you are confident the generic version is reliable."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "functions-reusable-logic",
+      "sequence": 3,
+      "requiresMission": "structs-data-tables-item-system",
+      "discipline": "Programmer",
+      "icon": "ƒ",
+      "title": "Stop Repeating Yourself: Functions & Reusable Logic",
+      "subtitle": "Refactor the same Escape Room so common jobs are written once, called everywhere and reused to add a new powered Fuse door quickly.",
+      "duration": "3–5 hours",
+      "difficulty": "Guided solo refactor",
+      "summary": "Your data is organised, but the same inventory checks and item lookups are still repeated across the Character, pickups, Generator and Exit. Keep the same game and turn those repeated node chains into Functions with clear inputs and outputs. Then prove the refactor matters by adding a new Maintenance Door that reuses the same logic instead of rebuilding it.",
+      "skills": [
+        "Functions",
+        "Inputs",
+        "Outputs",
+        "Pure functions",
+        "Impure functions",
+        "Function calls",
+        "Refactoring",
+        "Reusable logic",
+        "Composition",
+        "Debugging"
+      ],
+      "rules": [
+        "Continue the same Escape Room from Missions 1 and 2.",
+        "A Function should do one clear job and have a name that explains that job.",
+        "Refactor one system at a time and test before deleting the old node chain.",
+        "Do not hide broken logic inside a Function. Make the original behaviour work first."
+      ],
+      "gameFlow": [
+        "Audit repeated logic",
+        "Create HasItem",
+        "Create AddItem / RemoveItem",
+        "Create GetItemData",
+        "Create PrintInventory",
+        "Refactor pickups",
+        "Refactor Generator",
+        "Create reusable powered-item check",
+        "Add Fuse Maintenance Door",
+        "Full regression test"
+      ],
+      "stages": [
+        {
+          "id": "start",
+          "number": 0,
+          "title": "Start Here — Find the Repetition",
+          "goal": "Prove Mission 2 still works and identify the repeated node chains that should become Functions.",
+          "why": "Functions are useful when they solve a real repetition problem. You should see the repeated logic before hiding it behind a reusable Function call.",
+          "steps": [
+            {
+              "title": "Open the same project",
+              "where": "Unreal Engine → your EscapeRoom project from Missions 1 and 2",
+              "do": "Open LV_EscapeRoom and use File → Save All. Do not create a new project or duplicate the gameplay into another level.",
+              "check": "InventoryRows, ST_ItemData, DT_ItemData and BP_ItemPickup all still exist.",
+              "why": "Mission 3 is a code-quality refactor of the game you already built."
+            },
+            {
+              "title": "Run one clean Mission 2 play-through",
+              "where": "LV_EscapeRoom → Play",
+              "do": "Main Menu → collect Battery → inspect inventory → power Generator → collect ExitKey → open Exit → reach Win screen. Also collect one generic item such as Coin or Wrench.",
+              "check": "The complete game still works before you change any logic.",
+              "why": "You need a known-good baseline so new bugs can be traced to this refactor."
+            },
+            {
+              "title": "Find repeated inventory checks",
+              "where": "BP_Generator, BP_ExitDoor and any other item-gated Blueprint",
+              "do": "Find each place that gets InventoryRows and then uses Contains. Do not change it yet. Notice that the same job is being rebuilt with a different item name.",
+              "check": "You can identify at least two separate Contains checks against InventoryRows.",
+              "why": "This repeated question—does the player own this row?—should become one reusable Function."
+            },
+            {
+              "title": "Find repeated item-data lookups",
+              "where": "BP_ItemPickup and BP_ThirdPersonCharacter inventory display",
+              "do": "Locate Get Data Table Row → DT_ItemData → Break ST_ItemData chains. Notice that several graphs know how to fetch item data.",
+              "check": "You can point to more than one place that reads DT_ItemData.",
+              "why": "The lookup rules should live in one place so future changes are easier."
+            },
+            {
+              "title": "Keep the old logic for now",
+              "where": "All affected Blueprints",
+              "do": "Do not delete any repeated node chain yet. You will replace and test each chain one at a time.",
+              "check": "All Blueprints still compile and the game still plays.",
+              "why": "Safe refactoring changes structure without changing behaviour."
+            }
+          ],
+          "test": [
+            "Mission 2 still completes.",
+            "You have found repeated InventoryRows Contains logic.",
+            "You have found repeated DT_ItemData lookup logic."
+          ],
+          "doneWhen": "You have a working data-driven game and can name the repeated jobs that Mission 3 will turn into Functions.",
+          "common": [
+            "Do not start by deleting nodes.",
+            "Do not make one giant DoEverything Function.",
+            "If Mission 2 is already broken, fix it before continuing."
+          ]
+        },
+        {
+          "id": "has-item",
+          "number": 1,
+          "title": "Create HasItem — Your First Reusable Function",
+          "goal": "Create a Pure Function that asks whether InventoryRows contains a requested item row.",
+          "why": "The Generator, Exit and future puzzles all ask the same question. One HasItem Function lets every system ask it in the same way.",
+          "steps": [
+            {
+              "title": "Create HasItem",
+              "where": "BP_ThirdPersonCharacter → My Blueprint → Functions → +",
+              "do": "Create a Function named HasItem. Select the Function and, in Details, add an Input named ItemRow of type Name. Add an Output named Result of type Boolean.",
+              "check": "The Function signature accepts one Name and returns one Boolean.",
+              "why": "Inputs let callers tell the Function which item to check; the output sends the answer back."
+            },
+            {
+              "title": "Make HasItem Pure",
+              "where": "BP_ThirdPersonCharacter → select HasItem → Details",
+              "do": "Enable Pure for HasItem.",
+              "check": "The HasItem call node uses data pins rather than needing white execution wires.",
+              "why": "HasItem only reads InventoryRows and returns an answer. It does not change the game state, so a Pure Function is appropriate."
+            },
+            {
+              "title": "Build the Function logic",
+              "where": "HasItem Function graph",
+              "do": "Get InventoryRows → Contains. Connect the Function input ItemRow to Contains Item. Connect the Contains Boolean result to the Return Node output Result.",
+              "check": "The complete Function is essentially InventoryRows Contains ItemRow → Result.",
+              "why": "All inventory membership checks now have one authoritative implementation."
+            },
+            {
+              "title": "Test HasItem before changing the game",
+              "where": "BP_ThirdPersonCharacter → Event Graph",
+              "do": "Create a temporary H keyboard event → Branch. Use HasItem with ItemRow = Battery as the Branch Condition. True → Print BATTERY FOUND. False → Print NO BATTERY.",
+              "check": "Before collecting Battery, H prints NO BATTERY. After collecting Battery, H prints BATTERY FOUND.",
+              "why": "Testing the Function independently makes later refactoring safer."
+            },
+            {
+              "title": "Remove the temporary H test",
+              "where": "BP_ThirdPersonCharacter → Event Graph",
+              "do": "Delete the temporary H test chain after both results have been proven. Keep the HasItem Function.",
+              "check": "No temporary keyboard test remains and HasItem still compiles.",
+              "why": "The Function is now ready for real gameplay callers."
+            }
+          ],
+          "flow": [
+            "Caller supplies ItemRow",
+            "HasItem",
+            "InventoryRows Contains ItemRow",
+            "Result True / False"
+          ],
+          "test": [
+            "HasItem(Battery) is False before collection.",
+            "HasItem(Battery) is True after collection.",
+            "HasItem is Pure and has one Name input plus one Boolean output."
+          ],
+          "doneWhen": "BP_ThirdPersonCharacter has a tested Pure HasItem(ItemRow) Function that returns whether the requested row is in InventoryRows.",
+          "common": [
+            "Use Name for ItemRow, not String.",
+            "Pure Functions should not Set variables or remove/add inventory items.",
+            "If the call node does not update after changing inputs/outputs, Compile BP_ThirdPersonCharacter."
+          ]
+        },
+        {
+          "id": "add-remove",
+          "number": 2,
+          "title": "Create AddItem and RemoveItem",
+          "goal": "Move the two common inventory-changing operations into small reusable Functions.",
+          "why": "Other Blueprints should not need to know how InventoryRows is implemented. They should ask the player to add or remove an item.",
+          "steps": [
+            {
+              "title": "Create AddItem",
+              "where": "BP_ThirdPersonCharacter → My Blueprint → Functions → +",
+              "do": "Create Function AddItem. Add Input ItemRow of type Name. Leave Pure OFF because this Function changes InventoryRows.",
+              "check": "AddItem has white execution pins when called and one Name input.",
+              "why": "Functions that change state are Impure and execute through normal execution wires."
+            },
+            {
+              "title": "Build AddItem",
+              "where": "AddItem Function graph",
+              "do": "Get InventoryRows → Add Unique. Connect ItemRow to the Item input. Connect the Function execution path through Add Unique to the Return Node.",
+              "check": "Calling AddItem with Coin adds Coin once and calling it again does not create a duplicate.",
+              "why": "Add Unique keeps the inventory ID list clean while hiding the Array operation from outside Blueprints."
+            },
+            {
+              "title": "Create RemoveItem",
+              "where": "BP_ThirdPersonCharacter → My Blueprint → Functions → +",
+              "do": "Create Function RemoveItem with Input ItemRow of type Name. Get InventoryRows → Remove Item and connect ItemRow. Leave Pure OFF.",
+              "check": "RemoveItem compiles with one Name input and an execution path.",
+              "why": "Gameplay systems can consume an item without directly manipulating the Array."
+            },
+            {
+              "title": "Temporary Add/Remove test",
+              "where": "BP_ThirdPersonCharacter → Event Graph",
+              "do": "Create a temporary J key → AddItem(Coin) and a temporary R key → RemoveItem(Coin). Use your current I inventory display between presses to inspect the result.",
+              "check": "J adds Coin once; pressing J repeatedly does not duplicate it; R removes Coin.",
+              "why": "Both state-changing Functions are proven before other Blueprints depend on them."
+            },
+            {
+              "title": "Delete the temporary keys",
+              "where": "BP_ThirdPersonCharacter → Event Graph",
+              "do": "Remove the temporary J and R test chains. Keep AddItem and RemoveItem.",
+              "check": "The Event Graph is clean and both Functions remain available.",
+              "why": "Test scaffolding should not become part of the finished controls."
+            }
+          ],
+          "flow": [
+            "AddItem(ItemRow) → Add Unique",
+            "RemoveItem(ItemRow) → Remove Item"
+          ],
+          "test": [
+            "AddItem does not create duplicate row names.",
+            "RemoveItem removes the requested row.",
+            "Both Functions are Impure because they change InventoryRows."
+          ],
+          "doneWhen": "The Character owns tested AddItem(ItemRow) and RemoveItem(ItemRow) Functions and outside systems no longer need to manipulate the Array directly once migrated.",
+          "common": [
+            "Do not enable Pure on a Function that modifies InventoryRows.",
+            "Add Unique is different from Add; use Add Unique here.",
+            "If your I display still uses old logic that is fine for this stage; PrintInventory comes later."
+          ]
+        },
+        {
+          "id": "get-item-data",
+          "number": 3,
+          "title": "Create GetItemData",
+          "goal": "Create one Function that looks up a row in DT_ItemData and returns both the item Struct and whether the row was found.",
+          "why": "Pickups and inventory display currently repeat the same Data Table lookup. Centralising it gives the project one place to handle missing data.",
+          "steps": [
+            {
+              "title": "Create the Function signature",
+              "where": "BP_ThirdPersonCharacter → Functions → + → GetItemData",
+              "do": "Create Function GetItemData. Input: ItemRow (Name). Outputs: ItemData (ST_ItemData) and Found (Boolean). Leave Pure OFF because Get Data Table Row uses execution paths for Row Found / Row Not Found.",
+              "check": "The Function call exposes ItemRow in and ItemData + Found out.",
+              "why": "The caller receives both the data and a clear success/failure result."
+            },
+            {
+              "title": "Read DT_ItemData",
+              "where": "GetItemData Function graph",
+              "do": "Add Get Data Table Row. Set Data Table = DT_ItemData. Connect ItemRow to Row Name.",
+              "check": "The node exposes Row Found, Row Not Found and Out Row of type ST_ItemData.",
+              "why": "The Function now owns the knowledge of which table stores item data."
+            },
+            {
+              "title": "Return a successful lookup",
+              "where": "GetItemData → Row Found",
+              "do": "From Row Found add/use a Return Node. Connect Out Row to ItemData and set Found = True on that return path.",
+              "check": "A valid row reaches a Return Node with real Struct data and Found True.",
+              "why": "Callers can safely use the returned fields when Found is True."
+            },
+            {
+              "title": "Return a failed lookup",
+              "where": "GetItemData → Row Not Found",
+              "do": "From Row Not Found, Print String: ERROR: Item data not found. Add Return Node and leave ItemData at its default empty Struct; set Found = False.",
+              "check": "An invalid Row Name returns Found False and prints an obvious error.",
+              "why": "One failure path is easier to debug than silent errors spread across multiple Blueprints."
+            },
+            {
+              "title": "Test valid and invalid rows",
+              "where": "BP_ThirdPersonCharacter → temporary keyboard tests",
+              "do": "Use temporary T to call GetItemData(Battery) and print DisplayName from returned ItemData when Found is True. Then test ThisDoesNotExist and confirm the error path. Delete the temporary test afterwards.",
+              "check": "Battery returns valid data; the fake row returns Found False/error.",
+              "why": "Both Function exits need proof before you refactor callers."
+            }
+          ],
+          "flow": [
+            "ItemRow",
+            "GetItemData",
+            "DT_ItemData",
+            "Row Found → ItemData + True",
+            "Row Not Found → error + False"
+          ],
+          "test": [
+            "Battery returns ST_ItemData and Found True.",
+            "An invalid row returns Found False and an error.",
+            "Callers no longer need to know the Data Table asset once migrated."
+          ],
+          "doneWhen": "GetItemData(ItemRow) is the single tested place that reads DT_ItemData and handles missing rows.",
+          "common": [
+            "Set the Data Table asset to DT_ItemData inside the Function.",
+            "Add Return Node is available from the node action menu if you need a return on each execution path.",
+            "Do not mark this version Pure; it deliberately uses Row Found / Row Not Found execution paths."
+          ]
+        },
+        {
+          "id": "print-inventory",
+          "number": 4,
+          "title": "Turn the Inventory Display Into PrintInventory",
+          "goal": "Move the entire I-key inventory loop into one Function and call that Function from the Event Graph.",
+          "why": "The Event Graph should describe what happens—Print Inventory—not contain every implementation detail needed to do it.",
+          "steps": [
+            {
+              "title": "Create PrintInventory",
+              "where": "BP_ThirdPersonCharacter → Functions → +",
+              "do": "Create an Impure Function named PrintInventory with no inputs or outputs.",
+              "check": "The Function can be called with a simple execution node.",
+              "why": "This Function performs an action and does not need information from its caller."
+            },
+            {
+              "title": "Move the loop into the Function",
+              "where": "PrintInventory Function graph",
+              "do": "Get InventoryRows → For Each Loop. For each Array Element, call GetItemData and pass Array Element as ItemRow.",
+              "check": "Each owned Row Name flows through your reusable GetItemData Function.",
+              "why": "Functions can call other Functions; this is how small reusable jobs combine into a larger behaviour."
+            },
+            {
+              "title": "Format each valid item",
+              "where": "PrintInventory → GetItemData result",
+              "do": "If Found is True, Break ST_ItemData from ItemData. Format Text as {Name}: {Description}, connect DisplayName and Description, then Print String. If Found is False, do not print fake item details.",
+              "check": "Valid inventory rows print readable player-facing information.",
+              "why": "PrintInventory now reuses the lookup Function rather than rebuilding its Data Table logic."
+            },
+            {
+              "title": "Replace the old I chain",
+              "where": "BP_ThirdPersonCharacter → Event Graph",
+              "do": "Keep the I keyboard event, delete the old For Each / Data Table implementation connected to it, and call PrintInventory instead.",
+              "check": "The I event now has one meaningful Function call instead of a large node chain.",
+              "why": "This is the visible benefit of refactoring: the Event Graph becomes easier to read."
+            },
+            {
+              "title": "Test several items",
+              "where": "LV_EscapeRoom → Play",
+              "do": "Collect at least two different items and press I. Consume Battery at the Generator and press I again.",
+              "check": "Owned items print correctly and consumed Battery no longer appears.",
+              "why": "The Function must match the behaviour of the old implementation."
+            }
+          ],
+          "flow": [
+            "I pressed",
+            "PrintInventory",
+            "For Each InventoryRows",
+            "GetItemData",
+            "Format + Print"
+          ],
+          "test": [
+            "I calls PrintInventory only.",
+            "Multiple owned items display correctly.",
+            "Consumed items disappear from the output."
+          ],
+          "doneWhen": "The Event Graph uses one PrintInventory call and all inventory-loop implementation lives inside the Function.",
+          "common": [
+            "Do not create a second InventoryRows variable inside the Function; use the Character's existing variable.",
+            "If Found is False, inspect the Row Name rather than bypassing the check.",
+            "Delete the old I implementation only after the Function produces the same result."
+          ]
+        },
+        {
+          "id": "refactor-pickup",
+          "number": 5,
+          "title": "Refactor BP_ItemPickup to Use Your Functions",
+          "goal": "Replace direct Array and Data Table operations in the generic pickup with Character Function calls.",
+          "why": "Outside Blueprints should ask the Character to manage its inventory and item data rather than knowing the internals themselves.",
+          "steps": [
+            {
+              "title": "Keep the player Cast",
+              "where": "BP_ItemPickup → overlap logic",
+              "do": "Keep On Component Begin Overlap → Cast To BP_ThirdPersonCharacter. You still need a Character reference so you can call the Character's Functions.",
+              "check": "The successful Cast output gives As BP Third Person Character.",
+              "why": "Mission 4 will improve communication further; for this mission the Cast gives you the object that owns the Functions."
+            },
+            {
+              "title": "Replace Add Unique with AddItem",
+              "where": "BP_ItemPickup → successful Cast path",
+              "do": "Delete the direct Get InventoryRows → Add Unique chain. From As BP Third Person Character call AddItem and pass this pickup's ItemRow.",
+              "check": "BP_ItemPickup no longer directly changes InventoryRows.",
+              "why": "Inventory implementation is now owned by the Character Function."
+            },
+            {
+              "title": "Replace direct Data Table lookup",
+              "where": "BP_ItemPickup → after AddItem",
+              "do": "Delete Get Data Table Row from the pickup. From the Character reference call GetItemData(ItemRow). Branch on Found.",
+              "check": "BP_ItemPickup contains no DT_ItemData asset reference.",
+              "why": "The Character Function now owns the Data Table lookup and failure handling."
+            },
+            {
+              "title": "Use returned item data",
+              "where": "BP_ItemPickup → Found True",
+              "do": "Break returned ST_ItemData → PickupMessage → Print String → Destroy Actor. On Found False, do not Destroy Actor.",
+              "check": "Valid items still show their own message and disappear; invalid rows remain so you can fix them.",
+              "why": "The pickup now coordinates behaviour while reusable Functions perform the common jobs."
+            },
+            {
+              "title": "Test three rows",
+              "where": "LV_EscapeRoom → Play",
+              "do": "Collect Coin, Fuse and Wrench generic pickup instances. Press I afterwards.",
+              "check": "All three use correct messages/data and the inventory contains no duplicates.",
+              "why": "A generic caller is only useful if the Functions work with several different inputs."
+            }
+          ],
+          "flow": [
+            "Overlap",
+            "Cast to Character",
+            "AddItem(ItemRow)",
+            "GetItemData(ItemRow)",
+            "Found → message + destroy"
+          ],
+          "test": [
+            "BP_ItemPickup no longer gets InventoryRows directly.",
+            "BP_ItemPickup no longer uses Get Data Table Row directly.",
+            "Coin/Fuse/Wrench still work."
+          ],
+          "doneWhen": "BP_ItemPickup is a small caller of Character Functions instead of containing inventory and Data Table implementation details.",
+          "common": [
+            "Pass the pickup's Instance Editable ItemRow into both Function calls.",
+            "Do not Destroy an invalid pickup on the Found False path.",
+            "If the Functions cannot be called from the Character reference, Compile BP_ThirdPersonCharacter and confirm the Functions are Public/default access."
+          ]
+        },
+        {
+          "id": "refactor-generator",
+          "number": 6,
+          "title": "Refactor the Generator",
+          "goal": "Replace direct Array operations in BP_Generator with HasItem and RemoveItem Function calls.",
+          "why": "The Generator cares whether the player owns Battery and whether it should consume it; it does not need to know how the inventory Array works.",
+          "steps": [
+            {
+              "title": "Find the old Battery check",
+              "where": "BP_Generator",
+              "do": "Locate Get InventoryRows → Contains Battery. Leave the surrounding PowerOn logic in place.",
+              "check": "You know exactly which nodes answer whether Battery is owned.",
+              "why": "Refactor the smallest repeated chain rather than rewriting the whole Generator."
+            },
+            {
+              "title": "Replace Contains with HasItem",
+              "where": "BP_Generator → Character reference",
+              "do": "Delete the direct InventoryRows Contains chain. Call HasItem with ItemRow = Battery and use its Result as the existing Battery Branch condition.",
+              "check": "The Branch still has the same True/False behaviour but no direct Array access.",
+              "why": "The Generator now asks the Character a question through a named Function."
+            },
+            {
+              "title": "Replace Remove Item with RemoveItem",
+              "where": "BP_Generator → Battery success path",
+              "do": "Delete direct InventoryRows → Remove Item. Call RemoveItem(Battery) before setting PowerOn True.",
+              "check": "BP_Generator contains no direct InventoryRows Get node.",
+              "why": "Consumption is also handled by the Character's reusable inventory API."
+            },
+            {
+              "title": "Keep Generator-specific behaviour local",
+              "where": "BP_Generator",
+              "do": "Keep Set PowerOn True, Generator light visibility, sound/feedback and any Generator-specific visual logic in BP_Generator.",
+              "check": "Only common inventory logic moved into Functions; Generator-specific behaviour remains readable here.",
+              "why": "A good Function refactor does not move every node just because it can."
+            },
+            {
+              "title": "Test all Generator states",
+              "where": "LV_EscapeRoom → Play",
+              "do": "Try Generator without Battery → collect Battery → power Generator → press I → return to Generator again.",
+              "check": "Missing-Battery message works; Battery is consumed; Power remains on; repeated use is handled as before.",
+              "why": "Refactoring must preserve gameplay behaviour."
+            }
+          ],
+          "flow": [
+            "Generator overlaps player",
+            "HasItem(Battery)",
+            "True → RemoveItem(Battery)",
+            "PowerOn = True",
+            "Generator feedback"
+          ],
+          "test": [
+            "Generator fails without Battery.",
+            "Generator succeeds with Battery.",
+            "Battery is removed through RemoveItem.",
+            "BP_Generator no longer reads InventoryRows directly."
+          ],
+          "doneWhen": "BP_Generator uses named Character Functions for inventory work while retaining its own Generator-specific state and feedback.",
+          "common": [
+            "Do not move PowerOn into HasItem; HasItem should only answer the inventory question.",
+            "Do not remove the existing already-powered guard.",
+            "If Battery is not consumed, check the RemoveItem input is exactly Battery."
+          ]
+        },
+        {
+          "id": "powered-item-function",
+          "number": 7,
+          "title": "Create CanUsePoweredItem and Refactor the Exit",
+          "goal": "Create a reusable Function that combines PowerOn with HasItem(RequiredItem), then use it for the Exit Door.",
+          "why": "A Function becomes much more reusable when an input changes what it checks. One RequiredItem input can support the Exit Key, Fuse or future powered tools.",
+          "steps": [
+            {
+              "title": "Create CanUsePoweredItem",
+              "where": "BP_ThirdPersonCharacter → Functions → +",
+              "do": "Create Function CanUsePoweredItem. Input = RequiredItem (Name). Output = Result (Boolean). Enable Pure.",
+              "check": "The Function accepts any item Row Name and returns True/False without execution pins.",
+              "why": "This is a read-only condition check, so Pure is suitable."
+            },
+            {
+              "title": "Compose existing logic",
+              "where": "CanUsePoweredItem Function graph",
+              "do": "Get PowerOn. Call HasItem and pass RequiredItem. Feed PowerOn and HasItem Result into Boolean AND. Connect AND result to the Return Node Result.",
+              "check": "The Function returns True only when power is on AND the requested item is owned.",
+              "why": "A Function can reuse another Function instead of rebuilding its internals."
+            },
+            {
+              "title": "Refactor the Exit Door",
+              "where": "BP_ExitDoor",
+              "do": "Keep the Cast to BP_ThirdPersonCharacter. Delete the direct Get PowerOn + InventoryRows Contains ExitKey + AND chain. Call CanUsePoweredItem with RequiredItem = ExitKey and use Result for the existing Branch.",
+              "check": "The exit decision is now represented by one clearly named Function call.",
+              "why": "The door says what it needs without knowing how the Character stores inventory."
+            },
+            {
+              "title": "Keep door movement in the door",
+              "where": "BP_ExitDoor → True path",
+              "do": "Keep EXIT UNLOCKED feedback and door movement/animation in BP_ExitDoor. Do not move door visuals into the Character Function.",
+              "check": "CanUsePoweredItem only answers the condition; the Door still owns Door behaviour.",
+              "why": "Reusable condition logic and object-specific behaviour have different responsibilities."
+            },
+            {
+              "title": "Retest four Exit states",
+              "where": "LV_EscapeRoom → Play / restart between cases",
+              "do": "Test no power/no key; key only; power only; power + ExitKey.",
+              "check": "Only power + ExitKey opens the Exit, exactly as before.",
+              "why": "The new reusable Function must reproduce the original AND condition perfectly."
+            }
+          ],
+          "flow": [
+            "RequiredItem",
+            "HasItem(RequiredItem)",
+            "PowerOn",
+            "AND",
+            "Result"
+          ],
+          "test": [
+            "CanUsePoweredItem is Pure.",
+            "It calls HasItem rather than reading InventoryRows itself.",
+            "Exit passes ExitKey and only opens with both requirements."
+          ],
+          "doneWhen": "The Exit Door uses one reusable CanUsePoweredItem(ExitKey) condition instead of rebuilding power + inventory logic.",
+          "common": [
+            "RequiredItem must feed HasItem; do not hard-code ExitKey inside the reusable Function.",
+            "Keep the Function Pure because it should not consume the item or open a door.",
+            "The Exit Door should still own its movement/animation."
+          ]
+        },
+        {
+          "id": "maintenance-door",
+          "number": 8,
+          "title": "Proof Build — Add a Fuse Maintenance Door",
+          "goal": "Add a new powered puzzle gate using the reusable Functions instead of copying the Exit Door's old node chains.",
+          "why": "The real test of refactoring is whether the next feature becomes faster and simpler to build.",
+          "steps": [
+            {
+              "title": "Make sure Fuse can be collected",
+              "where": "LV_EscapeRoom + BP_ItemPickup",
+              "do": "Place or keep a BP_ItemPickup instance with ItemRow = Fuse. Test collecting it and press I to confirm Fuse appears.",
+              "check": "Fuse is a valid DT_ItemData row and enters InventoryRows through AddItem.",
+              "why": "The new gate needs an existing data-driven item to require."
+            },
+            {
+              "title": "Create BP_MaintenanceDoor",
+              "where": "Content Drawer → Blueprint Class → Actor",
+              "do": "Create BP_MaintenanceDoor. Add a Static Mesh and Box Collision. A stretched cube is enough for the door.",
+              "check": "The Actor can be placed as a second blocked doorway/alcove in LV_EscapeRoom.",
+              "why": "This is a new feature built after the refactor, so you can compare the amount of code required."
+            },
+            {
+              "title": "Check the reusable condition",
+              "where": "BP_MaintenanceDoor → Box Collision → On Component Begin Overlap",
+              "do": "Cast Other Actor to BP_ThirdPersonCharacter. Call CanUsePoweredItem with RequiredItem = Fuse. Feed Result to a Branch.",
+              "check": "The new door does not Get InventoryRows, Contains Fuse or build its own PowerOn AND chain.",
+              "why": "One Function call replaces the repeated condition implementation."
+            },
+            {
+              "title": "Handle the locked path",
+              "where": "BP_MaintenanceDoor → Branch False",
+              "do": "Print String: Maintenance access needs power and a Fuse.",
+              "check": "Visiting too early gives a useful message and the door stays closed.",
+              "why": "The player needs feedback without exposing technical implementation details."
+            },
+            {
+              "title": "Consume Fuse and open the door",
+              "where": "BP_MaintenanceDoor → Branch True",
+              "do": "Call RemoveItem(Fuse) on the Character. Print String: Maintenance door unlocked! Move the door upward or rotate it using the same simple method you used for the Exit.",
+              "check": "With PowerOn + Fuse, Fuse is removed and the Maintenance Door opens.",
+              "why": "The new puzzle reuses both the condition Function and inventory mutation Function."
+            },
+            {
+              "title": "Prove the new feature is independent",
+              "where": "LV_EscapeRoom → Play",
+              "do": "Test Maintenance Door with: neither requirement; Fuse only; power only; power + Fuse. Then check that the main Exit still needs ExitKey and still works.",
+              "check": "Maintenance Door and Exit use different RequiredItem values but share the same reusable Functions.",
+              "why": "Parameterised Functions should support different gameplay objects without being rewritten."
+            }
+          ],
+          "flow": [
+            "Maintenance Door overlap",
+            "CanUsePoweredItem(Fuse)",
+            "False → locked message",
+            "True → RemoveItem(Fuse)",
+            "Open Maintenance Door"
+          ],
+          "test": [
+            "Fuse-only does not open the door.",
+            "Power-only does not open the door.",
+            "Power + Fuse opens it and consumes Fuse.",
+            "Main Exit still requires ExitKey."
+          ],
+          "doneWhen": "A brand-new powered Fuse gate works using the existing HasItem / RemoveItem / CanUsePoweredItem Functions with no copied Array condition chain.",
+          "common": [
+            "Pass Fuse into RequiredItem; do not edit CanUsePoweredItem to mention Fuse.",
+            "Do not accidentally consume ExitKey when opening the Maintenance Door.",
+            "Keep this second area small—the proof is code reuse, not level size."
+          ]
+        },
+        {
+          "id": "final-test",
+          "number": 9,
+          "title": "Final Test — Prove the Refactor Made the Game Better",
+          "goal": "Complete the whole game, confirm the old repeated implementations are gone and independently create one useful Function of your own.",
+          "why": "A Function refactor is successful when behaviour is preserved, repeated implementation is reduced and the code becomes easier to extend.",
+          "steps": [
+            {
+              "title": "Run the complete game from the Main Menu",
+              "where": "LV_EscapeRoom → Play",
+              "do": "Start normally. Try gates early. Collect Battery → power Generator → collect Fuse → open Maintenance Door → collect ExitKey → open Exit → Win screen → Play Again.",
+              "check": "Every old feature and the new Maintenance Door work in one clean play-through.",
+              "why": "The final architecture must support the complete player journey."
+            },
+            {
+              "title": "Audit direct InventoryRows manipulation",
+              "where": "BP_ItemPickup, BP_Generator, BP_ExitDoor, BP_MaintenanceDoor",
+              "do": "Search visually for direct Get InventoryRows nodes. The reusable gameplay actors should now call Character Functions instead. InventoryRows itself can still be used inside the Character Functions that own the system.",
+              "check": "Common external actors no longer manipulate the Array directly.",
+              "why": "The Character now owns its inventory implementation behind a small reusable Function API."
+            },
+            {
+              "title": "Audit direct Data Table lookups",
+              "where": "BP_ItemPickup and ordinary gameplay Actors",
+              "do": "Confirm common callers use GetItemData rather than each carrying their own Get Data Table Row DT_ItemData chain. Keep the table lookup inside GetItemData.",
+              "check": "There is one clear authoritative item lookup Function.",
+              "why": "Changing item-data lookup behaviour later now requires one edit instead of several."
+            },
+            {
+              "title": "Clean and name your Function library",
+              "where": "BP_ThirdPersonCharacter → My Blueprint → Functions",
+              "do": "Confirm you have HasItem, AddItem, RemoveItem, GetItemData, PrintInventory and CanUsePoweredItem. Add useful Tooltips/Categories in Details if your version/workflow allows. Delete temporary keyboard test chains and disconnected old implementations. Compile and Save All.",
+              "check": "The Function list reads like a small, understandable inventory/game-state API.",
+              "why": "Naming and organisation are part of maintainable programming."
+            },
+            {
+              "title": "Create one Function independently",
+              "where": "BP_ThirdPersonCharacter",
+              "do": "Create ONE extra useful Function without copying this guide node-for-node. Recommended: GetTotalInventoryValue → loop InventoryRows → GetItemData → add each ItemData.Value → return total Integer. Alternative: HasQuestItem, GetInventoryCount or another sensible read-only helper.",
+              "check": "Your Function has a clear name, appropriate inputs/outputs, works in Play and is Pure only if it does not change state.",
+              "why": "Independent adaptation proves you understand what a Function is for rather than only following supplied recipes."
+            },
+            {
+              "title": "Explain the before and after",
+              "where": "Your project / teacher check",
+              "do": "Be able to explain one real example: BEFORE the Generator got InventoryRows and searched it itself; AFTER it calls HasItem(Battery). Then explain why that makes future changes safer.",
+              "check": "You can describe the benefit in terms of reuse, readability and one place to change logic.",
+              "why": "The goal is not fewer nodes for its own sake; it is better organisation of responsibilities."
+            }
+          ],
+          "flow": [
+            "Repeated node chains",
+            "Small named Functions",
+            "Functions call Functions",
+            "Gameplay Actors call reusable API",
+            "New features take less code"
+          ],
+          "test": [
+            "Full Escape Room + Maintenance Door works.",
+            "Common external actors no longer directly manipulate InventoryRows.",
+            "Item lookup is centralised through GetItemData.",
+            "Temporary test nodes are removed.",
+            "One independent Function has been created and proven."
+          ],
+          "doneWhen": "The game behaves correctly, repeated logic has been replaced by clear Function calls, and you can extend the Function set independently.",
+          "common": [
+            "Do not make every Function Pure—only read-only calculations should be Pure.",
+            "Do not move object-specific visuals/animations into generic Character Functions.",
+            "If a refactor changes behaviour, compare against the working pre-refactor path and fix it before polishing."
+          ],
+          "challenges": [
+            "Build GetTotalInventoryValue and display the total value of Coin/Wrench/other loot.",
+            "Add an output to AddItem that reports whether the item was newly added, then let pickups react differently to duplicates.",
+            "Create a Function Category such as Inventory for all inventory helpers so the Character stays organised.",
+            "Add a RequiredItem Name variable to BP_MaintenanceDoor so the same door class can require Fuse, Wrench or another tool.",
+            "Compare a Function and a Macro using Epic's current guidance, then explain why HasItem belongs as a Function in this project."
           ]
         }
       ]
