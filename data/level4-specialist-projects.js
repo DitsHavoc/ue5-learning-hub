@@ -1,5 +1,5 @@
 window.LEVEL4_SPECIALIST_PROJECTS = {
-  version: '3.57.2',
+  version: '3.57.5',
   intro: {
     title: 'Level 4 Specialist Projects',
     kicker: 'Choose ONE pathway',
@@ -8,31 +8,175 @@ window.LEVEL4_SPECIALIST_PROJECTS = {
   projects: [
     {
       id:'what-happened-here', icon:'✦', title:'What Happened Here?', role:'Environment / Level Design', time:'1–2 weeks',
-      strap:'Tell a story through a place. No exposition dump. Make the player read the scene.',
-      outcome:'A small, believable Unreal environment built primarily from the What Remains of Edith Finch asset library, communicating a before / event / after story through composition, props, light, sound and player guidance.',
-      heroImage:'https://upload.wikimedia.org/wikipedia/commons/3/33/Empty_Room_%28Unsplash%29.jpg',
-      heroFallback:'assets/tutorials/prison-cell/lighting-01-light-placement.webp',
-      heroAlt:'A real interior seen through a dark hallway, with furniture and lighting creating a strong focal area.',
-      imageCaption:'Real-world reference: notice how doorway framing, contrast and object placement naturally pull your eye deeper into the room. Your environment should guide attention this deliberately.',
-      imageCredit:'Stephen Caserta — Empty Room (CC0), Wikimedia Commons', imageLink:'https://commons.wikimedia.org/wiki/File:Empty_Room_(Unsplash).jpg',
+      strap:'Build one small place that makes somebody stop, look and work out the story for themselves.',
+      outcome:'A small playable Unreal environment built mainly from the What Remains of Edith Finch asset library. The player should be able to infer WHO used the space, WHAT normally happened there, WHAT changed, and WHAT was left behind — without you explaining it beside them.',
+      heroImage:'https://thumb.wikimedia.org/wikipedia/commons/thumb/d/dc/Workshop_interior_filled_with_tools%2C_wood_materials%2C_and_natural_light_illuminating_the_creative_space.jpg/960px-Workshop_interior_filled_with_tools%2C_wood_materials%2C_and_natural_light_illuminating_the_creative_space.jpg',
+      heroFallback:'assets/book/best-practices/environmental-clues-dressing.webp',
+      heroAlt:'A real working workshop filled with tools, timber, work surfaces and evidence of repeated use.',
+      imageCaption:'REAL-WORLD REFERENCE: do not copy the room. Study WHY things are where they are. Tools cluster around work areas, materials gather near the job they belong to, paths stay clearer than storage zones, and repeated use creates wear and mess with a reason.',
+      imageCredit:'Workshop interior — Nenad Stojković / Shixart1985, CC BY 2.0, Wikimedia Commons', imageLink:'https://commons.wikimedia.org/wiki/File:Workshop_interior_filled_with_tools,_wood_materials,_and_natural_light_illuminating_the_creative_space.jpg',
+      secondaryImage:'assets/book/best-practices/environmental-clues-dressing.webp',
+      secondaryAlt:'A before-and-after environment showing how carefully chosen props change a generic space into a story-rich scene.',
+      secondaryCaption:'PRODUCTION REFERENCE: compare the two halves. The geometry barely changes; the story comes from deliberate set dressing. Props should explain use, history and behaviour — not simply fill empty floor.',
       theory:[
-        {label:'GDC: What Happened Here? Environmental Storytelling',url:'https://www.gdcvault.com/play/1012696/What-Happened-Here-Environmental'},
-        {label:'Official What Remains of Edith Finch page',url:'https://www.annapurna.com/interactive/what-remains-of-edith-finch'},
-        {label:'Epic: Decal Materials – grime, damage and local story detail',url:'https://dev.epicgames.com/documentation/unreal-engine/decal-materials-in-unreal-engine'}
+        {label:'GDC Vault — What Happened Here? Environmental Storytelling',url:'https://www.gdcvault.com/play/1012696/What-Happened-Here-Environmental'},
+        {label:'What Remains of Edith Finch — official game page',url:'https://www.annapurna.com/interactive/what-remains-of-edith-finch'},
+        {label:'Gone Home — official game page',url:'https://gonehome.com/'},
+        {label:'Epic UE5 — Decal Materials',url:'https://dev.epicgames.com/documentation/unreal-engine/decal-materials-in-unreal-engine'},
+        {label:'Hub — Lighting fundamentals',url:'#/design'},
+        {label:'Hub — Sequencer / presentation guide',url:'#/tutorial/sequencer-master-guide'}
       ],
-      learn:['Environmental storytelling','Set dressing and believability','Visual hierarchy and focal points','Player guidance through composition and light','Before / event / after thinking','Iteration through blind playtesting'],
+      briefRules:[
+        'ONE small space. A bedroom, workshop, kitchen, office, shed, basement, tiny shop or short exterior is enough.',
+        'Tell the story through the ENVIRONMENT first. A note can support the scene, but a paragraph of text cannot be the scene.',
+        'Build a clear BEFORE → EVENT → AFTER chain.',
+        'Use at least FIVE readable clues and make ONE of them the hero clue.',
+        'Every prop needs a reason to exist. No Content Browser confetti.',
+        'Another student must be able to read the scene without you explaining it.'
+      ],
+      storyPrompts:[
+        {title:'They left in a hurry',text:'Normal routine is still visible, but one interrupted action and one missing/abandoned object suggest a sudden departure.'},
+        {title:'A repair went wrong',text:'The space shows repeated practical work. One failed repair, damaged object or improvised fix becomes the event.'},
+        {title:'A celebration changed',text:'The room was prepared for something positive, but the aftermath suggests the evening did not finish as planned.'},
+        {title:'Someone was hiding something',text:'Most of the room appears ordinary. One cluster of objects reveals a second use or secret behaviour.'},
+        {title:'This room has not moved on',text:'Daily life stopped on one specific day. The player should feel the contrast between ordinary routine and frozen aftermath.'},
+        {title:'Make your own',text:'Use the same structure: ordinary life → disruption → evidence. Keep the event simple enough to communicate physically.'}
+      ],
+      gameReferences:[
+        {title:'What Remains of Edith Finch',look:'Personal objects, room identity, visual routes and spaces that feel owned by specific people.',url:'https://www.annapurna.com/interactive/what-remains-of-edith-finch'},
+        {title:'Gone Home',look:'Domestic normality, absence, drawers/shelves/notes and how mundane objects become evidence.',url:'https://gonehome.com/'},
+        {title:'The Last of Us',look:'Aftermath. Look for abandoned routines, improvised survival, blocked routes and objects that suggest who was here before.',url:'https://www.playstation.com/en-gb/games/the-last-of-us-part-i/'},
+        {title:'BioShock',look:'Strong focal points, damaged spaces and props arranged to imply an event happened before the player arrived.',url:'https://store.playstation.com/en-gb/concept/216051'}
+      ],
+      learn:['Environmental storytelling','Set dressing with purpose','Before / Event / After logic','Clue hierarchy','Composition and player guidance','Lighting and sound as attention tools','Blind playtesting','Professional scene organisation'],
       stages:[
-        {n:'01',title:'Write the hidden story',do:'In 3–5 sentences, decide who used this place, what normal life looked like, what changed, and what the player arrives after. Do not write a script.',why:'You need a clear cause before you can design believable evidence.',check:'You can explain BEFORE → EVENT → AFTER in under 30 seconds.',fix:'If the idea needs a paragraph of dialogue to make sense, simplify the event.'},
-        {n:'02',title:'Reference real places',do:'Collect 6–10 real-world photos of spaces like yours. Look at clutter, storage, wear, object grouping and where people actually put things.',why:'Believable scenes come from observed behaviour, not random asset placement.',check:'Your references show lived-in details, not just pretty architecture.',fix:'Search for estate-agent photos, workshops, bedrooms, sheds, kitchens, offices or abandoned spaces rather than “game environment art”.'},
-        {n:'03',title:'Block the playable space',do:'Keep it small: one room, one workshop, one shed, one short exterior or similarly focused space. Establish entrances, sightlines and one main focal area.',why:'A small dense scene lets you spend time on story instead of square metres.',check:'From the entry point, you know where the player will probably look first.',fix:'If there are large empty areas, reduce the footprint before dressing it.'},
-        {n:'04',title:'Build five clues',do:'Place at least five story clues. Choose one hero clue and make the others support, complicate or reframe it.',why:'One obvious note is exposition. Several connected clues let the player infer.',check:'Remove any one supporting clue and the story still has evidence.',fix:'If every clue literally says what happened, replace text with physical evidence.'},
-        {n:'05',title:'Make it lived in',do:'Add believable clusters: objects used together should sit together. Add signs of routine, wear, mess, storage and personal preference.',why:'Set dressing communicates character before the “event” is even understood.',check:'You can point to three areas and explain why those objects are together.',fix:'If props look evenly sprinkled, build clusters and leave some calm areas.'},
-        {n:'06',title:'Guide attention',do:'Use light, contrast, framing, leading lines, open doors, object orientation and sound to guide See → Investigate → Discover → Reconsider.',why:'Level design controls the order in which evidence is read.',check:'A tester notices your intended first clue without being told.',fix:'If they miss it, strengthen contrast or composition before adding an arrow or UI marker.'},
-        {n:'07',title:'Blind playtest',do:'Say nothing. Let somebody explore. Ask: Who used this place? What happened? Which three objects made you think that?',why:'Environmental storytelling only works if the environment communicates without the author beside it.',check:'Their interpretation overlaps meaningfully with your intended story.',fix:'Do not immediately explain. Change the scene based on what they actually read.'},
-        {n:'08',title:'Polish and evidence',do:'Tidy the Outliner, check collision/scale, take a strong screenshot and capture a short walkthrough.',why:'Presentation and technical organisation are part of a professional environment workflow.',check:'Nothing important only looks good from the editor camera.',fix:'Play in-game and inspect the scene at player eye level before final capture.'}
+        {n:'01',title:'Write the story BEFORE opening Unreal',actions:[
+          'Open a blank document, slide or piece of paper. Write the heading BEFORE.',
+          'Under BEFORE, write ONE sentence saying who normally uses the space.',
+          'Write ONE sentence saying what that person normally does there.',
+          'Add the heading EVENT. Write ONE sentence describing the thing that changed the room.',
+          'Add the heading AFTER. Write ONE sentence describing what the player arrives to find.',
+          'Write a list of FIVE physical clues the player could see. Do not use five notes or five pieces of text.',
+          'Put a star beside ONE clue. This is your HERO CLUE — the clearest or most important piece of evidence.',
+          'Read the whole idea aloud in under 30 seconds. If it needs lots of backstory to make sense, simplify it now.'
+        ],why:'A room full of props cannot communicate a story you have not decided yet.',check:'You have four short statements: WHO / NORMAL ROUTINE / EVENT / AFTERMATH, plus five physical clues and one starred hero clue.',fix:'If your idea is “a murder happened” but nothing explains who lived there or what normal life looked like, add the BEFORE layer first.'},
+        {n:'02',title:'Build a reference board like a detective',actions:[
+          'Collect 6–10 REAL photographs of the type of space you are making.',
+          'Make sure at least THREE references show the space being actively used — not only abandoned versions.',
+          'For each reference, circle or label one useful observation: storage, clutter, wear, object grouping, lighting, access or scale.',
+          'Add 2–4 game/film references for mood or storytelling. Use them for ideas, not as something to copy exactly.',
+          'Write “WHAT I AM TAKING FROM THIS” beside every game/film reference.',
+          'Delete any image that is only there because it looks cool and teaches you nothing about the scene.',
+          'Put the reference board on your second screen or somewhere visible while you build.',
+          'Before continuing, point to three reference details you intend to use in your own environment.'
+        ],why:'Real places teach believable behaviour. Game references show how designers exaggerate that reality so players can read it.',check:'Your board answers practical questions about how the room is used, not just what colour palette you like.',fix:'If every image is concept art, go back and find photographs of real bedrooms, workshops, sheds, kitchens, offices or shops.'},
+        {n:'03',title:'Create the level and organise it before it gets messy',actions:[
+          'Open the Edith Finch asset project in Unreal Engine.',
+          'Create or open the clean map you will use for the task. Save it immediately as L4_WHH_YourName.',
+          'In the World Outliner, create folders named 01_ARCHITECTURE, 02_BEFORE, 03_EVENT_AFTER, 04_LIGHTING, 05_AUDIO and 06_HELPERS.',
+          'Place a Player Start at the doorway or approach where you want the player to enter.',
+          'Rotate the Player Start so the arrow points toward the first part of the room you want the player to see.',
+          'Press Play and check where the player actually spawns and which direction they face.',
+          'Move the Player Start until the first view is useful. Do not accept a spawn facing a blank wall.',
+          'Save the level again before building.'
+        ],why:'A clean Outliner and intentional starting view make the rest of the task easier to control and easier to present.',check:'Press Play: you spawn in the correct place, face into the scene, and the Outliner already has clear folders.',fix:'If Play starts somewhere unexpected, check that the correct GameMode/character is active and that the Player Start is not colliding with geometry.'},
+        {n:'04',title:'Block ONE small playable space',actions:[
+          'Choose the smallest footprint that can tell your story. One room is enough.',
+          'Use simple geometry or large Edith Finch architectural pieces to establish floor, walls, doorway and major furniture positions.',
+          'Keep a Third Person character or known doorway nearby as a scale reference.',
+          'Walk through the room in Play mode. Check doors, gaps and furniture spacing from player height.',
+          'Stand at the Player Start and decide exactly where the first focal area will be.',
+          'Move or rotate the largest shapes so they frame that focal area instead of fighting it.',
+          'Remove any extra corridor, second room or empty corner that does not help the story.',
+          'Take one blockout screenshot. This is your BEFORE-DRESSING evidence.'
+        ],why:'Small scenes become detailed. Large scenes become empty. The task is storytelling density, not square metres.',check:'You can walk the whole playable area in a few seconds and already know where the player is likely to look first.',fix:'If you are building a house, street or huge warehouse, cut it down. Pick the single strongest room or corner.'},
+        {n:'05',title:'Build the BEFORE layer — show normal life first',actions:[
+          'Ignore the dramatic event for a moment. Pretend nothing bad or unusual has happened yet.',
+          'Choose THREE activity zones, for example bed + bedside table, desk + chair, workbench + tool storage.',
+          'In each zone, place ONE anchor object first — the biggest object that explains what the area is for.',
+          'Add 2–5 related props around each anchor object. Keep objects that are used together physically near each other.',
+          'Rotate and offset repeated props so they do not look copied and pasted.',
+          'Add at least ONE personal choice that says something about the occupant: hobby, taste, job, routine or habit.',
+          'Add one sign of repeated use: worn area, stacked items, opened container, half-used material, moved chair or similar.',
+          'Leave some clear floor and quiet wall space. Do not fill every centimetre.'
+        ],why:'The event only means something if the player can understand what “normal” looked like before it happened.',check:'Without any EVENT props, another student could still guess who uses the room and what they normally do there.',fix:'If props look evenly sprinkled across the floor, stop. Pull them into purposeful clusters around activities.'},
+        {n:'06',title:'Add the EVENT — change only what the event would actually affect',actions:[
+          'Read your EVENT sentence again before touching the scene.',
+          'Pick 3–5 existing objects that the event would physically change.',
+          'Move, rotate, open, tip, break, remove or displace those objects in a way that follows cause and effect.',
+          'Add ONE new object only if the event genuinely needs it.',
+          'Use direction: knocked-over objects should suggest where force or movement came from.',
+          'Use height and gravity: fallen items should land somewhere believable, not float or balance impossibly.',
+          'Keep at least one area mostly untouched so the disturbance has contrast.',
+          'Press Play and walk through. Ask yourself: can I see the EVENT without knowing the written story?'
+        ],why:'Random destruction is noise. Cause-and-effect lets the player reconstruct what happened.',check:'You can explain WHY every moved or damaged object changed during the event.',fix:'If the answer is “because it looks messy”, undo it and make the change serve the event.'},
+        {n:'07',title:'Turn your five clues into a readable clue ladder',actions:[
+          'Open your original five-clue list and find each clue in the level.',
+          'Make CLUE 1 easy to notice from or near the entrance. It should create a question, not answer everything.',
+          'Place CLUE 2 deeper into the room so the player has a reason to investigate.',
+          'Place CLUE 3 so it confirms or develops the first idea.',
+          'Make your starred HERO CLUE the strongest visual moment. Give it space around it instead of burying it in clutter.',
+          'Use CLUE 5 as a consequence or reframe: something that changes, complicates or completes the player’s first interpretation.',
+          'Make sure at least FOUR of the five clues are physical/environmental rather than text.',
+          'Stand in Play mode at each clue and check it can actually be seen from player height.'
+        ],why:'Environmental stories are read in sequence. A clue ladder gives the player a developing thought rather than five unrelated props.',check:'Your five clues have different jobs: question → investigate → confirm → hero clue → consequence/reframe.',fix:'If all five clues say the same thing, change one so it adds new information rather than repeating the message.'},
+        {n:'08',title:'Control the player’s first 30 seconds',actions:[
+          'Press Play and do not move for three seconds. Write down the FIRST object your eye goes to.',
+          'If it is not intentional, change the composition before adding more detail.',
+          'Use a doorway, furniture edge, beam, shelf or other large shape to frame the intended first clue.',
+          'Rotate chairs, tools, fallen objects or furniture so their lines subtly point toward useful areas.',
+          'Use brighter/darker contrast to separate important clues from background clutter.',
+          'Walk from the start to Clue 1, then to Clue 2, then toward the hero clue. Remove obstacles that make this route awkward by accident.',
+          'Do NOT add floating arrows or objective markers to solve a composition problem.',
+          'Ask a classmate to enter the level for ten seconds and point at the thing they noticed first.'
+        ],why:'Players cannot interpret clues they never notice. Composition is part of level design, not decoration.',check:'A tester’s first look lands on either your intended focal point or something that naturally leads toward it.',fix:'Strengthen framing, contrast, spacing or object orientation before making the clue physically bigger.'},
+        {n:'09',title:'Use lighting to reveal story, not to hide unfinished work',actions:[
+          'Decide the main mood in ONE phrase: warm but abandoned, cold morning, emergency red spill, late-night workshop, etc.',
+          'Use your existing main light setup first. Do not immediately add lots of tiny lights.',
+          'Place or adjust one key practical light near the most important activity/focal area.',
+          'Set intensity and attenuation so the light has a believable local effect instead of washing the whole room.',
+          'Use colour temperature or subtle colour difference only where it supports the mood.',
+          'Walk to every clue in Play mode and make sure it remains readable.',
+          'If using Post Process, make small exposure/contrast changes and test them in Play mode.',
+          'Take a screenshot, then temporarily disable the key light. If nothing important changes, the light is not doing a job.'
+        ],why:'Lighting tells the eye where to go and separates narrative information from background detail.',check:'The hero clue is readable, the room still feels believable, and no important clue disappears into blackness.',fix:'If “moody” means “I cannot see anything”, increase local readability instead of turning the whole scene brighter.'},
+        {n:'10',title:'Add sound and surface detail carefully',actions:[
+          'Choose ONE background ambience that belongs to the location: rain, distant traffic, electrical hum, sea, wind, machinery or similar.',
+          'Place an Ambient Sound actor in or near the room and assign the sound.',
+          'Use attenuation so the sound belongs to this area instead of following the player across the whole level.',
+          'Add one local sound source only if it helps a clue — for example a failing machine, dripping pipe, television or buzzing light.',
+          'Add small decals/dirt/damage where repeated use or the EVENT would logically create them.',
+          'Keep detail strongest around story areas and quieter elsewhere.',
+          'Press Play with headphones and walk in/out of the area. Check volume and attenuation.',
+          'Mute the audio once. If the story becomes clearer with it muted, your sound is distracting rather than helping.'
+        ],why:'Sound and surface detail can make evidence feel physical, but they should support the visual read rather than compete with it.',check:'The room has atmosphere, local sounds sit in the correct place, and detail density follows importance.',fix:'If every surface has grime and every object has a sound, remove half of it. Contrast makes detail noticeable.'},
+        {n:'11',title:'Run a BLIND playtest — you are not allowed to explain',actions:[
+          'Save the level and invite a classmate who has not heard your story.',
+          'Tell them only: “Explore this space and tell me what you think happened.”',
+          'Do not point, prompt, explain or apologise while they play.',
+          'Watch where they go first and write it down.',
+          'When they finish, ask: Who used this place?',
+          'Ask: What do you think happened here?',
+          'Ask: Which THREE objects made you think that?',
+          'Ask: Was anything confusing or did anything look important but turn out not to matter?',
+          'Compare their answer with your BEFORE / EVENT / AFTER statement.',
+          'Choose TWO changes based on the test and make them before asking a second person.'
+        ],why:'If the story only works after the creator explains it, the environment is not yet doing the storytelling.',check:'The tester does not need the exact same wording as you, but their interpretation overlaps with the important facts and clues.',fix:'Do not solve confusion by adding an explanatory note first. Change prop placement, clue order, framing, lighting or evidence.'},
+        {n:'12',title:'Technical clean-up and final presentation',actions:[
+          'Open the World Outliner and move every important actor into the correct folder.',
+          'Rename any major custom actors that are still called StaticMeshActor_42 or similar.',
+          'Walk the complete scene in Play mode and look for bad collision, floating props, impossible scale and blocked routes.',
+          'Check movable/static settings on lights and objects you changed. Do not leave everything Movable without a reason.',
+          'Check the scene at PLAYER eye height, not only from the editor flying camera.',
+          'Take ONE strong final screenshot from a view that communicates the environment clearly.',
+          'Record a short player walkthrough showing the intended clue route without narration.',
+          'Capture one screenshot of your organised Outliner and one development/blockout image.',
+          'Write 3 short bullets explaining three storytelling decisions you made.',
+          'Add your blind-playtest answers and the two changes you made because of them.'
+        ],why:'The final work should prove both creative decision-making and competent Unreal production practice.',check:'A viewer can see the finished scene, understand how it developed, and see evidence that you tested whether the story communicated.',fix:'If your best screenshot only works from a camera position the player can never reach, capture an additional player-view image.'}
       ],
-      deliver:['Playable small environment','At least five narrative clues','One hero clue / focal area','Reference board','Before / Event / After statement','Blind playtest notes','1 strong screenshot + short walkthrough'],
-      stretch:'Create one clue that deliberately changes the player’s first interpretation without using a text note.'
+      deliver:['Playable small environment','BEFORE → EVENT → AFTER planning statement','Reference board with labelled observations','At least five physical narrative clues','One clear hero clue','Intentional player route / first focal point','Lighting + local audio pass','Blind playtest notes + changes','Blockout screenshot + final screenshot','Short player walkthrough','Organised Outliner evidence'],
+      stretch:'Create a deliberate REFRAME: the first three clues suggest one interpretation, then a later clue makes the player reconsider it — without using a paragraph of explanatory text.'
     },
     {
       id:'2d-visual-development', icon:'◈', title:'Visual Development Pack', role:'2D Art', time:'1–2 weeks',
