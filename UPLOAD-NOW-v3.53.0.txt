@@ -1,0 +1,26 @@
+UE5 LEARNING HUB v3.53.0 — GITHUB TEAM WORKFLOW
+
+RECOMMENDED BASELINE
+Deploy over v3.52.0.
+
+MINIMAL FILES TO ADD / REPLACE
+1. index.html
+2. app.js
+3. data/github-unreal-team-guide.js                [NEW]
+4. assets/github-team-guide/01_create_new_repository.png       [NEW]
+5. assets/github-team-guide/02_name_and_private.png             [NEW]
+6. assets/github-team-guide/03_invite_collaborator.png          [NEW]
+7. assets/github-team-guide/04_clone_repository_menu.png        [NEW]
+8. assets/github-team-guide/05_clone_repository_dialog.png      [NEW]
+9. assets/github-team-guide/06_commit_changes.png                [NEW]
+10. assets/github-team-guide/07_push_origin.png                  [NEW]
+11. assets/github-team-guide/08_fetch_then_pull.png              [NEW]
+12. assets/github-team-guide/09_daily_team_workflow.png          [NEW]
+
+NO DATABASE MIGRATION
+NO backend.js CHANGE
+
+POST-DEPLOY
+Hard refresh and confirm badge v3.53.0.
+Open Unreal Learning → Master Guides → GitHub + Unreal.
+Open Industry & Careers → The People Who Make Games → GitHub pair-jam bridge.

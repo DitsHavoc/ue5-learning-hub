@@ -1,0 +1,30 @@
+UE5 LEARNING HUB v3.52.0 — UNREAL DESIGNER
+
+RECOMMENDED BASELINE
+Deploy over v3.51.0.
+
+MINIMAL FILES TO ADD / REPLACE
+1. index.html
+2. app.js
+3. unreal-designer.css                         [NEW]
+4. data/unreal-designer-data.js               [NEW]
+5. data/landscape-master-guide.js
+6. data/sequencer-master-guide.js
+
+NO DATABASE MIGRATION
+NO backend.js CHANGE
+
+POST-DEPLOY CLICK-THROUGH
+1. Hard refresh.
+2. Confirm badge reads v3.52.0.
+3. Open Unreal Designer from the sidebar.
+4. Open Materials & Surfaces and confirm its six linked recipes appear.
+5. Open Landscape and confirm Landscape Master Guide + application build appear.
+6. Open Cinematics and confirm Sequencer Master Guide + application build appear.
+7. Open Designer Studio → any discipline → confirm “Apply it in Unreal” bridge appears.
+8. Open one Designer practical recipe → confirm breadcrumb/sidebar context is Unreal Designer.
+9. Open Homework → confirm “Unreal Designer — Apply the Theory”.
+10. Open Industry & Careers → The Industry and confirm today’s Reality Check, quiz and Secret Studio Protocol still appear.
+
+FULL BUILD
+Use the FULL zip if you want one canonical self-contained tree.

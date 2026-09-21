@@ -1,0 +1,26 @@
+UE5 LEARNING HUB v3.41.2 — THEORY CASE STUDY DIVERSITY PASS
+
+UPLOAD THE CONTENTS OF THE v3.41.2 GITHUB-UPLOAD ZIP TO THE REPOSITORY ROOT.
+
+Main changed files:
+- index.html
+- app.js
+- styles.css
+- data/theory-data.js
+
+Documentation:
+- RELEASE-NOTES-v3.41.2.md
+- THEORY-DIVERSITY-QA-v3.41.2.md
+
+No SQL migration is required.
+No Supabase schema change is required.
+Theory lesson IDs and existing completion/XP records are preserved.
+
+After Render deploys:
+1. Hard refresh the live site once.
+2. Open #/theory.
+3. Confirm v3.41.2 in the footer/version label.
+4. Confirm Theory cards show different CASE STUDY labels.
+5. Open Game Feel & Feedback and confirm Jet Set Radio.
+6. Open Environmental Storytelling and confirm OMORI.
+7. Open a previously completed Theory lesson and confirm it remains complete.

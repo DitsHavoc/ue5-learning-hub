@@ -2470,7 +2470,7 @@ window.UE5_SKILL_MISSIONS = {
             },
             {
               "title": "Explain the architecture",
-              "where": "Your project / to your teacher or partner",
+              "where": "Your project / final test",
               "do": "Be able to explain this chain in your own words: ItemRow Name → InventoryRows → DT_ItemData → ST_ItemData → DisplayName/Description/other fields.",
               "check": "You can describe what the Struct does, what the Data Table does and why the Array only stores row IDs.",
               "why": "Understanding the relationship matters more than memorising node names.",
@@ -3809,7 +3809,7 @@ window.UE5_SKILL_MISSIONS = {
             },
             {
               "title": "Explain the before and after",
-              "where": "Your project / teacher check",
+              "where": "Your project / final review",
               "do": "Be able to explain one real example: BEFORE the Generator got InventoryRows and searched it itself; AFTER it calls HasItem(Battery). Then explain why that makes future changes safer.",
               "check": "You can describe the benefit in terms of reuse, readability and one place to change logic.",
               "why": "The goal is not fewer nodes for its own sake; it is better organisation of responsibilities.",
@@ -3822,7 +3822,7 @@ window.UE5_SKILL_MISSIONS = {
                 "Describe the benefit as reuse: several actors call the same Functions.",
                 "Describe the benefit as readability: the Function names state the intention.",
                 "Describe the benefit as maintenance: changing inventory implementation later requires fewer edits.",
-                "Be ready to show one Function graph and one simplified caller graph to your teacher."
+                "Choose one Function graph and one simplified caller graph that clearly prove your refactor worked."
               ],
               "see": "You can describe the benefit in terms of reuse, readability and one place to change logic."
             }

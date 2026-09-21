@@ -1,0 +1,46 @@
+UE5 LEARNING HUB v3.51.0 — LEARNING FLOW CLEANUP
+
+RECOMMENDED
+Use the FULL ZIP if you want one clean canonical repository snapshot.
+Use the MINIMAL ZIP if you want to overlay the current live repository without replacing unrelated historical/documentation files.
+
+NO DATABASE MIGRATION
+NO SQL
+NO BACKEND CHANGE
+
+WHAT THIS FIXES
+- Reunites the v3.50.2 Landscape/Sequencer branch with v3.49.3 Industry Reality Check / Secret Studio Protocol.
+- Landscape and Sequencer now clearly live inside Unreal Learning as Master Guides.
+- Master Guides + Industry feed central Revision.
+- Practical recipes link to the relevant knowledge revision instead of carrying duplicate quizzes.
+- Homework starts with structured Learn → Do → Check → Bring Back routes.
+
+AFTER DEPLOYMENT — 5 MINUTE CLICK-THROUGH
+1. Hard refresh the Hub and confirm the badge reads v3.51.0.
+2. Open Unreal Learning.
+   - Confirm the ladder has 5 stages.
+   - Confirm Stage 03 is Master Guides.
+   - Open Landscape and Sequencer from the Master Guide cards.
+3. Open Quick Tutorials.
+   - Confirm Master Guides appear as a separate full-workflow strip above recipe families.
+4. Open Designer Studio → Landscape.
+   - Confirm the Unreal Learning Landscape bridge appears.
+5. Open Designer Studio → Sequencer & Cutscenes.
+   - Confirm the Sequencer Master Guide bridge appears.
+6. Open Revision.
+   - Confirm six areas: Unreal Systems, Unreal Master Guides, Game Design Theory, Industry & Careers, Designer Studio, 3D Foundations.
+   - Start a 5-question Landscape or Sequencer focused check.
+7. Open Homework.
+   - Confirm six guided routes.
+   - Open one route and check Learn → Do → Check → Bring Back.
+   - Test Copy full path for Teams; the copied text should include Hub links.
+8. Open Industry & Careers → The Industry.
+   - Confirm Industry Reality Check remains.
+   - Confirm the scenario quiz works.
+   - Confirm Secret Studio Protocol remains at the end.
+
+IF USING THE MINIMAL ZIP
+Extract it over the repository/site root and allow included files to replace/add. It does not delete other live files.
+
+IF USING THE FULL ZIP
+Replace the repository/site contents with the extracted snapshot, commit/push, and deploy normally.

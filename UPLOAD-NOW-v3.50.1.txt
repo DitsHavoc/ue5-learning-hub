@@ -1,0 +1,25 @@
+UE5 LEARNING HUB v3.50.1 — LANDSCAPE GUIDE HOME FIX
+
+RECOMMENDED BASE
+Current deployed v3.49.1 is fine. The v3.50.1 MINIMAL package includes the full Landscape addition plus this location fix.
+
+UPLOAD / REPLACE
+1. index.html
+2. app.js
+3. data/landscape-master-guide.js
+4. assets/tutorials/landscape-master/   (all files in this folder)
+
+NO DATABASE MIGRATION.
+NO CSS CHANGE.
+NO BACKEND CHANGE.
+
+AFTER DEPLOYMENT
+1. Hard refresh the Hub.
+2. Confirm the badge reads v3.50.1.
+3. Open Unreal Learning.
+4. Confirm the Landscape & World Building card is visible there.
+5. Open Landscape Master Guide and confirm the breadcrumb returns to Unreal Learning.
+6. Open Designer Studio → Landscape, Terrain & Foliage.
+7. Confirm the master guide is NOT one of the Designer Studio recipe cards.
+8. Confirm the page contains the 'Need the exact Landscape buttons and settings?' bridge to Unreal Learning.
+9. Open several guide stages and click screenshots to confirm the lightbox still works.

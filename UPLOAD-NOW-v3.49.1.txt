@@ -1,0 +1,23 @@
+UE5 LEARNING HUB v3.49.1 — CAREER QUIZ HOTFIX
+
+BASELINE
+Apply over the currently deployed v3.49.0 site.
+
+RUNTIME FILES TO REPLACE
+1. index.html
+2. app.js
+
+No database migration.
+No CSS change.
+No backend.js change.
+No career data change.
+
+AFTER DEPLOYMENT
+1. Hard refresh the Hub.
+2. Confirm the footer/sidebar badge reads v3.49.1.
+3. Open one of the previously affected pages, e.g. #/industry-careers/industry.
+4. Scroll to Scenario Check before completing the checkpoint.
+5. Confirm answers and Check Answers are clickable.
+6. Pass the quiz. The page should say the Hub checkpoint is still required.
+7. Complete/save the checkpoint.
+8. Confirm the chapter automatically completes and awards XP once.

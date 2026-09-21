@@ -1,0 +1,24 @@
+UE5 LEARNING HUB v3.40.0 — GAME DESIGN THEORY
+
+MINIMAL PATCH (recommended if your live repo is already v3.39.4 + homepage/Noclip hotfix)
+
+Upload/replace these files preserving folders:
+
+index.html
+styles.css
+app.js
+backend.js
+data/theory-data.js
+migrations/20260831_38_game_design_theory_xp.sql
+RELEASE-NOTES-v3.40.0.md
+GAME-DESIGN-THEORY-QA-v3.40.0.md
+
+IMPORTANT DATABASE STEP
+Apply migrations/20260831_38_game_design_theory_xp.sql to Supabase.
+Without this migration the Theory progress still saves, but the existing generic XP fallback would award the wrong amount.
+
+FULL BUILD
+If you prefer, upload the contents of the FULL zip as the complete site. It already includes v3.39.4 Network Quiet + the later homepage/Noclip hotfix + v3.40.0 Theory.
+
+AFTER DEPLOY
+Hard refresh once, then follow the short browser QA list in GAME-DESIGN-THEORY-QA-v3.40.0.md.

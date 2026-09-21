@@ -1,0 +1,52 @@
+UE5 LEARNING HUB v3.49.0 — FIND YOUR PLACE
+DEPLOYABLE MINIMAL OVERLAY
+
+BASELINE
+Apply this over the current known-good v3.48.3 site/repository.
+Do NOT extract it into a new nested folder inside the repo.
+
+RUNTIME FILES IN THIS UPDATE
+1. index.html
+2. app.js
+3. backend.js
+4. industry-careers.css                    [NEW]
+5. data/industry-careers-data.js           [NEW]
+
+DOCUMENTATION INCLUDED
+- RELEASE-NOTES-v3.49.0.md
+- INDUSTRY-CAREERS-QA-v3.49.0.md
+- LEVEL4-FIND-YOUR-PLACE-LIVE-DELIVERY-MAP.md
+
+DEPLOY
+1. Back up / commit the current v3.48.3 repository.
+2. Extract this ZIP over the repository root and allow these files to replace/add.
+3. Confirm index.html still sits at the repository root.
+4. Commit/push normally. The existing Render static-site deployment can then update from main.
+5. Hard refresh the Hub and confirm the badge reads v3.49.0.
+6. Open: #/industry-careers
+
+QUICK CLASSROOM CHECK AFTER DEPLOYMENT
+STUDENT
+- Open Industry & Careers.
+- Open Chapter 1 and save the Industry checkpoint.
+- Confirm the scenario check remains locked until both the game and cluster fields are saved.
+- Complete a chapter and confirm progress/XP sync.
+- Open Chapter 3 and save a work-style reflection / skill evidence.
+- Reload and confirm the career profile returns.
+
+TEACHER
+- Open Classes → one Level 4 class.
+- Confirm the Industry & Careers column appears in the roster.
+- Confirm the Live Level 4 Career View appears and updates as students save profiles.
+
+DATABASE
+No migration required.
+The feature reuses lesson_progress and the existing XP trigger/RLS.
+
+IMPORTANT PACKAGING NOTE
+The historical ZIP chain available to this build environment does not contain three older inherited files that the live/current site already references:
+- visual-refresh.css
+- visual-final.css
+- roster-controls.js
+
+They are NOT changed or deleted by this overlay. This is why v3.49.0 is intentionally supplied as a minimal overlay for the current v3.48.3 deployment rather than as a fabricated "full" site archive.

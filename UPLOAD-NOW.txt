@@ -1,0 +1,8 @@
+v3.48.2 — Guided Paths Tidy
+
+REPLACE:
+- index.html
+- light-workspace.css
+
+Removes the large "THE RULE / Guidance, not another course system" panel from Guided Paths.
+No JS, content data, progress or database changes.

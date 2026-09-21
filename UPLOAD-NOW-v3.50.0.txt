@@ -1,0 +1,28 @@
+UE5 LEARNING HUB v3.50.0 — LANDSCAPE MASTER GUIDE
+
+BASELINE
+Apply over the currently deployed v3.49.1 site.
+
+FILES TO ADD / REPLACE
+1. index.html
+2. data/landscape-master-guide.js
+3. assets/tutorials/landscape-master/  (all 78 .webp files)
+
+DOCUMENTATION (optional to keep in repo)
+4. RELEASE-NOTES-v3.50.0.md
+5. LANDSCAPE-MASTER-GUIDE-QA-v3.50.0.md
+
+NO DATABASE MIGRATION
+NO backend.js CHANGE
+NO app.js CHANGE
+NO styles.css CHANGE
+
+AFTER DEPLOYMENT
+1. Hard refresh the Hub.
+2. Confirm the version badge reads v3.50.0.
+3. Open Designer Studio → Landscape, Terrain & Foliage.
+4. Confirm the first practical tutorial is “Landscape: From Blank Terrain to Playable Environment”.
+5. Open it and confirm the 16 stages load.
+6. Open several screenshots in the image lightbox, including a full-editor view and a cropped Details-panel view.
+7. Confirm the final spline-road screenshot loads near the end of the guide.
+8. Complete the tutorial once and confirm normal tutorial completion/progress still works.

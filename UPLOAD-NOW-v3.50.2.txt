@@ -1,0 +1,27 @@
+UE5 LEARNING HUB v3.50.2 — SEQUENCER MASTER GUIDE
+
+BASELINE
+Apply directly over v3.50.1.
+
+RUNTIME FILES TO REPLACE
+1. index.html
+2. app.js
+3. data/landscape-master-guide.js
+4. data/sequencer-master-guide.js
+5. assets/tutorials/sequencer-master/*
+
+OPTIONAL REPO DOCUMENTATION
+- RELEASE-NOTES-v3.50.2.md
+- SEQUENCER-MASTER-GUIDE-QA-v3.50.2.md
+
+NO DATABASE MIGRATION.
+NO BACKEND CHANGE.
+NO CSS CHANGE.
+
+AFTER DEPLOYMENT
+1. Hard refresh the Hub.
+2. Confirm version badge reads v3.50.2.
+3. Open Unreal Learning and confirm the Sequencer Master Guide card/link appears.
+4. Open the guide and check early Epic images plus later lens/MRQ reference images load.
+5. Open Designer Studio → Sequencer & Cutscenes and confirm the technical-guide cross-link opens the same Sequencer Master Guide.
+6. Search for “Sequencer Master Guide” and confirm the result metadata says Unreal Learning • Sequencer & Cinematics.
