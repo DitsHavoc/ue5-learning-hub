@@ -1981,7 +1981,7 @@ function skillMissionStep(step,i){
   const actions=(step.doList&&step.doList.length)?step.doList:[step.do||''];
   return `<article class="skill-step-card"><div class="skill-step-num">${String(i+1).padStart(2,'0')}</div><div class="skill-step-body"><h3>${esc(step.title)}</h3>
     <div class="skill-step-field where"><span>1 • WHERE TO WORK</span><p>${esc(step.where||'')}</p></div>
-    <div class="skill-step-field do"><span>2 • CLICK / ADD / CONNECT — IN THIS ORDER</span><ol class="skill-action-list">${actions.map(x=>`<li>${esc(x)}</li>`).join('')}</ol></div>
+    <div class="skill-step-field do"><span>2 • DO THESE ONE AT A TIME — IN THIS EXACT ORDER</span><ol class="skill-action-list">${actions.map(x=>`<li>${esc(x)}</li>`).join('')}</ol></div>
     ${skillMissionVisual(step.visual)}
     <div class="skill-step-field check"><span>3 • YOU SHOULD NOW HAVE</span><p>${esc(step.see||step.check||'')}</p></div>
     <div class="skill-step-field why"><span>WHY THIS MATTERS</span><p>${esc(step.why||'')}</p></div>
