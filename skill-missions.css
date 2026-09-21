@@ -112,3 +112,17 @@
 .skill-theory-links a{display:inline-flex;align-items:center;padding:8px 10px;border-radius:10px;border:1px solid rgba(116,167,255,.22);background:rgba(116,167,255,.08);text-decoration:none;color:inherit;font-size:12px;font-weight:700}
 .skill-theory-links a:hover{border-color:rgba(116,167,255,.5);background:rgba(116,167,255,.13)}
 @media(max-width:680px){.skill-action-list li{padding-left:42px}.skill-step-visuals{grid-template-columns:1fr}}
+
+
+/* v3.57.3 — make the complete three-mission programmer path visible */
+.skill-path-roadmap{margin:14px 0 18px;padding:18px;border-radius:18px;background:linear-gradient(135deg,rgba(116,167,255,.08),rgba(122,92,190,.06));border:1px solid rgba(116,167,255,.18)}
+.skill-path-roadmap-head h2{margin:4px 0 5px;font-size:22px}.skill-path-roadmap-head p{margin:0 0 14px;opacity:.75}
+.skill-path-roadmap-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.skill-path-roadmap-card{display:grid;grid-template-columns:38px minmax(0,1fr);gap:10px;align-items:center;padding:12px;border-radius:13px;text-decoration:none;color:inherit;background:rgba(0,0,0,.14);border:1px solid rgba(255,255,255,.08)}
+.skill-path-roadmap-card:hover{border-color:rgba(116,167,255,.4);background:rgba(116,167,255,.09)}
+.skill-path-roadmap-card.current{border-color:rgba(116,167,255,.55);box-shadow:inset 0 0 0 1px rgba(116,167,255,.12)}
+.skill-path-roadmap-card.done{border-color:rgba(82,185,124,.35)}
+.skill-path-roadmap-card.locked{opacity:.6}
+.skill-path-roadmap-num{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;background:rgba(116,167,255,.13);font-weight:900}
+.skill-path-roadmap-card small,.skill-path-roadmap-card em{display:block;font-size:10px;line-height:1.3}.skill-path-roadmap-card small{opacity:.58;font-weight:800;letter-spacing:.06em}.skill-path-roadmap-card strong{display:block;margin:3px 0;font-size:13px;line-height:1.3}.skill-path-roadmap-card em{opacity:.68;font-style:normal}
+@media(max-width:820px){.skill-path-roadmap-grid{grid-template-columns:1fr}}

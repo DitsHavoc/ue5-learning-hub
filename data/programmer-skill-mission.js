@@ -1,5 +1,5 @@
 window.UE5_SKILL_MISSIONS = {
-  "version": "3.57.2",
+  "version": "3.57.3",
   "missions": [
     {
       "id": "arrays-maps-escape-room",

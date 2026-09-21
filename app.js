@@ -1987,12 +1987,18 @@ function skillMissionStep(step,i){
     <div class="skill-step-field why"><span>WHY THIS MATTERS</span><p>${esc(step.why||'')}</p></div>
   </div></article>`;
 }
+function skillMissionRoadmap(currentId){
+  const missions=(SKILL_MISSIONS.missions||[]).slice().sort((a,b)=>(a.sequence||0)-(b.sequence||0));
+  if(!missions.length)return '';
+  return `<section class="skill-path-roadmap"><div class="skill-path-roadmap-head"><span class="eyebrow">YOUR THREE-MISSION PROGRAMMER PATH</span><h2>See the whole journey before you start</h2><p>All three missions continue the same Escape Room. Finish one and the next unlocks automatically.</p></div><div class="skill-path-roadmap-grid">${missions.map(x=>{const xp=skillMissionProgress(x.id),ready=skillMissionPrereqMet(x),idx=skillMissionNextIndex(x),st=x.stages?.[idx]||x.stages?.[0],current=x.id===currentId;return `<a class="skill-path-roadmap-card ${current?'current':''} ${xp.complete?'done':''} ${ready?'':'locked'}" href="#/skill-mission/${x.id}/${st?.id||'start'}"><span class="skill-path-roadmap-num">${xp.complete?'✓':ready?(x.sequence||'•'):'🔒'}</span><div><small>MISSION ${x.sequence||''}${current?' • YOU ARE HERE':''}</small><strong>${esc(x.title)}</strong><em>${xp.complete?'Complete':ready?`${xp.done}/${xp.total} stages complete`:`Unlocks after Mission ${Math.max(1,(x.sequence||2)-1)}`}</em></div></a>`}).join('')}</div></section>`;
+}
 function skillMissionPage(id,requestedStage){
   const m=skillMission(id);if(!m)return notFound();
-  const p=skillMissionProgress(id);
+  const p=skillMissionProgress(id),roadmap=skillMissionRoadmap(id);
   if(!skillMissionPrereqMet(m)){
     const req=skillMission(m.requiresMission),rp=skillMissionProgress(m.requiresMission),ri=req?skillMissionNextIndex(req):0,rstage=req?.stages?.[ri];
     return `<div class="breadcrumb"><a href="#/">Home</a> / <a href="#/programming">Unreal Learning</a> / ${esc(m.title)}</div>
+    ${roadmap}
     <section class="skill-mission-hero"><div><span class="eyebrow">${esc(m.discipline)} SKILL MISSION${m.sequence?` ${m.sequence}`:''} • NEXT IN PATH</span><h1>🔒 ${esc(m.title)}</h1><p>${esc(m.summary)}</p></div><div class="skill-mission-progress"><strong>LOCKED</strong><span>Finish Mission ${Math.max(1,(m.sequence||2)-1)} first</span></div></section>
     <section class="content-card skill-locked-stage"><span class="eyebrow">YOUR NEXT PROGRAMMER STEP</span><h2>Finish ${esc(req?.title||'the previous Skill Mission')} first.</h2><p>This mission continues the game you already built. Complete the previous mission so you arrive here with a working Escape Room to refactor.</p>${req&&rstage?`<p><strong>Previous mission progress:</strong> ${rp.done}/${rp.total} stages complete.</p><a class="button primary" href="#/skill-mission/${req.id}/${rstage.id}">Continue Mission ${Math.max(1,(m.sequence||2)-1)} →</a>`:`<a class="button ghost" href="#/programming">Back to Programmer Skill Missions</a>`}</section>`;
   }
@@ -2006,11 +2012,13 @@ function skillMissionPage(id,requestedStage){
   }).join('');
   if(!unlocked){
     return `<div class="breadcrumb"><a href="#/">Home</a> / <a href="#/programming">Unreal Learning</a> / ${esc(m.title)}</div>
+    ${roadmap}
     <section class="skill-mission-hero"><div><span class="eyebrow">${esc(m.discipline)} SKILL MISSION${m.sequence?` ${m.sequence}`:''} • SOLO</span><h1>${m.icon||'⌘'} ${esc(m.title)}</h1><p>${esc(m.summary)}</p></div><div class="skill-mission-progress"><strong>${p.done}/${p.total}</strong><span>stages complete</span><div class="progress"><span style="width:${p.pct}%"></span></div></div></section>
     <div class="skill-mission-layout"><aside class="skill-stage-rail">${rail}</aside><section class="content-card skill-locked-stage"><span class="eyebrow">🔒 NOT YET</span><h2>Finish the previous stage first.</h2><p>This mission is intentionally sequential so you test each system before building the next one on top.</p><a class="button primary" href="#/skill-mission/${m.id}/${latestStage.id}">Continue current stage →</a></section></div>`;
   }
   const next=m.stages[index+1],prev=m.stages[index-1];
   return `<div class="breadcrumb"><a href="#/">Home</a> / <a href="#/programming">Unreal Learning</a> / ${esc(m.title)}</div>
+  ${roadmap}
   <section class="skill-mission-hero"><div><span class="eyebrow">${esc(m.discipline)} SKILL MISSION${m.sequence?` ${m.sequence}`:''} • SOLO • ${esc(m.duration)}</span><h1>${m.icon||'⌘'} ${esc(m.title)}</h1><p>${esc(m.summary)}</p><div class="tutorial-tag-row large">${(m.skills||[]).map(x=>`<span>${esc(x)}</span>`).join('')}</div></div><div class="skill-mission-progress"><strong>${p.done}/${p.total}</strong><span>stages complete</span><div class="progress"><span style="width:${p.pct}%"></span></div><small>${p.complete?'Mission complete — revisit any stage.':'Finish one stage, test it, then unlock the next.'}</small></div></section>
   <section class="skill-mission-rulebar"><div><span class="deep-label">HOW TO USE THIS GUIDE</span><h2>Follow it like I am standing beside you.</h2><p>${esc(m.guideRule||'Build one step, test it, then continue.')}</p>${(m.theoryLinks||[]).length?`<div class="skill-theory-links"><small>Need the idea explained first?</small>${m.theoryLinks.map(x=>`<a href="${esc(x.href)}">🧱 ${esc(x.label)} →</a>`).join('')}</div>`:''}</div><div class="skill-rule-chips">${(m.rules||[]).map(x=>`<span>✓ ${esc(x)}</span>`).join('')}</div></section>
   ${index===0?`<section class="content-card skill-game-brief"><span class="eyebrow">THE WHOLE GAME</span><h2>What you are building</h2><p>${esc(m.subtitle)}</p>${skillMissionFlow(m.gameFlow)}</section>`:''}
@@ -2022,7 +2030,7 @@ function skillMissionPage(id,requestedStage){
     <section class="skill-stage-test"><div><span class="eyebrow">STOP & TEST</span><h2>Do not continue until these work</h2><ul>${(stage.test||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><div class="skill-done-when"><small>STAGE IS DONE WHEN</small><strong>${esc(stage.doneWhen||'Everything above works.')}</strong></div></section>
     ${(stage.common||[]).length?`<details class="content-card skill-troubleshoot"><summary>⚠ If yours does not work</summary><ul>${stage.common.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></details>`:''}
     ${(stage.challenges||[]).length?`<section class="content-card skill-challenges"><span class="eyebrow">FINISHED THE CORE GAME?</span><h2>Independent upgrades</h2><p>Choose one after the complete play-through works.</p><ul>${stage.challenges.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></section>`:''}
-    <section class="skill-stage-actions">${prev?`<a class="button ghost" href="#/skill-mission/${m.id}/${prev.id}">← Previous stage</a>`:'<span></span>'}${done?(next?`<a class="button primary" href="#/skill-mission/${m.id}/${next.id}">Next stage →</a>`:`<a class="button success" href="#/programming">✓ Mission complete</a>`):`<button class="button primary" data-action="complete-skill-stage" data-mission="${m.id}" data-stage="${stage.id}">${next?'✓ This stage works — unlock next':'✓ Full game tested — complete mission'}</button>`}</section>
+    <section class="skill-stage-actions">${prev?`<a class="button ghost" href="#/skill-mission/${m.id}/${prev.id}">← Previous stage</a>`:'<span></span>'}${done?(next?`<a class="button primary" href="#/skill-mission/${m.id}/${next.id}">Next stage →</a>`:`<a class="button success" href="${(()=>{const nm=(SKILL_MISSIONS.missions||[]).find(x=>(x.sequence||0)===(m.sequence||0)+1);return nm?`#/skill-mission/${nm.id}/${nm.stages?.[0]?.id||'start'}`:'#/programming'})()}">✓ Mission complete${(SKILL_MISSIONS.missions||[]).some(x=>(x.sequence||0)===(m.sequence||0)+1)?' — Start next mission →':''}</a>`):`<button class="button primary" data-action="complete-skill-stage" data-mission="${m.id}" data-stage="${stage.id}">${next?'✓ This stage works — unlock next':'✓ Full game tested — complete mission'}</button>`}</section>
   </main></div>`;
 }
 function completeSkillMissionStage(missionId,stageId){
