@@ -1,0 +1,25 @@
+UE5 LEARNING HUB — v3.57.2 PROGRAMMER GUIDE CLARITY PASS
+
+Recommended upload:
+  UE5-Learning-Hub-v3.57.2-PROGRAMMER-GUIDES-MINIMAL.zip
+
+Upload/extract the contents over the current v3.57.1 site and allow these files to replace the old versions:
+  index.html
+  app.js
+  skill-missions.css
+  data/programmer-skill-mission.js
+  data/level4-specialist-projects.js
+
+Also included for reference:
+  RELEASE-NOTES-v3.57.2.md
+  UPLOAD-NOW-v3.57.2.txt
+
+No database migration is required.
+
+After deploy/hard refresh, check:
+  1. version badge reads v3.57.2
+  2. Level 4 → Programmer Skill Missions → Escape Room: Arrays & Maps
+  3. open Build the Inventory Array
+  4. each step shows numbered CLICK / ADD / CONNECT instructions
+  5. local reference images open when clicked
+  6. completing a stage still unlocks the next stage

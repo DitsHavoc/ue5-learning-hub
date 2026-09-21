@@ -90,3 +90,25 @@
   .skill-stage-actions{align-items:stretch;flex-direction:column}
   .skill-stage-actions .button{width:100%;text-align:center}
 }
+
+/* v3.57.2 — literal game-build instruction pass */
+.skill-stage-making{margin-top:14px;padding:14px 16px;border-radius:13px;background:rgba(116,167,255,.08);border:1px solid rgba(116,167,255,.18)}
+.skill-stage-making span{display:block;font-size:10px;letter-spacing:.12em;font-weight:900;opacity:.72;margin-bottom:5px}
+.skill-stage-making p{margin:0;line-height:1.55;font-weight:700}
+.skill-action-list{counter-reset:skillaction;list-style:none;margin:8px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+.skill-action-list li{counter-increment:skillaction;position:relative;padding:10px 12px 10px 46px;border-radius:10px;background:rgba(0,0,0,.14);border:1px solid rgba(116,167,255,.1);line-height:1.55}
+.skill-action-list li:before{content:counter(skillaction);position:absolute;left:11px;top:9px;display:grid;place-items:center;width:24px;height:24px;border-radius:7px;background:rgba(116,167,255,.17);border:1px solid rgba(116,167,255,.28);font-size:11px;font-weight:900}
+.skill-step-field.do{padding:14px}
+.skill-step-field.check{border-left:3px solid rgba(82,185,124,.75)}
+.skill-step-field.where{border-left:3px solid rgba(170,180,199,.48)}
+.skill-step-visuals{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:12px}
+.skill-step-visual{margin:0;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.09);background:rgba(0,0,0,.18)}
+.skill-step-visual button{position:relative;width:100%;padding:0;border:0;background:transparent;cursor:zoom-in;display:block;text-align:left}
+.skill-step-visual button>span{position:absolute;right:8px;top:8px;z-index:2;padding:5px 8px;border-radius:999px;background:rgba(5,9,15,.78);font-size:10px;font-weight:800;color:#fff}
+.skill-step-visual img{display:block;width:100%;max-height:360px;object-fit:contain;background:#080d14}
+.skill-step-visual figcaption{padding:10px 12px;font-size:12px;line-height:1.45;opacity:.78}
+.skill-theory-links{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:14px}
+.skill-theory-links small{width:100%;font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:800;opacity:.62}
+.skill-theory-links a{display:inline-flex;align-items:center;padding:8px 10px;border-radius:10px;border:1px solid rgba(116,167,255,.22);background:rgba(116,167,255,.08);text-decoration:none;color:inherit;font-size:12px;font-weight:700}
+.skill-theory-links a:hover{border-color:rgba(116,167,255,.5);background:rgba(116,167,255,.13)}
+@media(max-width:680px){.skill-action-list li{padding-left:42px}.skill-step-visuals{grid-template-columns:1fr}}

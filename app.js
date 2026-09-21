@@ -1972,12 +1972,19 @@ function skillMissionFlow(items){
   if(!items?.length)return '';
   return `<div class="skill-flow">${items.map((x,i)=>`<span>${esc(x)}</span>${i<items.length-1?'<b>→</b>':''}`).join('')}</div>`;
 }
+function skillMissionVisual(v){
+  if(!v)return '';
+  const rows=Array.isArray(v)?v:[v];
+  return `<div class="skill-step-visuals">${rows.map(x=>`<figure class="skill-step-visual"><button type="button" data-action="open-image" data-src="${esc(x.src||'')}" data-caption="${esc(x.caption||'Reference image')}" aria-label="Open reference image larger"><span>⌕ Click to enlarge</span><img src="${esc(x.src||'')}" alt="${esc(x.caption||'Programming reference image')}" loading="lazy"></button><figcaption>${esc(x.caption||'Reference image')}</figcaption></figure>`).join('')}</div>`;
+}
 function skillMissionStep(step,i){
+  const actions=(step.doList&&step.doList.length)?step.doList:[step.do||''];
   return `<article class="skill-step-card"><div class="skill-step-num">${String(i+1).padStart(2,'0')}</div><div class="skill-step-body"><h3>${esc(step.title)}</h3>
-    <div class="skill-step-field where"><span>WHERE TO WORK</span><p>${esc(step.where||'')}</p></div>
-    <div class="skill-step-field do"><span>DO THIS</span><p>${esc(step.do||'')}</p></div>
-    <div class="skill-step-field check"><span>TEST / CHECK</span><p>${esc(step.check||'')}</p></div>
-    <div class="skill-step-field why"><span>WHY</span><p>${esc(step.why||'')}</p></div>
+    <div class="skill-step-field where"><span>1 • WHERE TO WORK</span><p>${esc(step.where||'')}</p></div>
+    <div class="skill-step-field do"><span>2 • CLICK / ADD / CONNECT — IN THIS ORDER</span><ol class="skill-action-list">${actions.map(x=>`<li>${esc(x)}</li>`).join('')}</ol></div>
+    ${skillMissionVisual(step.visual)}
+    <div class="skill-step-field check"><span>3 • YOU SHOULD NOW HAVE</span><p>${esc(step.see||step.check||'')}</p></div>
+    <div class="skill-step-field why"><span>WHY THIS MATTERS</span><p>${esc(step.why||'')}</p></div>
   </div></article>`;
 }
 function skillMissionPage(id,requestedStage){
@@ -2005,11 +2012,11 @@ function skillMissionPage(id,requestedStage){
   const next=m.stages[index+1],prev=m.stages[index-1];
   return `<div class="breadcrumb"><a href="#/">Home</a> / <a href="#/programming">Unreal Learning</a> / ${esc(m.title)}</div>
   <section class="skill-mission-hero"><div><span class="eyebrow">${esc(m.discipline)} SKILL MISSION${m.sequence?` ${m.sequence}`:''} • SOLO • ${esc(m.duration)}</span><h1>${m.icon||'⌘'} ${esc(m.title)}</h1><p>${esc(m.summary)}</p><div class="tutorial-tag-row large">${(m.skills||[]).map(x=>`<span>${esc(x)}</span>`).join('')}</div></div><div class="skill-mission-progress"><strong>${p.done}/${p.total}</strong><span>stages complete</span><div class="progress"><span style="width:${p.pct}%"></span></div><small>${p.complete?'Mission complete — revisit any stage.':'Finish one stage, test it, then unlock the next.'}</small></div></section>
-  <section class="skill-mission-rulebar"><div><span class="deep-label">THE RULE</span><h2>One programmer. One complete game.</h2><p>Basic shapes are enough. Do not move on until the current test works.</p></div><div class="skill-rule-chips">${(m.rules||[]).map(x=>`<span>✓ ${esc(x)}</span>`).join('')}</div></section>
+  <section class="skill-mission-rulebar"><div><span class="deep-label">HOW TO USE THIS GUIDE</span><h2>Follow it like I am standing beside you.</h2><p>${esc(m.guideRule||'Build one step, test it, then continue.')}</p>${(m.theoryLinks||[]).length?`<div class="skill-theory-links"><small>Need the idea explained first?</small>${m.theoryLinks.map(x=>`<a href="${esc(x.href)}">🧱 ${esc(x.label)} →</a>`).join('')}</div>`:''}</div><div class="skill-rule-chips">${(m.rules||[]).map(x=>`<span>✓ ${esc(x)}</span>`).join('')}</div></section>
   ${index===0?`<section class="content-card skill-game-brief"><span class="eyebrow">THE WHOLE GAME</span><h2>What you are building</h2><p>${esc(m.subtitle)}</p>${skillMissionFlow(m.gameFlow)}</section>`:''}
   <div class="skill-mission-layout"><aside class="skill-stage-rail"><div class="skill-rail-head"><small>MISSION PROGRESS</small><strong>${p.pct}%</strong></div>${rail}</aside>
   <main class="skill-stage-main">
-    <section class="skill-stage-hero ${done?'done':''}"><div><span class="eyebrow">STAGE ${String(index).padStart(2,'0')} OF ${String(m.stages.length-1).padStart(2,'0')}${done?' • ✓ COMPLETE':''}</span><h2>${esc(stage.title)}</h2><p>${esc(stage.goal)}</p></div><div class="skill-stage-why"><span>WHY THIS STAGE EXISTS</span><p>${esc(stage.why)}</p></div></section>
+    <section class="skill-stage-hero ${done?'done':''}"><div><span class="eyebrow">STAGE ${String(index).padStart(2,'0')} OF ${String(m.stages.length-1).padStart(2,'0')}${done?' • ✓ COMPLETE':''}</span><h2>${esc(stage.title)}</h2><div class="skill-stage-making"><span>YOU ARE MAKING</span><p>${esc(stage.goal)}</p></div></div><div class="skill-stage-why"><span>WHY THIS STAGE EXISTS</span><p>${esc(stage.why)}</p></div></section>
     ${skillMissionFlow(stage.flow)}
     <section class="skill-step-list">${(stage.steps||[]).map(skillMissionStep).join('')}</section>
     <section class="skill-stage-test"><div><span class="eyebrow">STOP & TEST</span><h2>Do not continue until these work</h2><ul>${(stage.test||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><div class="skill-done-when"><small>STAGE IS DONE WHEN</small><strong>${esc(stage.doneWhen||'Everything above works.')}</strong></div></section>
