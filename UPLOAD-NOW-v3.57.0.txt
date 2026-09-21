@@ -1,0 +1,22 @@
+UE5 LEARNING HUB — v3.57.0 LEVEL 4 SPECIALIST PROJECTS
+
+BASELINE REQUIRED:
+  v3.56.2 — LOCAL ONLY homepage hotfix
+
+UPLOAD / REPLACE:
+  index.html
+  app.js
+
+ADD:
+  level4-specialist.css
+  data/level4-specialist-projects.js
+
+No database migration is required.
+
+After upload, hard refresh and check:
+1. version badge says v3.57.0 • LOCAL ONLY
+2. sidebar shows Level 4 Specialist Projects
+3. #/level4 opens the six-choice screen
+4. all six pathway cards open
+5. external theory links open in a new tab
+6. existing Guided Paths, Unreal Learning, Designer Studio, 3D Modelling and tutorials still open normally

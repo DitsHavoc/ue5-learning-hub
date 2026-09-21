@@ -8,6 +8,10 @@ const PROJECT = window.UE5_PROJECT_DATA;
 const TOOLS = window.UE5_TUTORIAL_DATA;
 const SNIPPETS = window.UE5_SNIPPET_DATA;
 const DESIGN = window.UE5_DESIGN_DATA;
+const UNREAL_DESIGNER = window.UE5_UNREAL_DESIGNER_DATA;
+const THEORY = window.UE5_THEORY_DATA;
+const CAREERS = window.UE5_INDUSTRY_CAREERS_DATA;
+const PATHWAYS = window.UE5_PATHWAY_DATA;
 const NEWS = window.UE5_NEWS_DATA;
 const MODEL = window.UE5_MODELING_DATA;
 const MODEL_FOUNDATIONS = window.UE5_MODELING_FOUNDATIONS;
@@ -15,7 +19,6 @@ const MODEL_VIDEOS = window.UE5_MODELING_VIDEOS;
 const SCULPT = window.UE5_SCULPT_DATA;
 const STUDY = window.UE5_STUDY_DATA;
 const BACKEND = window.UE5_BACKEND;
-const SKILL_MISSIONS = window.UE5_SKILL_MISSIONS || {missions:[]};
 
 // V3.19 deepens Designer Studio using the same Quick Tutorial recipe system so students can
 // search programming and design help from one place while still having a dedicated design curriculum.
@@ -29,7 +32,7 @@ DESIGN.tutorials.forEach(t=>{if(!knownTutorials.has(t.id))TOOLS.tutorials.push(t
 DESIGN.modules.forEach(m=>m.tutorials.forEach(id=>{const t=TOOLS.tutorials.find(x=>x.id===id);if(t&&!t.designModule)t.designModule=m.id}));
 
 
-if (!DATA || !BLOCKS || !PROJECT || !TOOLS || !SNIPPETS || !DESIGN || !NEWS || !MODEL || !MODEL_FOUNDATIONS || !MODEL_VIDEOS || !SCULPT || !STUDY || !BACKEND) {
+if (!DATA || !BLOCKS || !PROJECT || !TOOLS || !SNIPPETS || !DESIGN || !UNREAL_DESIGNER || !THEORY || !CAREERS || !PATHWAYS || !NEWS || !MODEL || !MODEL_FOUNDATIONS || !MODEL_VIDEOS || !SCULPT || !STUDY || !BACKEND) {
   const e = document.querySelector('#bootError');
   if (e) e.hidden = false;
   return;
@@ -59,6 +62,11 @@ const BADGE_META={
   'max-apprentice':{rarity:'Uncommon',tone:'uncommon',hint:"Complete all 14 videos in Dits' Max series."},
   'industry-eye':{rarity:'Rare',tone:'rare',hint:'Complete at least one industry deep dive in every Designer discipline.'},
   'design-thinker':{rarity:'Epic',tone:'epic',hint:'Complete all eight Designer Studio builds.'},
+  'design-analyst':{rarity:'Uncommon',tone:'uncommon',hint:'Complete six Game Design Theory lessons.'},
+  'theory-scholar':{rarity:'Epic',tone:'epic',hint:'Complete all Game Design Theory lessons.'},
+  'level-architect':{rarity:'Rare',tone:'rare',hint:'Complete the Build a Playable Level Guided Path.'},
+  'mechanic-maker':{rarity:'Rare',tone:'rare',hint:'Complete the Create a Gameplay Mechanic Guided Path.'},
+  'tabletop-translator':{rarity:'Epic',tone:'epic',hint:'Complete the Digital Game → Tabletop Guided Path.'},
   'digital-clay':{rarity:'Uncommon',tone:'uncommon',hint:'Complete all six Sculpt Playground exercises.'},
   'teacher':{rarity:'Staff',tone:'staff',hint:'Exclusive to verified Learning Hub teacher accounts.'}
 };
@@ -76,11 +84,12 @@ let state = loadState();
 let projectState = loadProjectState();
 let profilePrefs = loadProfilePrefs();
 let lessonMode = 'guided';
+let studioStageView = null;
 let authView = 'signin';
 let revisionSession = null;
 let blocksTier = 'core';
 let leaderboardPeriod = 'week';
-let leaderboardClassId = '';
+let leaderboardClassId = 'all';
 let critiqueClassId = '';
 let critiqueFilter = 'all';
 let critiquePostsCache = [];
@@ -186,7 +195,7 @@ function syncProjectRichEditors(root=document){
 }
 
 function loadState(){
-  const clean={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],designSourceCompleted:[],modelVideoCompleted:[],modelTheoryCompleted:[],modelTheoryScores:{},modelFoundationFinal:false,modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[],blockCompleted:[]};
+  const clean={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],designSourceCompleted:[],theoryCompleted:[],theoryScores:{},careerCompleted:[],careerScores:{},careerProfile:{version:1,updatedAt:null,roleInterests:{},signals:{},hardSkills:[],softSkills:[],vacancies:[],trafficLights:[],goals:{},industryBeliefs:{},industryDebate:{}},modelVideoCompleted:[],modelTheoryCompleted:[],modelTheoryScores:{},modelFoundationFinal:false,modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[],blockCompleted:[],pathwayCheckpoints:[],studioStepCompleted:[]};
   try{
     const current=JSON.parse(localStorage.getItem(STORE)||'null');
     if(current) return {...clean,...current};
@@ -272,9 +281,16 @@ function equippedBadge(){
 function nextBadgeTarget(){
   const done=completedLessons().length,tuts=completedTutorialCount(),game=projectProgress().complete,builds=state.chapterBuildCompleted.length;
   const ids=new Set(state.completed);
+  const pathBadgeTargets=[
+    ['playable-level','level-architect'],
+    ['gameplay-mechanic','mechanic-maker'],
+    ['digital-to-tabletop','tabletop-translator']
+  ].map(([pathId,id])=>{const x=guidedPathProgress(pathId);return {id,current:x.done,target:x.total}}).filter(x=>x.current>0&&x.target>0);
   const candidates=[
     {id:'first-step',current:Math.min(done,1),target:1},
     {id:'recipe',current:Math.min(tuts,5),target:5},
+    {id:'design-analyst',current:Math.min((state.theoryCompleted||[]).length,6),target:6},
+    ...pathBadgeTargets,
     {id:'blueprint-core',current:['variables','branches','functions'].filter(x=>ids.has(x)).length,target:3},
     {id:'halfway',current:Math.min(done,10),target:10},
     {id:'chapter-build',current:Math.min(builds,1),target:1},
@@ -307,7 +323,7 @@ function mechanic(id){return PROJECT.mechanics[id]}
 function completedLessons(){return DATA.lessons.filter(l=>state.completed.includes(l.id))}
 function totalXp(){
   if(BACKEND.user&&!isTeacher()&&BACKEND.xpSummary&&Number.isFinite(Number(BACKEND.xpSummary.all_time_xp)))return Number(BACKEND.xpSummary.all_time_xp);
-  return (state.blockCompleted||[]).length*25+(state.tutorialCompleted||[]).length*25+completedLessons().reduce((n,l)=>n+l.xp,0)+TOOLS.chapterBuilds.filter(b=>state.chapterBuildCompleted.includes(b.path)).reduce((n,b)=>n+(b.xp||0),0)+(state.designBuildCompleted||[]).length*300+(state.designSourceCompleted||[]).length*20+(state.modelVideoCompleted||[]).length*(MODEL_VIDEOS.xp||20)+(state.modelTheoryCompleted||[]).length*(MODEL_FOUNDATIONS.chapterXp||20)+(state.modelFoundationFinal?(MODEL_FOUNDATIONS.finalXp||100):0)+(state.modelLessonCompleted||[]).length*100+(state.modelBuildCompleted||[]).length*250+(state.modelFixCompleted||[]).length*75+(state.sculptCompleted||[]).reduce((n,id)=>n+(SCULPT.practices.find(x=>x.id===id)?.xp||0),0)
+  return (state.blockCompleted||[]).length*25+(state.tutorialCompleted||[]).length*25+completedLessons().reduce((n,l)=>n+l.xp,0)+TOOLS.chapterBuilds.filter(b=>state.chapterBuildCompleted.includes(b.path)).reduce((n,b)=>n+(b.xp||0),0)+(state.designBuildCompleted||[]).length*300+(state.designSourceCompleted||[]).length*20+(state.theoryCompleted||[]).length*(THEORY.xp||25)+(state.careerCompleted||[]).length*(CAREERS.xp||25)+(state.modelVideoCompleted||[]).length*(MODEL_VIDEOS.xp||20)+(state.modelTheoryCompleted||[]).length*(MODEL_FOUNDATIONS.chapterXp||20)+(state.modelFoundationFinal?(MODEL_FOUNDATIONS.finalXp||100):0)+(state.modelLessonCompleted||[]).length*100+(state.modelBuildCompleted||[]).length*250+(state.modelFixCompleted||[]).length*75+(state.sculptCompleted||[]).reduce((n,id)=>n+(SCULPT.practices.find(x=>x.id===id)?.xp||0),0)
 }
 function level(){
   const xp=totalXp(),n=Math.floor(xp/500)+1,into=xp%500;
@@ -469,6 +485,17 @@ async function syncCloudProgress(){
     state.chapterBuildCompleted=[...new Set([...(state.chapterBuildCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('chapter:')).map(id=>id.slice(8))])];
     state.designBuildCompleted=[...new Set([...(state.designBuildCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('designbuild:')).map(id=>id.slice(12))])];
     state.designSourceCompleted=[...new Set([...(state.designSourceCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('designsource:')).map(id=>id.slice(13))])];
+    const careerCloudIds=new Set((CAREERS.chapters||[]).map(ch=>`theory:industry-${ch.id}`));
+    state.careerCompleted=[...new Set([...(state.careerCompleted||[]),...cloudCompleted.filter(id=>careerCloudIds.has(id)).map(id=>id.replace(/^theory:industry-/,''))])];
+    const theoryIds=new Set((THEORY.lessons||[]).map(x=>x.id));
+    state.theoryCompleted=[...new Set([...(state.theoryCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('theory:')&&!careerCloudIds.has(id)).map(id=>id.slice(7)).filter(id=>theoryIds.has(id))])];
+    const cloudCareerRow=rows.find(r=>r.lesson_id==='career:profile'&&r.quiz&&typeof r.quiz==='object');
+    if(cloudCareerRow){
+      const localAt=Date.parse(state.careerProfile?.updatedAt||0)||0,cloudAt=Date.parse(cloudCareerRow.quiz?.updatedAt||cloudCareerRow.updated_at||0)||0;
+      if(cloudAt>=localAt)state.careerProfile={version:1,...(state.careerProfile||{}),...(cloudCareerRow.quiz||{})};
+    }else if(state.careerProfile?.updatedAt){
+      try{await BACKEND.saveCareerProfile(state.careerProfile)}catch(err){console.warn('Career profile initial sync',err.message)}
+    }
     state.modelVideoCompleted=[...new Set([...(state.modelVideoCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('modelvideo:')).map(id=>id.slice(11))])];
     state.modelTheoryCompleted=[...new Set([...(state.modelTheoryCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('modeltheory:')).map(id=>id.slice(12))])];
     state.modelFoundationFinal=state.modelFoundationFinal||cloudCompleted.includes('modelfoundation:final');
@@ -476,6 +503,8 @@ async function syncCloudProgress(){
     state.modelBuildCompleted=[...new Set([...(state.modelBuildCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('modelbuild:')).map(id=>id.slice(11))])];
     state.modelFixCompleted=[...new Set([...(state.modelFixCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('modelfix:')).map(id=>id.slice(9))])];
     state.sculptCompleted=[...new Set([...(state.sculptCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('sculpt:')).map(id=>id.slice(7))])];
+    state.pathwayCheckpoints=[...new Set([...(state.pathwayCheckpoints||[]),...rows.filter(r=>r.lesson_id?.startsWith('pathway:')&&r.completed_at).map(r=>r.lesson_id.slice(8))])];
+    state.studioStepCompleted=[...new Set([...(state.studioStepCompleted||[]),...rows.filter(r=>r.lesson_id?.startsWith('studiostep:')&&r.completed_at).map(r=>r.lesson_id.slice(11))])];
     await BACKEND.refreshXpSummary();
     saveState();
     // Projects are Teams-first from v3.39.3. The old Signal Lost practice state remains local-only
@@ -888,6 +917,69 @@ function tutorialReferenceVisuals(t){
 }
 
 
+function studioStageKey(tutorialId,index){return `${tutorialId}:${index}`}
+function studioStageCount(t){return (t.studioFlow||[]).length||((t.steps||[]).length+1)}
+function studioStageDone(t,index){
+  if(tutorialDone(t.id))return true; // Legacy/final completion must never relock an existing student.
+  return (state.studioStepCompleted||[]).includes(studioStageKey(t.id,index));
+}
+function studioStageUnlocked(t,index){return isTeacher()||index===0||studioStageDone(t,index-1)||tutorialDone(t.id)}
+function studioFirstIncomplete(t){const n=studioStageCount(t);for(let i=0;i<n;i++)if(!studioStageDone(t,i))return i;return Math.max(0,n-1)}
+function studioCurrentStage(t){
+  const n=studioStageCount(t),requested=studioStageView?.tutorialId===t.id?Number(studioStageView.index):-1;
+  if(Number.isInteger(requested)&&requested>=0&&requested<n&&studioStageUnlocked(t,requested))return requested;
+  return studioFirstIncomplete(t);
+}
+function studioStageProgress(t){const n=studioStageCount(t),done=Array.from({length:n},(_,i)=>studioStageDone(t,i)).filter(Boolean).length;return {done,total:n,pct:n?Math.round(done/n*100):0}}
+function studioProjectStageRail(t,current){
+  const flow=t.studioFlow||[];
+  return `<section class="studio-flow-shell"><div class="studio-flow-top"><div><span class="eyebrow">YOUR TWO-WEEK ROUTE</span><h2>One job at a time</h2><p>Finish the current stage to unlock the next. Completed stages stay open so you can revisit them.</p></div><div class="studio-flow-score"><strong>${studioStageProgress(t).done}/${studioStageProgress(t).total}</strong><span>stages complete</span></div></div><div class="studio-flow-progress"><span style="width:${studioStageProgress(t).pct}%"></span></div><div class="studio-stage-rail">${flow.map((x,i)=>{const done=studioStageDone(t,i),unlocked=studioStageUnlocked(t,i),active=i===current;return `<button class="studio-stage-tab ${done?'complete':''} ${active?'active':''} ${!unlocked?'locked':''}" ${unlocked?`data-action="studio-stage-open" data-tutorial="${esc(t.id)}" data-stage="${i}"`:'disabled'}><span>${done?'✓':unlocked?String(i+1).padStart(2,'0'):'🔒'}</span><div><b>${esc(x.label)}</b><small>${esc(x.short||x.title)}</small></div></button>`}).join('')}</div></section>`;
+}
+function studioProjectReferences(t,indexes=[]){
+  const xs=(indexes||[]).map(i=>({...(t.referenceImages||[])[i],_i:i})).filter(x=>x.src);if(!xs.length)return '';
+  return `<section class="studio-stage-block studio-reference-section"><div class="studio-stage-block-head"><span class="eyebrow">REFERENCE FOR THIS STAGE</span><h2>Look for the decision, not something to copy</h2><p><b>Steal the principle, not the picture.</b> These images are here because they connect directly to this stage.</p></div><div class="visual-story-grid studio-stage-reference-grid">${xs.map((v,i)=>zoomableImage({src:v.src,alt:`${t.title} reference ${v._i+1}`,caption:v.caption||'',sourceUrl:v.sourceUrl||'',sourceTitle:v.sourceTitle||'',kind:v.kind||'reference',eager:i===0})).join('')}</div></section>`;
+}
+function studioProjectTheory(t,indexes=[]){
+  const xs=(indexes||[]).map(i=>({...(t.theory||[])[i],_i:i})).filter(x=>x.title);if(!xs.length)return '';
+  return `<section class="studio-stage-block studio-theory-section"><div class="studio-stage-block-head"><span class="eyebrow">DESIGN CHECKS FOR THIS STAGE</span><h2>Use the theory while you build</h2><p>No vocabulary test. Each principle gives you something practical to check in the scene.</p></div><div class="studio-theory-grid">${xs.map(x=>`<article class="studio-theory-card"><span class="studio-theory-num">${String(x._i+1).padStart(2,'0')}</span><h3>${esc(x.title)}</h3><p>${esc(x.body)}</p><div><b>QUICK TEST</b><span>${esc(x.test)}</span></div></article>`).join('')}</div></section>`;
+}
+function studioProjectResources(t){
+  const xs=t.resources||[];if(!xs.length)return '';
+  return `<details class="studio-resource-shelf" id="studioAssetShelf"><summary><div><span class="eyebrow">SHARED ASSET SHELF • AVAILABLE FROM DAY 1</span><strong>Open the approved free assets + Hub recovery guides</strong><small>${xs.length} resources • browse now, dress after the Lesson 3 checkpoint</small></div><span class="studio-shelf-chevron">⌄</span></summary><div class="studio-resource-body"><div class="callout good studio-toolbox-rule"><b>Toolbox, not a checklist:</b> pick assets that support the same visual style and your story. You do not get extra credit for using everything.</div><div class="studio-resource-grid">${xs.map(r=>{const internal=String(r.url||'').startsWith('#/'),tag=r.url?'a':'article',attrs=r.url?` href="${esc(r.url)}"${internal?'':' target="_blank" rel="noopener"'}`:'';return `<${tag} class="studio-resource-card"${attrs}><span class="eyebrow">${esc(r.type)}</span><h3>${esc(r.title)}</h3><p>${esc(r.note)}</p>${r.bestFor?`<div class="studio-resource-best"><b>BEST FOR</b><span>${esc(r.bestFor)}</span></div>`:''}${r.status?`<small>${esc(r.status)}</small>`:''}${r.url?`<strong>${internal?'Open Hub guide →':'Open Fab listing ↗'}</strong>`:''}</${tag}>`}).join('')}</div><div class="callout warn studio-asset-rule"><b>Asset rule:</b> Fab links were checked as free on 12 September 2026. If a price appears later, do not buy it for this task — ask for a substitute. Use individual assets, never a supplied demo scene as your submission.</div></div></details>`;
+}
+function studioProjectIntro(t){
+  const b=t.studioBrief;if(!b)return '';
+  return `<section class="content-card studio-project-brief"><span class="eyebrow">THE STUDIO BRIEF</span><h2>${esc(t.studioIntroTitle||t.title)}</h2><blockquote>${esc(b.story)}</blockquote><div class="studio-brief-grid"><div><b>SCALE</b><p>${esc(b.scale)}</p></div><div><b>ROUTE</b><p>${esc(b.route)}</p></div></div><div class="studio-must-grid">${(b.mustHave||[]).map((x,i)=>`<span><b>${String(i+1).padStart(2,'0')}</b>${esc(x)}</span>`).join('')}</div><div class="callout good"><b>NON-NEGOTIABLE:</b> ${esc(b.hardRule)}</div></section>`;
+}
+function studioProjectFinishCards(t,module){
+  return `<section class="tutorial-three-col studio-finish-grid"><div class="content-card"><span class="eyebrow">COMMON MISTAKES</span><h2>If it goes weak</h2><ul>${(t.mistakes||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><div class="content-card"><span class="eyebrow">MAKE IT YOURS</span><h2>Same brief, different story</h2><ul>${(t.makeItYours||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><div class="content-card"><span class="eyebrow">DEFINITION OF DONE</span><h2>It works when…</h2>${requirements(t.worksWhen||[])}</div></section>
+  <section class="content-card tutorial-revision-bridge practical"><div><span class="eyebrow">CHECK • DESIGN JUDGEMENT</span><h2>Can you explain why the scene works?</h2><p>The practical build is the proof. Use the Environment Art & Set Dressing revision questions to test the judgement behind focal point, route, scale, dressing and atmosphere.</p></div><button class="button ghost" data-action="revision-topic-start" data-revision-topic-id="design:${esc(t.designModule)}" data-revision-count="5">Revise ${esc(module?.title||'Environment Art & Set Dressing')} →</button></section>`;
+}
+function studioProjectStage(t,index,module){
+  const flow=(t.studioFlow||[])[index];if(!flow)return '';
+  const done=studioStageDone(t,index),isFinal=index===studioStageCount(t)-1,step=Number.isInteger(flow.stepIndex)?t.steps?.[flow.stepIndex]:null;
+  return `<section class="studio-stage-panel" id="studioStagePanel"><div class="studio-stage-hero"><div><span class="eyebrow">${esc(flow.label)} • STAGE ${index+1} OF ${studioStageCount(t)}</span><h2>${esc(flow.title)}</h2><p>${esc(flow.subtitle||'')}</p></div><span class="studio-stage-state ${done?'complete':''}">${done?'✓ Complete':'Current mission'}</span></div>
+    ${index===0?studioProjectIntro(t):''}
+    ${studioProjectReferences(t,flow.referenceIndexes||[])}
+    ${studioProjectTheory(t,flow.theoryIndexes||[])}
+    ${step?`<section class="studio-stage-block studio-build-mission"><div class="studio-stage-block-head"><span class="eyebrow">TODAY'S BUILD</span><h2>${esc(step.title)}</h2></div><div class="tutorial-step-list">${renderTutorialStep(step,flow.stepIndex,true)}</div></section>`:''}
+    ${flow.assetPrompt?`<div class="callout good studio-open-assets"><b>Now open the asset shelf above.</b> Replace your approved blockout selectively. Keep the layout that passed the checkpoint — the assets serve the design, not the other way around. <button class="button small ghost" data-action="open-studio-assets">Open asset shelf ↑</button></div>`:''}
+    ${flow.finishPrompt?studioProjectFinishCards(t,module):''}
+    <div class="studio-stage-actions"><div><b>${done?'Stage complete.':'Before you continue'}</b><p>${done?'You can revisit this stage at any time. Use the route above to move between completed work.':'Only mark this complete when you have actually passed the check in this stage. The next stage will then unlock.'}</p></div>${done&&!isFinal?`<button class="button ghost" data-action="studio-stage-open" data-tutorial="${esc(t.id)}" data-stage="${Math.min(index+1,studioStageCount(t)-1)}">Go to next stage →</button>`:`<button class="button ${done?'success':'primary'}" data-action="complete-studio-step" data-tutorial="${esc(t.id)}" data-stage="${index}" ${done?'disabled':''}>${done?(isFinal?'✓ Project complete':'✓ Stage complete'):(isFinal?'✓ Finish studio project':'✓ Complete stage → unlock next')}</button>`}</div>
+  </section>`;
+}
+function studioProjectPage(t){
+  const done=tutorialDone(t.id),module=designModule(t.designModule),current=studioCurrentStage(t),progress=studioStageProgress(t);
+  return `<div class="breadcrumb"><a href="#/">Dashboard</a> / <a href="#/design">Designer Studio</a> / <a href="#/design/${esc(t.designModule)}">${esc(module?.title||'Environment Art & Set Dressing')}</a> / ${esc(t.title)}</div>
+  <section class="tutorial-hero studio-project-hero"><div><span class="eyebrow">◈ ENVIRONMENT ART & SET DRESSING • STUDIO PROJECT • ${esc(t.duration)} • ${esc(t.difficulty)}</span><h1>${t.icon} ${esc(t.title)}</h1><p>${esc(t.summary)}</p><div class="tutorial-tag-row large">${t.uses.map(x=>`<span>${esc(x)}</span>`).join('')}</div></div><div class="tutorial-complete-box"><strong>${done?'✓ Studio project complete':`${progress.done}/${progress.total} stages complete`}</strong><p>${done?'Reopen any completed stage whenever you need the workflow or references.':'The lesson now reveals one job at a time. Complete the current stage to unlock the next.'}</p><div class="progress"><span style="width:${progress.pct}%"></span></div></div></section>
+  <article class="tutorial-detail studio-project-page">
+    ${studioProjectStageRail(t,current)}
+    ${studioProjectResources(t)}
+    ${studioProjectStage(t,current,module)}
+    ${done?`<section class="content-card tutorial-next studio-project-next"><div><span class="eyebrow">FINISH • CRITIQUE THE PLACE</span><h2>Show the decision, not just the render</h2><p>Bring the plan, approved blockout and finished player-view result together. Ask whether another player can read the route, focal point and story you intended.</p></div><div class="tutorial-next-links"><a class="button" href="#/design/${esc(t.designModule)}">Back to ${esc(module?.title||'Environment Art & Set Dressing')} →</a><a class="button ghost" href="#/critique">Post a screenshot for critique →</a></div></section>`:''}
+  </article>`;
+}
+
 function designModule(id){return DESIGN.modules.find(m=>m.id===id)}
 function designBuildDone(id){return (state.designBuildCompleted||[]).includes(id)}
 function designSourceKey(m,i){return `${m.id}:${String(i+1).padStart(2,'0')}`}
@@ -951,13 +1043,54 @@ function designBlackBox(m,done){
   if(!done)return `<section class="designer-black-box locked"><div class="designer-black-icon">🔒</div><div><span class="eyebrow">HIDDEN DESIGN BRIEF</span><h2>Black Box challenge locked</h2><p>Complete the Studio Build first. Then the Hub removes one of your crutches and asks you to prove the design still works.</p></div></section>`;
   return `<section class="designer-black-box"><div class="designer-black-icon">⬢</div><div><span class="eyebrow">UNLOCKED • BLACK BOX BRIEF</span><h2>${esc(x.title)}</h2><p>${esc(x.brief)}</p><div class="designer-black-grid"><div><b>CONSTRAINTS</b><ul>${(x.constraints||[]).map(v=>`<li>${esc(v)}</li>`).join('')}</ul></div><div><b>IMPROVE IT</b><p>${esc(x.improve)}</p><b>EVIDENCE</b><p>${esc(x.evidence)}</p></div></div></div></section>`;
 }
+function unrealDesignerTrack(id){return (UNREAL_DESIGNER.tracks||[]).find(t=>t.id===id||t.moduleId===id)}
+function unrealDesignerTrackForModule(moduleId){return (UNREAL_DESIGNER.tracks||[]).find(t=>t.moduleId===moduleId)}
+function unrealDesignerTrackTutorials(track){const m=designModule(track?.moduleId);return (m?.tutorials||[]).map(tutorial).filter(Boolean)}
+function unrealDesignerTrackGuides(track){return (track?.masterGuideIds||[]).map(tutorial).filter(Boolean)}
+function unrealDesignerTrackDone(track){return !!track&&designBuildDone(track.moduleId)}
+function unrealDesignerTrackCard(track){
+  const m=designModule(track.moduleId);if(!m)return '';
+  const recipes=unrealDesignerTrackTutorials(track),tried=recipes.filter(t=>tutorialDone(t.id)).length,guides=unrealDesignerTrackGuides(track),guideDone=guides.filter(t=>tutorialDone(t.id)).length,done=unrealDesignerTrackDone(track);
+  return `<a class="ud-track-card ${done?'done':''}" href="#/unreal-designer/${esc(track.id)}"><span class="ud-track-icon">${track.icon||m.icon||'✦'}</span><div><span class="eyebrow">${done?'✓ APPLIED BUILD COMPLETE':'THEORY → UNREAL → EVIDENCE'}</span><h3>${esc(track.shortTitle||m.title)}</h3><p>${esc(track.focus||m.description)}</p><div class="ud-track-meta"><span>${tried}/${recipes.length} engine recipes tried</span>${guides.length?`<span>${guideDone}/${guides.length} master guide${guides.length===1?'':'s'}</span>`:''}<span>${done?'Studio Build complete':'Studio Build waiting'}</span></div></div><strong class="ud-track-open">${done?'Revisit':'Apply'} →</strong></a>`;
+}
+function unrealDesignerExpansionCard(x){
+  const starters=(x.starterTutorialIds||[]).map(tutorial).filter(Boolean);
+  return `<article class="ud-expansion-card"><span class="ud-expansion-status">${esc(x.status||'PLANNED')}</span><h3>${x.icon||'✦'} ${esc(x.title)}</h3><p>${esc(x.summary)}</p>${starters.length?`<div class="ud-expansion-links">${starters.map(t=>`<a href="#/tutorial/${esc(t.id)}">${esc(t.title)}</a>`).join('')}</div>`:''}<small>${esc(x.next||'This track will grow when the classroom workflow is ready.')}</small></article>`;
+}
+function unrealDesignerPage(){
+  const tracks=UNREAL_DESIGNER.tracks||[],live=tracks.filter(t=>designModule(t.moduleId)),builds=live.filter(unrealDesignerTrackDone).length,recipes=[...new Set(live.flatMap(t=>(designModule(t.moduleId)?.tutorials||[])))],recipeDone=recipes.filter(tutorialDone).length,guides=[...new Set(live.flatMap(t=>t.masterGuideIds||[]))].map(tutorial).filter(Boolean);
+  return `<div class="breadcrumb"><a href="#/">Dashboard</a> / Unreal Designer</div>
+  <section class="ud-hero"><div><span class="eyebrow">APPLY THE THEORY • BUILD IT IN UE5 • PROVE THE DECISION</span><h1>⚙ Unreal Designer</h1><p>${esc(UNREAL_DESIGNER.strapline||'Turn design theory into playable Unreal work.')}</p><p class="muted">Designer Studio explains what good design is. Unreal Learning explains the engine. This area joins them together without copying either one.</p><div class="button-row"><a class="button primary" href="#/design">✦ Start with Designer Studio</a><a class="button ghost" href="#/programming">⌘ Need the engine first?</a></div></div><aside class="ud-hero-aside"><div><b>${live.length}</b><span>live application tracks</span></div><div><b>${builds}/${live.length}</b><span>applied Studio Builds complete</span></div><div><b>${recipeDone}/${recipes.length}</b><span>linked engine recipes tried</span></div><div><b>${guides.length}</b><span>long-form Master Guides</span></div></aside></section>
+  <section class="ud-loop"><article><small>01 • UNDERSTAND</small><h3>Know the design job</h3><p>Use real games, designers and theory to identify the decision you are trying to make.</p></article><article><small>02 • BUILD</small><h3>Learn the Unreal technique</h3><p>Use the Master Guide or focused recipes. Copy the workflow, not somebody else's final design.</p></article><article><small>03 • TEST</small><h3>Put it in front of a player</h3><p>Check the result from player view. Break the easy version and revise from evidence.</p></article><article><small>04 • PROVE</small><h3>Capture what changed</h3><p>Keep the before/after, player proof and one sentence explaining why the revision matters.</p></article></section>
+  <section class="section"><div class="section-head"><div><span class="eyebrow">LIVE NOW</span><h2>Choose what you are trying to design</h2><p>Each track reuses the existing Designer Studio theory, Unreal recipes, Master Guides and Studio Build. Nothing is duplicated.</p></div></div><div class="ud-track-grid">${live.map(unrealDesignerTrackCard).join('')}</div></section>
+  <section class="section"><div class="section-head"><div><span class="eyebrow">GROWING WITH THE COURSE</span><h2>Next Unreal Designer tracks</h2><p>The architecture is ready for the areas we know are coming. Starter recipes remain usable now; full tracks only become “live” once the theory, application brief and evidence loop are good enough.</p></div></div><div class="ud-expansion-grid">${(UNREAL_DESIGNER.expansionTracks||[]).map(unrealDesignerExpansionCard).join('')}</div></section>
+  <section class="content-card"><span class="eyebrow">THE RULE FOR FUTURE CONTENT</span><h2>No more orphan tutorials.</h2><p>Every substantial new workflow should answer four questions: <b>Where do students understand the principle? Where do they learn the Unreal technique? What do they build independently? How do they test/revise/prove it?</b> If a new tutorial cannot connect to that chain yet, it stays a small Quick Tutorial until the track is ready.</p></section>`;
+}
+function unrealDesignerTrackPage(id){
+  const track=unrealDesignerTrack(id);if(!track)return notFound();const m=designModule(track.moduleId);if(!m)return notFound();
+  const recipes=unrealDesignerTrackTutorials(track),tried=recipes.filter(t=>tutorialDone(t.id)).length,guides=unrealDesignerTrackGuides(track),guideDone=guides.filter(t=>tutorialDone(t.id)).length,done=designBuildDone(m.id),b=m.build||{};
+  const phases=(b.phaseDetails||b.phases||[]).map((x,i)=>{const title=typeof x==='string'?`Phase ${i+1}`:(x.title||`Phase ${i+1}`),body=typeof x==='string'?x:(x.do||'');return `<article><span>${String(i+1).padStart(2,'0')}</span><h3>${esc(title)}</h3><p>${esc(Array.isArray(body)?body.join(' • '):body)}</p></article>`}).join('');
+  return `<div class="breadcrumb"><a href="#/">Dashboard</a> / <a href="#/unreal-designer">Unreal Designer</a> / ${esc(track.shortTitle||m.title)}</div>
+  <section class="ud-track-hero"><div><span class="eyebrow">${track.icon||m.icon||'✦'} UNREAL DESIGNER TRACK</span><h1>${esc(track.shortTitle||m.title)}</h1><p>${esc(track.focus||m.description)}</p><div class="button-row"><a class="button primary" href="#/design/${esc(m.id)}">✦ Understand the design first</a><button class="button ghost" data-action="revision-topic-start" data-revision-topic-id="design:${esc(m.id)}" data-revision-count="5">↻ Test the judgement</button></div></div><div class="ud-progress-box"><span class="eyebrow">TRACK PROGRESS</span><strong>${done?'✓ Applied build complete':`${tried}/${recipes.length} recipes tried`}</strong>${guides.length?`<span>${guideDone}/${guides.length} Master Guide${guides.length===1?'':'s'} complete</span>`:''}<span>${done?'You can still revisit and improve the evidence.':'The Studio Build is the application proof — not another separate assignment.'}</span></div></section>
+  <section class="ud-route"><article><b>01 • UNDERSTAND</b><h3>Designer Studio</h3><p>Cases, professional voices, field research and the design principles worth transferring.</p></article><article><b>02 • BUILD</b><h3>Unreal technique</h3><p>Use the technical guide/recipes below to make the first working version.</p></article><article><b>03 • TEST</b><h3>Studio Build</h3><p>Combine the skills under constraints and see what another player actually understands.</p></article><article><b>04 • PROVE</b><h3>Evidence + revision</h3><p>Capture the change, explain the decision and retrieve the judgement later in Revision.</p></article></section>
+  ${guides.length?`<section class="section ud-master-guides"><div class="section-head"><div><span class="eyebrow">FULL ENGINE WORKFLOW</span><h2>Start with the Master Guide</h2><p>Use this when the workflow is too substantial for a five-minute recipe.</p></div></div><div class="master-guide-grid">${guides.map(masterGuideCard).join('')}</div></section>`:''}
+  <section class="section"><div class="section-head"><div><span class="eyebrow">ENGINE TOOLKIT</span><h2>Build the techniques you need</h2><p>These are the existing Unreal recipes connected to this design discipline. Do not complete all of them for the sake of completion; use the ones your build actually needs.</p></div><a class="button ghost" href="#/tutorials">Search all Quick Tutorials →</a></div><div class="ud-technical-grid">${recipes.map(tutorialCard).join('')}</div></section>
+  <section class="ud-build-brief ${done?'done':''}"><div class="ud-build-brief-head"><div><span class="eyebrow">APPLIED CHALLENGE • EXISTING STUDIO BUILD</span><h2>🎮 ${esc(b.title||`${m.title} application build`)}</h2><p>${esc(b.brief||track.focus)}</p></div><span class="sync-chip">${done?'✓ COMPLETE':esc(b.duration||'Build • test • revise')}</span></div><div class="ud-build-phase-grid">${phases}</div><div class="ud-build-evidence"><div><span class="eyebrow">PROVE THE DESIGN</span><h3>Evidence to bring back</h3>${requirements(b.evidence||[track.evidence])}</div><div class="button-row"><a class="button ghost" href="#/design/${esc(m.id)}">Open full theory + critique →</a><button class="button ${done?'success':'primary'}" data-action="complete-design-build" data-design-module="${esc(m.id)}">${done?'✓ Studio Build complete':'Mark Studio Build complete • +300 XP'}</button></div></div></section>
+  <section class="content-card"><span class="eyebrow">FINAL CHECK</span><h2>Technically working is not the same as well designed.</h2><p>${esc(track.evidence)}</p><div class="button-row"><button class="button primary" data-action="revision-topic-start" data-revision-topic-id="design:${esc(m.id)}" data-revision-count="5">Run 5-question design check →</button><a class="button ghost" href="#/critique">💬 Put the result on Critique Board</a></div></section>`;
+}
+function unrealDesignerBridge(m){
+  const track=unrealDesignerTrackForModule(m.id);if(!track)return '';
+  const guides=unrealDesignerTrackGuides(track);
+  return `<section class="ud-bridge"><div><span class="eyebrow">05 • APPLY IT IN UNREAL</span><h2>Stop reading. Make the design decision playable.</h2><p>${esc(track.focus)} Unreal Designer connects this theory to the existing engine workflow, practical recipes, Studio Build, critique and Revision.</p></div><div class="ud-bridge-actions">${guides.map(g=>`<a class="button ghost" href="#/tutorial/${esc(g.id)}">${g.icon||'⌘'} ${esc(g.unrealSection||'Master Guide')} →</a>`).join('')}<a class="button primary" href="#/unreal-designer/${esc(track.id)}">⚙ Apply in Unreal Designer →</a></div></section>`;
+}
+
 function designPage(){
   const designIds=[...new Set(DESIGN.modules.flatMap(m=>m.tutorials))],tried=designIds.filter(tutorialDone).length,builds=(state.designBuildCompleted||[]).length;
   const researchCount=DESIGN.modules.reduce((n,m)=>n+(m.researchMissions||[]).length,0),gameCount=new Set(DESIGN.modules.flatMap(m=>(m.caseStudies||[]).map(c=>c.game))).size;
   const featured=['decision-point-test','story-vignette','material-cost-check','lumen-mood-pass','silent-hill-fog','pcg-safe-route','cine-lens-language','audio-offscreen-story','profile-fix-retest'].map(tutorial).filter(Boolean);
   return `<div class="page-head designer-page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Designer Studio</div><span class="eyebrow">LEVEL DESIGN • ENVIRONMENT • LIGHT • AUDIO • CINEMATICS</span><h1>✦ Designer Studio</h1><p class="muted">Stop treating design as “make it look nicer”. Study real games, reverse-engineer the decisions, research your own examples, build a small version, break it on purpose, then improve it from evidence.</p><div class="designer-stats"><div><strong>${DESIGN.modules.length}</strong><span>design disciplines</span></div><div><strong>${gameCount}</strong><span>different game studies</span></div><div><strong>${researchCount}</strong><span>research missions</span></div><div><strong>${builds}/${DESIGN.modules.length}</strong><span>studio builds</span></div></div></div>
   <section class="designer-manifesto designer-manifesto-v2"><div><span class="deep-label">THE DESIGN LOOP</span><h2>Look → steal → hear → research → build → break → improve.</h2><p>Every discipline starts with real game examples, then lets you hear directly from developers before you research and test the idea yourself. “I like it” is not evidence. A route that a stranger can read, a story they can infer, or a mood they can identify is evidence.</p></div><div class="designer-rule-stack"><span>01 • Name the design job</span><span>02 • Copy the principle, not the screenshot</span><span>03 • Hear the people who shipped it</span><span>04 • Research before you decorate</span><span>05 • Test with another human</span><span>06 • Make one evidence-based revision</span></div></section>
-  <section class="section designer-loop-section"><div class="section-head"><div><span class="eyebrow">HOW EVERY MODULE WORKS</span><h2>Seven moves. No waffle.</h2><p>Use the game examples and developer commentary to understand the decision first. The Unreal recipes then help you execute that decision in your own project.</p></div></div>${designLoopCards()}</section>
+  <section class="section designer-loop-section"><div class="section-head"><div><span class="eyebrow">HOW EVERY MODULE WORKS</span><h2>Understand it here. Apply it in Unreal Designer.</h2><p>Use the game examples and developer commentary to understand the decision first. When you are ready to make it playable, Unreal Designer joins this theory to the exact engine workflow, practical build, critique and Revision.</p></div><a class="button primary" href="#/unreal-designer">⚙ Open Unreal Designer →</a></div>${designLoopCards()}</section>
   <section class="section"><div class="section-head"><div><span class="eyebrow">8 DISCIPLINES • 24 DIFFERENT GAMES</span><h2>Choose the design problem you are trying to solve</h2><p>Each discipline uses three different games in its LOOK stage — 24 distinct case studies across the Studio — before moving into developer commentary, field research, UE5 recipes and the Studio Build.</p></div></div><div class="designer-module-grid">${DESIGN.modules.map(designModuleCard).join('')}</div></section>
   <section class="section"><div class="section-head"><div><span class="eyebrow">NEED A TOOL RIGHT NOW?</span><h2>Designer Quick Tutorials</h2><p>Use these when the design decision is clear and you just need the UE5 technique.</p></div><a class="button ghost" href="#/tutorials">Open all Quick Tutorials →</a></div><div class="quick-tutorial-grid featured">${featured.map(tutorialCard).join('')}</div></section>`;
 }
@@ -969,6 +1102,7 @@ function designModulePage(id){
   const critique=(m.critiqueQuestions||['What should the player notice first?','Can they understand the intended route without you talking?','What part feels generic or randomly placed?','What could be removed without losing anything?','What single change would improve the experience most?']).map(x=>`<li>${esc(x)}</li>`).join('');
   return `<div class="breadcrumb"><a href="#/">Dashboard</a> / <a href="#/design">Designer Studio</a> / ${esc(m.title)}</div>
   <section class="designer-module-hero"><div><span class="eyebrow">DESIGN DISCIPLINE • ${tried}/${ts.length} RECIPES TRIED</span><h1>${m.icon} ${esc(m.title)}</h1><p>${esc(m.intro)}</p><div class="designer-module-flow"><span>LOOK</span><i>→</i><span>HEAR THE TEAM</span><i>→</i><span>RESEARCH</span><i>→</i><span>BUILD</span><i>→</i><span>TEST</span><i>→</i><span>IMPROVE</span></div></div><div class="designer-principles"><span class="deep-label">DESIGN RULES</span>${m.principles.map((x,i)=>`<div><b>${String(i+1).padStart(2,'0')}</b><span>${esc(x)}</span></div>`).join('')}</div></section>
+  ${m.studioLesson?`<section class="studio-project-cta"><div><span class="eyebrow">${esc(m.studioLesson.eyebrow||'STUDIO PROJECT')}</span><h2>◈ ${esc(m.studioLesson.title)}</h2><p>${esc(m.studioLesson.text)}</p><div class="tutorial-tag-row"><span>Reference</span><span>Plan</span><span>Blockout</span><span>Art pass</span><span>Story</span><span>Sequencer</span></div></div><a class="button primary" href="#/tutorial/${esc(m.studioLesson.id)}">${esc(m.studioLesson.label||'Open project →')}</a></section>`:''}
   <section class="section designer-case-section"><div class="section-head"><div><span class="eyebrow">01 • LOOK AT REAL GAMES</span><h2>${esc(m.lookTitle||`Three shipped games solving ${m.title}`)}</h2><p>${esc(m.lookIntro||'Each example names a specific design factor, shows what the game does, and links to an interview, developer article or design talk that explains the decision.')}</p></div></div><div class="designer-case-grid">${(m.caseStudies||[]).map(designCaseStudyCard).join('')}</div></section>
   ${(m.industryDeepDives||[]).length?`<section class="section designer-industry-section"><div class="section-head"><div><span class="eyebrow">02 • DESIGNERS EXPLAIN IT</span><h2>Hear the decisions from the people who shipped the game</h2><p>Do not watch documentaries, talks or interviews passively. Each source gives you something specific to hunt for and a small design task to bring back into Unreal.</p></div><span class="sync-chip source-progress-chip">${designSourceCount(m)}/${m.industryDeepDives.length} complete • ${designSourceCount(m)*20} XP</span></div><div class="designer-industry-grid">${m.industryDeepDives.map((d,i)=>designIndustryDeepDiveCard(m,d,i)).join('')}</div></section>`:''}
   <section class="section designer-research-section"><div class="section-head"><div><span class="eyebrow">03 • FIELD RESEARCH</span><h2>Go find evidence yourself</h2><p>Do one of these before the Studio Build. They are deliberately short, game-focused and easy to discuss with another student.</p></div></div><div class="designer-research-grid">${(m.researchMissions||[]).map(designResearchCard).join('')}</div></section>
@@ -976,10 +1110,12 @@ function designModulePage(id){
   ${designBookReferenceGrid(m.referenceImages)}
   <section class="designer-professional-row"><div class="content-card designer-pro-habits"><span class="eyebrow">PRODUCTION HABITS</span><h2>Habits that stop design work becoming guesswork</h2><ul>${pro}</ul></div><div class="content-card designer-engine-check"><span class="eyebrow">UE5.8 REALITY CHECK</span><h2>Current engine context</h2><p>${esc(m.engineNote||'Use current Epic documentation to verify engine-specific workflows.')}</p>${m.engineUrl?`<a class="button ghost small" href="${esc(m.engineUrl)}" target="_blank" rel="noopener">Current Epic UE5.8 reference ↗</a>`:''}</div></section>
   ${(m.resources||[]).length?`<section class="section designer-pro-reading"><div class="section-head"><div><span class="eyebrow">PROFESSIONAL BREAKDOWNS</span><h2>See how designers actually talk about the problem</h2><p>These are optional rabbit holes, not required reading. Pick one when the topic grabs you.</p></div></div><div class="designer-pro-resource-grid">${m.resources.map(designProResourceCard).join('')}</div></section>`:''}
-  <section class="section"><div class="section-head"><div><span class="eyebrow">05 • BUILD THE TECHNIQUE</span><h2>UE5 recipes</h2><p>Use these when you know what design problem you are solving. Try the first version, then deliberately alter one decision.</p></div></div><div class="quick-tutorial-grid">${ts.map(tutorialCard).join('')}</div></section>
-  <section class="section designer-challenge-section"><div class="section-head"><div><span class="eyebrow">06 • BREAK THE EASY VERSION</span><h2>Pick one constraint challenge</h2><p>Constraints force design decisions to become visible. If the idea only works with every crutch enabled, it probably is not robust yet.</p></div></div><div class="designer-challenge-grid">${(m.challenges||[]).map(designChallengeCard).join('')}</div></section>
-  <section class="designer-studio-build ${done?'done':''}"><div class="designer-studio-title"><span class="eyebrow">07 • STUDIO BUILD • ${esc(b.duration)} • +300 XP</span><h2>🎨 ${esc(b.title)}</h2><p>${esc(b.brief)}</p><div class="tutorial-rich-note"><b>Build → test → revise:</b> finishing the phases is not the finish line. The evidence must show another human could read the experience you designed.</div></div><div class="designer-build-phases rich">${(b.phaseDetails||b.phases.map((x,i)=>({title:`Phase ${i+1}`,do:x}))).map((x,i)=>`<article class="designer-build-phase-rich"><span class="designer-build-phase-num">${String(i+1).padStart(2,'0')}</span><div><h3>${esc(x.title||`Phase ${i+1}`)}</h3>${x.where?`<div class="guided-where"><span>WHERE TO WORK</span><div>${renderRichText(x.where,false)}</div></div>`:''}<div class="guided-do"><span>DO THIS</span><div>${renderRichText(x.do||x,false)}</div></div>${x.check?`<div class="guided-check"><span>PROVE IT</span><div>${renderRichText(x.check,false)}</div></div>`:''}${x.troubleshoot?.length?`<div class="guided-fix"><span>IF IT'S WEAK</span><div>${renderRichText(x.troubleshoot,false)}</div></div>`:''}</div></article>`).join('')}</div><div class="designer-evidence"><h3>Show that it works</h3>${requirements(b.evidence)}<button class="button ${done?'success':'primary'}" data-action="complete-design-build" data-design-module="${m.id}">${done?'✓ Studio Build complete':'Mark Studio Build complete • +300 XP'}</button></div></section>
+  ${unrealDesignerBridge(m)}
+  <section class="section"><div class="section-head"><div><span class="eyebrow">06 • BUILD THE TECHNIQUE</span><h2>UE5 recipes</h2><p>Use these when you know what design problem you are solving. Try the first version, then deliberately alter one decision.</p></div></div><div class="quick-tutorial-grid">${ts.map(tutorialCard).join('')}</div></section>
+  <section class="section designer-challenge-section"><div class="section-head"><div><span class="eyebrow">07 • BREAK THE EASY VERSION</span><h2>Pick one constraint challenge</h2><p>Constraints force design decisions to become visible. If the idea only works with every crutch enabled, it probably is not robust yet.</p></div></div><div class="designer-challenge-grid">${(m.challenges||[]).map(designChallengeCard).join('')}</div></section>
+  <section class="designer-studio-build ${done?'done':''}"><div class="designer-studio-title"><span class="eyebrow">08 • STUDIO BUILD • ${esc(b.duration)} • +300 XP</span><h2>🎨 ${esc(b.title)}</h2><p>${esc(b.brief)}</p><div class="tutorial-rich-note"><b>Build → test → revise:</b> finishing the phases is not the finish line. The evidence must show another human could read the experience you designed.</div></div><div class="designer-build-phases rich">${(b.phaseDetails||b.phases.map((x,i)=>({title:`Phase ${i+1}`,do:x}))).map((x,i)=>`<article class="designer-build-phase-rich"><span class="designer-build-phase-num">${String(i+1).padStart(2,'0')}</span><div><h3>${esc(x.title||`Phase ${i+1}`)}</h3>${x.where?`<div class="guided-where"><span>WHERE TO WORK</span><div>${renderRichText(x.where,false)}</div></div>`:''}<div class="guided-do"><span>DO THIS</span><div>${renderRichText(x.do||x,false)}</div></div>${x.check?`<div class="guided-check"><span>PROVE IT</span><div>${renderRichText(x.check,false)}</div></div>`:''}${x.troubleshoot?.length?`<div class="guided-fix"><span>IF IT'S WEAK</span><div>${renderRichText(x.troubleshoot,false)}</div></div>`:''}</div></article>`).join('')}</div><div class="designer-evidence"><h3>Show that it works</h3>${requirements(b.evidence)}<button class="button ${done?'success':'primary'}" data-action="complete-design-build" data-design-module="${m.id}">${done?'✓ Studio Build complete':'Mark Studio Build complete • +300 XP'}</button></div></section>
   ${designBlackBox(m,done)}
+  <section class="content-card tutorial-revision-bridge practical"><div><span class="eyebrow">CHECK • DESIGN JUDGEMENT</span><h2>Can you make the call without copying the example?</h2><p>Designer Studio feeds the central Revision bank with scenario questions for this discipline. Use it after the build or before the next session.</p></div><button class="button ghost" data-action="revision-topic-start" data-revision-topic-id="design:${esc(m.id)}" data-revision-count="5">Revise ${esc(m.title)} →</button></section>
   <section class="content-card designer-critique"><span class="eyebrow">LAST THING • IMPROVE IT</span><h2>Critique your decision, not your effort</h2><ol>${critique}</ol><p class="muted">Pick the answer you like least. That is probably the next useful change.</p><div class="designer-critique-board-link"><a class="button primary" href="#/critique">💬 Post a screenshot for class critique →</a><span>Ask a specific design question, get structured peer feedback, then upload your improved version.</span></div></section>`;
 }
 
@@ -1002,29 +1138,53 @@ function chapterBuildCard(b,{compact=false}={}){
   if(!unlocked)return `<article class="chapter-build-card locked ${compact?'compact':''}"><div class="chapter-build-icon">🔒</div><div><span class="eyebrow">${esc(p?.title||b.path)}</span><h3>${esc(b.title)}</h3><p>Complete this learning path to unlock the playable Chapter Build.</p></div><span class="chapter-build-state">${pathProgress(b.path).done}/${pathProgress(b.path).total}</span></article>`;
   return `<a class="chapter-build-card unlocked ${done?'done':''} ${compact?'compact':''}" href="#/chapter-build/${b.path}"><div class="chapter-build-icon">${done?'✓':b.icon}</div><div><span class="eyebrow">CHAPTER BUILD UNLOCKED • ${esc(p?.title||b.path)}</span><h3>${esc(b.title)}</h3><p>${esc(b.summary)}</p><div class="tutorial-tag-row"><span>${esc(b.duration)}</span>${b.uses.slice(0,3).map(x=>`<span>${esc(x)}</span>`).join('')}</div></div><span class="chapter-build-state">${done?'Completed':'Build it →'}</span></a>`;
 }
+function unrealMasterGuides(){return TOOLS.tutorials.filter(t=>t.unrealHome)}
+function masterGuideCard(t){
+  const done=tutorialDone(t.id),q=(t.quiz||[]).length;
+  return `<a class="master-guide-card ${done?'done':''}" href="#/tutorial/${t.id}"><span class="master-guide-icon">${t.icon||'⌘'}</span><div><small>${esc(t.unrealSection||'Full workflow')} • ${esc(t.duration||'')}</small><h3>${esc(t.title)}</h3><p>${esc(t.summary)}</p><div class="master-guide-meta"><span>${t.steps?.length||0} stages</span><span>${q} revision questions</span><span>${done?'✓ Complete':'End-to-end guide'}</span></div></div><strong>Open →</strong></a>`;
+}
+function masterGuideStrip(){
+  const guides=unrealMasterGuides();if(!guides.length)return '';
+  return `<section class="master-guide-strip"><div class="section-head"><div><span class="eyebrow">FULL WORKFLOWS • UNREAL LEARNING</span><h2>Master Guides</h2><p>Use these when a topic needs a complete start-to-finish workflow rather than one small mechanic.</p></div><a class="button small ghost" href="#/programming">How Unreal Learning fits together →</a></div><div class="master-guide-grid">${guides.map(masterGuideCard).join('')}</div></section>`;
+}
 function tutorialLibrary(){
   const families=TOOLS.families||[],featured=families.filter(f=>f.featured),visibleTutorials=TOOLS.tutorials.filter(t=>!t.libraryHidden),done=visibleTutorials.filter(t=>tutorialDone(t.id)).length;
-  return `<div class="page-head tutorial-library-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Quick Tutorials</div><span class="eyebrow">${families.length} recipe families • ${visibleTutorials.length} practical builds</span><h1>🛠 Quick Tutorials</h1><p class="muted">Find the kind of system you need first, then choose the exact outcome. Similar builds live together so you can get to the exact outcome without wading through near-duplicate cards.</p></div><section class="tutorial-blocks-bridge"><div><span class="deep-label">SEE A TERM YOU DON'T KNOW?</span><h2>Don't abandon the build.</h2><p>Each recipe still shows the Building Blocks it uses. Open an unfamiliar term for a short explanation, then come straight back.</p></div><a class="button ghost" href="#/blocks">🧱 Browse Building Blocks</a></section><section class="tutorial-blocks-bridge snippet-reference-bridge"><div><span class="deep-label">⚡ EPIC PASTE ASSISTS</span><h2>Use the snippet where you learn the system.</h2><p>Use the relevant Epic clipboard assist inside the lesson or recipe where you learn the system. The standalone bank is there when you need to search for one quickly.</p></div><a class="button ghost" href="#/snippets">Search all ${SNIPPETS.snippets.length} assists →</a></section><section class="tutorial-library-tools"><div class="tutorial-search-box"><span>⌕</span><input id="tutorialSearch" type="search" enterkeyhint="search" placeholder="Try: dash, locked door, fog, health, AI, HUD…"></div><div class="tutorial-filter-row"><button class="tutorial-filter active" data-tutorial-filter="all">All</button>${TOOLS.categories.map(c=>`<button class="tutorial-filter" data-tutorial-filter="${c.id}">${c.icon} ${esc(c.title)}</button>`).join('')}</div><div class="tutorial-library-count"><strong>${done}/${visibleTutorials.length}</strong><span>practical builds tried</span></div></section><section class="section" id="tutorialFeaturedSection"><div class="section-head"><div><h2>Start with something useful</h2><p>Common system families students reach for constantly.</p></div></div><div class="quick-tutorial-grid featured">${featured.map(tutorialFamilyCard).join('')}</div></section><section class="section"><div class="section-head"><div><h2>All recipe families</h2><p id="tutorialResultCount">${families.length} recipe families</p></div></div><div class="quick-tutorial-grid" id="tutorialGrid">${families.map(tutorialFamilyCard).join('')}</div><div class="empty" id="tutorialSearchEmpty" hidden><h2>No recipe families match that search.</h2><p>Try a broader term, mechanic, node or clear the category filter.</p></div></section><section class="lesson-application-note"><span>⌘</span><div><strong>Some practical builds sit inside the Core Lesson that teaches them.</strong><p>Find Smooth Timeline Door with <a href="#/lesson/timelines">Timelines & Lerp</a>, Save a Checkpoint Between Sessions with <a href="#/lesson/savegame">SaveGame</a>, and Struct + Data Table with <a href="#/lesson/data">Data Structures & Data Tables</a>. Site-wide search still finds each build directly.</p></div></section><section class="section chapter-build-library"><div class="section-head"><div><span class="eyebrow">BIGGER APPLICATION TASKS</span><h2>🎮 Chapter Builds</h2><p>Finish a learning path and a new guided mini-game/system unlocks. The tutorial can still be step-by-step — you must test it and prove it works.</p></div></div><div class="chapter-build-grid">${TOOLS.chapterBuilds.map(b=>chapterBuildCard(b)).join('')}</div></section>`;
+  return `<div class="page-head tutorial-library-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Quick Tutorials</div><span class="eyebrow">${families.length} recipe families • ${visibleTutorials.length} practical builds</span><h1>🛠 Quick Tutorials</h1><p class="muted">Find the kind of system you need first, then choose the exact outcome. Similar builds live together so you can get to the exact outcome without wading through near-duplicate cards.</p></div><section class="tutorial-blocks-bridge"><div><span class="deep-label">SEE A TERM YOU DON'T KNOW?</span><h2>Don't abandon the build.</h2><p>Each recipe still shows the Building Blocks it uses. Open an unfamiliar term for a short explanation, then come straight back.</p></div><a class="button ghost" href="#/blocks">🧱 Browse Building Blocks</a></section><section class="tutorial-blocks-bridge snippet-reference-bridge"><div><span class="deep-label">⚡ EPIC PASTE ASSISTS</span><h2>Use the snippet where you learn the system.</h2><p>Use the relevant Epic clipboard assist inside the lesson or recipe where you learn the system. The standalone bank is there when you need to search for one quickly.</p></div><a class="button ghost" href="#/snippets">Search all ${SNIPPETS.snippets.length} assists →</a></section>${masterGuideStrip()}<section class="tutorial-library-tools"><div class="tutorial-search-box"><span>⌕</span><input id="tutorialSearch" type="search" enterkeyhint="search" placeholder="Try: dash, locked door, fog, health, AI, HUD…"></div><div class="tutorial-filter-row"><button class="tutorial-filter active" data-tutorial-filter="all">All</button>${TOOLS.categories.map(c=>`<button class="tutorial-filter" data-tutorial-filter="${c.id}">${c.icon} ${esc(c.title)}</button>`).join('')}</div><div class="tutorial-library-count"><strong>${done}/${visibleTutorials.length}</strong><span>practical builds tried</span></div></section><section class="section" id="tutorialFeaturedSection"><div class="section-head"><div><h2>Start with something useful</h2><p>Common system families students reach for constantly.</p></div></div><div class="quick-tutorial-grid featured">${featured.map(tutorialFamilyCard).join('')}</div></section><section class="section"><div class="section-head"><div><h2>All recipe families</h2><p id="tutorialResultCount">${families.length} recipe families</p></div></div><div class="quick-tutorial-grid" id="tutorialGrid">${families.map(tutorialFamilyCard).join('')}</div><div class="empty" id="tutorialSearchEmpty" hidden><h2>No recipe families match that search.</h2><p>Try a broader term, mechanic, node or clear the category filter.</p></div></section><section class="lesson-application-note"><span>⌘</span><div><strong>Some practical builds sit inside the Core Lesson that teaches them.</strong><p>Find Smooth Timeline Door with <a href="#/lesson/timelines">Timelines & Lerp</a>, Save a Checkpoint Between Sessions with <a href="#/lesson/savegame">SaveGame</a>, and Struct + Data Table with <a href="#/lesson/data">Data Structures & Data Tables</a>. Site-wide search still finds each build directly.</p></div></section><section class="section chapter-build-library"><div class="section-head"><div><span class="eyebrow">BIGGER APPLICATION TASKS</span><h2>🎮 Chapter Builds</h2><p>Finish a learning path and a new guided mini-game/system unlocks. The tutorial can still be step-by-step — you must test it and prove it works.</p></div></div><div class="chapter-build-grid">${TOOLS.chapterBuilds.map(b=>chapterBuildCard(b)).join('')}</div></section>`;
 }
 
-function renderTutorialStep(step,i){
+function renderTutorialStep(step,i,designMode=false){
   if(Array.isArray(step)){
     return `<article class="tutorial-step" data-level="legacy"><div class="tutorial-step-number">${String(i+1).padStart(2,'0')}</div><div><h3>${esc(step[0])}</h3><div class="guided-do"><span>DO THIS</span><p>${esc(step[1])}</p></div><div class="guided-reason"><span>WHY</span><p>${esc(step[2])}</p></div><div class="guided-check"><span>TEST / CHECK</span><p>${esc(step[3])}</p></div></div></article>`;
   }
-  return `<article class="tutorial-step"><div class="tutorial-step-number">${String(i+1).padStart(2,'0')}</div><div><h3>${esc(step.title)}</h3>${step.where?`<div class="guided-where"><span>WHERE TO CLICK</span><div>${renderRichText(step.where,false)}</div></div>`:''}<div class="guided-do"><span>DO THIS</span><div>${renderRichText(step.do,false)}${step.doList?renderRichText(step.doList,true):''}</div></div>${step.see?`<div class="guided-see"><span>YOU SHOULD SEE</span><div>${renderRichText(step.see,false)}</div></div>`:''}<div class="guided-reason"><span>WHY</span><p>${esc(step.why)}</p></div><div class="guided-check"><span>TEST / CHECK</span><div>${renderRichText(step.check,false)}</div></div>${step.troubleshoot?.length?`<div class="guided-fix"><span>IF STUCK</span><div>${renderRichText(step.troubleshoot,false)}</div></div>`:''}${renderStepVisual(step.visual,step.title)}</div></article>`;
+  return `<article class="tutorial-step"><div class="tutorial-step-number">${String(i+1).padStart(2,'0')}</div><div><h3>${esc(step.title)}</h3>${step.where?`<div class="guided-where"><span>${designMode?'WHERE TO WORK':'WHERE TO CLICK'}</span><div>${renderRichText(step.where,false)}</div></div>`:''}<div class="guided-do"><span>DO THIS</span><div>${renderRichText(step.do,false)}${step.doList?renderRichText(step.doList,true):''}</div></div>${step.see?`<div class="guided-see"><span>YOU SHOULD SEE</span><div>${renderRichText(step.see,false)}</div></div>`:''}<div class="guided-reason"><span>WHY</span><p>${esc(step.why)}</p></div><div class="guided-check"><span>TEST / CHECK</span><div>${renderRichText(step.check,false)}</div></div>${step.troubleshoot?.length?`<div class="guided-fix"><span>IF STUCK</span><div>${renderRichText(step.troubleshoot,false)}</div></div>`:''}${renderStepVisual(step.visual,step.title)}</div></article>`;
+}
+function tutorialRevisionBridge(t){
+  if(t.unrealHome){const n=(t.quiz||[]).length;return n?`<section class="content-card tutorial-revision-bridge"><div><span class="eyebrow">CHECK • CENTRAL REVISION</span><h2>Can you explain the workflow without the screenshots?</h2><p>This Master Guide contributes ${n} questions to Revision. Use the focused check now, or mix it with the rest of the Hub later.</p></div><button class="button primary" data-action="revision-topic-start" data-revision-topic-id="guide:${esc(t.id)}" data-revision-count="5">Start ${n}-question knowledge check →</button></section>`:''}
+  if(t.designModule)return `<section class="content-card tutorial-revision-bridge practical"><div><span class="eyebrow">PRACTICAL PROOF • NO DUPLICATE QUIZ</span><h2>Build this; revise the design judgement.</h2><p>This recipe is assessed by whether the result works and you can explain the decision. Unreal Designer links it into an applied build; Designer Studio holds the design judgement and scenario questions.</p></div><button class="button ghost" data-action="revision-topic-start" data-revision-topic-id="design:${esc(t.designModule)}" data-revision-count="5">Revise ${esc(designModule(t.designModule)?.title||'Designer Studio')} →</button></section>`;
+  const lessonId=t.lessonHome||t.referenceLesson;if(lessonId&&lesson(lessonId))return `<section class="content-card tutorial-revision-bridge practical"><div><span class="eyebrow">PRACTICAL PROOF • NO DUPLICATE QUIZ</span><h2>The recipe proves the build; the Core Lesson holds the knowledge check.</h2><p>Quick Tutorials stay short and useful. Revise the transferable system underneath this build instead of answering the same mini-quiz on every recipe.</p></div><button class="button ghost" data-action="revision-topic-start" data-revision-topic-id="ue:${esc(lessonId)}" data-revision-count="5">Revise ${esc(lesson(lessonId).title)} →</button></section>`;
+  return `<section class="content-card tutorial-revision-bridge practical"><div><span class="eyebrow">PRACTICAL PROOF</span><h2>Prove this by building and testing it.</h2><p>This recipe does not carry a duplicate quiz. Use the central Revision page for the knowledge areas around it.</p></div><a class="button ghost" href="#/revision">Open Revision →</a></section>`;
 }
 function tutorialPage(id){
-  const t=tutorial(id);if(!t)return notFound();const c=tutorialCategory(t.category),done=tutorialDone(t.id),ref=tutorialOfficialRef(t),f=t.familyId?tutorialFamily(t.familyId):null,home=t.libraryHidden?`<a href="#/lesson/${t.lessonHome||t.referenceLesson}">${esc(lesson(t.lessonHome||t.referenceLesson)?.title||'Unreal Learning')}</a>`:(f&&familyTutorials(f).length>1?`<a href="#/tutorial-family/${f.id}">${esc(f.title)}</a>`:'<a href="#/tutorials">Quick Tutorials</a>'),related=f?familyTutorials(f).filter(x=>x.id!==t.id):TOOLS.tutorials.filter(x=>x.id!==t.id&&!x.libraryHidden&&(x.category===t.category||x.uses.some(u=>t.uses.includes(u)))).slice(0,4);
+  const t=tutorial(id);if(!t)return notFound();if(t.studioProject)return studioProjectPage(t);const c=tutorialCategory(t.category),done=tutorialDone(t.id),ref=tutorialOfficialRef(t),f=t.familyId?tutorialFamily(t.familyId):null,unrealGuide=!!t.unrealHome,designMode=!!t.designModule,udTrack=designMode?unrealDesignerTrackForModule(t.designModule):null,home=unrealGuide?'<a href="#/programming">Unreal Learning</a>':designMode&&udTrack?`<a href="#/unreal-designer/${udTrack.id}">Unreal Designer</a>`:t.libraryHidden?`<a href="#/lesson/${t.lessonHome||t.referenceLesson}">${esc(lesson(t.lessonHome||t.referenceLesson)?.title||'Unreal Learning')}</a>`:(f&&familyTutorials(f).length>1?`<a href="#/tutorial-family/${f.id}">${esc(f.title)}</a>`:'<a href="#/tutorials">Quick Tutorials</a>'),related=unrealGuide?[]:(f?familyTutorials(f).filter(x=>x.id!==t.id):TOOLS.tutorials.filter(x=>x.id!==t.id&&!x.libraryHidden&&(x.category===t.category||x.uses.some(u=>t.uses.includes(u)))).slice(0,4));
+  const unrealSection=t.unrealSection||'Engine Workflow',categoryLabel=unrealGuide?unrealSection:(c?.title||t.category),categoryIcon=unrealGuide?(t.icon||'⌘'):(c?.icon||'🛠');
+  const unrealIntroTitle=t.unrealIntroTitle||`Build the ${unrealSection} workflow in one controlled practice scene`;
+  const unrealCallout=t.unrealCallout||'Work in order: this is a long-form recovery guide, not a menu of random tips. Start at Stage 1, prove each checkpoint, then move on.';
+  const unrealNextEyebrow=t.unrealNextEyebrow||'NEXT • APPLY THE WORKFLOW';
+  const unrealNextTitle=t.unrealNextTitle||'Now use the tools for a reason';
+  const unrealNextText=t.unrealNextText||'This guide teaches the technical Unreal workflow. Use the linked studio area to make the design decisions that turn the tools into a purposeful result.';
+  const unrealNextHref=t.unrealNextHref||'#/programming';
+  const unrealNextLabel=t.unrealNextLabel||'Back to Unreal Learning →';
   return `<div class="breadcrumb"><a href="#/">Dashboard</a> / ${home} / ${esc(t.title)}</div>
-  <section class="tutorial-hero"><div><span class="eyebrow">${c?.icon||'🛠'} ${esc(c?.title||t.category)} • ${esc(t.duration)} • ${esc(t.difficulty)}</span><h1>${t.icon} ${esc(t.title)}</h1><p>${esc(t.summary)}</p><div class="tutorial-tag-row large">${t.uses.map(x=>`<span>${esc(x)}</span>`).join('')}</div></div><div class="tutorial-complete-box"><strong>${done?'✓ Tried it':'Build → Test → Change'}</strong><p>${done?'You marked this tutorial as working. You can revisit it anytime.':'Follow the recipe, then make one small change of your own.'}</p><button class="button ${done?'success':'primary'}" data-action="complete-tutorial" data-tutorial="${t.id}">${done?'✓ Tutorial complete':'Mark tutorial complete'}</button></div></section>
+  <section class="tutorial-hero"><div><span class="eyebrow">${categoryIcon} ${esc(categoryLabel)} • ${esc(t.duration)} • ${esc(t.difficulty)}</span><h1>${t.icon} ${esc(t.title)}</h1><p>${esc(t.summary)}</p><div class="tutorial-tag-row large">${t.uses.map(x=>`<span>${esc(x)}</span>`).join('')}</div></div><div class="tutorial-complete-box"><strong>${done?'✓ Tried it':unrealGuide?'Learn → Build → Test':designMode?'Design → Test → Revise':'Build → Test → Change'}</strong><p>${done?'You marked this tutorial as working. You can revisit it anytime.':unrealGuide?'Follow the workflow in order. Use the screenshots to recover independently if you miss a live demonstration.':designMode?'Follow the controlled first version, test it from player view, then change one design decision.':'Follow the recipe, then make one small change of your own.'}</p><button class="button ${done?'success':'primary'}" data-action="complete-tutorial" data-tutorial="${t.id}">${done?'✓ Tutorial complete':'Mark tutorial complete'}</button></div></section>
   <article class="tutorial-detail">
-    <section class="content-card tutorial-result"><span class="eyebrow">01 • What we are making</span><h2>A small working mechanic</h2><p>${esc(t.summary)}</p><div class="callout good"><b>Use this tutorial when:</b> you need this mechanic in a prototype, Chapter Build or assignment and want a short reliable route to a first working version.</div></section>
+    ${unrealGuide?`<section class="content-card tutorial-result"><span class="eyebrow">${esc(t.unrealIntroEyebrow||'01 • THE ENGINE WORKFLOW')}</span><h2>${esc(unrealIntroTitle)}</h2><p>${esc(t.summary)}</p><div class="callout good">${esc(unrealCallout)}</div></section>`:designMode?`<section class="content-card tutorial-result"><span class="eyebrow">01 • THE DESIGN TEST</span><h2>Prove one idea in a small controlled scene</h2><p>${esc(t.summary)}</p><div class="callout good"><b>Important:</b> build the starter version first using the dimensions, object counts and test conditions in the steps. Do not improvise the result before you have something you can actually compare and play-test.</div></section>`:`<section class="content-card tutorial-result"><span class="eyebrow">01 • What we are making</span><h2>A small working mechanic</h2><p>${esc(t.summary)}</p><div class="callout good"><b>Use this tutorial when:</b> you need this mechanic in a prototype, Chapter Build or assignment and want a short reliable route to a first working version.</div></section>`}
     ${tutorialBuildingBlocks(t)}
     ${tutorialSnippetBridge(t)}
-    <section class="content-card practical-first-card"><span class="eyebrow">02 • BUILD IT</span><h2>${t.studentRecipe?.length?'Start at Step 1':'Follow the practical steps'}</h2>${t.studentRecipe?.length?renderSingleClearGuide(t.starterValues,t.studentRecipe,t.steps||[],{title:'Build the working version',intro:'Follow the steps in order. Each step tells you exactly what to make or click, the value to use, why you are doing it and how to check it worked.',recipeVisuals:t.recipeVisuals||null}):`<div class="tutorial-step-list">${t.steps.map((s,i)=>renderTutorialStep(s,i)).join('')}</div>`}</section>
+    <section class="content-card practical-first-card"><span class="eyebrow">02 • ${unrealGuide?'FOLLOW THE WORKFLOW':designMode?'DO THE CONTROLLED EXERCISE':'BUILD IT'}</span><h2>${t.studentRecipe?.length?'Start at Step 1':unrealGuide?'Start at Stage 1 and work straight down':designMode?'Follow every step in order':'Follow the practical steps'}</h2>${t.studentRecipe?.length?renderSingleClearGuide(t.starterValues,t.studentRecipe,t.steps||[],{title:'Build the working version',intro:'Follow the steps in order. Each step tells you exactly what to make or click, the value to use, why you are doing it and how to check it worked.',recipeVisuals:t.recipeVisuals||null}):`<div class="tutorial-step-list">${t.steps.map((s,i)=>renderTutorialStep(s,i,designMode)).join('')}</div>`}</section>
   ${tutorialReferenceVisuals(t)}
     <section class="tutorial-three-col"><div class="content-card"><span class="eyebrow">03 • Common mistakes</span><h2>If it doesn\'t work</h2><ul>${t.mistakes.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><div class="content-card"><span class="eyebrow">04 • Make it yours</span><h2>Change something</h2><ul>${t.makeItYours.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><div class="content-card"><span class="eyebrow">05 • Definition of done</span><h2>It works when…</h2>${requirements(t.worksWhen)}</div></section>
-    <section class="content-card tutorial-next"><div><span class="eyebrow">GO DEEPER</span><h2>Connect this recipe to the course</h2><p>Quick Tutorials solve the immediate mechanic. The full lesson explains the transferable idea behind it.</p></div><div class="tutorial-next-links">${t.designModule?`<a class="button" href="#/design/${t.designModule}">Open ${esc(designModule(t.designModule)?.title||'Designer Studio')} →</a>`:`<a class="button" href="#/lesson/${t.referenceLesson}">Open ${esc(lesson(t.referenceLesson)?.title||'related lesson')} →</a>`}${ref?`<a class="button ghost" href="${esc(ref.url)}" target="_blank" rel="noopener">Epic UE5.8 reference ↗</a>`:''}${t.source?.url?`<a class="button ghost" href="${esc(t.source.url)}" target="_blank" rel="noopener">${esc(t.source.title||'Reference source')} ↗</a>`:''}</div></section>
+    ${tutorialRevisionBridge(t)}
+    ${unrealGuide?`<section class="content-card tutorial-next"><div><span class="eyebrow">${esc(unrealNextEyebrow)}</span><h2>${esc(unrealNextTitle)}</h2><p>${esc(unrealNextText)}</p></div><div class="tutorial-next-links"><a class="button" href="${esc(unrealNextHref)}">${esc(unrealNextLabel)}</a>${ref?`<a class="button ghost" href="${esc(ref.url)}" target="_blank" rel="noopener">Epic UE5.8 reference ↗</a>`:''}${t.source?.url?`<a class="button ghost" href="${esc(t.source.url)}" target="_blank" rel="noopener">${esc(t.source.title||'Reference source')} ↗</a>`:''}</div></section>`:`<section class="content-card tutorial-next"><div><span class="eyebrow">GO DEEPER</span><h2>Connect this recipe to the course</h2><p>Quick Tutorials solve the immediate mechanic. The full lesson explains the transferable idea behind it.</p></div><div class="tutorial-next-links">${designMode&&udTrack?`<a class="button" href="#/unreal-designer/${udTrack.id}">⚙ Apply in Unreal Designer →</a><a class="button ghost" href="#/design/${t.designModule}">✦ Open ${esc(designModule(t.designModule)?.title||'Designer Studio')} theory →</a>`:`<a class="button" href="#/lesson/${t.referenceLesson}">Open ${esc(lesson(t.referenceLesson)?.title||'related lesson')} →</a>`}${ref?`<a class="button ghost" href="${esc(ref.url)}" target="_blank" rel="noopener">Epic UE5.8 reference ↗</a>`:''}${t.source?.url?`<a class="button ghost" href="${esc(t.source.url)}" target="_blank" rel="noopener">${esc(t.source.title||'Reference source')} ↗</a>`:''}</div></section>`}
     ${related.length?`<section class="section"><div class="section-head"><div><h2>${f?'Other builds in this recipe family':'Related Quick Tutorials'}</h2><p>${f?'Same idea, different practical outcome.':'Useful next mechanics.'}</p></div></div><div class="quick-tutorial-grid related">${related.map(tutorialCard).join('')}</div></section>`:''}
   </article>`;
 }
@@ -1068,6 +1228,7 @@ function sculptPage(id){
   <section class="section"><div class="section-head"><div><span class="eyebrow">START SIMPLE</span><h2>Six tiny clay exercises</h2><p>Do them in order the first time. Each one introduces only a small amount of new control.</p></div></div><div class="sculpt-practice-grid">${SCULPT.practices.map(sculptPracticeCard).join('')}</div></section>
   <section class="section"><div class="section-head"><div><span class="eyebrow">TOOL CHEAT SHEET</span><h2>The only controls beginners need first</h2><p>SculptGL has more tools. Ignore them until these feel comfortable.</p></div></div><div class="sculpt-tool-grid">${SCULPT.starterTools.map(t=>`<article><span>${esc(t.key)}</span><h3>${esc(t.name)}</h3><p>${esc(t.purpose)}</p></article>`).join('')}</div></section>
   <section class="sculpt-pipeline-bridge"><div><span class="deep-label">THE IMPORTANT BRIDGE</span><h2>Nice sculpture → inspect mesh → rebuild / retopologise if needed</h2><p>SculptGL is excellent for learning form. It does not magically turn every sculpture into a clean game asset. Exercise 06 exports an OBJ to 3ds Max specifically so students can see that difference.</p></div><a class="button primary" href="#/modeling/lesson/max-topology-clinic">⬡ Go to Topology Clinic →</a></section>
+  <section class="content-card tutorial-revision-bridge practical"><div><span class="eyebrow">PRACTICE HERE • KNOWLEDGE IN 3D FOUNDATIONS</span><h2>Sculpt proves form; Revision checks the game-ready mesh thinking.</h2><p>Sculpt exercises stay practical. Use the 3D Foundations revision bank when you need to test topology, geometry, pivots, UVs and production decisions.</p></div><a class="button ghost" href="#/revision">Open 3D Foundations revision →</a></section>
   <section class="section"><div class="section-head"><div><h2>About the tool</h2><p>SculptGL is the original browser sculpting app by Stéphane Ginier. Its source is MIT-licensed; the repository is archived/read-only, so the Hub treats it as an optional practice tool rather than a critical dependency.</p></div></div>${sculptSources()}</section>`;
 }
 
@@ -1244,7 +1405,7 @@ function modelLessonVideoBridge(l){
 function modelingVideosPage(){
   const p=modelVideoProgress();
   const groups=MODEL_VIDEOS.groups.map(g=>{const vids=MODEL_VIDEOS.videos.filter(v=>v.group===g.id),done=vids.filter(v=>modelVideoDone(v.id)).length;return `<section class="section model-video-group"><div class="section-head"><div><span class="eyebrow">${esc(g.kicker)}</span><h2>${esc(g.title)}</h2><p>${esc(g.note)}</p></div><span class="sync-chip source-progress-chip">${done}/${vids.length} complete</span></div><div class="model-video-grid">${vids.map(v=>modelVideoCard(v)).join('')}</div></section>`}).join('');
-  return `<div class="breadcrumb"><a href="#/">Home</a> / <a href="#/modeling">3D Modelling Studio</a> / Video Series</div><section class="model-video-page-hero"><div><span class="eyebrow">🎬 14 FOLLOW-ALONG VIDEOS • +${MODEL_VIDEOS.xp} XP EACH</span><h1>${esc(MODEL_VIDEOS.title)}</h1><p>${esc(MODEL_VIDEOS.short)}</p><div class="model-video-launch-stats"><span><b>${p.done}/${p.total}</b> complete</span><span><b>${p.pct}%</b> watched + practised</span><span><b>${p.done*MODEL_VIDEOS.xp}</b> XP earned</span></div><div class="progress"><span style="width:${p.pct}%"></span></div></div><div class="model-video-course-rule"><b>THE RULE</b><p>Playing the video is not the finish line. Pause it, do the named task in Max, compare your result, then claim the XP.</p><a class="button ghost small" href="${esc(MODEL_VIDEOS.folderUrl)}" target="_blank" rel="noopener">Open original Drive folder ↗</a></div></section>${groups}`;
+  return `<div class="breadcrumb"><a href="#/">Home</a> / <a href="#/modeling">3D Modelling Studio</a> / Video Series</div><section class="model-video-page-hero"><div><span class="eyebrow">🎬 14 FOLLOW-ALONG VIDEOS • +${MODEL_VIDEOS.xp} XP EACH</span><h1>${esc(MODEL_VIDEOS.title)}</h1><p>${esc(MODEL_VIDEOS.short)}</p><div class="model-video-launch-stats"><span><b>${p.done}/${p.total}</b> complete</span><span><b>${p.pct}%</b> watched + practised</span><span><b>${p.done*MODEL_VIDEOS.xp}</b> XP earned</span></div><div class="progress"><span style="width:${p.pct}%"></span></div></div><div class="model-video-course-rule"><b>THE RULE</b><p>Playing the video is not the finish line. Pause it, do the named task in Max, compare your result, then claim the XP.</p><a class="button ghost small" href="${esc(MODEL_VIDEOS.folderUrl)}" target="_blank" rel="noopener">Open original Drive folder ↗</a></div></section><section class="content-card tutorial-revision-bridge practical"><div><span class="eyebrow">PRACTICE HERE • KNOWLEDGE IN 3D FOUNDATIONS</span><h2>The video proves the move; Revision checks the modelling judgement.</h2><p>Max videos do not carry duplicate mini-quizzes. Use 3D Foundations in Revision for topology, pivots, UVs, PBR and game-ready decisions.</p></div><a class="button ghost" href="#/revision">Open 3D Foundations revision →</a></section>${groups}`;
 }
 function modelingPage(){
   const p=modelProgress(),n=nextModelLesson();
@@ -1301,6 +1462,408 @@ function modelingFixPage(id){
 }
 
 
+function theoryLesson(id){return (THEORY.lessons||[]).find(x=>x.id===id)}
+function theoryPath(id){return (THEORY.paths||[]).find(x=>x.id===id)}
+function theoryDone(id){return (state.theoryCompleted||[]).includes(id)}
+function theoryScore(id){return (state.theoryScores||{})[id]||null}
+function theoryPathProgress(id){
+  const lessons=(THEORY.lessons||[]).filter(x=>x.path===id),done=lessons.filter(x=>theoryDone(x.id)).length;
+  return {done,total:lessons.length,pct:lessons.length?Math.round(done/lessons.length*100):0};
+}
+function theoryCard(l){
+  const p=theoryPath(l.path),done=theoryDone(l.id),score=theoryScore(l.id),search=normaliseSearchText(`${l.title} ${l.short} ${p?.title||''} ${l.example?.game||''} ${(l.keyIdeas||[]).join(' ')}`);
+  return `<a class="theory-card ${done?'done':''}" href="#/theory/${l.id}" data-theory-card data-path="${esc(l.path)}" data-search="${esc(search)}"><div class="theory-card-icon">${l.icon||'◈'}</div><div><span class="eyebrow">${esc(p?.title||'Game Design Theory')} • ${esc(l.duration||'15–20 min')}</span><h3>${esc(l.title)}</h3><p>${esc(l.short)}</p>${l.example?.game?`<span class="theory-card-case">CASE STUDY • ${esc(l.example.game)}</span>`:''}<div class="theory-card-foot"><span>${done?'✓ Complete':score?`Best ${score.bestPct||score.pct}%`:'Scenario quiz'}</span><b>+${THEORY.xp} XP</b></div></div></a>`;
+}
+function theoryDiagram(d){
+  if(!d?.nodes?.length)return '';
+  return `<section class="theory-diagram-card"><span class="eyebrow">MODEL IT</span><h2>${esc(d.title||'Design model')}</h2><div class="theory-diagram-flow">${d.nodes.map((n,i)=>`${i?'<span class="theory-arrow">→</span>':''}<strong>${esc(n)}</strong>`).join('')}</div>${d.caption?`<p>${esc(d.caption)}</p>`:''}</section>`;
+}
+function theoryExampleCard(x){
+  if(!x)return '';
+  const url=safeUrl(x.sourceUrl||''),image=x.src?safeUrl(x.src):'';
+  return `<article class="theory-example-card">${image?`<button class="zoom-image-button theory-example-image" type="button" data-action="open-image" data-src="${esc(image)}" data-caption="${esc(x.title||x.game||'Game example')}" data-source="${esc(url)}"><img class="remote-reference-image" src="${esc(image)}" alt="${esc((x.game||'Game')+' design example')}" loading="lazy"></button>`:''}<div><span class="eyebrow">REAL GAME EXAMPLE${x.game?` • ${esc(x.game)}`:''}</span><h3>${esc(x.title||x.game||'Example')}</h3><p>${esc(x.body||'')}</p>${url?`<a class="link-button" href="${esc(url)}" target="_blank" rel="noopener">${esc(x.sourceTitle||'Open source')} ↗</a>`:''}</div></article>`;
+}
+function theorySources(l){
+  return `<div class="theory-source-grid">${(l.sources||[]).map(s=>{const u=safeUrl(s.url);return u?`<a class="theory-source-card" href="${esc(u)}" target="_blank" rel="noopener"><span>${esc(s.kind||'Further reading')}</span><strong>${esc(s.title)}</strong>${s.note?`<p>${esc(s.note)}</p>`:''}<b>Open source ↗</b></a>`:''}).join('')}</div>`;
+}
+function theoryCaseStudy(l){
+  const c=l?.caseStudy;if(!c)return '';
+  const game=l?.example?.game||'Case study';
+  return `<section class="theory-case-study"><div class="theory-case-study-head"><span class="eyebrow">CASE STUDY BREAKDOWN • ${esc(game)}</span><h2>Read the design, not just the game</h2><p>${esc(c.intro||'')}</p></div><div class="theory-case-study-grid">${(c.observations||[]).map((x,i)=>`<article><span>${String(i+1).padStart(2,'0')}</span><p>${esc(x)}</p></article>`).join('')}</div>${c.question?`<div class="theory-designer-question"><b>DESIGNER QUESTION</b><p>${esc(c.question)}</p></div>`:''}</section>`;
+}
+function theoryWatch(l){
+  const w=l?.watch;if(!w)return '';
+  const url=safeUrl(w.url||''),youtubeId=/^[A-Za-z0-9_-]{6,20}$/.test(String(w.youtubeId||''))?String(w.youtubeId):'';
+  return `<section class="theory-watch"><div class="theory-watch-copy"><span class="eyebrow">▶ WATCH IT IN ACTION • ${esc(w.kind||'Video')}</span><h2>${esc(w.title||'See the design in motion')}</h2><div class="theory-watch-prompt"><b>WATCH FOR</b><p>${esc(w.watchFor||'Watch for the design principle operating during real play.')}</p></div>${w.question?`<div class="theory-watch-question"><b>AFTER WATCHING</b><p>${esc(w.question)}</p></div>`:''}</div><div class="theory-watch-stage" data-theory-watch-stage>${youtubeId?`<div class="theory-watch-placeholder"><span class="theory-watch-play-icon">▶</span><strong>Load video when you are ready</strong><p>The player is not loaded until you press Play.</p><button class="button primary" type="button" data-action="load-theory-video" data-youtube="${esc(youtubeId)}" data-title="${esc(w.title||'Theory case study video')}">▶ Play here</button>${url?`<a class="button ghost small" href="${esc(url)}" target="_blank" rel="noopener">Open source ↗</a>`:''}</div>`:(url?`<div class="theory-watch-placeholder external"><span class="theory-watch-play-icon">↗</span><strong>Watch on the source site</strong><p>This source is kept on its official, developer or professional host.</p><a class="button primary" href="${esc(url)}" target="_blank" rel="noopener">Open video / media page ↗</a></div>`:'')}</div></section>`;
+}
+function theoryQuizReview(l,s){
+  if(!s?.answers)return '';
+  return `<div class="theory-quiz-review">${l.quiz.map((q,i)=>{const selected=s.answers[i],ok=selected===q.correct;return `<article class="${ok?'correct':'wrong'}"><span>${ok?'✓ Correct':'× Review'}</span><strong>${esc(q.q)}</strong><p><b>Your answer:</b> ${esc(q.options[selected]??'No answer')}</p><p><b>Correct:</b> ${esc(q.options[q.correct])}</p><small>${esc(q.feedback)}</small></article>`}).join('')}</div>`;
+}
+function theoryPage(){
+  const done=(state.theoryCompleted||[]).length,total=THEORY.lessons.length,pct=total?Math.round(done/total*100):0,lab=THEORY.lab;
+  return `<div class="page-head theory-page-head"><div class="breadcrumb"><a href="#/">Home</a> / Game Design Theory</div><span class="eyebrow">SYSTEMS • PLAYERS • BALANCE • EXPERIENCE • PROCESS</span><h1>◈ Game Design Theory</h1><p class="muted">Learn why games work, not just how to build them. Every lesson uses a different game case study, breaks down what the design is doing, then lets you watch the principle in action before you try it yourself.</p></div>
+  ${careerHubPromo()}
+  <section class="theory-dashboard"><div><span class="eyebrow">YOUR THEORY PROGRESS</span><h2>${done}/${total} lessons • ${done*THEORY.xp}/${total*THEORY.xp} XP earned</h2><div class="progress"><span style="width:${pct}%"></span></div></div><div class="theory-method"><span>UNDERSTAND</span><b>→</b><span>SEE IT</span><b>→</b><span>WATCH</span><b>→</b><span>TRY IT</span><b>→</b><span>QUIZ</span><b>→</b><span>APPLY</span></div></section>
+  <section class="theory-lab" id="boardGameLab"><div class="theory-lab-mark">🎲</div><div><span class="eyebrow">OPTIONAL PRACTICAL DESIGN LAB</span><h2>${esc(lab.title)}</h2><p>${esc(lab.intro)}</p><div class="callout good"><b>TABLETOP ADAPTATION PROJECT?</b> Your teacher may ask you to complete this lab before your group commits to its design.</div><div class="theory-lab-columns"><div><h3>How to run it</h3><ol>${lab.rules.map(x=>`<li>${esc(x)}</li>`).join('')}</ol></div><div><h3>Design evidence to collect</h3><ul>${lab.prompts.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div></div><div class="callout"><b>EVIDENCE:</b> ${esc(lab.evidence)}</div><p class="muted"><b>Why try it?</b> ${esc(lab.note)}</p></div></section>
+  <div class="study-toolbar theory-toolbar"><input id="theorySearch" type="search" enterkeyhint="search" placeholder="Search agency, balance, pacing, playtesting…"><div class="filter-row"><button class="filter active" data-theory-filter="all">All <b>${total}</b></button>${THEORY.paths.map(p=>`<button class="filter" data-theory-filter="${esc(p.id)}">${p.icon} ${esc(p.title)}</button>`).join('')}</div><span class="study-result-count" id="theoryResultCount">${total} lessons</span></div>
+  <div class="theory-path-overview">${THEORY.paths.map(p=>{const x=theoryPathProgress(p.id);return `<article><span>${p.icon}</span><div><strong>${esc(p.title)}</strong><p>${esc(p.short)}</p><div class="progress"><span style="width:${x.pct}%"></span></div><small>${x.done}/${x.total} complete</small></div></article>`}).join('')}</div>
+  <div class="theory-grid" id="theoryGrid">${THEORY.lessons.map(theoryCard).join('')}</div><div class="empty" id="theorySearchEmpty" hidden><h2>No theory lessons match.</h2><p>Try a shorter design term or switch back to All.</p></div>`;
+}
+function theoryLessonPage(id){
+  const l=theoryLesson(id);if(!l)return notFound();const p=theoryPath(l.path),done=theoryDone(l.id),s=theoryScore(l.id),passed=(s?.bestPct||s?.pct||0)>=THEORY.passPercent,idx=THEORY.lessons.indexOf(l),prev=THEORY.lessons[idx-1],next=THEORY.lessons[idx+1];
+  return `<div class="breadcrumb"><a href="#/">Home</a> / <a href="#/theory">Game Design Theory</a> / ${esc(l.title)}</div>
+  <section class="theory-lesson-hero"><div><span class="eyebrow">${p?.icon||'◈'} ${esc(p?.title||'Game Design Theory')} • ${esc(l.duration)} • +${THEORY.xp} XP</span><h1>${l.icon||'◈'} ${esc(l.title)}</h1><p>${esc(l.short)}</p></div><div class="theory-status ${done?'done':''}"><strong>${done?'✓ Complete':s?`Best score ${s.bestPct||s.pct}%`:`Pass ${THEORY.passPercent}% to complete`}</strong><span>${done?'XP is awarded once on the first pass.':'The quiz uses design scenarios, not just definitions.'}</span></div></section>
+  <section class="theory-definition"><div><span class="eyebrow">THE IDEA</span><h2>What is it?</h2><p>${esc(l.definition)}</p></div><div><span class="eyebrow">WHY IT MATTERS</span><h2>Why should a designer care?</h2><p>${esc(l.why)}</p></div></section>
+  ${theoryDiagram(l.diagram)}
+  <section class="content-card"><span class="eyebrow">KEY IDEAS</span><h2>What to remember</h2><div class="theory-key-grid">${(l.keyIdeas||[]).map((x,i)=>`<article><span>${String(i+1).padStart(2,'0')}</span><p>${esc(x)}</p></article>`).join('')}</div></section>
+  ${theoryExampleCard(l.example)}${theoryCaseStudy(l)}${theoryWatch(l)}${l.examples?.length?`<section class="section"><div class="section-head"><div><span class="eyebrow">COMPARE REAL ADAPTATIONS</span><h2>What survived the conversion?</h2><p>Do not copy components. Identify the principle the designers preserved.</p></div></div><div class="theory-example-grid">${l.examples.map(theoryExampleCard).join('')}</div></section>`:''}
+  <section class="theory-warning"><div><span>⚠</span><h2>Common design traps</h2></div><ul>${(l.mistakes||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></section>
+  <section class="theory-task"><div><span class="eyebrow">APPLY IT • ${esc(l.task.title)}</span><h2>${esc(l.task.brief)}</h2><ol>${(l.task.steps||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ol><div class="callout good"><b>EVIDENCE:</b> ${esc(l.task.evidence)}</div>${l.task.stretch?`<div class="callout"><b>STRETCH:</b> ${esc(l.task.stretch)}</div>`:''}</div></section>
+  ${theoryApplyNext(l.id)}
+  <section class="section"><div class="section-head"><div><span class="eyebrow">GO DEEPER</span><h2>Further reading & professional sources</h2><p>These are here when you want the full theory, original paper, industry talk or real rule set. They are not required to earn the lesson XP.</p></div></div>${theorySources(l)}</section>
+  <section class="theory-quiz-section"><div class="section-head"><div><span class="eyebrow">SCENARIO CHECK • ${THEORY.passPercent}% PASS</span><h2>Can you use the idea?</h2><p>${done?'You have already passed this lesson. Retake it any time; XP is only awarded once.':'Answer every question. A pass marks the lesson complete and awards XP.'}</p></div>${s?`<span class="sync-chip">Best ${s.bestPct||s.pct}%</span>`:''}</div><form class="theory-quiz-form" data-action-form="theory-quiz" data-theory="${esc(l.id)}">${l.quiz.map((q,qi)=>`<fieldset><legend>${qi+1}. ${esc(q.q)}</legend>${q.options.map((o,oi)=>`<label><input type="radio" name="q${qi}" value="${oi}" required><span>${esc(o)}</span></label>`).join('')}</fieldset>`).join('')}<button class="button primary" type="submit">${done?'Retake scenario check':'Check answers & complete lesson'} →</button></form>${theoryQuizReview(l,s)}</section>
+  <nav class="theory-lesson-nav"><div>${prev?`<a class="button ghost" href="#/theory/${prev.id}">← ${esc(prev.title)}</a>`:`<a class="button ghost" href="#/theory">← Theory home</a>`}</div><div>${next?`<a class="button primary" href="#/theory/${next.id}">${esc(next.title)} →</a>`:`<a class="button primary" href="#/theory">Theory dashboard →</a>`}</div></nav>`;
+}
+
+
+function careerChapter(id){return (CAREERS.chapters||[]).find(x=>x.id===id)}
+function careerRole(id){return (CAREERS.roles||[]).find(x=>x.id===id)}
+function careerChallenge(id){return (CAREERS.challenges||[]).find(x=>x.id===id)}
+function careerDone(id){return (state.careerCompleted||[]).includes(id)}
+function careerScore(id){return (state.careerScores||{})[id]||null}
+function careerProfile(){return state.careerProfile||{version:1,roleInterests:{},signals:{},hardSkills:[],softSkills:[],vacancies:[],trafficLights:[],goals:{},industryBeliefs:{},industryDebate:{}}}
+function careerChapterProgress(){const total=(CAREERS.chapters||[]).length,done=(CAREERS.chapters||[]).filter(ch=>careerDone(ch.id)).length;return {done,total,pct:total?Math.round(done/total*100):0}}
+function careerProfileHasContent(p=careerProfile()){
+  return Boolean(p.updatedAt||p.targetRole||p.industryEvidence?.game||Object.keys(p.roleInterests||{}).length||p.reflection?.completed||p.challenge?.id||p.goals?.sixMonth);
+}
+async function saveCareerProfileData(patch,message='Career evidence saved.'){
+  const current=careerProfile();
+  state.careerProfile={version:1,...current,...patch,updatedAt:new Date().toISOString()};
+  saveState();
+  if(BACKEND.user){try{await BACKEND.saveCareerProfile(state.careerProfile)}catch(err){toast('Saved locally; cloud career sync failed.');return}}
+  const autoCompleted=await completeReadyCareerChaptersFromSavedScores();
+  if(autoCompleted.length)return;
+  toast(message);
+}
+function careerRequirementStatus(ch,p=careerProfile()){
+  if(!ch)return {ready:false,label:'Checkpoint not found'};
+  const interests=Object.keys(p.roleInterests||{}).length;
+  const vacancies=(p.vacancies||[]).filter(v=>v?.company&&v?.title).length;
+  if(ch.id==='industry')return {ready:Boolean(p.industryEvidence?.game&&p.industryEvidence?.cluster),label:p.industryEvidence?.game&&p.industryEvidence?.cluster?'Credits + cluster saved':'Save a game investigation + UK cluster'};
+  if(ch.id==='people')return {ready:interests>=3,label:interests>=3?`${interests} role reactions saved`:`React to ${Math.max(0,3-interests)} more role${3-interests===1?'':'s'}`};
+  if(ch.id==='you'){
+    const hardEvidence=(p.hardSkills||[]).some(x=>Number(x?.level||0)>0&&String(x?.evidence||'').trim());
+    const softEvidence=(p.softSkills||[]).some(x=>Number(x?.level||0)>0&&String(x?.evidence||'').trim());
+    const ready=Boolean(p.reflection?.completed&&hardEvidence&&softEvidence&&p.peerFeedback?.strength&&p.peerFeedback?.improve);
+    return {ready,label:ready?'Reflection + hard/soft evidence + peer check saved':'Complete reflection • evidence one hard + one soft skill • save peer feedback'};
+  }
+  if(ch.id==='routes'){
+    const predicted=Object.keys(p.storyChoices||{}).length>0,ready=Boolean(predicted&&p.careerStoryLesson);
+    return {ready,label:ready?'Career prediction + personal lesson saved':'Predict at least one story + save one lesson'};
+  }
+  if(ch.id==='reality'){
+    const hasRed=(p.trafficLights||[]).some(x=>x?.status==='red'&&String(x?.requirement||'').trim());
+    const ready=Boolean(p.targetRole&&vacancies>=3&&hasRed&&p.biggestGap);
+    return {ready,label:ready?'Role + 3 vacancies + evidenced RED gap saved':`Choose role • ${vacancies}/3 vacancies • identify at least one RED requirement`};
+  }
+  if(ch.id==='prove'){
+    const ready=Boolean(p.challenge?.id&&p.challenge?.requirement&&p.challenge?.scopeCut);
+    return {ready,label:ready?'Targeted challenge + evidence purpose saved':'Choose a challenge • requirement it proves • deliberate scope cut'};
+  }
+  if(ch.id==='plan')return {ready:Boolean(p.goals?.sixMonth&&p.goals?.twelveMonth&&p.goals?.twentyFourMonth),label:p.goals?.sixMonth&&p.goals?.twelveMonth&&p.goals?.twentyFourMonth?'6 / 12 / 24-month plan saved':'Save all three career goals'};
+  return {ready:true,label:'Ready'};
+}
+async function completeReadyCareerChaptersFromSavedScores(){
+  const ready=(CAREERS.chapters||[]).filter(ch=>{
+    const score=careerScore(ch.id),best=Number(score?.bestPct||score?.pct||0);
+    return !careerDone(ch.id)&&best>=CAREERS.passPercent&&careerRequirementStatus(ch).ready;
+  });
+  if(!ready.length)return [];
+  const before=localUnlockedBadgeIds();
+  state.careerCompleted=[...new Set([...(state.careerCompleted||[]),...ready.map(ch=>ch.id)])];
+  saveState();
+  if(BACKEND.user){
+    for(const ch of ready){
+      try{await BACKEND.setLessonComplete(`theory:industry-${ch.id}`,true)}
+      catch(err){toast('Completed locally; cloud chapter sync failed.');}
+    }
+  }
+  const names=ready.map(ch=>ch.title).join(', '),xp=ready.length*CAREERS.xp;
+  badgeUnlockAfter(before,`${names} complete • +${xp} XP`);
+  return ready;
+}
+function careerSourceCards(items=[]){
+  return `<div class="career-source-grid">${items.map(x=>{const u=safeUrl(x.url);return u?`<a class="career-source-card" href="${esc(u)}" target="_blank" rel="noopener"><span>${esc(x.kind||'Professional source')}</span><strong>${esc(x.title)}</strong><p>${esc(x.note||'Open the original source and use it as evidence.')}</p><b>Open source ↗</b></a>`:''}).join('')}</div>`;
+}
+function careerCases(items=[]){
+  return `<div class="career-case-grid">${items.map(x=>`<article class="career-case-card"><div class="career-case-icon">${esc(x.icon||'◈')}</div><div><span class="eyebrow">${esc(x.kicker||'CASE STUDY')}</span><h3>${esc(x.title)}</h3><p>${esc(x.body)}</p><div class="career-case-question"><b>SO WHAT?</b><p>${esc(x.question||'What does this reveal about working in games?')}</p></div>${safeUrl(x.sourceUrl)?`<a class="link-button" href="${esc(safeUrl(x.sourceUrl))}" target="_blank" rel="noopener">${esc(x.sourceTitle||'Open source')} ↗</a>`:''}</div></article>`).join('')}</div>`;
+}
+function careerWatchCards(items=[]){
+  if(!items.length)return '';
+  return `<div class="career-watch-grid">${items.map(w=>{const id=/^[A-Za-z0-9_-]{6,20}$/.test(String(w.youtubeId||''))?w.youtubeId:'';return `<article class="career-watch-card"><div class="theory-watch-stage career-watch-stage" data-theory-watch-stage>${id?`<img src="https://i.ytimg.com/vi/${esc(id)}/hqdefault.jpg" alt="${esc(w.title)} video thumbnail" loading="lazy"><div class="career-watch-overlay"><button class="button primary" type="button" data-action="load-theory-video" data-youtube="${esc(id)}" data-title="${esc(w.title)}">▶ Play here</button></div>`:''}</div><div><span class="eyebrow">▶ ${esc(w.kind||'VIDEO')}</span><h3>${esc(w.title)}</h3><div class="career-watch-for"><b>WATCH FOR</b><p>${esc(w.watchFor||'Watch the people and production decisions, not just the game.')}</p></div>${safeUrl(w.url)?`<a class="link-button" href="${esc(safeUrl(w.url))}" target="_blank" rel="noopener">Open on source ↗</a>`:''}</div></article>`}).join('')}</div>`;
+}
+function careerQuizReview(ch,s){
+  if(!s?.answers)return '';
+  return `<div class="theory-quiz-review career-quiz-review">${ch.quiz.map((q,i)=>{const selected=s.answers[i],ok=selected===q.correct;return `<article class="${ok?'correct':'wrong'}"><span>${ok?'✓ Correct':'× Review'}</span><strong>${esc(q.q)}</strong><p><b>Your answer:</b> ${esc(q.options[selected]??'No answer')}</p><p><b>Best answer:</b> ${esc(q.options[q.correct])}</p><small>${esc(q.feedback)}</small></article>`}).join('')}</div>`;
+}
+function careerQuiz(ch){
+  const s=careerScore(ch.id),done=careerDone(ch.id),req=careerRequirementStatus(ch),best=s?.bestPct||s?.pct||0,quizPassed=best>=CAREERS.passPercent;
+  const message=done?'Already complete. Retake whenever you want; XP is only awarded once.':req.ready?'The checkpoint is saved. Pass the scenarios to complete this chapter.':quizPassed?`You have passed the scenario check. Finish the Hub checkpoint to complete the chapter: ${esc(req.label)}.`:`You can take the scenario check now. Chapter completion needs both a pass and the Hub checkpoint: ${esc(req.label)}.`;
+  const chip=done?'✓ COMPLETE':quizPassed&&!req.ready?'✓ QUIZ PASSED':req.ready?'✓ CHECKPOINT READY':'◌ CHECKPOINT REQUIRED';
+  return `<section class="theory-quiz-section career-quiz-section"><div class="section-head"><div><span class="eyebrow">SCENARIO CHECK • ${CAREERS.passPercent}% PASS</span><h2>Can you use the industry thinking?</h2><p>${message}</p></div><span class="career-ready-chip ${done||req.ready||quizPassed?'ready':'waiting'}">${chip}${best?` • Best ${best}%`:''}</span></div><form class="theory-quiz-form" data-action-form="career-quiz" data-career="${esc(ch.id)}">${ch.quiz.map((q,qi)=>`<fieldset><legend>${qi+1}. ${esc(q.q)}</legend>${q.options.map((o,oi)=>`<label><input type="radio" name="q${qi}" value="${oi}" required><span>${esc(o)}</span></label>`).join('')}</fieldset>`).join('')}<button class="button primary" type="submit">${done?'Retake scenario check':req.ready?'Check answers & complete chapter':'Check answers'} →</button></form>${careerQuizReview(ch,s)}</section>`;
+}
+function careerProfileMini(){
+  const p=careerProfile(),role=careerRole(p.targetRole),challenge=careerChallenge(p.challenge?.id),signals=p.signals||{},top=Object.entries(signals).sort((a,b)=>b[1]-a[1])[0];
+  if(!careerProfileHasContent(p))return `<div class="career-profile-empty"><span>◎</span><div><strong>Your profile will build here</strong><p>Your role reactions, work-style signals, vacancy evidence and portfolio challenge are saved as you move through the seven chapters.</p></div></div>`;
+  return `<div class="career-profile-mini"><div><small>TARGET ROLE</small><strong>${esc(role?.title||'Still exploring')}</strong></div><div><small>STRONGEST CURRENT SIGNAL</small><strong>${top?esc({technical:'Technical / systems',design:'Design / player experience',visual:'Visual / craft',production:'Production / organisation'}[top[0]]||top[0]):'Not measured yet'}</strong></div><div><small>BIGGEST GAP</small><strong>${esc(p.biggestGap||'Not chosen yet')}</strong></div><div><small>PORTFOLIO CHALLENGE</small><strong>${esc(challenge?.title||'Not selected yet')}</strong></div></div>`;
+}
+function careerHubPromo(){
+  const x=careerChapterProgress();
+  return `<section class="career-theory-promo"><div><span class="eyebrow">📌 LEVEL 4 • INDUSTRY & CAREERS</span><h2>Find Your Place in the Games Industry</h2><p>Use this pathway alongside the live Assignment 1 presentation. The presentation tells the stories; the Hub is where you investigate, make decisions, save evidence and build your career profile.</p><div class="career-promo-method"><span>LISTEN</span><b>→</b><span>INVESTIGATE</span><b>→</b><span>REFLECT</span><b>→</b><span>PROVE</span></div></div><div class="career-promo-progress"><strong>${x.done}/${x.total}</strong><span>chapters complete</span><div class="progress"><span style="width:${x.pct}%"></span></div><a class="button primary" href="#/industry-careers">${x.done?'Continue pathway':'Start the pathway'} →</a></div></section>`;
+}
+function careerHubPage(){
+  const x=careerChapterProgress(),p=careerProfile();
+  return `<div class="page-head career-page-head"><div class="breadcrumb"><a href="#/">Home</a> / <a href="#/theory">Theory</a> / Industry & Careers</div><span class="eyebrow">📌 LEVEL 4 REQUIRED PATHWAY • ASSIGNMENT 1</span><h1>◎ ${esc(CAREERS.title)}</h1><p>${esc(CAREERS.subtitle)}</p></div>
+  <section class="career-dashboard"><div><span class="eyebrow">YOUR PATHWAY</span><h2>${x.done}/${x.total} chapters • ${x.done*CAREERS.xp}/${x.total*CAREERS.xp} XP</h2><div class="progress"><span style="width:${x.pct}%"></span></div><p>Use this live with the presentation. A chapter only completes after its required checkpoint is saved and the scenario check is passed.</p></div>${careerProfileMini()}</section>
+  <section class="career-how"><span class="eyebrow">HOW THIS WORKS IN CLASS</span><div class="career-how-flow"><span>🎤 TEACH</span><b>→</b><span>🎮 STORY</span><b>→</b><span>💬 DISCUSS</span><b>→</b><span>◎ HUB CHECKPOINT</span><b>→</b><span>✓ SAVE EVIDENCE</span></div><p>The Hub does not replace the presentation. It catches the parts that are better when you investigate, choose, test yourself and leave useful evidence behind.</p></section>
+  <div class="career-chapter-grid">${(CAREERS.chapters||[]).map(ch=>{const done=careerDone(ch.id),req=careerRequirementStatus(ch),score=careerScore(ch.id);return `<a class="career-chapter-card ${done?'done':''}" href="#/industry-careers/${ch.id}"><span class="career-chapter-number">${done?'✓':String(ch.order).padStart(2,'0')}</span><div><span class="eyebrow">PRESENTATION SLIDES ${esc(ch.slides)} • +${CAREERS.xp} XP</span><h2>${esc(ch.icon)} ${esc(ch.title)}</h2><p>${esc(ch.short)}</p><div class="career-card-foot"><span class="${req.ready?'ready':'waiting'}">${req.ready?'✓ checkpoint saved':'◌ '+esc(req.label)}</span><b>${score?`Best ${score.bestPct||score.pct}%`:'Open chapter →'}</b></div></div></a>`}).join('')}</div>
+  <section class="career-assignment-preview"><div><span class="eyebrow">WHERE THIS IS HEADING</span><h2>Your Assignment 1 evidence grows as you go</h2><p>By the end you should have a specific target role, real employer and vacancy evidence, a hard/soft skills audit, a Green / Amber / Red gap analysis, a targeted portfolio challenge and a 6 / 12 / 24-month plan.</p></div><div>${careerProfileMini()}</div></section>`;
+}
+
+function careerIndustryRealitySection(ch){
+  const checks=ch?.realityChecks||[];if(!checks.length)return '';
+  const p=careerProfile(),answers=p.industryBeliefs||{},answered=checks.filter(q=>answers[q.id]&&Number.isInteger(Number(answers[q.id].choice))).length;
+  const cards=checks.map((q,i)=>{
+    const saved=answers[q.id],choice=saved?Number(saved.choice):null,has=Number.isInteger(choice)&&choice>=0&&choice<q.options.length,ok=has&&choice===q.correct;
+    const buttons=q.options.map((o,oi)=>`<button type="button" data-action="career-industry-belief" data-belief="${esc(q.id)}" data-choice="${oi}" ${has?'disabled':''} class="${has&&choice===oi?'selected':''}"><span>${String.fromCharCode(65+oi)}</span>${esc(o)}</button>`).join('');
+    const reveal=has?`<div class="industry-reality-reveal ${ok?'strong':'caught'}"><div class="industry-reality-verdict"><span>${ok?'✓ STRONG CALL':'⚠ ASSUMPTION CAUGHT'}</span><strong>${esc(q.optionFeedback?.[choice]||q.reveal||'')}</strong></div>${!ok?`<div class="industry-reality-best"><b>STRONGER ANSWER</b><p>${esc(q.options[q.correct])}</p></div>`:''}<p class="industry-reality-explain">${esc(q.reveal||'')}</p><div class="industry-reality-case"><span>REAL CASE</span><h4>${esc(q.caseTitle||'Industry example')}</h4><p>${esc(q.caseText||'')}</p>${safeUrl(q.sourceUrl)?`<a href="${esc(safeUrl(q.sourceUrl))}" target="_blank" rel="noopener">${esc(q.sourceTitle||'Open source')} ↗</a>`:''}</div></div>`:'';
+    return `<article class="industry-reality-card ${has?(ok?'answered strong':'answered caught'):''}" id="industry-belief-${esc(q.id)}"><div class="industry-reality-num">${String(i+1).padStart(2,'0')}</div><div class="industry-reality-main"><span class="eyebrow">FIRST INSTINCT • COMMIT BEFORE THE REVEAL</span><h3>${esc(q.q)}</h3><div class="industry-reality-options">${buttons}</div>${reveal}</div></article>`;
+  }).join('');
+  const reflection=`<form data-action-form="career-industry-belief-reflection" class="industry-belief-reflection"><div><span class="eyebrow">WHAT CHANGED?</span><h3>Catch yourself thinking</h3><p>Which answer surprised you most, challenged something you assumed, or made you want more evidence?</p></div><textarea name="reflection" required placeholder="I assumed… The case that changed / complicated that was…">${esc(p.industryBeliefReflection||'')}</textarea><button class="button primary" type="submit">Save my industry reflection ✓</button></form>`;
+  return `<section class="industry-reality-section"><div class="industry-reality-head"><div><span class="eyebrow">🎮 WATCH ALONG • INDUSTRY REALITY CHECK</span><h2>How much of the industry do you think you already understand?</h2><p>Do these before the answer appears in the presentation. Your <b>first answer is saved</b>. Getting caught is useful — the reveal explains why and gives you a real case to argue with.</p></div><div class="industry-reality-score"><strong>${answered}/${checks.length}</strong><span>first instincts saved</span><small>No XP • not graded</small></div></div><div class="industry-reality-grid">${cards}</div>${reflection}${careerIndustryDebateSection(ch)}</section>`;
+}
+function careerIndustryDebateSection(ch){
+  const d=ch?.industryDebate;if(!d)return '';
+  const p=careerProfile(),saved=p.industryDebate||{},before=Number.isInteger(Number(saved.before))?Number(saved.before):null,after=Number.isInteger(Number(saved.after))?Number(saved.after):null;
+  const beforeButtons=d.options.map((o,i)=>`<button type="button" data-action="career-industry-debate" data-stage="before" data-choice="${i}" ${before!==null?'disabled':''} class="${before===i?'selected':''}"><span>${String.fromCharCode(65+i)}</span>${esc(o)}</button>`).join('');
+  const afterButtons=before!==null?d.options.map((o,i)=>`<button type="button" data-action="career-industry-debate" data-stage="after" data-choice="${i}" ${after!==null?'disabled':''} class="${after===i?'selected':''}"><span>${String.fromCharCode(65+i)}</span>${esc(o)}</button>`).join(''):'';
+  const changed=before!==null&&after!==null&&before!==after;
+  return `<section class="industry-debate"><div class="industry-debate-title"><span>⚖</span><div><small>OPTIONAL LIVE DEBATE • NO SINGLE CORRECT ANSWER</small><h2>${esc(d.title)}</h2></div></div><div class="industry-debate-step"><span class="industry-debate-stepnum">1</span><div><h3>${esc(d.prompt)}</h3><div class="industry-reality-options debate-options">${beforeButtons}</div></div></div>${before!==null?`<div class="industry-pressure-reveal"><span>NOW ADD THE POWER DYNAMIC</span><p>${esc(d.pressure)}</p></div><div class="industry-debate-step"><span class="industry-debate-stepnum">2</span><div><h3>${esc(d.afterPrompt)}</h3><div class="industry-reality-options debate-options">${afterButtons}</div></div></div>`:''}${after!==null?`<div class="industry-debate-takeaway"><b>${changed?'↻ YOU CHANGED YOUR POSITION':'→ YOUR POSITION STAYED THE SAME'}</b><p>${esc(d.takeaway)}</p>${safeUrl(d.sourceUrl)?`<a href="${esc(safeUrl(d.sourceUrl))}" target="_blank" rel="noopener">${esc(d.sourceTitle||'Read the evidence')} ↗</a>`:''}</div><form data-action-form="career-industry-debate-reflection" class="industry-debate-reflection"><label>Why did your position ${changed?'change':'stay the same'}?<textarea name="reflection" required placeholder="What mattered most: choice, pay, duration, ownership, peer pressure, leadership behaviour…?">${esc(saved.reflection||'')}</textarea></label><button class="button ghost" type="submit">Save debate reasoning ✓</button></form>`:''}</section>`;
+}
+function teacherIndustryPulse(members,careerProfileFor){
+  const ch=careerChapter('industry'),checks=ch?.realityChecks||[];if(!checks.length||!members?.length)return '';
+  const cards=checks.map((q,i)=>{
+    const rows=members.map(m=>careerProfileFor(m.id)?.industryBeliefs?.[q.id]).filter(x=>x&&Number.isInteger(Number(x.choice)));
+    const counts=q.options.map((_,oi)=>rows.filter(x=>Number(x.choice)===oi).length),total=rows.length;
+    const bars=q.options.map((o,oi)=>{const pct=total?Math.round(counts[oi]/total*100):0;return `<div class="teacher-pulse-option ${oi===q.correct?'best':''}"><span>${String.fromCharCode(65+oi)}</span><div><b>${esc(o)}</b><i><em style="width:${pct}%"></em></i></div><strong>${counts[oi]}${total?` • ${pct}%`:''}</strong></div>`}).join('');
+    return `<details class="teacher-pulse-question" ${i<2?'open':''}><summary><span>${String(i+1).padStart(2,'0')}</span><strong>${esc(q.q)}</strong><b>${total}/${members.length}</b></summary><div>${bars}<small>Strongest evidence-based answer: ${String.fromCharCode(65+q.correct)}</small></div></details>`;
+  }).join('');
+  const responded=members.filter(m=>Object.keys(careerProfileFor(m.id)?.industryBeliefs||{}).length).length;
+  return `<section class="section teacher-industry-pulse"><div class="section-head"><div><span class="eyebrow">🎮 LIVE CLASS PULSE • INDUSTRY REALITY CHECK</span><h2>What does the room believe?</h2><p>Aggregate first answers only. Use this on the projector to expose assumptions before revealing the cases — no individual student is singled out.</p></div><span class="sync-chip">${responded}/${members.length} started</span></div><div class="teacher-pulse-grid">${cards}</div></section>`;
+}
+
+function careerIndustryActivity(){
+  const p=careerProfile(),v=p.industryEvidence||{};
+  return `<section class="career-activity"><div class="career-activity-head"><span class="eyebrow">◎ HUB CHECKPOINT 1A • CREDITS ARCHAEOLOGY</span><h2>Who actually made one game?</h2><p>Use the game credits and at least one studio/publisher source. Do not guess from the logo on the box.</p></div><form data-action-form="career-industry"><div class="career-form-grid"><label>Game<input name="game" required value="${esc(v.game||'')}" placeholder="e.g. Alan Wake 2"></label><label>Lead developer<input name="developer" value="${esc(v.developer||'')}" placeholder="Who is publicly credited as lead?"></label><label>Publisher<input name="publisher" value="${esc(v.publisher||'')}" placeholder="Who published it?"></label><label>Engine / key technology<input name="engine" value="${esc(v.engine||'')}" placeholder="Unreal, proprietary, middleware…"></label><label class="wide">External studios / hidden contributors<textarea name="external" required placeholder="Name at least two where possible. What did they contribute?">${esc(v.external||'')}</textarea></label><label class="wide">Your conclusion<textarea name="conclusion" required placeholder="How useful is the phrase ‘the developer’ for this production?">${esc(v.conclusion||'')}</textarea></label></div><div class="career-map-bridge"><div><span class="eyebrow">◎ HUB CHECKPOINT 1B • UK GAMES MAP</span><h3>Find one real UK cluster</h3><p>Open the UK Games Map, pick an area and explain what might be holding the cluster together.</p></div><a class="button ghost" href="https://ukie.org.uk/uk-games-map" target="_blank" rel="noopener">Open UK Games Map ↗</a></div><div class="career-form-grid"><label>Cluster / area<input name="cluster" required value="${esc(v.cluster||'')}" placeholder="Guildford, Leamington, Dundee…"></label><label>Studios / organisations found<input name="clusterStudios" value="${esc(v.clusterStudios||'')}" placeholder="3–5 names"></label><label class="wide">Why here?<textarea name="clusterInsight" required placeholder="People, previous studios, education, transport, specialist knowledge, local network…">${esc(v.clusterInsight||'')}</textarea></label></div><button class="button primary" type="submit">Save industry evidence ✓</button></form></section>`;
+}
+function careerRoleExplorer(){
+  const p=careerProfile(),interests=p.roleInterests||{},disciplines=[...new Set((CAREERS.roles||[]).map(r=>r.discipline))];
+  return `<section class="career-activity"><div class="career-activity-head"><span class="eyebrow">◎ HUB CHECKPOINT • ROLE EXPLORER</span><h2>Do not choose by job title. Choose by the problem.</h2><p>Open the roles. For at least three, decide whether the day-to-day problems sound like something you would actually want to solve.</p></div><div class="career-role-filters">${disciplines.map(d=>`<span>${esc(d)}</span>`).join('')}</div><div class="career-role-grid">${CAREERS.roles.map(r=>{const mark=interests[r.id]||'';return `<article class="career-role-card ${mark?`interest-${mark}`:''}"><div class="career-role-top"><span>${esc(r.icon)}</span><div><small>${esc(r.discipline)}</small><h3>${esc(r.title)}</h3></div></div><div class="career-role-problem"><b>THE PROBLEM</b><p>${esc(r.problem)}</p></div><details><summary>What does this person actually do?</summary><p>${esc(r.does)}</p><p><b>Works with:</b> ${esc(r.collaborators)}</p><div class="career-skill-columns"><div><b>Hard skills</b><ul>${r.hard.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><div><b>Soft skills</b><ul>${r.soft.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div></div><div class="callout good"><b>PORTFOLIO SIGNAL:</b> ${esc(r.portfolio)}</div><a class="link-button" href="${esc(safeUrl(r.source))}" target="_blank" rel="noopener">Read a professional role source ↗</a></details><div class="career-interest-buttons"><button type="button" data-action="career-role-interest" data-role="${r.id}" data-interest="definite" class="${mark==='definite'?'active':''}">♥ Definitely</button><button type="button" data-action="career-role-interest" data-role="${r.id}" data-interest="maybe" class="${mark==='maybe'?'active':''}">? Maybe</button><button type="button" data-action="career-role-interest" data-role="${r.id}" data-interest="no" class="${mark==='no'?'active':''}">× Not for me</button></div></article>`}).join('')}</div></section>`;
+}
+function careerSignalBars(signals={}){
+  const labels={technical:'Technical / systems',design:'Design / player experience',visual:'Visual / craft',production:'Production / organisation'};const max=Math.max(1,...Object.values(signals).map(Number));
+  return `<div class="career-signal-bars">${Object.keys(labels).map(k=>`<div><span>${labels[k]}</span><div class="career-signal-track"><i style="width:${Math.round((Number(signals[k]||0)/max)*100)}%"></i></div><b>${Number(signals[k]||0)}</b></div>`).join('')}</div>`;
+}
+function careerSelfActivity(){
+  const p=careerProfile(),ref=p.reflection||{},hard=Object.fromEntries((p.hardSkills||[]).map(x=>[x.name,x])),soft=Object.fromEntries((p.softSkills||[]).map(x=>[x.name,x]));
+  return `<section class="career-activity"><div class="career-activity-head"><span class="eyebrow">◎ HUB CHECKPOINT • YOU AS A DEVELOPER</span><h2>Personality-style reflection — without pretending it can choose your career</h2><p>This is a work-style warm-up, not MBTI and not a diagnosis. It spots patterns in the problems you say you enjoy. Your actual evidence matters more.</p></div>${ref.completed?`<div class="career-results"><div><span class="eyebrow">YOUR CURRENT SIGNALS</span><h3>What your answers leaned towards</h3><p>Use this as a hypothesis. Compare it with your projects, skills and what other people say about working with you.</p></div>${careerSignalBars(p.signals||{})}</div>`:''}<form data-action-form="career-reflection"><div class="career-reflection-grid">${CAREERS.reflectionQuestions.map((q,qi)=>`<fieldset><legend>${qi+1}. ${esc(q.q)}</legend>${q.options.map((o,oi)=>`<label><input type="radio" name="r${qi}" value="${oi}" required><span>${esc(o[0])}</span></label>`).join('')}</fieldset>`).join('')}</div><button class="button primary" type="submit">Build my work-style snapshot →</button></form><div class="career-mbti-note"><span>🧠</span><div><strong>Already know an MBTI / 16-type result?</strong><p>Bring it into the discussion if you want — but do not let four letters allocate your career. Ask whether it matches your actual behaviour, evidence and peer feedback. The Hub deliberately does not store or use a personality label to recommend jobs.</p></div></div>
+  <form data-action-form="career-skills" class="career-skills-form"><div class="career-activity-head compact"><span class="eyebrow">HARD + SOFT SKILLS AUDIT</span><h2>Evidence beats confidence</h2><p>0 = no evidence yet • 1 = beginning • 2 = working evidence • 3 = strong/repeatable evidence. Add a short example wherever you can.</p></div><div class="career-audit-columns"><div><h3>Hard skills</h3>${CAREERS.hardSkills.map((name,i)=>{const x=hard[name]||{};return `<div class="career-audit-row"><label>${esc(name)}<select name="hard_level_${i}"><option value="0" ${Number(x.level||0)===0?'selected':''}>0 — none yet</option><option value="1" ${Number(x.level||0)===1?'selected':''}>1 — beginning</option><option value="2" ${Number(x.level||0)===2?'selected':''}>2 — working evidence</option><option value="3" ${Number(x.level||0)===3?'selected':''}>3 — strong evidence</option></select></label><input name="hard_evidence_${i}" value="${esc(x.evidence||'')}" placeholder="What proves it?"></div>`}).join('')}</div><div><h3>Soft skills</h3>${CAREERS.softSkills.map((name,i)=>{const x=soft[name]||{};return `<div class="career-audit-row"><label>${esc(name)}<select name="soft_level_${i}"><option value="0" ${Number(x.level||0)===0?'selected':''}>0 — no evidence</option><option value="1" ${Number(x.level||0)===1?'selected':''}>1 — beginning</option><option value="2" ${Number(x.level||0)===2?'selected':''}>2 — working evidence</option><option value="3" ${Number(x.level||0)===3?'selected':''}>3 — strong evidence</option></select></label><input name="soft_evidence_${i}" value="${esc(x.evidence||'')}" placeholder="When did this change an outcome?"></div>`}).join('')}</div></div><button class="button primary" type="submit">Save skills evidence ✓</button></form>
+  <form data-action-form="career-peer" class="career-peer-form"><div><span class="eyebrow">PEER REALITY CHECK</span><h2>Ask somebody who has actually worked with you</h2><p>Do other people experience you the way you experience yourself?</p></div><div class="career-form-grid"><label>What do they rely on you for?<textarea name="strength" required>${esc(p.peerFeedback?.strength||'')}</textarea></label><label>What should you improve?<textarea name="improve" required>${esc(p.peerFeedback?.improve||'')}</textarea></label><label class="wide">What role do you naturally take in a group?<input name="naturalRole" value="${esc(p.peerFeedback?.naturalRole||'')}" placeholder="Problem solver, organiser, finisher, idea tester, specialist…"></label></div><button class="button primary" type="submit">Save peer feedback ✓</button></form></section>`;
+}
+function careerStoriesActivity(){
+  const p=careerProfile();
+  return `<section class="career-activity"><div class="career-activity-head"><span class="eyebrow">◎ HUB CHECKPOINT • CAREER STORY PREDICTIONS</span><h2>Predict first. Reveal second.</h2><p>The point is not to guess perfectly. It is to notice which skills and pieces of evidence survive when a career changes direction.</p></div><div class="career-story-grid">${CAREERS.stories.map(st=>`<article class="career-story-card" data-career-story="${st.id}"><span class="eyebrow">REAL CAREER STORY</span><h3>${esc(st.title)}</h3><p>${esc(st.start)}</p><div class="career-story-question"><b>YOUR CALL</b><p>${esc(st.question)}</p>${st.options.map((o,i)=>`<button type="button" data-action="career-story-choice" data-story="${st.id}" data-choice="${i}">${String.fromCharCode(65+i)} — ${esc(o)}</button>`).join('')}</div><div class="career-story-reveal" data-story-reveal hidden></div><a class="link-button" href="${esc(safeUrl(st.source))}" target="_blank" rel="noopener">Original source ↗</a></article>`).join('')}</div><form data-action-form="career-story-lesson" class="career-story-lesson"><label><span class="eyebrow">SAVE ONE LESSON FOR YOURSELF</span><textarea name="lesson" required placeholder="Example: Mel's route makes me think QA or another adjacent role is not automatically a dead end, as long as I keep building evidence for the role I actually want.">${esc(p.careerStoryLesson||'')}</textarea></label><button class="button primary" type="submit">Save career-story lesson ✓</button></form></section>`;
+}
+function careerRealityActivity(){
+  const p=careerProfile(),vac=[...(p.vacancies||[])];while(vac.length<3)vac.push({});const lights=p.trafficLights||[];
+  return `<section class="career-activity"><div class="career-activity-head"><span class="eyebrow">◎ HUB CHECKPOINT • REAL MARKET EVIDENCE</span><h2>Stop researching imaginary jobs</h2><p>Choose one specific role. Then compare three vacancies at similar levels where possible. Current jobs change, so save the evidence rather than relying on the link being live forever.</p></div><form data-action-form="career-target-role" class="career-target-role"><label>Target role<select name="targetRole" required><option value="">Choose a specific role…</option>${CAREERS.roles.map(r=>`<option value="${r.id}" ${p.targetRole===r.id?'selected':''}>${esc(r.title)}</option>`).join('')}</select></label><label>Why does the day-to-day work fit you?<textarea name="targetReason" required>${esc(p.targetReason||'')}</textarea></label><button class="button primary" type="submit">Save target role ✓</button></form><div class="career-live-source-row"><a href="https://gidb.uk/" target="_blank" rel="noopener">GIDB ↗</a><a href="https://www.gamesjobsdirect.com/jobs-in-uk" target="_blank" rel="noopener">Games Jobs Direct ↗</a><a href="https://www.workwithindies.com/" target="_blank" rel="noopener">Work With Indies ↗</a><a href="https://ukie.org.uk/uk-games-map" target="_blank" rel="noopener">UK Games Map ↗</a></div><form data-action-form="career-vacancies"><div class="career-vacancy-grid">${vac.slice(0,3).map((v,i)=>`<fieldset><legend>Vacancy ${i+1}</legend><label>Company<input name="company_${i}" required value="${esc(v.company||'')}"></label><label>Job title<input name="title_${i}" required value="${esc(v.title||'')}"></label><label>Link<input name="url_${i}" type="url" value="${esc(v.url||'')}" placeholder="https://…"></label><label>Hard / technical requirements<textarea name="hard_${i}" required placeholder="Separate important requirements with commas">${esc(v.hard||'')}</textarea></label><label>Soft / professional requirements<textarea name="soft_${i}" required>${esc(v.soft||'')}</textarea></label><label>Portfolio / software / anything surprising<textarea name="notes_${i}" required>${esc(v.notes||'')}</textarea></label></fieldset>`).join('')}</div><button class="button primary" type="submit">Save three vacancy snapshots ✓</button></form><form data-action-form="career-gap" class="career-gap-form"><div class="career-activity-head compact"><span class="eyebrow">GREEN / AMBER / RED</span><h2>Turn vacancy requirements into evidence</h2><p>Add up to five repeated requirements. GREEN = I can prove it. AMBER = some evidence. RED = I cannot currently prove it.</p></div><div class="career-light-grid">${[0,1,2,3,4].map(i=>{const x=lights[i]||{};return `<div class="career-light-row"><input name="req_${i}" value="${esc(x.requirement||'')}" placeholder="Repeated requirement"><select name="status_${i}"><option value="">—</option><option value="green" ${x.status==='green'?'selected':''}>GREEN — prove it</option><option value="amber" ${x.status==='amber'?'selected':''}>AMBER — partial</option><option value="red" ${x.status==='red'?'selected':''}>RED — no evidence</option></select><input name="evidence_${i}" value="${esc(x.evidence||'')}" placeholder="Evidence or gap"></div>`}).join('')}</div><label>Most important RED gap<textarea name="biggestGap" required placeholder="Which missing requirement would make the biggest difference?">${esc(p.biggestGap||'')}</textarea></label><button class="button primary" type="submit">Save reality check ✓</button></form></section>`;
+}
+function careerChallengeCards(){
+  const p=careerProfile(),selected=p.challenge?.id,role=p.targetRole;
+  return `<section class="career-activity"><div class="career-activity-head"><span class="eyebrow">◎ HUB CHECKPOINT • TARGETED PORTFOLIO PIECE</span><h2>Do not begin with “what would be fun to make?”</h2><p>Begin with the RED / AMBER evidence you need. The cards highlight challenges that fit your selected role, but you can still choose another if you can justify it.</p></div><div class="career-challenge-grid">${CAREERS.challenges.map(c=>{const fit=!role||c.roles.includes(role);return `<article class="career-challenge-card ${selected===c.id?'selected':''} ${fit?'fit':''}"><span class="career-challenge-icon">${esc(c.icon)}</span><div><span class="eyebrow">${fit&&role?'SUGGESTED FOR YOUR ROLE':'PORTFOLIO CHALLENGE'}</span><h3>${esc(c.title)}</h3><p>${esc(c.brief)}</p><details><summary>Evidence to capture</summary><ul>${c.evidence.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></details><button type="button" class="button ${selected===c.id?'success':'ghost'}" data-action="career-select-challenge" data-challenge="${c.id}">${selected===c.id?'✓ Selected':'Choose this challenge'}</button></div></article>`}).join('')}</div><form data-action-form="career-challenge-requirement" class="career-challenge-requirement"><label>Which employer requirement will this piece prove?<textarea name="requirement" required placeholder="Example: ‘Ability to greybox and iterate playable spaces using Unreal Engine.’">${esc(p.challenge?.requirement||'')}</textarea></label><label>What will you deliberately NOT build, so this stays finishable?<textarea name="scopeCut" required placeholder="Example: No final environment art; the evidence is Level Design, not a full environment.">${esc(p.challenge?.scopeCut||'')}</textarea></label><button class="button primary" type="submit" ${selected?'':'disabled'}>Save challenge purpose ✓</button></form></section>`;
+}
+function careerSummaryText(){
+  const p=careerProfile(),role=careerRole(p.targetRole),challenge=careerChallenge(p.challenge?.id),signals=p.signals||{},top=Object.entries(signals).sort((a,b)=>b[1]-a[1])[0];
+  const interested=Object.entries(p.roleInterests||{}).filter(([,v])=>v==='definite'||v==='maybe').map(([id,v])=>`${careerRole(id)?.title||id} (${v})`).join(', ');
+  const vacancies=(p.vacancies||[]).filter(v=>v.company&&v.title).map((v,i)=>`${i+1}. ${v.title} — ${v.company}`).join('\n');
+  const lights=(p.trafficLights||[]).filter(x=>x.requirement).map(x=>`- ${String(x.status||'').toUpperCase()}: ${x.requirement}${x.evidence?` — ${x.evidence}`:''}`).join('\n');
+  return `MY PLACE IN THE GAMES INDUSTRY\n\nTarget role: ${role?.title||'Still exploring'}\nWhy: ${p.targetReason||'Not written yet'}\n\nRoles I investigated: ${interested||'Not recorded yet'}\nStrongest work-style signal: ${top?({technical:'Technical / systems',design:'Design / player experience',visual:'Visual / craft',production:'Production / organisation'}[top[0]]||top[0]):'Not measured yet'}\nPeer strength: ${p.peerFeedback?.strength||'Not recorded yet'}\nPeer improvement: ${p.peerFeedback?.improve||'Not recorded yet'}\n\nVacancy evidence:\n${vacancies||'Not recorded yet'}\n\nGreen / Amber / Red:\n${lights||'Not recorded yet'}\n\nBiggest current gap: ${p.biggestGap||'Not chosen yet'}\n\nTargeted portfolio piece: ${challenge?.title||'Not selected yet'}\nRequirement it proves: ${p.challenge?.requirement||'Not recorded yet'}\nScope I will cut: ${p.challenge?.scopeCut||'Not recorded yet'}\n\n6 months: ${p.goals?.sixMonth||'Not written yet'}\n12 months: ${p.goals?.twelveMonth||'Not written yet'}\n24 months: ${p.goals?.twentyFourMonth||'Not written yet'}\n\nIndustry belief / assumption I challenged: ${p.industryBeliefReflection||'Not written yet'}\nMagnum Opus debate reasoning: ${p.industryDebate?.reflection||'Not written yet'}\n\nCareer-story lesson: ${p.careerStoryLesson||'Not written yet'}`;
+}
+function careerPlanActivity(){
+  const p=careerProfile(),g=p.goals||{};
+  return `<section class="career-activity"><div class="career-activity-head"><span class="eyebrow">◎ HUB CHECKPOINT • 6 / 12 / 24 MONTHS</span><h2>Make the next move measurable</h2><p>Every useful goal should create evidence. “Improve Unreal” is not a plan. Name what you will produce, by when, and what it will prove.</p></div><form data-action-form="career-goals"><div class="career-goal-grid"><label><span>6 MONTHS</span><textarea name="sixMonth" required placeholder="What can realistically change this academic year?">${esc(g.sixMonth||'')}</textarea></label><label><span>12 MONTHS</span><textarea name="twelveMonth" required placeholder="What should your skills and portfolio contain?">${esc(g.twelveMonth||'')}</textarea></label><label><span>24 MONTHS</span><textarea name="twentyFourMonth" required placeholder="What is the realistic next professional / education stage?">${esc(g.twentyFourMonth||'')}</textarea></label></div><button class="button primary" type="submit">Save career plan ✓</button></form><div class="career-summary-box"><div><span class="eyebrow">ASSIGNMENT 1 STARTER SUMMARY</span><h2>The Hub has been collecting your evidence</h2><p>Copy this into your own working document, then turn it into proper Level 4 analysis. It is a starting structure, not a finished submission.</p></div><pre>${esc(careerSummaryText())}</pre><button class="button ghost" type="button" data-action="career-copy-summary">Copy my career summary</button></div></section>`;
+}
+function careerChapterActivity(ch){
+  if(ch.id==='industry')return careerIndustryActivity();
+  if(ch.id==='people')return careerRoleExplorer();
+  if(ch.id==='you')return careerSelfActivity();
+  if(ch.id==='routes')return careerStoriesActivity();
+  if(ch.id==='reality')return careerRealityActivity();
+  if(ch.id==='prove')return careerChallengeCards();
+  if(ch.id==='plan')return careerPlanActivity();
+  return '';
+}
+function careerSecretAttentionCheck(ch){
+  if(ch?.id!=='industry')return '';
+  return `<section class="industry-secret-protocol" aria-label="Session 1 final instruction"><div class="industry-secret-icon">👀</div><div><span class="eyebrow">SESSION 1 • FINAL INSTRUCTION • DO NOT READ THIS OUT LOUD</span><h2>Secret Studio Protocol</h2><p><b>If you are actually reading this:</b> quietly stand up, walk to the classroom door when the route is clear, stop beside it, do one slow 360° turn, then return to your seat and carry on as if absolutely nothing happened.</p><p class="industry-secret-whisper">Do not explain what you are doing. If somebody asks, just say <b>“pipeline check”</b> and sit back down.</p><small>If getting up or moving around the room is not practical for you, give your teacher one silent thumbs-up instead. No button. No XP. No proof required.</small></div></section>`;
+}
+
+function careerChapterPage(id){
+  const ch=careerChapter(id);if(!ch)return notFound();const idx=CAREERS.chapters.indexOf(ch),prev=CAREERS.chapters[idx-1],next=CAREERS.chapters[idx+1],done=careerDone(ch.id),req=careerRequirementStatus(ch);
+  return `<div class="breadcrumb"><a href="#/">Home</a> / <a href="#/industry-careers">Industry & Careers</a> / ${esc(ch.title)}</div><section class="career-chapter-hero"><div><span class="eyebrow">CHAPTER ${ch.order}/7 • PRESENTATION SLIDES ${esc(ch.slides)} • +${CAREERS.xp} XP</span><h1>${esc(ch.icon)} ${esc(ch.title)}</h1><p>${esc(ch.short)}</p><div class="career-big-question"><b>BIG QUESTION</b><span>${esc(ch.question)}</span></div></div><div class="career-checkpoint-panel ${req.ready?'ready':''}"><span>◎ LIVE HUB CHECKPOINT</span><strong>${req.ready?'✓ Evidence ready':esc(req.label)}</strong><p>${esc(ch.checkpoint)}</p>${done?'<b class="career-done-mark">✓ Chapter complete</b>':''}</div></section><section class="career-key-section"><span class="eyebrow">RECOVERY NOTES • IF YOU MISSED THE LIVE DELIVERY</span><h2>The ideas you need</h2><div class="career-key-grid">${ch.keyIdeas.map((x,i)=>`<article><span>${String(i+1).padStart(2,'0')}</span><p>${esc(x)}</p></article>`).join('')}</div></section>${careerIndustryRealitySection(ch)}<section class="section"><div class="section-head"><div><span class="eyebrow">REAL INDUSTRY STORIES</span><h2>People, studios and projects make the theory visible</h2><p>Use the question on each card. The story matters because of what it reveals about work.</p></div></div>${careerCases(ch.cases||[])}</section>${careerWatchCards(ch.watches||[])}${careerChapterActivity(ch)}${ch.id==='people'?`<section class="content-card tutorial-next"><div><span class="eyebrow">PUT THE ROLES INTO PRACTICE • TWO-PERSON JAM</span><h2>Programmer builds the system. Designer builds the player experience.</h2><p>Start with the GitHub team workflow so both PCs share one safe project. Then the Programmer follows the Power Jam guide to create reusable switches and doors while the Designer owns Jam_Main.</p></div><div class="tutorial-next-links"><a class="button primary" href="#/tutorial/github-unreal-team-workflow">🔀 GitHub team setup →</a><a class="button" href="#/tutorial/power-jam-programmer">⚡ Programmer power guide →</a></div></section>`:''}<section class="section"><div class="section-head"><div><span class="eyebrow">GO DEEPER</span><h2>Professional sources</h2><p>Use original studio, industry, practitioner and careers sources wherever possible.</p></div></div>${careerSourceCards(ch.sources||[])}</section>${careerQuiz(ch)}<section class="content-card tutorial-revision-bridge practical"><div><span class="eyebrow">ALSO IN CENTRAL REVISION</span><h2>Come back to this chapter later without reopening the whole activity.</h2><p>The same five scenario questions are available as a focused Revision topic and can also appear in mixed quizzes.</p></div><button class="button ghost" data-action="revision-topic-start" data-revision-topic-id="industry:${esc(ch.id)}" data-revision-count="5">Revise ${esc(ch.title)} →</button></section>${careerSecretAttentionCheck(ch)}<nav class="theory-lesson-nav career-chapter-nav"><div>${prev?`<a class="button ghost" href="#/industry-careers/${prev.id}">← ${esc(prev.title)}</a>`:`<a class="button ghost" href="#/industry-careers">← Pathway home</a>`}</div><div>${next?`<a class="button primary" href="#/industry-careers/${next.id}">${esc(next.title)} →</a>`:`<a class="button primary" href="#/industry-careers">Career pathway dashboard →</a>`}</div></nav>`;
+}
+
+
+function guidedPath(id){return (PATHWAYS.paths||[]).find(x=>x.id===id)}
+function pathCheckpointDone(id){return (state.pathwayCheckpoints||[]).includes(id)}
+function guidedItemInfo(item){
+  if(!item)return {title:'Unknown step',href:'#/',icon:'○',area:'Hub'};
+  if(item.type==='activity')return {title:item.title||'Practical activity',href:item.href||'#/',icon:item.icon||'○',area:item.area||'Practical activity',description:item.description||''};
+  if(item.type==='checkpoint')return {title:item.title||'Pathway checkpoint',href:item.href||'',icon:item.icon||'◆',area:item.area||'Required pathway checkpoint',description:item.description||''};
+  if(item.type==='theory'){
+    const x=theoryLesson(item.id);return {title:item.title||x?.title||item.id,href:`#/theory/${item.id}`,icon:x?.icon||'◈',area:'Game Design Theory',description:item.why||x?.short||''};
+  }
+  if(item.type==='lesson'){
+    const x=lesson(item.id);return {title:item.title||x?.title||item.id,href:`#/lesson/${item.id}`,icon:'⌘',area:'Unreal Learning',description:item.why||x?.short||''};
+  }
+  if(item.type==='tutorial'){
+    const x=tutorial(item.id),designer=x?.designModule;return {title:item.title||x?.title||item.id,href:`#/tutorial/${item.id}`,icon:designer?'✦':'🛠',area:designer?'Designer Studio practical':'Quick Tutorial',description:item.why||x?.summary||''};
+  }
+  if(item.type==='designBuild'){
+    const x=designModule(item.id);return {title:item.title||x?.build?.title||x?.title||item.id,href:`#/design/${item.id}`,icon:x?.icon||'✦',area:'Designer Studio Build',description:item.why||x?.build?.brief||x?.description||''};
+  }
+  if(item.type==='designSource'){
+    const m=designModule(item.module),i=Number(item.index)||0,d=m?.industryDeepDives?.[i];
+    return {title:item.title||d?.title||'Professional design source',href:m?`#/design/${m.id}`:'#/design',icon:item.icon||'◉',area:`${m?.title||'Designer Studio'} • professional source`,description:item.why||d?.focus||d?.task||''};
+  }
+  if(item.type==='route'){
+    const items=item.items||[],next=items.find(x=>!guidedItemDone(x))||items[items.length-1],x=guidedItemInfo(next);
+    return {title:item.title||x.title,href:x.href,icon:item.icon||x.icon||'◇',area:item.area||'Mechanic route',description:item.note||item.description||''};
+  }
+  if(item.type==='modelFoundation'){
+    const x=modelTheoryChapter(item.id);return {title:item.title||x?.title||item.id,href:`#/modeling/foundations/${item.id}`,icon:x?.icon||'🧠',area:'3D Foundations',description:item.why||x?.short||x?.summary||''};
+  }
+  if(item.type==='modelFinal')return {title:item.title||'Model Doctor',href:'#/modeling/foundations/final',icon:'🩺',area:'3D Foundations final check',description:item.why||'Prove you can diagnose game-ready mesh decisions before Build X completion unlocks.'};
+  if(item.type==='modelLesson'){
+    const x=modelLesson(item.id);return {title:item.title||x?.title||item.id,href:`#/modeling/lesson/${item.id}`,icon:'⬡',area:'3D Modelling lesson',description:item.why||x?.purpose||x?.newSkill||''};
+  }
+  if(item.type==='modelBuild'){
+    const x=modelBuild(item.id);return {title:item.title||x?.title||item.id,href:`#/modeling/build/${item.id}`,icon:x?.icon||'⬡',area:'3D Build X',description:item.why||x?.brief||x?.description||''};
+  }
+  if(item.type==='chapterBuild'){
+    const x=TOOLS.chapterBuilds.find(b=>b.path===item.id);return {title:item.title||x?.title||item.id,href:`#/chapter-build/${item.id}`,icon:x?.icon||'🎮',area:'Unreal Chapter Build',description:item.why||x?.summary||''};
+  }
+  return {title:item.title||item.id||'Hub step',href:item.href||'#/',icon:item.icon||'○',area:item.area||'Hub',description:item.why||item.description||''};
+}
+function guidedItemDone(item){
+  if(!item)return false;
+  if(item.type==='choice')return (item.options||[]).some(guidedItemDone);
+  if(item.type==='group'||item.type==='route')return (item.items||[]).length>0&&(item.items||[]).every(guidedItemDone);
+  if(item.type==='checkpoint')return pathCheckpointDone(item.id);
+  if(item.type==='theory')return theoryDone(item.id);
+  if(item.type==='lesson')return state.completed.includes(item.id);
+  if(item.type==='tutorial')return tutorialDone(item.id);
+  if(item.type==='designBuild')return designBuildDone(item.id);
+  if(item.type==='designSource'){const m=designModule(item.module);return Boolean(m)&&designSourceDone(m,Number(item.index)||0)}
+  if(item.type==='modelFoundation')return modelTheoryDone(item.id);
+  if(item.type==='modelFinal')return modelFoundationDone();
+  if(item.type==='modelLesson')return modelLessonDone(item.id);
+  if(item.type==='modelBuild')return modelBuildDone(item.id);
+  if(item.type==='chapterBuild')return chapterBuildDone(item.id);
+  return false;
+}
+function guidedStepTrackable(step){return step&&step.type!=='activity'}
+function guidedPathProgress(value){
+  const p=typeof value==='string'?guidedPath(value):value;if(!p)return {done:0,total:0,pct:0,current:-1};
+  const track=p.steps.filter(guidedStepTrackable),done=track.filter(guidedItemDone).length;
+  const current=p.steps.findIndex(s=>guidedStepTrackable(s)&&!guidedItemDone(s));
+  return {done,total:track.length,pct:track.length?Math.round(done/track.length*100):0,current};
+}
+function guidedItemDoneForProgress(item,completed,checkpoints){
+  if(!item)return false;
+  if(item.type==='choice')return (item.options||[]).some(x=>guidedItemDoneForProgress(x,completed,checkpoints));
+  if(item.type==='group'||item.type==='route')return (item.items||[]).length>0&&(item.items||[]).every(x=>guidedItemDoneForProgress(x,completed,checkpoints));
+  if(item.type==='checkpoint')return checkpoints.has(item.id);
+  if(item.type==='theory')return completed.has(`theory:${item.id}`);
+  if(item.type==='lesson')return completed.has(item.id);
+  if(item.type==='tutorial')return completed.has(`tutorial:${item.id}`);
+  if(item.type==='designBuild')return completed.has(`designbuild:${item.id}`);
+  if(item.type==='designSource'){const m=designModule(item.module);return Boolean(m)&&completed.has(`designsource:${designSourceKey(m,Number(item.index)||0)}`)}
+  if(item.type==='modelFoundation')return completed.has(`modeltheory:${item.id}`);
+  if(item.type==='modelFinal')return completed.has('modelfoundation:final');
+  if(item.type==='modelLesson')return completed.has(`model:${item.id}`);
+  if(item.type==='modelBuild')return completed.has(`modelbuild:${item.id}`);
+  if(item.type==='chapterBuild')return completed.has(`chapter:${item.id}`);
+  return false;
+}
+function guidedPathProgressForStudent(value,rows,userId){
+  const p=typeof value==='string'?guidedPath(value):value;if(!p)return {done:0,total:0,pct:0};
+  const mine=(rows||[]).filter(r=>r.user_id===userId),completed=new Set(mine.filter(r=>r.completed).map(r=>r.lesson_id)),checkpoints=new Set(mine.filter(r=>r.lesson_id?.startsWith('pathway:')&&r.completed_at).map(r=>r.lesson_id.slice(8)));
+  const track=p.steps.filter(guidedStepTrackable),done=track.filter(step=>guidedItemDoneForProgress(step,completed,checkpoints)).length;
+  return {done,total:track.length,pct:track.length?Math.round(done/track.length*100):0};
+}
+function guidedChoiceOptions(step){
+  return `<div class="guided-choice-grid">${(step.options||[]).map(o=>{
+    const done=guidedItemDone(o),x=guidedItemInfo(o);
+    if(o.type==='route'){
+      const items=o.items||[],complete=items.filter(guidedItemDone).length,next=items.find(v=>!guidedItemDone(v)),nextInfo=next?guidedItemInfo(next):null;
+      return `<a class="guided-choice-option route ${done?'done':''}" href="${esc(x.href)}"><span>${done?'✓':x.icon}</span><div><small>${done?'ROUTE COMPLETE':`${complete}/${items.length} complete${nextInfo?` • next: ${esc(nextInfo.title)}`:''}`}</small><strong>${esc(x.title)}</strong>${o.note?`<em>${esc(o.note)}</em>`:''}</div><b>${done?'Done':'Continue →'}</b></a>`;
+    }
+    return `<a class="guided-choice-option ${done?'done':''}" href="${esc(x.href)}"><span>${done?'✓':x.icon}</span><div><small>${esc(x.area)}</small><strong>${esc(x.title)}</strong></div><b>${done?'Done':'Choose →'}</b></a>`;
+  }).join('')}</div>`;
+}
+function guidedGroupItems(step){
+  const items=step.items||[],done=items.filter(guidedItemDone).length;
+  return `<details class="guided-group-details" ${done<items.length?'open':''}><summary><span>${done}/${items.length} complete</span><b>Show the steps</b></summary><div>${items.map(o=>{const x=guidedItemInfo(o),ok=guidedItemDone(o);return `<a href="${esc(x.href)}" class="guided-group-item ${ok?'done':''}"><span>${ok?'✓':x.icon}</span><div><small>${esc(x.area)}</small><strong>${esc(x.title)}</strong></div><b>${ok?'Done':'Open →'}</b></a>`}).join('')}</div></details>`;
+}
+function guidedStepCard(step,i,current){
+  const trackable=guidedStepTrackable(step),done=trackable&&guidedItemDone(step),isCurrent=trackable&&!done&&i===current,status=!trackable?'activity':done?'done':isCurrent?'current':'later';
+  if(step.type==='choice')return `<article class="guided-step ${status}"><div class="guided-step-num">${done?'✓':String(i+1).padStart(2,'0')}</div><div class="guided-step-main"><div class="guided-step-head"><div><span class="eyebrow">CHOICE STEP • COMPLETE ANY ONE ROUTE</span><h2>${esc(step.icon||'◇')} ${esc(step.title)}</h2></div><span class="guided-state">${done?'✓ Complete':isCurrent?'▶ Recommended next':'○ Coming up'}</span></div><p>${esc(step.description||'Choose the outcome that best fits what you want to make.')}</p>${guidedChoiceOptions(step)}</div></article>`;
+  if(step.type==='group')return `<article class="guided-step ${status}"><div class="guided-step-num">${done?'✓':String(i+1).padStart(2,'0')}</div><div class="guided-step-main"><div class="guided-step-head"><div><span class="eyebrow">GROUPED STAGE</span><h2>${esc(step.icon||'◇')} ${esc(step.title)}</h2></div><span class="guided-state">${done?'✓ Complete':isCurrent?'▶ Recommended next':'○ Coming up'}</span></div><p>${esc(step.description||'Complete the linked foundation pieces in this stage.')}</p>${guidedGroupItems(step)}</div></article>`;
+  if(step.type==='checkpoint'){
+    const x=guidedItemInfo(step),open=x.href?`<a class="button ghost" href="${esc(x.href)}">Open related Hub area →</a>`:'';
+    return `<article class="guided-step checkpoint ${status}"><div class="guided-step-num">${done?'✓':String(i+1).padStart(2,'0')}</div><div class="guided-step-main"><div class="guided-step-head"><div><span class="eyebrow">REQUIRED FOR THIS PATH • NO XP</span><h2>${esc(x.icon)} ${esc(x.title)}</h2></div><span class="guided-state">${done?'✓ Complete':isCurrent?'▶ Recommended next':'○ Coming up'}</span></div><p>${esc(x.description)}</p><div class="guided-step-actions">${open}<button class="button ${done?'success':'primary'}" data-action="complete-pathway-checkpoint" data-checkpoint="${esc(step.id)}">${done?'✓ Checkpoint complete':esc(step.actionLabel||'Mark checkpoint complete')}</button><small>Records pathway progress only. It never locks the Hub or awards XP.</small></div></div></article>`;
+  }
+  const x=guidedItemInfo(step);
+  return `<article class="guided-step ${status}"><div class="guided-step-num">${done?'✓':trackable?String(i+1).padStart(2,'0'):'+'}</div><div class="guided-step-main"><div class="guided-step-head"><div><span class="eyebrow">${esc(x.area)}${!trackable?' • OPTIONAL / TEACHER-SET':''}</span><h2>${esc(x.icon)} ${esc(x.title)}</h2></div><span class="guided-state">${!trackable?'Try it':done?'✓ Complete':isCurrent?'▶ Recommended next':'○ Coming up'}</span></div><p>${esc(x.description||step.description||'Open the existing Hub content and complete it when it is useful.')}</p><div class="guided-step-actions"><a class="button ${isCurrent?'primary':'ghost'}" href="${esc(x.href)}">${done?'Revisit':!trackable?'Open activity':'Open step'} →</a>${!trackable?'<small>This activity does not affect pathway progress or XP.</small>':''}</div></div></article>`;
+}
+function guidedPathCard(p){
+  const x=guidedPathProgress(p),done=x.total>0&&x.done===x.total;
+  return `<a class="guided-path-card ${done?'complete':''}" href="#/pathways/${p.id}"><div class="guided-path-card-top"><span class="guided-path-icon">${p.icon}</span><span class="guided-path-progress">${done?'✓ Complete':`${x.done}/${x.total}`}</span></div><span class="eyebrow">${esc(p.kicker)}</span><h2>${esc(p.title)}</h2><p>${esc(p.summary)}</p><div class="progress"><span style="width:${x.pct}%"></span></div><div class="guided-path-card-foot"><span>${x.pct}% complete</span><strong>${x.done?'Continue':'Start'} →</strong></div></a>`;
+}
+function guidedPathsPage(){
+  return `<div class="page-head guided-paths-head"><div class="breadcrumb"><a href="#/">Home</a> / Guided Paths</div><span class="eyebrow">OPTIONAL ROUTES • EXISTING CONTENT • NO HARD LOCKS</span><h1>↠ Guided Paths</h1><p class="muted">Not sure what to learn next? Pick an outcome and the Hub will connect useful Theory, Unreal and Designer content in a sensible order. Prefer exploring? Ignore this page and keep browsing normally.</p></div>
+  <section class="guided-paths-rule"><div><span class="deep-label">THE RULE</span><h2>Guidance, not another course system.</h2><p>${esc(PATHWAYS.intro)}</p></div><ul>${(PATHWAYS.principles||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></section>
+  <section class="section"><div class="section-head"><div><h2>Choose an outcome</h2><p>These paths exist only where joining different Hub areas creates a better learning journey.</p></div></div><div class="guided-path-grid">${PATHWAYS.paths.map(guidedPathCard).join('')}</div></section>
+  <section class="section guided-existing-wrap"><div class="section-head"><div><span class="eyebrow">ALREADY STRUCTURED PROPERLY</span><h2>Two areas already have their own full learning route</h2><p>We do not duplicate them inside Guided Paths.</p></div></div><div class="guided-existing-grid"><article class="guided-existing-course"><div><span class="eyebrow">SIX STAGES + CHAPTER BUILDS</span><h2>⌘ Learn Unreal systematically</h2><p>Unreal Learning already moves from foundations through Blueprints, framework, gameplay systems and professional practice.</p></div><a class="button primary" href="#/programming">Open Unreal Learning →</a></article><article class="guided-existing-course"><div><span class="eyebrow">FOUNDATIONS + BUILD X</span><h2>⬡ Learn game-ready 3D</h2><p>3D Modelling Studio already has gated foundations, progressive Max lessons, Build X briefs, UV/material/export work and the independent Hero Prop.</p></div><a class="button primary" href="#/modeling">Open 3D Modelling →</a></article></div></section>
+  <section class="guided-free-explore"><div><span class="eyebrow">OR JUST EXPLORE</span><h2>Know what you need? Go straight there.</h2><p>Search, tutorials and every normal Hub area remain open.</p></div><div class="button-row"><a class="button ghost" href="#/theory">◈ Theory</a><a class="button ghost" href="#/design">✦ Designer Studio</a><a class="button ghost" href="#/unreal-designer">⚙ Unreal Designer</a><a class="button ghost" href="#/modeling">⬡ 3D Modelling</a><a class="button ghost" href="#/tutorials">🛠 Quick Tutorials</a></div></section>`;
+}
+function guidedPathPage(id){
+  const p=guidedPath(id);if(!p)return notFound();const x=guidedPathProgress(p),done=x.total>0&&x.done===x.total;
+  return `<div class="breadcrumb"><a href="#/">Home</a> / <a href="#/pathways">Guided Paths</a> / ${esc(p.title)}</div>
+  <section class="guided-path-hero"><div><span class="eyebrow">${esc(p.kicker)} • OPTIONAL GUIDED ROUTE</span><h1>${p.icon} ${esc(p.title)}</h1><p>${esc(p.summary)}</p><div class="guided-path-audience"><b>WHO IS THIS FOR?</b> ${esc(p.audience)}</div></div><div class="guided-path-hero-progress"><strong>${x.done}/${x.total}</strong><span>path stages complete</span><div class="progress"><span style="width:${x.pct}%"></span></div><small>${done?'Path complete — revisit anything whenever you need it.':'All normal Hub content stays open. “Recommended next” is guidance, not a site lock.'}</small></div></section>
+  <section class="guided-outcome"><span>🎯</span><div><small>THE OUTCOME</small><strong>${esc(p.outcome)}</strong></div></section>
+  <section class="guided-sequence"><div class="section-head"><div><span class="eyebrow">RECOMMENDED ORDER</span><h2>One useful next step at a time</h2><p>Existing completions count automatically. Choice stages adapt to the route you pick. Required practical checkpoints count toward this path but award no XP. You can still open any Hub page whenever you need it.</p></div></div>${p.steps.map((s,i)=>guidedStepCard(s,i,x.current)).join('')}</section>
+  <section class="guided-path-footer"><div><span class="eyebrow">NEED SOMETHING ELSE?</span><h2>Leave the path whenever you want.</h2><p>Your real lesson/build progress remains exactly where it already lives.</p></div><div class="button-row"><a class="button primary" href="#/pathways">← All Guided Paths</a><a class="button ghost" href="#/">Explore the Hub</a></div></section>`;
+}
+function theoryApplyNext(id){
+  const links=PATHWAYS.applyLinks?.[id]||[];if(!links.length)return '';
+  return `<section class="theory-apply-next"><div class="section-head"><div><span class="eyebrow">PUT THIS INTO PRACTICE</span><h2>Where could this idea go next?</h2><p>Optional links into existing Hub practical work. Pick one that actually helps what you are making.</p></div></div><div class="theory-apply-link-grid">${links.map(x=>`<a href="${esc(x.href)}"><span>${esc(x.icon||'→')}</span><div><small>${esc(x.meta||'Hub practical')}</small><strong>${esc(x.title)}</strong><p>${esc(x.why||'Apply the theory in a practical task.')}</p></div><b>Open →</b></a>`).join('')}</div></section>`;
+}
+
+
+
 
 function teamsProjectNoticePage(){
   return `<div class="page-head"><div class="breadcrumb"><a href="#/">Home</a> / Projects</div><span class="eyebrow">TEAMS-FIRST WORKFLOW</span><h1>Project work lives in Microsoft Teams</h1><p class="muted">The Hub now focuses on learning, practice, revision, critique and progress. Project briefs, deadlines, formal submissions and assessed feedback stay in Microsoft Teams so there is only one place to hand work in.</p></div>
@@ -1317,16 +1880,36 @@ function classHomeShortcut(){
   </section>`;
 }
 
+function homeLeaderboardPreview(){
+  if(!BACKEND.user)return '';
+  return `<section class="home-leaderboard" id="homeLeaderboard"><div class="home-leaderboard-head"><div><span class="eyebrow">🏆 HUB RIVALRY • THIS WEEK</span><h2>Who is making moves?</h2><p>Everyone in leaderboard-enabled classes • learning XP only • never grades.</p></div><a class="button ghost small" href="#/leaderboard">Full leaderboard →</a></div><div class="home-leaderboard-body"><div class="empty">Loading this week's Hub leaders…</div></div></section>`;
+}
+async function renderHomeLeaderboardPreview(){
+  const box=$('#homeLeaderboard .home-leaderboard-body');if(!box||!BACKEND.user)return;
+  try{
+    const rows=await BACKEND.getHubLeaderboard('week');
+    const top=rows.slice(0,3),me=rows.find(r=>r.user_id===BACKEND.user.id);
+    if(!rows.length){box.innerHTML=`<div class="home-leaderboard-empty"><b>Everyone</b><span>No XP on the board yet. First useful completion takes the lead.</span></div>`;return}
+    box.innerHTML=`<div class="home-leaderboard-class"><span>🌐 Everyone</span><small>${rows.length} student${rows.length===1?'':'s'} ranked</small></div><div class="home-leaderboard-podium">${top.map(r=>`<div class="home-rival ${r.user_id===BACKEND.user.id?'is-you':''}"><span class="home-rival-rank">${leaderboardMedal(r.rank_position)}</span><div><strong>${esc(r.display_name)}${r.user_id===BACKEND.user.id?' <em>YOU</em>':''}</strong><small>${Number(r.weekly_xp||0).toLocaleString()} XP${r.current_streak?` • 🔥 ${r.current_streak}`:''}</small></div></div>`).join('')}</div>${!isTeacher()&&me&&!top.some(r=>r.user_id===BACKEND.user.id)?`<div class="home-your-rank"><span>Your position</span><b>#${me.rank_position}</b><strong>${Number(me.weekly_xp||0).toLocaleString()} XP</strong></div>`:''}`;
+  }catch(e){document.getElementById('homeLeaderboard')?.remove()}
+}
+
 function dashboard(){
   return `<section class="portal-hero portal-hero-clean">
-    <div><span class="eyebrow">UE5 LEARNING HUB</span><h1>Choose a path.</h1><p>Learn systems. Design worlds. Build assets. Practise, critique and keep an eye on the industry.</p></div>
+    <div><span class="eyebrow">UE5 LEARNING HUB</span><h1>Choose where to learn.</h1><p>Learn systems. Understand game design. Build worlds and assets. Practise, critique and keep an eye on the industry.</p></div>
   </section>
 
   ${classHomeShortcut()}
 
+  ${homeLeaderboardPreview()}
+
+  <a class="guided-home-cta" href="#/pathways"><div class="guided-home-icon">↠</div><div><span class="portal-kicker">NOT SURE WHAT TO DO NEXT?</span><h2>Try a Guided Path</h2><p>Three optional outcome-based routes connect Theory, Designer Studio and Unreal in a sensible order. Nothing else gets locked.</p><div class="portal-chip-row"><span>3 guided paths</span><span>Existing XP counts</span><span>Browse freely anytime</span></div></div><strong>See Guided Paths →</strong></a>
+
   <section class="portal-path-grid" aria-label="Choose a Learning Hub area">
-    <a class="portal-path-card programming" href="#/programming"><div class="portal-path-icon">⌘</div><span class="portal-kicker">BUILDING BLOCKS • SYSTEMS • BLUEPRINTS</span><h2>Unreal Learning</h2><p>Learn Unreal terms in tiny Building Blocks, understand the deeper systems, then apply them in practical tutorials and challenge builds.</p><div class="portal-chip-row"><span>${BLOCKS.blocks.filter(b=>b.tier==='core').length} core blocks</span><span>${DATA.lessons.length} system lessons</span><span>${(TOOLS.families||[]).length} recipe families</span></div><strong>Enter Unreal Learning →</strong></a>
+    <a class="portal-path-card programming" href="#/programming"><div class="portal-path-icon">⌘</div><span class="portal-kicker">BUILDING BLOCKS • SYSTEMS • BLUEPRINTS</span><h2>Unreal Learning</h2><p>Learn Unreal terms in tiny Building Blocks, understand the deeper systems, then apply them in practical tutorials and challenge builds.</p><div class="portal-chip-row"><span>${BLOCKS.blocks.filter(b=>b.tier==='core').length} core blocks</span><span>${DATA.lessons.length} system lessons</span><span>${unrealMasterGuides().length} master guides</span><span>${(TOOLS.families||[]).length} recipe families</span></div><strong>Enter Unreal Learning →</strong></a>
+    <a class="portal-path-card theory" href="#/theory"><div class="portal-path-icon">◈</div><span class="portal-kicker">PLAYERS • SYSTEMS • BALANCE • PROCESS</span><h2>Game Design Theory</h2><p>Understand why games work: core loops, agency, meaningful choices, economies, pacing, level readability, prototyping and playtesting.</p><div class="portal-chip-row"><span>${THEORY.lessons.length} theory lessons</span><span>${THEORY.lessons.length} different game case studies</span><span>${THEORY.lessons.length*THEORY.xp} XP</span></div><strong>Think like a designer →</strong></a>
     <a class="portal-path-card design" href="#/design"><div class="portal-path-icon">✦</div><span class="portal-kicker">LEVELS • ART • LIGHT • SOUND</span><h2>Design</h2><p>Build readable spaces, create atmosphere, guide players and learn why strong game worlds communicate rather than simply decorate.</p><div class="portal-chip-row"><span>${DESIGN.modules.length} disciplines</span><span>24 different games</span><span>Black Box challenges</span></div><strong>Enter Designer Studio →</strong></a>
+    <a class="portal-path-card unreal-designer" href="#/unreal-designer"><div class="portal-path-icon">⚙</div><span class="portal-kicker">THEORY → ENGINE → TEST → EVIDENCE</span><h2>Unreal Designer</h2><p>Take the design ideas from Designer Studio and turn them into playable Unreal work using the right guides, recipes, Studio Builds and critique.</p><div class="portal-chip-row"><span>${UNREAL_DESIGNER.tracks.length} live tracks</span><span>Landscape + Sequencer guides</span><span>${UNREAL_DESIGNER.expansionTracks.length} growing next</span></div><strong>Apply the theory →</strong></a>
     <a class="portal-path-card modeling" href="#/modeling"><div class="portal-path-icon">⬡</div><span class="portal-kicker">3DS MAX • TOPOLOGY • UVS</span><h2>3D Modelling</h2><p>Start from reference, plan the form, follow clear 3ds Max steps, inspect the mesh and finish with a game-ready asset you can explain.</p><div class="portal-chip-row"><span>${MODEL_FOUNDATIONS.chapters.length} foundations chapters</span><span>${MODEL.lessons.length} deep lessons</span><span>${MODEL.builds.length} Build X</span></div><strong>Open 3D Modelling Studio →</strong></a>
     <a class="portal-path-card sculpt" href="#/sculpt"><div class="portal-path-icon">🗿</div><span class="portal-kicker">DIGITAL CLAY • FORM • SILHOUETTE</span><h2>Sculpt Playground</h2><p>Push and pull digital clay in SculptGL with six tiny guided exercises, then inspect what exists underneath the surface.</p><div class="portal-chip-row"><span>${SCULPT.practices.length} exercises</span><span>Browser sculpting</span><span>OBJ → Max</span></div><strong>Play with clay →</strong></a>
     <a class="portal-path-card news" href="#/news"><div class="portal-path-icon">◉</div><span class="portal-kicker">LIVE • INDUSTRY • WATCH & LISTEN</span><h2>News & Industry</h2><p>Follow games and development stories, trailers, podcasts and industry discussion. Save what matters and come back later.</p><div class="portal-chip-row"><span>Live feeds</span><span>Read later</span><span>Discussion</span></div><strong>See what is happening →</strong></a>
@@ -1341,109 +1924,16 @@ function dashboard(){
 }
 
 
-
-const SKILL_MISSION_STORE='ue5hub:skill-missions:v1';
-function skillMission(id){return (SKILL_MISSIONS.missions||[]).find(x=>x.id===id)}
-function loadSkillMissionState(){
-  try{
-    const raw=JSON.parse(localStorage.getItem(SKILL_MISSION_STORE)||'{}');
-    return raw&&typeof raw==='object'?raw:{};
-  }catch(e){return {}}
-}
-function saveSkillMissionState(value){
-  try{localStorage.setItem(SKILL_MISSION_STORE,JSON.stringify(value))}catch(e){}
-}
-function skillMissionDoneStages(id){
-  const s=loadSkillMissionState(),rows=s[id]?.completedStages;
-  return Array.isArray(rows)?rows:[];
-}
-function skillMissionStageDone(id,stageId){return skillMissionDoneStages(id).includes(stageId)}
-function skillMissionProgress(id){
-  const m=skillMission(id);if(!m)return {done:0,total:0,pct:0,complete:false};
-  const done=m.stages.filter(s=>skillMissionStageDone(id,s.id)).length,total=m.stages.length;
-  return {done,total,pct:total?Math.round(done/total*100):0,complete:done===total};
-}
-function skillMissionStageUnlocked(m,index){
-  if(index<=0)return true;
-  return skillMissionStageDone(m.id,m.stages[index-1].id);
-}
-function skillMissionNextIndex(m){
-  const i=m.stages.findIndex(s=>!skillMissionStageDone(m.id,s.id));
-  if(i<0)return Math.max(0,m.stages.length-1);
-  return Math.max(0,i);
-}
-function skillMissionCard(m){
-  const p=skillMissionProgress(m.id),next=m.stages[skillMissionNextIndex(m)];
-  return `<a class="skill-mission-card ${p.complete?'done':''}" href="#/skill-mission/${m.id}/${next?.id||m.stages[0]?.id||''}">
-    <div class="skill-mission-card-icon">${m.icon||'⌘'}</div>
-    <div class="skill-mission-card-copy"><span class="eyebrow">${esc(m.discipline||'Programmer')} SKILL MISSION • ${esc(m.duration||'Guided build')}</span><h3>${esc(m.title)}</h3><p>${esc(m.subtitle||m.summary||'')}</p><div class="tutorial-tag-row">${(m.skills||[]).slice(0,6).map(x=>`<span>${esc(x)}</span>`).join('')}</div><div class="skill-mission-progress-row"><div class="progress"><span style="width:${p.pct}%"></span></div><small>${p.done}/${p.total} stages complete</small></div></div>
-    <strong>${p.complete?'✓ Revisit mission':'Start / continue →'}</strong>
-  </a>`;
-}
-function skillMissionFlow(items){
-  if(!items?.length)return '';
-  return `<div class="skill-flow">${items.map((x,i)=>`<span>${esc(x)}</span>${i<items.length-1?'<b>→</b>':''}`).join('')}</div>`;
-}
-function skillMissionStep(step,i){
-  return `<article class="skill-step-card"><div class="skill-step-num">${String(i+1).padStart(2,'0')}</div><div class="skill-step-body"><h3>${esc(step.title)}</h3>
-    <div class="skill-step-field where"><span>WHERE TO WORK</span><p>${esc(step.where||'')}</p></div>
-    <div class="skill-step-field do"><span>DO THIS</span><p>${esc(step.do||'')}</p></div>
-    <div class="skill-step-field check"><span>TEST / CHECK</span><p>${esc(step.check||'')}</p></div>
-    <div class="skill-step-field why"><span>WHY</span><p>${esc(step.why||'')}</p></div>
-  </div></article>`;
-}
-function skillMissionPage(id,requestedStage){
-  const m=skillMission(id);if(!m)return notFound();
-  const p=skillMissionProgress(id);
-  let index=requestedStage?m.stages.findIndex(s=>s.id===requestedStage):skillMissionNextIndex(m);
-  if(index<0)index=skillMissionNextIndex(m);
-  const stage=m.stages[index],unlocked=skillMissionStageUnlocked(m,index),done=skillMissionStageDone(id,stage.id);
-  const latest=skillMissionNextIndex(m),latestStage=m.stages[latest];
-  const rail=m.stages.map((s,i)=>{
-    const sd=skillMissionStageDone(id,s.id),su=skillMissionStageUnlocked(m,i),current=i===index;
-    return su?`<a class="skill-stage-link ${sd?'done':''} ${current?'current':''}" href="#/skill-mission/${m.id}/${s.id}"><span>${sd?'✓':String(i).padStart(2,'0')}</span><div><strong>${esc(s.title.replace(/^.*?—\s*/,'').replace(/^.*?-\s*/,''))}</strong><small>${sd?'Complete':current?'Working now':'Unlocked'}</small></div></a>`:`<div class="skill-stage-link locked"><span>🔒</span><div><strong>${esc(s.title.replace(/^.*?—\s*/,'').replace(/^.*?-\s*/,''))}</strong><small>Finish the previous stage</small></div></div>`;
-  }).join('');
-  if(!unlocked){
-    return `<div class="breadcrumb"><a href="#/">Home</a> / <a href="#/programming">Unreal Learning</a> / ${esc(m.title)}</div>
-    <section class="skill-mission-hero"><div><span class="eyebrow">${esc(m.discipline)} SKILL MISSION • SOLO</span><h1>${m.icon||'⌘'} ${esc(m.title)}</h1><p>${esc(m.summary)}</p></div><div class="skill-mission-progress"><strong>${p.done}/${p.total}</strong><span>stages complete</span><div class="progress"><span style="width:${p.pct}%"></span></div></div></section>
-    <div class="skill-mission-layout"><aside class="skill-stage-rail">${rail}</aside><section class="content-card skill-locked-stage"><span class="eyebrow">🔒 NOT YET</span><h2>Finish the previous stage first.</h2><p>This mission is intentionally sequential so you test each system before building the next one on top.</p><a class="button primary" href="#/skill-mission/${m.id}/${latestStage.id}">Continue current stage →</a></section></div>`;
-  }
-  const next=m.stages[index+1],prev=m.stages[index-1];
-  return `<div class="breadcrumb"><a href="#/">Home</a> / <a href="#/programming">Unreal Learning</a> / ${esc(m.title)}</div>
-  <section class="skill-mission-hero"><div><span class="eyebrow">${esc(m.discipline)} SKILL MISSION • SOLO • ${esc(m.duration)}</span><h1>${m.icon||'⌘'} ${esc(m.title)}</h1><p>${esc(m.summary)}</p><div class="tutorial-tag-row large">${(m.skills||[]).map(x=>`<span>${esc(x)}</span>`).join('')}</div></div><div class="skill-mission-progress"><strong>${p.done}/${p.total}</strong><span>stages complete</span><div class="progress"><span style="width:${p.pct}%"></span></div><small>${p.complete?'Mission complete — revisit any stage.':'Finish one stage, test it, then unlock the next.'}</small></div></section>
-  <section class="skill-mission-rulebar"><div><span class="deep-label">THE RULE</span><h2>One programmer. One complete game.</h2><p>Basic shapes are enough. Do not move on until the current test works.</p></div><div class="skill-rule-chips">${(m.rules||[]).map(x=>`<span>✓ ${esc(x)}</span>`).join('')}</div></section>
-  ${index===0?`<section class="content-card skill-game-brief"><span class="eyebrow">THE WHOLE GAME</span><h2>What you are building</h2><p>${esc(m.subtitle)}</p>${skillMissionFlow(m.gameFlow)}</section>`:''}
-  <div class="skill-mission-layout"><aside class="skill-stage-rail"><div class="skill-rail-head"><small>MISSION PROGRESS</small><strong>${p.pct}%</strong></div>${rail}</aside>
-  <main class="skill-stage-main">
-    <section class="skill-stage-hero ${done?'done':''}"><div><span class="eyebrow">STAGE ${String(index).padStart(2,'0')} OF ${String(m.stages.length-1).padStart(2,'0')}${done?' • ✓ COMPLETE':''}</span><h2>${esc(stage.title)}</h2><p>${esc(stage.goal)}</p></div><div class="skill-stage-why"><span>WHY THIS STAGE EXISTS</span><p>${esc(stage.why)}</p></div></section>
-    ${skillMissionFlow(stage.flow)}
-    <section class="skill-step-list">${(stage.steps||[]).map(skillMissionStep).join('')}</section>
-    <section class="skill-stage-test"><div><span class="eyebrow">STOP & TEST</span><h2>Do not continue until these work</h2><ul>${(stage.test||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><div class="skill-done-when"><small>STAGE IS DONE WHEN</small><strong>${esc(stage.doneWhen||'Everything above works.')}</strong></div></section>
-    ${(stage.common||[]).length?`<details class="content-card skill-troubleshoot"><summary>⚠ If yours does not work</summary><ul>${stage.common.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></details>`:''}
-    ${(stage.challenges||[]).length?`<section class="content-card skill-challenges"><span class="eyebrow">FINISHED THE CORE GAME?</span><h2>Independent upgrades</h2><p>Choose one after the complete play-through works.</p><ul>${stage.challenges.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></section>`:''}
-    <section class="skill-stage-actions">${prev?`<a class="button ghost" href="#/skill-mission/${m.id}/${prev.id}">← Previous stage</a>`:'<span></span>'}${done?(next?`<a class="button primary" href="#/skill-mission/${m.id}/${next.id}">Next stage →</a>`:`<a class="button success" href="#/programming">✓ Mission complete</a>`):`<button class="button primary" data-action="complete-skill-stage" data-mission="${m.id}" data-stage="${stage.id}">${next?'✓ This stage works — unlock next':'✓ Full game tested — complete mission'}</button>`}</section>
-  </main></div>`;
-}
-function completeSkillMissionStage(missionId,stageId){
-  const m=skillMission(missionId);if(!m)return;
-  const i=m.stages.findIndex(s=>s.id===stageId);if(i<0||!skillMissionStageUnlocked(m,i))return;
-  const all=loadSkillMissionState(),row=all[missionId]||{completedStages:[]},set=new Set(Array.isArray(row.completedStages)?row.completedStages:[]);
-  set.add(stageId);row.completedStages=[...set];all[missionId]=row;saveSkillMissionState(all);
-  const next=m.stages[i+1];
-  toast(next?'Stage complete — next stage unlocked.':'Skill Mission complete — you built the whole game.');
-  if(next)location.hash=`#/skill-mission/${m.id}/${next.id}`;else route();
-}
-
-
 function programmingPage(){
   const i=level(),n=nextLesson(),np=pathProgress(n.path),pb=pendingUnlockedBuild(),blocksDone=(state.blockCompleted||[]).length,coreBlocks=BLOCKS.blocks.filter(b=>b.tier==='core'),coreDone=coreBlocks.filter(b=>blockDone(b.id)).length;
-  const pathsComplete=DATA.paths.filter(p=>pathProgress(p.id).pct===100).length;
-  return `<div class="page-head programming-page-head"><div class="breadcrumb"><a href="#/">Home</a> / Unreal Learning</div><span class="eyebrow">UNDERSTAND THE ENGINE • BUILD SYSTEMS • APPLY THEM</span><h1>⌘ Unreal Learning</h1><p class="muted">You do not need to memorise Unreal before making games. Learn a small Building Block, use it in a system, then meet it again in tutorials and challenge builds.</p></div>
-  <section class="unreal-learning-ladder"><a href="#/blocks"><span>01</span><div><small>3–8 MINUTE MICRO-LEARNING</small><h2>🧱 Building Blocks</h2><p>What does IA, BPI, Struct, AnimBP, NavMesh or Skeletal Mesh actually mean? Learn the term once with a tiny proof exercise.</p><strong>${coreDone}/${coreBlocks.length} Core learned →</strong></div></a><a href="#/path/${n.path}"><span>02</span><div><small>DEEPER SYSTEM UNDERSTANDING</small><h2>⌘ Core System Lessons</h2><p>Understand why systems work, build them carefully, debug them and apply them in a larger mechanic.</p><strong>${completedLessons().length}/${DATA.lessons.length} lessons complete →</strong></div></a><a href="#/tutorials"><span>03</span><div><small>JUST-IN-TIME BUILDING</small><h2>🛠 Quick Tutorials</h2><p>Choose a system family first, then the exact practical outcome. Similar builds are grouped instead of repeated as separate top-level destinations.</p><strong>${(TOOLS.families||[]).length} families • ${TOOLS.tutorials.filter(t=>!t.libraryHidden).length} family builds + ${TOOLS.tutorials.filter(t=>t.libraryHidden).length} lesson applications →</strong></div></a><a href="#/challenges"><span>04</span><div><small>REMOVE THE TRAINING WHEELS</small><h2>🔥 Challenges & Practice</h2><p>Combine systems without every node being handed to you. This is where copying becomes understanding.</p><strong>Prove it →</strong></div></a></section>
+  const guides=unrealMasterGuides();
+  return `<div class="page-head programming-page-head"><div class="breadcrumb"><a href="#/">Home</a> / Unreal Learning</div><span class="eyebrow">UNDERSTAND THE ENGINE • BUILD SYSTEMS • APPLY THEM</span><h1>⌘ Unreal Learning</h1><p class="muted">One Unreal area, three different depths: learn the language, understand the system, then choose either a full workflow or a quick recipe when you need it.</p></div>
+  <section class="unreal-learning-ladder five-step"><a href="#/blocks"><span>01</span><div><small>3–8 MINUTE MICRO-LEARNING</small><h2>🧱 Building Blocks</h2><p>What does IA, BPI, Struct, AnimBP, NavMesh or Skeletal Mesh actually mean? Learn the term once with a tiny proof exercise.</p><strong>${coreDone}/${coreBlocks.length} Core learned →</strong></div></a><a href="#/path/${n.path}"><span>02</span><div><small>DEEPER SYSTEM UNDERSTANDING</small><h2>⌘ Core System Lessons</h2><p>Understand why systems work, build them carefully, debug them and apply them in a larger mechanic.</p><strong>${completedLessons().length}/${DATA.lessons.length} lessons complete →</strong></div></a><button type="button" data-action="scroll" data-target="master-guides"><span>03</span><div><small>END-TO-END ENGINE WORKFLOWS</small><h2>🧭 Master Guides</h2><p>Some topics need more than a five-minute recipe. Master Guides take a complete workflow from setup to a tested result — including engine workflows and team production habits.</p><strong>${guides.length} full workflows ↓</strong></div></button><a href="#/tutorials"><span>04</span><div><small>JUST-IN-TIME BUILDING</small><h2>🛠 Quick Tutorials</h2><p>Need one mechanic or fix? Choose a recipe family, build the exact outcome, then return to your project.</p><strong>${(TOOLS.families||[]).length} families • ${TOOLS.tutorials.filter(t=>!t.libraryHidden).length} practical builds →</strong></div></a><a href="#/challenges"><span>05</span><div><small>REMOVE THE TRAINING WHEELS</small><h2>🔥 Challenges & Practice</h2><p>Combine systems without every node being handed to you. This is where copying becomes understanding.</p><strong>Prove it →</strong></div></a></section>
+  <section class="content-card tutorial-next github-team-home-card"><div><span class="eyebrow">PAIR JAM • TEAM SETUP + PROGRAMMER ROUTE</span><h2>🔀 GitHub first. ⚡ Then build the Power mechanic.</h2><p>For the two-person jam, get the same project safely onto both PCs first. Then the Programmer follows the photographed Power Jam guide while the Designer owns the main level.</p></div><div class="tutorial-next-links"><a class="button primary" href="#/tutorial/github-unreal-team-workflow">🔀 GitHub team setup →</a><a class="button" href="#/tutorial/power-jam-programmer">⚡ Programmer mechanic guide →</a></div></section>
+  <section class="section master-guides-programming" id="master-guides"><div class="section-head"><div><span class="eyebrow">03 • FULL WORKFLOWS</span><h2>🧭 Unreal Master Guides</h2><p>These are part of Unreal Learning — not separate mini-sites. Each guide has one authoritative start-to-finish workflow, clear checkpoints and a focused Revision check. Engine guides may also bridge into Unreal Designer application tasks.</p></div><a class="button ghost" href="#/tutorials">See Quick Tutorials →</a></div><div class="master-guide-grid">${guides.map(masterGuideCard).join('')}</div></section>
   <section class="programming-continue"><div><span class="eyebrow">CONTINUE CORE SYSTEMS • ${esc(path(n.path).title)}</span><h2>${esc(n.title)}</h2><p>${esc(n.short)}</p><div class="path-meta"><span>${n.duration} • ${n.xp} XP</span><span>${np.pct}% path complete</span></div><div class="progress"><span style="width:${np.pct}%"></span></div></div><div class="programming-continue-actions"><a class="button primary" href="${pb?`#/chapter-build/${pb.path}`:`#/lesson/${n.id}`}">${pb?`🎮 Build: ${esc(pb.title)}`:'▶ Continue core lesson'}</a><a class="button ghost" href="#/blocks">🧱 Building Blocks</a></div></section>
-  ${(SKILL_MISSIONS.missions||[]).length?`<section class="section skill-mission-section"><div class="section-head"><div><span class="eyebrow">JAM TRAINING • SOLO SKILL BUILDS</span><h2>⌘ Programmer Skill Missions</h2><p>Build a complete small game around the next programming skill. Follow the guide alone, test each stage, then use the skill in the next team jam.</p></div></div><div class="skill-mission-grid">${SKILL_MISSIONS.missions.map(skillMissionCard).join('')}</div></section>`:''}
   <section class="snippet-programming-cta integrated"><div><span class="eyebrow">⚡ EPIC PASTE ASSISTS</span><h2>Learn the system first; use the shortcut at the right moment.</h2><p>Use the official Epic paste assists inside the relevant Unreal Learning lessons and recipe families. The standalone bank remains a searchable reference shelf when you need to find one directly.</p></div><a class="button ghost" href="#/snippets">Search the reference bank →</a></section>
-  <div class="stat-grid programming-stats"><div class="stat"><small>Building Blocks</small><strong>${blocksDone}/${BLOCKS.blocks.length}</strong></div><div class="stat"><small>Core lessons</small><strong>${completedLessons().length}/${DATA.lessons.length}</strong></div><div class="stat"><small>Practical builds</small><strong>${TOOLS.tutorials.filter(t=>tutorialDone(t.id)).length}/${TOOLS.tutorials.length}</strong></div><div class="stat"><small>Total XP</small><strong>${i.xp}</strong></div></div>
+  <div class="stat-grid programming-stats"><div class="stat"><small>Building Blocks</small><strong>${blocksDone}/${BLOCKS.blocks.length}</strong></div><div class="stat"><small>Core lessons</small><strong>${completedLessons().length}/${DATA.lessons.length}</strong></div><div class="stat"><small>Master Guides</small><strong>${guides.filter(t=>tutorialDone(t.id)).length}/${guides.length}</strong></div><div class="stat"><small>Total XP</small><strong>${i.xp}</strong></div></div>
   <section class="section"><div class="section-head"><div><span class="eyebrow">WHEN YOU WANT THE DEEPER VERSION</span><h2>Core System Lessons</h2><p>These are not prerequisites for every tutorial. Follow them in order as a course, or open the system your project needs.</p></div></div><div class="path-grid">${DATA.paths.map(p=>{const x=pathProgress(p.id);return `<a class="path-card" href="#/path/${p.id}"><div class="path-icon">${p.icon}</div><h3>${esc(p.title)}</h3><p>${esc(p.description)}</p><div class="path-meta"><span>${x.done}/${x.total} lessons</span><span>${x.pct}%</span></div><div class="progress"><span style="width:${x.pct}%"></span></div></a>`}).join('')}</div></section>
   <section class="blocks-mini-cta"><div><span class="deep-label">DON'T KNOW A TERM?</span><h2>Search the Building Blocks, not YouTube roulette.</h2><p>${BLOCKS.blocks.length} concise Unreal concepts are organised into Core, Common and Later. Only ${coreBlocks.length} are suggested early; the rest appear when tutorials need them.</p></div><a class="button primary" href="#/blocks">Open Building Blocks →</a></section>
   ${pb?`<section class="section dashboard-unlock"><div class="section-head"><div><span class="eyebrow">YOU FINISHED A CHAPTER</span><h2>🎮 New Chapter Build unlocked</h2><p>Combine what you learned into something playable before moving on.</p></div></div>${chapterBuildCard(pb,{compact:true})}</section>`:''}`;
@@ -2078,6 +2568,11 @@ function achievementData(approvedCount=0,requestCount=0){
     ['max-apprentice','Max Apprentice',"Complete all 14 videos in Dits' Max series.",(state.modelVideoCompleted||[]).length>=MODEL_VIDEOS.videos.length,'▶'],
     ['industry-eye','Industry Eye','Complete at least one industry deep dive in every Designer discipline.',DESIGN.modules.every(m=>(m.industryDeepDives||[]).some((_,i)=>(state.designSourceCompleted||[]).includes(designSourceKey(m,i)))),'👁'],
     ['design-thinker','Design Thinker','Complete all eight Designer Studio builds.',(state.designBuildCompleted||[]).length>=DESIGN.modules.length,'✦'],
+    ['design-analyst','Design Analyst','Complete six Game Design Theory lessons.',(state.theoryCompleted||[]).length>=6,'◈'],
+    ['theory-scholar','Systems Thinker','Complete every Game Design Theory lesson.',(state.theoryCompleted||[]).length>=THEORY.lessons.length,'◎'],
+    ['level-architect','Level Architect','Complete the Build a Playable Level Guided Path.',guidedPathProgress('playable-level').pct===100,'◇'],
+    ['mechanic-maker','Mechanic Maker','Complete the Create a Gameplay Mechanic Guided Path.',guidedPathProgress('gameplay-mechanic').pct===100,'⚙'],
+    ['tabletop-translator','Tabletop Translator','Complete the Digital Game → Tabletop Guided Path.',guidedPathProgress('digital-to-tabletop').pct===100,'🎲'],
     ['digital-clay','Digital Clay','Complete all six Sculpt Playground exercises.',sculptDoneCount>=SCULPT.practices.length,'🗿']
   ];
   if(isTeacher())rows.unshift(['teacher','Unreal Instructor','Verified Learning Hub teacher account. Staff-only badge; students cannot unlock it.',true,'🎓']);
@@ -2093,12 +2588,17 @@ function progressPage(){
   </div>
   <section class="progress-player-banner ${teacher?'teacher-progress-banner':''}"><div class="progress-player-id">${avatarMarkup('xl',userDisplayName())}<div><span class="eyebrow">${esc(userRankTitle())}</span><h2>${esc(userDisplayName())}</h2><p>${teacher?'🎓 Teacher • Level MAX':`Level ${i.n} • ${i.xp} XP`}</p></div></div>${levelRingMarkup()}<div class="progress-equipped"><span>${teacher?'STAFF BADGE':'PINNED BADGE'}</span><strong>${eq?`${eq[4]} ${esc(eq[1])}`:'None yet'}</strong><small>${teacher?'Teacher-only • automatically equipped':eq?esc(BADGE_META[eq[0]]?.rarity||'Common'):'Unlock and pin one below'}</small></div></section>
   <div class="stat-grid">
-    <div class="stat"><small>Lessons</small><strong>${completedLessons().length}/${DATA.lessons.length}</strong></div>
+    <div class="stat"><small>Core lessons</small><strong>${completedLessons().length}/${DATA.lessons.length}</strong></div>
+    <div class="stat"><small>Building Blocks</small><strong>${(state.blockCompleted||[]).length}/${BLOCKS.blocks.length}</strong></div>
     <div class="stat"><small>Practical builds</small><strong>${completedTutorialCount()}/${TOOLS.tutorials.length}</strong></div>
-    <div class="stat"><small>3D Foundations</small><strong>${modelFoundationChaptersDone()}/${MODEL_FOUNDATIONS.chapters.length}${modelFoundationDone()?' ✓':''}</strong></div><div class="stat"><small>3D Modelling</small><strong>${(state.modelLessonCompleted||[]).length}/${MODEL.lessons.length}</strong></div>
+    <div class="stat"><small>Game Design Theory</small><strong>${(state.theoryCompleted||[]).length}/${THEORY.lessons.length}</strong></div>
+    <div class="stat"><small>Designer Studio</small><strong>${(state.designBuildCompleted||[]).length}/${DESIGN.modules.length}</strong><span>${(state.designSourceCompleted||[]).length} source tasks</span></div>
+    <div class="stat"><small>Guided Paths</small><strong>${PATHWAYS.paths.filter(p=>guidedPathProgress(p).pct===100).length}/${PATHWAYS.paths.length}</strong><span>${(state.pathwayCheckpoints||[]).length} checkpoints</span></div>
+    <div class="stat"><small>3D Foundations</small><strong>${modelFoundationChaptersDone()}/${MODEL_FOUNDATIONS.chapters.length}${modelFoundationDone()?' ✓':''}</strong></div>
+    <div class="stat"><small>3ds Max videos</small><strong>${(state.modelVideoCompleted||[]).length}/${MODEL_VIDEOS.videos.length}</strong></div>
+    <div class="stat"><small>3D Modelling</small><strong>${(state.modelLessonCompleted||[]).length}/${MODEL.lessons.length}</strong><span>${(state.modelBuildCompleted||[]).length} Build X</span></div>
     <div class="stat"><small>Sculpt Playground</small><strong>${(state.sculptCompleted||[]).length}/${SCULPT.practices.length}</strong></div>
     <div class="stat"><small>Chapter Builds</small><strong>${state.chapterBuildCompleted.length}/${TOOLS.chapterBuilds.length}</strong></div>
-    <div class="stat"><small>Practice mechanics</small><strong>${pp.complete}/${pp.total}</strong></div>
     <div class="stat"><small>${teacher?'Level':'XP'}</small><strong>${teacher?'MAX':i.xp}</strong></div>
   </div>
   <section class="section"><div class="section-head"><div><span class="eyebrow">BADGE CABINET</span><h2>Achievements</h2><p>${teacher?'Your Unreal Instructor badge stays equipped; student-style achievements still record your learning activity.':'Meaningful learning milestones rather than participation confetti. Pin any unlocked badge to your player card.'}</p></div></div><div class="achievement-grid badge-cabinet" id="achievementGrid">${renderAchievements(0,0)}</div></section>
@@ -2283,11 +2783,74 @@ function homeworkItems(){
   (MODEL_VIDEOS.videos||[]).forEach(v=>items.push({id:`video:${v.id}`,area:'video',areaLabel:"Dits' Max series",title:`Watch + practise: ${v.title}`,task:v.task,evidence:'Show the result you made in Max and be ready to explain the move without replaying the video.',stretch:'Use the same tool or idea on a different object so it becomes a transferable skill.',meta:`Video ${String(v.order).padStart(2,'0')} • +${MODEL_VIDEOS.xp||20} XP when completed in the video series`,href:'#/modeling/videos',linkLabel:'Open video series'}));
   return items;
 }
+function homeworkPaths(){
+  const unreal=nextLesson();
+  const theoryNext=THEORY.lessons.find(x=>!theoryDone(x.id))||THEORY.lessons[0];
+  const careerNext=CAREERS.chapters.find(x=>!careerDone(x.id))||CAREERS.chapters[0];
+  const modelNext=MODEL_FOUNDATIONS.chapters.find(x=>!modelTheoryDone(x.id))||MODEL_FOUNDATIONS.chapters[0];
+  return [
+    {id:'unreal-core',icon:'⌘',title:'Unreal Core',time:'30–45 min',summary:'Continue the next Unreal system, prove it in-engine, then retrieve the knowledge instead of only re-reading it.',steps:[
+      {label:'LEARN',title:unreal.title,body:unreal.short||'Continue your next Core System Lesson.',href:`#/lesson/${unreal.id}`,link:'Open lesson'},
+      {label:'DO',title:'Build the proof',body:unreal.homework?.task||'Complete the lesson application and make one change of your own.',href:`#/lesson/${unreal.id}`,link:'Build from the lesson'},
+      {label:'CHECK',title:'Focused revision',body:`Run the focused question set from ${unreal.title}. Use the review links if you miss anything.`,revisionTopic:`ue:${unreal.id}`,link:'Start focused check'},
+      {label:'BRING BACK',title:'One piece of evidence',body:unreal.homework?.evidence||'Bring one screenshot plus a sentence explaining what the system proves.'}
+    ]},
+    {id:'landscape',icon:'🏔',title:'Landscape & World Building',time:'45–60 min',summary:'Use the long Unreal workflow as the technical spine, then connect it to landscape-design decisions.',steps:[
+      {label:'LEARN',title:'Landscape Master Guide',body:'Continue the authoritative workflow: create, sculpt, paint, foliage, traversal, Edit Layers and Splines.',href:'#/tutorial/landscape-master-guide',link:'Open master guide'},
+      {label:'DO',title:'Design the route, not just the terrain',body:'Use Designer Studio to check route readability, landmarks, composition and believable foliage.',href:'#/design/landscape',link:'Open Landscape Designer Studio'},
+      {label:'CHECK',title:'Landscape knowledge check',body:'Five questions test whether the engine workflow makes sense, not whether you memorised button positions.',revisionTopic:'guide:landscape-master-guide',link:'Start 5-question check'},
+      {label:'BRING BACK',title:'Player-height proof',body:'Bring one player-height screenshot showing the route plus one sentence explaining a change you made after testing it.'}
+    ]},
+    {id:'sequencer',icon:'🎬',title:'Sequencer & Cinematics',time:'40–55 min',summary:'Build the technical sequence, then justify the filmmaking decisions and prove the final camera/timing works.',steps:[
+      {label:'LEARN',title:'Sequencer Master Guide',body:'Continue the authoritative workflow: Level Sequence, tracks, keys, Cine Cameras, Camera Cuts, focus and render.',href:'#/tutorial/sequencer-master-guide',link:'Open master guide'},
+      {label:'DO',title:'Make the camera choice purposeful',body:'Use Designer Studio to test framing, lens choice, pacing, continuity and the reason for each shot.',href:'#/design/cinematics',link:'Open Cinematics Designer Studio'},
+      {label:'CHECK',title:'Sequencer knowledge check',body:'Five questions test the core workflow and the mistakes that most often break a render.',revisionTopic:'guide:sequencer-master-guide',link:'Start 5-question check'},
+      {label:'BRING BACK',title:'Short rendered proof',body:'Bring a short render or screen recording plus one sentence explaining why you chose the strongest shot.'}
+    ]},
+    {id:'unreal-designer',icon:'⚙',title:'Unreal Designer — Apply the Theory',time:'35–60 min',summary:'Choose one design discipline, use only the engine skills you need, then bring back evidence of a tested design change.',steps:[
+      {label:'LEARN',title:'Choose one design problem',body:'Open Unreal Designer and choose the track that matches what you are currently making. Read the linked Designer Studio principle before touching the engine.',href:'#/unreal-designer',link:'Choose a track'},
+      {label:'DO',title:'Build one purposeful change',body:'Use the track’s Master Guide or practical recipes to make one playable change. Do not complete recipes just to tick them off.',href:'#/unreal-designer',link:'Open Unreal Designer'},
+      {label:'CHECK',title:'Test the design judgement',body:'Run the five-question Designer Studio check for the discipline you chose from the track page.',href:'#/revision',link:'Open Revision'},
+      {label:'BRING BACK',title:'Before → after → why',body:'Bring one before screenshot, one player-view after screenshot and one sentence explaining what changed after testing.'}
+    ]},
+    {id:'theory',icon:'◈',title:'Game Design Theory',time:'25–40 min',summary:'Continue one theory idea, apply it to an actual game/build, then retrieve it through a focused quiz.',steps:[
+      {label:'LEARN',title:theoryNext.title,body:theoryNext.short||'Continue your next Game Design Theory lesson.',href:`#/theory/${theoryNext.id}`,link:'Open theory lesson'},
+      {label:'DO',title:'Apply one principle',body:'Find one example in a real game or your own project. Capture the moment and explain what design problem it solves.',href:`#/theory/${theoryNext.id}`,link:'Use the lesson examples'},
+      {label:'CHECK',title:'Focused revision',body:`Run the focused question set from ${theoryNext.title}.`,revisionTopic:`theory:${theoryNext.id}`,link:'Start focused check'},
+      {label:'BRING BACK',title:'One useful design decision',body:'Bring the screenshot/example and one sentence beginning “This matters because…”'}
+    ]},
+    {id:'industry',icon:'◎',title:'Industry & Careers',time:'25–40 min',summary:'Continue the current industry chapter, investigate one real case, then test whether your judgement changed.',steps:[
+      {label:'LEARN',title:careerNext.title,body:careerNext.short||careerNext.summary||'Continue your next Industry & Careers chapter.',href:`#/industry-careers/${careerNext.id}`,link:'Open chapter'},
+      {label:'DO',title:'Follow one real piece of evidence',body:'Use one case, vacancy, credit list, company story or source from the chapter. Record what it tells you — and what it cannot prove.',href:`#/industry-careers/${careerNext.id}`,link:'Use chapter evidence'},
+      {label:'CHECK',title:'Industry scenario check',body:`Run a focused five-question revision set from ${careerNext.title}.`,revisionTopic:`industry:${careerNext.id}`,link:'Start 5-question check'},
+      {label:'BRING BACK',title:'What changed?',body:'Bring one sentence: “I assumed ___; the evidence made me reconsider because ___.”'}
+    ]},
+    {id:'3d-foundations',icon:'⬡',title:'3D Foundations',time:'30–45 min',summary:'Continue the next foundation chapter, practise the idea in Max, then test the judgement behind the tool use.',steps:[
+      {label:'LEARN',title:modelNext.title,body:modelNext.intro||'Continue your next 3D Foundations chapter.',href:`#/modeling/foundations/${modelNext.id}`,link:'Open foundation chapter'},
+      {label:'DO',title:'Practise it in 3ds Max',body:'Use the chapter task or the Max video series to reproduce the decision, then try it on a different object.',href:'#/modeling/videos',link:'Open Max video series'},
+      {label:'CHECK',title:'Focused 3D revision',body:`Answer five questions from ${modelNext.title}.`,revisionTopic:`3d:${modelNext.id}`,link:'Start 5-question check'},
+      {label:'BRING BACK',title:'Show the mesh decision',body:'Bring a screenshot that makes the decision visible and be ready to explain why it is game-ready.'}
+    ]}
+  ];
+}
+function homeworkPath(id){return homeworkPaths().find(x=>x.id===id)}
+function homeworkPathStep(step,i){
+  const action=step.revisionTopic?`<button class="button small primary" data-action="revision-topic-start" data-revision-topic-id="${esc(step.revisionTopic)}" data-revision-count="5">${esc(step.link||'Start check')} →</button>`:step.href?`<a class="button small ${i===0?'primary':'ghost'}" href="${esc(step.href)}">${esc(step.link||'Open')} →</a>`:'';
+  return `<article class="homework-path-step"><span class="homework-path-step-number">${String(i+1).padStart(2,'0')}</span><div><small>${esc(step.label)}</small><h3>${esc(step.title)}</h3><p>${esc(step.body)}</p>${action}</div></article>`;
+}
+function homeworkPathPage(id){
+  const path=homeworkPath(id);if(!path)return notFound();
+  return `<div class="page-head homework-path-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / <a href="#/homework">Homework</a> / ${esc(path.title)}</div><span class="eyebrow">GUIDED HOMEWORK PATH • ${esc(path.time)}</span><h1>${path.icon} ${esc(path.title)}</h1><p class="muted">${esc(path.summary)}</p></div>
+  <section class="homework-path-sequence">${path.steps.map(homeworkPathStep).join('')}</section>
+  <section class="content-card homework-path-finish"><div><span class="eyebrow">ONE ROUTE • ONE SMALL PIECE OF EVIDENCE</span><h2>Do not turn homework into a second assignment.</h2><p>Follow the four steps in order. The existing lesson/tutorial keeps its normal progress and XP; this homework path adds no duplicate completion system.</p></div><div class="button-row"><button class="button primary" data-action="copy-homework-path" data-homework-path="${esc(path.id)}">Copy full path for Teams</button><a class="button ghost" href="#/homework">← All homework</a></div></section>`;
+}
 function homeworkBoard(){
-  const items=homeworkItems(),areas=[['unreal','⌘','Unreal',items.filter(x=>x.area==='unreal').length],['design','✦','Design research',items.filter(x=>x.area==='design').length],['modeling','⬡','3D theory',items.filter(x=>x.area==='modeling').length],['video','▶','Max videos',items.filter(x=>x.area==='video').length]];
+  const items=homeworkItems(),paths=homeworkPaths(),areas=[['unreal','⌘','Unreal',items.filter(x=>x.area==='unreal').length],['design','✦','Design research',items.filter(x=>x.area==='design').length],['modeling','⬡','3D theory',items.filter(x=>x.area==='modeling').length],['video','▶','Max videos',items.filter(x=>x.area==='video').length]];
   const section=(area,title,desc,open=false)=>{const rows=items.filter(x=>x.area===area);return `<details class="study-board-section homework-section" data-study-section ${open?'open':''}><summary><span>${areas.find(a=>a[0]===area)?.[1]||'⌂'}</span><div><strong>${esc(title)}</strong><small>${esc(desc)}</small></div><b>${rows.length}</b></summary><div class="board-grid study-board-grid">${rows.map(x=>`<article class="board-card study-board-card homework-study-card" data-study-card data-area="${x.area}" data-search="${esc((x.title+' '+x.task+' '+x.evidence+' '+x.stretch+' '+x.meta).toLowerCase())}"><span class="eyebrow">${esc(x.areaLabel)} • ${esc(x.meta)}</span><h3>${esc(x.title)}</h3><p>${esc(x.task)}</p><div class="study-evidence"><b>Evidence</b><span>${esc(x.evidence)}</span></div><div class="study-stretch"><b>Stretch</b><span>${esc(x.stretch)}</span></div><div class="button-row"><button class="button small" data-action="copy-homework" data-study-homework="${esc(x.id)}">Copy for Teams</button><a class="button small ghost" href="${x.href}">${esc(x.linkLabel)}</a></div></article>`).join('')}</div></details>`};
-  return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Homework</div><span class="eyebrow">Independent study • not another assignment system</span><h1>⌂ Homework & Independent Study</h1><p class="muted">Short tasks that extend what students are already learning. The Hub supplies the activity and reference; Teams remains the place for formal assignment briefs, deadlines and submission.</p></div>
-  <section class="study-tool-intro"><div><strong>Play / watch / inspect.</strong><span>Start with something real rather than another page of notes.</span></div><div><strong>Produce small evidence.</strong><span>A screenshot, annotation, map, comparison or short explanation is enough.</span></div><div><strong>Bring it back into the work.</strong><span>Every task should change a decision in the next build.</span></div></section>
+  return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Homework</div><span class="eyebrow">GUIDED STUDY PATHS • TEAMS-READY</span><h1>⌂ Homework & Independent Study</h1><p class="muted">Start with a clear route instead of hunting through the Hub. Each path follows the same rhythm: <b>Learn → Do → Check → Bring Back.</b> Teams remains the place for deadlines, formal briefs and submission.</p></div>
+  <section class="homework-paths-wrap"><div class="section-head"><div><span class="eyebrow">RECOMMENDED</span><h2>Follow a homework path</h2><p>Choose the area you are currently studying. The path points to the real Hub content, a focused revision check and one small piece of evidence to bring back.</p></div></div><div class="homework-path-grid">${paths.map(x=>`<a class="homework-path-card" href="#/homework/${x.id}"><span>${x.icon}</span><div><small>${esc(x.time)}</small><h3>${esc(x.title)}</h3><p>${esc(x.summary)}</p><strong>Learn → Do → Check → Bring Back</strong></div></a>`).join('')}</div></section>
+  <section class="study-tool-intro"><div><strong>Learn.</strong><span>Open the exact lesson, guide or chapter rather than browsing at random.</span></div><div><strong>Do + check.</strong><span>Build/apply something, then use focused retrieval to expose what has not stuck.</span></div><div><strong>Bring back evidence.</strong><span>One screenshot, comparison or short explanation is enough unless Teams says otherwise.</span></div></section>
+  <section class="homework-browse-divider"><span class="eyebrow">NEED ONE SMALL TASK INSTEAD?</span><h2>Browse individual independent-study tasks</h2><p>The task bank is still here for targeted practice; the guided paths above are the default route.</p></section>
   <div class="study-toolbar"><input id="homeworkSearch" type="search" enterkeyhint="search" placeholder="Search independent study…"><div class="filter-row"><button class="filter active" data-homework-filter="all">All <b>${items.length}</b></button>${areas.map(a=>`<button class="filter" data-homework-filter="${a[0]}">${a[1]} ${a[2]} <b>${a[3]}</b></button>`).join('')}</div></div>
   <div id="homeworkBoardSections">${section('unreal','Unreal independent learning','Broaden the thinking around a mechanic instead of doing more node-copying.',true)}${section('design','Designer field research','Observe games, spaces and players; then bring the principle back to your own work.',true)}${section('modeling','3D foundations study','Small modelling decisions that reinforce Module 0 before or between practical sessions.')}${section('video',"Dits' Max follow-along practice",'Watch the demonstration, reproduce the move, then apply it somewhere else.')}</div>
   <div class="empty" id="homeworkSearchEmpty" hidden><h2>No homework tasks match.</h2><p>Try a shorter search or switch back to All.</p></div>`;
@@ -2302,10 +2865,13 @@ function glossary(){
 }
 function revisionTopics(){
   const topics=[];
-  DATA.lessons.forEach(l=>topics.push({id:`ue:${l.id}`,areaId:'unreal',areaTitle:'Unreal Learning',icon:path(l.path)?.icon||'⌘',title:l.title,meta:path(l.path)?.title||'Unreal',href:`#/lesson/${l.id}`,sourceLabel:`Open ${l.title}`,questions:(l.quiz||[]).map((q,qi)=>({question:q[0],options:q[1],correct:Array.isArray(q[2])?q[2]:[q[2]],feedback:q[3],key:`ue:${l.id}:${qi}`}))}));
-  MODEL_FOUNDATIONS.chapters.forEach(ch=>topics.push({id:`3d:${ch.id}`,areaId:'modeling',areaTitle:'3D Foundations',icon:ch.icon||'⬡',title:ch.title,meta:'Module 0',href:`#/modeling/foundations/${ch.id}`,sourceLabel:`Open ${ch.title}`,questions:(ch.quiz||[]).map((q,qi)=>({question:q.q,options:q.options,correct:[q.correct],feedback:q.feedback,key:`3d:${ch.id}:${qi}`}))}));
+  DATA.lessons.forEach(l=>topics.push({id:`ue:${l.id}`,areaId:'unreal',areaTitle:'Unreal Systems',icon:path(l.path)?.icon||'⌘',title:l.title,meta:path(l.path)?.title||'Unreal',href:`#/lesson/${l.id}`,sourceLabel:`Open ${l.title}`,questions:(l.quiz||[]).map((q,qi)=>({question:q[0],options:q[1],correct:Array.isArray(q[2])?q[2]:[q[2]],feedback:q[3],key:`ue:${l.id}:${qi}`}))}));
+  TOOLS.tutorials.filter(t=>t.unrealHome&&(t.quiz||[]).length).forEach(t=>topics.push({id:`guide:${t.id}`,areaId:'guides',areaTitle:'Unreal Master Guides',icon:t.icon||'⌘',title:t.title,meta:t.unrealSection||'Full workflow',href:`#/tutorial/${t.id}`,sourceLabel:`Open ${t.title}`,questions:(t.quiz||[]).map((q,qi)=>({question:q.q,options:q.options,correct:[q.correct],feedback:q.feedback,key:`guide:${t.id}:${qi}`}))}));
+  THEORY.lessons.forEach(t=>topics.push({id:`theory:${t.id}`,areaId:'theory',areaTitle:'Game Design Theory',icon:t.icon||'◈',title:t.title,meta:theoryPath(t.path)?.title||'Theory',href:`#/theory/${t.id}`,sourceLabel:`Open ${t.title}`,questions:(t.quiz||[]).map((q,qi)=>({question:q.q,options:q.options,correct:[q.correct],feedback:q.feedback,key:`theory:${t.id}:${qi}`}))}));
+  CAREERS.chapters.forEach(ch=>topics.push({id:`industry:${ch.id}`,areaId:'industry',areaTitle:'Industry & Careers',icon:ch.icon||'◎',title:ch.title,meta:`Slides ${ch.slides||''}`.trim(),href:`#/industry-careers/${ch.id}`,sourceLabel:`Open ${ch.title}`,questions:(ch.quiz||[]).map((q,qi)=>({question:q.q,options:q.options,correct:[q.correct],feedback:q.feedback,key:`industry:${ch.id}:${qi}`}))}));
   DESIGN.modules.forEach(m=>topics.push({id:`design:${m.id}`,areaId:'design',areaTitle:'Designer Studio',icon:m.icon||'✦',title:m.title,meta:'Design judgement',href:`#/design/${m.id}`,sourceLabel:`Open ${m.title}`,questions:(STUDY.designRevision[m.id]||[]).map((q,qi)=>({question:q[0],options:q[1],correct:Array.isArray(q[2])?q[2]:[q[2]],feedback:q[3],key:`design:${m.id}:${qi}`}))}));
-  return topics;
+  MODEL_FOUNDATIONS.chapters.forEach(ch=>topics.push({id:`3d:${ch.id}`,areaId:'modeling',areaTitle:'3D Foundations',icon:ch.icon||'⬡',title:ch.title,meta:'Module 0',href:`#/modeling/foundations/${ch.id}`,sourceLabel:`Open ${ch.title}`,questions:(ch.quiz||[]).map((q,qi)=>({question:q.q,options:q.options,correct:[q.correct],feedback:q.feedback,key:`3d:${ch.id}:${qi}`}))}));
+  return topics.filter(t=>t.questions.length);
 }
 function revisionQuestionBank(topicIds=null){
   const selected=Array.isArray(topicIds)&&topicIds.length?new Set(topicIds):null;
@@ -2318,15 +2884,16 @@ function revisionSelectionLabel(topicIds){
   if(!topicIds?.length)return 'Random mixed';
   const topics=revisionTopics(),selected=topics.filter(t=>topicIds.includes(t.id));
   if(selected.length===1)return selected[0].title;
-  for(const area of ['unreal','design','modeling']){const all=topics.filter(t=>t.areaId===area);if(all.length===selected.length&&all.every(t=>topicIds.includes(t.id)))return all[0]?.areaTitle||'Focused area'}
+  for(const area of ['unreal','guides','theory','industry','design','modeling']){const all=topics.filter(t=>t.areaId===area);if(all.length===selected.length&&all.every(t=>topicIds.includes(t.id)))return all[0]?.areaTitle||'Focused area'}
   return `${selected.length} selected topics`;
 }
 function startRevisionQuiz(topicIds=null,count=10,label=null){
   const bank=shuffled(revisionQuestionBank(topicIds));
   if(!bank.length){toast('Choose at least one topic with revision questions.');return}
-  const wanted=[10,20,30].includes(Number(count))?Number(count):10,used=Math.min(wanted,bank.length);
+  const wanted=[5,10,20,30].includes(Number(count))?Number(count):10,used=Math.min(wanted,bank.length);
   revisionSession={topicIds:Array.isArray(topicIds)?[...topicIds]:null,topicLabel:label||revisionSelectionLabel(topicIds),requestedCount:wanted,questions:bank.slice(0,used),index:0,answers:[],finished:false};
-  route();if(used<wanted)toast(`This selection has ${used} question${used===1?'':'s'}, so the quiz uses all of them.`);
+  if(location.hash!=='#/revision')location.hash='#/revision';else route();
+  if(used<wanted)toast(`This selection has ${used} question${used===1?'':'s'}, so the quiz uses all of them.`);
 }
 function revisionScore(session){
   let correct=0;session.answers.forEach((ans,i)=>{const expected=session.questions[i].correct.slice().sort().join(','),got=[...ans].sort().join(',');if(expected===got)correct++});
@@ -2334,6 +2901,7 @@ function revisionScore(session){
 }
 function revisionAreaPicker(areaId,icon,title,subtitle){
   const topics=revisionTopics().filter(t=>t.areaId===areaId),count=topics.reduce((n,t)=>n+t.questions.length,0);
+  if(!topics.length)return '';
   return `<fieldset class="revision-path-picker revision-area-picker" data-revision-group="${areaId}"><legend><span>${icon}</span>${esc(title)}</legend><p>${esc(subtitle)}</p><label class="revision-select-path"><input type="checkbox" data-revision-group-toggle="${areaId}"> Select whole area • ${count} questions</label><div class="revision-lesson-options">${topics.map(t=>`<label><input type="checkbox" name="topicIds" value="${esc(t.id)}" data-revision-topic data-area="${areaId}"><span><strong>${esc(t.title)}</strong><small>${esc(t.meta)} • ${t.questions.length} question${t.questions.length===1?'':'s'}</small></span></label>`).join('')}</div></fieldset>`;
 }
 function revision(){
@@ -2346,9 +2914,10 @@ function revision(){
     return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Revision</div><span class="eyebrow">${esc(revisionSession.topicLabel)}</span><h1>Question ${n} of ${revisionSession.questions.length}</h1><div class="revision-progress"><span style="width:${Math.round((revisionSession.index/revisionSession.questions.length)*100)}%"></span></div></div><section class="revision-quiz-card"><span class="eyebrow">${esc(q.areaTitle)} • ${esc(q.topicTitle)}</span><h2>${esc(q.question)}</h2><p class="muted">${multiple?'Select every answer that applies.':'Choose the best answer.'}</p><form data-action-form="revision-answer" class="revision-answer-form">${q.options.map((o,i)=>`<label class="revision-choice"><input type="${multiple?'checkbox':'radio'}" name="answer" value="${i}" ${multiple?'':'required'}><span>${esc(o)}</span></label>`).join('')}<div class="button-row"><button class="button primary" type="submit">${n===revisionSession.questions.length?'Finish quiz':'Next question →'}</button><button class="button ghost" type="button" data-action="revision-abandon">Quit quiz</button></div></form></section>`;
   }
   const results=loadRevisionResults(),total=revisionQuestionBank().length,topicTotal=revisionTopics().length;
-  return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Revision</div><span class="eyebrow">Scored retrieval + design judgement</span><h1>↻ Revision Quizzes</h1><p class="muted">Practise Blueprint systems, Module 0 game-art theory and Designer Studio decisions. Choose one area to focus on or mix them for a quick retrieval session.</p></div>
-  <div class="revision-start-grid"><section class="project-panel revision-random"><span class="eyebrow">Random quiz</span><h2>Mix the whole Hub</h2><p><b>${total}</b> questions across <b>${topicTotal}</b> topics are shuffled each time.</p><form data-action-form="revision-random-start"><label>Number of questions<select name="count"><option value="10" selected>10 — quick revision</option><option value="20">20 — solid session</option><option value="30">30 — full workout</option></select></label><button class="button primary" type="submit">Start mixed quiz →</button></form></section><section class="project-panel revision-focus-intro"><span class="eyebrow">Focused quiz</span><h2>Choose what you actually need</h2><p>Pick a whole area or individual topics. Use Unreal for technical recall, 3D Foundations for game-art decisions, or Designer Studio for scenario-based judgement.</p><div class="callout good"><b>Best use:</b> revise a weak area, prepare for the next practical session, then follow the review links straight back to the content you missed.</div></section></div>
-  <section class="section revision-builder"><div class="section-head"><div><h2>Build a focused quiz</h2><p id="revisionSelectionSummary">Choose at least one topic.</p></div></div><form data-action-form="revision-focused-start" id="revisionFocusedForm"><div class="revision-path-picker-grid revision-area-picker-grid">${revisionAreaPicker('unreal','⌘','Unreal Learning','Core Blueprint/system knowledge from the existing course quizzes.')}${revisionAreaPicker('design','✦','Designer Studio','Scenario questions: choose the design decision that best solves the problem.')}${revisionAreaPicker('modeling','⬡','3D Foundations','Mesh, views, geometry, pivots, UVs, PBR and game-ready decisions.')}</div><div class="revision-builder-footer"><label>Number of questions<select name="count"><option value="10" selected>10</option><option value="20">20</option><option value="30">30</option></select></label><button class="button primary" type="submit">Start focused quiz →</button></div></form></section>
+  return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Revision</div><span class="eyebrow">RETRIEVAL • JUDGEMENT • RETURN TO THE SOURCE</span><h1>↻ Revision Quizzes</h1><p class="muted">The central revision bank now covers Unreal systems, Master Guides, Game Design Theory, Industry & Careers, Designer Studio and 3D Foundations.</p></div>
+  <section class="revision-coverage-note"><div><strong>Knowledge/judgement content gets questions.</strong><span>Core lessons, Master Guides, Theory, Industry, Designer Studio and 3D Foundations feed this revision bank.</span></div><div><strong>Practical recipes are proved by doing.</strong><span>Quick Tutorials, Max videos and Sculpt exercises do not get repetitive mini-quizzes; their pages point back to the knowledge area you should revise.</span></div></section>
+  <div class="revision-start-grid"><section class="project-panel revision-random"><span class="eyebrow">Random quiz</span><h2>Mix the whole Hub</h2><p><b>${total}</b> questions across <b>${topicTotal}</b> topics are shuffled each time.</p><form data-action-form="revision-random-start"><label>Number of questions<select name="count"><option value="10" selected>10 — quick revision</option><option value="20">20 — solid session</option><option value="30">30 — full workout</option></select></label><button class="button primary" type="submit">Start mixed quiz →</button></form></section><section class="project-panel revision-focus-intro"><span class="eyebrow">Focused quiz</span><h2>Revise the thing you just studied</h2><p>Choose one area or individual topic. Master Guide and Industry questions now sit beside the rest of the course instead of living in separate silos.</p><div class="callout good"><b>Best use:</b> study → apply → retrieve → follow the review link directly back to anything you missed.</div></section></div>
+  <section class="section revision-builder"><div class="section-head"><div><h2>Build a focused quiz</h2><p id="revisionSelectionSummary">Choose at least one topic.</p></div></div><form data-action-form="revision-focused-start" id="revisionFocusedForm"><div class="revision-path-picker-grid revision-area-picker-grid">${revisionAreaPicker('unreal','⌘','Unreal Systems','Core Blueprint/system knowledge from the course lessons.')}${revisionAreaPicker('guides','🧭','Unreal Master Guides','End-to-end workflow knowledge including Landscape, Sequencer and GitHub team collaboration.')}${revisionAreaPicker('theory','◈','Game Design Theory','Systems, choices, balance, experience, space and design-process scenarios.')}${revisionAreaPicker('industry','◎','Industry & Careers','Roles, studios, careers, evidence and industry judgement.')}${revisionAreaPicker('design','✦','Designer Studio','Scenario questions: choose the design decision that best solves the problem.')}${revisionAreaPicker('modeling','⬡','3D Foundations','Mesh, views, geometry, pivots, UVs, PBR and game-ready decisions.')}</div><div class="revision-builder-footer"><label>Number of questions<select name="count"><option value="5">5 — quick check</option><option value="10" selected>10</option><option value="20">20</option><option value="30">30</option></select></label><button class="button primary" type="submit">Start focused quiz →</button></div></form></section>
   ${results.length?`<section class="section"><div class="section-head"><div><h2>Recent scores</h2><p>Stored on this browser for quick progress checks.</p></div></div><div class="recent-quiz-results">${results.slice(0,6).map(r=>`<div><strong>${r.pct}%</strong><span>${esc(r.topicLabel)} • ${r.correct}/${r.total}</span><small>${new Date(r.at).toLocaleString()}</small></div>`).join('')}</div></section>`:''}`;
 }
 
@@ -2367,14 +2936,27 @@ function classProgressRows(o,memberIds,items,prefix='',titleKey=x=>x.title){
     return `<div class="class-content-row"><div class="class-content-name"><strong>${esc(titleKey(item))}</strong>${item.duration?`<small>${esc(item.duration)}</small>`:''}</div><div class="class-content-progress"><div class="progress"><span style="width:${pct}%"></span></div><span>${complete}/${total} complete</span></div></div>`;
   }).join('');
 }
+function classCheckpointRows(o,memberIds,items){
+  const total=memberIds.length;
+  return items.map(item=>{
+    const id=`pathway:${item.id}`;
+    const complete=memberIds.filter(uid=>o.progress.some(p=>p.user_id===uid&&p.lesson_id===id&&p.completed_at)).length;
+    const pct=total?Math.round((complete/total)*100):0;
+    return `<div class="class-content-row"><div class="class-content-name"><strong>${esc(item.title)}</strong><small>${esc(item.pathTitle||'Guided Path')} • no XP</small></div><div class="class-content-progress"><div class="progress"><span style="width:${pct}%"></span></div><span>${complete}/${total} complete</span></div></div>`;
+  }).join('');
+}
 function studentCompletedContent(o,userId){
   const completed=new Set(o.progress.filter(p=>p.user_id===userId&&p.completed).map(p=>p.lesson_id));
   const list=(items,prefix='')=>items.filter(x=>completed.has(prefix+x.id)).map(x=>`<li>${esc(x.title)}</li>`).join('');
-  const core=list(DATA.lessons),blocks=list(BLOCKS.blocks,'block:'),tutorials=list(TOOLS.tutorials,'tutorial:'),modelTheory=list(MODEL_FOUNDATIONS.chapters,'modeltheory:')+(completed.has('modelfoundation:final')?'<li>Model Doctor</li>':''),model=list(MODEL.lessons,'model:'),sculpt=list(SCULPT.practices,'sculpt:'),design=list(DESIGN.modules.map(m=>({id:m.id,title:m.build?.title||m.title})),'designbuild:'),designSources=list(designSourceItems(),'designsource:'),modelVideos=list(modelVideoItems(),'modelvideo:'),modelBuild=list(MODEL.builds||[],'modelbuild:'),modelFix=list(MODEL.fixes||[],'modelfix:'),chapters=TOOLS.chapterBuilds.filter(x=>completed.has(`chapter:${x.path}`)).map(x=>`<li>${esc(x.title)}</li>`).join('');
+  const core=list(DATA.lessons),blocks=list(BLOCKS.blocks,'block:'),tutorials=list(TOOLS.tutorials,'tutorial:'),theory=list(THEORY.lessons,'theory:'),careers=(CAREERS.chapters||[]).filter(x=>completed.has(`theory:industry-${x.id}`)).map(x=>`<li>${esc(x.title)}</li>`).join(''),modelTheory=list(MODEL_FOUNDATIONS.chapters,'modeltheory:')+(completed.has('modelfoundation:final')?'<li>Model Doctor</li>':''),model=list(MODEL.lessons,'model:'),sculpt=list(SCULPT.practices,'sculpt:'),design=list(DESIGN.modules.map(m=>({id:m.id,title:m.build?.title||m.title})),'designbuild:'),designSources=list(designSourceItems(),'designsource:'),modelVideos=list(modelVideoItems(),'modelvideo:'),modelBuild=list(MODEL.builds||[],'modelbuild:'),modelFix=list(MODEL.fixes||[],'modelfix:'),chapters=TOOLS.chapterBuilds.filter(x=>completed.has(`chapter:${x.path}`)).map(x=>`<li>${esc(x.title)}</li>`).join('');
+  const pathStatus=PATHWAYS.paths.map(p=>{const x=guidedPathProgressForStudent(p,o.progress,userId);return `<li>${p.icon} ${esc(p.title)} — ${x.done}/${x.total} (${x.pct}%)</li>`}).join('');
   return `<div class="student-content-detail">
+    <div><strong>Guided Paths</strong><ul>${pathStatus}</ul></div>
     <div><strong>Building Blocks</strong><ul>${blocks||'<li class="muted">None completed yet.</li>'}</ul></div>
     <div><strong>Core lessons</strong><ul>${core||'<li class="muted">None completed yet.</li>'}</ul></div>
     <div><strong>Practical builds</strong><ul>${tutorials||'<li class="muted">None completed yet.</li>'}</ul></div>
+    <div><strong>Game Design Theory</strong><ul>${theory||'<li class="muted">None completed yet.</li>'}</ul></div>
+    <div><strong>Industry & Careers</strong><ul>${careers||'<li class="muted">None completed yet.</li>'}</ul></div>
     <div><strong>Designer Studio</strong><ul>${design||'<li class="muted">None completed yet.</li>'}</ul></div>
     <div><strong>Designer industry sources</strong><ul>${designSources||'<li class="muted">None completed yet.</li>'}</ul></div>
     <div><strong>3D Foundations</strong><ul>${modelTheory||'<li class="muted">None completed yet.</li>'}</ul></div><div><strong>3D Videos</strong><ul>${modelVideos||'<li class="muted">None completed yet.</li>'}</ul></div><div><strong>3D / Sculpt</strong><ul>${model+modelBuild+modelFix+sculpt||'<li class="muted">None completed yet.</li>'}</ul></div>
@@ -2384,48 +2966,77 @@ function studentCompletedContent(o,userId){
 async function renderTeacherClass(classId){
   const box=$('#teacherClassContent');if(!box)return;
   try{
-    const [o,teachingClasses]=await Promise.all([BACKEND.teacherClassOverview(classId),BACKEND.getTeachingClasses()]);
+    const [o,weeklyRows]=await Promise.all([BACKEND.teacherClassOverview(classId),BACKEND.getClassLeaderboard(classId,'week').catch(()=>[])]);
     const c=(o?.classes||[]).find(x=>String(x.id)===String(classId));
     if(!c){box.innerHTML='<div class="empty"><h3>Class not found.</h3><p>You may no longer teach this class, or it may have been deleted.</p><a class="button ghost" href="#/teacher">Back to Teacher Dashboard</a></div>';return}
     const memberIds=(c.class_members||[]).map(m=>m.user_id);
-    const members=(o.profiles||[]).filter(p=>memberIds.includes(p.id));
+    const members=(o.profiles||[]).filter(p=>memberIds.includes(p.id)).sort((a,b)=>a.display_name.localeCompare(b.display_name));
     const progress=o.progress||[];
+    const careerProfileFor=uid=>progress.find(p=>p.user_id===uid&&p.lesson_id==='career:profile')?.quiz||{};
     const done=(uid,id)=>progress.some(p=>p.user_id===uid&&p.lesson_id===id&&p.completed);
     const count=(uid,items,prefix='')=>items.filter(x=>done(uid,prefix+x.id)).length;
     const teacherNames=Object.fromEntries((o.teachers||[]).map(t=>[t.id,t.display_name]));
     const teacherIds=(c.class_teachers||[]).map(t=>t.teacher_id);
+    const weeklyBy=Object.fromEntries((weeklyRows||[]).map(r=>[r.user_id,r]));
+    const lastActivity=uid=>{
+      const times=progress.filter(r=>r.user_id===uid&&(r.completed||r.completed_at||r.lesson_id==='career:profile')).map(r=>new Date(r.completed_at||r.updated_at||0).getTime()).filter(Number.isFinite);
+      return times.length?new Date(Math.max(...times)).toISOString():null;
+    };
+    const checkpointItems=[];const checkpointSeen=new Set();
+    (PATHWAYS.paths||[]).forEach(path=>path.steps.filter(x=>x.type==='checkpoint').forEach(x=>{if(!checkpointSeen.has(x.id)){checkpointSeen.add(x.id);checkpointItems.push({...x,pathTitle:path.title})}}));
     const head=document.querySelector('.class-detail-head');
-    if(head)head.innerHTML=`<div class="breadcrumb"><a href="#/teacher">Teacher Dashboard</a> / ${esc(c.name)}</div><span class="eyebrow">Class learning view • ${esc(c.academic_year||'No academic year')}</span><h1>${esc(c.name)}</h1><p class="muted">One class, its students and exactly what they have completed across the Hub. Formal project work and submissions stay in Microsoft Teams.</p><div class="class-detail-team">${teacherIds.map(id=>`<span>${esc(teacherNames[id]||'Teacher')}${id===c.teacher_id?' • Owner':''}</span>`).join('')}</div>`;
+    if(head)head.innerHTML=`<div class="breadcrumb"><a href="#/teacher">Teacher Dashboard</a> / ${esc(c.name)}</div><span class="eyebrow">Class learning view • ${esc(c.academic_year||'No academic year')}</span><h1>${esc(c.name)}</h1><p class="muted">Scan every student, then drill into exact Hub content. Formal project work and submissions stay in Microsoft Teams.</p><div class="class-detail-team">${teacherIds.map(id=>`<span>${esc(teacherNames[id]||'Teacher')}${id===c.teacher_id?' • Owner':''}</span>`).join('')}</div>`;
     const lessonTotal=DATA.lessons.length*memberIds.length;
     const lessonDone=memberIds.reduce((n,uid)=>n+count(uid,DATA.lessons),0);
     const blockTotal=BLOCKS.blocks.length*memberIds.length;
     const blockDone=memberIds.reduce((n,uid)=>n+count(uid,BLOCKS.blocks,'block:'),0);
     const tutorialTotal=TOOLS.tutorials.length*memberIds.length;
     const tutorialDone=memberIds.reduce((n,uid)=>n+count(uid,TOOLS.tutorials,'tutorial:'),0);
+    const theoryTotal=THEORY.lessons.length*memberIds.length;
+    const theoryDone=memberIds.reduce((n,uid)=>n+count(uid,THEORY.lessons,'theory:'),0);
+    const careerTotal=CAREERS.chapters.length*memberIds.length;
+    const careerDoneCount=memberIds.reduce((n,uid)=>n+CAREERS.chapters.filter(ch=>done(uid,`theory:industry-${ch.id}`)).length,0);
     const designDone=memberIds.reduce((n,uid)=>n+count(uid,DESIGN.modules.map(m=>({id:m.id})),'designbuild:'),0);
     const modelDone=memberIds.reduce((n,uid)=>n+count(uid,MODEL.lessons,'model:')+count(uid,MODEL_FOUNDATIONS.chapters,'modeltheory:')+(done(uid,'modelfoundation:final')?1:0),0);
+    const checkpointDone=memberIds.reduce((n,uid)=>n+checkpointItems.filter(x=>progress.some(r=>r.user_id===uid&&r.lesson_id===`pathway:${x.id}`&&r.completed_at)).length,0);
     box.innerHTML=`
       <div class="teacher-grid class-detail-stats">
         <div class="teacher-stat"><small>Students</small><strong>${memberIds.length}</strong></div>
         <div class="teacher-stat"><small>Building Blocks</small><strong>${blockDone}</strong><span>of ${blockTotal||0} student completions</span></div>
         <div class="teacher-stat"><small>Core lessons</small><strong>${lessonDone}</strong><span>of ${lessonTotal||0} student completions</span></div>
         <div class="teacher-stat"><small>Practical builds</small><strong>${tutorialDone}</strong><span>of ${tutorialTotal||0} student completions</span></div>
+        <div class="teacher-stat"><small>Game Design Theory</small><strong>${theoryDone}</strong><span>of ${theoryTotal||0} student completions</span></div>
+        <div class="teacher-stat"><small>Industry & Careers</small><strong>${careerDoneCount}</strong><span>of ${careerTotal||0} chapter completions</span></div>
         <div class="teacher-stat"><small>Designer builds</small><strong>${designDone}</strong></div>
         <div class="teacher-stat"><small>3D learning</small><strong>${modelDone}</strong></div>
+        <div class="teacher-stat"><small>Guided checkpoints</small><strong>${checkpointDone}</strong><span>required path evidence</span></div>
       </div>
-      <section class="section"><div class="section-head"><div><h2>Students in ${esc(c.name)}</h2><p>Open a student to see the exact content they have completed, not just a percentage.</p></div><span class="sync-chip">${members.length} student${members.length===1?'':'s'}</span></div>
+
+      <section class="section class-snapshot-section"><div class="section-head"><div><span class="eyebrow">AT-A-GLANCE</span><h2>Student learning snapshot</h2><p>The fast scan: core progress, Theory, Designer Studio, 3D, Guided Paths, this week's XP and recent activity.</p></div><a class="button small ghost" href="#/leaderboard">🏆 Full leaderboard</a></div><div class="class-snapshot-scroll"><table class="class-snapshot-table"><thead><tr><th>Student</th><th>Unreal</th><th>Theory</th><th>Industry</th><th>Designer</th><th>3D / Sculpt</th><th>Guided Paths</th><th>Week XP</th><th>Streak</th><th>Last activity</th></tr></thead><tbody>${members.map(p=>{
+        const core=count(p.id,DATA.lessons),tutorials=count(p.id,TOOLS.tutorials,'tutorial:'),chapters=count(p.id,TOOLS.chapterBuilds.map(x=>({id:x.path})),'chapter:'),theory=count(p.id,THEORY.lessons,'theory:'),career=CAREERS.chapters.filter(ch=>done(p.id,`theory:industry-${ch.id}`)).length,design=count(p.id,DESIGN.modules.map(m=>({id:m.id})),'designbuild:'),sources=count(p.id,designSourceItems(),'designsource:'),foundation=count(p.id,MODEL_FOUNDATIONS.chapters,'modeltheory:')+(done(p.id,'modelfoundation:final')?1:0),modelVideos=count(p.id,modelVideoItems(),'modelvideo:'),model=count(p.id,MODEL.lessons,'model:'),buildX=count(p.id,MODEL.builds||[],'modelbuild:'),modelFix=count(p.id,MODEL.fixes||[],'modelfix:'),sculpt=count(p.id,SCULPT.practices,'sculpt:'),xp=weeklyBy[p.id];
+        const pathChips=PATHWAYS.paths.map(path=>{const x=guidedPathProgressForStudent(path,progress,p.id);return `<span class="path-mini ${x.pct===100?'done':''}" title="${esc(path.title)}">${path.icon} ${x.pct}%</span>`}).join('');
+        return `<tr><td><strong>${esc(p.display_name)}</strong></td><td><b>${core}/${DATA.lessons.length}</b><small>${tutorials} practical • ${chapters} chapter</small></td><td><b>${theory}/${THEORY.lessons.length}</b></td><td><b>${career}/${CAREERS.chapters.length}</b><small>${esc(careerRole(careerProfileFor(p.id).targetRole)?.title||'exploring')}</small></td><td><b>${design}/${DESIGN.modules.length}</b><small>${sources} source tasks</small></td><td><b>${foundation}/${MODEL_FOUNDATIONS.chapters.length+1}</b><small>${modelVideos}/${MODEL_VIDEOS.videos.length} Max videos • ${model}/${MODEL.lessons.length} lessons • ${buildX} Build X • ${modelFix} fixes • ${sculpt} sculpt</small></td><td><div class="path-mini-row">${pathChips}</div></td><td><b>${Number(xp?.weekly_xp||0).toLocaleString()}</b></td><td>${xp?.current_streak?`🔥 ${xp.current_streak}`:'—'}</td><td><span class="teacher-activity ${lastActivity(p.id)?'active':''}">${teacherActivityLabel(lastActivity(p.id))}</span></td></tr>`;
+      }).join('')}</tbody></table></div></section>
+
+      <section class="section teacher-career-snapshot"><div class="section-head"><div><span class="eyebrow">LIVE LEVEL 4 CAREER VIEW</span><h2>Industry & Careers snapshot</h2><p>Use this while the class is working: target role, current RED gap and chosen portfolio challenge come from each student's saved Hub evidence.</p></div><a class="button small ghost" href="#/industry-careers">Open pathway</a></div><div class="teacher-career-grid">${members.map(p=>{const cp=careerProfileFor(p.id),role=careerRole(cp.targetRole),challenge=careerChallenge(cp.challenge?.id),completed=CAREERS.chapters.filter(ch=>done(p.id,`theory:industry-${ch.id}`)).length,top=Object.entries(cp.signals||{}).sort((a,b)=>b[1]-a[1])[0];const signal=top?({technical:'Technical / systems',design:'Design / player experience',visual:'Visual / craft',production:'Production / organisation'}[top[0]]||top[0]):'Not profiled';return `<article><div><strong>${esc(p.display_name)}</strong><span>${completed}/${CAREERS.chapters.length} chapters</span></div><dl><dt>Target</dt><dd>${esc(role?.title||'Exploring')}</dd><dt>Signal</dt><dd>${esc(signal)}</dd><dt>RED gap</dt><dd>${esc(cp.biggestGap||'Not identified')}</dd><dt>Challenge</dt><dd>${esc(challenge?.title||'Not selected')}</dd></dl></article>`}).join('')}</div></section>
+
+      ${teacherIndustryPulse(members,careerProfileFor)}
+
+      <section class="section"><div class="section-head"><div><h2>Student detail</h2><p>Open a student to see exact completed content and all three Guided Path percentages.</p></div><span class="sync-chip">${members.length} student${members.length===1?'':'s'}</span></div>
         <div class="class-student-grid">${members.length?members.map(p=>{
-          const core=count(p.id,DATA.lessons),blocks=count(p.id,BLOCKS.blocks,'block:'),tutorials=count(p.id,TOOLS.tutorials,'tutorial:'),design=count(p.id,DESIGN.modules.map(m=>({id:m.id})),'designbuild:'),model=count(p.id,MODEL_FOUNDATIONS.chapters,'modeltheory:')+(done(p.id,'modelfoundation:final')?1:0)+count(p.id,MODEL.lessons,'model:')+count(p.id,SCULPT.practices,'sculpt:'),chapters=count(p.id,TOOLS.chapterBuilds.map(x=>({id:x.path})),'chapter:');
-          const moveTargets=(teachingClasses||[]).filter(x=>String(x.id)!==String(c.id));
-          return `<article class="class-student-card"><div class="class-student-head">${avatarMarkup('sm',p.display_name)}<div><h3>${esc(p.display_name)}</h3><span>${core}/${DATA.lessons.length} core lessons</span></div></div><div class="class-student-stats"><span><b>${blocks}</b> blocks</span><span><b>${tutorials}</b> tutorials</span><span><b>${design}</b> design builds</span><span><b>${model}</b> 3D/sculpt</span><span><b>${chapters}</b> chapter builds</span></div><div class="class-student-actions"><div><strong>Manage student</strong><small>Moving or removing keeps their account, XP and completed learning.</small></div>${moveTargets.length?`<form class="class-student-move" data-action-form="move-class-member" data-class="${c.id}" data-student="${p.id}" data-name="${esc(p.display_name)}"><select name="targetClass" required><option value="">Move to another class…</option>${moveTargets.map(x=>`<option value="${x.id}">${esc(x.name)}${x.academic_year?` • ${esc(x.academic_year)}`:''}</option>`).join('')}</select><button class="button small" type="submit">Move</button></form>`:''}<button class="button small danger class-student-remove" data-action="remove-class-member" data-class="${c.id}" data-student="${p.id}" data-name="${esc(p.display_name)}">Remove from class</button></div><details><summary>View completed content</summary>${studentCompletedContent(o,p.id)}</details></article>`;
+          const core=count(p.id,DATA.lessons),blocks=count(p.id,BLOCKS.blocks,'block:'),tutorials=count(p.id,TOOLS.tutorials,'tutorial:'),theory=count(p.id,THEORY.lessons,'theory:'),career=CAREERS.chapters.filter(ch=>done(p.id,`theory:industry-${ch.id}`)).length,design=count(p.id,DESIGN.modules.map(m=>({id:m.id})),'designbuild:'),model=count(p.id,MODEL_FOUNDATIONS.chapters,'modeltheory:')+(done(p.id,'modelfoundation:final')?1:0)+count(p.id,MODEL.lessons,'model:')+count(p.id,SCULPT.practices,'sculpt:'),chapters=count(p.id,TOOLS.chapterBuilds.map(x=>({id:x.path})),'chapter:');
+          return `<article class="class-student-card"><div class="class-student-head">${avatarMarkup('sm',p.display_name)}<div><h3>${esc(p.display_name)}</h3><span>${core}/${DATA.lessons.length} core lessons</span></div></div><div class="class-student-stats"><span><b>${blocks}</b> blocks</span><span><b>${tutorials}</b> tutorials</span><span><b>${theory}</b> theory</span><span><b>${career}</b> industry</span><span><b>${design}</b> design builds</span><span><b>${model}</b> 3D/sculpt</span><span><b>${chapters}</b> chapter builds</span></div><details><summary>View completed content</summary>${studentCompletedContent(o,p.id)}</details></article>`;
         }).join(''):'<div class="empty"><h3>No students yet.</h3><p>Students will appear here after joining this class.</p></div>'}</div>
       </section>
-      <section class="section class-learning-content"><div class="section-head"><div><span class="eyebrow">CLASS CONTENT</span><h2>What has this class completed?</h2><p>Every row shows how many students in this class have completed that piece of Hub learning. Project briefs, deadlines and submissions are handled in Microsoft Teams.</p></div></div>
+      <section class="section class-learning-content"><div class="section-head"><div><span class="eyebrow">CLASS CONTENT</span><h2>What has this class completed?</h2><p>Every row shows how many students have completed that piece of Hub learning. Guided Path checkpoints are tracked separately because they deliberately award no XP.</p></div></div>
         <details open class="class-content-group"><summary>🧱 Building Blocks <span>${BLOCKS.blocks.length} concepts</span></summary><div>${classProgressRows(o,memberIds,BLOCKS.blocks,'block:')}</div></details>
         <details open class="class-content-group"><summary>🧠 Core System Lessons <span>${DATA.lessons.length} lessons</span></summary><div>${classProgressRows(o,memberIds,DATA.lessons)}</div></details>
         <details class="class-content-group"><summary>🛠 Practical builds <span>${TOOLS.tutorials.length} outcomes</span></summary><div>${classProgressRows(o,memberIds,TOOLS.tutorials,'tutorial:')}</div></details>
+        <details class="class-content-group"><summary>◈ Game Design Theory <span>${THEORY.lessons.length} lessons</span></summary><div>${classProgressRows(o,memberIds,THEORY.lessons,'theory:')}</div></details>
+        <details open class="class-content-group"><summary>◎ Industry & Careers <span>${CAREERS.chapters.length} chapters</span></summary><div>${classProgressRows(o,memberIds,CAREERS.chapters.map(ch=>({id:`industry-${ch.id}`,title:ch.title,duration:`Slides ${ch.slides}`})),'theory:')}</div></details>
         <details class="class-content-group"><summary>🎨 Designer Studio Builds <span>${DESIGN.modules.length} builds</span></summary><div>${classProgressRows(o,memberIds,DESIGN.modules.map(m=>({id:m.id,title:m.build?.title||m.title})),'designbuild:')}</div></details>
         <details class="class-content-group"><summary>🎬 Designer Industry Sources <span>${designSourceItems().length} source tasks</span></summary><div>${classProgressRows(o,memberIds,designSourceItems(),'designsource:')}</div></details>
+        <details class="class-content-group"><summary>↠ Guided Path Checkpoints <span>${checkpointItems.length} practical checkpoints</span></summary><div>${classCheckpointRows(o,memberIds,checkpointItems)}</div></details>
         <details class="class-content-group"><summary>🎥 3ds Max Video Series <span>${MODEL_VIDEOS.videos.length} follow-alongs</span></summary><div>${classProgressRows(o,memberIds,modelVideoItems(),'modelvideo:')}</div></details>
         <details class="class-content-group"><summary>🧠 3D Foundations <span>${MODEL_FOUNDATIONS.chapters.length} chapters + final</span></summary><div>${classProgressRows(o,memberIds,MODEL_FOUNDATIONS.chapters,'modeltheory:')}${classProgressRows(o,memberIds,[{id:'final',title:'Model Doctor'}],'modelfoundation:')}</div></details>
         <details class="class-content-group"><summary>⬡ 3D Modelling <span>${MODEL.lessons.length} lessons</span></summary><div>${classProgressRows(o,memberIds,MODEL.lessons,'model:')}</div></details>
@@ -2501,9 +3112,9 @@ function randomCritiquePost(){
 
 function leaderboardPage(){
   if(!BACKEND.user){
-    return `<div class="page-head"><div class="breadcrumb"><a href="#/">Home</a> / Leaderboard</div><span class="eyebrow">CLASS XP</span><h1>🏆 Leaderboard</h1><p class="muted">Sign in to see your class ranking, XP and streak.</p></div><div class="offline-note">Leaderboards are class-only. Sign in with your Learning Hub account to continue.</div>`;
+    return `<div class="page-head"><div class="breadcrumb"><a href="#/">Home</a> / Leaderboard</div><span class="eyebrow">HUB XP</span><h1>🏆 Leaderboard</h1><p class="muted">Sign in to see Hub-wide and class rankings, XP and streaks.</p></div><div class="offline-note">Sign in with your Learning Hub account to continue.</div>`;
   }
-  return `<div class="page-head leaderboard-page-head"><div class="breadcrumb"><a href="#/">Home</a> / Leaderboard</div><span class="eyebrow">CLASS PROGRESSION</span><h1>🏆 Leaderboard</h1><p class="muted">Useful progress earns XP. Grades and assessment marks are never ranked here.</p></div><div id="leaderboardContent"><div class="empty">Loading class leaderboard…</div></div>`;
+  return `<div class="page-head leaderboard-page-head"><div class="breadcrumb"><a href="#/">Home</a> / Leaderboard</div><span class="eyebrow">HUB + CLASS PROGRESSION</span><h1>🏆 Leaderboard</h1><p class="muted">Useful progress earns XP. Compare across the Hub or switch to one of your classes. Grades and assessment marks are never ranked here.</p></div><div id="leaderboardContent"><div class="empty">Loading leaderboard…</div></div>`;
 }
 function leaderboardTitle(levelNo){
   const n=Number(levelNo)||1;
@@ -2523,24 +3134,29 @@ async function renderLeaderboard(){
   const box=$('#leaderboardContent');if(!box||!BACKEND.user)return;
   try{
     const classes=await BACKEND.getLeaderboardClasses();
-    if(!classes.length){box.innerHTML=`<div class="empty"><h3>No class leaderboard yet.</h3><p>${isTeacher()?'Create or join a teaching class first.':'Join your class with the code from your teacher.'}</p></div>`;return}
-    if(!leaderboardClassId||!classes.some(c=>String(c.id)===String(leaderboardClassId)))leaderboardClassId=String(classes[0].id);
-    const cls=classes.find(c=>String(c.id)===String(leaderboardClassId))||classes[0];
-    const enabled=cls.leaderboard_enabled!==false;
-    if(!enabled&&!isTeacher()){
-      box.innerHTML=`<section class="leaderboard-toolbar"><label>Class<select id="leaderboardClassSelect">${classes.map(c=>`<option value="${c.id}" ${String(c.id)===String(cls.id)?'selected':''}>${esc(c.name)}</option>`).join('')}</select></label></section><div class="empty leaderboard-paused"><h3>🏆 Leaderboard paused</h3><p>Your teacher has switched the leaderboard off for this class.</p></div>`;return;
+    if(!leaderboardClassId)leaderboardClassId='all';
+    if(leaderboardClassId!=='all'&&!classes.some(c=>String(c.id)===String(leaderboardClassId)))leaderboardClassId='all';
+    const globalView=leaderboardClassId==='all';
+    const cls=globalView?null:(classes.find(c=>String(c.id)===String(leaderboardClassId))||null);
+    if(!globalView&&!cls){leaderboardClassId='all';return renderLeaderboard()}
+    const enabled=globalView?true:cls.leaderboard_enabled!==false;
+    const options=`<option value="all" ${globalView?'selected':''}>🌐 Everyone</option>${classes.map(c=>`<option value="${c.id}" ${!globalView&&String(c.id)===String(cls?.id)?'selected':''}>${esc(c.name)}${c.academic_year?' • '+esc(c.academic_year):''}</option>`).join('')}`;
+    if(!globalView&&!enabled&&!isTeacher()){
+      box.innerHTML=`<section class="leaderboard-toolbar"><label>View<select id="leaderboardClassSelect">${options}</select></label></section><div class="empty leaderboard-paused"><h3>🏆 Leaderboard paused</h3><p>Your teacher has switched the leaderboard off for this class. You can still use the Hub-wide view if you belong to another leaderboard-enabled class.</p></div>`;return;
     }
-    const rows=await BACKEND.getClassLeaderboard(cls.id,leaderboardPeriod);
+    const rows=globalView?await BACKEND.getHubLeaderboard(leaderboardPeriod):await BACKEND.getClassLeaderboard(cls.id,leaderboardPeriod);
     const me=rows.find(r=>r.user_id===BACKEND.user.id)||null;
     const top=rows.slice(0,10),podium=rows.slice(0,3);
     const improving=[...rows].sort((a,b)=>((b.weekly_xp||0)-(b.previous_week_xp||0))-((a.weekly_xp||0)-(a.previous_week_xp||0)))[0]||null;
     const active=[...rows].sort((a,b)=>(b.current_streak||0)-(a.current_streak||0))[0]||null;
+    const scopeLabel=globalView?'across the Hub':`in ${esc(cls.name)}`;
     box.innerHTML=`
-      <section class="leaderboard-toolbar"><label>Class<select id="leaderboardClassSelect">${classes.map(c=>`<option value="${c.id}" ${String(c.id)===String(cls.id)?'selected':''}>${esc(c.name)}${c.academic_year?' • '+esc(c.academic_year):''}</option>`).join('')}</select></label><div class="leaderboard-period-tabs"><button class="${leaderboardPeriod==='week'?'active':''}" data-action="leaderboard-period" data-period="week">This week</button><button class="${leaderboardPeriod==='all'?'active':''}" data-action="leaderboard-period" data-period="all">All time</button></div>${isTeacher()?`<button class="button ghost small" data-action="toggle-leaderboard" data-class="${cls.id}" data-enabled="${enabled?'1':'0'}">${enabled?'Pause for students':'Enable for students'}</button>`:''}</section>
-      ${isTeacher()&&!enabled?'<div class="teacher-security-banner"><b>LEADERBOARD PAUSED FOR STUDENTS</b><span>You can still preview it here. Students in this class cannot see rankings until you enable it again.</span></div>':''}
+      <section class="leaderboard-toolbar"><label>View<select id="leaderboardClassSelect">${options}</select></label><div class="leaderboard-period-tabs"><button class="${leaderboardPeriod==='week'?'active':''}" data-action="leaderboard-period" data-period="week">This week</button><button class="${leaderboardPeriod==='all'?'active':''}" data-action="leaderboard-period" data-period="all">All time</button></div>${isTeacher()&&!globalView?`<button class="button ghost small" data-action="toggle-leaderboard" data-class="${cls.id}" data-enabled="${enabled?'1':'0'}">${enabled?'Pause for students':'Enable for students'}</button>`:''}</section>
+      ${isTeacher()&&!globalView&&!enabled?'<div class="teacher-security-banner"><b>LEADERBOARD PAUSED FOR STUDENTS</b><span>You can still preview it here. Students in this class cannot see rankings until you enable it again.</span></div>':''}
+      ${globalView?'<div class="teacher-security-banner hub-rivalry-note"><b>🌐 HUB-WIDE RIVALRY</b><span>Each student appears once, even if they belong to more than one class. Only active, leaderboard-enabled classes feed this board.</span></div>':''}
       ${rows.length?`<section class="leaderboard-podium">${podium.map((r,i)=>`<article class="podium-card place-${i+1}"><span class="podium-medal">${leaderboardMedal(r.rank_position)}</span><span class="podium-avatar">${esc(String(r.display_name||'?').slice(0,1).toUpperCase())}</span><h3>${esc(r.display_name)}</h3><p>Level ${r.current_level} • ${esc(leaderboardTitle(r.current_level))}</p><strong>${Number(r.score_xp||0).toLocaleString()} XP</strong>${r.current_streak?`<small>🔥 ${r.current_streak} day streak</small>`:'<small>No current streak</small>'}</article>`).join('')}</section>`:''}
       <section class="leaderboard-spotlights">${improving?`<article><span>📈</span><div><small>BIGGEST PROGRESS THIS WEEK</small><strong>${esc(improving.display_name)}</strong><p>+${Math.max(0,(improving.weekly_xp||0)-(improving.previous_week_xp||0)).toLocaleString()} XP vs last week</p></div></article>`:''}${active?`<article><span>🔥</span><div><small>CURRENT STREAK</small><strong>${esc(active.display_name)}</strong><p>${active.current_streak||0} active day${Number(active.current_streak)===1?'':'s'}</p></div></article>`:''}</section>
-      <section class="section leaderboard-board"><div class="section-head"><div><h2>${leaderboardPeriod==='week'?'This week':'All-time'} Top 10</h2><p>XP comes from genuine learning progress. Repeating the same completion does not award it twice.</p></div><span class="sync-chip">${rows.length} student${rows.length===1?'':'s'}</span></div><div class="leaderboard-list">${top.map(r=>leaderboardRow(r,r.user_id===BACKEND.user.id)).join('')||'<div class="empty">No XP activity yet.</div>'}</div></section>
+      <section class="section leaderboard-board"><div class="section-head"><div><h2>${leaderboardPeriod==='week'?'This week':'All-time'} Top 10 ${scopeLabel}</h2><p>XP comes from genuine learning progress. Repeating the same completion does not award it twice.</p></div><span class="sync-chip">${rows.length} student${rows.length===1?'':'s'}</span></div><div class="leaderboard-list">${top.map(r=>leaderboardRow(r,r.user_id===BACKEND.user.id)).join('')||'<div class="empty">No XP activity yet.</div>'}</div></section>
       ${!isTeacher()&&me&&!top.some(r=>r.user_id===BACKEND.user.id)?`<section class="your-rank-card"><span class="eyebrow">YOUR POSITION</span>${leaderboardRow(me,true)}</section>`:''}
       <section class="leaderboard-rules"><span class="eyebrow">HOW XP WORKS</span><h2>Progress, not grades.</h2><div class="leaderboard-rule-grid"><span><b>Core learning</b>Uses the XP already attached to Hub lessons and chapter builds.</span><span><b>+20 XP</b>Complete an industry video/article source task in Designer Studio.</span><span><b>+15 XP</b>Meaningful structured peer critique — first 3 rewarded each day.</span><span><b>+25 XP</b>Quick Tutorial or Building Block completion.</span><span><b>+5 XP</b>First genuine activity of the day.</span><span><b>No farming</b>One reward per source/post; critique XP has a daily cap.</span></div></section>`;
   }catch(err){box.innerHTML=`<div class="empty"><h3>Could not load the leaderboard.</h3><p>${esc(err.message)}</p></div>`}
@@ -2585,6 +3201,17 @@ async function hydrateEvidencePreviews(){
   lazySignedPreview($$('[data-evidence-preview]'),{thumbnail:path=>BACKEND.openEvidenceThumbnail(path),full:path=>BACKEND.openEvidenceFile(path),alt:'Student evidence preview',fallbackText:'Preview unavailable — open file'});
 }
 
+function teacherActivityLabel(value){
+  if(!value)return 'No Hub activity yet';
+  const d=new Date(value);if(Number.isNaN(d.getTime()))return '—';
+  const diff=Math.max(0,Date.now()-d.getTime()),min=Math.floor(diff/60000),hr=Math.floor(diff/3600000),day=Math.floor(diff/86400000);
+  if(min<2)return 'Just now';
+  if(min<60)return `${min} min ago`;
+  if(hr<24)return `${hr} hr${hr===1?'':'s'} ago`;
+  if(day<7)return `${day} day${day===1?'':'s'} ago`;
+  return d.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+}
+
 async function renderTeacher(){
   const box=$('#teacherContent');if(!box)return;
   try{
@@ -2592,33 +3219,37 @@ async function renderTeacher(){
     if(!o){box.innerHTML='<div class="empty">Teacher data unavailable.</div>';return}
     const progressRows=o.progressSummary||[],progressBy=Object.fromEntries(progressRows.map(x=>[x.user_id,x]));
     const pcount=(id,key)=>Number(progressBy[id]?.[key]||0);
-    const byStudent=id=>pcount(id,'core_lessons');
-    const tutorialBy=id=>pcount(id,'tutorials');
-    const designBy=id=>pcount(id,'designer_builds');
-    const modelingBy=id=>pcount(id,'modelling');
-    const chapterBy=id=>pcount(id,'chapter_builds');
     const names=Object.fromEntries(o.profiles.map(p=>[p.id,p.display_name]));
     const teacherNames=Object.fromEntries((o.teachers||[]).map(p=>[p.id,p.display_name]));
     const recent=(o.comments||[]).slice(0,12);
     const activeClasses=(o.classes||[]).filter(c=>!c.archived);
     const archivedClasses=(o.classes||[]).filter(c=>c.archived);
+    const designSourcesTotal=designSourceItems().length;
+    const foundationsTotal=MODEL_FOUNDATIONS.chapters.length+1;
+    const pathwayCheckpointTotal=[...new Set((PATHWAYS.paths||[]).flatMap(path=>(path.steps||[]).filter(step=>step.type==='checkpoint').map(step=>step.id)))].length;
+    const sum=key=>progressRows.reduce((n,x)=>n+Number(x[key]||0),0);
+    const modelActivity=x=>Number(x.modelling_foundations||0)+Number(x.modelling_videos||0)+Number(x.modelling_lessons||0)+Number(x.modelling_builds||0)+Number(x.modelling_fixes||0)+Number(x.sculpt||0);
+    const classPulse=activeClasses.map(c=>{
+      const memberIds=(c.class_members||[]).map(m=>m.user_id),members=o.profiles.filter(p=>memberIds.includes(p.id)).sort((a,b)=>a.display_name.localeCompare(b.display_name));
+      return `<article class="teacher-class-pulse"><div class="teacher-class-pulse-head"><div><span class="eyebrow">${esc(c.academic_year||'CURRENT CLASS')}</span><h3>${esc(c.name)}</h3><p>${members.length} student${members.length===1?'':'s'} • scan progress here, open the class for exact content and Guided Path stages.</p></div><a class="button small primary" href="#/teacher/class/${c.id}">Open detailed class →</a></div>${members.length?`<div class="teacher-pulse-scroll"><table class="teacher-pulse-table"><thead><tr><th>Student</th><th>Unreal</th><th>Theory</th><th>Designer</th><th>3D / Sculpt</th><th>Guided</th><th>Last activity</th></tr></thead><tbody>${members.map(st=>{const id=st.id,pr=progressBy[id]||{};return `<tr><td><strong>${esc(st.display_name)}</strong></td><td><b>${pcount(id,'core_lessons')}/${DATA.lessons.length}</b> core<small>${pcount(id,'building_blocks')} blocks • ${pcount(id,'tutorials')} practical • ${pcount(id,'chapter_builds')} chapters</small></td><td><b>${pcount(id,'theory')}/${THEORY.lessons.length}</b><small>Game Design Theory</small></td><td><b>${pcount(id,'designer_builds')}/${DESIGN.modules.length}</b> builds<small>${pcount(id,'designer_sources')}/${designSourcesTotal} source tasks</small></td><td><b>${pcount(id,'modelling_foundations')}/${foundationsTotal}</b> foundations<small>${pcount(id,'modelling_videos')}/${MODEL_VIDEOS.videos.length} Max videos • ${pcount(id,'modelling_lessons')}/${MODEL.lessons.length} lessons • ${pcount(id,'modelling_builds')} Build X • ${pcount(id,'modelling_fixes')} fixes • ${pcount(id,'sculpt')} sculpt</small></td><td><b>${pcount(id,'pathway_checkpoints')}/${pathwayCheckpointTotal}</b><small>required checkpoints</small></td><td><span class="teacher-activity ${pr.last_activity?'active':''}">${teacherActivityLabel(pr.last_activity)}</span></td></tr>`}).join('')}</tbody></table></div>`:'<div class="empty">No students in this class yet.</div>'}</article>`;
+    }).join('');
 
-    box.innerHTML=`<div class="teacher-grid">
+    box.innerHTML=`<div class="teacher-grid teacher-command-stats">
       <div class="teacher-stat"><small>Students</small><strong>${o.profiles.length}</strong></div>
       <div class="teacher-stat"><small>Active classes</small><strong>${activeClasses.length}</strong><span>${archivedClasses.length} archived</span></div>
-      <div class="teacher-stat"><small>Lesson completions</small><strong>${progressRows.reduce((n,x)=>n+Number(x.core_lessons||0),0)}</strong></div>
-      <div class="teacher-stat"><small>Practical builds tried</small><strong>${progressRows.reduce((n,x)=>n+Number(x.tutorials||0),0)}</strong></div>
-      <div class="teacher-stat"><small>Designer builds</small><strong>${progressRows.reduce((n,x)=>n+Number(x.designer_builds||0),0)}</strong></div>
-      <div class="teacher-stat"><small>3D / Foundations</small><strong>${progressRows.reduce((n,x)=>n+Number(x.modelling||0),0)}</strong></div>
-      <div class="teacher-stat"><small>Chapter Builds complete</small><strong>${progressRows.reduce((n,x)=>n+Number(x.chapter_builds||0),0)}</strong></div>
+      <div class="teacher-stat"><small>Core lessons complete</small><strong>${sum('core_lessons')}</strong></div>
+      <div class="teacher-stat"><small>Theory complete</small><strong>${sum('theory')}</strong></div>
+      <div class="teacher-stat"><small>Designer activity</small><strong>${sum('designer_builds')+sum('designer_sources')}</strong><span>builds + source tasks</span></div>
+      <div class="teacher-stat"><small>3D / Sculpt activity</small><strong>${progressRows.reduce((n,x)=>n+modelActivity(x),0)}</strong></div>
+      <div class="teacher-stat"><small>Guided checkpoints</small><strong>${sum('pathway_checkpoints')}</strong><span>${pathwayCheckpointTotal} possible per student • no XP</span></div>
       <div class="teacher-stat"><small>Student requests</small><strong>${(o.requests||[]).length}</strong></div>
     </div>
 
-    <div class="teacher-security-banner"><b>CLASS-SCOPED PRIVACY ACTIVE</b><span>You only see learning progress and lesson comments from classes you own or co-teach. Project briefs, files and formal feedback stay in Microsoft Teams.</span></div>
+    <div class="teacher-security-banner"><b>CLASS-SCOPED PRIVACY ACTIVE</b><span>You only see learning progress and lesson comments from classes you own or co-teach. Formal project work, deadlines and submissions stay in Microsoft Teams.</span></div>
 
-    <section class="section">
-      <div class="section-head"><div><h2>Teacher team</h2><p>Invite colleagues without sharing a permanent master code. Each invite is unique, expires and can only be used once.</p></div><span class="sync-chip">${o.teachers?.length||1} teacher${(o.teachers?.length||1)===1?'':'s'}</span></div>
-      <div class="teacher-split">
+    <section class="section teacher-learning-pulse"><div class="section-head"><div><span class="eyebrow">LEARNING PULSE</span><h2>What has everyone actually done?</h2><p>One scan across Unreal, Theory, Designer Studio, 3D and Guided Path checkpoints. Open a class for the exact lessons, builds, path percentages, weekly XP and streaks.</p></div><a class="button small ghost" href="#/leaderboard">🏆 Open leaderboard</a></div><div class="teacher-class-pulse-list">${classPulse||'<div class="empty"><h3>No active classes yet.</h3><p>Create a class below, then students can join with its code.</p></div>'}</div></section>
+
+    <details class="teacher-admin-section"><summary><span>👥 Teacher team & invites</span><small>${o.teachers?.length||1} teacher${(o.teachers?.length||1)===1?'':'s'}</small></summary><section class="section teacher-admin-inner"><div class="teacher-split">
         <form class="project-panel form-grid" data-action-form="create-teacher-invite">
           <span class="eyebrow">Invite a teacher</span>
           <label>Who is it for? <span class="muted">(optional)</span><input name="label" maxlength="120" placeholder="e.g. Leah / Games teacher"></label>
@@ -2626,12 +3257,9 @@ async function renderTeacher(){
           <button class="button small primary" type="submit">Generate teacher invite</button><div id="teacherInviteResult"></div>
         </form>
         <div class="teacher-team-panel"><div class="teacher-list">${(o.teachers||[]).map(t=>`<div class="teacher-person"><span class="teacher-person-icon">T</span><div><strong>${esc(t.display_name)}</strong><small>${t.id===BACKEND.user.id?'You • Teacher':'Teacher'}</small></div></div>`).join('')||'<div class="muted">Teacher account active.</div>'}</div><div class="teacher-invite-list">${(o.teacherInvites||[]).length?(o.teacherInvites||[]).map(inv=>{const expired=new Date(inv.expires_at)<=new Date();const state=inv.used_at?'Used':inv.revoked_at?'Revoked':expired?'Expired':'Active';return `<div class="teacher-invite-row ${state.toLowerCase()}"><div><strong>${esc(inv.label||'Teacher invite')}</strong><small>Code ending ${esc(inv.code_hint)} • ${state} • expires ${new Date(inv.expires_at).toLocaleDateString()}</small></div>${state==='Active'?`<button class="button tiny ghost" data-action="revoke-teacher-invite" data-invite="${inv.id}">Revoke</button>`:''}</div>`}).join(''):'<div class="muted">No teacher invites created yet.</div>'}</div></div>
-      </div>
-    </section>
+      </div></section></details>
 
-    <section class="section">
-      <div class="section-head"><div><h2>Classes</h2><p>Classes you own or co-teach. Assigned teachers share learning-progress access; only the class owner can add/remove co-teachers or permanently delete the class.</p></div><span class="sync-chip">${activeClasses.length} active</span></div>
-      <div class="teacher-split">
+    <details class="teacher-admin-section"><summary><span>🏫 Manage classes, codes & teaching teams</span><small>${activeClasses.length} active</small></summary><section class="section teacher-admin-inner"><div class="teacher-split">
         <form class="project-panel form-grid" data-action-form="create-class"><span class="eyebrow">New class</span><label>Class name<input name="name" required maxlength="100" placeholder="Games Y1 A"></label><label>Academic year<input name="academicYear" maxlength="40" placeholder="2026/27"></label><button class="button small primary" type="submit">Create class</button></form>
         <div class="class-manager">
           ${activeClasses.length?activeClasses.map(c=>{
@@ -2640,16 +3268,13 @@ async function renderTeacher(){
               <div class="class-teaching-team"><div class="class-team-head"><small>TEACHING TEAM</small><span>${teacherIds.length} teacher${teacherIds.length===1?'':'s'}</span></div><div class="class-teacher-chips">${teacherIds.map(id=>`<div class="class-teacher-chip ${id===c.teacher_id?'owner':''}"><span>${esc(teacherNames[id]||'Teacher')}</span><small>${id===c.teacher_id?'Owner':id===BACKEND.user.id?'You • Co-teacher':'Co-teacher'}</small>${isOwner&&id!==c.teacher_id?`<button data-action="remove-class-teacher" data-class="${c.id}" data-teacher="${id}" data-name="${esc(teacherNames[id]||'Teacher')}" title="Remove co-teacher">×</button>`:''}</div>`).join('')}</div>${isOwner&&availableTeachers.length?`<form class="class-add-teacher" data-action-form="add-class-teacher" data-class="${c.id}"><select name="teacher" required><option value="">Add co-teacher…</option>${availableTeachers.map(t=>`<option value="${t.id}">${esc(t.display_name)}</option>`).join('')}</select><button class="button small" type="submit">Add teacher</button></form>`:''}</div>
               <details class="class-edit-panel"><summary>Edit class details</summary><form class="class-edit-form" data-action-form="edit-class" data-class="${c.id}"><label>Class name<input name="name" maxlength="100" value="${esc(c.name)}" required></label><label>Academic year<input name="academicYear" maxlength="40" value="${esc(c.academic_year||'')}"></label><button class="button small primary" type="submit">Save changes</button></form></details>
               <div class="class-code-panel ${c.join_enabled?'enabled':'paused'}"><div><small>STUDENT JOIN CODE</small><code>${esc(c.join_code||'—')}</code><span>${c.join_enabled?'Accepting joins':'Paused'}</span></div><div class="class-code-actions"><button class="button small ghost" data-action="copy-class-code" data-code="${esc(c.join_code||'')}">Copy</button><button class="button small ghost" data-action="toggle-class-join" data-class="${c.id}" data-enabled="${c.join_enabled?'1':'0'}">${c.join_enabled?'Pause':'Enable'}</button><button class="button small ghost" data-action="regenerate-class-code" data-class="${c.id}">New code</button></div></div>
-              <div class="class-members">${memberIds.length?memberIds.map(id=>`<div class="class-member"><span>${esc(names[id]||'Student')}</span><button data-action="remove-class-member" data-class="${c.id}" data-student="${id}" data-name="${esc(names[id]||'Student')}" title="Remove from class">×</button></div>`).join(''):'<div class="muted">No students in this class yet. Give students the join code above.</div>'}</div>
+              <div class="class-members">${memberIds.length?memberIds.map(id=>`<div class="class-member"><span>${esc(names[id]||'Student')}</span><button data-action="remove-class-member" data-class="${c.id}" data-student="${id}" title="Remove">×</button></div>`).join(''):'<div class="muted">No students in this class yet. Give students the join code above.</div>'}</div>
               ${available.length?`<form class="class-add" data-action-form="add-class-member" data-class="${c.id}"><select name="student" required><option value="">Add student already visible to you…</option>${available.map(st=>`<option value="${st.id}">${esc(st.display_name)}</option>`).join('')}</select><button class="button small" type="submit">Add</button></form>`:'<div class="muted">New students should normally join with the class code. Manual add only lists students already visible through one of your classes.</div>'}
               <div class="class-open-row"><a class="button primary class-open-button" href="#/teacher/class/${c.id}">Open class →</a><span>See this class's students and learning content.</span></div><div class="class-danger-row"><button class="button small ghost" data-action="archive-class" data-class="${c.id}" data-name="${esc(c.name)}">Archive class</button>${isOwner?`<button class="button small danger" data-action="delete-class" data-class="${c.id}" data-name="${esc(c.name)}">Delete permanently</button>`:`<button class="button small ghost" data-action="leave-class-teacher" data-class="${c.id}" data-name="${esc(c.name)}">Leave teaching team</button>`}</div></div>`;
           }).join(''):'<div class="offline-note">No active classes yet. Create your first teaching group here.</div>'}
           ${archivedClasses.length?`<details class="archived-classes"><summary>${archivedClasses.length} archived class${archivedClasses.length===1?'':'es'}</summary><div class="archived-class-list">${archivedClasses.map(c=>{const isOwner=c.teacher_id===BACKEND.user.id;return `<div class="class-card archived"><div class="class-card-head"><div><strong>${esc(c.name)}</strong><small>${esc(c.academic_year||'')} • ${isOwner?'Owner':'Co-teacher'}</small></div><span>Archived</span></div><p class="muted">Students and learning progress remain in the Hub; this class no longer accepts joins.</p><div class="class-danger-row"><button class="button small ghost" data-action="unarchive-class" data-class="${c.id}" data-name="${esc(c.name)}">Restore class</button>${isOwner?`<button class="button small danger" data-action="delete-class" data-class="${c.id}" data-name="${esc(c.name)}">Delete permanently</button>`:`<button class="button small ghost" data-action="leave-class-teacher" data-class="${c.id}" data-name="${esc(c.name)}">Leave teaching team</button>`}</div></div>`}).join('')}</div></details>`:''}
         </div>
-      </div>
-    </section>
-
-    <section class="section"><div class="section-head"><div><h2>Student overview</h2><p>Use completion to spot who needs help. Formal assessment decisions still belong in Microsoft Teams.</p></div></div><table class="teacher-table"><thead><tr><th>Student</th><th>Lessons</th><th>Tutorials</th><th>Designer</th><th>3D</th><th>Chapter Builds</th></tr></thead><tbody>${o.profiles.map(p=>`<tr><td>${esc(p.display_name)}</td><td>${byStudent(p.id)}/${DATA.lessons.length}</td><td>${tutorialBy(p.id)}/${TOOLS.tutorials.length}</td><td>${designBy(p.id)}/${DESIGN.modules.length}</td><td>${modelingBy(p.id)}</td><td>${chapterBy(p.id)}/${TOOLS.chapterBuilds.length}</td></tr>`).join('')}</tbody></table></section>
+      </div></section></details>
 
     <section class="section"><div class="section-head"><div><h2>Student roadmap</h2><p>Top student requests and ideas for what the Hub should support next.</p></div><a class="button small" href="#/requests">Open full Requests Board</a></div><div class="board-grid">${(o.requests||[]).slice().sort((a,b)=>(b.request_votes?.length||0)-(a.request_votes?.length||0)).slice(0,6).map(r=>`<div class="board-card"><span class="eyebrow">${esc(requestCategoryLabel(r.category))} • ${r.request_votes?.length||0} votes</span><h3>${esc(r.title)}</h3><p>${esc(r.body)}</p><span class="request-status ${esc(r.status)}">${esc(requestStatusLabel(r.status))}</span></div>`).join('')||'<div class="empty">No requests yet.</div>'}</div></section>
 
@@ -2667,6 +3292,29 @@ async function loadComments(id){
   }).join('');
 }
 
+
+function level4ProjectData(id){return (window.LEVEL4_SPECIALIST_PROJECTS?.projects||[]).find(p=>p.id===id)}
+function level4SpecialistHub(){
+  const data=window.LEVEL4_SPECIALIST_PROJECTS;
+  if(!data)return `<div class="empty">Level 4 project data could not load.</div>`;
+  return `<div class="level4-shell">
+    <section class="level4-hero"><div class="level4-kicker">${esc(data.intro.kicker)}</div><h1>${esc(data.intro.title)}</h1><p>${esc(data.intro.summary)}</p><div class="level4-warning"><strong>One pathway only.</strong> Choose the discipline you want to develop or show in your portfolio. The goal is one strong specialist outcome, not a quick attempt at every option.</div></section>
+    <section class="level4-choice-grid">${data.projects.map(p=>`<a class="level4-choice" href="#/level4/${p.id}"><div class="icon">${p.icon}</div><h2>${esc(p.title)}</h2><div class="role">${esc(p.role)} · ${esc(p.time)}</div><p>${esc(p.strap)}</p><div class="go">Open pathway →</div></a>`).join('')}</section>
+  </div>`;
+}
+function level4SpecialistProjectPage(id){
+ const p=level4ProjectData(id); if(!p)return notFound();
+ const visual=p.heroImage?`<figure class="level4-visual"><img src="${p.heroImage}" alt="${esc(p.heroAlt||'Reference image')}" loading="lazy"><figcaption><a href="${p.imageLink}" target="_blank" rel="noopener">${esc(p.imageCredit||'Reference image')} ↗</a></figcaption></figure>`:'';
+ const secondary=p.secondaryImage?`<figure class="level4-visual level4-secondary"><img src="${p.secondaryImage}" alt="${esc(p.secondaryAlt||'Additional process reference')}" loading="lazy"><figcaption>Process reference: plan the shot before polishing it.</figcaption></figure>`:'';
+ return `<div class="level4-shell"><a class="level4-back" href="#/level4">← Level 4 Specialist Projects</a>
+ <section class="level4-project-head ${p.heroImage?'':'no-image'}"><div class="level4-project-copy"><div class="level4-kicker">${p.icon} ${esc(p.role)}</div><h1>${esc(p.title)}</h1><div class="meta"><span class="level4-pill">Choose-one specialist task</span><span class="level4-pill">${esc(p.time)}</span></div><p class="level4-outcome"><strong>Outcome:</strong> ${esc(p.outcome)}</p></div>${visual}</section>
+ <section class="level4-section"><h2>What you will practise</h2><div class="level4-learn">${p.learn.map(x=>`<span>${esc(x)}</span>`).join('')}</div></section>
+ <section class="level4-section"><h2>Theory & professional reference</h2><div class="level4-theory">${p.theory.map(x=>`<a href="${x.url}" ${x.url.startsWith('#/')?'':'target="_blank" rel="noopener"'}>${esc(x.label)} →</a>`).join('')}</div>${secondary}</section>
+ <section class="level4-section"><h2>Step-by-step workflow</h2><div class="level4-stage-list">${p.stages.map(s=>`<article class="level4-stage"><div class="level4-stage-top"><div class="level4-stage-num">${s.n}</div><div><h3>${esc(s.title)}</h3></div></div><div class="level4-stage-grid"><div class="level4-note"><strong>Do this</strong>${esc(s.do)}</div><div class="level4-note"><strong>Why</strong>${esc(s.why)}</div><div class="level4-note"><strong>Check</strong>${esc(s.check)}</div><div class="level4-note"><strong>Common fix</strong>${esc(s.fix)}</div></div></article>`).join('')}</div></section>
+ <section class="level4-section"><h2>Definition of done</h2><div class="level4-deliver">${p.deliver.map(x=>`<div>✓ ${esc(x)}</div>`).join('')}</div></section>
+ <section class="level4-section"><h2>Stretch</h2><div class="level4-stretch">${esc(p.stretch)}</div></section></div>`;
+}
+
 function rememberCurrentRouteScroll(){
   const hash=location.hash||'#/';
   if(!hash.startsWith('#/'))return;
@@ -2681,6 +3329,10 @@ function route(options={}){
   const parts=currentHash.replace(/^#\//,'').split('/').filter(Boolean),app=$('#app');
   $$('.nav a').forEach(a=>a.classList.remove('active'));
   if(!parts.length){app.innerHTML=dashboard();activate('home')}
+  else if(parts[0]==='pathways'&&parts[1]){app.innerHTML=guidedPathPage(parts[1]);activate('pathways')}
+  else if(parts[0]==='pathways'){app.innerHTML=guidedPathsPage();activate('pathways')}
+  else if(parts[0]==='level4'&&parts[1]){app.innerHTML=level4SpecialistProjectPage(parts[1]);activate('level4')}
+  else if(parts[0]==='level4'){app.innerHTML=level4SpecialistHub();activate('level4')}
   else if(parts[0]==='programming'){app.innerHTML=programmingPage();activate('programming')}
   else if(parts[0]==='blocks'){app.innerHTML=blocksPage();activate('blocks')}
   else if(parts[0]==='block'&&parts[1]){app.innerHTML=blockPage(parts[1]);activate('blocks')}
@@ -2693,8 +3345,8 @@ function route(options={}){
   else if(parts[0]==='critique'){app.innerHTML=critiquePage();activate('critique')}
   else if(parts[0]==='progress'){app.innerHTML=progressPage();activate('progress')}
   else if(parts[0]==='requests'){app.innerHTML=requestBoard();activate('requests')}
-  else if(parts[0]==='skill-mission'&&parts[1]){app.innerHTML=skillMissionPage(parts[1],parts[2]);activate('programming')}
   else if(parts[0]==='challenges'){app.innerHTML=challengeBoard();activate('challenges')}
+  else if(parts[0]==='homework'&&parts[1]){app.innerHTML=homeworkPathPage(parts[1]);activate('homework')}
   else if(parts[0]==='homework'){app.innerHTML=homeworkBoard();activate('homework')}
   else if(parts[0]==='sculpt'){app.innerHTML=sculptPage(parts[1]);activate('sculpt')}
   else if(parts[0]==='modeling'&&parts[1]==='videos'){app.innerHTML=modelingVideosPage();activate('modeling')}
@@ -2705,13 +3357,19 @@ function route(options={}){
   else if(parts[0]==='modeling'&&parts[1]==='build'&&parts[2]){app.innerHTML=modelingBuildPage(parts[2]);activate('modeling')}
   else if(parts[0]==='modeling'&&parts[1]==='fix'&&parts[2]){app.innerHTML=modelingFixPage(parts[2]);activate('modeling')}
   else if(parts[0]==='modeling'){app.innerHTML=modelingPage();activate('modeling')}
+  else if(parts[0]==='industry-careers'&&parts[1]){app.innerHTML=careerChapterPage(parts[1]);activate('industry-careers')}
+  else if(parts[0]==='industry-careers'){app.innerHTML=careerHubPage();activate('industry-careers')}
+  else if(parts[0]==='theory'&&parts[1]){app.innerHTML=theoryLessonPage(parts[1]);activate('theory')}
+  else if(parts[0]==='theory'){app.innerHTML=theoryPage();activate('theory')}
+  else if(parts[0]==='unreal-designer'&&parts[1]){app.innerHTML=unrealDesignerTrackPage(parts[1]);activate('unreal-designer')}
+  else if(parts[0]==='unreal-designer'){app.innerHTML=unrealDesignerPage();activate('unreal-designer')}
   else if(parts[0]==='design'&&parts[1]){app.innerHTML=designModulePage(parts[1]);activate('design')}
   else if(parts[0]==='design'){app.innerHTML=designPage();activate('design')}
   else if(parts[0]==='resources'){app.innerHTML=resourceLibraryPage();activate('resources')}
   else if(parts[0]==='tutorials'){app.innerHTML=tutorialLibrary();activate('tutorials')}
   else if(parts[0]==='snippets'){app.innerHTML=snippetBankPage();activate('snippets')}
   else if(parts[0]==='tutorial-family'&&parts[1]){app.innerHTML=tutorialFamilyPage(parts[1]);activate('tutorials')}
-  else if(parts[0]==='tutorial'&&parts[1]){app.innerHTML=tutorialPage(parts[1]);activate('tutorials')}
+  else if(parts[0]==='tutorial'&&parts[1]){const t=tutorial(parts[1]);app.innerHTML=tutorialPage(parts[1]);activate(t?.studioProject?'design':t?.unrealHome?'programming':t?.designModule?'unreal-designer':'tutorials')}
   else if(parts[0]==='chapter-build'&&parts[1]){app.innerHTML=chapterBuildPage(parts[1]);activate('tutorials')}
   else if(parts[0]==='revision'){app.innerHTML=revision();activate('revision')}
   else if(parts[0]==='glossary'){app.innerHTML=glossary();activate('glossary')}
@@ -2729,6 +3387,7 @@ function route(options={}){
   app.focus({preventScroll:true});
   $('#sidebar').classList.remove('open');
 
+  if(!parts.length&&BACKEND.user) renderHomeLeaderboardPreview();
   if(parts[0]==='lesson'&&BACKEND.user)loadComments(parts[1]);
   if(parts[0]==='news') loadNewsFeed();
   if(parts[0]==='leaderboard'&&BACKEND.user) renderLeaderboard();
@@ -2826,6 +3485,13 @@ function bindNewsPage(){
   }));
 }
 function bindPageInputs(){
+  const ts=$('#theorySearch');
+  if(ts){
+    let area='all';
+    const apply=()=>{const q=normaliseSearchText(ts.value),tokens=q.split(/\s+/).filter(Boolean);let visible=0;$$('[data-theory-card]').forEach(x=>{const okArea=area==='all'||x.dataset.path===area,hay=x.dataset.search||'',okText=!tokens.length||tokens.every(t=>hay.includes(t)),ok=okArea&&okText;x.style.display=ok?'':'none';if(ok)visible++;});const out=$('#theoryResultCount');if(out)out.textContent=`${visible} lesson${visible===1?'':'s'}`;const empty=$('#theorySearchEmpty');if(empty)empty.hidden=visible!==0;};
+    bindEmbeddedSearchInput(ts,apply,()=>firstVisible('[data-theory-card]')?.scrollIntoView({block:'center',behavior:'smooth'}));
+    $$('[data-theory-filter]').forEach(btn=>btn.addEventListener('click',()=>{$$('[data-theory-filter]').forEach(x=>x.classList.remove('active'));btn.classList.add('active');area=btn.dataset.theoryFilter||'all';apply();}));
+  }
   const gs=$('#glossarySearch');
   if(gs){
     let area='all';
@@ -2852,6 +3518,21 @@ async function copyHomework(id){
   const steps=item.steps?.length?`\n\nSuggested steps:\n${item.steps.map((x,i)=>`${i+1}. ${x}`).join('\n')}`:'';
   const text=`${item.title}\n\nTask:\n${item.task}${steps}\n\nEvidence:\n${item.evidence}\n\nStretch:\n${item.stretch}\n\nRelated Hub area: ${item.areaLabel}\nReference: ${item.meta}`;
   try{await navigator.clipboard.writeText(text);toast('Independent-study task copied — ready for Teams.')}catch(e){toast('Clipboard blocked by browser.')}
+}
+
+async function copyHomeworkPath(id){
+  const path=homeworkPath(id);if(!path)return;
+  const hubBase=`${location.origin}${location.pathname}`;
+  const pathUrl=`${hubBase}#/homework/${path.id}`;
+  const lines=[`${path.title} — Guided Homework Path`,`${path.time}`,'',path.summary,'',`Follow the live path: ${pathUrl}`,''];
+  path.steps.forEach((s,i)=>{
+    lines.push(`${i+1}. ${s.label} — ${s.title}`,s.body);
+    if(s.href)lines.push(`Open: ${hubBase}${s.href}`);
+    else if(s.revisionTopic)lines.push(`Check: ${hubBase}#/revision — use the focused ${s.title} check from the homework path.`);
+    lines.push('');
+  });
+  lines.push('Bring this evidence back to the next lesson unless Teams says otherwise.','The Hub is for learning/practice; Teams remains the formal submission/deadline space.');
+  try{await navigator.clipboard.writeText(lines.join('\n'));toast('Guided homework path copied — links included for Teams.')}catch(e){toast('Clipboard blocked by browser.')}
 }
 
 function localUnlockedBadgeIds(){return new Set(achievementData(0,0).filter(a=>a[3]).map(a=>a[0]))}
@@ -2936,6 +3617,38 @@ async function setSculptComplete(id){
   state.sculptCompleted=was?(state.sculptCompleted||[]).filter(x=>x!==id):[...new Set([...(state.sculptCompleted||[]),id])];saveState();
   if(BACKEND.user){try{await BACKEND.setLessonComplete(`sculpt:${id}`,!was)}catch(e){toast('Saved locally; cloud sync failed.')}}
   if(was)toast('Sculpt exercise marked incomplete.');else badgeUnlockAfter(before,`🗿 Sculpt exercise complete • +${p.xp} XP`);finishInlineUpdate(!was);
+}
+async function setPathwayCheckpointComplete(id){
+  const clean=String(id||'').trim();if(!clean)return;const was=pathCheckpointDone(clean);
+  state.pathwayCheckpoints=was?(state.pathwayCheckpoints||[]).filter(x=>x!==clean):[...new Set([...(state.pathwayCheckpoints||[]),clean])];saveState();
+  if(BACKEND.user){try{await BACKEND.setPathwayCheckpointComplete(clean,!was)}catch(e){toast('Saved locally; cloud sync failed.')}}
+  toast(was?'Pathway checkpoint marked incomplete.':'Pathway checkpoint complete ✓');finishInlineUpdate(!was);
+}
+
+async function setStudioStepComplete(tutorialId,index){
+  const t=tutorial(tutorialId),i=Number(index);if(!t?.studioProject||!Number.isInteger(i))return;
+  if(!studioStageUnlocked(t,i)){toast('Finish the previous stage first.');return}
+  const key=studioStageKey(t.id,i);
+  if(!studioStageDone(t,i)){
+    state.studioStepCompleted=[...new Set([...(state.studioStepCompleted||[]),key])];saveState();
+    if(BACKEND.user){try{await BACKEND.setStudioStepComplete(key,true)}catch(e){toast('Stage saved locally; cloud sync failed.')}}
+  }
+  const final=i===studioStageCount(t)-1;
+  if(final){
+    if(!tutorialDone(t.id)){
+      const before=localUnlockedBadgeIds();
+      state.tutorialCompleted=[...new Set([...(state.tutorialCompleted||[]),t.id])];saveState();
+      if(BACKEND.user){try{await BACKEND.setLessonComplete(`tutorial:${t.id}`,true)}catch(e){toast('Project saved locally; cloud sync failed.')}}
+      badgeUnlockAfter(before,'Studio project complete ✓');
+    }
+    studioStageView={tutorialId:t.id,index:i};
+    toast('The Last Light complete ✓');
+  }else{
+    studioStageView={tutorialId:t.id,index:i+1};
+    toast(`${t.studioFlow?.[i+1]?.label||'Next stage'} unlocked ✓`);
+  }
+  route({preserveScroll:true});
+  requestAnimationFrame(()=>document.getElementById('studioStagePanel')?.scrollIntoView({behavior:'smooth',block:'start'}));
 }
 
 async function setMechanicStatus(id,status){
@@ -3179,13 +3892,70 @@ document.addEventListener('click',async e=>{
     iframe.referrerPolicy='strict-origin-when-cross-origin';
     shell.replaceChildren(iframe);
   }
+  else if(a==='load-theory-video'){
+    const stage=b.closest('[data-theory-watch-stage]');
+    if(!stage)return;
+    const id=String(b.dataset.youtube||'');
+    if(!/^[A-Za-z0-9_-]{6,20}$/.test(id)){toast('Video source was blocked for safety.');return}
+    const src=safeVideoEmbed(`https://www.youtube-nocookie.com/embed/${id}?rel=0&modestbranding=1`);
+    if(!src){toast('Video source was blocked for safety.');return}
+    const iframe=document.createElement('iframe');
+    iframe.className='theory-watch-iframe';
+    iframe.src=src;
+    iframe.title=b.dataset.title||'Game Design Theory video';
+    iframe.loading='lazy';
+    iframe.allow='accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen';
+    iframe.setAttribute('allowfullscreen','');
+    iframe.referrerPolicy='strict-origin-when-cross-origin';
+    stage.classList.add('loaded');
+    stage.replaceChildren(iframe);
+  }
+  else if(a==='career-industry-belief'){
+    const ch=careerChapter('industry'),q=(ch?.realityChecks||[]).find(x=>x.id===b.dataset.belief);if(!q)return;
+    const choice=Number(b.dataset.choice);if(!Number.isInteger(choice)||choice<0||choice>=q.options.length)return;
+    const p=careerProfile(),current=p.industryBeliefs||{};if(current[q.id]&&Number.isInteger(Number(current[q.id].choice))){toast('Your first instinct is already saved — that is the point of this activity.');return}
+    const next={...current,[q.id]:{choice,correct:choice===q.correct,at:new Date().toISOString()}};
+    await saveCareerProfileData({industryBeliefs:next},choice===q.correct?'Strong first call saved.':'First instinct saved — getting caught is useful here.');
+    route({preserveScroll:true});
+  }
+  else if(a==='career-industry-debate'){
+    const d=careerChapter('industry')?.industryDebate;if(!d)return;const stage=b.dataset.stage,choice=Number(b.dataset.choice);if(!['before','after'].includes(stage)||!Number.isInteger(choice)||choice<0||choice>=d.options.length)return;
+    const p=careerProfile(),current=p.industryDebate||{};if(current[stage]!==undefined&&current[stage]!==null){toast('That first position is already saved.');return}
+    if(stage==='after'&&(current.before===undefined||current.before===null)){toast('Choose your first position before adding the extra context.');return}
+    await saveCareerProfileData({industryDebate:{...current,[stage]:choice,[`${stage}At`]:new Date().toISOString()}},stage==='before'?'First position saved — now add the power dynamic.':'Second position saved — compare what changed.');
+    route({preserveScroll:true});
+  }
+  else if(a==='career-role-interest'){
+    const role=b.dataset.role,interest=b.dataset.interest;if(!careerRole(role)||!['definite','maybe','no'].includes(interest))return;
+    const p=careerProfile(),next={...(p.roleInterests||{}),[role]:interest};
+    await saveCareerProfileData({roleInterests:next},`${careerRole(role).title}: ${interest==='definite'?'definitely interested':interest==='maybe'?'maybe':'not for me'} saved.`);route({preserveScroll:true});
+  }
+  else if(a==='career-story-choice'){
+    const st=(CAREERS.stories||[]).find(x=>x.id===b.dataset.story);if(!st)return;const choice=Number(b.dataset.choice),card=b.closest('[data-career-story]'),out=card?.querySelector('[data-story-reveal]');if(!out)return;
+    out.hidden=false;out.className=`career-story-reveal ${choice===st.correct?'correct':'consider'}`;out.innerHTML=`<b>${choice===st.correct?'✓ Strong call':'↻ Useful prediction — now compare'}</b><p>${esc(st.reveal)}</p>`;
+    card.querySelectorAll('[data-action="career-story-choice"]').forEach(x=>x.disabled=true);
+    const p=careerProfile(),storyChoices={...(p.storyChoices||{}),[st.id]:{choice,at:new Date().toISOString()}};
+    await saveCareerProfileData({storyChoices},'Prediction saved — now decide what the career story means for you.');
+  }
+  else if(a==='career-select-challenge'){
+    const ch=careerChallenge(b.dataset.challenge);if(!ch)return;const p=careerProfile();await saveCareerProfileData({challenge:{...(p.challenge||{}),id:ch.id,status:'selected'}},`${ch.title} selected.`);route({preserveScroll:true});
+  }
+  else if(a==='career-copy-summary'){
+    try{await navigator.clipboard.writeText(careerSummaryText());toast('Career summary copied — use it as a starting structure, not a finished submission.')}catch(err){toast('Clipboard blocked by the browser.')}
+  }
   else if(a==='close-image'){closeImageLightbox();}
   else if(a==='scroll'){document.getElementById(b.dataset.target)?.scrollIntoView({behavior:'smooth',block:'start'});}
   else if(a==='complete') await setLessonComplete(b.dataset.lesson);
   else if(a==='complete-block') await setBlockComplete(b.dataset.block);
   else if(a==='block-filter'){blocksTier=b.dataset.tier||'core';route();}
+  else if(a==='open-studio-assets'){
+    const shelf=document.getElementById('studioAssetShelf');if(shelf){shelf.open=true;shelf.scrollIntoView({behavior:'smooth',block:'start'});}
+  }
+  else if(a==='studio-stage-open'){
+    const t=tutorial(b.dataset.tutorial),i=Number(b.dataset.stage);if(t?.studioProject&&studioStageUnlocked(t,i)){studioStageView={tutorialId:t.id,index:i};route({preserveScroll:true});requestAnimationFrame(()=>document.getElementById('studioStagePanel')?.scrollIntoView({behavior:'smooth',block:'start'}));}
+  }
+  else if(a==='complete-studio-step') await setStudioStepComplete(b.dataset.tutorial,b.dataset.stage);
   else if(a==='complete-tutorial') await setTutorialComplete(b.dataset.tutorial);
-  else if(a==='complete-skill-stage') completeSkillMissionStage(b.dataset.mission,b.dataset.stage);
   else if(a==='complete-chapter-build') await setChapterBuildComplete(b.dataset.path);
   else if(a==='complete-design-build') await setDesignBuildComplete(b.dataset.designModule);
   else if(a==='complete-design-source') await setDesignSourceComplete(b.dataset.sourceKey);
@@ -3194,6 +3964,7 @@ document.addEventListener('click',async e=>{
   else if(a==='complete-model-build') await setModelBuildComplete(b.dataset.modelBuild);
   else if(a==='complete-model-fix') await setModelFixComplete(b.dataset.modelFix);
   else if(a==='complete-sculpt') await setSculptComplete(b.dataset.sculpt);
+  else if(a==='complete-pathway-checkpoint') await setPathwayCheckpointComplete(b.dataset.checkpoint);
   else if(a==='quiz'){
     const l=lesson(b.dataset.lesson),qi=+b.dataset.q,oi=+b.dataset.o,q=l.quiz[qi],wrap=b.closest('.quiz');
     $$('.quiz-option',wrap).forEach(x=>x.disabled=true);
@@ -3206,6 +3977,8 @@ document.addEventListener('click',async e=>{
     if(!$$('.hint',wrap).some(x=>!x.classList.contains('show')))b.textContent='All hints revealed';
   }
   else if(a==='copy-homework') await copyHomework(b.dataset.studyHomework||b.dataset.lesson);
+  else if(a==='copy-homework-path') await copyHomeworkPath(b.dataset.homeworkPath);
+  else if(a==='revision-topic-start') startRevisionQuiz([b.dataset.revisionTopicId],Number(b.dataset.revisionCount||5));
   else if(a==='mode'){lessonMode=b.dataset.mode;route();}
   else if(a==='avatar-glyph'){profilePrefs.glyph=b.dataset.glyph||'⌘';saveProfilePrefs();renderAuth();}
   else if(a==='avatar-theme'){profilePrefs.theme=b.dataset.theme||'violet';saveProfilePrefs();renderAuth();}
@@ -3358,15 +4131,8 @@ document.addEventListener('click',async e=>{
     refreshNotificationCount();
   }
   else if(a==='remove-class-member'){
-    const classId=b.dataset.class,name=b.dataset.name||'this student';
-    if(confirm(`Remove ${name} from this class?
-
-Their account, XP and completed learning will be kept.`)){
-      try{
-        await BACKEND.removeClassMember(classId,b.dataset.student);
-        if(location.hash===`#/teacher/class/${classId}`)await renderTeacherClass(classId);else await renderTeacher();
-        toast('Student removed from class.');
-      }catch(err){toast(err.message)}
+    if(confirm('Remove this student from the class?')){
+      try{await BACKEND.removeClassMember(b.dataset.class,b.dataset.student);await renderTeacher();toast('Student removed from class.')}catch(err){toast(err.message)}
     }
   }
   else if(a==='signout'){await BACKEND.signOut();closeAuth();toast('Signed out. Local progress remains on this browser.');route();}
@@ -3390,7 +4156,61 @@ document.addEventListener('submit',async e=>{
     toast('That brief is over the 6,000 character limit. Shorten it before saving.');
     return;
   }
-  if(e.target.dataset.actionForm==='model-theory-quiz'){
+  if(e.target.dataset.actionForm==='career-industry-belief-reflection'){
+    e.preventDefault();const fd=new FormData(e.target);await saveCareerProfileData({industryBeliefReflection:String(fd.get('reflection')||'').trim()},'Industry reflection saved.');route({preserveScroll:true});return;
+  }
+  if(e.target.dataset.actionForm==='career-industry-debate-reflection'){
+    e.preventDefault();const fd=new FormData(e.target),p=careerProfile();await saveCareerProfileData({industryDebate:{...(p.industryDebate||{}),reflection:String(fd.get('reflection')||'').trim()}},'Debate reasoning saved.');route({preserveScroll:true});return;
+  }
+  if(e.target.dataset.actionForm==='career-industry'){
+    e.preventDefault();const fd=new FormData(e.target);await saveCareerProfileData({industryEvidence:{game:String(fd.get('game')||'').trim(),developer:String(fd.get('developer')||'').trim(),publisher:String(fd.get('publisher')||'').trim(),engine:String(fd.get('engine')||'').trim(),external:String(fd.get('external')||'').trim(),conclusion:String(fd.get('conclusion')||'').trim(),cluster:String(fd.get('cluster')||'').trim(),clusterStudios:String(fd.get('clusterStudios')||'').trim(),clusterInsight:String(fd.get('clusterInsight')||'').trim()}},'Industry evidence saved.');route({preserveScroll:true});return;
+  }
+  if(e.target.dataset.actionForm==='career-reflection'){
+    e.preventDefault();const fd=new FormData(e.target),signals={technical:0,design:0,visual:0,production:0},answers=[];
+    for(let i=0;i<CAREERS.reflectionQuestions.length;i++){const raw=fd.get(`r${i}`);if(raw===null){toast('Answer every reflection question first.');return}const oi=Number(raw),opt=CAREERS.reflectionQuestions[i].options[oi];answers.push(oi);if(opt?.[1] in signals)signals[opt[1]]++}
+    await saveCareerProfileData({reflection:{completed:true,answers,at:new Date().toISOString()},signals},'Work-style snapshot saved — now challenge it with your actual evidence.');route({preserveScroll:true});return;
+  }
+  if(e.target.dataset.actionForm==='career-skills'){
+    e.preventDefault();const fd=new FormData(e.target),hardSkills=CAREERS.hardSkills.map((name,i)=>({name,level:Number(fd.get(`hard_level_${i}`)||0),evidence:String(fd.get(`hard_evidence_${i}`)||'').trim()})),softSkills=CAREERS.softSkills.map((name,i)=>({name,level:Number(fd.get(`soft_level_${i}`)||0),evidence:String(fd.get(`soft_evidence_${i}`)||'').trim()}));await saveCareerProfileData({hardSkills,softSkills},'Hard + soft skills evidence saved.');route({preserveScroll:true});return;
+  }
+  if(e.target.dataset.actionForm==='career-peer'){
+    e.preventDefault();const fd=new FormData(e.target);await saveCareerProfileData({peerFeedback:{strength:String(fd.get('strength')||'').trim(),improve:String(fd.get('improve')||'').trim(),naturalRole:String(fd.get('naturalRole')||'').trim()}},'Peer reality check saved.');route({preserveScroll:true});return;
+  }
+  if(e.target.dataset.actionForm==='career-story-lesson'){
+    e.preventDefault();const fd=new FormData(e.target);await saveCareerProfileData({careerStoryLesson:String(fd.get('lesson')||'').trim()},'Career-story lesson saved.');route({preserveScroll:true});return;
+  }
+  if(e.target.dataset.actionForm==='career-target-role'){
+    e.preventDefault();const fd=new FormData(e.target),role=String(fd.get('targetRole')||'');if(!careerRole(role)){toast('Choose a specific role first.');return}await saveCareerProfileData({targetRole:role,targetReason:String(fd.get('targetReason')||'').trim()},`${careerRole(role).title} saved as your current working target — you can change it later.`);route({preserveScroll:true});return;
+  }
+  if(e.target.dataset.actionForm==='career-vacancies'){
+    e.preventDefault();const fd=new FormData(e.target),vacancies=[0,1,2].map(i=>({company:String(fd.get(`company_${i}`)||'').trim(),title:String(fd.get(`title_${i}`)||'').trim(),url:String(fd.get(`url_${i}`)||'').trim(),hard:String(fd.get(`hard_${i}`)||'').trim(),soft:String(fd.get(`soft_${i}`)||'').trim(),notes:String(fd.get(`notes_${i}`)||'').trim()}));await saveCareerProfileData({vacancies},'Three vacancy snapshots saved.');route({preserveScroll:true});return;
+  }
+  if(e.target.dataset.actionForm==='career-gap'){
+    e.preventDefault();const fd=new FormData(e.target),trafficLights=[0,1,2,3,4].map(i=>({requirement:String(fd.get(`req_${i}`)||'').trim(),status:String(fd.get(`status_${i}`)||''),evidence:String(fd.get(`evidence_${i}`)||'').trim()})).filter(x=>x.requirement);await saveCareerProfileData({trafficLights,biggestGap:String(fd.get('biggestGap')||'').trim()},'Green / Amber / Red evidence saved.');route({preserveScroll:true});return;
+  }
+  if(e.target.dataset.actionForm==='career-challenge-requirement'){
+    e.preventDefault();const p=careerProfile();if(!p.challenge?.id){toast('Choose a portfolio challenge first.');return}const fd=new FormData(e.target);await saveCareerProfileData({challenge:{...p.challenge,requirement:String(fd.get('requirement')||'').trim(),scopeCut:String(fd.get('scopeCut')||'').trim(),status:'selected'}},'Portfolio challenge purpose saved.');route({preserveScroll:true});return;
+  }
+  if(e.target.dataset.actionForm==='career-goals'){
+    e.preventDefault();const fd=new FormData(e.target);await saveCareerProfileData({goals:{sixMonth:String(fd.get('sixMonth')||'').trim(),twelveMonth:String(fd.get('twelveMonth')||'').trim(),twentyFourMonth:String(fd.get('twentyFourMonth')||'').trim()}},'6 / 12 / 24-month career plan saved.');route({preserveScroll:true});return;
+  }
+  if(e.target.dataset.actionForm==='career-quiz'){
+    e.preventDefault();const ch=careerChapter(e.target.dataset.career);if(!ch)return;const req=careerRequirementStatus(ch);
+    const fd=new FormData(e.target),answers=ch.quiz.map((_,i)=>{const v=fd.get(`q${i}`);return v===null?NaN:Number(v)});if(answers.some(Number.isNaN)){toast('Answer every question first.');return}
+    const correct=ch.quiz.reduce((n,q,i)=>n+(answers[i]===q.correct?1:0),0),total=ch.quiz.length,pct=Math.round(correct/total*100),old=careerScore(ch.id),bestPct=Math.max(old?.bestPct||old?.pct||0,pct),passed=pct>=CAREERS.passPercent,firstPass=passed&&req.ready&&!careerDone(ch.id),before=firstPass?localUnlockedBadgeIds():null;
+    state.careerScores={...(state.careerScores||{}),[ch.id]:{answers,correct,total,pct,bestPct,at:new Date().toISOString()}};if(firstPass)state.careerCompleted=[...new Set([...(state.careerCompleted||[]),ch.id])];saveState();if(firstPass&&BACKEND.user){try{await BACKEND.setLessonComplete(`theory:industry-${ch.id}`,true)}catch(err){toast('Passed locally; cloud sync failed.')}}if(firstPass){badgeUnlockAfter(before,`Industry & Careers chapter passed • +${CAREERS.xp} XP`);finishInlineUpdate(true)}else if(passed&&!req.ready){toast(`Quiz passed — finish the Hub checkpoint to complete the chapter: ${req.label}`);route({preserveScroll:true})}else{toast(passed?'Passed again — XP was already awarded.':`${pct}% — review the scenario feedback and retry.`);route({preserveScroll:true})}return;
+  }
+  if(e.target.dataset.actionForm==='theory-quiz'){
+    e.preventDefault();const l=theoryLesson(e.target.dataset.theory);if(!l)return;
+    const fd=new FormData(e.target),answers=l.quiz.map((_,i)=>{const v=fd.get(`q${i}`);return v===null?NaN:Number(v)});
+    if(answers.some(Number.isNaN)){toast('Answer every question first.');return}
+    const correct=l.quiz.reduce((n,q,i)=>n+(answers[i]===q.correct?1:0),0),total=l.quiz.length,pct=Math.round(correct/total*100),old=theoryScore(l.id),bestPct=Math.max(old?.bestPct||old?.pct||0,pct),passed=pct>=THEORY.passPercent,firstPass=passed&&!theoryDone(l.id),before=firstPass?localUnlockedBadgeIds():null;
+    state.theoryScores={...(state.theoryScores||{}),[l.id]:{answers,correct,total,pct,bestPct,at:new Date().toISOString()}};
+    if(firstPass)state.theoryCompleted=[...new Set([...(state.theoryCompleted||[]),l.id])];saveState();
+    if(firstPass&&BACKEND.user){try{await BACKEND.setLessonComplete(`theory:${l.id}`,true)}catch(err){toast('Passed locally; cloud sync failed.')}}
+    if(firstPass){badgeUnlockAfter(before,`Theory lesson passed • +${THEORY.xp} XP`);finishInlineUpdate(true)}else{toast(passed?'Passed again — XP was already awarded.':`${pct}% — review the scenario feedback and retry.`);route({preserveScroll:true})}return;
+  }
+    if(e.target.dataset.actionForm==='model-theory-quiz'){
     e.preventDefault();const ch=modelTheoryChapter(e.target.dataset.chapter);if(!ch)return;
     const fd=new FormData(e.target),answers=ch.quiz.map((_,i)=>{const v=fd.get(`q${i}`);return v===null?NaN:Number(v)});
     if(answers.some(Number.isNaN)){toast('Answer every question first.');return}
@@ -3695,20 +4515,6 @@ document.addEventListener('submit',async e=>{
     const fd=new FormData(e.target);
     try{await BACKEND.addClassMember(e.target.dataset.class,fd.get('student'));toast('Student added to class.');await renderTeacher()}catch(err){toast(err.message)}
   }
-  if(e.target.dataset.actionForm==='move-class-member'){
-    e.preventDefault();
-    const fd=new FormData(e.target),fromClass=e.target.dataset.class,student=e.target.dataset.student,targetClass=String(fd.get('targetClass')||''),name=e.target.dataset.name||'this student';
-    const select=e.target.elements.targetClass,targetName=select?.selectedOptions?.[0]?.textContent?.trim()||'the selected class';
-    if(!targetClass){toast('Choose a destination class.');return}
-    if(!confirm(`Move ${name} to ${targetName}?
-
-Their account, XP and completed learning will be kept.`))return;
-    try{
-      await BACKEND.moveClassMember(fromClass,targetClass,student);
-      toast(`${name} moved to ${targetName}.`);
-      if(location.hash===`#/teacher/class/${fromClass}`)await renderTeacherClass(fromClass);else await renderTeacher();
-    }catch(err){toast(err.message)}
-  }
   if(e.target.dataset.actionForm==='review-evidence'){
     e.preventDefault();
     const fd=new FormData(e.target),status=e.submitter?.dataset.status;
@@ -3781,17 +4587,23 @@ function buildGlobalSearchIndex(){
     title:l.title,meta:`Unreal Learning • ${l.projectTask?.name||path(l.path)?.title||'Core lesson'}`,
     href:`#/lesson/${l.id}`,icon:'◇',kind:'lesson',data:deepSearchText(l)
   }));
-  (SKILL_MISSIONS.missions||[]).forEach(m=>add({
-    title:m.title,meta:`${m.discipline||'Programmer'} Skill Mission • ${m.duration||'Guided solo build'}`,href:`#/skill-mission/${m.id}/${m.stages?.[skillMissionNextIndex(m)]?.id||m.stages?.[0]?.id||''}`,icon:m.icon||'⌘',kind:'skill-mission',data:deepSearchText(m)
-  }));
   (TOOLS.families||[]).forEach(f=>add({
     title:f.title,meta:`Quick Tutorial family • ${familyTutorials(f).length} build${familyTutorials(f).length===1?'':'s'} • ${tutorialCategory(f.category)?.title||'UE5'}`,
     href:familyHref(f),icon:f.icon||'🛠',kind:'tutorial-family',data:deepSearchText({...f,outcomes:familyTutorials(f)})
   }));
   (TOOLS.tutorials||[]).forEach(t=>{const f=t.familyId?tutorialFamily(t.familyId):null;add({
-    title:t.title,meta:t.libraryHidden?`Core lesson application • ${lesson(t.lessonHome||t.referenceLesson)?.title||'Unreal Learning'}`:`Practical build • ${f?.title||tutorialCategory(t.category)?.title||'UE5'} • ${t.duration||''}`,
-    href:`#/tutorial/${t.id}`,icon:'🛠',kind:'tutorial',data:deepSearchText(t)
+    title:t.title,meta:t.unrealHome?`Unreal Learning • ${t.unrealSection||'Engine Workflow'} • ${t.duration||''}`:t.libraryHidden?`Core lesson application • ${lesson(t.lessonHome||t.referenceLesson)?.title||'Unreal Learning'}`:`Practical build • ${f?.title||tutorialCategory(t.category)?.title||'UE5'} • ${t.duration||''}`,
+    href:`#/tutorial/${t.id}`,icon:t.unrealHome?(t.icon||'⌘'):'🛠',kind:'tutorial',data:deepSearchText(t)
   })});
+  (THEORY.lessons||[]).forEach(t=>add({
+    title:t.title,meta:`Game Design Theory • ${theoryPath(t.path)?.title||'Theory'} • +${THEORY.xp} XP`,href:`#/theory/${t.id}`,icon:t.icon||'◈',kind:'theory',data:deepSearchText(t)
+  }));
+  (CAREERS.chapters||[]).forEach(ch=>add({title:ch.title,meta:`Industry & Careers • Level 4 • Chapter ${ch.order}`,href:`#/industry-careers/${ch.id}`,icon:ch.icon||'◎',kind:'career',data:deepSearchText(ch)}));
+  (CAREERS.roles||[]).forEach(r=>add({title:r.title,meta:`Industry & Careers • ${r.discipline} role`,href:'#/industry-careers/people',icon:r.icon||'◉',kind:'career-role',data:deepSearchText(r)}));
+  (PATHWAYS.paths||[]).forEach(p=>add({title:p.title,meta:'Guided Path • optional route through existing Hub content',href:`#/pathways/${p.id}`,icon:p.icon||'↠',kind:'guided-path',data:deepSearchText(p)}));
+  homeworkPaths().forEach(p=>add({title:`Homework: ${p.title}`,meta:`Guided Homework • ${p.time} • Learn → Do → Check → Bring Back`,href:`#/homework/${p.id}`,icon:p.icon||'⌂',kind:'homework-path',data:deepSearchText(p)}));
+  (UNREAL_DESIGNER.tracks||[]).forEach(t=>{const m=designModule(t.moduleId);add({title:`Unreal Designer: ${t.shortTitle||m?.title||t.id}`,meta:'Unreal Designer • Theory → Engine → Test → Evidence',href:`#/unreal-designer/${t.id}`,icon:t.icon||'⚙',kind:'unreal-designer',data:deepSearchText({...t,module:m})})});
+  (UNREAL_DESIGNER.expansionTracks||[]).forEach(t=>add({title:`Unreal Designer: ${t.title}`,meta:`Unreal Designer • ${t.status||'Growing track'}`,href:'#/unreal-designer',icon:t.icon||'⚙',kind:'unreal-designer-next',data:deepSearchText(t)}));
   (DESIGN.modules||[]).forEach(m=>add({
     title:m.title,meta:'Designer Studio • Discipline',href:`#/design/${m.id}`,icon:m.icon||'◆',kind:'design',data:deepSearchText(m)
   }));
@@ -3826,17 +4638,22 @@ function buildGlobalSearchIndex(){
   }));
 
   [
+    ['Guided Paths','Optional outcome-based routes through Theory, Unreal, Designer Studio and 3D without locking the rest of the Hub','#/pathways','↠'],
     ['Unreal Learning','Core lessons, learning paths and practical Unreal Engine progression','#/programming','◇'],
     ['Blueprint Snippet Bank','Official Epic paste assists and reusable Blueprint graph helpers','#/snippets','⚡'],
     ['Quick Tutorials','Recipe families and practical UE5 build outcomes','#/tutorials','🛠'],
+    ['Game Design Theory','Core loops, MDA, agency, choices, balance, pacing, accessibility, prototyping, playtesting and adaptation','#/theory','◈'],
+    ['Industry & Careers','Level 4 games industry roles, hard and soft skills, career evidence, vacancies and portfolio planning','#/industry-careers','◎'],
     ['Designer Studio','Level design, lighting, materials, terrain, cinematic and environment design','#/design','◆'],
     ['Critique Board','Class studio wall, screenshots, peer feedback, structured critique and improvement','#/critique','💬'],
     ['Resource Library','Free assets, CC0 textures, HDRIs, sound libraries, level explorers, UI reference, documentaries and professional talks','#/resources','🧰'],
     ['3D Modelling Studio','3ds Max modelling lessons, builds, video series and topology repair','#/modeling','⬡'],
     ["Dits' 3ds Max Video Series",'14 follow-along videos covering interface, primitives, Editable Poly, modifiers, Array, mini builds and materials','#/modeling/videos','🎬'],
     ['Glossary','Unreal Engine, game design and 3D modelling terminology','#/glossary','?'],
-    ['Revision Quizzes','Mixed Unreal, Designer Studio and 3D Foundations knowledge checks','#/revision','↻'],
-    ['Homework','Independent study across Unreal, design and 3D with Teams-ready task copy','#/homework','⌂']
+    ['Revision Quizzes','Focused and mixed checks across Unreal systems, Master Guides, Game Design Theory, Industry & Careers, Designer Studio and 3D Foundations','#/revision','↻'],
+    ['Homework','Guided Learn → Do → Check → Bring Back routes across Unreal, Landscape, Sequencer, Theory, Industry and 3D','#/homework','⌂'],
+    ['GitHub + Unreal Team Workflow','GitHub Desktop version control two-person team collaboration clone commit push pull Unreal project asset ownership conflict safety','#/tutorial/github-unreal-team-workflow','🔀'],
+    ['Power Jam Programmer: Maps, Switches & Doors','Blueprint programming power map switch door PowerStates ActivatePower HasPower Instance Editable overlap cast branch POWER_A POWER_B pair jam programmer','#/tutorial/power-jam-programmer','⚡']
   ].forEach(([title,data,href,icon])=>add({title,meta:'Hub area',href,icon,kind:'area',data}));
   return entries;
 }
@@ -3858,9 +4675,9 @@ function scoreSearchEntry(entry,q,tokens){
 function setupSearch(){
   const input=$('#globalSearch'),panel=$('#searchPanel');
   if(!input||!panel)return;
-  const index=buildGlobalSearchIndex();
   const render=()=>{
     const q=normaliseSearchText(input.value);
+    const index=buildGlobalSearchIndex();
     if(!q){panel.hidden=true;panel.innerHTML='';return}
     const tokens=q.split(' ').filter(Boolean);
     const rows=index
@@ -3887,9 +4704,9 @@ function setupSearch(){
 $('#menuButton').addEventListener('click',()=>$('#sidebar').classList.toggle('open'));
 $('#resetProgress').addEventListener('click',()=>{
   if(confirm('Reset all locally saved lesson progress, XP and game-project status on this browser?')){
-    state={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],designSourceCompleted:[],modelVideoCompleted:[],modelTheoryCompleted:[],modelTheoryScores:{},modelFoundationFinal:false,modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[],blockCompleted:[]};
+    state={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],designSourceCompleted:[],theoryCompleted:[],theoryScores:{},careerCompleted:[],careerScores:{},careerProfile:{version:1,updatedAt:null,roleInterests:{},signals:{},hardSkills:[],softSkills:[],vacancies:[],trafficLights:[],goals:{},industryBeliefs:{},industryDebate:{}},modelVideoCompleted:[],modelTheoryCompleted:[],modelTheoryScores:{},modelFoundationFinal:false,modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[],blockCompleted:[],pathwayCheckpoints:[],studioStepCompleted:[]};
     projectState={project_title:'Signal Lost',theme:PROJECT.themes[0],pitch:'',mechanics:{}};
-    saveState();saveProjectState();localStorage.removeItem(SKILL_MISSION_STORE);route();toast('Local progress reset.');
+    saveState();saveProjectState();route();toast('Local progress reset.');
   }
 });
 $('#authModal').addEventListener('click',e=>{if(e.target===$('#authModal'))closeAuth()});
