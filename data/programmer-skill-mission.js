@@ -1,5 +1,5 @@
 window.UE5_SKILL_MISSIONS = {
-  "version": "3.57.4",
+  "version": "3.58.3",
   "missions": [
     {
       "id": "arrays-maps-escape-room",
@@ -3861,6 +3861,739 @@ window.UE5_SKILL_MISSIONS = {
         {
           "label": "Functions, Custom Events & Macros — theory",
           "href": "#/block/functions-events-macros"
+        }
+      ]
+    },
+    {
+      "id": "blueprint-interfaces-interaction",
+      "sequence": 4,
+      "requiresMission": "functions-reusable-logic",
+      "discipline": "Programmer",
+      "icon": "⇄",
+      "title": "Stop Casting Everything: Blueprint Interfaces",
+      "subtitle": "Turn the same Escape Room into a deliberate press-E interaction system where different Blueprints communicate through shared Interface contracts instead of type-specific Cast chains.",
+      "duration": "3–5 hours",
+      "difficulty": "Guided solo architecture upgrade",
+      "summary": "Your Escape Room now has good data and reusable Functions, but the world objects still need to know too much about specific Blueprint classes. Replace that tight coupling with Blueprint Interfaces. The player will look at an object and press E, send one Interact Interface Message to anything interactable, and the Battery, Generator, Exit, Maintenance Door and a new Console will each respond in their own way. A second Interface lets those objects ask the player for inventory and power services without casting to BP_ThirdPersonCharacter.",
+      "skills": [
+        "Blueprint Interfaces",
+        "Interface functions",
+        "Implemented Interfaces",
+        "Interface Messages",
+        "Does Object Implement Interface",
+        "Line Trace interaction",
+        "Loose coupling",
+        "Actor communication",
+        "Inputs / outputs",
+        "Refactoring"
+      ],
+      "rules": [
+        "Continue the same Escape Room from Missions 1–3.",
+        "Interfaces define what an object can do; the implementing Blueprint decides how it does it.",
+        "From the refactor stages onward, do not solve communication by adding new Cast To BP_ThirdPersonCharacter or Cast To specific interactable nodes.",
+        "Convert and test one object at a time. Do not delete the old overlap path until the new Interface interaction works."
+      ],
+      "gameFlow": [
+        "Audit casts",
+        "Create BPI_Interactable",
+        "Press E + trace",
+        "First Interface implementation",
+        "Create BPI_PlayerGameplay",
+        "Convert pickups",
+        "Convert Generator",
+        "Convert both doors",
+        "Add new interactable",
+        "Full no-cast test"
+      ],
+      "stages": [
+        {
+          "id": "start",
+          "number": 0,
+          "title": "Start Here — Find the Communication Problem",
+          "goal": "Prove Mission 3 still works, then identify where the Character and world Actors are too tightly connected through casts and overlap-specific logic.",
+          "why": "Blueprint Interfaces solve a communication problem. You should first see the problem: several different Actors need to communicate, but each graph currently knows the exact class it is talking to.",
+          "steps": [
+            {
+              "title": "Open the same working project",
+              "where": "Unreal Engine → EscapeRoom project → LV_EscapeRoom",
+              "do": "Open the project from Missions 1–3 and File → Save All. Confirm ST_ItemData, DT_ItemData, BP_ItemPickup, BP_Generator, BP_ExitDoor, BP_MaintenanceDoor and the Mission 3 Character Functions still exist.",
+              "check": "The project opens with the complete Mission 3 architecture intact.",
+              "why": "Mission 4 changes communication, not the data or Function systems you already made."
+            },
+            {
+              "title": "Run a complete baseline play-through",
+              "where": "LV_EscapeRoom → Play",
+              "do": "Start normally → collect Battery → power Generator → collect Fuse → open Maintenance Door → collect ExitKey → open Exit → reach Win screen. Press I at least once to prove PrintInventory still works.",
+              "check": "Every Mission 3 feature works before you touch communication code.",
+              "why": "A known-good baseline tells you whether a later failure was introduced by this mission."
+            },
+            {
+              "title": "Find your world-to-player casts",
+              "where": "BP_ItemPickup, BP_Generator, BP_ExitDoor, BP_MaintenanceDoor",
+              "do": "Locate every Cast To BP_ThirdPersonCharacter used by those world Actors. Do not delete them yet. Count how many different Actors need to know the exact Character class.",
+              "check": "You can point to the type-specific communication you are about to replace.",
+              "why": "A cast is useful when you genuinely need a specific type, but repeating it across many unrelated interactables creates tight coupling."
+            },
+            {
+              "title": "Notice the interaction problem",
+              "where": "Battery/pickup, Generator and doors in Play mode",
+              "do": "Notice that important actions currently happen because the player walks into collision. Decide what should become deliberate: picking up an item, using the Generator and opening doors will all respond to one Interact command.",
+              "check": "You can describe the new player rule: look at an interactable object and press E.",
+              "why": "One common interaction request is a perfect use case for an Interface."
+            },
+            {
+              "title": "Keep the old paths for safety",
+              "where": "Affected Blueprints",
+              "do": "Do not remove overlap logic yet. You will disable/delete each old path only after its Interface replacement has passed a Play test.",
+              "check": "The baseline still compiles and runs.",
+              "why": "Safe refactoring preserves working behaviour until the replacement is proven."
+            }
+          ],
+          "test": [
+            "Mission 3 still completes.",
+            "You found the existing Character casts in the world Actors.",
+            "You can explain why one shared Interact request would be cleaner than separate object-specific interaction code."
+          ],
+          "doneWhen": "You have a working Mission 3 game and a clear list of the communication paths Mission 4 will replace.",
+          "common": [
+            "Do not delete casts before the replacement works.",
+            "Do not start a new project; the value of this mission is refactoring the same game.",
+            "Do not confuse a Blueprint Interface with a Blueprint Function Library—the Interface is a contract implemented by different objects."
+          ]
+        },
+        {
+          "id": "interactable-interface",
+          "number": 1,
+          "title": "Create BPI_Interactable — One Contract for Many Objects",
+          "goal": "Create a Blueprint Interface containing one Interact function that any world Actor can implement differently.",
+          "why": "The player should not need to know whether it is looking at a Battery, Generator, Door or Console. It only needs to know whether that object supports Interact.",
+          "steps": [
+            {
+              "title": "Create the Interface asset",
+              "where": "Content Drawer → Data/Blueprints folder → Add (+) → Blueprints → Blueprint Interface",
+              "do": "Create a Blueprint Interface named BPI_Interactable and open it.",
+              "check": "The asset opens in the Blueprint Interface editor rather than a normal Actor Blueprint.",
+              "why": "A Blueprint Interface contains function signatures that other Blueprints agree to implement."
+            },
+            {
+              "title": "Rename the Interface function",
+              "where": "BPI_Interactable → My Blueprint → Functions",
+              "do": "Rename the default function to Interact.",
+              "check": "BPI_Interactable contains a function named Interact.",
+              "why": "The function name describes the capability all implementing objects will share."
+            },
+            {
+              "title": "Add the Interactor input",
+              "where": "BPI_Interactable → select Interact → Details → Inputs",
+              "do": "Add one Input named Interactor. Set its type to Actor Object Reference.",
+              "check": "Interact accepts one Actor reference called Interactor and has no output values.",
+              "why": "The receiving object may need to communicate back to whoever initiated the interaction without knowing that object's exact class."
+            },
+            {
+              "title": "Save and inspect the Interface",
+              "where": "BPI_Interactable",
+              "do": "Compile/Save if available. Notice that the Interface does not contain gameplay implementation, components or ordinary state variables.",
+              "check": "You have only defined Interact(Interactor); you have not built what Battery/Generator/Door should do.",
+              "why": "The Interface declares the common contract. Each implementing Blueprint supplies its own behaviour."
+            },
+            {
+              "title": "Write the rule in your own words",
+              "where": "Your notes / verbal check",
+              "do": "Be able to state: If an Actor implements BPI_Interactable, the player can send it the Interact message. Different Actors can respond differently.",
+              "check": "You can explain the difference between the shared function name and each object's implementation.",
+              "why": "Understanding the contract is more important than memorising the menu path."
+            }
+          ],
+          "flow": [
+            "BPI_Interactable",
+            "Interact(Interactor)",
+            "implemented by many different Actor classes"
+          ],
+          "test": [
+            "BPI_Interactable exists.",
+            "It contains Interact.",
+            "Interact has an Actor input named Interactor.",
+            "No object-specific gameplay is written inside the Interface asset."
+          ],
+          "doneWhen": "BPI_Interactable defines one shared Interact(Interactor) contract ready to be implemented by unrelated world Actors.",
+          "common": [
+            "Create Blueprint Interface, not Blueprint Function Library.",
+            "Use Actor Object Reference for Interactor.",
+            "Do not try to add a Static Mesh, variables or full gameplay graph to the Interface asset."
+          ]
+        },
+        {
+          "id": "player-interact-trace",
+          "number": 2,
+          "title": "Make the Player Send an Interface Message",
+          "goal": "Create one press-E camera trace that finds the object being looked at and sends Interact as an Interface Message if that object implements BPI_Interactable.",
+          "why": "The player interaction code should stay the same no matter how many different interactable classes you add later.",
+          "steps": [
+            {
+              "title": "Add the E interaction event",
+              "where": "BP_ThirdPersonCharacter → Event Graph",
+              "do": "Add a Keyboard E event. Keep this mission focused on Interfaces; you do not need to rebuild your Enhanced Input setup just for this exercise.",
+              "check": "Pressing E can trigger one new execution chain in the Character.",
+              "why": "One input will become the universal request to interact with whatever the player is looking at."
+            },
+            {
+              "title": "Create the trace Start",
+              "where": "BP_ThirdPersonCharacter → Event Graph",
+              "do": "Drag the FollowCamera component into the graph → Get World Location. Use that Vector as the Start for a Line Trace By Channel.",
+              "check": "The trace Start comes from the camera rather than the Character's feet.",
+              "why": "The interaction should follow where the player is looking."
+            },
+            {
+              "title": "Create the trace End",
+              "where": "BP_ThirdPersonCharacter → Event Graph",
+              "do": "From FollowCamera get Forward Vector → multiply Vector by Float 500 → add the result to the camera World Location. Connect the final Vector to Line Trace End.",
+              "check": "End = Camera Location + (Camera Forward Vector × 500).",
+              "why": "A 500 cm trace gives a short deliberate interaction range instead of activating distant objects."
+            },
+            {
+              "title": "Configure the trace for testing",
+              "where": "Line Trace By Channel node",
+              "do": "Use Trace Channel = Visibility. Leave Ignore Self enabled if available. Set Draw Debug Type = For Duration while building this stage.",
+              "check": "Pressing E draws a short debug line from the camera into the scene.",
+              "why": "Seeing the trace is the fastest way to diagnose range/direction problems."
+            },
+            {
+              "title": "Break the hit",
+              "where": "After Line Trace By Channel",
+              "do": "Branch from the Line Trace Return Value. From True → Break Hit Result → take Hit Actor.",
+              "check": "Nothing after the Branch runs when the trace misses; when it hits, you have an Actor reference to the target.",
+              "why": "The Interface Message needs a target object."
+            },
+            {
+              "title": "Ask whether the target supports the Interface",
+              "where": "After Break Hit Result → Hit Actor",
+              "do": "From Hit Actor search Does Object Implement Interface. Set Interface to BPI_Interactable. Connect the result to a Branch.",
+              "check": "The graph can distinguish interactable Actors from ordinary scenery.",
+              "why": "This gives beginner-friendly explicit feedback/control before sending the Interface Message."
+            },
+            {
+              "title": "Send Interact as a Message",
+              "where": "True output of the Interface-check Branch",
+              "do": "From Hit Actor call Interact (Message)—use the Interface Message/envelope version. Connect Hit Actor to Target. Connect Self from the Character to Interactor.",
+              "check": "The Character graph ends in a generic BPI_Interactable message, not a Cast to any specific target class.",
+              "why": "A Message can target a generic Actor reference; the implementing object decides what Interact means."
+            }
+          ],
+          "flow": [
+            "E",
+            "camera Location + Forward×500",
+            "Line Trace Visibility",
+            "Hit Actor",
+            "implements BPI_Interactable?",
+            "Interact Message(Target=Hit Actor, Interactor=Self)"
+          ],
+          "test": [
+            "E draws the trace.",
+            "Scenery can be hit without causing an interaction error.",
+            "No Cast To BP_Generator/BP_ItemPickup/door appears in this interaction chain."
+          ],
+          "doneWhen": "The Character has one class-agnostic E interaction caller ready for any Actor that implements BPI_Interactable.",
+          "common": [
+            "If the line points from the wrong place, use FollowCamera World Location/Forward Vector.",
+            "If you cannot see the debug trace, make sure E fires and Draw Debug Type is For Duration.",
+            "If the trace passes through an object, that object's collision must block the Visibility trace channel.",
+            "Choose Interact (Message) when calling through the generic Hit Actor reference."
+          ]
+        },
+        {
+          "id": "first-implementation",
+          "number": 3,
+          "title": "First Proof — Make a Console Respond to the Same Message",
+          "goal": "Create a completely new Actor that implements BPI_Interactable and responds to E without changing the Character graph.",
+          "why": "Before refactoring important game systems, prove that the Interface caller really works on a harmless object.",
+          "steps": [
+            {
+              "title": "Create a Training Console Actor",
+              "where": "Content Drawer → Blueprint Class → Actor",
+              "do": "Create BP_TrainingConsole. Add a Static Mesh (a cube is fine) and make it large enough to look at easily.",
+              "check": "BP_TrainingConsole can be placed in the room.",
+              "why": "A disposable proof object lets you validate the architecture before touching working puzzle logic."
+            },
+            {
+              "title": "Make sure the trace can hit it",
+              "where": "BP_TrainingConsole → Static Mesh → Details → Collision",
+              "do": "Use collision that allows the mesh to block the Visibility trace channel. If you use a separate collision component, make it Query Only and set Visibility to Block so it detects the trace without becoming an invisible physical wall.",
+              "check": "The E debug trace visibly stops on the Console rather than passing through it.",
+              "why": "An Interface cannot help if the trace never finds the Actor."
+            },
+            {
+              "title": "Implement the Interface",
+              "where": "BP_TrainingConsole → Class Settings → Interfaces → Implemented Interfaces",
+              "do": "Add BPI_Interactable, then Compile.",
+              "check": "BPI_Interactable appears under Implemented Interfaces.",
+              "why": "This declares that the Console supports the Interact contract."
+            },
+            {
+              "title": "Add the Interface event",
+              "where": "BP_TrainingConsole → Event Graph → right-click / Interfaces section",
+              "do": "Add Event Interact from BPI_Interactable. From the event Print String: INTERFACE WORKS — Console activated.",
+              "check": "The event is the Interface implementation for this Actor class.",
+              "why": "The Console decides what Interact means for itself."
+            },
+            {
+              "title": "Test without editing the Character",
+              "where": "LV_EscapeRoom → place BP_TrainingConsole → Play",
+              "do": "Look at the Console and press E. Do not add a Cast or Console-specific branch to BP_ThirdPersonCharacter.",
+              "check": "The Console prints its message. Looking at ordinary scenery and pressing E does nothing.",
+              "why": "The same Character code can now communicate with a class it never explicitly names."
+            }
+          ],
+          "test": [
+            "Console blocks the trace.",
+            "Console implements BPI_Interactable.",
+            "E triggers Event Interact on the Console.",
+            "Character contains no BP_TrainingConsole-specific logic."
+          ],
+          "doneWhen": "A new Actor responds to the universal interaction message without any caller-side class knowledge.",
+          "common": [
+            "Compile after adding the Interface before looking for Event Interact.",
+            "If Event Interact does not appear, confirm BPI_Interactable is listed in Class Settings.",
+            "If the event exists but never fires, test Visibility collision with the debug trace first."
+          ]
+        },
+        {
+          "id": "player-services",
+          "number": 4,
+          "title": "Create BPI_PlayerGameplay — Talk Back Without Casting",
+          "goal": "Create a second Interface that exposes the player services world objects need: inventory checks, item changes, item data and power state.",
+          "why": "BPI_Interactable removes target-specific casts from the player, but the Generator and doors still need to ask the Interactor about inventory/power. A player-facing contract removes the Cast in the opposite direction too.",
+          "steps": [
+            {
+              "title": "Create the second Interface",
+              "where": "Content Drawer → Add (+) → Blueprints → Blueprint Interface",
+              "do": "Create BPI_PlayerGameplay.",
+              "check": "A second Interface asset exists beside BPI_Interactable.",
+              "why": "This contract represents services a gameplay-capable player can provide to world objects."
+            },
+            {
+              "title": "Add HasItem",
+              "where": "BPI_PlayerGameplay",
+              "do": "Create function HasItem. Input RequiredItem = Name. Output HasItem = Boolean.",
+              "check": "The signature can ask about any DT_ItemData row name without referencing the Character class.",
+              "why": "World objects need inventory checks without direct access to InventoryRows."
+            },
+            {
+              "title": "Add AddItem",
+              "where": "BPI_PlayerGameplay",
+              "do": "Create function AddItem. Input ItemRow = Name. No output required.",
+              "check": "The Interface declares a way to request an inventory addition.",
+              "why": "Generic pickups need to give items to an Interactor without casting."
+            },
+            {
+              "title": "Add RemoveItem",
+              "where": "BPI_PlayerGameplay",
+              "do": "Create function RemoveItem. Input ItemRow = Name. Output Removed = Boolean.",
+              "check": "The contract can request a consumable/key removal and report whether it succeeded.",
+              "why": "Generator and Maintenance Door already rely on the Mission 3 RemoveItem behaviour."
+            },
+            {
+              "title": "Add GetItemData",
+              "where": "BPI_PlayerGameplay",
+              "do": "Create function GetItemData. Input ItemRow = Name. Output ItemData = ST_ItemData and Found = Boolean.",
+              "check": "The Interface uses the Struct made in Mission 2.",
+              "why": "Pickups can retrieve DisplayName/PickupMessage through the player's existing data service instead of duplicating table access."
+            },
+            {
+              "title": "Add power functions",
+              "where": "BPI_PlayerGameplay",
+              "do": "Create GetPowerOn with Boolean output PowerOn. Create SetPowerOn with Boolean input NewPowerOn.",
+              "check": "World objects can read/change the small piece of game state they genuinely need.",
+              "why": "The Generator and powered doors should not need the concrete Character type."
+            },
+            {
+              "title": "Implement BPI_PlayerGameplay on the Character",
+              "where": "BP_ThirdPersonCharacter → Class Settings → Implemented Interfaces",
+              "do": "Add BPI_PlayerGameplay and Compile.",
+              "check": "The Character now promises to provide every function in the player gameplay contract.",
+              "why": "The Interface signature alone does nothing until a Blueprint implements it."
+            },
+            {
+              "title": "Wire Interface functions into your Mission 3 logic",
+              "where": "BP_ThirdPersonCharacter → Interfaces / Event Graph",
+              "do": "Implement each Interface function by reusing/calling your existing Mission 3 Functions and variables: HasItem → HasItem Function; AddItem → AddItem Function; RemoveItem → RemoveItem Function; GetItemData → GetItemData Function; GetPowerOn → return PowerOn; SetPowerOn → set PowerOn.",
+              "check": "The Interface implementations are thin adapters around working systems rather than duplicate inventory logic.",
+              "why": "Mission 3 Functions remain the single source of gameplay logic; the Interface changes how other Actors reach them."
+            }
+          ],
+          "flow": [
+            "world Actor",
+            "BPI_PlayerGameplay Message",
+            "Character Interface implementation",
+            "existing Mission 3 Function/state"
+          ],
+          "test": [
+            "BPI_PlayerGameplay contains all six contracts.",
+            "Character implements it.",
+            "Interface implementations reuse existing Functions/state.",
+            "No inventory Array was moved into the Interface asset."
+          ],
+          "doneWhen": "World Actors have a capability-based route to player inventory/data/power services without requiring BP_ThirdPersonCharacter.",
+          "common": [
+            "BPI_PlayerGameplay is a contract, not a place to store InventoryRows.",
+            "Match Name/Boolean/ST_ItemData pin types exactly.",
+            "Do not rewrite HasItem/AddItem/RemoveItem logic inside each Interface implementation; call the Mission 3 Function you already proved."
+          ]
+        },
+        {
+          "id": "convert-pickups",
+          "number": 5,
+          "title": "Convert BP_ItemPickup — Press E to Collect Without a Character Cast",
+          "goal": "Make every data-driven pickup implement BPI_Interactable and use BPI_PlayerGameplay Messages on its Interactor rather than Cast To BP_ThirdPersonCharacter.",
+          "why": "One generic pickup Blueprint is already data-driven. Interfaces now make its communication generic too.",
+          "steps": [
+            {
+              "title": "Implement the world interaction Interface",
+              "where": "BP_ItemPickup → Class Settings",
+              "do": "Add BPI_Interactable → Compile → add Event Interact to the Event Graph.",
+              "check": "BP_ItemPickup can receive the same Interact message as the Training Console.",
+              "why": "All placed Battery/Coin/Fuse/etc. pickup instances share the same class, so one implementation upgrades them all."
+            },
+            {
+              "title": "Remove the pickup Cast from the new path",
+              "where": "BP_ItemPickup → Event Interact",
+              "do": "Do NOT Cast Interactor to BP_ThirdPersonCharacter. Instead call Does Object Implement Interface on Interactor with BPI_PlayerGameplay → Branch.",
+              "check": "The pickup asks whether the interacting Actor supports the services it needs.",
+              "why": "The pickup cares about capabilities, not the caller's exact class."
+            },
+            {
+              "title": "Add the item through an Interface Message",
+              "where": "BP_ItemPickup → True branch",
+              "do": "Call AddItem (Message) from BPI_PlayerGameplay. Target = Interactor. ItemRow = this pickup's ItemRow.",
+              "check": "The item reaches InventoryRows through the Character's Interface implementation.",
+              "why": "The pickup no longer needs access to InventoryRows or a Character reference."
+            },
+            {
+              "title": "Request item data through the Interface",
+              "where": "BP_ItemPickup → after AddItem",
+              "do": "Call GetItemData (Message). Target = Interactor, ItemRow = this pickup's ItemRow. On Found = True, Break ST_ItemData → Print PickupMessage.",
+              "check": "The same Data Table message from Mission 2 still appears when collected.",
+              "why": "Data remains centralised while communication becomes decoupled."
+            },
+            {
+              "title": "Destroy only after successful collection",
+              "where": "BP_ItemPickup → successful path",
+              "do": "After the item is added/data lookup succeeds, Destroy Actor (Self).",
+              "check": "The pickup disappears only after the interaction reaches a gameplay-capable Interactor.",
+              "why": "Unsupported callers should not accidentally consume pickups."
+            },
+            {
+              "title": "Disable the old overlap pickup path",
+              "where": "BP_ItemPickup → previous Sphere BeginOverlap logic",
+              "do": "After the E path works, disconnect/remove the old collection execution chain or disable Generate Overlap Events for that interaction component. Keep collision that blocks Visibility for the trace; use Query Only if appropriate so the interaction shape does not physically block the player.",
+              "check": "Walking into a pickup no longer collects it. Looking at it and pressing E does.",
+              "why": "There should be one clear interaction route, not duplicate auto-pickup and manual-pickup behaviours."
+            },
+            {
+              "title": "Test several ItemRow instances",
+              "where": "LV_EscapeRoom → Play",
+              "do": "Test Battery, Coin and Fuse. Look at each → E → verify its correct Data Table PickupMessage and inventory result.",
+              "check": "One Interface implementation works for several data-driven instances.",
+              "why": "The earlier Data Table architecture and new Interface architecture now reinforce each other."
+            }
+          ],
+          "test": [
+            "Walking into pickup does not collect it.",
+            "E collects Battery/Coin/Fuse.",
+            "BP_ItemPickup has no Cast To BP_ThirdPersonCharacter in its new interaction path.",
+            "Correct DT_ItemData messages still appear."
+          ],
+          "doneWhen": "All generic pickups are deliberate E interactions and communicate with the player entirely through Interface contracts.",
+          "common": [
+            "If E hits the pickup but nothing happens, check BPI_Interactable implementation first, then BPI_PlayerGameplay on the Interactor.",
+            "If the trace passes through the pickup, make the mesh or a Query Only collision shape Block Visibility.",
+            "Do not type item descriptions back into BP_ItemPickup."
+          ]
+        },
+        {
+          "id": "convert-generator",
+          "number": 6,
+          "title": "Convert the Generator — Interface Inventory and Power",
+          "goal": "Make BP_Generator implement Interact, check/consume Battery through BPI_PlayerGameplay, then restore power without casting to the Character.",
+          "why": "This proves Interfaces work for more than pickups: a puzzle Actor can request several services through the same player contract.",
+          "steps": [
+            {
+              "title": "Implement BPI_Interactable",
+              "where": "BP_Generator → Class Settings",
+              "do": "Add BPI_Interactable → Compile → add Event Interact.",
+              "check": "The Generator can receive the universal Interact message.",
+              "why": "The Character does not need a Generator-specific call."
+            },
+            {
+              "title": "Check the Interactor contract",
+              "where": "BP_Generator → Event Interact",
+              "do": "Does Object Implement Interface → Interface = BPI_PlayerGameplay → Target = Interactor → Branch.",
+              "check": "The Generator only continues if the caller can provide the gameplay services it needs.",
+              "why": "This replaces assumptions about the exact Character class."
+            },
+            {
+              "title": "Ask for Battery",
+              "where": "BP_Generator → True branch",
+              "do": "Call HasItem (Message): Target = Interactor, RequiredItem = Battery. Branch on HasItem.",
+              "check": "Without Battery, print the existing needs-Battery feedback and do not restore power.",
+              "why": "The inventory rule remains the same; only the communication route changes."
+            },
+            {
+              "title": "Consume Battery through the contract",
+              "where": "BP_Generator → HasItem True",
+              "do": "Call RemoveItem (Message): Target = Interactor, ItemRow = Battery. Continue only when Removed = True.",
+              "check": "Battery disappears from InventoryRows through the Mission 3 RemoveItem Function behind the Interface.",
+              "why": "World Actors do not need to know where/how inventory is stored."
+            },
+            {
+              "title": "Restore power",
+              "where": "BP_Generator → Removed True",
+              "do": "Call SetPowerOn (Message): Target = Interactor, NewPowerOn = True. Then keep your existing Generator visual feedback—Point Light, message, sound if you added one.",
+              "check": "The Generator visibly activates and powered systems can read PowerOn.",
+              "why": "Object-specific presentation still belongs inside BP_Generator."
+            },
+            {
+              "title": "Disable old overlap activation",
+              "where": "BP_Generator → previous Box BeginOverlap chain",
+              "do": "Once E interaction passes, disconnect/remove the old activation path. Make sure the Generator's mesh or a Query Only interaction collision blocks Visibility so the trace can hit it without adding an invisible physical barrier.",
+              "check": "Walking into the Generator does nothing; looking at it and pressing E activates it when requirements are met.",
+              "why": "One interaction model is easier for players and programmers to reason about."
+            },
+            {
+              "title": "Audit for the old Character Cast",
+              "where": "BP_Generator Event Graph",
+              "do": "Remove the obsolete Cast To BP_ThirdPersonCharacter path after the new version is proven.",
+              "check": "BP_Generator contains no direct Character cast for its gameplay communication.",
+              "why": "This is the architectural goal of the stage."
+            }
+          ],
+          "test": [
+            "E without Battery fails with feedback.",
+            "E with Battery consumes it and sets power on.",
+            "Generator visual feedback still works.",
+            "No Cast To BP_ThirdPersonCharacter remains in the Generator gameplay path."
+          ],
+          "doneWhen": "Generator gameplay is unchanged for the player except that interaction is deliberate, and all player communication travels through BPI_PlayerGameplay.",
+          "common": [
+            "Call SetPowerOn on Interactor, not Self.",
+            "Do not recreate an InventoryRows variable in BP_Generator.",
+            "If the Generator is physically blocked by a new interaction collision, use Query Only while still Blocking Visibility."
+          ]
+        },
+        {
+          "id": "convert-doors",
+          "number": 7,
+          "title": "Convert Both Doors — Same Interface, Different Requirements",
+          "goal": "Make the Exit and Maintenance Door use BPI_Interactable plus BPI_PlayerGameplay so the player can press E to try either door without door-specific Character code.",
+          "why": "Several unrelated Actors can share the same interaction contract while keeping their own rule data and behaviour.",
+          "steps": [
+            {
+              "title": "Implement BPI_Interactable on BP_ExitDoor",
+              "where": "BP_ExitDoor → Class Settings",
+              "do": "Add BPI_Interactable → Compile → Event Interact.",
+              "check": "Exit Door receives the same generic Interact request.",
+              "why": "The Character never needs an OpenExit function or Cast."
+            },
+            {
+              "title": "Ask for power",
+              "where": "BP_ExitDoor → Event Interact",
+              "do": "Check Interactor implements BPI_PlayerGameplay, then call GetPowerOn (Message).",
+              "check": "The Exit can read power without accessing the Character's PowerOn variable directly.",
+              "why": "State access is now provided by the contract."
+            },
+            {
+              "title": "Ask for ExitKey",
+              "where": "BP_ExitDoor",
+              "do": "Call HasItem (Message) with RequiredItem = ExitKey. Combine PowerOn and HasItem using Boolean AND as before.",
+              "check": "Only PowerOn=True AND ExitKey=True reaches the existing door-open movement.",
+              "why": "Mission 1 gameplay rules remain intact through a new communication route."
+            },
+            {
+              "title": "Keep ExitKey if that is your existing rule",
+              "where": "BP_ExitDoor success path",
+              "do": "Do not consume ExitKey unless you deliberately changed that rule earlier. Print/open the door using your existing movement logic.",
+              "check": "Refactoring Interfaces does not silently change resource rules.",
+              "why": "Architecture changes should preserve established game behaviour."
+            },
+            {
+              "title": "Convert BP_MaintenanceDoor",
+              "where": "BP_MaintenanceDoor → Class Settings/Event Graph",
+              "do": "Implement BPI_Interactable. On Interact use GetPowerOn (Message) and HasItem (Message) RequiredItem=Fuse → AND. On success RemoveItem (Message) Fuse before opening, matching Mission 3.",
+              "check": "Maintenance Door still requires Power + Fuse and consumes Fuse.",
+              "why": "Two doors can share the same contracts but retain different data/rules."
+            },
+            {
+              "title": "Disable both overlap-opening paths",
+              "where": "Both door Blueprints",
+              "do": "After both E paths work, disconnect/remove old BeginOverlap opening logic. Ensure the visible door mesh or a dedicated Query Only interaction collision blocks Visibility so the camera trace can hit it without adding an invisible physical wall in front of the player.",
+              "check": "Walking into either door does not open it; E is required; neither door casts to the Character.",
+              "why": "The project now has one consistent interaction model."
+            },
+            {
+              "title": "Test all requirement combinations",
+              "where": "LV_EscapeRoom → Play / restart between cases",
+              "do": "Exit: no power/no key, key only, power only, power + ExitKey. Maintenance: Fuse only, power only, power + Fuse. Confirm opening Maintenance consumes Fuse while main Exit still requires ExitKey.",
+              "check": "Both doors retain their original game rules after the communication refactor.",
+              "why": "Refactoring communication must not accidentally change gameplay logic."
+            }
+          ],
+          "test": [
+            "Both doors require E.",
+            "Exit uses ExitKey.",
+            "Maintenance uses Fuse and consumes it.",
+            "Neither door casts to BP_ThirdPersonCharacter."
+          ],
+          "doneWhen": "Both door classes share BPI_Interactable and talk to the player through BPI_PlayerGameplay while preserving different requirements and behaviour.",
+          "common": [
+            "Pass the correct RequiredItem to each door.",
+            "Do not put door movement inside BPI_PlayerGameplay.",
+            "If the trace stops at invisible collision in front of a door, inspect which component is blocking Visibility."
+          ]
+        },
+        {
+          "id": "new-interactable",
+          "number": 8,
+          "title": "Proof Build — Add a New Interactable Without Touching the Player",
+          "goal": "Create a new object with genuinely different behaviour and make it work with E solely by implementing BPI_Interactable.",
+          "why": "The proof of a good Interface architecture is that the next interactable does not require another branch, cast or class check in the Character.",
+          "steps": [
+            {
+              "title": "Create BP_LightSwitch",
+              "where": "Content Drawer → Blueprint Class → Actor",
+              "do": "Create BP_LightSwitch. Add a small Static Mesh and a Point Light. Add Boolean LightOn default False.",
+              "check": "The Actor has its own state and visible result independent of the existing puzzle objects.",
+              "why": "A light switch is deliberately different from inventory, Generator and doors."
+            },
+            {
+              "title": "Implement BPI_Interactable",
+              "where": "BP_LightSwitch → Class Settings",
+              "do": "Add BPI_Interactable and Compile. Implement Event Interact. You do not need BPI_PlayerGameplay for this object because it does not care about inventory or power.",
+              "check": "The LightSwitch only opts into the Interface it actually needs.",
+              "why": "Objects should implement the contracts relevant to their behaviour."
+            },
+            {
+              "title": "Toggle its state",
+              "where": "BP_LightSwitch → Event Interact",
+              "do": "Set LightOn to NOT LightOn. Then Set Visibility on the Point Light from the new LightOn value. Print Light ON or Light OFF if useful.",
+              "check": "Each E press toggles the light state.",
+              "why": "The same Interact request can trigger completely different implementation logic."
+            },
+            {
+              "title": "Place and test it",
+              "where": "LV_EscapeRoom",
+              "do": "Place BP_LightSwitch somewhere visible. Play → look at it → press E several times.",
+              "check": "The light toggles every time without any new node in the Character interaction graph.",
+              "why": "The Character only knows the Interface contract, so new classes can join later without editing the caller."
+            },
+            {
+              "title": "Audit the Character graph",
+              "where": "BP_ThirdPersonCharacter → E interaction chain",
+              "do": "Confirm you did not add BP_LightSwitch, BP_Generator, BP_ItemPickup or door-specific branches/casts. The trace should still end in the same BPI_Interactable Message call created in Stage 2.",
+              "check": "Adding the new interaction required zero caller changes.",
+              "why": "This is the architectural benefit you were aiming for."
+            }
+          ],
+          "flow": [
+            "Same E trace",
+            "Same Interact Message",
+            "New BP_LightSwitch implementation",
+            "different behaviour"
+          ],
+          "test": [
+            "LightSwitch works.",
+            "No Character changes were required to support its class.",
+            "It does not implement/use BPI_PlayerGameplay unnecessarily."
+          ],
+          "doneWhen": "A brand-new interaction joins the game solely by implementing BPI_Interactable, proving the caller is no longer tied to specific classes.",
+          "common": [
+            "Make sure the switch can be hit by the Visibility trace.",
+            "Do not add a Cast To BP_LightSwitch in the Character.",
+            "Do not use BPI_PlayerGameplay if the switch does not need player services."
+          ]
+        },
+        {
+          "id": "final-test",
+          "number": 9,
+          "title": "Final Test — Prove the Game Communicates Through Interfaces",
+          "goal": "Complete the full game using deliberate E interaction, remove obsolete Cast/overlap communication and independently add or improve one Interface interaction.",
+          "why": "The mission is complete only when the architecture is genuinely reusable: the player sends one generic message, each object implements its response, and world objects can talk back through a player contract without knowing the Character class.",
+          "steps": [
+            {
+              "title": "Turn off trace debug drawing",
+              "where": "BP_ThirdPersonCharacter → Line Trace By Channel",
+              "do": "Set Draw Debug Type back to None once aiming/range is reliable.",
+              "check": "Normal play no longer displays the debug line.",
+              "why": "Debug visualisation is useful during development but should not remain in the finished player experience."
+            },
+            {
+              "title": "Run the full game using E",
+              "where": "LV_EscapeRoom → Play",
+              "do": "Main Menu → try Generator early → look at and E-collect Battery → E-use Generator → E-collect Fuse → E-open Maintenance Door → use LightSwitch/Console → E-collect ExitKey → E-open Exit → Win screen → Play Again.",
+              "check": "The entire game is completable with the new interaction system and old UI/restart behaviour still works.",
+              "why": "The Interface refactor must survive the complete player journey."
+            },
+            {
+              "title": "Audit the Character caller",
+              "where": "BP_ThirdPersonCharacter → E interaction graph",
+              "do": "Confirm the caller is generic: trace → Hit Actor → Does Object Implement BPI_Interactable → Interact Message. There should be no class-specific Cast/Branch for pickup, Generator, Exit, Maintenance Door, Console or LightSwitch.",
+              "check": "One caller supports every current interactable class.",
+              "why": "This is loose coupling on the caller side."
+            },
+            {
+              "title": "Audit world-to-player communication",
+              "where": "BP_ItemPickup, BP_Generator, BP_ExitDoor, BP_MaintenanceDoor",
+              "do": "Confirm these objects use BPI_PlayerGameplay Messages instead of Cast To BP_ThirdPersonCharacter. Search visually and remove disconnected obsolete Cast chains left from the refactor.",
+              "check": "The converted gameplay Actors do not depend on the concrete Character class for their communication.",
+              "why": "The reverse direction should also communicate through a contract."
+            },
+            {
+              "title": "Check Interface responsibility",
+              "where": "BPI_Interactable and BPI_PlayerGameplay",
+              "do": "Confirm the Interface assets contain signatures/contracts, not the actual Generator, Door or inventory implementation. Object-specific behaviour remains in the implementing Blueprint; inventory/data Functions remain in the Character.",
+              "check": "You can identify contract, implementation and caller as three different responsibilities.",
+              "why": "An Interface is not a storage place for shared gameplay graphs."
+            },
+            {
+              "title": "Create one independent Interface improvement",
+              "where": "Your choice of Blueprint",
+              "do": "Choose ONE: add another new interactable class without editing the Character; OR add GetInteractionText to BPI_Interactable with a Text output and use it to supply object-specific prompt text; OR create an interface-driven locked container using PlayerHasItem. Build and test it without copying a whole supplied stage.",
+              "check": "Your improvement works and you can explain which Interface it uses and why.",
+              "why": "Independent adaptation proves you understand Interfaces as a design tool rather than just following a recipe."
+            },
+            {
+              "title": "Explain Cast vs Interface",
+              "where": "Project check / discussion",
+              "do": "Be able to explain: a Cast asks whether an object is a specific class/type so you can access that type; an Interface asks whether an object supports a particular contract/capability. Give one example from this game where the Interface is better.",
+              "check": "You can describe why the player does not need to care whether its Hit Actor is a Generator, Door or LightSwitch.",
+              "why": "Knowing when to choose a communication method matters more than blindly removing every Cast in every project."
+            }
+          ],
+          "flow": [
+            "Player does not know target class",
+            "BPI_Interactable Message",
+            "object-specific implementation",
+            "BPI_PlayerGameplay Message when player service is needed",
+            "no class-specific communication chain"
+          ],
+          "test": [
+            "Full Escape Room completes using E interaction.",
+            "Universal Character interaction graph has no object-specific Casts.",
+            "Converted world Actors have no Cast To BP_ThirdPersonCharacter.",
+            "Console/LightSwitch prove unrelated classes share Interact.",
+            "One independent Interface improvement has been completed."
+          ],
+          "doneWhen": "The game is fully playable through the Interface interaction architecture and you can explain how Interfaces reduce coupling without claiming that casts are always wrong.",
+          "common": [
+            "Do not remove a Cast elsewhere in the project merely because casts are 'bad'; replace them when a capability-based Interface is the cleaner communication contract.",
+            "Interface Messages to unsupported objects fail silently, so keep deliberate Interface checks where they improve debugging/readability.",
+            "If an Actor cannot be interacted with, inspect Visibility collision before rewriting Blueprint logic."
+          ],
+          "challenges": [
+            "Add GetInteractionText to BPI_Interactable and display LOOK AT + PRESS E prompt text unique to each object.",
+            "Create BP_LoreTerminal implementing BPI_Interactable where each placed instance has editable Text and prints a different message.",
+            "Create BP_LockedCrate that asks BPI_PlayerGameplay for a required item and then reveals a BP_ItemPickup reward.",
+            "Replace the direct E key with the project's existing Enhanced Input workflow after the Interface system is proven.",
+            "Research Interface call variants in current Epic documentation and explain why this beginner build uses the Message version on generic Actor references."
+          ]
         }
       ]
     }
