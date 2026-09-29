@@ -1,5 +1,5 @@
 window.LEVEL4_SPECIALIST_PROJECTS = {
-  version: '3.58.5',
+  version: '3.58.6',
   intro: {
     title: 'Level 4 Specialist Projects',
     kicker: 'Choose ONE pathway',
