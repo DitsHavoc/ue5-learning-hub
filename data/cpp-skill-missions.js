@@ -1,5 +1,5 @@
 window.UE5_CPP_SKILL_MISSIONS = {
-  "version": "3.58.5",
+  "version": "3.58.6",
   "title": "Unreal C++ Programmer Path",
   "summary": "A cumulative Level 4 C++ pathway for students who already know Unreal through Blueprint but have never used Visual Studio with Unreal. Every mission continues the same L4CppTraining project.",
   "planned": [
