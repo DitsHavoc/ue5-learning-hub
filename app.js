@@ -20,6 +20,7 @@ const SCULPT = window.UE5_SCULPT_DATA;
 const STUDY = window.UE5_STUDY_DATA;
 const BACKEND = window.UE5_BACKEND;
 const SKILL_MISSIONS = window.UE5_SKILL_MISSIONS || {missions:[]};
+const CPP_SKILL_MISSIONS = window.UE5_CPP_SKILL_MISSIONS || {missions:[],planned:[]};
 
 // V3.19 deepens Designer Studio using the same Quick Tutorial recipe system so students can
 // search programming and design help from one place while still having a dedicated design curriculum.
@@ -2043,6 +2044,119 @@ function completeSkillMissionStage(missionId,stageId){
   if(next)location.hash=`#/skill-mission/${m.id}/${next.id}`;else route();
 }
 
+
+const CPP_MISSION_STORE='ue5hub:cpp-skill-missions:v1';
+function cppMission(id){return (CPP_SKILL_MISSIONS.missions||[]).find(x=>x.id===id)}
+function loadCppMissionState(){
+  try{
+    const raw=JSON.parse(localStorage.getItem(CPP_MISSION_STORE)||'{}');
+    return raw&&typeof raw==='object'?raw:{};
+  }catch(e){return {}}
+}
+function saveCppMissionState(value){
+  try{localStorage.setItem(CPP_MISSION_STORE,JSON.stringify(value))}catch(e){}
+}
+function cppMissionDoneStages(id){
+  const s=loadCppMissionState(),rows=s[id]?.completedStages;
+  return Array.isArray(rows)?rows:[];
+}
+function cppMissionStageDone(id,stageId){return cppMissionDoneStages(id).includes(stageId)}
+function cppMissionProgress(id){
+  const m=cppMission(id);if(!m)return {done:0,total:0,pct:0,complete:false};
+  const done=m.stages.filter(s=>cppMissionStageDone(id,s.id)).length,total=m.stages.length;
+  return {done,total,pct:total?Math.round(done/total*100):0,complete:done===total};
+}
+function cppMissionPrereqMet(m){
+  if(!m?.requiresMission)return true;
+  return cppMissionProgress(m.requiresMission).complete;
+}
+function cppMissionStageUnlocked(m,index){
+  if(!cppMissionPrereqMet(m))return false;
+  if(index<=0)return true;
+  return cppMissionStageDone(m.id,m.stages[index-1].id);
+}
+function cppMissionNextIndex(m){
+  const i=m.stages.findIndex(s=>!cppMissionStageDone(m.id,s.id));
+  if(i<0)return Math.max(0,m.stages.length-1);
+  return Math.max(0,i);
+}
+function cppMissionSeq(m){return m?.displaySequence??m?.sequence??''}
+function cppMissionFlow(items){
+  if(!items?.length)return '';
+  return `<div class="skill-flow cpp-skill-flow">${items.map((x,i)=>`<span>${esc(x)}</span>${i<items.length-1?'<b>→</b>':''}`).join('')}</div>`;
+}
+function cppMissionCode(blocks){
+  if(!blocks?.length)return '';
+  return `<div class="cpp-code-stack">${blocks.map(x=>`<figure class="cpp-code-block"><figcaption>${esc(x.title||'C++')}</figcaption><pre><code>${esc(x.content||'')}</code></pre></figure>`).join('')}</div>`;
+}
+function cppMissionStep(step,i){
+  const actions=(step.doList&&step.doList.length)?step.doList:[step.do||''];
+  return `<article class="skill-step-card cpp-step-card"><div class="skill-step-num">${String(i+1).padStart(2,'0')}</div><div class="skill-step-body"><h3>${esc(step.title)}</h3>
+    <div class="skill-step-field where"><span>1 • WHERE TO WORK</span><p>${esc(step.where||'')}</p></div>
+    <div class="skill-step-field do"><span>2 • DO THESE ONE AT A TIME — IN THIS EXACT ORDER</span><ol class="skill-action-list">${actions.map(x=>`<li>${esc(x)}</li>`).join('')}</ol></div>
+    ${cppMissionCode(step.code)}
+    <div class="skill-step-field check"><span>3 • YOU SHOULD NOW HAVE</span><p>${esc(step.check||'')}</p></div>
+    <div class="skill-step-field why"><span>WHY THIS MATTERS</span><p>${esc(step.why||'')}</p></div>
+  </div></article>`;
+}
+function cppMissionRoadmap(currentId){
+  const missions=(CPP_SKILL_MISSIONS.missions||[]).slice().sort((a,b)=>(a.sequence??0)-(b.sequence??0));
+  if(!missions.length)return '';
+  return `<section class="skill-path-roadmap cpp-path-roadmap"><div class="skill-path-roadmap-head"><span class="eyebrow">LEVEL 4 • UNREAL C++ PROGRAMMER PATH</span><h2>One project. Each mission upgrades the last.</h2><p>Start with the toolchain, then keep extending <strong>L4CppTraining</strong>. The next mission unlocks only after the current one has been tested.</p></div><div class="skill-path-roadmap-grid cpp-roadmap-grid">${missions.map(x=>{const xp=cppMissionProgress(x.id),ready=cppMissionPrereqMet(x),idx=cppMissionNextIndex(x),st=x.stages?.[idx]||x.stages?.[0],current=x.id===currentId;return `<a class="skill-path-roadmap-card ${current?'current':''} ${xp.complete?'done':''} ${ready?'':'locked'}" href="#/cpp-mission/${x.id}/${st?.id||'start'}"><span class="skill-path-roadmap-num">${xp.complete?'✓':ready?cppMissionSeq(x):'🔒'}</span><div><small>MISSION ${esc(String(cppMissionSeq(x)))}${current?' • YOU ARE HERE':''}</small><strong>${esc(x.title)}</strong><em>${xp.complete?'Complete':ready?`${xp.done}/${xp.total} stages complete`:`Unlocks after Mission ${esc(String(cppMissionSeq(cppMission(x.requiresMission))))}`}</em></div></a>`}).join('')}</div>${(CPP_SKILL_MISSIONS.planned||[]).length?`<details class="cpp-future-path"><summary>See where the C++ pathway goes next</summary><div>${CPP_SKILL_MISSIONS.planned.map(x=>`<span>${esc(x)}</span>`).join('')}</div></details>`:''}</section>`;
+}
+function cppMissionPage(id,requestedStage){
+  const m=cppMission(id);if(!m)return notFound();
+  const p=cppMissionProgress(id),roadmap=cppMissionRoadmap(id),seq=cppMissionSeq(m);
+  if(!cppMissionPrereqMet(m)){
+    const req=cppMission(m.requiresMission),rp=cppMissionProgress(m.requiresMission),ri=req?cppMissionNextIndex(req):0,rstage=req?.stages?.[ri];
+    return `<div class="breadcrumb"><a href="#/">Home</a> / <a href="#/level4">Level 4 Specialist Projects</a> / Unreal C++ / ${esc(m.title)}</div>
+    ${roadmap}
+    <section class="skill-mission-hero cpp-mission-hero"><div><span class="eyebrow">UNREAL C++ • MISSION ${esc(String(seq))} • NEXT IN PATH</span><h1>🔒 ${esc(m.title)}</h1><p>${esc(m.summary)}</p></div><div class="skill-mission-progress"><strong>LOCKED</strong><span>Finish Mission ${esc(String(cppMissionSeq(req)))} first</span></div></section>
+    <section class="content-card skill-locked-stage"><span class="eyebrow">YOUR NEXT C++ STEP</span><h2>Finish ${esc(req?.title||'the previous mission')} first.</h2><p>The C++ pathway is cumulative. This mission expects the same L4CppTraining project and working systems from the previous mission.</p>${req&&rstage?`<p><strong>Previous mission progress:</strong> ${rp.done}/${rp.total} stages complete.</p><a class="button primary" href="#/cpp-mission/${req.id}/${rstage.id}">Continue Mission ${esc(String(cppMissionSeq(req)))} →</a>`:`<a class="button ghost" href="#/level4">Back to Level 4</a>`}</section>`;
+  }
+  let index=requestedStage?m.stages.findIndex(s=>s.id===requestedStage):cppMissionNextIndex(m);
+  if(index<0)index=cppMissionNextIndex(m);
+  const stage=m.stages[index],unlocked=cppMissionStageUnlocked(m,index),done=cppMissionStageDone(id,stage.id);
+  const latest=cppMissionNextIndex(m),latestStage=m.stages[latest];
+  const rail=m.stages.map((s,i)=>{
+    const sd=cppMissionStageDone(id,s.id),su=cppMissionStageUnlocked(m,i),current=i===index;
+    return su?`<a class="skill-stage-link ${sd?'done':''} ${current?'current':''}" href="#/cpp-mission/${m.id}/${s.id}"><span>${sd?'✓':String(i).padStart(2,'0')}</span><div><strong>${esc(s.title.replace(/^.*?—\s*/,'').replace(/^.*?-\s*/,''))}</strong><small>${sd?'Complete':current?'Working now':'Unlocked'}</small></div></a>`:`<div class="skill-stage-link locked"><span>🔒</span><div><strong>${esc(s.title.replace(/^.*?—\s*/,'').replace(/^.*?-\s*/,''))}</strong><small>Finish the previous stage</small></div></div>`;
+  }).join('');
+  if(!unlocked){
+    return `<div class="breadcrumb"><a href="#/">Home</a> / <a href="#/level4">Level 4 Specialist Projects</a> / Unreal C++ / ${esc(m.title)}</div>
+    ${roadmap}
+    <section class="skill-mission-hero cpp-mission-hero"><div><span class="eyebrow">UNREAL C++ • MISSION ${esc(String(seq))} • SOLO</span><h1>${esc(m.icon||'C++')} ${esc(m.title)}</h1><p>${esc(m.summary)}</p></div><div class="skill-mission-progress"><strong>${p.done}/${p.total}</strong><span>stages complete</span><div class="progress"><span style="width:${p.pct}%"></span></div></div></section>
+    <div class="skill-mission-layout"><aside class="skill-stage-rail">${rail}</aside><section class="content-card skill-locked-stage"><span class="eyebrow">🔒 NOT YET</span><h2>Finish the previous stage first.</h2><p>C++ errors become much harder to diagnose if you skip the compile/test checkpoints. Finish the current stage, prove it works, then continue.</p><a class="button primary" href="#/cpp-mission/${m.id}/${latestStage.id}">Continue current stage →</a></section></div>`;
+  }
+  const next=m.stages[index+1],prev=m.stages[index-1];
+  const nm=(CPP_SKILL_MISSIONS.missions||[]).find(x=>(x.sequence??0)===(m.sequence??0)+1);
+  return `<div class="breadcrumb"><a href="#/">Home</a> / <a href="#/level4">Level 4 Specialist Projects</a> / Unreal C++ / ${esc(m.title)}</div>
+  ${roadmap}
+  <section class="skill-mission-hero cpp-mission-hero"><div><span class="eyebrow">UNREAL C++ • MISSION ${esc(String(seq))} • SOLO • ${esc(m.duration)}</span><h1><span class="cpp-title-mark">C++</span> ${esc(m.title)}</h1><p>${esc(m.summary)}</p><div class="tutorial-tag-row large">${(m.skills||[]).map(x=>`<span>${esc(x)}</span>`).join('')}</div></div><div class="skill-mission-progress"><strong>${p.done}/${p.total}</strong><span>stages complete</span><div class="progress"><span style="width:${p.pct}%"></span></div><small>${p.complete?'Mission complete — revisit any stage.':'Finish one stage, test/build it, then unlock the next.'}</small></div></section>
+  <section class="skill-mission-rulebar cpp-rulebar"><div><span class="deep-label">HOW TO USE THIS C++ GUIDE</span><h2>Type small changes. Build. Test. Continue.</h2><p>${esc(m.guideRule||'Make one change, compile it, then test it in Unreal.')}</p>${(m.theoryLinks||[]).length?`<div class="skill-theory-links"><small>Official reference if you need it</small>${m.theoryLinks.map(x=>`<a href="${esc(x.href)}" target="_blank" rel="noopener">↗ ${esc(x.label)}</a>`).join('')}</div>`:''}</div><div class="skill-rule-chips">${(m.rules||[]).map(x=>`<span>✓ ${esc(x)}</span>`).join('')}</div></section>
+  ${index===0?`<section class="content-card skill-game-brief cpp-project-brief"><span class="eyebrow">THE WHOLE MISSION</span><h2>What you are building</h2><p>${esc(m.subtitle)}</p>${cppMissionFlow(m.gameFlow)}</section>`:''}
+  <div class="skill-mission-layout"><aside class="skill-stage-rail"><div class="skill-rail-head"><small>MISSION ${esc(String(seq))} PROGRESS</small><strong>${p.pct}%</strong></div>${rail}</aside>
+  <main class="skill-stage-main">
+    <section class="skill-stage-hero ${done?'done':''} cpp-stage-hero"><div><span class="eyebrow">STAGE ${String(index).padStart(2,'0')} OF ${String(m.stages.length-1).padStart(2,'0')}${done?' • ✓ COMPLETE':''}</span><h2>${esc(stage.title)}</h2><div class="skill-stage-making"><span>YOU ARE MAKING</span><p>${esc(stage.goal)}</p></div></div><div class="skill-stage-why"><span>WHY THIS STAGE EXISTS</span><p>${esc(stage.why)}</p></div></section>
+    ${stage.bridge?`<section class="cpp-blueprint-bridge"><span>BLUEPRINT → C++ BRIDGE</span><p>${esc(stage.bridge)}</p></section>`:''}
+    ${cppMissionFlow(stage.flow)}
+    <section class="skill-step-list">${(stage.steps||[]).map(cppMissionStep).join('')}</section>
+    <section class="skill-stage-test"><div><span class="eyebrow">STOP & TEST / BUILD</span><h2>Do not continue until these work</h2><ul>${(stage.test||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><div class="skill-done-when"><small>STAGE IS DONE WHEN</small><strong>${esc(stage.doneWhen||'Everything above works.')}</strong></div></section>
+    ${(stage.common||[]).length?`<details class="content-card skill-troubleshoot"><summary>⚠ If yours does not work</summary><ul>${stage.common.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></details>`:''}
+    ${(stage.challenges||[]).length?`<section class="content-card skill-challenges"><span class="eyebrow">CORE MISSION COMPLETE?</span><h2>Independent upgrades</h2><ul>${stage.challenges.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></section>`:''}
+    <section class="skill-stage-actions">${prev?`<a class="button ghost" href="#/cpp-mission/${m.id}/${prev.id}">← Previous stage</a>`:'<span></span>'}${done?(next?`<a class="button primary" href="#/cpp-mission/${m.id}/${next.id}">Next stage →</a>`:(nm?`<a class="button success" href="#/cpp-mission/${nm.id}/${nm.stages?.[0]?.id||'start'}">✓ Mission complete — Start Mission ${esc(String(cppMissionSeq(nm)))} →</a>`:`<a class="button success" href="#/level4">✓ Mission complete — Back to Level 4</a>`)):`<button class="button primary" data-action="complete-cpp-stage" data-mission="${m.id}" data-stage="${stage.id}">${next?'✓ This stage works — unlock next':'✓ Build tested — complete mission'}</button>`}</section>
+  </main></div>`;
+}
+function completeCppMissionStage(missionId,stageId){
+  const m=cppMission(missionId);if(!m)return;
+  const i=m.stages.findIndex(s=>s.id===stageId);if(i<0||!cppMissionStageUnlocked(m,i))return;
+  const all=loadCppMissionState(),row=all[missionId]||{completedStages:[]},set=new Set(Array.isArray(row.completedStages)?row.completedStages:[]);
+  set.add(stageId);row.completedStages=[...set];all[missionId]=row;saveCppMissionState(all);
+  const next=m.stages[i+1];
+  toast(next?'C++ stage complete — next stage unlocked.':'C++ Skill Mission complete.');
+  if(next)location.hash=`#/cpp-mission/${m.id}/${next.id}`;else route();
+}
+
 function programmingPage(){
   const i=level(),n=nextLesson(),np=pathProgress(n.path),pb=pendingUnlockedBuild(),blocksDone=(state.blockCompleted||[]).length,coreBlocks=BLOCKS.blocks.filter(b=>b.tier==='core'),coreDone=coreBlocks.filter(b=>blockDone(b.id)).length;
   const guides=unrealMasterGuides();
@@ -3459,6 +3573,7 @@ function route(options={}){
   else if(parts[0]==='pathways'){app.innerHTML=guidedPathsPage();activate('pathways')}
   else if(parts[0]==='level4'&&parts[1]){app.innerHTML=level4SpecialistProjectPage(parts[1]);activate('level4')}
   else if(parts[0]==='level4'){app.innerHTML=level4SpecialistHub();activate('level4')}
+  else if(parts[0]==='cpp-mission'&&parts[1]){app.innerHTML=cppMissionPage(parts[1],parts[2]);activate('level4')}
   else if(parts[0]==='skill-mission'&&parts[1]){app.innerHTML=skillMissionPage(parts[1],parts[2]);activate('programming')}
   else if(parts[0]==='programming'){app.innerHTML=programmingPage();activate('programming')}
   else if(parts[0]==='blocks'){app.innerHTML=blocksPage();activate('blocks')}
@@ -4085,6 +4200,7 @@ document.addEventListener('click',async e=>{
   else if(a==='complete-tutorial') await setTutorialComplete(b.dataset.tutorial);
   else if(a==='complete-chapter-build') await setChapterBuildComplete(b.dataset.path);
   else if(a==='complete-skill-stage') completeSkillMissionStage(b.dataset.mission,b.dataset.stage);
+  else if(a==='complete-cpp-stage') completeCppMissionStage(b.dataset.mission,b.dataset.stage);
   else if(a==='complete-design-build') await setDesignBuildComplete(b.dataset.designModule);
   else if(a==='complete-design-source') await setDesignSourceComplete(b.dataset.sourceKey);
   else if(a==='complete-model-video') await setModelVideoComplete(b.dataset.modelVideo);
@@ -4834,6 +4950,7 @@ $('#resetProgress').addEventListener('click',()=>{
   if(confirm('Reset all locally saved lesson progress, XP and game-project status on this browser?')){
     state={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],designSourceCompleted:[],theoryCompleted:[],theoryScores:{},careerCompleted:[],careerScores:{},careerProfile:{version:1,updatedAt:null,roleInterests:{},signals:{},hardSkills:[],softSkills:[],vacancies:[],trafficLights:[],goals:{},industryBeliefs:{},industryDebate:{}},modelVideoCompleted:[],modelTheoryCompleted:[],modelTheoryScores:{},modelFoundationFinal:false,modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[],blockCompleted:[],pathwayCheckpoints:[],studioStepCompleted:[]};
     projectState={project_title:'Signal Lost',theme:PROJECT.themes[0],pitch:'',mechanics:{}};
+    try{localStorage.removeItem(SKILL_MISSION_STORE);localStorage.removeItem(CPP_MISSION_STORE)}catch(e){}
     saveState();saveProjectState();route();toast('Local progress reset.');
   }
 });
