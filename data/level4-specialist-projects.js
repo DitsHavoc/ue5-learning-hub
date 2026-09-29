@@ -1,5 +1,5 @@
 window.LEVEL4_SPECIALIST_PROJECTS = {
-  version: '3.58.1',
+  version: '3.58.5',
   intro: {
     title: 'Level 4 Specialist Projects',
     kicker: 'Choose ONE pathway',
@@ -824,10 +824,10 @@ window.LEVEL4_SPECIALIST_PROJECTS = {
       stretch:'OPTIONAL after the final cinematic works: make a second cut of the SAME footage / event using different shot order, lens choices or timing. Compare how the audience interpretation changes. Do not build a second cinematic.'
     },
     {
-      id:'programming', icon:'⌘', title:'Programmer Skill Missions', role:'Gameplay Programming', time:'Three linked guided builds',
+      id:'programming', icon:'⌘', title:'Blueprint Programmer Skill Missions', role:'Gameplay Programming — Blueprint', time:'Four linked guided builds',
       href:'#/skill-mission/arrays-maps-escape-room/start',
-      strap:'Build one small Escape Room step by step: Arrays & Maps → Structs & Data Tables → Functions.',
-      outcome:'A complete solo Blueprint Escape Room. First make the game work with an Inventory Array and item-information Map, then refactor the same project into structured Data Table content and reusable Functions.',
+      strap:'Build one small Escape Room step by step: Arrays & Maps → Structs & Data Tables → Functions → Blueprint Interfaces.',
+      outcome:'A complete solo Blueprint Escape Room that grows through four linked missions: make it work with Arrays & Maps, move content into Structs/Data Tables, refactor repeated logic into Functions, then replace tight casting with Blueprint Interfaces and a deliberate interaction system.',
       heroImage:'assets/tutorials/blueprint-foundations/maps-02-container-menu.webp',
       heroAlt:'Unreal Blueprint variable container menu showing collection types used for Arrays and Maps.',
       imageCaption:'Start small and finish the whole game. Mission 1 takes you from an empty Third Person project to battery → generator → key → locked exit → win screen before the later missions improve the architecture.',
@@ -835,21 +835,30 @@ window.LEVEL4_SPECIALIST_PROJECTS = {
       secondaryImage:'assets/tutorials/blueprint-foundations/structs-03-fields.webp',
       secondaryFallback:'assets/power-jam-programmer/03-powerstates-map-type.png',
       secondaryAlt:'Unreal Structure fields used to group related data.',
-      secondaryCaption:'The same game then grows with you: Mission 2 moves item data into Structs/Data Tables; Mission 3 extracts repeated logic into Functions instead of starting over.',
+      secondaryCaption:'The same game grows with you: Mission 2 moves item data into Structs/Data Tables; Mission 3 extracts repeated logic into Functions; Mission 4 replaces repeated direct casts with Blueprint Interfaces and a reusable press-E interaction contract.',
       theory:[
         {label:'Start Mission 1 — Escape Room: Arrays & Maps',url:'#/skill-mission/arrays-maps-escape-room/start'},
         {label:'Building Block — Arrays, Sets & Maps',url:'#/block/arrays-sets-maps'},
         {label:'Building Block — Structs',url:'#/block/structs'},
         {label:'Building Block — Data Tables',url:'#/block/data-tables'},
-        {label:'Building Block — Functions, Custom Events & Macros',url:'#/block/functions-events-macros'}
+        {label:'Building Block — Functions, Custom Events & Macros',url:'#/block/functions-events-macros'},
+        {label:'Start Mission 4 — Blueprint Interfaces',url:'#/skill-mission/blueprint-interfaces-interaction/start'}
       ],
-      learn:['Arrays and inventory state','Maps and key → value data','Branches and game flow','Widgets and start/win screens','Structs and Data Tables','Functions and reusable logic','Testing one stage before unlocking the next'],
+      learn:['Arrays and inventory state','Maps and key → value data','Branches and game flow','Widgets and start/win screens','Structs and Data Tables','Functions and reusable logic','Blueprint Interfaces and loose coupling','Testing one stage before unlocking the next'],
       stages:[
         {n:'01',title:'Mission 1 — Arrays & Maps: build the complete Escape Room',do:'Start with the Third Person template and follow the guided mission from the room blockout through Start Menu, Battery pickup, Inventory Array, Generator, Key, item-description Map, locked Exit and Win Screen.',why:'You learn the containers inside a complete playable loop instead of isolated node exercises.',check:'You can start, collect the Battery, power the Generator, collect the Key, unlock the Exit, win and restart.',fix:'Do not jump ahead. Each mission page has its own DO THIS / WHY / CHECK steps; fix the current test before unlocking the next stage.'},
         {n:'02',title:'Mission 2 — Structs & Data Tables: stop hard-coding',do:'Continue the same project. Group item fields in a Struct and move repeated item content into a Data Table so Blueprints ask for data instead of storing every value separately.',why:'This turns a one-off prototype into a system that can grow without duplicating variables and branches everywhere.',check:'Adding or changing an item is mainly a data edit rather than rewriting several Blueprints.',fix:'If item names, descriptions or properties are still scattered through graphs, move the content back to the shared data source.'},
-        {n:'03',title:'Mission 3 — Functions: stop repeating logic',do:'Continue the Escape Room again. Identify repeated logic, convert appropriate pieces into clearly named Functions and test that behaviour has not changed.',why:'Reusable functions make the project easier to read, debug and expand.',check:'Repeated implementation has reduced and another programmer can understand the important function names without tracing every wire.',fix:'Do not make one giant function. Give each function one clear job and keep game state where it belongs.'}
+        {n:'03',title:'Mission 3 — Functions: stop repeating logic',do:'Continue the Escape Room again. Identify repeated logic, convert appropriate pieces into clearly named Functions and test that behaviour has not changed.',why:'Reusable functions make the project easier to read, debug and expand.',check:'Repeated implementation has reduced and another programmer can understand the important function names without tracing every wire.',fix:'Do not make one giant function. Give each function one clear job and keep game state where it belongs.'},
+        {n:'04',title:'Mission 4 — Blueprint Interfaces: stop casting everything',do:'Continue the same project. Build one press-E interaction caller, implement BPI_Interactable on pickups/Generator/doors, and use a player-facing Interface for inventory and power services.',why:'Interfaces let unrelated Actors communicate through capabilities rather than requiring the caller to know every concrete class.',check:'The same Character interaction call works with multiple unrelated Actors and converted world objects no longer require direct Cast To BP_ThirdPersonCharacter communication.',fix:'Keep the contract small, implement behaviour in the receiving Blueprint, and test Visibility trace collision before assuming the Interface is broken.'}
       ],
-      deliver:['One working Escape Room built from start screen to win screen','Mission 1 completed: Arrays & Maps','Mission 2 completed: Structs & Data Tables','Mission 3 completed: Functions & reusable logic','Stage-by-stage testing evidence','Readable final Blueprint structure'],
-      stretch:'After all three missions, add one new item or puzzle element using the data-driven/reusable system without rebuilding the original logic.'
-    }  ]
+      deliver:['One working Escape Room built from start screen to win screen','Mission 1 completed: Arrays & Maps','Mission 2 completed: Structs & Data Tables','Mission 3 completed: Functions & reusable logic','Mission 4 completed: Blueprint Interfaces','Stage-by-stage testing evidence','Readable final Blueprint structure'],
+      stretch:'After all four missions, add one new interactable puzzle object using the data-driven, reusable and Interface-based systems without editing the universal Character interaction caller.'
+    },
+    {
+      id:'unreal-cpp-programming', icon:'C++', title:'Unreal C++ Skill Missions', role:'Gameplay Programming — C++', time:'Cumulative guided pathway',
+      href:'#/cpp-mission/cpp-setup/start',
+      strap:'Start before the code: Visual Studio + Unreal setup → first gameplay Actor → then keep extending the same C++ project mission by mission.',
+      outcome:'A cumulative Unreal C++ training project. Mission 0 proves the Visual Studio/Unreal toolchain; Mission 1 creates a real gameplay Actor and Blueprint child; later missions build variables, functions, arrays, components, collision, interaction, Blueprint communication, data and save/load on top of the same project.'
+    }
+  ]
 };
