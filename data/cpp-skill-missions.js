@@ -474,10 +474,12 @@ window.UE5_CPP_SKILL_MISSIONS = {
               "doList": [
                 "Make sure Play In Editor is stopped.",
                 "Choose File → Save All.",
-                "Leave the Unreal Editor open for now unless the Build reports a Live Coding/build conflict.",
-                "Switch to Visual Studio."
+                "Use Tools → Open Visual Studio if Visual Studio is not already open.",
+                "Wait for the L4CppTraining project to finish loading in Visual Studio.",
+                "Close Unreal Editor before this first full baseline Build.",
+                "Keep Visual Studio open."
               ],
-              "check": "The Unreal project is saved and not currently playing.",
+              "check": "The project is saved, Visual Studio is open on L4CppTraining, and Unreal Editor is closed for the full Build.",
               "why": "A clean baseline avoids mixing gameplay state with build troubleshooting."
             },
             {
@@ -749,14 +751,17 @@ window.UE5_CPP_SKILL_MISSIONS = {
               "where": "Visual Studio",
               "do": "Verify the project before adding code.",
               "doList": [
-                "Tools → Open Visual Studio from Unreal.",
-                "Set Development Editor + Win64.",
+                "From Unreal choose Tools → Open Visual Studio.",
+                "Wait for L4CppTraining to load in Visual Studio.",
                 "Save All.",
-                "Run Build on L4CppTraining.",
+                "Close Unreal Editor.",
+                "Set Development Editor + Win64 in Visual Studio.",
+                "Right-click/build L4CppTraining.",
                 "Wait for 0 failed.",
+                "Reopen L4CppTraining in Unreal only after the Build succeeds.",
                 "If it fails before you change anything, fix Mission 0 rather than continuing."
               ],
-              "check": "Baseline Build succeeds.",
+              "check": "A clean Development Editor / Win64 full Build succeeds and L4CppTraining reopens.",
               "why": "Any later failure can now be tied to your new class/code."
             },
             {
