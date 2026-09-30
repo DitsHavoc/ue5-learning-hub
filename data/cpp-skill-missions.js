@@ -659,11 +659,11 @@ window.UE5_CPP_SKILL_MISSIONS = {
           "checkpointCode": [
             {
               "title": "SetupProbe.h — checkpoint",
-              "content": "#pragma once\n\n#include \"CoreMinimal.h\"\n#include \"GameFramework/Actor.h\"\n#include \"SetupProbe.generated.h\"\n\nUCLASS()\nclass L4CPPTRAINING_API ASetupProbe : public AActor\n{\n    GENERATED_BODY()\n\npublic:\n    ASetupProbe();\n\n    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=\"Setup Probe\")\n    int32 ProbeNumber = 42;\n\nprotected:\n    virtual void BeginPlay() override;\n};"
+              "content": "#pragma once\n\n#include \"CoreMinimal.h\"\n#include \"GameFramework/Actor.h\"\n#include \"SetupProbe.generated.h\"\n\nUCLASS()\nclass L4CPPTRAINING_API ASetupProbe : public AActor\n{\n    GENERATED_BODY()\n\npublic:\n    ASetupProbe();\n\n    virtual void Tick(float DeltaTime) override;\n\n    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=\"Setup Probe\")\n    int32 ProbeNumber = 42;\n\nprotected:\n    virtual void BeginPlay() override;\n};"
             },
             {
               "title": "SetupProbe.cpp — checkpoint",
-              "content": "#include \"SetupProbe.h\"\n\nASetupProbe::ASetupProbe()\n{\n    PrimaryActorTick.bCanEverTick = false;\n}\n\nvoid ASetupProbe::BeginPlay()\n{\n    Super::BeginPlay();\n\n    UE_LOG(\n        LogTemp,\n        Warning,\n        TEXT(\"SetupProbe connected. ProbeNumber = %d\"),\n        ProbeNumber\n    );\n}"
+              "content": "#include \"SetupProbe.h\"\n\nASetupProbe::ASetupProbe()\n{\n    PrimaryActorTick.bCanEverTick = false;\n}\n\nvoid ASetupProbe::BeginPlay()\n{\n    Super::BeginPlay();\n\n    UE_LOG(\n        LogTemp,\n        Warning,\n        TEXT(\"SetupProbe connected. ProbeNumber = %d\"),\n        ProbeNumber\n    );\n}\n\nvoid ASetupProbe::Tick(float DeltaTime)\n{\n    Super::Tick(DeltaTime);\n}"
             }
           ],
           "steps": [
@@ -672,8 +672,8 @@ window.UE5_CPP_SKILL_MISSIONS = {
               "where": "SetupProbe.cpp → ASetupProbe::ASetupProbe()",
               "doList": [
                 "Set PrimaryActorTick.bCanEverTick = false; because this probe does not need per-frame code.",
-                "If the generated template contains Tick(), you may leave the function declaration/definition temporarily, but it is not used by the probe.",
-                "Save the .cpp."
+                "Keep the generated Tick declaration/definition if Unreal created it. With ticking disabled it will not run, but leaving the generated function avoids unnecessary deletion during your first class.",
+                "Save SetupProbe.cpp."
               ],
               "code": [
                 {
@@ -681,7 +681,7 @@ window.UE5_CPP_SKILL_MISSIONS = {
                   "content": "PrimaryActorTick.bCanEverTick = false;"
                 }
               ],
-              "check": "The constructor explicitly disables unnecessary Tick.",
+              "check": "The constructor disables Tick, while any generated Tick function remains harmlessly in place.",
               "why": "Do not pay for/update per-frame logic when the Actor does not need it."
             },
             {
@@ -1387,6 +1387,7 @@ window.UE5_CPP_SKILL_MISSIONS = {
               "doList": [
                 "Create Mesh as UStaticMeshComponent.",
                 "Attach Mesh to SceneRoot.",
+                "Disable collision on Mesh so the visible pickup does not physically block the player.",
                 "Create CollectionSphere as USphereComponent.",
                 "Attach CollectionSphere to SceneRoot.",
                 "Set initial sphere radius to 90.0f.",
@@ -1395,10 +1396,10 @@ window.UE5_CPP_SKILL_MISSIONS = {
               "code": [
                 {
                   "title": "Child components",
-                  "content": "Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT(\"Mesh\"));\nMesh->SetupAttachment(SceneRoot);\n\nCollectionSphere = CreateDefaultSubobject<USphereComponent>(TEXT(\"CollectionSphere\"));\nCollectionSphere->SetupAttachment(SceneRoot);\nCollectionSphere->InitSphereRadius(90.0f);"
+                  "content": "Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT(\"Mesh\"));\nMesh->SetupAttachment(SceneRoot);\nMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);\n\nCollectionSphere = CreateDefaultSubobject<USphereComponent>(TEXT(\"CollectionSphere\"));\nCollectionSphere->SetupAttachment(SceneRoot);\nCollectionSphere->InitSphereRadius(90.0f);"
                 }
               ],
-              "check": "The constructor creates a root with Mesh and CollectionSphere children.",
+              "check": "The constructor creates a non-blocking Mesh and a separate CollectionSphere under SceneRoot.",
               "why": "The class now has visible representation and a dedicated interaction/detection shape."
             },
             {
@@ -1633,6 +1634,7 @@ window.UE5_CPP_SKILL_MISSIONS = {
               "where": "TrainingPickup.cpp → constructor after InitSphereRadius",
               "doList": [
                 "Set Collision Enabled to QueryOnly.",
+                "Explicitly enable Generate Overlap Events.",
                 "Set all channel responses to Ignore.",
                 "Set Pawn response to Overlap.",
                 "Save the .cpp."
@@ -1640,10 +1642,10 @@ window.UE5_CPP_SKILL_MISSIONS = {
               "code": [
                 {
                   "title": "CollectionSphere collision",
-                  "content": "CollectionSphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);\nCollectionSphere->SetCollisionResponseToAllChannels(ECR_Ignore);\nCollectionSphere->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);"
+                  "content": "CollectionSphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);\nCollectionSphere->SetGenerateOverlapEvents(true);\nCollectionSphere->SetCollisionResponseToAllChannels(ECR_Ignore);\nCollectionSphere->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);"
                 }
               ],
-              "check": "CollectionSphere is a Pawn-overlap trigger rather than a blocker.",
+              "check": "CollectionSphere is a query-only Pawn-overlap trigger with overlap events explicitly enabled.",
               "why": "The player can walk through the pickup while still producing an overlap event."
             },
             {
@@ -1804,7 +1806,7 @@ window.UE5_CPP_SKILL_MISSIONS = {
             },
             {
               "title": "TrainingPickup.cpp — complete Mission 1 implementation",
-              "content": "#include \"TrainingPickup.h\"\n\n#include \"Components/SceneComponent.h\"\n#include \"Components/SphereComponent.h\"\n#include \"Components/StaticMeshComponent.h\"\n#include \"GameFramework/Character.h\"\n\nATrainingPickup::ATrainingPickup()\n{\n    PrimaryActorTick.bCanEverTick = true;\n\n    SceneRoot = CreateDefaultSubobject<USceneComponent>(TEXT(\"SceneRoot\"));\n    SetRootComponent(SceneRoot);\n\n    Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT(\"Mesh\"));\n    Mesh->SetupAttachment(SceneRoot);\n\n    CollectionSphere = CreateDefaultSubobject<USphereComponent>(TEXT(\"CollectionSphere\"));\n    CollectionSphere->SetupAttachment(SceneRoot);\n    CollectionSphere->InitSphereRadius(90.0f);\n    CollectionSphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);\n    CollectionSphere->SetCollisionResponseToAllChannels(ECR_Ignore);\n    CollectionSphere->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);\n\n    CollectionSphere->OnComponentBeginOverlap.AddDynamic(\n        this,\n        &ATrainingPickup::OnCollectionSphereBeginOverlap\n    );\n}\n\nvoid ATrainingPickup::BeginPlay()\n{\n    Super::BeginPlay();\n\n    UE_LOG(\n        LogTemp,\n        Log,\n        TEXT(\"%s ready. ItemValue = %d\"),\n        *GetName(),\n        ItemValue\n    );\n}\n\nvoid ATrainingPickup::Tick(float DeltaTime)\n{\n    Super::Tick(DeltaTime);\n\n    AddActorLocalRotation(\n        FRotator(0.0f, RotationSpeed * DeltaTime, 0.0f)\n    );\n}\n\nvoid ATrainingPickup::OnCollectionSphereBeginOverlap(\n    UPrimitiveComponent* OverlappedComponent,\n    AActor* OtherActor,\n    UPrimitiveComponent* OtherComp,\n    int32 OtherBodyIndex,\n    bool bFromSweep,\n    const FHitResult& SweepResult\n)\n{\n    if (bCollected || !OtherActor)\n    {\n        return;\n    }\n\n    ACharacter* Character = Cast<ACharacter>(OtherActor);\n\n    if (!Character)\n    {\n        return;\n    }\n\n    bCollected = true;\n\n    UE_LOG(\n        LogTemp,\n        Warning,\n        TEXT(\"%s collected %s for %d points\"),\n        *Character->GetName(),\n        *GetName(),\n        ItemValue\n    );\n\n    Destroy();\n}"
+              "content": "#include \"TrainingPickup.h\"\n\n#include \"Components/SceneComponent.h\"\n#include \"Components/SphereComponent.h\"\n#include \"Components/StaticMeshComponent.h\"\n#include \"GameFramework/Character.h\"\n\nATrainingPickup::ATrainingPickup()\n{\n    PrimaryActorTick.bCanEverTick = true;\n\n    SceneRoot = CreateDefaultSubobject<USceneComponent>(TEXT(\"SceneRoot\"));\n    SetRootComponent(SceneRoot);\n\n    Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT(\"Mesh\"));\n    Mesh->SetupAttachment(SceneRoot);\n    Mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);\n\n    CollectionSphere = CreateDefaultSubobject<USphereComponent>(TEXT(\"CollectionSphere\"));\n    CollectionSphere->SetupAttachment(SceneRoot);\n    CollectionSphere->InitSphereRadius(90.0f);\n    CollectionSphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);\n    CollectionSphere->SetGenerateOverlapEvents(true);\n    CollectionSphere->SetCollisionResponseToAllChannels(ECR_Ignore);\n    CollectionSphere->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);\n\n    CollectionSphere->OnComponentBeginOverlap.AddDynamic(\n        this,\n        &ATrainingPickup::OnCollectionSphereBeginOverlap\n    );\n}\n\nvoid ATrainingPickup::BeginPlay()\n{\n    Super::BeginPlay();\n\n    UE_LOG(\n        LogTemp,\n        Log,\n        TEXT(\"%s ready. ItemValue = %d\"),\n        *GetName(),\n        ItemValue\n    );\n}\n\nvoid ATrainingPickup::Tick(float DeltaTime)\n{\n    Super::Tick(DeltaTime);\n\n    AddActorLocalRotation(\n        FRotator(0.0f, RotationSpeed * DeltaTime, 0.0f)\n    );\n}\n\nvoid ATrainingPickup::OnCollectionSphereBeginOverlap(\n    UPrimitiveComponent* OverlappedComponent,\n    AActor* OtherActor,\n    UPrimitiveComponent* OtherComp,\n    int32 OtherBodyIndex,\n    bool bFromSweep,\n    const FHitResult& SweepResult\n)\n{\n    if (bCollected || !OtherActor)\n    {\n        return;\n    }\n\n    ACharacter* Character = Cast<ACharacter>(OtherActor);\n\n    if (!Character)\n    {\n        return;\n    }\n\n    bCollected = true;\n\n    UE_LOG(\n        LogTemp,\n        Warning,\n        TEXT(\"%s collected %s for %d points\"),\n        *Character->GetName(),\n        *GetName(),\n        ItemValue\n    );\n\n    Destroy();\n}"
             }
           ],
           "steps": [
@@ -1993,7 +1995,7 @@ window.UE5_CPP_SKILL_MISSIONS = {
               "title": "Choose one independent variation",
               "where": "TrainingPickup.h/.cpp or Blueprint child",
               "doList": [
-                "Option A: add editable float CollectionRadius and use it to set the sphere radius in the constructor (then full rebuild).",
+                "Option A: add editable bool bSpin = true and change Tick so rotation only happens when bSpin is true.",
                 "Option B: add editable FString PickupLabel and include it in the collection log.",
                 "Option C: create two Blueprint children—Coin and Key—with different meshes/ItemValue but the same native collection behaviour.",
                 "Choose ONE option.",
