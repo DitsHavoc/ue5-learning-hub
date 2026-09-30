@@ -1,5 +1,5 @@
 window.LEVEL4_SPECIALIST_PROJECTS = {
-  version: '3.58.8',
+  version: '3.58.9',
   intro: {
     title: 'Level 4 Specialist Projects',
     kicker: 'Choose ONE pathway',
@@ -857,8 +857,8 @@ window.LEVEL4_SPECIALIST_PROJECTS = {
     {
       id:'unreal-cpp-programming', icon:'C++', title:'Unreal C++ Skill Missions', role:'Gameplay Programming — C++', time:'Cumulative guided pathway',
       href:'#/cpp-mission/cpp-setup/start',
-      strap:'Complete-newbie C++: learn Visual Studio by writing real code, with every new symbol decoded in plain English, then build a native collectible in the same project.',
-      outcome:'A cumulative Unreal C++ gameplay project built for students who may never have written C++. Mission 0 ends with a working ASetupProbe; Mission 1 builds ATrainingPickup. New syntax such as *, ->, ::, &, !, ||, access sections, Unreal macros and event parameters is decoded at first use instead of being assumed knowledge.'
+      strap:'Complete-newbie C++ pathway: toolchain → native collectible → function-based locked door → TArray inventory + key-gated door, all in one Third Person C++ project.',
+      outcome:'A cumulative Unreal C++ gameplay project for complete beginners. Mission 0 proves the Visual Studio/Unreal workflow with ASetupProbe; Mission 1 builds ATrainingPickup; Mission 2 builds a function-based ATrainingDoor; Mission 3 adds a TArray<FName> inventory to AL4CppTrainingCharacter so BP_Key can unlock the door. Syntax is decoded at first use rather than assumed.'
     }
   ]
 };
