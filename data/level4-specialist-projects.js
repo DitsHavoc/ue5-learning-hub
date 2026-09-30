@@ -1,5 +1,5 @@
 window.LEVEL4_SPECIALIST_PROJECTS = {
-  version: '3.58.9',
+  version: '3.59.0',
   intro: {
     title: 'Level 4 Specialist Projects',
     kicker: 'Choose ONE pathway',
@@ -857,8 +857,8 @@ window.LEVEL4_SPECIALIST_PROJECTS = {
     {
       id:'unreal-cpp-programming', icon:'C++', title:'Unreal C++ Skill Missions', role:'Gameplay Programming — C++', time:'Cumulative guided pathway',
       href:'#/cpp-mission/cpp-setup/start',
-      strap:'Complete-newbie C++ pathway: toolchain → native collectible → function-based locked door → TArray inventory + key-gated door, all in one Third Person C++ project.',
-      outcome:'A cumulative Unreal C++ gameplay project for complete beginners. Mission 0 proves the Visual Studio/Unreal workflow with ASetupProbe; Mission 1 builds ATrainingPickup; Mission 2 builds a function-based ATrainingDoor; Mission 3 adds a TArray<FName> inventory to AL4CppTrainingCharacter so BP_Key can unlock the door. Syntax is decoded at first use rather than assumed.'
+      strap:'Complete-newbie C++ pathway: toolchain → collectible → function-based door → TArray inventory/key gate → reusable InventoryComponent + events, all in one Third Person C++ project.',
+      outcome:'A cumulative Unreal C++ gameplay project for complete beginners. Mission 0 proves Visual Studio/Unreal with ASetupProbe; Mission 1 builds ATrainingPickup; Mission 2 builds ATrainingDoor with reusable functions; Mission 3 adds a Character-owned TArray<FName> inventory and key gate; Mission 4 refactors that working inventory into reusable UInventoryComponent with an OnInventoryChanged delegate/event. Syntax is decoded at first use rather than assumed.'
     }
   ]
 };
