@@ -181,3 +181,20 @@
 .cpp-code-read-grid p{margin:0;line-height:1.5;color:var(--muted,#c7cbd2)}
 .cpp-code-read-note{margin:0;padding:11px 13px;border-top:1px solid rgba(255,214,102,.16);background:rgba(255,214,102,.055);font-weight:750;line-height:1.5}
 @media(max-width:720px){.cpp-code-read-grid>div{grid-template-columns:1fr;gap:4px}}
+
+
+/* v3.59.1 — exact C++ code placement */
+.cpp-code-guide{margin:12px 0;border:1px solid rgba(105,220,170,.28);border-radius:14px;background:rgba(10,40,31,.32);overflow:hidden}
+.cpp-code-guide-head{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;padding:11px 13px;border-bottom:1px solid rgba(105,220,170,.17)}
+.cpp-code-guide-head span{font-size:.68rem;font-weight:950;letter-spacing:.12em;color:#83efc2}
+.cpp-code-guide-head strong{font-size:.9rem}
+.cpp-code-guide-grid{display:grid;grid-template-columns:1fr 1fr}
+.cpp-code-guide-grid>div{padding:11px 13px;border-top:1px solid rgba(255,255,255,.055)}
+.cpp-code-guide-grid>div:nth-child(-n+2){border-top:0}
+.cpp-code-guide-grid>div:nth-child(even){border-left:1px solid rgba(255,255,255,.055)}
+.cpp-code-guide-grid .after{grid-column:1/-1;border-left:0;background:rgba(105,220,170,.045)}
+.cpp-code-guide-grid small{display:block;margin-bottom:5px;font-size:.66rem;font-weight:950;letter-spacing:.1em;color:#83efc2}
+.cpp-code-guide-grid code{font-family:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;font-weight:850;color:#d7fff0;overflow-wrap:anywhere}
+.cpp-code-guide-grid p{margin:0;line-height:1.5;color:var(--muted,#c7cbd2)}
+.cpp-code-guide-grid strong{color:#effff8}
+@media(max-width:720px){.cpp-code-guide-grid{grid-template-columns:1fr}.cpp-code-guide-grid>div,.cpp-code-guide-grid>div:nth-child(-n+2),.cpp-code-guide-grid>div:nth-child(even){border-left:0;border-top:1px solid rgba(255,255,255,.055)}.cpp-code-guide-grid>div:first-child{border-top:0}}
