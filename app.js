@@ -2101,12 +2101,17 @@ function cppMissionCheckpoint(blocks){
   if(!blocks?.length)return '';
   return `<details class="content-card cpp-checkpoint"><summary>⌨ Full code checkpoint — compare after you have typed the stage</summary><p>Use this to compare your finished file. Do not replace your working file blindly: find the exact difference that matters.</p>${cppMissionCode(blocks)}</details>`;
 }
+function cppCodeRead(read){
+  if(!read?.items?.length)return '';
+  return `<section class="cpp-code-read"><div class="cpp-code-read-head"><span>READ THIS CODE</span><strong>What the symbols actually mean</strong></div><div class="cpp-code-read-grid">${read.items.map(x=>`<div><code>${esc(x.token||'')}</code><p>${esc(x.meaning||'')}</p></div>`).join('')}</div>${read.note?`<p class="cpp-code-read-note">${esc(read.note)}</p>`:''}</section>`;
+}
 function cppMissionStep(step,i){
   const actions=(step.doList&&step.doList.length)?step.doList:[step.do||''];
   return `<article class="skill-step-card cpp-step-card"><div class="skill-step-num">${String(i+1).padStart(2,'0')}</div><div class="skill-step-body"><h3>${esc(step.title)}</h3>
     <div class="skill-step-field where"><span>1 • WHERE TO WORK</span><p>${esc(step.where||'')}</p></div>
     <div class="skill-step-field do"><span>2 • DO THESE ONE AT A TIME — IN THIS EXACT ORDER</span><ol class="skill-action-list">${actions.map(x=>`<li>${esc(x)}</li>`).join('')}</ol></div>
     ${cppMissionCode(step.code)}
+    ${cppCodeRead(step.codeRead)}
     <div class="skill-step-field check"><span>3 • YOU SHOULD NOW HAVE</span><p>${esc(step.check||'')}</p></div>
     <div class="skill-step-field why"><span>WHY THIS MATTERS</span><p>${esc(step.why||'')}</p></div>
   </div></article>`;
