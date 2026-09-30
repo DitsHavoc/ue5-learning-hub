@@ -1,7 +1,7 @@
 window.UE5_CPP_SKILL_MISSIONS = {
-  "version": "3.58.9",
+  "version": "3.59.0",
   "title": "Unreal C++ Programmer Path",
-  "summary": "A cumulative Level 4 C++ pathway for complete beginners. Students start from the Third Person C++ template, learn the toolchain by writing real code, then build connected gameplay systems in one project: collectible → function-based door → Character-owned TArray inventory → key-gated door. New C++ syntax is decoded at first use.",
+  "summary": "A cumulative Level 4 C++ pathway for complete beginners using one Third Person C++ project. Students progress from toolchain and syntax, to a collectible, function-based locked door, Character-owned TArray inventory, then a professional refactor into reusable UInventoryComponent plus inventory-changed events.",
   "planned": [
     "Mission 0 — Toolchain + Your First Working C++",
     "Mission 1 — Core Gameplay Actor: C++ Collectible",
@@ -4832,6 +4832,1094 @@ window.UE5_CPP_SKILL_MISSIONS = {
           "common": [
             "If the key appears in logs but HasItem is false, compare FName spelling exactly (ExitKey vs other IDs).",
             "If you consume the key and then reset bIsLocked manually, the player will need another key—state rules should be deliberate."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cpp-inventory-component",
+      "sequence": 4,
+      "displaySequence": "4",
+      "requiresMission": "cpp-arrays-inventory",
+      "discipline": "Unreal C++",
+      "icon": "C++",
+      "title": "Reusable Actor Components & Events — Extract Inventory",
+      "subtitle": "Refactor the working inventory out of AL4CppTrainingCharacter into a reusable UInventoryComponent, broadcast an inventory-changed event, then update pickups and doors to communicate through the component.",
+      "duration": "4–5 hours",
+      "difficulty": "Guided architecture refactor",
+      "summary": "Your inventory works, but the Character is starting to own too many unrelated jobs. Mission 4 teaches composition: create a reusable Actor Component for inventory behaviour, attach it to the Character, broadcast a dynamic multicast delegate when state changes, and refactor the existing pickup/door systems without changing their player-facing behaviour.",
+      "guideRule": "Do not delete the old Character inventory until the component version has passed the full gameplay test. Refactor safely: build replacement → connect callers → prove behaviour → remove obsolete code.",
+      "skills": [
+        "UActorComponent",
+        "composition",
+        "CreateDefaultSubobject component",
+        "private state",
+        "getter functions",
+        "dynamic multicast delegates",
+        "BlueprintAssignable",
+        "Broadcast",
+        "AddDynamic",
+        "component API",
+        "safe refactoring"
+      ],
+      "rules": [
+        "Continue the same L4CppTraining project.",
+        "Do not skip READ THIS CODE boxes—component/delegate syntax is explained at first use.",
+        "The new component owns the TArray; Character owns the component instance.",
+        "Keep inventory data private behind functions rather than letting every Actor edit the array.",
+        "Refactor one caller at a time and test before removing the old Character implementation.",
+        "Mission 4 should end with the same Coin/Key/Door gameplay behaviour as Mission 3, but cleaner architecture."
+      ],
+      "gameFlow": [
+        "Why component?",
+        "Create UInventoryComponent",
+        "Move array/API",
+        "Add delegate",
+        "Character owns component",
+        "Bind event",
+        "Refactor pickup",
+        "Refactor door",
+        "Delete old Character inventory",
+        "Full regression + reuse"
+      ],
+      "theoryLinks": [
+        {
+          "label": "Epic UE5.8 — Components",
+          "href": "https://dev.epicgames.com/documentation/en-us/unreal-engine/components-in-unreal-engine"
+        },
+        {
+          "label": "Epic UE5.8 — UActorComponent",
+          "href": "https://dev.epicgames.com/documentation/en-us/unreal-engine/API/Runtime/Engine/UActorComponent"
+        },
+        {
+          "label": "Epic UE5.8 — Delegates",
+          "href": "https://dev.epicgames.com/documentation/en-us/unreal-engine/delegates-and-lambda-functions-in-unreal-engine"
+        },
+        {
+          "label": "Epic UE5.8 — Dynamic Delegates",
+          "href": "https://dev.epicgames.com/documentation/en-us/unreal-engine/dynamic-delegates-in-unreal-engine"
+        }
+      ],
+      "stages": [
+        {
+          "id": "start",
+          "number": 0,
+          "title": "Why Refactor? — Character Has Too Many Jobs",
+          "goal": "Identify why inventory is a reusable behaviour and plan a safe move from Character-owned array to UInventoryComponent.",
+          "why": "Mission 3 deliberately put the first TArray directly on the Character because it was the easiest place to learn ownership. Now that the mechanic works, you can improve the architecture without changing the game.",
+          "concept": "Composition means building an Actor from reusable components instead of making one class own every system. UActorComponent is designed for reusable non-physical behaviours; inventory is a strong example because it has no world transform of its own.",
+          "practical": [
+            "The same InventoryComponent could later be added to an NPC, chest or different player Character.",
+            "Character code becomes easier to read because movement/input and inventory implementation are separated.",
+            "Pickup and door can depend on the inventory component API instead of the Character's raw array."
+          ],
+          "algorithm": [
+            "Build UInventoryComponent while old Character inventory still works.",
+            "Move/copy array functions into the component.",
+            "Add component instance to Character.",
+            "Refactor pickup to call component AddItem.",
+            "Refactor door to call component HasItem.",
+            "Run full regression test.",
+            "Only then delete old Character inventory/functions."
+          ],
+          "review": [
+            {
+              "term": "Composition",
+              "text": "Build functionality by giving an Actor components, rather than forcing all behaviour into the Actor class itself."
+            },
+            {
+              "term": "UActorComponent",
+              "text": "Reusable component for non-spatial behaviour such as inventory, attributes or logic."
+            },
+            {
+              "term": "Refactor",
+              "text": "Improve code structure while preserving intended external behaviour."
+            },
+            {
+              "term": "Regression test",
+              "text": "Re-test previously working behaviour after structural changes."
+            }
+          ],
+          "steps": [
+            {
+              "title": "Audit the Character",
+              "where": "L4CppTrainingCharacter.h/.cpp",
+              "doList": [
+                "Find Inventory TArray.",
+                "Find AddItem, HasItem, RemoveItem and PrintInventory.",
+                "Notice movement/camera/input code also lives in the Character.",
+                "Do not delete the inventory code yet."
+              ],
+              "check": "You can identify the inventory behaviour that will move.",
+              "why": "Refactoring starts by identifying a coherent responsibility."
+            },
+            {
+              "title": "State the safety rule",
+              "where": "Notes / verbal check",
+              "doList": [
+                "Replacement first.",
+                "Callers second.",
+                "Full test third.",
+                "Delete old implementation last."
+              ],
+              "check": "You can explain why deleting first would make debugging harder.",
+              "why": "Safe incremental refactors preserve a working reference point."
+            }
+          ],
+          "test": [
+            "Mission 3 gameplay still works.",
+            "You can explain why inventory fits an ActorComponent.",
+            "Old Character inventory remains intact for now."
+          ],
+          "doneWhen": "You have a clear safe refactor plan.",
+          "common": [
+            "Do not rewrite pickup, door and Character simultaneously before the component itself compiles.",
+            "Refactoring is not an excuse to change gameplay rules at the same time."
+          ]
+        },
+        {
+          "id": "create-component",
+          "number": 1,
+          "title": "Create UInventoryComponent",
+          "goal": "Create an Actor Component C++ class and understand why its prefix/lifecycle differ from AActor.",
+          "why": "This is your first authored reusable non-Actor gameplay class.",
+          "concept": "UActorComponent inherits from UObject rather than AActor, so it cannot be placed independently in a level and has no transform. An Actor owns component instances.",
+          "practical": [
+            "Character will create one InventoryComponent.",
+            "The component can later be reused by other Actor classes.",
+            "It does not need Tick for this inventory system."
+          ],
+          "algorithm": [
+            "Tools → New C++ Class.",
+            "Choose Actor Component (or Show All Classes → ActorComponent).",
+            "Name InventoryComponent.",
+            "Compile untouched class.",
+            "Inspect UInventoryComponent inheritance."
+          ],
+          "review": [
+            {
+              "term": "U prefix",
+              "text": "Unreal naming prefix used for UObject-derived classes such as components."
+            },
+            {
+              "term": "UActorComponent",
+              "text": "Base class for reusable Actor-owned behaviour without a transform."
+            },
+            {
+              "term": "AActor vs UActorComponent",
+              "text": "Actor can exist in the world; ActorComponent belongs to an Actor."
+            },
+            {
+              "term": "PrimaryComponentTick",
+              "text": "Component equivalent of Actor tick configuration."
+            }
+          ],
+          "steps": [
+            {
+              "title": "Generate InventoryComponent",
+              "where": "Unreal Editor → Tools → New C++ Class",
+              "doList": [
+                "Choose Actor Component if shown in Common Classes.",
+                "If not, use Show All Classes and search ActorComponent.",
+                "Name the class InventoryComponent.",
+                "Create it in the project module.",
+                "Open InventoryComponent.h/.cpp.",
+                "Compile the untouched generated class."
+              ],
+              "check": "UInventoryComponent exists and compiles.",
+              "why": "Start from a clean generated component baseline."
+            },
+            {
+              "title": "Disable unnecessary component Tick",
+              "where": "InventoryComponent.cpp → constructor",
+              "doList": [
+                "Set PrimaryComponentTick.bCanEverTick = false;.",
+                "Save/compile."
+              ],
+              "code": [
+                {
+                  "title": "Component constructor",
+                  "content": "UInventoryComponent::UInventoryComponent()\n{\n    PrimaryComponentTick.bCanEverTick = false;\n}"
+                }
+              ],
+              "codeRead": {
+                "items": [
+                  {
+                    "token": "UInventoryComponent::UInventoryComponent()",
+                    "meaning": "Constructor belonging to the UObject-derived InventoryComponent class."
+                  },
+                  {
+                    "token": "PrimaryComponentTick",
+                    "meaning": "Component tick settings; equivalent idea to PrimaryActorTick on Actors."
+                  },
+                  {
+                    "token": "false",
+                    "meaning": "This inventory has no per-frame work, so Tick is disabled."
+                  }
+                ]
+              },
+              "check": "InventoryComponent does not Tick.",
+              "why": "Non-spatial event-driven inventory has no reason to update every frame."
+            }
+          ],
+          "test": [
+            "UInventoryComponent compiles.",
+            "It derives from UActorComponent.",
+            "Tick is disabled."
+          ],
+          "doneWhen": "The reusable component class exists.",
+          "common": [
+            "Do not choose SceneComponent—inventory has no position/rotation.",
+            "Do not create a separate Inventory Actor just to store non-spatial behaviour."
+          ]
+        },
+        {
+          "id": "component-header",
+          "number": 2,
+          "title": "Component Header — Move the Inventory Contract",
+          "goal": "Declare the private TArray and public inventory API inside UInventoryComponent.",
+          "why": "The component should own both inventory state and the functions that enforce its rules.",
+          "concept": "Encapsulation keeps data private and exposes named operations. Other classes should ask AddItem/HasItem rather than edit the array.",
+          "practical": [
+            "The component can change its internal representation later without forcing every caller to change.",
+            "GetItemCount provides a simple read-only count without exposing the array itself."
+          ],
+          "algorithm": [
+            "Declare public functions.",
+            "Declare BlueprintAssignable event placeholder later.",
+            "Keep Inventory private.",
+            "Use AllowPrivateAccess metadata only so Blueprint reflection can expose it read-only if required."
+          ],
+          "review": [
+            {
+              "term": "Encapsulation",
+              "text": "Hide internal data and expose controlled functions for interacting with it."
+            },
+            {
+              "term": "private TArray",
+              "text": "Only UInventoryComponent directly edits Inventory."
+            },
+            {
+              "term": "GetItemCount",
+              "text": "Query returning Inventory.Num() without exposing array mutation."
+            }
+          ],
+          "checkpointCode": [
+            {
+              "title": "InventoryComponent.h — target after delegate stage",
+              "content": "#pragma once\n\n#include \"CoreMinimal.h\"\n#include \"Components/ActorComponent.h\"\n#include \"InventoryComponent.generated.h\"\n\nDECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(\n    FInventoryChangedSignature,\n    FName, ItemId,\n    int32, NewCount\n);\n\nUCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))\nclass L4CPPTRAINING_API UInventoryComponent : public UActorComponent\n{\n    GENERATED_BODY()\n\npublic:\n    UInventoryComponent();\n\n    UPROPERTY(BlueprintAssignable, Category=\"Inventory\")\n    FInventoryChangedSignature OnInventoryChanged;\n\n    UFUNCTION(BlueprintCallable, Category=\"Inventory\")\n    bool AddItem(FName ItemId);\n\n    UFUNCTION(BlueprintPure, Category=\"Inventory\")\n    bool HasItem(FName ItemId) const;\n\n    UFUNCTION(BlueprintCallable, Category=\"Inventory\")\n    bool RemoveItem(FName ItemId);\n\n    UFUNCTION(BlueprintCallable, Category=\"Inventory\")\n    void PrintInventory() const;\n\n    UFUNCTION(BlueprintPure, Category=\"Inventory\")\n    int32 GetItemCount() const;\n\nprivate:\n    UPROPERTY(\n        VisibleAnywhere,\n        BlueprintReadOnly,\n        Category=\"Inventory\",\n        meta=(AllowPrivateAccess=\"true\")\n    )\n    TArray<FName> Inventory;\n};"
+            }
+          ],
+          "steps": [
+            {
+              "title": "Declare the public inventory functions",
+              "where": "InventoryComponent.h → public section",
+              "doList": [
+                "Add bool AddItem(FName ItemId).",
+                "Add bool HasItem(FName ItemId) const.",
+                "Add bool RemoveItem(FName ItemId).",
+                "Add void PrintInventory() const.",
+                "Add int32 GetItemCount() const.",
+                "Add the BlueprintCallable/Pure specifiers shown in the checkpoint."
+              ],
+              "code": [
+                {
+                  "title": "Component API",
+                  "content": "UFUNCTION(BlueprintCallable, Category=\"Inventory\")\nbool AddItem(FName ItemId);\n\nUFUNCTION(BlueprintPure, Category=\"Inventory\")\nbool HasItem(FName ItemId) const;\n\nUFUNCTION(BlueprintCallable, Category=\"Inventory\")\nbool RemoveItem(FName ItemId);\n\nUFUNCTION(BlueprintCallable, Category=\"Inventory\")\nvoid PrintInventory() const;\n\nUFUNCTION(BlueprintPure, Category=\"Inventory\")\nint32 GetItemCount() const;"
+                }
+              ],
+              "check": "The component has a complete public API without exposing mutation details.",
+              "why": "Other systems can depend on function names rather than array implementation."
+            },
+            {
+              "title": "Move the TArray declaration to private",
+              "where": "InventoryComponent.h → private section",
+              "doList": [
+                "Declare TArray<FName> Inventory.",
+                "Use VisibleAnywhere + BlueprintReadOnly + Category Inventory.",
+                "Add meta=(AllowPrivateAccess=\"true\") exactly as shown.",
+                "Do not delete the Character array yet."
+              ],
+              "code": [
+                {
+                  "title": "Private inventory state",
+                  "content": "UPROPERTY(\n    VisibleAnywhere,\n    BlueprintReadOnly,\n    Category=\"Inventory\",\n    meta=(AllowPrivateAccess=\"true\")\n)\nTArray<FName> Inventory;"
+                }
+              ],
+              "codeRead": {
+                "items": [
+                  {
+                    "token": "private:",
+                    "meaning": "Only UInventoryComponent methods can directly access this member in ordinary C++."
+                  },
+                  {
+                    "token": "meta=(AllowPrivateAccess=\"true\")",
+                    "meaning": "Allows Unreal's Blueprint reflection to expose the private property according to the specified read-only rule."
+                  },
+                  {
+                    "token": "TArray<FName>",
+                    "meaning": "Same simple presence inventory learned in Mission 3, now owned by the component."
+                  }
+                ]
+              },
+              "check": "Inventory storage now exists in the new class too.",
+              "why": "This is the state being extracted from Character."
+            }
+          ],
+          "test": [
+            "Component public API is declared.",
+            "Inventory is private in component.",
+            "Old Character inventory still exists until migration passes."
+          ],
+          "doneWhen": "The new component contract/state are declared.",
+          "common": [
+            "Do not make Inventory public simply to make refactoring easier.",
+            "The component and Character temporarily both having an array is expected during the safe transition."
+          ]
+        },
+        {
+          "id": "move-functions",
+          "number": 3,
+          "title": "Move the Inventory Logic — Improve AddItem While You Refactor",
+          "goal": "Implement the inventory functions inside UInventoryComponent and make AddItem return success instead of silently accepting duplicates.",
+          "why": "A refactor can improve the internal API when the behaviour is explicit and tested. Returning bool lets pickups know whether collection actually succeeded.",
+          "concept": "The component owns the rules. AddItem returns false for NAME_None or duplicate IDs; true only when the array changes.",
+          "practical": [
+            "A duplicate unique pickup can remain in the world instead of disappearing if AddItem fails.",
+            "Door HasItem logic remains a simple query."
+          ],
+          "algorithm": [
+            "AddItem: validate → reject duplicate → Add → return true.",
+            "HasItem: Contains.",
+            "RemoveItem: Remove → success bool.",
+            "PrintInventory: loop.",
+            "GetItemCount: Num."
+          ],
+          "review": [
+            {
+              "term": "Success return",
+              "text": "bool tells the caller whether the requested state change happened."
+            },
+            {
+              "term": "Inventory.Add",
+              "text": "Now safe after an explicit Contains duplicate check."
+            },
+            {
+              "term": "<= 0",
+              "text": "Comparison used to detect that nothing was removed."
+            }
+          ],
+          "checkpointCode": [
+            {
+              "title": "InventoryComponent.cpp — complete core logic before delegate broadcasts",
+              "content": "#include \"InventoryComponent.h\"\n\nUInventoryComponent::UInventoryComponent()\n{\n    PrimaryComponentTick.bCanEverTick = false;\n}\n\nbool UInventoryComponent::AddItem(FName ItemId)\n{\n    if (ItemId.IsNone())\n    {\n        UE_LOG(LogTemp, Warning, TEXT(\"Inventory rejected NAME_None\"));\n        return false;\n    }\n\n    if (Inventory.Contains(ItemId))\n    {\n        UE_LOG(\n            LogTemp,\n            Warning,\n            TEXT(\"Inventory already contains %s\"),\n            *ItemId.ToString()\n        );\n        return false;\n    }\n\n    Inventory.Add(ItemId);\n\n    OnInventoryChanged.Broadcast(ItemId, Inventory.Num());\n\n    return true;\n}\n\nbool UInventoryComponent::HasItem(FName ItemId) const\n{\n    return Inventory.Contains(ItemId);\n}\n\nbool UInventoryComponent::RemoveItem(FName ItemId)\n{\n    const int32 RemovedCount = Inventory.Remove(ItemId);\n\n    if (RemovedCount <= 0)\n    {\n        return false;\n    }\n\n    OnInventoryChanged.Broadcast(ItemId, Inventory.Num());\n\n    return true;\n}\n\nvoid UInventoryComponent::PrintInventory() const\n{\n    UE_LOG(\n        LogTemp,\n        Warning,\n        TEXT(\"Inventory contains %d item(s)\"),\n        Inventory.Num()\n    );\n\n    for (const FName& ItemId : Inventory)\n    {\n        UE_LOG(LogTemp, Warning, TEXT(\"- %s\"), *ItemId.ToString());\n    }\n}\n\nint32 UInventoryComponent::GetItemCount() const\n{\n    return Inventory.Num();\n}"
+            }
+          ],
+          "steps": [
+            {
+              "title": "Implement AddItem/HasItem",
+              "where": "InventoryComponent.cpp",
+              "doList": [
+                "Reject NAME_None with false.",
+                "Reject duplicate Contains with false.",
+                "Call Inventory.Add(ItemId).",
+                "For now leave the Broadcast line in the checkpoint until the next stage or add it after declaring the delegate.",
+                "Return true.",
+                "Implement HasItem with Contains."
+              ],
+              "code": [
+                {
+                  "title": "Core AddItem decision",
+                  "content": "if (ItemId.IsNone())\n{\n    return false;\n}\n\nif (Inventory.Contains(ItemId))\n{\n    return false;\n}\n\nInventory.Add(ItemId);\nreturn true;"
+                }
+              ],
+              "check": "AddItem only reports true when the component state changes.",
+              "why": "Callers can make correct decisions based on actual success."
+            },
+            {
+              "title": "Implement Remove/Print/Count",
+              "where": "InventoryComponent.cpp",
+              "doList": [
+                "Move/adapt RemoveItem from Mission 3.",
+                "Move PrintInventory loop.",
+                "Implement GetItemCount returning Inventory.Num().",
+                "Save/compile before adding delegate code."
+              ],
+              "code": [
+                {
+                  "title": "GetItemCount",
+                  "content": "int32 UInventoryComponent::GetItemCount() const\n{\n    return Inventory.Num();\n}"
+                }
+              ],
+              "check": "The component can perform every operation the Character inventory previously provided.",
+              "why": "The replacement must be feature-complete before callers migrate."
+            }
+          ],
+          "test": [
+            "Component AddItem rejects invalid/duplicate IDs.",
+            "HasItem works.",
+            "RemoveItem works.",
+            "PrintInventory/GetItemCount work."
+          ],
+          "doneWhen": "Inventory behaviour exists independently of the Character.",
+          "common": [
+            "Do not delete Character functions yet.",
+            "If you copied method bodies, ensure class qualifiers now say UInventoryComponent:: rather than AL4CppTrainingCharacter::."
+          ]
+        },
+        {
+          "id": "delegate",
+          "number": 4,
+          "title": "Events — Broadcast OnInventoryChanged",
+          "goal": "Declare a dynamic multicast delegate, expose it as BlueprintAssignable and broadcast it after successful add/remove operations.",
+          "why": "Other systems should be able to react when inventory changes without the component knowing every listener.",
+          "concept": "A multicast delegate is an event that can have multiple listeners. The inventory component broadcasts 'something changed'; listeners choose what to do.",
+          "practical": [
+            "UI can refresh after a pickup.",
+            "Character can log/debug changes.",
+            "Audio/quest systems could listen later without changing AddItem."
+          ],
+          "algorithm": [
+            "Declare delegate type with ItemId/NewCount parameters.",
+            "Add OnInventoryChanged property.",
+            "After successful Add → Broadcast.",
+            "After successful Remove → Broadcast."
+          ],
+          "review": [
+            {
+              "term": "DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams",
+              "text": "Macro creating a reflected multicast event type with two parameters."
+            },
+            {
+              "term": "BlueprintAssignable",
+              "text": "Allows Blueprint to bind event listeners to the delegate."
+            },
+            {
+              "term": "Broadcast",
+              "text": "Invoke every function currently bound to the multicast delegate."
+            },
+            {
+              "term": "Loose notification",
+              "text": "Broadcaster announces an event without needing to know specific listeners."
+            }
+          ],
+          "steps": [
+            {
+              "title": "Declare the delegate type",
+              "where": "InventoryComponent.h → after includes/before UCLASS",
+              "doList": [
+                "Add the TwoParams delegate declaration exactly as shown.",
+                "Name the type FInventoryChangedSignature.",
+                "Parameters: FName ItemId and int32 NewCount.",
+                "Do not place this macro inside a function body."
+              ],
+              "code": [
+                {
+                  "title": "Delegate type",
+                  "content": "DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(\n    FInventoryChangedSignature,\n    FName, ItemId,\n    int32, NewCount\n);"
+                }
+              ],
+              "codeRead": {
+                "items": [
+                  {
+                    "token": "DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams",
+                    "meaning": "Unreal macro that declares a dynamic multicast event signature with two supplied parameters."
+                  },
+                  {
+                    "token": "FInventoryChangedSignature",
+                    "meaning": "The new delegate type name."
+                  },
+                  {
+                    "token": "FName, ItemId",
+                    "meaning": "First event parameter type/name."
+                  },
+                  {
+                    "token": "int32, NewCount",
+                    "meaning": "Second event parameter type/name."
+                  }
+                ],
+                "note": "Do not memorise the macro name. Learn the idea: define an event type and the data listeners receive."
+              },
+              "check": "The header defines a delegate signature before the component class.",
+              "why": "The class can now own an instance of that event type."
+            },
+            {
+              "title": "Expose OnInventoryChanged",
+              "where": "InventoryComponent.h → public section",
+              "doList": [
+                "Add UPROPERTY(BlueprintAssignable, Category=\"Inventory\").",
+                "Declare FInventoryChangedSignature OnInventoryChanged;.",
+                "Save."
+              ],
+              "code": [
+                {
+                  "title": "Delegate property",
+                  "content": "UPROPERTY(BlueprintAssignable, Category=\"Inventory\")\nFInventoryChangedSignature OnInventoryChanged;"
+                }
+              ],
+              "check": "The component owns a Blueprint-bindable inventory event.",
+              "why": "Listeners can subscribe without inventory knowing them."
+            },
+            {
+              "title": "Broadcast after successful state changes",
+              "where": "InventoryComponent.cpp",
+              "doList": [
+                "After Inventory.Add(ItemId), call OnInventoryChanged.Broadcast(ItemId, Inventory.Num()).",
+                "After successful RemoveItem, call the same Broadcast before returning true.",
+                "Do not Broadcast for rejected duplicates/missing removals.",
+                "Save/full build if reflection changes require it."
+              ],
+              "code": [
+                {
+                  "title": "Broadcast",
+                  "content": "OnInventoryChanged.Broadcast(ItemId, Inventory.Num());"
+                }
+              ],
+              "codeRead": {
+                "items": [
+                  {
+                    "token": ".Broadcast(...)",
+                    "meaning": "Call every listener bound to this multicast delegate."
+                  },
+                  {
+                    "token": "ItemId",
+                    "meaning": "Tell listeners which identifier was involved."
+                  },
+                  {
+                    "token": "Inventory.Num()",
+                    "meaning": "Tell listeners the new total count."
+                  }
+                ]
+              },
+              "check": "Only successful inventory changes broadcast events.",
+              "why": "Listeners receive meaningful change notifications rather than failed attempts."
+            }
+          ],
+          "test": [
+            "Delegate type compiles.",
+            "OnInventoryChanged is BlueprintAssignable.",
+            "Add/remove success broadcasts.",
+            "Rejected operations do not broadcast."
+          ],
+          "doneWhen": "Inventory state changes can notify external listeners.",
+          "common": [
+            "Dynamic multicast delegates do not return values; they notify listeners.",
+            "If UHT errors occur, keep the DECLARE macro at header/global scope and check commas/parameter pairs."
+          ]
+        },
+        {
+          "id": "character-component",
+          "number": 5,
+          "title": "Character Composition — Add InventoryComponent",
+          "goal": "Create one UInventoryComponent as a default subobject on AL4CppTrainingCharacter and expose a getter.",
+          "why": "The Character should own the component instance while the component owns inventory implementation.",
+          "concept": "An Actor Component is created as a default subobject in the owning Actor constructor, just like other native components, but it does not need SetupAttachment because it has no transform.",
+          "practical": [
+            "Every spawned player Character gets its own inventory component instance.",
+            "Other classes can ask Character for its component through a getter."
+          ],
+          "algorithm": [
+            "Forward-declare UInventoryComponent.",
+            "Declare component pointer/getter.",
+            "Include component header in Character.cpp.",
+            "CreateDefaultSubobject in Character constructor.",
+            "Return pointer from getter."
+          ],
+          "review": [
+            {
+              "term": "Default subobject",
+              "text": "Native component automatically created as part of every Character instance."
+            },
+            {
+              "term": "No SetupAttachment",
+              "text": "UActorComponent has no transform, so it is not attached spatially to SceneRoot."
+            },
+            {
+              "term": "Getter",
+              "text": "Small function that returns a pointer/reference to owned data/component."
+            }
+          ],
+          "steps": [
+            {
+              "title": "Declare InventoryComponent and getter",
+              "where": "L4CppTrainingCharacter.h",
+              "doList": [
+                "Forward-declare class UInventoryComponent near other forward declarations.",
+                "Add VisibleAnywhere/BlueprintReadOnly UInventoryComponent* InventoryComponent.",
+                "Add BlueprintPure UInventoryComponent* GetInventoryComponent() const.",
+                "Do not remove old array/functions yet."
+              ],
+              "code": [
+                {
+                  "title": "Character component members",
+                  "content": "UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=\"Inventory\")\nUInventoryComponent* InventoryComponent;\n\nUFUNCTION(BlueprintPure, Category=\"Inventory\")\nUInventoryComponent* GetInventoryComponent() const;"
+                }
+              ],
+              "check": "Character declares ownership/access to the component.",
+              "why": "Callers need a clear route to the reusable inventory service."
+            },
+            {
+              "title": "Create the component in the Character constructor",
+              "where": "L4CppTrainingCharacter.cpp",
+              "doList": [
+                "Include InventoryComponent.h.",
+                "Find AL4CppTrainingCharacter constructor.",
+                "Create InventoryComponent with CreateDefaultSubobject<UInventoryComponent>(TEXT(\"InventoryComponent\")).",
+                "Do not call SetupAttachment.",
+                "Save/full build."
+              ],
+              "code": [
+                {
+                  "title": "Create component",
+                  "content": "InventoryComponent =\n    CreateDefaultSubobject<UInventoryComponent>(TEXT(\"InventoryComponent\"));"
+                }
+              ],
+              "codeRead": {
+                "items": [
+                  {
+                    "token": "CreateDefaultSubobject<UInventoryComponent>",
+                    "meaning": "Create one native InventoryComponent owned by every Character instance."
+                  },
+                  {
+                    "token": "No SetupAttachment",
+                    "meaning": "ActorComponent has no transform/location, unlike SceneComponent/PrimitiveComponent."
+                  }
+                ]
+              },
+              "check": "The Character now owns a native InventoryComponent.",
+              "why": "Composition replaces direct inventory implementation."
+            },
+            {
+              "title": "Implement the getter",
+              "where": "L4CppTrainingCharacter.cpp",
+              "doList": [
+                "Add GetInventoryComponent implementation.",
+                "Return InventoryComponent.",
+                "Save/compile."
+              ],
+              "code": [
+                {
+                  "title": "Getter",
+                  "content": "UInventoryComponent* AL4CppTrainingCharacter::GetInventoryComponent() const\n{\n    return InventoryComponent;\n}"
+                }
+              ],
+              "check": "Other C++/Blueprint systems can retrieve the component through a named query.",
+              "why": "This avoids public callers needing to know how it is stored."
+            }
+          ],
+          "test": [
+            "Character compiles with InventoryComponent.",
+            "Component appears on Character/Blueprint component list.",
+            "Getter returns it."
+          ],
+          "doneWhen": "Inventory behaviour is composed into the Character.",
+          "common": [
+            "If UInventoryComponent is incomplete in the .cpp constructor, include InventoryComponent.h.",
+            "Do not attach ActorComponent to a SceneComponent."
+          ]
+        },
+        {
+          "id": "bind-event",
+          "number": 6,
+          "title": "Character Listens to Inventory Events",
+          "goal": "Bind a Character handler to OnInventoryChanged in BeginPlay and log event data.",
+          "why": "This proves the delegate is genuinely decoupled: InventoryComponent broadcasts; Character chooses to listen.",
+          "concept": "AddDynamic is used again, but this time you created the event yourself. The listener callback signature must match the delegate parameters exactly.",
+          "practical": [
+            "Later UI can listen instead of/in addition to Character.",
+            "Character no longer needs AddItem implementation to know when inventory changes."
+          ],
+          "algorithm": [
+            "Declare BeginPlay if not already present.",
+            "Declare UFUNCTION handler(FName,int32).",
+            "BeginPlay checks component.",
+            "AddDynamic listener.",
+            "Handler logs values."
+          ],
+          "review": [
+            {
+              "term": "Listener",
+              "text": "Object/function registered to run when an event broadcasts."
+            },
+            {
+              "term": "Signature match",
+              "text": "Handler parameter types/order must match the delegate signature."
+            },
+            {
+              "term": "AddDynamic",
+              "text": "Bind current UObject instance/member function to a dynamic multicast delegate."
+            }
+          ],
+          "steps": [
+            {
+              "title": "Declare BeginPlay/handler",
+              "where": "L4CppTrainingCharacter.h",
+              "doList": [
+                "If BeginPlay override is not already declared, add virtual void BeginPlay() override; under protected.",
+                "Add UFUNCTION() void HandleInventoryChanged(FName ItemId, int32 NewCount);.",
+                "Do not duplicate BeginPlay if the template already has one."
+              ],
+              "code": [
+                {
+                  "title": "Listener declarations",
+                  "content": "virtual void BeginPlay() override;\n\nUFUNCTION()\nvoid HandleInventoryChanged(FName ItemId, int32 NewCount);"
+                }
+              ],
+              "check": "Character has a matching two-parameter listener callback.",
+              "why": "Dynamic delegate binding needs a reflected compatible function."
+            },
+            {
+              "title": "Bind in BeginPlay",
+              "where": "L4CppTrainingCharacter.cpp",
+              "doList": [
+                "In BeginPlay keep Super::BeginPlay();.",
+                "Check InventoryComponent is valid.",
+                "Call InventoryComponent->OnInventoryChanged.AddDynamic(this, &AL4CppTrainingCharacter::HandleInventoryChanged).",
+                "Save."
+              ],
+              "code": [
+                {
+                  "title": "Bind listener",
+                  "content": "if (InventoryComponent)\n{\n    InventoryComponent->OnInventoryChanged.AddDynamic(\n        this,\n        &AL4CppTrainingCharacter::HandleInventoryChanged\n    );\n}"
+                }
+              ],
+              "check": "Character subscribes when gameplay begins.",
+              "why": "The component does not need to know the Character's handler exists."
+            },
+            {
+              "title": "Implement the handler",
+              "where": "L4CppTrainingCharacter.cpp",
+              "doList": [
+                "Add HandleInventoryChanged with FName ItemId/int32 NewCount.",
+                "Log both values.",
+                "Compile."
+              ],
+              "code": [
+                {
+                  "title": "Event handler",
+                  "content": "void AL4CppTrainingCharacter::HandleInventoryChanged(\n    FName ItemId,\n    int32 NewCount\n)\n{\n    UE_LOG(\n        LogTemp,\n        Warning,\n        TEXT(\"Inventory changed: %s | count = %d\"),\n        *ItemId.ToString(),\n        NewCount\n    );\n}"
+                }
+              ],
+              "check": "The listener is ready to prove future broadcasts.",
+              "why": "This is your first authored event broadcaster/listener pair."
+            }
+          ],
+          "test": [
+            "Binding compiles.",
+            "Handler signature matches delegate.",
+            "A future broadcast will call the Character handler."
+          ],
+          "doneWhen": "Character reacts to component events without owning the component logic.",
+          "common": [
+            "If AddDynamic errors, compare handler parameters exactly with FInventoryChangedSignature.",
+            "Always keep Super::BeginPlay() when adding an override here."
+          ]
+        },
+        {
+          "id": "pickup-refactor",
+          "number": 7,
+          "title": "Refactor TrainingPickup to Use the Component",
+          "goal": "Replace Character->AddItem with GetInventoryComponent()->AddItem and only destroy the pickup when the component reports success.",
+          "why": "This migrates one caller at a time and immediately benefits from AddItem's new success Boolean.",
+          "concept": "The Character identifies/owns the service; the InventoryComponent performs the inventory operation. Pickup needs neither the array nor old Character AddItem.",
+          "practical": [
+            "Duplicate key/coin pickups can remain when AddItem rejects them, making the result explicit.",
+            "InventoryChanged event fires automatically from the component."
+          ],
+          "algorithm": [
+            "Cast Character.",
+            "Get component pointer.",
+            "If null return.",
+            "Call AddItem.",
+            "If false log/return.",
+            "If true mark collected/destroy."
+          ],
+          "review": [
+            {
+              "term": "Service component",
+              "text": "Reusable object providing a focused API such as inventory operations."
+            },
+            {
+              "term": "bool bAdded",
+              "text": "Local result telling pickup whether AddItem changed state."
+            },
+            {
+              "term": "Null component guard",
+              "text": "Protect against calling through a missing component pointer."
+            }
+          ],
+          "steps": [
+            {
+              "title": "Include InventoryComponent",
+              "where": "TrainingPickup.cpp",
+              "doList": [
+                "Add #include \"InventoryComponent.h\".",
+                "Keep L4CppTrainingCharacter.h.",
+                "Save."
+              ],
+              "check": "Pickup can call component functions through the full type.",
+              "why": "Getter only gives the pointer; the .cpp needs the class definition to call AddItem."
+            },
+            {
+              "title": "Replace AddItem call",
+              "where": "OnCollectionSphereBeginOverlap",
+              "doList": [
+                "After Character validation, get UInventoryComponent* Inventory = Character->GetInventoryComponent().",
+                "Return if Inventory is null.",
+                "Call const bool bAdded = Inventory->AddItem(ItemId).",
+                "If !bAdded, log/reject and return.",
+                "Only then set bCollected and Destroy."
+              ],
+              "code": [
+                {
+                  "title": "Component-based pickup",
+                  "content": "UInventoryComponent* Inventory =\n    Character->GetInventoryComponent();\n\nif (!Inventory)\n{\n    return;\n}\n\nconst bool bAdded = Inventory->AddItem(ItemId);\n\nif (!bAdded)\n{\n    UE_LOG(\n        LogTemp,\n        Warning,\n        TEXT(\"Could not add %s\"),\n        *ItemId.ToString()\n    );\n    return;\n}\n\nbCollected = true;\nDestroy();"
+                }
+              ],
+              "codeRead": {
+                "items": [
+                  {
+                    "token": "UInventoryComponent* Inventory",
+                    "meaning": "Local pointer to the Character's reusable inventory service."
+                  },
+                  {
+                    "token": "const bool bAdded",
+                    "meaning": "Store whether AddItem actually changed inventory."
+                  },
+                  {
+                    "token": "if (!bAdded)",
+                    "meaning": "Reject collection when invalid/duplicate item was not added."
+                  }
+                ]
+              },
+              "check": "Pickup now depends on the component API, not Character inventory functions.",
+              "why": "One caller has been safely migrated."
+            },
+            {
+              "title": "Test pickup before touching door",
+              "where": "Play",
+              "doList": [
+                "Collect Coin.",
+                "Confirm Character HandleInventoryChanged log fires.",
+                "Try collecting duplicate Coin.",
+                "Confirm the second AddItem is rejected according to your current pickup placement/state test.",
+                "Collect Key.",
+                "Confirm event logs new count."
+              ],
+              "check": "Pickup + component + delegate work before door is refactored.",
+              "why": "One-at-a-time testing localises refactor problems."
+            }
+          ],
+          "test": [
+            "Pickup obtains component safely.",
+            "Successful add broadcasts/listener logs.",
+            "Failed add does not destroy through the success path."
+          ],
+          "doneWhen": "TrainingPickup is fully migrated to UInventoryComponent.",
+          "common": [
+            "If delegate log never appears but item adds, check BeginPlay binding.",
+            "If component pointer is null, confirm Character constructor created it and you're using AL4CppTrainingCharacter."
+          ]
+        },
+        {
+          "id": "door-refactor",
+          "number": 8,
+          "title": "Refactor TrainingDoor to Query InventoryComponent",
+          "goal": "Replace Character->HasItem with component HasItem while preserving the exact Mission 3 key-gated behaviour.",
+          "why": "A good refactor should make the architecture change invisible to the player.",
+          "concept": "Door asks Character for its inventory service, then asks that component the item question. Door still owns RequiredItem/lock/movement.",
+          "practical": [
+            "Door no longer depends on Character implementing inventory methods.",
+            "Another Character class could work if it exposes/owns the same component route later."
+          ],
+          "algorithm": [
+            "Cast Character.",
+            "Get InventoryComponent.",
+            "If missing return/log.",
+            "Locked? ask Inventory->HasItem(RequiredItem).",
+            "If false reject.",
+            "If true SetLocked(false).",
+            "Reuse CanOpenDoor/OpenDoor."
+          ],
+          "review": [
+            {
+              "term": "Regression",
+              "text": "Accidental loss/change of previously working behaviour."
+            },
+            {
+              "term": "Preserve behaviour",
+              "text": "Coin still fails; ExitKey still unlocks; movement unchanged."
+            }
+          ],
+          "steps": [
+            {
+              "title": "Include InventoryComponent",
+              "where": "TrainingDoor.cpp",
+              "doList": [
+                "Add InventoryComponent.h include.",
+                "Keep L4CppTrainingCharacter.h.",
+                "Save."
+              ],
+              "check": "Door can call component HasItem.",
+              "why": "The concrete component type must be known in this implementation file."
+            },
+            {
+              "title": "Replace the key query",
+              "where": "OnTriggerBeginOverlap",
+              "doList": [
+                "After Character validation, get Inventory component.",
+                "Return if null.",
+                "Replace Character->HasItem(RequiredItem) with Inventory->HasItem(RequiredItem).",
+                "Keep SetLocked(false), CanOpenDoor and OpenDoor unchanged.",
+                "Save/compile."
+              ],
+              "code": [
+                {
+                  "title": "Component-based key query",
+                  "content": "UInventoryComponent* Inventory =\n    Character->GetInventoryComponent();\n\nif (!Inventory)\n{\n    return;\n}\n\nif (bIsLocked)\n{\n    if (!Inventory->HasItem(RequiredItem))\n    {\n        UE_LOG(\n            LogTemp,\n            Warning,\n            TEXT(\"%s requires %s\"),\n            *GetName(),\n            *RequiredItem.ToString()\n        );\n        return;\n    }\n\n    SetLocked(false);\n}\n\nif (CanOpenDoor())\n{\n    OpenDoor();\n}"
+                }
+              ],
+              "check": "Door behaviour is preserved through the new service component.",
+              "why": "The movement/lock architecture from Mission 2 survives the refactor unchanged."
+            },
+            {
+              "title": "Regression test",
+              "where": "Play",
+              "doList": [
+                "No items → door fails.",
+                "Coin only → door fails.",
+                "ExitKey → door unlocks/opens.",
+                "Leave → closes.",
+                "Re-enter → opens while unlocked."
+              ],
+              "check": "Player-facing Mission 3 behaviour is unchanged.",
+              "why": "That is the success condition for the architecture refactor."
+            }
+          ],
+          "test": [
+            "Door queries UInventoryComponent.",
+            "Wrong item still fails.",
+            "Correct item still unlocks.",
+            "Open/close remains unchanged."
+          ],
+          "doneWhen": "All gameplay callers use the new component.",
+          "common": [
+            "If door stopped compiling, check both Character and InventoryComponent includes.",
+            "Do not delete old Character inventory until this stage passes."
+          ]
+        },
+        {
+          "id": "final",
+          "number": 9,
+          "title": "Delete the Old Inventory, Full Regression, Reuse the Component",
+          "goal": "Remove the obsolete Character array/functions, run the complete gameplay loop and demonstrate that the component is independently reusable.",
+          "why": "A refactor is unfinished while two competing inventory implementations remain.",
+          "concept": "Once every caller uses UInventoryComponent, the old Character-owned array/API becomes dead code. Removing it leaves one source of truth.",
+          "practical": [
+            "Character becomes focused on character responsibilities.",
+            "Future UI/save systems can work with InventoryComponent directly.",
+            "Component reuse becomes possible on other Actor types."
+          ],
+          "algorithm": [
+            "Search references to old Character AddItem/HasItem/etc.",
+            "Delete old Character TArray/functions/implementations.",
+            "Build.",
+            "Run full gameplay regression.",
+            "Optionally add component to another test Actor/Blueprint.",
+            "Explain event flow."
+          ],
+          "review": [
+            {
+              "term": "Dead code",
+              "text": "Implementation no longer used by the current system."
+            },
+            {
+              "term": "Single source of truth",
+              "text": "Only one inventory array/system controls the state."
+            },
+            {
+              "term": "Reusable component",
+              "text": "Behaviour packaged so multiple Actor classes can own independent instances."
+            },
+            {
+              "term": "Event flow",
+              "text": "Component changes state → Broadcast → Character/listeners react."
+            }
+          ],
+          "checkpointCode": [
+            {
+              "title": "InventoryComponent.h — complete Mission 4",
+              "content": "#pragma once\n\n#include \"CoreMinimal.h\"\n#include \"Components/ActorComponent.h\"\n#include \"InventoryComponent.generated.h\"\n\nDECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(\n    FInventoryChangedSignature,\n    FName, ItemId,\n    int32, NewCount\n);\n\nUCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))\nclass L4CPPTRAINING_API UInventoryComponent : public UActorComponent\n{\n    GENERATED_BODY()\n\npublic:\n    UInventoryComponent();\n\n    UPROPERTY(BlueprintAssignable, Category=\"Inventory\")\n    FInventoryChangedSignature OnInventoryChanged;\n\n    UFUNCTION(BlueprintCallable, Category=\"Inventory\")\n    bool AddItem(FName ItemId);\n\n    UFUNCTION(BlueprintPure, Category=\"Inventory\")\n    bool HasItem(FName ItemId) const;\n\n    UFUNCTION(BlueprintCallable, Category=\"Inventory\")\n    bool RemoveItem(FName ItemId);\n\n    UFUNCTION(BlueprintCallable, Category=\"Inventory\")\n    void PrintInventory() const;\n\n    UFUNCTION(BlueprintPure, Category=\"Inventory\")\n    int32 GetItemCount() const;\n\nprivate:\n    UPROPERTY(\n        VisibleAnywhere,\n        BlueprintReadOnly,\n        Category=\"Inventory\",\n        meta=(AllowPrivateAccess=\"true\")\n    )\n    TArray<FName> Inventory;\n};"
+            },
+            {
+              "title": "InventoryComponent.cpp — complete Mission 4",
+              "content": "#include \"InventoryComponent.h\"\n\nUInventoryComponent::UInventoryComponent()\n{\n    PrimaryComponentTick.bCanEverTick = false;\n}\n\nbool UInventoryComponent::AddItem(FName ItemId)\n{\n    if (ItemId.IsNone())\n    {\n        UE_LOG(LogTemp, Warning, TEXT(\"Inventory rejected NAME_None\"));\n        return false;\n    }\n\n    if (Inventory.Contains(ItemId))\n    {\n        UE_LOG(\n            LogTemp,\n            Warning,\n            TEXT(\"Inventory already contains %s\"),\n            *ItemId.ToString()\n        );\n        return false;\n    }\n\n    Inventory.Add(ItemId);\n\n    OnInventoryChanged.Broadcast(ItemId, Inventory.Num());\n\n    return true;\n}\n\nbool UInventoryComponent::HasItem(FName ItemId) const\n{\n    return Inventory.Contains(ItemId);\n}\n\nbool UInventoryComponent::RemoveItem(FName ItemId)\n{\n    const int32 RemovedCount = Inventory.Remove(ItemId);\n\n    if (RemovedCount <= 0)\n    {\n        return false;\n    }\n\n    OnInventoryChanged.Broadcast(ItemId, Inventory.Num());\n\n    return true;\n}\n\nvoid UInventoryComponent::PrintInventory() const\n{\n    UE_LOG(\n        LogTemp,\n        Warning,\n        TEXT(\"Inventory contains %d item(s)\"),\n        Inventory.Num()\n    );\n\n    for (const FName& ItemId : Inventory)\n    {\n        UE_LOG(LogTemp, Warning, TEXT(\"- %s\"), *ItemId.ToString());\n    }\n}\n\nint32 UInventoryComponent::GetItemCount() const\n{\n    return Inventory.Num();\n}"
+            }
+          ],
+          "steps": [
+            {
+              "title": "Remove old Character inventory implementation",
+              "where": "L4CppTrainingCharacter.h/.cpp",
+              "doList": [
+                "Search project references for Character::AddItem, HasItem, RemoveItem and PrintInventory.",
+                "Confirm pickup/door no longer use them.",
+                "Delete the old Character Inventory TArray.",
+                "Delete old Character inventory function declarations/implementations.",
+                "Keep InventoryComponent pointer/getter/event handler.",
+                "Full Build."
+              ],
+              "check": "There is one inventory array: the private one inside UInventoryComponent.",
+              "why": "Duplicate state after a refactor is confusing and dangerous."
+            },
+            {
+              "title": "Run the full regression",
+              "where": "Play",
+              "doList": [
+                "Collect Coin → inventory changed event/log.",
+                "Try locked ExitKey door → fails.",
+                "Collect ExitKey → inventory changed event/log.",
+                "Door unlocks/opens.",
+                "Duplicate item add is rejected.",
+                "If you use RemoveItem, confirm removal broadcasts too."
+              ],
+              "check": "All Mission 3 gameplay survives with the new architecture.",
+              "why": "Structure improved without breaking behaviour."
+            },
+            {
+              "title": "Inspect Blueprint event exposure",
+              "where": "Character/Blueprint with InventoryComponent",
+              "doList": [
+                "Select/inspect InventoryComponent in the owning Blueprint/editor.",
+                "Confirm On Inventory Changed is available for Blueprint binding where appropriate.",
+                "Do not build UI yet unless you want the stretch task."
+              ],
+              "check": "The component event is available beyond the C++ Character listener.",
+              "why": "Dynamic multicast + BlueprintAssignable creates an extension point for later UI."
+            },
+            {
+              "title": "Independent component challenge",
+              "where": "Your choice",
+              "doList": [
+                "Option A: add InventoryComponent to a simple test Actor/Blueprint and prove it has its own empty inventory.",
+                "Option B: bind a Blueprint Print String to OnInventoryChanged.",
+                "Option C: add BlueprintPure GetItemCount display/debug use.",
+                "Complete one and explain why the component can be reused."
+              ],
+              "check": "You demonstrate reuse/notification without moving the TArray back into Character.",
+              "why": "This proves you understand composition rather than only following a refactor recipe."
+            }
+          ],
+          "test": [
+            "Old Character inventory code is removed.",
+            "Only UInventoryComponent owns TArray<FName>.",
+            "Pickup and door still work.",
+            "Inventory change event fires.",
+            "One reuse/event extension is demonstrated."
+          ],
+          "doneWhen": "The project has a clean reusable inventory component and event-driven notification architecture.",
+          "common": [
+            "Do not delete old Character methods until project-wide references show callers migrated.",
+            "If Blueprint event exposure seems stale after delegate/header changes, close Unreal and full Build/reopen."
           ]
         }
       ]
