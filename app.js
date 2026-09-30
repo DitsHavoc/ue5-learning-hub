@@ -2089,6 +2089,18 @@ function cppMissionCode(blocks){
   if(!blocks?.length)return '';
   return `<div class="cpp-code-stack">${blocks.map(x=>`<figure class="cpp-code-block"><figcaption>${esc(x.title||'C++')}</figcaption><pre><code>${esc(x.content||'')}</code></pre></figure>`).join('')}</div>`;
 }
+function cppMissionLearning(stage){
+  const concept=stage?.concept?`<article class="cpp-study-card concept"><small>CORE IDEA</small><p>${esc(stage.concept)}</p></article>`:'';
+  const practical=(stage?.practical||[]).length?`<article class="cpp-study-card practical"><small>PRACTICAL APPLICATIONS</small><ul>${stage.practical.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></article>`:'';
+  const algorithm=(stage?.algorithm||[]).length?`<article class="cpp-study-card algorithm"><small>ALGORITHM OVERVIEW</small><ol>${stage.algorithm.map(x=>`<li>${esc(x)}</li>`).join('')}</ol></article>`:'';
+  const review=(stage?.review||[]).length?`<article class="cpp-study-card review"><small>REVIEW THE CODE / TERMS</small><dl>${stage.review.map(x=>`<div><dt>${esc(x.term)}</dt><dd>${esc(x.text)}</dd></div>`).join('')}</dl></article>`:'';
+  if(!concept&&!practical&&!algorithm&&!review)return '';
+  return `<section class="cpp-study-grid">${concept}${practical}${algorithm}${review}</section>`;
+}
+function cppMissionCheckpoint(blocks){
+  if(!blocks?.length)return '';
+  return `<details class="content-card cpp-checkpoint"><summary>⌨ Full code checkpoint — compare after you have typed the stage</summary><p>Use this to compare your finished file. Do not replace your working file blindly: find the exact difference that matters.</p>${cppMissionCode(blocks)}</details>`;
+}
 function cppMissionStep(step,i){
   const actions=(step.doList&&step.doList.length)?step.doList:[step.do||''];
   return `<article class="skill-step-card cpp-step-card"><div class="skill-step-num">${String(i+1).padStart(2,'0')}</div><div class="skill-step-body"><h3>${esc(step.title)}</h3>
@@ -2139,8 +2151,10 @@ function cppMissionPage(id,requestedStage){
   <main class="skill-stage-main">
     <section class="skill-stage-hero ${done?'done':''} cpp-stage-hero"><div><span class="eyebrow">STAGE ${String(index).padStart(2,'0')} OF ${String(m.stages.length-1).padStart(2,'0')}${done?' • ✓ COMPLETE':''}</span><h2>${esc(stage.title)}</h2><div class="skill-stage-making"><span>YOU ARE MAKING</span><p>${esc(stage.goal)}</p></div></div><div class="skill-stage-why"><span>WHY THIS STAGE EXISTS</span><p>${esc(stage.why)}</p></div></section>
     ${stage.bridge?`<section class="cpp-blueprint-bridge"><span>BLUEPRINT → C++ BRIDGE</span><p>${esc(stage.bridge)}</p></section>`:''}
+    ${cppMissionLearning(stage)}
     ${cppMissionFlow(stage.flow)}
     <section class="skill-step-list">${(stage.steps||[]).map(cppMissionStep).join('')}</section>
+    ${cppMissionCheckpoint(stage.checkpointCode)}
     <section class="skill-stage-test"><div><span class="eyebrow">STOP & TEST / BUILD</span><h2>Do not continue until these work</h2><ul>${(stage.test||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><div class="skill-done-when"><small>STAGE IS DONE WHEN</small><strong>${esc(stage.doneWhen||'Everything above works.')}</strong></div></section>
     ${(stage.common||[]).length?`<details class="content-card skill-troubleshoot"><summary>⚠ If yours does not work</summary><ul>${stage.common.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></details>`:''}
     ${(stage.challenges||[]).length?`<section class="content-card skill-challenges"><span class="eyebrow">CORE MISSION COMPLETE?</span><h2>Independent upgrades</h2><ul>${stage.challenges.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></section>`:''}
