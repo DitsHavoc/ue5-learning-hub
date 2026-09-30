@@ -1,7 +1,7 @@
 window.UE5_CPP_SKILL_MISSIONS = {
-  "version": "3.59.0",
+  "version": "3.59.1",
   "title": "Unreal C++ Programmer Path",
-  "summary": "A cumulative Level 4 C++ pathway for complete beginners using one Third Person C++ project. Students progress from toolchain and syntax, to a collectible, function-based locked door, Character-owned TArray inventory, then a professional refactor into reusable UInventoryComponent plus inventory-changed events.",
+  "summary": "A cumulative Level 4 Unreal C++ pathway for complete beginners. Every code-bearing step now gives an exact file, class/function/section, ADD/REPLACE/EDIT instruction, placement anchor and compile/build instruction before students type. The project progresses from toolchain to collectible, door, inventory and reusable component/events without leaving intentional linker gaps.",
   "planned": [
     "Mission 0 — Toolchain + Your First Working C++",
     "Mission 1 — Core Gameplay Actor: C++ Collectible",
@@ -675,6 +675,13 @@ window.UE5_CPP_SKILL_MISSIONS = {
                   }
                 ],
                 "note": "You are not expected to memorise this boilerplate. Your job is to recognise the important pieces and avoid deleting/reordering them."
+              },
+              "codeGuide": {
+                "file": "SetupProbe.h",
+                "find": "The generated ASetupProbe class created by Tools → New C++ Class",
+                "action": "READ ONLY",
+                "place": "Do not type or replace this block. Use it as a map and locate each matching line in your generated header.",
+                "after": "No compile. This step is only about recognising the generated structure."
               }
             }
           ],
@@ -789,6 +796,13 @@ window.UE5_CPP_SKILL_MISSIONS = {
                     "meaning": "End of the statement."
                   }
                 ]
+              },
+              "codeGuide": {
+                "file": "SetupProbe.cpp",
+                "find": "ASetupProbe::ASetupProbe()",
+                "action": "EDIT EXISTING LINE",
+                "place": "Inside the constructor braces, find the generated PrimaryActorTick.bCanEverTick line and change its value to false. Do not replace the whole constructor.",
+                "after": "Save SetupProbe.cpp. Do not compile until the ProbeNumber/BeginPlay changes in this stage are also complete."
               }
             },
             {
@@ -844,6 +858,13 @@ window.UE5_CPP_SKILL_MISSIONS = {
                     "meaning": "Terminates the declaration."
                   }
                 ]
+              },
+              "codeGuide": {
+                "file": "SetupProbe.h",
+                "find": "class ASetupProbe → public: section",
+                "action": "ADD",
+                "place": "Directly below ASetupProbe(); and before the protected: section, add the UPROPERTY line and ProbeNumber declaration.",
+                "after": "Save the header. Because this is a reflected UPROPERTY change, use the full close Unreal → Development Editor / Win64 Build → reopen route after the .cpp change is also finished."
               }
             },
             {
@@ -907,6 +928,13 @@ window.UE5_CPP_SKILL_MISSIONS = {
                   }
                 ],
                 "note": "Read the UE_LOG from left to right as: “log a warning message, and insert ProbeNumber where %d appears.”"
+              },
+              "codeGuide": {
+                "file": "SetupProbe.cpp",
+                "find": "void ASetupProbe::BeginPlay()",
+                "action": "ADD",
+                "place": "Inside BeginPlay(), keep Super::BeginPlay(); first and add UE_LOG immediately underneath it.",
+                "after": "Save All, close Unreal, full Build Development Editor / Win64, reopen Unreal, then place/test SetupProbe."
               }
             },
             {
@@ -1045,6 +1073,13 @@ window.UE5_CPP_SKILL_MISSIONS = {
                     "meaning": "Two integer placeholders; arguments after the text fill them in from left to right."
                   }
                 ]
+              },
+              "codeGuide": {
+                "file": "SetupProbe.cpp",
+                "find": "void ASetupProbe::BeginPlay()",
+                "action": "EDIT FUNCTION BODY",
+                "place": "Keep Super::BeginPlay();. Add DoubledValue immediately after it, then REPLACE the previous one-value UE_LOG with the new two-value UE_LOG.",
+                "after": "Save SetupProbe.cpp and use Live Coding because only .cpp implementation code changed."
               }
             },
             {
@@ -1472,6 +1507,13 @@ window.UE5_CPP_SKILL_MISSIONS = {
                   }
                 ],
                 "note": "Forward declarations are not creating components. They simply let the header use pointer types without including every component header."
+              },
+              "codeGuide": {
+                "file": "TrainingPickup.h",
+                "find": "Immediately after #include \"TrainingPickup.generated.h\"? NO — forward declarations go after the include block but before UCLASS().",
+                "action": "ADD",
+                "place": "Keep TrainingPickup.generated.h as the final #include. Add the forward-declaration lines on the blank lines AFTER that include and BEFORE UCLASS().",
+                "after": "Save the header. Do not full Build yet; finish the header declarations in this stage first."
               }
             },
             {
@@ -1520,6 +1562,13 @@ window.UE5_CPP_SKILL_MISSIONS = {
                   }
                 ],
                 "note": "The * next to the type is one of the first big C++ differences from Blueprint. For this course, Unreal Components are usually handled through pointers."
+              },
+              "codeGuide": {
+                "file": "TrainingPickup.h",
+                "find": "class ATrainingPickup → public: section",
+                "action": "ADD",
+                "place": "Add SceneRoot, Mesh and CollectionSphere declarations below the constructor/Tick declarations and before the protected: section. Do not delete generated declarations.",
+                "after": "Save. Continue the rest of the header stage before the full Build."
               }
             },
             {
@@ -1575,6 +1624,13 @@ window.UE5_CPP_SKILL_MISSIONS = {
                     "meaning": "Collection state should be inspectable but not casually overwritten by a designer."
                   }
                 ]
+              },
+              "codeGuide": {
+                "file": "TrainingPickup.h",
+                "find": "class ATrainingPickup → public: section",
+                "action": "ADD",
+                "place": "Place RotationSpeed, ItemValue and bCollected directly below the component declarations you just added.",
+                "after": "Save. Continue to the callback declaration before building."
               }
             },
             {
@@ -1647,6 +1703,13 @@ window.UE5_CPP_SKILL_MISSIONS = {
                   }
                 ],
                 "note": "DO NOT MEMORISE THIS CALLBACK SIGNATURE. Unreal's overlap delegate requires this shape, so copy/type it carefully. The important beginner idea is: Unreal calls this function and supplies information about the overlap."
+              },
+              "codeGuide": {
+                "file": "TrainingPickup.h",
+                "find": "class ATrainingPickup → protected: section",
+                "action": "ADD",
+                "place": "Keep BeginPlay() override. Add UFUNCTION() and the callback declaration directly below BeginPlay(). Do not type an implementation body in the header.",
+                "after": "Save All. These are reflected/header changes; use a full Build when the matching constructor/component implementation is ready in Stage 3."
               }
             }
           ],
@@ -1734,6 +1797,13 @@ window.UE5_CPP_SKILL_MISSIONS = {
                     "meaning": "The header can often forward-declare a pointer type. The .cpp includes the full type when it needs to construct it or call its functions."
                   }
                 ]
+              },
+              "codeGuide": {
+                "file": "TrainingPickup.cpp",
+                "find": "Top include block",
+                "action": "ADD",
+                "place": "Keep #include \"TrainingPickup.h\" as the first include. Add the three Components/... includes immediately below it.",
+                "after": "Save. No compile until the constructor component code in this stage is complete."
               }
             },
             {
@@ -1784,6 +1854,13 @@ window.UE5_CPP_SKILL_MISSIONS = {
                     "meaning": "Parentheses contain function arguments. Empty () means no arguments."
                   }
                 ]
+              },
+              "codeGuide": {
+                "file": "TrainingPickup.cpp",
+                "find": "ATrainingPickup::ATrainingPickup()",
+                "action": "ADD",
+                "place": "Inside the constructor braces, keep PrimaryActorTick.bCanEverTick = true; and add the SceneRoot creation lines immediately underneath it.",
+                "after": "Save. Continue adding Mesh and CollectionSphere before building."
               }
             },
             {
@@ -1834,6 +1911,13 @@ window.UE5_CPP_SKILL_MISSIONS = {
                   }
                 ],
                 "note": "Useful rule: if the variable is a pointer to an Unreal object/component, you will very often use -> to call its functions."
+              },
+              "codeGuide": {
+                "file": "TrainingPickup.cpp",
+                "find": "ATrainingPickup::ATrainingPickup()",
+                "action": "ADD",
+                "place": "Still inside the same constructor, add this block immediately after SetRootComponent(SceneRoot);.",
+                "after": "Save All, close Unreal, full Build Development Editor / Win64, reopen, then inspect the component hierarchy."
               }
             },
             {
@@ -1945,6 +2029,13 @@ window.UE5_CPP_SKILL_MISSIONS = {
                   }
                 ],
                 "note": "Do not try to generalise every meaning of * today. Learn each use in context: pointer declaration versus FString logging."
+              },
+              "codeGuide": {
+                "file": "TrainingPickup.cpp",
+                "find": "void ATrainingPickup::BeginPlay()",
+                "action": "ADD",
+                "place": "Inside BeginPlay(), keep Super::BeginPlay(); first and add the UE_LOG block immediately underneath it.",
+                "after": "Save and Live Coding compile; this is .cpp-only implementation code."
               }
             },
             {
@@ -2060,6 +2151,13 @@ window.UE5_CPP_SKILL_MISSIONS = {
                     "meaning": "A float literal with value zero."
                   }
                 ]
+              },
+              "codeGuide": {
+                "file": "TrainingPickup.cpp",
+                "find": "void ATrainingPickup::Tick(float DeltaTime)",
+                "action": "ADD",
+                "place": "Keep Super::Tick(DeltaTime); first. Add AddActorLocalRotation(...) immediately below it.",
+                "after": "Save and Live Coding compile."
               }
             },
             {
@@ -2173,6 +2271,13 @@ window.UE5_CPP_SKILL_MISSIONS = {
                     "meaning": "Boolean value meaning yes/on."
                   }
                 ]
+              },
+              "codeGuide": {
+                "file": "TrainingPickup.cpp",
+                "find": "ATrainingPickup::ATrainingPickup()",
+                "action": "ADD",
+                "place": "Find CollectionSphere->InitSphereRadius(90.0f); and add the four collision lines immediately BELOW it, still inside the constructor.",
+                "after": "Save. Constructor/default-subobject changes can appear stale with Live Coding; use a full close/build/reopen if the Details panel does not update correctly."
               }
             },
             {
@@ -2285,6 +2390,13 @@ window.UE5_CPP_SKILL_MISSIONS = {
                   }
                 ],
                 "note": "You do not need to invent delegate syntax from memory. The important idea is: CollectionSphere's event is being connected to your callback."
+              },
+              "codeGuide": {
+                "file": "TrainingPickup.cpp",
+                "find": "ATrainingPickup::ATrainingPickup()",
+                "action": "ADD",
+                "place": "Add the AddDynamic block immediately after the CollectionSphere collision configuration and before the constructor's closing brace.",
+                "after": "Save, but DO NOT compile yet. The callback must have a definition first; complete the next step."
               }
             },
             {
@@ -2304,7 +2416,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 }
               ],
               "check": "Walking the player into CollectionSphere causes the callback log.",
-              "why": "You prove event binding before adding filtering/state logic."
+              "why": "You prove event binding before adding filtering/state logic.",
+              "codeGuide": {
+                "file": "TrainingPickup.cpp",
+                "find": "Below the constructor / after existing lifecycle function definitions",
+                "action": "ADD FUNCTION DEFINITION",
+                "place": "Add the full OnCollectionSphereBeginOverlap(...) definition once. Put the temporary UE_LOG inside its braces. Do not add a second declaration to the header.",
+                "after": "Save and compile. Now the delegate has a real callback definition, so the project can link."
+              }
             }
           ],
           "test": [
@@ -2385,7 +2504,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 }
               ],
               "check": "The .cpp has the full ACharacter definition needed by Cast usage.",
-              "why": "The callback will filter generic overlapping Actors to Characters."
+              "why": "The callback will filter generic overlapping Actors to Characters.",
+              "codeGuide": {
+                "file": "TrainingPickup.cpp",
+                "find": "Top include block",
+                "action": "ADD",
+                "place": "Add #include \"GameFramework/Character.h\" below the Components/... includes and above the first function definition.",
+                "after": "Save. No separate compile needed until the callback edits below are complete."
+              }
             },
             {
               "title": "Add the guard clause",
@@ -2436,6 +2562,13 @@ window.UE5_CPP_SKILL_MISSIONS = {
                   }
                 ],
                 "note": "Read it in English: “If we already collected this OR Unreal did not give us another Actor, stop immediately.”"
+              },
+              "codeGuide": {
+                "file": "TrainingPickup.cpp",
+                "find": "ATrainingPickup::OnCollectionSphereBeginOverlap(...)",
+                "action": "REPLACE TEMPORARY BODY CONTENT",
+                "place": "KEEP the full callback signature. Delete only the temporary UE_LOG inside { }. Add the guard clause as the first code in the function body.",
+                "after": "Save. Continue the same callback before compiling."
               }
             },
             {
@@ -2478,6 +2611,13 @@ window.UE5_CPP_SKILL_MISSIONS = {
                   }
                 ],
                 "note": "A Cast is not magic conversion. It asks whether the object really is compatible with the requested Unreal type."
+              },
+              "codeGuide": {
+                "file": "TrainingPickup.cpp",
+                "find": "ATrainingPickup::OnCollectionSphereBeginOverlap(...)",
+                "action": "ADD",
+                "place": "Inside the callback, add this block immediately AFTER the first guard clause and BEFORE any collection-success code.",
+                "after": "Save. Continue to the success path before compiling."
               }
             },
             {
@@ -2529,6 +2669,13 @@ window.UE5_CPP_SKILL_MISSIONS = {
                     "meaning": "Set bCollected before logging/destroying so a repeated overlap cannot enter the success path first."
                   }
                 ]
+              },
+              "codeGuide": {
+                "file": "TrainingPickup.cpp",
+                "find": "ATrainingPickup::OnCollectionSphereBeginOverlap(...)",
+                "action": "ADD",
+                "place": "Inside the same callback, add the success block immediately AFTER the Character null-check. Destroy(); must remain last in the success path.",
+                "after": "Save and Live Coding compile. Then Play-test collection."
               }
             },
             {
@@ -2980,7 +3127,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 ]
               },
               "check": "Three reflected component pointers exist.",
-              "why": "These form the stable door structure."
+              "why": "These form the stable door structure.",
+              "codeGuide": {
+                "file": "TrainingDoor.h",
+                "find": "class ATrainingDoor → public: section plus forward declarations before UCLASS()",
+                "action": "ADD",
+                "place": "Add forward declarations after the generated include block/before UCLASS(). Add SceneRoot, DoorMesh and TriggerBox inside public:. Do not replace the generated class skeleton.",
+                "after": "Save. DO NOT BUILD YET; the header declares functions that are implemented over the next stages."
+              }
             },
             {
               "title": "Declare state and movement data",
@@ -3015,7 +3169,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 ]
               },
               "check": "The door has explicit lock/open state and an editable open offset.",
-              "why": "Conditions need state, and movement needs data rather than magic numbers hidden inside a function."
+              "why": "Conditions need state, and movement needs data rather than magic numbers hidden inside a function.",
+              "codeGuide": {
+                "file": "TrainingDoor.h",
+                "find": "class ATrainingDoor → public: section",
+                "action": "ADD",
+                "place": "Place bIsLocked, bIsOpen and OpenOffset directly below the component declarations.",
+                "after": "Save. Do not build yet."
+              }
             },
             {
               "title": "Declare public functions",
@@ -3053,7 +3214,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 ]
               },
               "check": "The class exposes one query and one action function.",
-              "why": "This introduces two common gameplay-function roles."
+              "why": "This introduces two common gameplay-function roles.",
+              "codeGuide": {
+                "file": "TrainingDoor.h",
+                "find": "class ATrainingDoor → public: section",
+                "action": "ADD",
+                "place": "Place CanOpenDoor() and SetLocked(...) declarations below the state properties. These are declarations only—end them with semicolons.",
+                "after": "Save. Do not build yet."
+              }
             },
             {
               "title": "Declare callbacks/internal helpers/cache",
@@ -3088,7 +3256,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 "note": "Use the full checkpoint above for the exact overlap signatures—you are still not expected to memorise Unreal's event parameter list."
               },
               "check": "The header describes the full class contract.",
-              "why": "The implementation can now be built one function at a time."
+              "why": "The implementation can now be built one function at a time.",
+              "codeGuide": {
+                "file": "TrainingDoor.h",
+                "find": "class ATrainingDoor → protected: and private: sections",
+                "action": "ADD",
+                "place": "Under protected:, add BeginPlay, both UFUNCTION overlap declarations, OpenDoor() and CloseDoor(). Under private:, add ClosedRelativeLocation and OpenRelativeLocation. Do not put function bodies in the header.",
+                "after": "Save. Continue to Stage 3 before your first door Build."
+              }
             }
           ],
           "test": [
@@ -3155,7 +3330,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 }
               ],
               "check": "The door has a neutral root and does not Tick.",
-              "why": "No per-frame update is needed for instant open/close behaviour."
+              "why": "No per-frame update is needed for instant open/close behaviour.",
+              "codeGuide": {
+                "file": "TrainingDoor.cpp",
+                "find": "Top includes + ATrainingDoor::ATrainingDoor()",
+                "action": "ADD",
+                "place": "Keep #include \"TrainingDoor.h\" first; add component/Character includes below it. Inside the constructor, set Tick false and create SceneRoot.",
+                "after": "Save. Continue the constructor before building."
+              }
             },
             {
               "title": "Create blocking DoorMesh",
@@ -3173,7 +3355,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 }
               ],
               "check": "DoorMesh can physically block the player.",
-              "why": "The visual door is also the physical barrier."
+              "why": "The visual door is also the physical barrier.",
+              "codeGuide": {
+                "file": "TrainingDoor.cpp",
+                "find": "ATrainingDoor::ATrainingDoor()",
+                "action": "ADD",
+                "place": "Add this block immediately after SetRootComponent(SceneRoot);.",
+                "after": "Save. Continue to TriggerBox."
+              }
             },
             {
               "title": "Create TriggerBox",
@@ -3192,21 +3381,34 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 }
               ],
               "check": "TriggerBox detects Pawn overlap without becoming another physical wall.",
-              "why": "Detection and blocking are separate component responsibilities."
+              "why": "Detection and blocking are separate component responsibilities.",
+              "codeGuide": {
+                "file": "TrainingDoor.cpp",
+                "find": "ATrainingDoor::ATrainingDoor()",
+                "action": "ADD",
+                "place": "Add this block immediately after the DoorMesh collision setup and before delegate bindings.",
+                "after": "Save. Continue to delegate bindings/stubs."
+              }
             },
             {
-              "title": "Bind begin and end events",
+              "title": "Bind begin/end events and add temporary callback stubs",
               "where": "TrainingDoor.cpp → constructor",
               "doList": [
                 "Bind OnComponentBeginOverlap to OnTriggerBeginOverlap.",
                 "Bind OnComponentEndOverlap to OnTriggerEndOverlap.",
-                "Use this and the correct member-function addresses.",
-                "Save."
+                "Below the constructor, add both temporary callback function definitions exactly as shown.",
+                "Leave the callback bodies empty for now—the real decision logic is added in Stage 7.",
+                "Save TrainingDoor.cpp.",
+                "Full Build Development Editor / Win64 and reopen Unreal before marking this stage complete."
               ],
               "code": [
                 {
-                  "title": "Delegate bindings",
+                  "title": "Delegate bindings — inside the constructor",
                   "content": "TriggerBox->OnComponentBeginOverlap.AddDynamic(\n    this,\n    &ATrainingDoor::OnTriggerBeginOverlap\n);\n\nTriggerBox->OnComponentEndOverlap.AddDynamic(\n    this,\n    &ATrainingDoor::OnTriggerEndOverlap\n);"
+                },
+                {
+                  "title": "Temporary callback stubs — below the constructor",
+                  "content": "void ATrainingDoor::OnTriggerBeginOverlap(\n    UPrimitiveComponent* OverlappedComponent,\n    AActor* OtherActor,\n    UPrimitiveComponent* OtherComp,\n    int32 OtherBodyIndex,\n    bool bFromSweep,\n    const FHitResult& SweepResult\n)\n{\n}\n\nvoid ATrainingDoor::OnTriggerEndOverlap(\n    UPrimitiveComponent* OverlappedComponent,\n    AActor* OtherActor,\n    UPrimitiveComponent* OtherComp,\n    int32 OtherBodyIndex\n)\n{\n}"
                 }
               ],
               "codeRead": {
@@ -3221,17 +3423,25 @@ window.UE5_CPP_SKILL_MISSIONS = {
                   }
                 ]
               },
-              "check": "Both overlap events are connected to door callbacks.",
-              "why": "Begin overlap will open; end overlap will close."
+              "check": "Both delegates are bound, both callbacks have temporary definitions, and the project completes a full Build with 0 failed.",
+              "why": "Binding references the callback functions. Providing stubs now keeps the project linkable until Stage 7 replaces the empty bodies with real logic.",
+              "codeGuide": {
+                "file": "TrainingDoor.cpp",
+                "find": "ATrainingDoor::ATrainingDoor() plus new callback definitions below the constructor",
+                "action": "ADD",
+                "place": "Put the delegate-binding block at the END of the constructor before its closing brace. Then add the two full empty callback definitions BELOW the constructor. Do not put callback definitions inside the constructor.",
+                "after": "Save All, close Unreal, full Build Development Editor / Win64. The stubs exist specifically so this stage links cleanly."
+              }
             }
           ],
           "test": [
-            "Components are created/attached.",
-            "DoorMesh blocks.",
-            "TriggerBox overlaps Pawn only.",
-            "Both delegates are bound."
+            "SceneRoot, DoorMesh and TriggerBox are created.",
+            "DoorMesh blocks while TriggerBox overlaps Pawns.",
+            "Begin and End overlap delegates are bound.",
+            "Both callback stubs exist.",
+            "Development Editor / Win64 Build succeeds with 0 failed."
           ],
-          "doneWhen": "The door has the correct physical/detection architecture.",
+          "doneWhen": "The door has its physical/detection architecture and compiles cleanly before behaviour is added.",
           "common": [
             "If the player cannot enter the trigger because an invisible box blocks them, TriggerBox is not QueryOnly/Overlap.",
             "If moving the door later causes an immediate end overlap, check you are moving DoorMesh rather than the entire Actor."
@@ -3301,7 +3511,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 ]
               },
               "check": "BeginPlay calculates exactly two stable mesh locations.",
-              "why": "Open/Close functions can now set positions rather than accumulate movement."
+              "why": "Open/Close functions can now set positions rather than accumulate movement.",
+              "codeGuide": {
+                "file": "TrainingDoor.cpp",
+                "find": "void ATrainingDoor::BeginPlay()",
+                "action": "ADD / CREATE IMPLEMENTATION",
+                "place": "If BeginPlay implementation already exists, keep Super::BeginPlay(); and add the two cache lines underneath. If only declared in the header, create the .cpp function definition once.",
+                "after": "Save and Live Coding compile."
+              }
             }
           ],
           "test": [
@@ -3387,7 +3604,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 "note": "Read it in English: “Can open = not locked AND not already open.”"
               },
               "check": "CanOpenDoor returns one readable Boolean expression.",
-              "why": "Named queries prevent decision logic being copied into several callbacks."
+              "why": "Named queries prevent decision logic being copied into several callbacks.",
+              "codeGuide": {
+                "file": "TrainingDoor.cpp",
+                "find": "New function: bool ATrainingDoor::CanOpenDoor() const",
+                "action": "ADD FUNCTION DEFINITION",
+                "place": "Add this function at file scope, below another completed ATrainingDoor function (for example after BeginPlay). It must NOT be nested inside another function.",
+                "after": "Save and compile."
+              }
             }
           ],
           "test": [
@@ -3447,7 +3671,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 }
               ],
               "check": "OpenDoor performs one state/action transition.",
-              "why": "It cannot repeatedly move/mark an already-open door."
+              "why": "It cannot repeatedly move/mark an already-open door.",
+              "codeGuide": {
+                "file": "TrainingDoor.cpp",
+                "find": "New function: void ATrainingDoor::OpenDoor()",
+                "action": "ADD FUNCTION DEFINITION",
+                "place": "Add the full function at file scope below CanOpenDoor() or another completed function. Do not place it inside BeginPlay/constructor.",
+                "after": "Save. Add CloseDoor before compiling."
+              }
             },
             {
               "title": "Implement CloseDoor",
@@ -3465,7 +3696,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 }
               ],
               "check": "CloseDoor mirrors the open action cleanly.",
-              "why": "Symmetric functions are easier to read/test than one function full of branches."
+              "why": "Symmetric functions are easier to read/test than one function full of branches.",
+              "codeGuide": {
+                "file": "TrainingDoor.cpp",
+                "find": "New function: void ATrainingDoor::CloseDoor()",
+                "action": "ADD FUNCTION DEFINITION",
+                "place": "Add the full function at file scope directly after OpenDoor().",
+                "after": "Save and Live Coding compile both action functions together."
+              }
             }
           ],
           "test": [
@@ -3517,10 +3755,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
               "title": "Implement BeginOverlap",
               "where": "TrainingDoor.cpp → OnTriggerBeginOverlap",
               "doList": [
+                "Find the existing OnTriggerBeginOverlap function stub created in Stage 3.",
+                "KEEP the function signature exactly as it is.",
+                "REPLACE only the empty code between { and } with the supplied decision code.",
                 "Cast OtherActor to ACharacter.",
                 "Return if the cast fails.",
                 "If bIsLocked, log that the door is locked and return.",
-                "If CanOpenDoor() is true, call OpenDoor()."
+                "If CanOpenDoor() is true, call OpenDoor().",
+                "Save TrainingDoor.cpp."
               ],
               "code": [
                 {
@@ -3529,16 +3771,26 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 }
               ],
               "check": "The begin event reads like a sequence of validation/decisions.",
-              "why": "The callback coordinates rather than owning movement implementation."
+              "why": "The callback coordinates rather than owning movement implementation.",
+              "codeGuide": {
+                "file": "TrainingDoor.cpp",
+                "find": "Existing ATrainingDoor::OnTriggerBeginOverlap(...) stub from Stage 3",
+                "action": "REPLACE FUNCTION BODY ONLY",
+                "place": "KEEP the signature and braces. Replace the empty content between { } with the supplied decision code.",
+                "after": "Save. Continue to EndOverlap before compiling."
+              }
             },
             {
               "title": "Implement EndOverlap",
               "where": "TrainingDoor.cpp → OnTriggerEndOverlap",
               "doList": [
+                "Find the existing OnTriggerEndOverlap function stub created in Stage 3.",
+                "KEEP the function signature exactly as it is.",
+                "REPLACE only the empty code between { and } with the supplied code.",
                 "Cast OtherActor to ACharacter.",
                 "Return if invalid.",
                 "Call CloseDoor().",
-                "Save/compile."
+                "Save TrainingDoor.cpp, then Live Coding compile (or use the safe full Build route if the Editor state is unclear)."
               ],
               "code": [
                 {
@@ -3547,7 +3799,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 }
               ],
               "check": "A valid Character leaving requests CloseDoor.",
-              "why": "CloseDoor's own guard safely handles the already-closed case."
+              "why": "CloseDoor's own guard safely handles the already-closed case.",
+              "codeGuide": {
+                "file": "TrainingDoor.cpp",
+                "find": "Existing ATrainingDoor::OnTriggerEndOverlap(...) stub from Stage 3",
+                "action": "REPLACE FUNCTION BODY ONLY",
+                "place": "KEEP the signature and braces. Replace the empty content between { } with the supplied code.",
+                "after": "Save and Live Coding compile; if event code appears stale, use the full Build route."
+              }
             },
             {
               "title": "Test locked and unlocked",
@@ -3643,7 +3902,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 ]
               },
               "check": "One parameter controls the persistent lock state.",
-              "why": "Later systems can unlock without reaching directly into implementation details."
+              "why": "Later systems can unlock without reaching directly into implementation details.",
+              "codeGuide": {
+                "file": "TrainingDoor.cpp",
+                "find": "New function: void ATrainingDoor::SetLocked(bool bNewLocked)",
+                "action": "ADD FUNCTION DEFINITION",
+                "place": "Add the function at file scope near CanOpenDoor/OpenDoor/CloseDoor. It must not be nested inside another function.",
+                "after": "Save and Live Coding compile."
+              }
             },
             {
               "title": "Confirm Blueprint exposure",
@@ -4004,7 +4270,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 ]
               },
               "check": "The Character declares one reflected array of FName.",
-              "why": "This becomes the single inventory state owner."
+              "why": "This becomes the single inventory state owner.",
+              "codeGuide": {
+                "file": "L4CppTrainingCharacter.h",
+                "find": "class AL4CppTrainingCharacter → public: gameplay section",
+                "action": "ADD",
+                "place": "Do NOT replace the generated Third Person Character header. Add the Inventory UPROPERTY inside the class, in a public section near your new inventory functions and away from the #include block.",
+                "after": "Save. Do not full Build until the function declarations are added too."
+              }
             },
             {
               "title": "Declare inventory functions",
@@ -4039,7 +4312,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 ]
               },
               "check": "Other classes now have a small set of named inventory operations to call.",
-              "why": "This hides the implementation details behind readable functions."
+              "why": "This hides the implementation details behind readable functions.",
+              "codeGuide": {
+                "file": "L4CppTrainingCharacter.h",
+                "find": "class AL4CppTrainingCharacter → same public: inventory section",
+                "action": "ADD",
+                "place": "Add the four UFUNCTION declarations directly below Inventory. Keep all existing movement/camera/input declarations.",
+                "after": "Save. These declarations are implemented in Stages 2–5; do not delete or replace template code."
+              }
             }
           ],
           "test": [
@@ -4125,7 +4405,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 ]
               },
               "check": "AddItem validates, adds uniquely and logs the count.",
-              "why": "Centralising the rule prevents invalid/duplicate IDs from being added by different pickups."
+              "why": "Centralising the rule prevents invalid/duplicate IDs from being added by different pickups.",
+              "codeGuide": {
+                "file": "L4CppTrainingCharacter.cpp",
+                "find": "New file-scope function: AL4CppTrainingCharacter::AddItem(FName ItemId)",
+                "action": "ADD FUNCTION DEFINITION",
+                "place": "Add the function below existing Character function definitions, not inside the constructor, input setup or another function.",
+                "after": "Save and compile."
+              }
             }
           ],
           "test": [
@@ -4198,7 +4485,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 "note": "This is intentionally tiny. Good functions do not need to be long to be valuable."
               },
               "check": "HasItem expresses the inventory question in one readable line.",
-              "why": "Other gameplay code can depend on the function name rather than the TArray implementation."
+              "why": "Other gameplay code can depend on the function name rather than the TArray implementation.",
+              "codeGuide": {
+                "file": "L4CppTrainingCharacter.cpp",
+                "find": "New file-scope function: bool AL4CppTrainingCharacter::HasItem(FName ItemId) const",
+                "action": "ADD FUNCTION DEFINITION",
+                "place": "Add it directly below AddItem() for readability.",
+                "after": "Save and compile."
+              }
             }
           ],
           "test": [
@@ -4277,7 +4571,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 ]
               },
               "check": "RemoveItem converts the array's count result into a simple true/false API.",
-              "why": "Callers usually care whether removal succeeded, not the internal count mechanics."
+              "why": "Callers usually care whether removal succeeded, not the internal count mechanics.",
+              "codeGuide": {
+                "file": "L4CppTrainingCharacter.cpp",
+                "find": "New file-scope function: bool AL4CppTrainingCharacter::RemoveItem(FName ItemId)",
+                "action": "ADD FUNCTION DEFINITION",
+                "place": "Add it directly below HasItem().",
+                "after": "Save and compile."
+              }
             }
           ],
           "test": [
@@ -4362,7 +4663,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 "note": "You do not need to master references generally yet. In this loop, read `const FName& ItemId` as “the current item, read-only, without copying it.”"
               },
               "check": "PrintInventory logs the count and every FName entry.",
-              "why": "You now have both an array-processing pattern and a debugging tool."
+              "why": "You now have both an array-processing pattern and a debugging tool.",
+              "codeGuide": {
+                "file": "L4CppTrainingCharacter.cpp",
+                "find": "New file-scope function: void AL4CppTrainingCharacter::PrintInventory() const",
+                "action": "ADD FUNCTION DEFINITION",
+                "place": "Add it below RemoveItem(). Keep the entire for loop inside PrintInventory's braces.",
+                "after": "Save and compile. Then test via the later pickup/door integration."
+              }
             }
           ],
           "test": [
@@ -4428,7 +4736,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 }
               ],
               "check": "Each pickup can now identify itself with an FName.",
-              "why": "Data distinguishes Key from Coin while behaviour stays in one class."
+              "why": "Data distinguishes Key from Coin while behaviour stays in one class.",
+              "codeGuide": {
+                "file": "TrainingPickup.h",
+                "find": "class ATrainingPickup → public: Pickup properties",
+                "action": "ADD",
+                "place": "Add ItemId directly beside/below ItemValue in the existing public Pickup data section. Do not create a second public: section unless needed.",
+                "after": "Save. Because this is a reflected UPROPERTY change, full Build after the related .cpp refactor is complete."
+              }
             },
             {
               "title": "Include the project Character",
@@ -4445,7 +4760,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 }
               ],
               "check": "TrainingPickup.cpp knows the full project Character type.",
-              "why": "It needs access to AddItem."
+              "why": "It needs access to AddItem.",
+              "codeGuide": {
+                "file": "TrainingPickup.cpp",
+                "find": "Top include block",
+                "action": "ADD / CLEAN UP INCLUDE",
+                "place": "Add #include \"L4CppTrainingCharacter.h\" below TrainingPickup.h/component includes. Remove GameFramework/Character.h only if nothing else in this file uses ACharacter.",
+                "after": "Save. No compile until the callback cast/refactor below is complete."
+              }
             },
             {
               "title": "Replace the generic Character cast",
@@ -4481,7 +4803,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 ]
               },
               "check": "Pickup collection adds the ID to Character state before destroying the world Actor.",
-              "why": "The pickup becomes a producer of inventory state rather than the owner of it."
+              "why": "The pickup becomes a producer of inventory state rather than the owner of it.",
+              "codeGuide": {
+                "file": "TrainingPickup.cpp",
+                "find": "ATrainingPickup::OnCollectionSphereBeginOverlap(...)",
+                "action": "REPLACE PART OF FUNCTION BODY",
+                "place": "KEEP the initial bCollected/OtherActor guard. Replace the old ACharacter cast/null-check and old success block with the supplied AL4CppTrainingCharacter + ItemId + AddItem version.",
+                "after": "Save All. Because TrainingPickup.h changed too, close Unreal, full Build Development Editor / Win64, reopen and test BP_Coin/BP_Key."
+              }
             }
           ],
           "test": [
@@ -4640,7 +4969,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 ]
               },
               "check": "Each door instance can specify an item ID requirement.",
-              "why": "Requirement is data rather than a hard-coded comparison hidden deep in the callback."
+              "why": "Requirement is data rather than a hard-coded comparison hidden deep in the callback.",
+              "codeGuide": {
+                "file": "TrainingDoor.h",
+                "find": "class ATrainingDoor → public: Door lock/state properties",
+                "action": "ADD",
+                "place": "Add RequiredItem near bIsLocked/OpenOffset, not outside the class and not in the include section.",
+                "after": "Save. Full Build after the .cpp cast/query refactor below."
+              }
             },
             {
               "title": "Include the project Character",
@@ -4691,7 +5027,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 ]
               },
               "check": "The overlap callback now depends on the Character API without touching Inventory directly.",
-              "why": "This is clean class-to-class gameplay communication."
+              "why": "This is clean class-to-class gameplay communication.",
+              "codeGuide": {
+                "file": "TrainingDoor.cpp",
+                "find": "ATrainingDoor::OnTriggerBeginOverlap(...)",
+                "action": "REPLACE FUNCTION BODY",
+                "place": "KEEP the existing function signature. Replace the Mission 2 ACharacter/locked-body logic with the complete key-aware body shown here.",
+                "after": "Save All, close Unreal, full Build Development Editor / Win64, reopen and test Coin versus ExitKey."
+              }
             },
             {
               "title": "Update EndOverlap cast too",
@@ -4805,7 +5148,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 }
               ],
               "check": "Your key-consumption rule is deliberate rather than accidental.",
-              "why": "Gameplay design determines whether items are ownership flags or consumable resources."
+              "why": "Gameplay design determines whether items are ownership flags or consumable resources.",
+              "codeGuide": {
+                "file": "TrainingDoor.cpp",
+                "find": "ATrainingDoor::OnTriggerBeginOverlap(...) → inside the successful key branch",
+                "action": "OPTIONAL ADD",
+                "place": "ONLY if you choose consumable keys: insert Character->RemoveItem(RequiredItem); AFTER HasItem has succeeded and BEFORE SetLocked(false). Do not add it to the failure branch.",
+                "after": "Save and compile, then explicitly test whether the key remains/vanishes according to your chosen rule."
+              }
             },
             {
               "title": "Independent transfer challenge",
@@ -5059,7 +5409,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 ]
               },
               "check": "InventoryComponent does not Tick.",
-              "why": "Non-spatial event-driven inventory has no reason to update every frame."
+              "why": "Non-spatial event-driven inventory has no reason to update every frame.",
+              "codeGuide": {
+                "file": "InventoryComponent.cpp",
+                "find": "UInventoryComponent::UInventoryComponent()",
+                "action": "EDIT EXISTING LINE",
+                "place": "Inside the generated component constructor, find PrimaryComponentTick.bCanEverTick and set it to false. Do not replace the entire generated file.",
+                "after": "Save and compile."
+              }
             }
           ],
           "test": [
@@ -5129,7 +5486,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 }
               ],
               "check": "The component has a complete public API without exposing mutation details.",
-              "why": "Other systems can depend on function names rather than array implementation."
+              "why": "Other systems can depend on function names rather than array implementation.",
+              "codeGuide": {
+                "file": "InventoryComponent.h",
+                "find": "class UInventoryComponent → public: section",
+                "action": "ADD",
+                "place": "Add the five UFUNCTION declarations below UInventoryComponent(); and before private:. Do not remove generated component declarations.",
+                "after": "Save. Do not build yet—the implementations are added in Stage 3."
+              }
             },
             {
               "title": "Move the TArray declaration to private",
@@ -5163,7 +5527,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 ]
               },
               "check": "Inventory storage now exists in the new class too.",
-              "why": "This is the state being extracted from Character."
+              "why": "This is the state being extracted from Character.",
+              "codeGuide": {
+                "file": "InventoryComponent.h",
+                "find": "class UInventoryComponent → private: section",
+                "action": "ADD",
+                "place": "Add a private: section near the bottom of the class (if one does not already exist) and place the UPROPERTY + TArray inside it, before the class closing };.",
+                "after": "Save. Keep the old Character inventory for now."
+              }
             }
           ],
           "test": [
@@ -5234,7 +5605,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 }
               ],
               "check": "AddItem only reports true when the component state changes.",
-              "why": "Callers can make correct decisions based on actual success."
+              "why": "Callers can make correct decisions based on actual success.",
+              "codeGuide": {
+                "file": "InventoryComponent.cpp",
+                "find": "File scope below UInventoryComponent constructor",
+                "action": "ADD FUNCTION DEFINITIONS",
+                "place": "Add complete UInventoryComponent::AddItem(...) and UInventoryComponent::HasItem(...) functions at file scope. Do not paste them inside the constructor.",
+                "after": "Save. Continue Remove/Print/Count before compiling the component API as a whole."
+              }
             },
             {
               "title": "Implement Remove/Print/Count",
@@ -5252,7 +5630,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 }
               ],
               "check": "The component can perform every operation the Character inventory previously provided.",
-              "why": "The replacement must be feature-complete before callers migrate."
+              "why": "The replacement must be feature-complete before callers migrate.",
+              "codeGuide": {
+                "file": "InventoryComponent.cpp",
+                "find": "File scope below AddItem()/HasItem()",
+                "action": "ADD FUNCTION DEFINITIONS",
+                "place": "Add RemoveItem(), PrintInventory() and GetItemCount() as three separate file-scope functions. Use the checkpoint to compare the complete .cpp.",
+                "after": "Save and compile. At this point the component core API should work before delegates are introduced."
+              }
             }
           ],
           "test": [
@@ -5341,7 +5726,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 "note": "Do not memorise the macro name. Learn the idea: define an event type and the data listeners receive."
               },
               "check": "The header defines a delegate signature before the component class.",
-              "why": "The class can now own an instance of that event type."
+              "why": "The class can now own an instance of that event type.",
+              "codeGuide": {
+                "file": "InventoryComponent.h",
+                "find": "After #include \"InventoryComponent.generated.h\" and BEFORE UCLASS()",
+                "action": "ADD",
+                "place": "Add the DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams macro at header/global scope. Do not put it inside UInventoryComponent or inside a function.",
+                "after": "Save. Do not full Build until the delegate property/broadcast changes are also complete."
+              }
             },
             {
               "title": "Expose OnInventoryChanged",
@@ -5358,7 +5750,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 }
               ],
               "check": "The component owns a Blueprint-bindable inventory event.",
-              "why": "Listeners can subscribe without inventory knowing them."
+              "why": "Listeners can subscribe without inventory knowing them.",
+              "codeGuide": {
+                "file": "InventoryComponent.h",
+                "find": "class UInventoryComponent → public: section",
+                "action": "ADD",
+                "place": "Add the BlueprintAssignable UPROPERTY and OnInventoryChanged declaration directly below UInventoryComponent(); and before the inventory UFUNCTION declarations.",
+                "after": "Save. Continue broadcast edits."
+              }
             },
             {
               "title": "Broadcast after successful state changes",
@@ -5392,7 +5791,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 ]
               },
               "check": "Only successful inventory changes broadcast events.",
-              "why": "Listeners receive meaningful change notifications rather than failed attempts."
+              "why": "Listeners receive meaningful change notifications rather than failed attempts.",
+              "codeGuide": {
+                "file": "InventoryComponent.cpp",
+                "find": "UInventoryComponent::AddItem(...) and UInventoryComponent::RemoveItem(...)",
+                "action": "ADD TO TWO EXISTING FUNCTIONS",
+                "place": "In AddItem(), insert Broadcast immediately AFTER Inventory.Add(ItemId) and BEFORE return true. In RemoveItem(), insert Broadcast only AFTER confirming RemovedCount > 0 and BEFORE return true.",
+                "after": "Save All, close Unreal, full Build Development Editor / Win64 because the delegate/reflection header changed."
+              }
             }
           ],
           "test": [
@@ -5462,7 +5868,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 }
               ],
               "check": "Character declares ownership/access to the component.",
-              "why": "Callers need a clear route to the reusable inventory service."
+              "why": "Callers need a clear route to the reusable inventory service.",
+              "codeGuide": {
+                "file": "L4CppTrainingCharacter.h",
+                "find": "Forward declarations + class AL4CppTrainingCharacter public: inventory section",
+                "action": "ADD",
+                "place": "Add `class UInventoryComponent;` with the other forward declarations before the Character UCLASS. Inside the Character public section, add the component UPROPERTY and getter. Keep the old Mission 3 Inventory/functions for now.",
+                "after": "Save. Continue constructor/getter before the full Build."
+              }
             },
             {
               "title": "Create the component in the Character constructor",
@@ -5493,7 +5906,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 ]
               },
               "check": "The Character now owns a native InventoryComponent.",
-              "why": "Composition replaces direct inventory implementation."
+              "why": "Composition replaces direct inventory implementation.",
+              "codeGuide": {
+                "file": "L4CppTrainingCharacter.cpp",
+                "find": "Top includes + AL4CppTrainingCharacter::AL4CppTrainingCharacter()",
+                "action": "ADD",
+                "place": "Add #include \"InventoryComponent.h\" to the include block. Inside the existing Character constructor, add CreateDefaultSubobject near the other native component setup. Do NOT call SetupAttachment.",
+                "after": "Save. Continue the getter implementation."
+              }
             },
             {
               "title": "Implement the getter",
@@ -5510,7 +5930,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 }
               ],
               "check": "Other C++/Blueprint systems can retrieve the component through a named query.",
-              "why": "This avoids public callers needing to know how it is stored."
+              "why": "This avoids public callers needing to know how it is stored.",
+              "codeGuide": {
+                "file": "L4CppTrainingCharacter.cpp",
+                "find": "New file-scope function: UInventoryComponent* AL4CppTrainingCharacter::GetInventoryComponent() const",
+                "action": "ADD FUNCTION DEFINITION",
+                "place": "Add the getter below another complete Character function, not inside the constructor.",
+                "after": "Save All, close Unreal, full Build Development Editor / Win64, reopen and confirm the component appears."
+              }
             }
           ],
           "test": [
@@ -5572,7 +5999,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 }
               ],
               "check": "Character has a matching two-parameter listener callback.",
-              "why": "Dynamic delegate binding needs a reflected compatible function."
+              "why": "Dynamic delegate binding needs a reflected compatible function.",
+              "codeGuide": {
+                "file": "L4CppTrainingCharacter.h",
+                "find": "class AL4CppTrainingCharacter → protected: section",
+                "action": "ADD / CHECK FIRST",
+                "place": "Search the class for BeginPlay before typing. If it already exists, DO NOT duplicate it. Otherwise add `virtual void BeginPlay() override;`. Add the UFUNCTION handler beside it in protected:.",
+                "after": "Save. Continue to the .cpp implementations before building."
+              }
             },
             {
               "title": "Bind in BeginPlay",
@@ -5590,7 +6024,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 }
               ],
               "check": "Character subscribes when gameplay begins.",
-              "why": "The component does not need to know the Character's handler exists."
+              "why": "The component does not need to know the Character's handler exists.",
+              "codeGuide": {
+                "file": "L4CppTrainingCharacter.cpp",
+                "find": "AL4CppTrainingCharacter::BeginPlay()",
+                "action": "ADD / CREATE IF MISSING",
+                "place": "If BeginPlay() already has an implementation, KEEP Super::BeginPlay(); and add the InventoryComponent binding after it. If no implementation exists, create the full function once and call Super first.",
+                "after": "Save. Continue the handler implementation before compiling."
+              }
             },
             {
               "title": "Implement the handler",
@@ -5607,7 +6048,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 }
               ],
               "check": "The listener is ready to prove future broadcasts.",
-              "why": "This is your first authored event broadcaster/listener pair."
+              "why": "This is your first authored event broadcaster/listener pair.",
+              "codeGuide": {
+                "file": "L4CppTrainingCharacter.cpp",
+                "find": "New file-scope function: AL4CppTrainingCharacter::HandleInventoryChanged(FName,int32)",
+                "action": "ADD FUNCTION DEFINITION",
+                "place": "Add the full handler at file scope below BeginPlay() or another complete Character function.",
+                "after": "Save All, full Build if needed for the new reflected UFUNCTION, then collect an item to prove the event fires."
+              }
             }
           ],
           "test": [
@@ -5699,7 +6147,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 ]
               },
               "check": "Pickup now depends on the component API, not Character inventory functions.",
-              "why": "One caller has been safely migrated."
+              "why": "One caller has been safely migrated.",
+              "codeGuide": {
+                "file": "TrainingPickup.cpp",
+                "find": "ATrainingPickup::OnCollectionSphereBeginOverlap(...)",
+                "action": "REPLACE PART OF FUNCTION BODY",
+                "place": "KEEP the Character cast, ItemId validation and callback signature. Replace the direct Character->AddItem(ItemId) success section with GetInventoryComponent(), null guard, bAdded check and success block.",
+                "after": "Save and compile. Test pickup + delegate BEFORE refactoring the door."
+              }
             },
             {
               "title": "Test pickup before touching door",
@@ -5786,7 +6241,14 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 }
               ],
               "check": "Door behaviour is preserved through the new service component.",
-              "why": "The movement/lock architecture from Mission 2 survives the refactor unchanged."
+              "why": "The movement/lock architecture from Mission 2 survives the refactor unchanged.",
+              "codeGuide": {
+                "file": "TrainingDoor.cpp",
+                "find": "ATrainingDoor::OnTriggerBeginOverlap(...)",
+                "action": "REPLACE PART OF FUNCTION BODY",
+                "place": "KEEP the Character cast and existing door movement calls. After Character validation, obtain InventoryComponent and replace Character->HasItem(RequiredItem) with Inventory->HasItem(RequiredItem).",
+                "after": "Save and compile, then run the full no-item/Coin/ExitKey regression test."
+              }
             },
             {
               "title": "Regression test",
