@@ -1,5 +1,5 @@
 window.LEVEL4_SPECIALIST_PROJECTS = {
-  version: '3.59.0',
+  version: '3.59.1',
   intro: {
     title: 'Level 4 Specialist Projects',
     kicker: 'Choose ONE pathway',
@@ -857,8 +857,8 @@ window.LEVEL4_SPECIALIST_PROJECTS = {
     {
       id:'unreal-cpp-programming', icon:'C++', title:'Unreal C++ Skill Missions', role:'Gameplay Programming — C++', time:'Cumulative guided pathway',
       href:'#/cpp-mission/cpp-setup/start',
-      strap:'Complete-newbie C++ pathway: toolchain → collectible → function-based door → TArray inventory/key gate → reusable InventoryComponent + events, all in one Third Person C++ project.',
-      outcome:'A cumulative Unreal C++ gameplay project for complete beginners. Mission 0 proves Visual Studio/Unreal with ASetupProbe; Mission 1 builds ATrainingPickup; Mission 2 builds ATrainingDoor with reusable functions; Mission 3 adds a Character-owned TArray<FName> inventory and key gate; Mission 4 refactors that working inventory into reusable UInventoryComponent with an OnInventoryChanged delegate/event. Syntax is decoded at first use rather than assumed.'
+      strap:'Complete-newbie C++ pathway with exact code placement: every coding step tells students the file, function/section, ADD/REPLACE action, precise insertion point and build method.',
+      outcome:'A cumulative Unreal C++ gameplay project for complete beginners. Missions 0–4 now use a consistent code-placement system: FILE → FIND → CHANGE → PLACE IT HERE → THEN DO THIS. Students build ASetupProbe, ATrainingPickup, ATrainingDoor, a TArray<FName> key inventory, then refactor it into UInventoryComponent with events—without being expected to guess where code belongs.'
     }
   ]
 };
