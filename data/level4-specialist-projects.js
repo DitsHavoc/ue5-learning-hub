@@ -1,5 +1,5 @@
 window.LEVEL4_SPECIALIST_PROJECTS = {
-  version: '3.58.7',
+  version: '3.58.8',
   intro: {
     title: 'Level 4 Specialist Projects',
     kicker: 'Choose ONE pathway',
@@ -857,8 +857,8 @@ window.LEVEL4_SPECIALIST_PROJECTS = {
     {
       id:'unreal-cpp-programming', icon:'C++', title:'Unreal C++ Skill Missions', role:'Gameplay Programming — C++', time:'Cumulative guided pathway',
       href:'#/cpp-mission/cpp-setup/start',
-      strap:'Learn the toolchain by writing real C++, then build a native collectible with components, data, Tick, collision, delegates and a Blueprint child — all in the same project.',
-      outcome:'A cumulative Unreal C++ gameplay project. Mission 0 now ends with a working ASetupProbe using UPROPERTY, BeginPlay and UE_LOG; Mission 1 builds ATrainingPickup with native components, editable state, Tick, overlap collision, delegate binding, condition checks, Character validation and a Blueprint child. Later missions grow the same codebase into doors, inventory, interaction, data and save/load.'
+      strap:'Complete-newbie C++: learn Visual Studio by writing real code, with every new symbol decoded in plain English, then build a native collectible in the same project.',
+      outcome:'A cumulative Unreal C++ gameplay project built for students who may never have written C++. Mission 0 ends with a working ASetupProbe; Mission 1 builds ATrainingPickup. New syntax such as *, ->, ::, &, !, ||, access sections, Unreal macros and event parameters is decoded at first use instead of being assumed knowledge.'
     }
   ]
 };
