@@ -1,13 +1,13 @@
 window.UE5_CPP_SKILL_MISSIONS = {
-  "version": "3.58.6",
+  "version": "3.58.7",
   "title": "Unreal C++ Programmer Path",
-  "summary": "A cumulative Level 4 C++ pathway for students who already know Unreal through Blueprint but have never used Visual Studio with Unreal. Every mission continues the same L4CppTraining project.",
+  "summary": "A cumulative Level 4 C++ pathway for students who know Unreal through Blueprint but are new to Visual Studio and native gameplay code. Each mission uses the same L4CppTraining project and follows a repeatable pattern: understand the mechanic, plan the algorithm, review the class/code, build it, compile it, test it, then adapt it.",
   "planned": [
-    "Mission 0 — Visual Studio + Unreal Setup",
-    "Mission 1 — Your First C++ Gameplay Actor",
-    "Mission 2 — Variables, Functions & Decisions",
-    "Mission 3 — Arrays & Gameplay State",
-    "Mission 4 — Components & Collision",
+    "Mission 0 — Toolchain + Your First Working C++",
+    "Mission 1 — Core Gameplay Actor: C++ Collectible",
+    "Mission 2 — Functions & Decisions: Key + Locked Door",
+    "Mission 3 — Arrays & Inventory State",
+    "Mission 4 — Components, Collision & Gameplay Events",
     "Mission 5 — C++ Interaction",
     "Mission 6 — C++ ↔ Blueprint Communication",
     "Mission 7 — Structs, Enums & Data Tables",
@@ -21,694 +21,47 @@ window.UE5_CPP_SKILL_MISSIONS = {
       "displaySequence": "0",
       "discipline": "Unreal C++",
       "icon": "C++",
-      "title": "Visual Studio + Unreal Setup",
-      "subtitle": "Go from never using Visual Studio with Unreal to a verified C++ project that builds successfully and is ready for gameplay code.",
-      "duration": "60–90 minutes",
-      "difficulty": "Absolute beginner setup",
-      "summary": "Before writing gameplay code, make the toolchain boring and predictable. Install/check the correct Visual Studio workload, create one Unreal C++ project, learn where its source lives, build it in Development Editor / Win64, understand when to use Live Coding, and practise the recovery steps students need when Unreal and Visual Studio stop agreeing.",
-      "guideRule": "Do not rush to Mission 1. A clean successful Build is the final product of Mission 0.",
+      "title": "Toolchain + Your First Working C++",
+      "subtitle": "Set up Visual Studio correctly, understand the Unreal C++ file/build workflow, then prove the whole toolchain by creating ASetupProbe, exposing a real C++ variable and printing it from BeginPlay.",
+      "duration": "90 minutes–2 hours",
+      "difficulty": "Absolute beginner",
+      "summary": "This is no longer only an installation checklist. You will verify Visual Studio, create L4CppTraining, learn where C++ lives, build the untouched project, then write and run a tiny Unreal Actor class. By the end you will have edited a header, edited a .cpp file, compiled, placed the Actor, changed an editor-exposed value, read UE_LOG output and fixed a real compiler error.",
+      "guideRule": "Work like a programmer from the first lesson: understand the small system, predict what the code should do, type it yourself, compile after each change and use the first useful error as evidence.",
       "skills": [
         "Visual Studio Installer",
         "Game development with C++",
         "Solution Explorer",
-        "Source folder",
-        "Development Editor",
-        "Win64",
-        "Build",
-        "Live Coding",
-        "Refresh project files",
-        "Compile errors"
-      ],
-      "rules": [
-        "Use the same project name throughout this pathway: L4CppTraining.",
-        "Do not move or rename source files in Windows Explorer while learning the workflow.",
-        "Do not edit Engine source code. Work only inside your project's Source folder.",
-        "Save before every compile/build.",
-        "If a step says STOP & TEST, fix that result before continuing."
-      ],
-      "gameFlow": [
-        "Check Visual Studio",
-        "Create L4CppTraining",
-        "Open Visual Studio",
-        "Find Source",
-        "Development Editor + Win64",
-        "Build succeeds",
-        "Learn Live Coding",
-        "Recovery test",
-        "Ready for Mission 1"
-      ],
-      "theoryLinks": [
-        {
-          "label": "Epic UE5.8 — C++ Programming Quick Start",
-          "href": "https://dev.epicgames.com/documentation/unreal-engine/unreal-engine-cpp-quick-start"
-        },
-        {
-          "label": "Microsoft — Install Visual Studio Tools for Unreal Engine",
-          "href": "https://learn.microsoft.com/visualstudio/gamedev/unreal/get-started/vs-tools-unreal-install"
-        }
-      ],
-      "stages": [
-        {
-          "id": "start",
-          "number": 0,
-          "title": "Start Here — Know What Mission 0 Is For",
-          "goal": "Understand the two-program workflow and create a safe folder/location for the C++ project you will keep through the whole pathway.",
-          "why": "Most first-time Unreal C++ problems are workflow problems rather than programming problems. You need to know which program owns which job before code appears.",
-          "bridge": "Blueprint students already know the Unreal Editor. Mission 0 adds the second half of the workflow: Unreal creates/uses gameplay objects; Visual Studio edits and builds the native C++ source behind them.",
-          "steps": [
-            {
-              "title": "Understand the two-program workflow",
-              "where": "Read this before opening anything",
-              "do": "Learn which program does which job.",
-              "doList": [
-                "Unreal Editor is where you create levels, place Actors, choose assets, tune exposed values and press Play.",
-                "Visual Studio is where you read/edit C++ source, build the project and read compiler errors.",
-                "The same Unreal project is open in both tools. They are not two separate projects.",
-                "You will move between them constantly: edit code → compile/build → return to Unreal → test.",
-                "Do not treat Visual Studio as a replacement for Unreal or Blueprint."
-              ],
-              "check": "You can explain that Unreal and Visual Studio are two views/workflows for the same project.",
-              "why": "Students get lost quickly if they think the IDE is another game project."
-            },
-            {
-              "title": "Choose the project location now",
-              "where": "Windows File Explorer",
-              "do": "Choose a simple local folder for the project.",
-              "doList": [
-                "Use a local drive/location approved by your college.",
-                "Prefer a short path such as Documents\\Unreal Projects or the college's normal Unreal project folder.",
-                "Avoid OneDrive/Desktop sync folders if your college machines have caused Unreal project-file locking or sync issues there.",
-                "Do not put the project inside the Unreal Engine installation folder.",
-                "You will name the project L4CppTraining later."
-              ],
-              "check": "You know exactly where the project will be saved.",
-              "why": "Short predictable paths make generated project files and build errors easier to diagnose."
-            },
-            {
-              "title": "Know the finish line",
-              "where": "Mission 0 checklist",
-              "do": "Do not judge success by whether Visual Studio merely opens.",
-              "doList": [
-                "The project must open in Unreal.",
-                "Visual Studio must be able to see the project's Source folder.",
-                "The toolbar/build configuration must be suitable for the Unreal Editor.",
-                "A full Build must finish successfully.",
-                "You must know how to reopen/refresh the Visual Studio project from Unreal.",
-                "Only then should you mark Mission 0 complete."
-              ],
-              "check": "Your target is a successful working toolchain, not gameplay yet.",
-              "why": "That gives Mission 1 a reliable starting point."
-            }
-          ],
-          "test": [
-            "You can describe what Unreal does and what Visual Studio does.",
-            "You have chosen a safe project location.",
-            "You know Mission 0 ends with a successful Build."
-          ],
-          "doneWhen": "You understand the workflow and are ready to verify the Visual Studio installation.",
-          "common": [
-            "Do not create random test projects with different names; this pathway intentionally keeps one project.",
-            "If your college uses a required local project folder, use that rather than changing machine policy yourself."
-          ]
-        },
-        {
-          "id": "vs-installer",
-          "number": 1,
-          "title": "Check Visual Studio 2022 Is Installed",
-          "goal": "Confirm the machine has Visual Studio 2022 and open Visual Studio Installer so you can inspect the installed workloads.",
-          "why": "Visual Studio can be installed without the C++ compiler/workload Unreal needs. Seeing the IDE icon is not enough.",
-          "steps": [
-            {
-              "title": "Open Visual Studio Installer",
-              "where": "Windows Start/Search",
-              "do": "Launch the installer rather than opening Visual Studio itself.",
-              "doList": [
-                "Press the Windows key.",
-                "Type Visual Studio Installer.",
-                "Open Visual Studio Installer.",
-                "Wait for the installed products list to appear.",
-                "Find Visual Studio 2022 Community, Professional or Enterprise on the machine.",
-                "Do not click Launch yet."
-              ],
-              "check": "Visual Studio Installer shows a Visual Studio 2022 installation with a Modify button.",
-              "why": "The Installer is where workloads/components are checked."
-            },
-            {
-              "title": "If Visual Studio 2022 is missing",
-              "where": "Visual Studio Installer",
-              "do": "Stop and use the college-approved install route.",
-              "doList": [
-                "Do not download random older versions from third-party sites.",
-                "Use the current college/software-centre installation route if one exists.",
-                "If you do not have permission to install software, ask the teacher/technician rather than bypassing admin controls.",
-                "The target is Visual Studio 2022 with Unreal/C++ tooling."
-              ],
-              "check": "Either Visual Studio 2022 is present or the machine has been flagged for installation.",
-              "why": "The rest of the mission cannot be completed without a C++ compiler/IDE."
-            }
-          ],
-          "test": [
-            "Visual Studio 2022 appears in Visual Studio Installer.",
-            "You can see the Modify control for that installation."
-          ],
-          "doneWhen": "You have confirmed Visual Studio 2022 exists and can inspect its workloads.",
-          "common": [
-            "Visual Studio Code is not the same product as Visual Studio 2022 for this pathway.",
-            "If Windows Search cannot find Visual Studio Installer, ask for the machine image/software install to be checked."
-          ]
-        },
-        {
-          "id": "vs-workload",
-          "number": 2,
-          "title": "Install/Verify the Unreal C++ Workload",
-          "goal": "Verify the Game development with C++ workload and Unreal-specific Visual Studio tools are installed.",
-          "why": "This supplies the compiler, Windows SDK and Unreal integration students need for reliable project builds.",
-          "steps": [
-            {
-              "title": "Open Modify",
-              "where": "Visual Studio Installer → Visual Studio 2022",
-              "do": "Inspect the installed workload.",
-              "doList": [
-                "Click Modify beside the installed Visual Studio 2022 edition.",
-                "Open the Workloads tab.",
-                "Find Game development with C++.",
-                "Tick Game development with C++ if it is not already selected.",
-                "Keep the installer open; do not click Modify/Install yet."
-              ],
-              "check": "Game development with C++ is selected.",
-              "why": "That is Microsoft's Unreal-ready C++ workload."
-            },
-            {
-              "title": "Check the Unreal optional tools",
-              "where": "Visual Studio Installer → Installation details → Game development with C++",
-              "do": "Verify the Unreal integration components.",
-              "doList": [
-                "With Game development with C++ selected, look at the Installation details/Optional pane.",
-                "Ensure Visual Studio Tools for Unreal Engine is selected.",
-                "Ensure Visual Studio debugger tools for Unreal Engine Blueprints is selected if available.",
-                "Ensure Unreal Engine Test Adapter is selected if available.",
-                "Ensure a supported Windows SDK is selected; Microsoft currently specifies Windows 10 SDK 10.0.18362.0 or later.",
-                "Do not untick existing college-required components."
-              ],
-              "check": "The C++ workload, Unreal tools and a suitable Windows SDK are selected.",
-              "why": "Those options provide Unreal-aware navigation, debugging and the Windows toolchain."
-            },
-            {
-              "title": "Apply only if changes are needed",
-              "where": "Visual Studio Installer",
-              "do": "Finish the installation safely.",
-              "doList": [
-                "If you changed any boxes, click Modify.",
-                "Allow the installer to finish completely.",
-                "If Windows asks for admin permission and you do not have it, stop and ask the teacher/technician.",
-                "If everything was already selected, close the installer without changing anything.",
-                "Do not open Unreal until the installer has finished."
-              ],
-              "check": "Visual Studio Installer reports the installation is complete/up to date.",
-              "why": "Opening/building during a partial workload install creates misleading compiler errors."
-            }
-          ],
-          "test": [
-            "Game development with C++ is installed.",
-            "Visual Studio Tools for Unreal Engine is selected.",
-            "A supported Windows SDK is installed."
-          ],
-          "doneWhen": "The machine has the C++/Unreal toolchain required for the pathway.",
-          "common": [
-            "Component names can move slightly between Visual Studio updates; keep Game development with C++ and Visual Studio Tools for Unreal Engine as the anchors.",
-            "If Modify is disabled by college policy, record the missing component and ask staff to update the machine."
-          ]
-        },
-        {
-          "id": "create-project",
-          "number": 3,
-          "title": "Create L4CppTraining as a C++ Unreal Project",
-          "goal": "Create the one Unreal project that every C++ mission will continue.",
-          "why": "Keeping one project makes each new C++ idea an upgrade to something students already understand.",
-          "steps": [
-            {
-              "title": "Open Unreal Engine 5.8",
-              "where": "Epic Games Launcher / college Unreal shortcut",
-              "do": "Start the current engine and open the New Project browser.",
-              "doList": [
-                "Launch Unreal Engine 5.8.",
-                "Choose Games in the Project Browser.",
-                "Choose Blank.",
-                "Select C++ as the project type/programming language where the Project Browser exposes that choice.",
-                "Set Target Platform to Desktop if the option is shown.",
-                "Use the normal Maximum/Scalable quality setting your college uses; it does not affect the C++ lesson.",
-                "Starter Content can be Off for this training project."
-              ],
-              "check": "The New Project screen is set to create a Blank C++ game project.",
-              "why": "A C++ project generates a game module and source/build files from the start."
-            },
-            {
-              "title": "Name and create the project",
-              "where": "New Project → Project Name / Location",
-              "do": "Use the exact pathway project name.",
-              "doList": [
-                "Set the project location to the folder chosen in Stage 0.",
-                "Enter the exact project name L4CppTraining.",
-                "Avoid spaces/special characters in the project name.",
-                "Click Create.",
-                "Wait. The first C++ project can take noticeably longer than a Blueprint-only project because Unreal generates/builds code files.",
-                "Do not force-close Unreal or Visual Studio while generation is still happening."
-              ],
-              "check": "L4CppTraining opens in Unreal Editor and Visual Studio may also open automatically.",
-              "why": "The exact shared project name keeps class/module names predictable throughout the tutorials."
-            },
-            {
-              "title": "If the Project Browser did not offer C++",
-              "where": "Unreal Editor fallback only",
-              "do": "Use the supported conversion route rather than abandoning the mission.",
-              "doList": [
-                "Create/open the Blank project.",
-                "In Unreal choose Tools → New C++ Class.",
-                "Choose a simple class and complete the wizard only with teacher approval because this converts the content-only project to code.",
-                "Unreal will generate the code module/project files and open the IDE.",
-                "Return to the main path after the conversion succeeds."
-              ],
-              "check": "The project now contains a Source folder/code module and Visual Studio can open it.",
-              "why": "Epic supports converting a content-only project by adding its first C++ class."
-            }
-          ],
-          "test": [
-            "The project name is L4CppTraining.",
-            "The project opens in Unreal Engine 5.8.",
-            "A C++ Source/module exists for the project."
-          ],
-          "doneWhen": "L4CppTraining exists as an Unreal C++ project and will be reused for later missions.",
-          "common": [
-            "First creation can be slow; wait for generation/build tasks rather than repeatedly clicking Create.",
-            "If project creation fails, copy the FIRST meaningful error rather than the last fifty follow-on lines."
-          ]
-        },
-        {
-          "id": "project-anatomy",
-          "number": 4,
-          "title": "Meet the Files Unreal Created",
-          "goal": "Identify the project file, Content folder and Source folder without editing or moving them.",
-          "why": "Students need a mental map of where native code lives before Visual Studio's Solution Explorer makes sense.",
-          "steps": [
-            {
-              "title": "Find the project folder",
-              "where": "Windows File Explorer → L4CppTraining",
-              "do": "Inspect, do not reorganise.",
-              "doList": [
-                "Close File Explorer previews if they slow the folder.",
-                "Locate L4CppTraining.uproject.",
-                "Locate Content — this is where Unreal assets such as maps/materials/Blueprints live.",
-                "Locate Source — this is where your project's C++ source/module lives.",
-                "You may also see Binaries, Intermediate, Saved and/or .vs after builds.",
-                "Do not manually move files between these folders."
-              ],
-              "check": "You can point to L4CppTraining.uproject, Content and Source.",
-              "why": "Content assets and C++ source are different parts of the same Unreal project."
-            },
-            {
-              "title": "Open the Source folder only to inspect",
-              "where": "File Explorer → L4CppTraining\\Source",
-              "do": "Recognise the module files.",
-              "doList": [
-                "Open Source.",
-                "Open the L4CppTraining folder/module.",
-                "Notice the .Build.cs file.",
-                "Notice the main project/module .h/.cpp files Unreal generated.",
-                "Do not edit these files in Notepad.",
-                "Return to Unreal/Visual Studio for code editing."
-              ],
-              "check": "You recognise that Source/L4CppTraining contains native project code/build configuration.",
-              "why": "Later compiler messages often name these exact folders/files."
-            }
-          ],
-          "test": [
-            "You know Content stores Unreal assets.",
-            "You know Source stores the C++ module/source.",
-            "You have not renamed/moved generated files."
-          ],
-          "doneWhen": "You can navigate the physical project safely without treating generated folders as random clutter.",
-          "common": [
-            "Do not submit Binaries/Intermediate as authored source evidence unless specifically requested.",
-            "Deleting generated folders can sometimes be a recovery technique, but not until the teacher explicitly teaches that workflow."
-          ]
-        },
-        {
-          "id": "meet-visual-studio",
-          "number": 5,
-          "title": "Meet Visual Studio — Only Learn the Parts You Need",
-          "goal": "Find Solution Explorer, the project Source area, editor tabs and the Output/Error panes.",
-          "why": "Visual Studio looks enormous. Beginners only need a small repeatable set of panels to work effectively in Unreal.",
-          "steps": [
-            {
-              "title": "Open Visual Studio from Unreal",
-              "where": "Unreal Editor → Tools",
-              "do": "Use Unreal to open the correct project context.",
-              "doList": [
-                "In Unreal choose Tools → Open Visual Studio.",
-                "Wait for Visual Studio to finish loading/indexing.",
-                "If prompted to sign in, use the college policy; signing in is not required just to understand the project.",
-                "Do not open a random .cpp file from File Explorer instead."
-              ],
-              "check": "Visual Studio opens with L4CppTraining loaded.",
-              "why": "Opening through Unreal reduces the chance of editing the wrong solution/project."
-            },
-            {
-              "title": "Find Solution Explorer",
-              "where": "Visual Studio",
-              "do": "Open the main project navigation panel.",
-              "doList": [
-                "Look for Solution Explorer, normally at the right side.",
-                "If it is hidden choose View → Solution Explorer.",
-                "Expand the L4CppTraining/game project nodes.",
-                "Find the Source area/module.",
-                "Do not expand Engine source trees looking for files to change.",
-                "Click one project source file so it opens as a tab."
-              ],
-              "check": "You can open a project .h/.cpp file from Solution Explorer.",
-              "why": "Solution Explorer becomes the main way to navigate classes once the project grows."
-            },
-            {
-              "title": "Find Output and Error List",
-              "where": "Visual Studio → View menu",
-              "do": "Know where build messages will appear before the first Build.",
-              "doList": [
-                "Choose View → Output if Output is hidden.",
-                "Choose View → Error List if Error List is hidden.",
-                "In Output, learn that the Build output is the important place for the full compiler message.",
-                "Do not assume every red underline is a real compiler failure while IntelliSense is still indexing.",
-                "The real test is the compiler/build result."
-              ],
-              "check": "Solution Explorer, Output and Error List are all available.",
-              "why": "Knowing where errors live removes a lot of first-build panic."
-            }
-          ],
-          "test": [
-            "You can open Solution Explorer.",
-            "You can locate the L4CppTraining Source/module.",
-            "You can open Output and Error List."
-          ],
-          "doneWhen": "Visual Studio no longer feels like an unexplained wall of panels.",
-          "common": [
-            "If Solution Explorer shows thousands of Engine files, collapse them and return to your game/project Source.",
-            "IntelliSense can show temporary errors while Unreal project indexing is still running; use the build result as the authority."
-          ]
-        },
-        {
-          "id": "header-source",
-          "number": 6,
-          "title": "Understand .h, .cpp and Unreal's Generated Code",
-          "goal": "Learn the purpose of header/source files and recognise Unreal macros without trying to memorise them.",
-          "why": "Mission 1 will create a pair of files. Students need to know which kind of declaration/implementation belongs where.",
-          "steps": [
-            {
-              "title": "Learn the simple rule",
-              "where": "Visual Studio → project Source",
-              "do": "Use this mental model.",
-              "doList": [
-                ".h = the class declaration/interface: what the class owns and what functions/properties exist.",
-                ".cpp = implementation: what those functions actually do.",
-                "Unreal adds reflection/code-generation macros such as UCLASS and GENERATED_BODY in gameplay classes.",
-                "The .generated.h include is produced by Unreal Header Tool; do not create/edit that generated file yourself.",
-                "You do not need to understand every macro before writing your first Actor."
-              ],
-              "check": "You can explain .h as declaration and .cpp as implementation.",
-              "why": "This prevents students pasting all code into whichever tab happens to be open."
-            },
-            {
-              "title": "Learn the generated-header rule early",
-              "where": "Any Unreal gameplay class header you inspect",
-              "do": "Notice where the generated include belongs.",
-              "doList": [
-                "Look for a line ending .generated.h in an Unreal gameplay header.",
-                "Treat that generated header include as the final #include in that header.",
-                "Do not move normal #include lines underneath it.",
-                "Do not rename the generated header independently of the class/file.",
-                "Mission 1 will use the C++ Class Wizard so Unreal creates this boilerplate correctly."
-              ],
-              "check": "You know not to move/add includes below the .generated.h include.",
-              "why": "Unreal Header Tool relies on the expected generated-header structure."
-            }
-          ],
-          "test": [
-            "You can state what a header does.",
-            "You can state what a .cpp file does.",
-            "You know generated.h is managed by Unreal tooling."
-          ],
-          "doneWhen": "You understand enough file structure to read the first generated gameplay class in Mission 1.",
-          "common": [
-            "Do not memorise boilerplate line-by-line; use the Class Wizard to generate correct starting files.",
-            "A compiler error near generated.h can be caused by an earlier syntax/macro problem, not the generated file itself."
-          ]
-        },
-        {
-          "id": "first-build",
-          "number": 7,
-          "title": "Set Development Editor / Win64 and Build Once",
-          "goal": "Perform one full successful Visual Studio Build of L4CppTraining before adding gameplay code.",
-          "why": "This proves the compiler, SDK, Unreal Build Tool and project files all agree on the untouched baseline.",
-          "steps": [
-            {
-              "title": "Stop Play and save Unreal",
-              "where": "Unreal Editor",
-              "do": "Prepare for the clean baseline build.",
-              "doList": [
-                "Make sure Play In Editor is stopped.",
-                "Choose File → Save All.",
-                "Use Tools → Open Visual Studio if Visual Studio is not already open.",
-                "Wait for the L4CppTraining project to finish loading in Visual Studio.",
-                "Close Unreal Editor before this first full baseline Build.",
-                "Keep Visual Studio open."
-              ],
-              "check": "The project is saved, Visual Studio is open on L4CppTraining, and Unreal Editor is closed for the full Build.",
-              "why": "A clean baseline avoids mixing gameplay state with build troubleshooting."
-            },
-            {
-              "title": "Choose the Editor configuration",
-              "where": "Visual Studio top toolbar",
-              "do": "Select the Unreal Editor build target.",
-              "doList": [
-                "Find the Solution Configuration dropdown.",
-                "Choose Development Editor.",
-                "Find the Solution Platform dropdown.",
-                "Choose Win64.",
-                "If those dropdowns are hidden, widen the Visual Studio window/toolbar or use Build → Configuration Manager to inspect them.",
-                "Do not choose Shipping for normal classroom iteration."
-              ],
-              "check": "Visual Studio shows Development Editor and Win64.",
-              "why": "Development Editor builds the game code that loads inside Unreal Editor."
-            },
-            {
-              "title": "Build the game project",
-              "where": "Visual Studio → Solution Explorer",
-              "do": "Run a real compiler/build test.",
-              "doList": [
-                "Save All in Visual Studio (Ctrl+Shift+S).",
-                "In Solution Explorer right-click the L4CppTraining game project.",
-                "Choose Build.",
-                "Watch the Output panel rather than clicking around while it works.",
-                "Wait for the final build summary.",
-                "Look for Build succeeded / 0 failed."
-              ],
-              "check": "The baseline project builds with 0 failed.",
-              "why": "This is the strongest proof that the machine setup works before your own code is involved."
-            },
-            {
-              "title": "If Build fails, read the first useful error",
-              "where": "Visual Studio → Output",
-              "do": "Diagnose rather than randomly changing settings.",
-              "doList": [
-                "Scroll upward from the final failure summary.",
-                "Find the first error that mentions your toolchain/project rather than later follow-on failures.",
-                "Read the file/path and error code/message.",
-                "Do not try to fix 30 later errors before the first one.",
-                "If it references missing compiler/SDK/toolset, return to the Visual Studio workload stage or ask staff."
-              ],
-              "check": "You can identify the first meaningful error or you have a successful Build.",
-              "why": "One missing dependency can generate many secondary errors."
-            }
-          ],
-          "test": [
-            "Configuration is Development Editor.",
-            "Platform is Win64.",
-            "Build finishes successfully with 0 failed."
-          ],
-          "doneWhen": "The untouched L4CppTraining project builds successfully in Visual Studio.",
-          "common": [
-            "If Visual Studio says a build is blocked because Live Coding is active, use Unreal's Live Coding compile or close Unreal for the full IDE build.",
-            "If Development Editor is unavailable, refresh/regenerate project files from Unreal before inventing a new configuration."
-          ]
-        },
-        {
-          "id": "live-coding",
-          "number": 8,
-          "title": "Learn Build vs Live Coding Before You Need It",
-          "goal": "Understand the classroom rule for compiling small .cpp changes versus larger structural/header changes.",
-          "why": "Mixing full IDE builds, Hot Reload and Live Coding without a rule creates confusing stale classes and editor state.",
-          "steps": [
-            {
-              "title": "Find Live Coding",
-              "where": "Unreal Editor → Editor Preferences / compile controls",
-              "do": "Confirm Live Coding is enabled on the machine.",
-              "doList": [
-                "Return to Unreal Editor.",
-                "Open Editor Preferences.",
-                "Find Live Coding under the General/Live Coding settings.",
-                "Confirm Live Coding is enabled (it is enabled by default in current Unreal versions).",
-                "Keep Object Reinstancing at the project/college default; do not disable it during this beginner pathway."
-              ],
-              "check": "Live Coding is enabled or you know the college's approved compile method.",
-              "why": "Current UE supports recompiling/patching C++ while the Editor is running."
-            },
-            {
-              "title": "Use the simple classroom compile rule",
-              "where": "Keep this rule beside your project",
-              "do": "Choose the safer compile route for the change.",
-              "doList": [
-                "Small implementation-only .cpp change while Unreal is open: Live Coding is normally appropriate.",
-                "Adding/changing reflected class structure, UPROPERTY/UFUNCTION signatures, constructors/components or after confusing reload behaviour: save, close Unreal and perform a full Visual Studio Build before reopening.",
-                "Never run an IDE Build and a Live Coding compile at the same time.",
-                "If the Editor behaves as if old code still exists, stop trying random recompiles and use the full close/build/reopen route.",
-                "Mission 1 will tell you which route to use at each checkpoint."
-              ],
-              "check": "You can choose between Live Coding and a full Build using the change type rather than guessing.",
-              "why": "Live Coding is powerful, but beginners need a predictable escape route for structural changes."
-            },
-            {
-              "title": "Know the Live Coding shortcut",
-              "where": "Unreal Editor",
-              "do": "Learn the compile trigger without using it on random code yet.",
-              "doList": [
-                "Current Unreal Live Coding can be triggered from the Editor compile controls.",
-                "Ctrl+Alt+F11 is the common Live Coding compile shortcut on Windows.",
-                "Only trigger it after saving your edited code.",
-                "Read the Live Coding output if it fails; do not repeatedly press the shortcut."
-              ],
-              "check": "You know how Live Coding is triggered and when not to rely on it.",
-              "why": "That makes Mission 1 iteration faster without turning recompilation into superstition."
-            }
-          ],
-          "test": [
-            "You know what Live Coding is.",
-            "You know a full Build is the safe recovery route for structural/header changes or strange reload behaviour.",
-            "You will not run both build systems simultaneously."
-          ],
-          "doneWhen": "You have a simple compile rule you can follow without teacher intervention.",
-          "common": [
-            "Hot Reload and Live Coding are not the same workflow; this pathway uses Live Coding/current tooling.",
-            "If a component/default value seems stale after Live Coding, close the Editor and perform a full Build."
-          ]
-        },
-        {
-          "id": "recovery",
-          "number": 9,
-          "title": "Recovery Drill — Reopen, Refresh and Prove the Toolchain",
-          "goal": "Practise the safe recovery actions students will need when Visual Studio or Unreal loses project context, then finish with a final clean build.",
-          "why": "Being able to recover the workflow is more valuable than pretending the IDE never misbehaves.",
-          "steps": [
-            {
-              "title": "Practise reopening Visual Studio from Unreal",
-              "where": "Unreal Editor → Tools",
-              "do": "Use the supported project route.",
-              "doList": [
-                "Close Visual Studio only; leave Unreal/L4CppTraining open.",
-                "In Unreal choose Tools → Open Visual Studio.",
-                "Wait for the project to load again.",
-                "Confirm Solution Explorer returns to L4CppTraining.",
-                "Do not browse to a random old .sln/project on disk."
-              ],
-              "check": "Unreal can reopen the correct project in Visual Studio.",
-              "why": "This is the quickest fix for students who accidentally close the IDE or open the wrong workspace."
-            },
-            {
-              "title": "Know the project refresh command",
-              "where": "Unreal Editor → Tools",
-              "do": "Locate the refresh option without forcing it unnecessarily.",
-              "doList": [
-                "Open the Tools menu.",
-                "Locate Refresh Visual Studio Project (wording can vary slightly by tooling/version).",
-                "Use it if newly-added source/project files are not appearing correctly in Visual Studio.",
-                "After refreshing, reopen Visual Studio if required.",
-                "Do not repeatedly regenerate/refresh when the real problem is a C++ syntax error."
-              ],
-              "check": "You can locate the project refresh/re-generation workflow.",
-              "why": "Epic notes that project files can need refreshing after source/project layout changes."
-            },
-            {
-              "title": "Finish with one clean full build",
-              "where": "Visual Studio",
-              "do": "End Mission 0 on a verified baseline.",
-              "doList": [
-                "Save everything.",
-                "If you want the cleanest possible final check, close Unreal Editor.",
-                "Open the project in Visual Studio from the project/Unreal route.",
-                "Set Development Editor + Win64.",
-                "Right-click L4CppTraining → Build.",
-                "Wait for Build succeeded / 0 failed.",
-                "Reopen L4CppTraining in Unreal after the Build."
-              ],
-              "check": "L4CppTraining opens and its latest full Build has succeeded.",
-              "why": "Mission 1 can now focus on programming rather than installation problems."
-            }
-          ],
-          "test": [
-            "You can reopen Visual Studio from Unreal.",
-            "You can locate Refresh Visual Studio Project.",
-            "Development Editor / Win64 Build succeeds.",
-            "L4CppTraining reopens normally."
-          ],
-          "doneWhen": "Your Visual Studio + Unreal C++ toolchain is verified and you know the first recovery steps when it stops behaving.",
-          "common": [
-            "If a full baseline Build still fails, do not start Mission 1—capture the first error and fix the toolchain first.",
-            "Refreshing project files does not fix invalid C++ syntax."
-          ]
-        }
-      ]
-    },
-    {
-      "id": "cpp-first-actor",
-      "sequence": 1,
-      "displaySequence": "1",
-      "requiresMission": "cpp-setup",
-      "discipline": "Unreal C++",
-      "icon": "C++",
-      "title": "Your First C++ Gameplay Actor",
-      "subtitle": "Continue L4CppTraining: create an Actor class, log from BeginPlay, add a mesh component, expose RotationSpeed to Unreal, rotate the Actor in Tick, then make a Blueprint child that designers can tune.",
-      "duration": "2–3 hours",
-      "difficulty": "Absolute beginner C++ gameplay",
-      "summary": "This is the first coding mission, but it still builds slowly. Use Unreal's C++ Class Wizard, learn what the generated .h and .cpp are doing, make one visible Actor, expose a property with UPROPERTY, use DeltaTime correctly, and prove that C++ can provide a reusable base while Blueprint handles presentation/tuning.",
-      "guideRule": "Type the supplied code rather than pasting the whole finished class. Compile after each checkpoint so you know which change caused an error.",
-      "skills": [
-        "C++ Class Wizard",
+        ".h vs .cpp",
+        "UCLASS / GENERATED_BODY",
         "AActor",
-        "header vs source",
+        "UPROPERTY",
+        "int32",
         "BeginPlay",
         "UE_LOG",
-        "UStaticMeshComponent",
-        "constructor",
-        "UPROPERTY",
-        "Tick",
-        "DeltaTime",
-        "FRotator",
-        "Blueprint child"
+        "Development Editor",
+        "Win64",
+        "Live Coding",
+        "Compiler errors"
       ],
       "rules": [
-        "Continue L4CppTraining from Mission 0; do not create another project.",
-        "Use Unreal's Tools → New C++ Class wizard to create gameplay classes.",
-        "Type one change, Save, Compile/Build, then test.",
-        "The generated .generated.h include stays the last #include in the header.",
-        "Do not copy an entire final file over generated code until you understand which section you are changing."
+        "Use one project for the whole pathway: L4CppTraining.",
+        "Type the code shown in the guide. Do not paste an entire finished file and hope it works.",
+        "Compile after each code checkpoint so one error has one likely cause.",
+        "Keep the generated .generated.h include as the final #include in an Unreal gameplay header.",
+        "Do not edit Engine source. Work only inside L4CppTraining/Source.",
+        "If STOP & TEST fails, do not unlock the next stage."
       ],
       "gameFlow": [
-        "Create TrainingActor",
-        "Read generated code",
-        "BeginPlay log",
-        "Mesh component",
-        "Expose RotationSpeed",
-        "Rotate in Tick",
-        "Place/test",
-        "Blueprint child",
-        "Break/fix",
-        "Independent variant"
+        "Toolchain",
+        "L4CppTraining",
+        "First full Build",
+        "SetupProbe class",
+        "Header property",
+        "BeginPlay code",
+        "Place Actor",
+        "Change value",
+        "Live Coding",
+        "Break → read → fix"
       ],
       "theoryLinks": [
         {
@@ -720,748 +73,1967 @@ window.UE5_CPP_SKILL_MISSIONS = {
           "href": "https://dev.epicgames.com/documentation/unreal-engine/gameplay-classes-in-unreal-engine"
         },
         {
-          "label": "Epic UE5.8 — Actors",
-          "href": "https://dev.epicgames.com/documentation/unreal-engine/actors-in-unreal-engine"
+          "label": "Microsoft — Install Visual Studio Tools for Unreal Engine",
+          "href": "https://learn.microsoft.com/visualstudio/gamedev/unreal/get-started/vs-tools-unreal-install"
         }
       ],
       "stages": [
         {
           "id": "start",
           "number": 0,
-          "title": "Start Here — Prove Mission 0 Still Works",
-          "goal": "Open the same L4CppTraining project, verify one clean build, and set up a simple level area where your first C++ Actor will be visible.",
-          "why": "You need a known-good baseline before the first authored C++ class.",
-          "bridge": "Blueprint equivalent: before adding a new Blueprint system you prove the level/project still runs. C++ uses the same discipline, with a compiler/build check added.",
+          "title": "Start Here — Understand the Unreal C++ Loop",
+          "goal": "Understand the workflow you are about to use repeatedly: edit code → compile/build → return to Unreal → test → read evidence.",
+          "why": "The hardest part for a first-time Unreal C++ student is often not syntax. It is knowing which program to use, when to compile and how to tell whether the code actually ran.",
+          "concept": "Unreal C++ development is one project viewed through two main tools. Unreal Editor owns levels, assets and play-testing. Visual Studio owns the source code and compiler workflow. The project only becomes useful when the two agree.",
+          "practical": [
+            "You will keep Unreal and Visual Studio as two parts of the same L4CppTraining project.",
+            "Every later C++ mission will use the same compile/test loop.",
+            "You will deliberately use Output/Build messages as evidence rather than guessing."
+          ],
+          "algorithm": [
+            "Open the correct Unreal project.",
+            "Open the matching Visual Studio project/workspace.",
+            "Edit one small piece of C++.",
+            "Save the file.",
+            "Compile/build using the correct route.",
+            "Return to Unreal and test the expected behaviour.",
+            "If it fails, read the first useful compiler/runtime message."
+          ],
+          "review": [
+            {
+              "term": "Unreal Editor",
+              "text": "Place/test gameplay objects, edit assets and tune exposed values."
+            },
+            {
+              "term": "Visual Studio",
+              "text": "Edit .h/.cpp files, build the project and inspect compiler output."
+            },
+            {
+              "term": "Compile / Build",
+              "text": "Turn C++ source into code Unreal can load and execute."
+            },
+            {
+              "term": "Evidence",
+              "text": "A successful build, Output Log line or visible gameplay result—not 'it looks about right'."
+            }
+          ],
           "steps": [
             {
-              "title": "Open the same project",
-              "where": "Unreal Engine 5.8 → L4CppTraining",
-              "do": "Reuse Mission 0.",
+              "title": "Choose a safe project location",
+              "where": "Windows File Explorer",
               "doList": [
-                "Open L4CppTraining.",
-                "Choose File → Save All.",
-                "Confirm the project opens without module/build warnings.",
-                "Do not create L4CppTraining2 or another copy for this mission."
+                "Use the normal college-approved Unreal project location on a local drive.",
+                "Prefer a short path such as Documents\\Unreal Projects or the college standard.",
+                "Avoid renaming/moving source files through File Explorer once Unreal has generated them.",
+                "Do not place the project inside the Unreal Engine installation folder."
               ],
-              "check": "The same Mission 0 project opens cleanly.",
-              "why": "Every C++ mission will grow this project."
+              "check": "You know exactly where L4CppTraining will live.",
+              "why": "Predictable paths make generated project/build files easier to diagnose."
             },
             {
-              "title": "Run the baseline build",
-              "where": "Visual Studio",
-              "do": "Verify the project before adding code.",
+              "title": "Write down the loop",
+              "where": "Your notes / verbal check",
               "doList": [
-                "From Unreal choose Tools → Open Visual Studio.",
-                "Wait for L4CppTraining to load in Visual Studio.",
-                "Save All.",
-                "Close Unreal Editor.",
-                "Set Development Editor + Win64 in Visual Studio.",
-                "Right-click/build L4CppTraining.",
-                "Wait for 0 failed.",
-                "Reopen L4CppTraining in Unreal only after the Build succeeds.",
-                "If it fails before you change anything, fix Mission 0 rather than continuing."
+                "Say the workflow: edit → save → compile/build → test.",
+                "Say what Unreal Editor is responsible for.",
+                "Say what Visual Studio is responsible for.",
+                "Know that a compiler error is information about the code/toolchain, not a reason to restart the whole project."
               ],
-              "check": "A clean Development Editor / Win64 full Build succeeds and L4CppTraining reopens.",
-              "why": "Any later failure can now be tied to your new class/code."
-            },
-            {
-              "title": "Prepare a visible test space",
-              "where": "Unreal Editor → current level",
-              "do": "Make a simple area for the training Actor.",
-              "doList": [
-                "Use a blank/default level area.",
-                "Make sure there is a floor and enough light to see a cube.",
-                "Place a Player Start/camera only if your chosen level needs it for testing.",
-                "Save the map as LV_CPPTraining if you need a dedicated map."
-              ],
-              "check": "There is a simple saved space where a rotating cube will be obvious.",
-              "why": "Immediate visual feedback makes the code easier to understand."
+              "check": "You can explain the development loop without looking at the guide.",
+              "why": "This is the routine you will repeat in every mission."
             }
           ],
           "test": [
-            "L4CppTraining opens.",
-            "Development Editor / Win64 baseline Build succeeds.",
-            "A simple saved test level is ready."
+            "You can explain the role of Unreal Editor.",
+            "You can explain the role of Visual Studio.",
+            "You can state the edit → build → test loop."
           ],
-          "doneWhen": "You have a known-good project and a visible test space.",
+          "doneWhen": "The workflow makes sense before you install or write anything.",
           "common": [
-            "Do not troubleshoot new class code until the baseline itself builds.",
-            "The level can stay ugly—this pathway is about programming."
+            "Do not create several versions of the project just because a build fails.",
+            "Do not treat red IntelliSense squiggles as more authoritative than the actual compiler result while Visual Studio is still indexing."
+          ]
+        },
+        {
+          "id": "vs-installer",
+          "number": 1,
+          "title": "Visual Studio 2022 — Verify the IDE",
+          "goal": "Confirm Visual Studio 2022 is installed and open the Installer where the Unreal C++ workload is controlled.",
+          "why": "Visual Studio can exist without the compiler and Unreal tooling. Opening the IDE is not proof that the C++ toolchain is installed.",
+          "concept": "An IDE is the program you write/navigate code in. The compiler/toolchain is installed as workloads/components. Unreal needs both.",
+          "practical": [
+            "This stage is machine setup rather than gameplay, but it prevents most 'C++ does not build at all' problems.",
+            "College machines may require staff/admin approval for changes."
+          ],
+          "algorithm": [
+            "Open Visual Studio Installer.",
+            "Locate Visual Studio 2022.",
+            "Choose Modify.",
+            "Inspect workloads instead of launching the IDE immediately."
+          ],
+          "review": [
+            {
+              "term": "IDE",
+              "text": "Integrated Development Environment—the code editor/debug/build workspace."
+            },
+            {
+              "term": "Workload",
+              "text": "A bundle of Visual Studio tools/components for a type of development."
+            },
+            {
+              "term": "Visual Studio 2022",
+              "text": "The IDE used in this pathway on Windows."
+            }
+          ],
+          "steps": [
+            {
+              "title": "Open Visual Studio Installer",
+              "where": "Windows Start/Search",
+              "doList": [
+                "Press the Windows key.",
+                "Type Visual Studio Installer.",
+                "Open Visual Studio Installer.",
+                "Wait for the installed products list.",
+                "Find Visual Studio 2022 Community, Professional or Enterprise.",
+                "Do not click Launch yet."
+              ],
+              "check": "A Visual Studio 2022 installation appears with Modify available.",
+              "why": "The Installer is where the actual C++/Unreal workload is verified."
+            },
+            {
+              "title": "If it is missing",
+              "where": "College software route / teacher",
+              "doList": [
+                "Do not install an older Visual Studio from a random website.",
+                "Use the college-approved installer/software centre.",
+                "If you lack permission, flag the machine to staff.",
+                "The target is Visual Studio 2022 with Game development with C++."
+              ],
+              "check": "Visual Studio 2022 is installed or the machine has been flagged for setup.",
+              "why": "The rest of the pathway needs a supported compiler environment."
+            }
+          ],
+          "test": [
+            "Visual Studio 2022 appears in Visual Studio Installer.",
+            "You can access Modify or know the machine requires staff setup."
+          ],
+          "doneWhen": "The correct IDE exists and its components can be inspected.",
+          "common": [
+            "Visual Studio Code is not Visual Studio 2022.",
+            "Do not bypass college administrator controls."
+          ]
+        },
+        {
+          "id": "vs-workload",
+          "number": 2,
+          "title": "Install the Unreal C++ Workload",
+          "goal": "Verify Game development with C++, Visual Studio Tools for Unreal Engine and a suitable Windows SDK.",
+          "why": "These components provide the native compiler/toolset and Unreal-aware Visual Studio integration.",
+          "concept": "C++ is compiled. Before any gameplay code can run, Windows/Visual Studio need the C++ compiler, SDK headers/libraries and Unreal integration.",
+          "practical": [
+            "Microsoft's Unreal setup guidance places the Unreal tools under Game development with C++.",
+            "A missing SDK/toolset usually causes project-wide failures before your own code is even considered."
+          ],
+          "algorithm": [
+            "Modify Visual Studio 2022.",
+            "Select Game development with C++.",
+            "Check Unreal optional components.",
+            "Check Windows SDK.",
+            "Apply changes and let the installation finish."
+          ],
+          "review": [
+            {
+              "term": "C++ compiler",
+              "text": "Transforms source code into native machine/object code used by the Unreal build."
+            },
+            {
+              "term": "Windows SDK",
+              "text": "Headers/libraries/tools needed to build Windows applications."
+            },
+            {
+              "term": "Visual Studio Tools for Unreal Engine",
+              "text": "Adds Unreal-aware project, macro, logging and navigation features to Visual Studio."
+            }
+          ],
+          "steps": [
+            {
+              "title": "Select the workload",
+              "where": "Visual Studio Installer → Modify → Workloads",
+              "doList": [
+                "Open Modify for Visual Studio 2022.",
+                "Find Game development with C++.",
+                "Tick it if it is not selected.",
+                "Do not untick college-required workloads."
+              ],
+              "check": "Game development with C++ is selected.",
+              "why": "This is the core native-game-development workload used by Unreal."
+            },
+            {
+              "title": "Check Unreal options",
+              "where": "Installation details / Optional components",
+              "doList": [
+                "Ensure Visual Studio Tools for Unreal Engine is selected.",
+                "Ensure Visual Studio debugger tools for Unreal Engine Blueprints is selected if offered.",
+                "Ensure Unreal Engine Test Adapter is selected if offered.",
+                "Ensure a supported Windows SDK is selected.",
+                "Click Modify only if changes are needed and wait for completion."
+              ],
+              "check": "The C++ workload, Unreal tools and Windows SDK are installed.",
+              "why": "This gives the project the compiler/integration expected by current Microsoft/Epic guidance."
+            }
+          ],
+          "test": [
+            "Game development with C++ is installed.",
+            "Visual Studio Tools for Unreal Engine is installed.",
+            "A suitable Windows SDK is installed."
+          ],
+          "doneWhen": "The machine has the native Unreal C++ toolchain.",
+          "common": [
+            "Exact optional component wording can move between Visual Studio updates.",
+            "If installation requires admin credentials, stop and ask staff rather than working around policy."
+          ]
+        },
+        {
+          "id": "create-project",
+          "number": 3,
+          "title": "Create the One Project: L4CppTraining",
+          "goal": "Create the C++ project that every mission in this pathway will extend.",
+          "why": "A cumulative project makes later learning feel like upgrading a real codebase instead of completing disconnected syntax exercises.",
+          "concept": "A C++ Unreal project contains a game module under Source. Unreal Build Tool compiles that module and Unreal Editor loads it alongside your Content assets.",
+          "practical": [
+            "You will keep this project through future pickups, doors, inventory, interaction and save/load work.",
+            "The exact project name makes class/module/API names predictable in the guide."
+          ],
+          "algorithm": [
+            "Create a Games project.",
+            "Choose C++/code project.",
+            "Name it L4CppTraining.",
+            "Let Unreal generate the game module.",
+            "Open the project and Visual Studio."
+          ],
+          "review": [
+            {
+              "term": ".uproject",
+              "text": "The Unreal project descriptor."
+            },
+            {
+              "term": "Source",
+              "text": "Your project's C++ module/source files."
+            },
+            {
+              "term": "Content",
+              "text": "Unreal assets such as maps, Blueprints, meshes and materials."
+            },
+            {
+              "term": "L4CPPTRAINING_API",
+              "text": "The module export macro that will appear in generated gameplay classes."
+            }
+          ],
+          "steps": [
+            {
+              "title": "Create the project",
+              "where": "Unreal Engine 5.8 → Project Browser → Games",
+              "doList": [
+                "Choose a Blank Games project.",
+                "Choose C++ as the project type/programming language where shown.",
+                "Use Desktop/normal college target settings.",
+                "Starter Content may be Off.",
+                "Set the location chosen earlier.",
+                "Name the project exactly L4CppTraining.",
+                "Click Create and wait for generation/build tasks to finish."
+              ],
+              "check": "L4CppTraining opens as a C++ Unreal project.",
+              "why": "This creates the game module and source/build files used by every later mission."
+            },
+            {
+              "title": "If you accidentally made a Blueprint-only project",
+              "where": "Unreal Editor → Tools",
+              "doList": [
+                "Do not start over immediately.",
+                "Use Tools → New C++ Class to add an Actor class only if your teacher approves converting the project.",
+                "Creating the first native class converts the project into a code project.",
+                "Return to this guide once a Source module exists."
+              ],
+              "check": "The project contains C++ Source and Visual Studio can open it.",
+              "why": "Epic supports adding native code to a content-only project."
+            }
+          ],
+          "test": [
+            "The project is called L4CppTraining.",
+            "It opens in Unreal.",
+            "A Source/L4CppTraining module exists."
+          ],
+          "doneWhen": "The cumulative C++ training project exists.",
+          "common": [
+            "The first C++ project creation can take longer than a Blueprint-only project.",
+            "If creation fails, capture the first meaningful build error rather than the final cascade."
+          ]
+        },
+        {
+          "id": "project-anatomy",
+          "number": 4,
+          "title": "Project Anatomy — Read the Codebase Before Editing It",
+          "goal": "Identify the files Unreal generated and understand what belongs in Source versus Content.",
+          "why": "Programmers need to navigate a codebase before they start changing it.",
+          "concept": "The project is split between authored content and native source. Generated/build folders may appear, but Source and Content are the two folders beginners should understand first.",
+          "practical": [
+            "Later compiler errors will name Source files and line numbers.",
+            "Later Blueprint children will live in Content but inherit native classes from Source."
+          ],
+          "algorithm": [
+            "Find .uproject.",
+            "Find Content.",
+            "Find Source/L4CppTraining.",
+            "Open the game module files in Visual Studio.",
+            "Do not manually reorganise generated folders."
+          ],
+          "review": [
+            {
+              "term": "Header (.h)",
+              "text": "Declares a class, its properties and its functions."
+            },
+            {
+              "term": "Source (.cpp)",
+              "text": "Implements what those functions actually do."
+            },
+            {
+              "term": ".Build.cs",
+              "text": "Declares module build dependencies/settings."
+            },
+            {
+              "term": "Binaries / Intermediate",
+              "text": "Generated build output; not where you author gameplay logic."
+            }
+          ],
+          "steps": [
+            {
+              "title": "Inspect the physical project",
+              "where": "Windows File Explorer → L4CppTraining",
+              "doList": [
+                "Find L4CppTraining.uproject.",
+                "Find Content.",
+                "Find Source.",
+                "Open Source → L4CppTraining.",
+                "Notice L4CppTraining.Build.cs and generated module source files.",
+                "Do not edit them in Notepad or move them around."
+              ],
+              "check": "You can identify the project descriptor, Content and Source.",
+              "why": "This gives later compiler paths/names meaning."
+            },
+            {
+              "title": "Open Visual Studio from Unreal",
+              "where": "Unreal Editor → Tools → Open Visual Studio",
+              "doList": [
+                "Open Visual Studio through Unreal.",
+                "Wait for indexing/project loading.",
+                "Open Solution Explorer if hidden: View → Solution Explorer.",
+                "Find the L4CppTraining Source/module.",
+                "Open one generated .h and one .cpp file without changing them."
+              ],
+              "check": "You can navigate project C++ from Solution Explorer.",
+              "why": "Solution Explorer becomes the main code navigation view."
+            }
+          ],
+          "test": [
+            "You know where Source lives.",
+            "You know where Content lives.",
+            "You can find a .h, .cpp and .Build.cs."
+          ],
+          "doneWhen": "The project structure is familiar enough to navigate safely.",
+          "common": [
+            "Do not edit Engine source because it appears in the Visual Studio solution.",
+            "Do not delete generated folders as a first response to an ordinary syntax error."
+          ]
+        },
+        {
+          "id": "meet-visual-studio",
+          "number": 5,
+          "title": "Visual Studio — Learn Only the Panels You Need",
+          "goal": "Find Solution Explorer, Output, Error List and the Unreal Editor build configuration.",
+          "why": "Reducing Visual Studio to a few repeatable tools makes the IDE manageable for first-time students.",
+          "concept": "The compiler's Build Output is the authority. Error List is useful, but one true compiler error can cause many follow-on messages.",
+          "practical": [
+            "You will navigate code in Solution Explorer.",
+            "You will read Build/Live Coding output when something fails.",
+            "You will build the Editor target rather than a Shipping game build."
+          ],
+          "algorithm": [
+            "Find Solution Explorer.",
+            "Find Output.",
+            "Find Error List.",
+            "Set Development Editor.",
+            "Set Win64.",
+            "Build the untouched project once."
+          ],
+          "review": [
+            {
+              "term": "Development Editor",
+              "text": "Build configuration for code that runs inside Unreal Editor during development."
+            },
+            {
+              "term": "Win64",
+              "text": "The Windows 64-bit target platform used in this classroom workflow."
+            },
+            {
+              "term": "Output",
+              "text": "Full build/compiler log—use this to find the first useful error."
+            },
+            {
+              "term": "Error List",
+              "text": "Clickable summary of errors/warnings; useful, but not a substitute for the build log."
+            }
+          ],
+          "steps": [
+            {
+              "title": "Open the panels",
+              "where": "Visual Studio → View",
+              "doList": [
+                "Open Solution Explorer.",
+                "Open Output.",
+                "Open Error List.",
+                "Arrange them so the code editor remains readable.",
+                "Ignore temporary IntelliSense red squiggles while indexing unless the actual Build also fails."
+              ],
+              "check": "All three panels are accessible.",
+              "why": "These are the core beginner debugging/navigation panels."
+            },
+            {
+              "title": "Choose the correct build target",
+              "where": "Visual Studio top toolbar",
+              "doList": [
+                "Find Solution Configuration.",
+                "Choose Development Editor.",
+                "Find Solution Platform.",
+                "Choose Win64.",
+                "If dropdowns are hidden, use Build → Configuration Manager or widen the toolbar."
+              ],
+              "check": "Development Editor / Win64 is selected.",
+              "why": "That is the target you will use for full Unreal Editor builds."
+            },
+            {
+              "title": "Build the untouched project",
+              "where": "Visual Studio",
+              "doList": [
+                "Save All.",
+                "Close Unreal Editor for this first baseline full Build.",
+                "Right-click/build L4CppTraining.",
+                "Watch Output.",
+                "Wait for Build succeeded / 0 failed.",
+                "Reopen L4CppTraining only after the Build finishes."
+              ],
+              "check": "The untouched project builds successfully.",
+              "why": "This proves the toolchain works before authored code is introduced."
+            }
+          ],
+          "test": [
+            "Solution Explorer, Output and Error List are available.",
+            "Development Editor / Win64 is selected.",
+            "The untouched project builds with 0 failed."
+          ],
+          "doneWhen": "The baseline compiler/toolchain is proven.",
+          "common": [
+            "If this untouched Build fails, stop: the problem is setup/toolchain, not your future gameplay code.",
+            "Read the first meaningful error, especially if it mentions missing SDK/toolset."
+          ]
+        },
+        {
+          "id": "header-source",
+          "number": 6,
+          "title": "Create ASetupProbe — Your First Native Gameplay Class",
+          "goal": "Create an Actor through Unreal's C++ Class Wizard and understand the generated header/source structure.",
+          "why": "The best way to learn Unreal C++ structure is to create a real class and read what Unreal generates for you.",
+          "concept": "An Unreal gameplay class combines standard C++ with Unreal reflection macros. AActor-derived classes can be placed in the world. The header declares the class; the .cpp implements it.",
+          "practical": [
+            "SetupProbe is deliberately tiny: one editable integer and one log message.",
+            "It will remain in the project as a known-good diagnostic Actor."
+          ],
+          "algorithm": [
+            "Use Tools → New C++ Class.",
+            "Choose Actor.",
+            "Name it SetupProbe.",
+            "Let Unreal generate SetupProbe.h/.cpp.",
+            "Read the generated constructor/BeginPlay/Tick before changing them."
+          ],
+          "review": [
+            {
+              "term": "AActor",
+              "text": "Base type for an object that can exist/spawn in the Unreal world."
+            },
+            {
+              "term": "UCLASS()",
+              "text": "Marks the class for Unreal's reflection/object system."
+            },
+            {
+              "term": "GENERATED_BODY()",
+              "text": "Injects Unreal-generated class support required by reflected gameplay classes."
+            },
+            {
+              "term": "Super::BeginPlay()",
+              "text": "Calls the parent class BeginPlay implementation before your subclass adds its own behaviour."
+            }
+          ],
+          "steps": [
+            {
+              "title": "Create SetupProbe",
+              "where": "Unreal Editor → Tools → New C++ Class",
+              "doList": [
+                "Choose Actor.",
+                "Click Next.",
+                "Name the class SetupProbe.",
+                "Keep the default game module/location.",
+                "Click Create Class.",
+                "Wait for Unreal/Live Coding and Visual Studio to update.",
+                "Find SetupProbe.h and SetupProbe.cpp in Solution Explorer."
+              ],
+              "check": "ASetupProbe exists as a generated AActor class.",
+              "why": "The Wizard creates the boilerplate and updates the module for you."
+            },
+            {
+              "title": "Read the generated structure",
+              "where": "Visual Studio → SetupProbe.h / SetupProbe.cpp",
+              "doList": [
+                "Find #include \"SetupProbe.generated.h\" and keep it as the final include in the header.",
+                "Find UCLASS().",
+                "Find class L4CPPTRAINING_API ASetupProbe : public AActor.",
+                "Find GENERATED_BODY().",
+                "Find ASetupProbe::ASetupProbe() in the .cpp.",
+                "Find BeginPlay() and Tick() if the template generated Tick."
+              ],
+              "check": "You can point to class declaration, constructor and BeginPlay implementation.",
+              "why": "You need to know where declarations and implementations live before typing code."
+            }
+          ],
+          "test": [
+            "SetupProbe.h exists.",
+            "SetupProbe.cpp exists.",
+            "ASetupProbe derives from AActor.",
+            "You can explain header versus .cpp."
+          ],
+          "doneWhen": "Your first authored Unreal C++ class exists and its structure is readable.",
+          "common": [
+            "Class names cannot contain spaces.",
+            "Do not move includes below SetupProbe.generated.h."
+          ]
+        },
+        {
+          "id": "first-build",
+          "number": 7,
+          "title": "Write Real Code — UPROPERTY + BeginPlay + UE_LOG",
+          "goal": "Add an editable integer property to SetupProbe, log it from BeginPlay, build the structural change and prove the value travels from Unreal Editor into C++.",
+          "why": "This is the first complete Unreal C++ data flow: C++ declares a value → Unreal exposes it → the placed Actor carries a value → C++ reads it at runtime.",
+          "concept": "UPROPERTY connects a C++ member to Unreal's reflection/editor system. BeginPlay is a lifecycle function called when gameplay begins. UE_LOG is one of the most useful ways to prove code executed and inspect runtime values.",
+          "practical": [
+            "This mirrors a common Unreal pattern: programmers expose tuning data while runtime C++ consumes it.",
+            "Later missions will expose item values, key requirements, interaction distances and more."
+          ],
+          "algorithm": [
+            "Declare ProbeNumber in SetupProbe.h.",
+            "Build/reopen because the reflected header changed.",
+            "Place SetupProbe.",
+            "Set ProbeNumber in Details.",
+            "Play.",
+            "BeginPlay logs the current value."
+          ],
+          "review": [
+            {
+              "term": "UPROPERTY(EditAnywhere)",
+              "text": "Makes the property editable in Unreal Editor instances/defaults."
+            },
+            {
+              "term": "BlueprintReadWrite",
+              "text": "Allows Blueprint to read/write the reflected property."
+            },
+            {
+              "term": "int32",
+              "text": "A 32-bit integer type commonly used in Unreal C++."
+            },
+            {
+              "term": "TEXT(...)",
+              "text": "Wraps string literals for Unreal's TCHAR text system used by logging/macros."
+            },
+            {
+              "term": "%d",
+              "text": "Integer format placeholder used by this UE_LOG call."
+            }
+          ],
+          "checkpointCode": [
+            {
+              "title": "SetupProbe.h — checkpoint",
+              "content": "#pragma once\n\n#include \"CoreMinimal.h\"\n#include \"GameFramework/Actor.h\"\n#include \"SetupProbe.generated.h\"\n\nUCLASS()\nclass L4CPPTRAINING_API ASetupProbe : public AActor\n{\n    GENERATED_BODY()\n\npublic:\n    ASetupProbe();\n\n    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=\"Setup Probe\")\n    int32 ProbeNumber = 42;\n\nprotected:\n    virtual void BeginPlay() override;\n};"
+            },
+            {
+              "title": "SetupProbe.cpp — checkpoint",
+              "content": "#include \"SetupProbe.h\"\n\nASetupProbe::ASetupProbe()\n{\n    PrimaryActorTick.bCanEverTick = false;\n}\n\nvoid ASetupProbe::BeginPlay()\n{\n    Super::BeginPlay();\n\n    UE_LOG(\n        LogTemp,\n        Warning,\n        TEXT(\"SetupProbe connected. ProbeNumber = %d\"),\n        ProbeNumber\n    );\n}"
+            }
+          ],
+          "steps": [
+            {
+              "title": "Simplify the constructor",
+              "where": "SetupProbe.cpp → ASetupProbe::ASetupProbe()",
+              "doList": [
+                "Set PrimaryActorTick.bCanEverTick = false; because this probe does not need per-frame code.",
+                "If the generated template contains Tick(), you may leave the function declaration/definition temporarily, but it is not used by the probe.",
+                "Save the .cpp."
+              ],
+              "code": [
+                {
+                  "title": "Constructor line",
+                  "content": "PrimaryActorTick.bCanEverTick = false;"
+                }
+              ],
+              "check": "The constructor explicitly disables unnecessary Tick.",
+              "why": "Do not pay for/update per-frame logic when the Actor does not need it."
+            },
+            {
+              "title": "Declare ProbeNumber",
+              "where": "SetupProbe.h → public section",
+              "doList": [
+                "Add the UPROPERTY line exactly as shown.",
+                "On the next line declare int32 ProbeNumber = 42;.",
+                "Check the semicolon.",
+                "Do not put normal #include lines beneath SetupProbe.generated.h.",
+                "Save the header."
+              ],
+              "code": [
+                {
+                  "title": "Add to SetupProbe.h",
+                  "content": "UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=\"Setup Probe\")\nint32 ProbeNumber = 42;"
+                }
+              ],
+              "check": "ProbeNumber is declared as an editor-exposed int32 with default 42.",
+              "why": "This is your first reflected native gameplay property."
+            },
+            {
+              "title": "Log ProbeNumber from BeginPlay",
+              "where": "SetupProbe.cpp → BeginPlay()",
+              "doList": [
+                "Leave Super::BeginPlay(); in place.",
+                "Add the UE_LOG statement beneath it.",
+                "Type the code yourself.",
+                "Save the .cpp."
+              ],
+              "code": [
+                {
+                  "title": "Add under Super::BeginPlay()",
+                  "content": "UE_LOG(LogTemp, Warning, TEXT(\"SetupProbe connected. ProbeNumber = %d\"), ProbeNumber);"
+                }
+              ],
+              "check": "BeginPlay logs ProbeNumber.",
+              "why": "This connects editor data to runtime C++ evidence."
+            },
+            {
+              "title": "Full build the reflected header change",
+              "where": "Visual Studio",
+              "doList": [
+                "Save All.",
+                "Close Unreal Editor.",
+                "Select Development Editor / Win64.",
+                "Build L4CppTraining.",
+                "Wait for 0 failed.",
+                "Reopen Unreal."
+              ],
+              "check": "The new reflected class/property loads after a successful full Build.",
+              "why": "Header/reflection changes are safest for beginners using close → full Build → reopen."
+            },
+            {
+              "title": "Place and test SetupProbe",
+              "where": "Unreal Editor → level / Output Log",
+              "doList": [
+                "Find SetupProbe under C++ Classes/L4CppTraining.",
+                "Drag one into the level.",
+                "Select it and find Setup Probe → Probe Number.",
+                "Set Probe Number to 73.",
+                "Open Window → Developer Tools → Output Log.",
+                "Press Play.",
+                "Find the log line showing ProbeNumber = 73.",
+                "Stop Play."
+              ],
+              "check": "The Output Log prints the same value you set in the Editor.",
+              "why": "You have proven the complete C++ reflection/runtime loop."
+            }
+          ],
+          "test": [
+            "ProbeNumber appears in Details.",
+            "You can change it from 42 to another value.",
+            "The Build succeeds.",
+            "BeginPlay logs the edited value."
+          ],
+          "doneWhen": "ASetupProbe executes authored C++ and reads editor-exposed data at runtime.",
+          "common": [
+            "If ProbeNumber is missing from Details, verify the full Build succeeded and you selected the correct Actor.",
+            "If the compiler points near UPROPERTY, first check the previous line/semicolon and macro punctuation."
+          ]
+        },
+        {
+          "id": "live-coding",
+          "number": 8,
+          "title": "Use Live Coding for a .cpp-Only Change",
+          "goal": "Add a local const variable and change runtime logging without changing the reflected class layout.",
+          "why": "Students need a clear distinction between small implementation changes that are good Live Coding candidates and structural header changes that deserve a full rebuild.",
+          "concept": "A local variable exists only inside the function call while it runs. const means the local value should not be reassigned after creation. This is ordinary C++ working inside an Unreal lifecycle function.",
+          "practical": [
+            "Gameplay code constantly creates temporary/local values for calculations.",
+            "Live Coding speeds up small implementation changes while the Editor stays open."
+          ],
+          "algorithm": [
+            "Read ProbeNumber.",
+            "Calculate DoubledValue.",
+            "Log both values.",
+            "Save .cpp.",
+            "Live Code compile.",
+            "Play and compare output."
+          ],
+          "review": [
+            {
+              "term": "const int32",
+              "text": "An integer local variable that will not be reassigned after initialisation."
+            },
+            {
+              "term": "=",
+              "text": "Assignment/initialisation operator."
+            },
+            {
+              "term": "*",
+              "text": "Multiplication operator."
+            },
+            {
+              "term": "Local variable",
+              "text": "Exists within the function scope rather than as persistent Actor state."
+            }
+          ],
+          "checkpointCode": [
+            {
+              "title": "BeginPlay() after the Live Coding change",
+              "content": "void ASetupProbe::BeginPlay()\n{\n    Super::BeginPlay();\n\n    const int32 DoubledValue = ProbeNumber * 2;\n\n    UE_LOG(\n        LogTemp,\n        Warning,\n        TEXT(\"Probe %d -> doubled %d\"),\n        ProbeNumber,\n        DoubledValue\n    );\n}"
+            }
+          ],
+          "steps": [
+            {
+              "title": "Add DoubledValue",
+              "where": "SetupProbe.cpp → BeginPlay()",
+              "doList": [
+                "Keep Super::BeginPlay();.",
+                "Create const int32 DoubledValue = ProbeNumber * 2;.",
+                "Replace the earlier log with the new two-value log.",
+                "Save SetupProbe.cpp.",
+                "Do not edit SetupProbe.h during this stage."
+              ],
+              "code": [
+                {
+                  "title": "BeginPlay body",
+                  "content": "void ASetupProbe::BeginPlay()\n{\n    Super::BeginPlay();\n\n    const int32 DoubledValue = ProbeNumber * 2;\n\n    UE_LOG(\n        LogTemp,\n        Warning,\n        TEXT(\"Probe %d -> doubled %d\"),\n        ProbeNumber,\n        DoubledValue\n    );\n}"
+                }
+              ],
+              "check": "BeginPlay calculates a local value and logs both numbers.",
+              "why": "This introduces ordinary C++ expressions/local variables without another reflection change."
+            },
+            {
+              "title": "Compile with Live Coding",
+              "where": "Unreal Editor",
+              "doList": [
+                "Keep Unreal Editor open.",
+                "Trigger Live Coding from the Editor or Ctrl+Alt+F11.",
+                "Wait for a successful compile.",
+                "Press Play.",
+                "With ProbeNumber 73, confirm the output includes doubled 146.",
+                "Stop Play."
+              ],
+              "check": "The .cpp-only change compiles without closing Unreal and prints the expected calculation.",
+              "why": "This is the fast iteration route for small implementation edits."
+            }
+          ],
+          "test": [
+            "Live Coding succeeds.",
+            "Probe 73 produces doubled 146.",
+            "You can explain why this stage did not need a reflected header change."
+          ],
+          "doneWhen": "You can make and verify a small .cpp-only code change efficiently.",
+          "common": [
+            "Do not run Visual Studio Build and Live Coding simultaneously.",
+            "If the Editor behaves as if old code is still loaded, use the safe close → full Build → reopen route."
+          ]
+        },
+        {
+          "id": "recovery",
+          "number": 9,
+          "title": "Break It on Purpose — Read, Fix, Recover",
+          "goal": "Cause one controlled compiler error, use the first useful message to fix it, then finish with a clean full Build.",
+          "why": "Compiler errors are part of C++ development. The skill is not avoiding them; it is reducing the change, reading the message and correcting the actual cause.",
+          "concept": "One syntax error can create many secondary errors. The first error near your last change is usually the best starting point.",
+          "practical": [
+            "Later classes will be much larger. A disciplined 'last change + first error' routine prevents random edits.",
+            "SetupProbe remains a known-good class you can use to test whether the toolchain itself still works."
+          ],
+          "algorithm": [
+            "Make one intentional error.",
+            "Compile once.",
+            "Read the first error.",
+            "Navigate to its line.",
+            "Undo/fix only the mistake.",
+            "Compile again.",
+            "Finish with a clean full Build."
+          ],
+          "review": [
+            {
+              "term": "Syntax error",
+              "text": "Code does not follow C++ grammar, such as a missing semicolon."
+            },
+            {
+              "term": "Compiler error",
+              "text": "The compiler cannot produce valid output from the source."
+            },
+            {
+              "term": "Follow-on error",
+              "text": "A later error caused by an earlier parse/type failure."
+            },
+            {
+              "term": "Recovery build",
+              "text": "Close Unreal and perform a clean full Development Editor / Win64 Build when state is confusing."
+            }
+          ],
+          "steps": [
+            {
+              "title": "Remove one semicolon",
+              "where": "SetupProbe.cpp → DoubledValue line",
+              "doList": [
+                "Delete ONLY the final semicolon from const int32 DoubledValue = ProbeNumber * 2;.",
+                "Save the file.",
+                "Trigger Live Coding once.",
+                "Do not change five other lines after it fails."
+              ],
+              "check": "Compilation fails because of the deliberate syntax error.",
+              "why": "A tiny controlled error makes compiler output safe to study."
+            },
+            {
+              "title": "Use the first useful error",
+              "where": "Live Coding / Visual Studio Output",
+              "doList": [
+                "Find the first error referencing SetupProbe.cpp.",
+                "Read the line number/message.",
+                "Return to the code around your last change.",
+                "Restore the semicolon.",
+                "Save.",
+                "Compile again."
+              ],
+              "check": "Live Coding succeeds after restoring the semicolon.",
+              "why": "You fixed the cause instead of chasing symptoms."
+            },
+            {
+              "title": "Practise reopen/refresh",
+              "where": "Unreal Editor → Tools",
+              "doList": [
+                "Locate Tools → Open Visual Studio.",
+                "Locate Refresh Visual Studio Project (wording may vary slightly).",
+                "Know refresh is for project/source-file visibility, not C++ syntax errors.",
+                "Do not use refresh as a replacement for reading compiler output."
+              ],
+              "check": "You know where the two common project-navigation recovery commands live.",
+              "why": "Students sometimes lose project context separately from code correctness."
+            },
+            {
+              "title": "Final full Build",
+              "where": "Visual Studio",
+              "doList": [
+                "Save All.",
+                "Close Unreal Editor.",
+                "Set Development Editor / Win64.",
+                "Build L4CppTraining.",
+                "Confirm 0 failed.",
+                "Reopen Unreal.",
+                "Place/test SetupProbe one final time."
+              ],
+              "check": "The project ends Mission 0 with a clean full Build and working SetupProbe.",
+              "why": "Mission 1 can now start from a known-good real C++ baseline."
+            }
+          ],
+          "test": [
+            "You deliberately caused a compiler error.",
+            "You found and fixed it from the compiler output.",
+            "A final full Build succeeds.",
+            "SetupProbe still logs its value/calculation."
+          ],
+          "doneWhen": "You have completed the entire Unreal C++ workflow: setup, author, compile, run, inspect and debug.",
+          "common": [
+            "If the project built before the intentional edit, do not reinstall Visual Studio because of a missing semicolon.",
+            "Refresh project files does not fix invalid C++."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cpp-first-actor",
+      "sequence": 1,
+      "displaySequence": "1",
+      "requiresMission": "cpp-setup",
+      "discipline": "Unreal C++",
+      "icon": "C++",
+      "title": "Core Gameplay Actor — Build a C++ Collectible",
+      "subtitle": "Continue L4CppTraining and build a real collectible Actor entirely from C++ foundations: component hierarchy, editable data, per-frame rotation, overlap collision, delegate binding, condition checks, a Character cast, collection state, logging and a Blueprint child.",
+      "duration": "3–4 hours",
+      "difficulty": "Guided beginner gameplay code",
+      "summary": "Mission 1 now behaves like a small gameplay-programming chapter rather than a syntax demo. You will plan the collection algorithm, review the class responsibilities, then build ATrainingPickup in layers. The finished object spins, detects a player overlap, checks state/type, logs who collected it and its value, and destroys itself. Blueprint is used to assign presentation/tuning—not to replace the native gameplay logic.",
+      "guideRule": "Before each code block, read what the class/function is responsible for. Type the change, compile it, then prove it in Unreal. Use the full-code checkpoints only to compare after you have built the stage.",
+      "skills": [
+        "AActor",
+        "Component hierarchy",
+        "CreateDefaultSubobject",
+        "SetupAttachment",
+        "UPROPERTY",
+        "UFUNCTION",
+        "float / int32 / bool",
+        "Tick + DeltaTime",
+        "USphereComponent",
+        "collision channels",
+        "delegates / AddDynamic",
+        "if / return",
+        "Cast<ACharacter>",
+        "Destroy",
+        "Blueprint child"
+      ],
+      "rules": [
+        "Continue the same L4CppTraining project from Mission 0.",
+        "Build one gameplay responsibility at a time: structure → data → update → collision → response.",
+        "Type incremental code first; full-file checkpoints are for comparison/debugging.",
+        "Use C++ for the reusable gameplay rule. Use Blueprint for mesh/material/default tuning.",
+        "Compile/test after every stage before adding the next system.",
+        "If you change reflected header structure and the Editor becomes confused, use close → full Build → reopen."
+      ],
+      "gameFlow": [
+        "Plan collectible",
+        "Create class",
+        "Build components",
+        "Expose data",
+        "Rotate in Tick",
+        "Configure overlap",
+        "Bind delegate",
+        "Validate player",
+        "Collect + Destroy",
+        "Blueprint child + variation"
+      ],
+      "theoryLinks": [
+        {
+          "label": "Epic UE5.8 — Gameplay Classes",
+          "href": "https://dev.epicgames.com/documentation/unreal-engine/gameplay-classes-in-unreal-engine"
+        },
+        {
+          "label": "Epic UE5.8 — C++ and Blueprints Example",
+          "href": "https://dev.epicgames.com/documentation/en-us/unreal-engine/cpp-and-blueprints-example"
+        },
+        {
+          "label": "Epic UE5.8 — C++ Programming Tutorials",
+          "href": "https://dev.epicgames.com/documentation/unreal-engine/unreal-engine-cpp-programming-tutorials"
+        }
+      ],
+      "stages": [
+        {
+          "id": "start",
+          "number": 0,
+          "title": "Plan the Mechanic Before the Code",
+          "goal": "Define exactly what the collectible should do and turn that behaviour into a small algorithm before creating the class.",
+          "why": "The book reference repeatedly separates the gameplay idea, practical use, algorithm and code review. We will use that same learning rhythm so the code has a reason to exist.",
+          "concept": "The collectible is an Actor with visible representation, a detection volume, editable data and one response to player overlap. It is small enough to understand, but real enough to introduce several core Unreal C++ systems.",
+          "practical": [
+            "Collectibles are used for score items, keys, health/ammo, quest items and progression.",
+            "This class will become the foundation for later inventory and locked-door missions.",
+            "The Blueprint child will let a designer change the mesh/value without rewriting C++."
+          ],
+          "algorithm": [
+            "Initialise a root, mesh and collection sphere.",
+            "Every frame, rotate the Actor using RotationSpeed × DeltaTime.",
+            "When the sphere begins overlapping something, check whether the pickup is already collected.",
+            "Check the overlapping Actor exists and is a Character.",
+            "Mark the pickup collected.",
+            "Log the collector and ItemValue.",
+            "Destroy the pickup."
+          ],
+          "review": [
+            {
+              "term": "State",
+              "text": "bCollected remembers whether collection has already happened."
+            },
+            {
+              "term": "Data",
+              "text": "RotationSpeed and ItemValue are values that can vary between pickup instances."
+            },
+            {
+              "term": "Detection",
+              "text": "USphereComponent produces an overlap event when a Pawn enters its query volume."
+            },
+            {
+              "term": "Response",
+              "text": "The overlap callback validates the Actor, logs the event and removes the pickup."
+            }
+          ],
+          "steps": [
+            {
+              "title": "Prove Mission 0 still works",
+              "where": "L4CppTraining",
+              "doList": [
+                "Open L4CppTraining.",
+                "Place/test SetupProbe or confirm it still exists.",
+                "Save All.",
+                "Open Visual Studio from Unreal.",
+                "If the project has not been built since Mission 0, close Unreal and run Development Editor / Win64 Build.",
+                "Reopen Unreal after a successful build."
+              ],
+              "check": "The existing C++ project is healthy before you add the collectible.",
+              "why": "A known-good baseline makes new errors traceable to the new class."
+            },
+            {
+              "title": "Predict the class members",
+              "where": "Before Visual Studio coding",
+              "doList": [
+                "Write down: SceneRoot, Mesh, CollectionSphere.",
+                "Write down: RotationSpeed, ItemValue, bCollected.",
+                "Write down: BeginPlay, Tick, OnCollectionSphereBeginOverlap.",
+                "Do not worry about syntax yet; identify responsibilities first."
+              ],
+              "check": "You can describe the class shape before seeing the code.",
+              "why": "Programming starts with decomposing the mechanic, not typing macros blindly."
+            }
+          ],
+          "test": [
+            "You can explain the collection algorithm in order.",
+            "You can name the three components and three gameplay properties.",
+            "Mission 0 project still builds/runs."
+          ],
+          "doneWhen": "You know what the class must own and what event makes collection happen.",
+          "common": [
+            "Do not start by searching for a giant finished pickup class online.",
+            "If you cannot describe what triggers collection, revisit the algorithm before coding."
           ]
         },
         {
           "id": "create-class",
           "number": 1,
-          "title": "Create TrainingActor with Unreal's C++ Class Wizard",
-          "goal": "Create your first authored AActor-derived gameplay class through Unreal so the boilerplate is generated correctly.",
-          "why": "The Class Wizard creates the header/source pair and Unreal reflection boilerplate for you.",
+          "title": "Create ATrainingPickup",
+          "goal": "Use Unreal's C++ Class Wizard to create the new Actor and compile the untouched generated class.",
+          "why": "A clean generated baseline separates Wizard/module issues from the code you will add afterwards.",
+          "concept": "ATrainingPickup derives from AActor, so Unreal can place/spawn it in the world. The class name uses Unreal's A prefix because it derives from Actor.",
+          "practical": [
+            "The class will eventually become a reusable base for multiple pickup Blueprint children.",
+            "The C++ Class Wizard creates the reflection boilerplate correctly."
+          ],
+          "algorithm": [
+            "Tools → New C++ Class.",
+            "Actor parent.",
+            "Name TrainingPickup.",
+            "Generate header/source.",
+            "Compile untouched baseline.",
+            "Confirm class appears in Unreal."
+          ],
+          "review": [
+            {
+              "term": "ATrainingPickup",
+              "text": "C++ class name; A prefix indicates Actor-derived."
+            },
+            {
+              "term": "TrainingPickup.h",
+              "text": "Declares components/properties/functions."
+            },
+            {
+              "term": "TrainingPickup.cpp",
+              "text": "Constructs components and implements runtime behaviour."
+            }
+          ],
           "steps": [
             {
-              "title": "Open the C++ Class Wizard",
-              "where": "Unreal Editor → Tools",
-              "do": "Create a new native gameplay class.",
+              "title": "Generate the class",
+              "where": "Unreal Editor → Tools → New C++ Class",
               "doList": [
-                "Stop Play In Editor if it is running.",
-                "Choose Tools → New C++ Class.",
-                "In Common Classes choose Actor.",
+                "Choose Actor.",
                 "Click Next.",
-                "Name the class TrainingActor.",
-                "Keep it in the project module/default Source location.",
+                "Name it TrainingPickup.",
+                "Keep the default L4CppTraining module/location.",
                 "Click Create Class.",
-                "Wait for Unreal/Live Coding and Visual Studio to finish opening/updating."
+                "Wait for Visual Studio/Live Coding to update.",
+                "Open TrainingPickup.h and TrainingPickup.cpp."
               ],
-              "check": "TrainingActor.h and TrainingActor.cpp exist and Visual Studio opens them.",
-              "why": "Epic's wizard generates the UCLASS/generated header structure and registers the class with the project."
+              "check": "A generated ATrainingPickup class exists.",
+              "why": "The Wizard handles UCLASS/generated header/module plumbing."
             },
             {
-              "title": "Find both files in Solution Explorer",
-              "where": "Visual Studio → Solution Explorer → Source → L4CppTraining",
-              "do": "Locate the generated pair.",
+              "title": "Compile before changing it",
+              "where": "Unreal / Visual Studio",
               "doList": [
-                "Find TrainingActor.h.",
-                "Find TrainingActor.cpp.",
-                "Open both as editor tabs.",
-                "Notice Unreal's actual C++ class name begins with A: ATrainingActor.",
-                "Do not rename the files/class after generation."
+                "Save the untouched generated files.",
+                "Compile once using Live Coding if Unreal has created/loaded the class normally.",
+                "If the class does not appear correctly, close Unreal and full Build Development Editor / Win64.",
+                "Reopen Unreal and confirm TrainingPickup appears under C++ Classes."
               ],
-              "check": "Both generated files are open and you can see ATrainingActor.",
-              "why": "Unreal uses the A prefix for Actor-derived C++ classes."
-            },
-            {
-              "title": "Compile the untouched generated class first",
-              "where": "Unreal Live Coding or full Build",
-              "do": "Prove the Wizard output works before editing.",
-              "doList": [
-                "Save both generated files without changing them.",
-                "Use Unreal's Live Coding compile if the Editor is open and it has already created the class cleanly.",
-                "If the class has not appeared correctly or Live Coding reports structural trouble, close Unreal and run a full Development Editor / Win64 Build.",
-                "Reopen Unreal.",
-                "Find TrainingActor under C++ Classes / the project classes."
-              ],
-              "check": "The untouched TrainingActor class compiles and appears in Unreal.",
-              "why": "Never add three code changes before proving the generated baseline."
+              "check": "The untouched class compiles and is visible to Unreal.",
+              "why": "This makes the generated class your new known-good checkpoint."
             }
           ],
           "test": [
-            "TrainingActor.h exists.",
-            "TrainingActor.cpp exists.",
-            "ATrainingActor derives from AActor.",
+            "TrainingPickup.h/.cpp exist.",
+            "ATrainingPickup derives from AActor.",
             "The untouched class compiles."
           ],
-          "doneWhen": "Your first authored C++ Actor class exists and Unreal recognises it.",
+          "doneWhen": "The new gameplay class is recognised by Unreal.",
           "common": [
-            "Class names cannot contain spaces.",
-            "If Tools → New C++ Class is missing, verify this is the Mission 0 code project and refresh/reopen the project."
+            "Do not add all components and overlap code before the generated class has compiled once.",
+            "If class creation fails, use the first Wizard/Build error rather than editing random module files."
           ]
         },
         {
           "id": "read-generated",
           "number": 2,
-          "title": "Read the Generated Class Before Editing It",
-          "goal": "Identify UCLASS, GENERATED_BODY, constructor, BeginPlay and Tick without trying to memorise the boilerplate.",
-          "why": "Students should know which generated parts are structural and which functions they are about to change.",
-          "bridge": "Blueprint equivalent: Event BeginPlay and Event Tick already exist as familiar concepts. In C++, the generated class overrides BeginPlay() and Tick(float DeltaTime).",
+          "title": "Write the Class Shape — Header First",
+          "goal": "Declare the three components, three gameplay properties and overlap callback in TrainingPickup.h.",
+          "why": "The header is the contract of the class. Reading it should tell another programmer what the Actor owns and can respond to.",
+          "concept": "The header declares reflected member variables with UPROPERTY and event callback functions with UFUNCTION. Forward declarations let the header refer to component types without pulling their full definitions into every file that includes this header.",
+          "practical": [
+            "A readable header is a map of the gameplay class.",
+            "Later missions will add inventory/door functions using the same declaration → implementation pattern."
+          ],
+          "algorithm": [
+            "Forward-declare component types.",
+            "Declare constructor/Tick/BeginPlay.",
+            "Declare components.",
+            "Declare editable gameplay data.",
+            "Declare overlap callback."
+          ],
+          "review": [
+            {
+              "term": "class UStaticMeshComponent;",
+              "text": "Forward declaration: tells C++ the type name exists."
+            },
+            {
+              "term": "UPROPERTY",
+              "text": "Makes Unreal aware of a member for reflection/editor/object tracking."
+            },
+            {
+              "term": "UFUNCTION()",
+              "text": "Marks the callback for Unreal reflection/delegate binding."
+            },
+            {
+              "term": "protected",
+              "text": "Class members accessible in this class and subclasses; used here for lifecycle/callback implementation."
+            }
+          ],
+          "checkpointCode": [
+            {
+              "title": "TrainingPickup.h — target after this stage",
+              "content": "#pragma once\n\n#include \"CoreMinimal.h\"\n#include \"GameFramework/Actor.h\"\n#include \"TrainingPickup.generated.h\"\n\nclass USceneComponent;\nclass UStaticMeshComponent;\nclass USphereComponent;\nclass UPrimitiveComponent;\n\nUCLASS()\nclass L4CPPTRAINING_API ATrainingPickup : public AActor\n{\n    GENERATED_BODY()\n\npublic:\n    ATrainingPickup();\n\n    virtual void Tick(float DeltaTime) override;\n\n    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=\"Pickup\")\n    USceneComponent* SceneRoot;\n\n    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=\"Pickup\")\n    UStaticMeshComponent* Mesh;\n\n    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=\"Pickup\")\n    USphereComponent* CollectionSphere;\n\n    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=\"Pickup\")\n    float RotationSpeed = 90.0f;\n\n    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=\"Pickup\")\n    int32 ItemValue = 10;\n\n    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=\"Pickup\")\n    bool bCollected = false;\n\nprotected:\n    virtual void BeginPlay() override;\n\n    UFUNCTION()\n    void OnCollectionSphereBeginOverlap(\n        UPrimitiveComponent* OverlappedComponent,\n        AActor* OtherActor,\n        UPrimitiveComponent* OtherComp,\n        int32 OtherBodyIndex,\n        bool bFromSweep,\n        const FHitResult& SweepResult\n    );\n};"
+            }
+          ],
           "steps": [
             {
-              "title": "Read TrainingActor.h top to bottom",
-              "where": "Visual Studio → TrainingActor.h",
-              "do": "Identify the structural lines.",
+              "title": "Add component forward declarations",
+              "where": "TrainingPickup.h → after includes / before UCLASS",
               "doList": [
-                "Find #pragma once.",
-                "Find #include \"CoreMinimal.h\".",
-                "Find #include \"GameFramework/Actor.h\".",
-                "Find #include \"TrainingActor.generated.h\" and confirm it is the final #include.",
-                "Find UCLASS().",
-                "Find class L4CPPTRAINING_API ATrainingActor : public AActor.",
-                "Find GENERATED_BODY().",
-                "Do not delete or reorder these lines."
+                "Keep TrainingPickup.generated.h as the final #include.",
+                "Below the includes, add forward declarations for USceneComponent, UStaticMeshComponent, USphereComponent and UPrimitiveComponent.",
+                "Do not #include component headers under the generated header."
               ],
-              "check": "You can point to the base class AActor and the generated Unreal macros.",
-              "why": "These lines connect standard C++ class syntax to Unreal's reflection/object system."
+              "code": [
+                {
+                  "title": "Forward declarations",
+                  "content": "class USceneComponent;\nclass UStaticMeshComponent;\nclass USphereComponent;\nclass UPrimitiveComponent;"
+                }
+              ],
+              "check": "The header can name the component pointer types without moving generated.h.",
+              "why": "This keeps the header's dependencies lighter."
             },
             {
-              "title": "Find the generated functions",
-              "where": "TrainingActor.h",
-              "do": "Match the declarations to familiar Blueprint events.",
+              "title": "Declare the component properties",
+              "where": "TrainingPickup.h → public section",
               "doList": [
-                "Find ATrainingActor(); — the constructor.",
-                "Find virtual void BeginPlay() override;.",
-                "Find virtual void Tick(float DeltaTime) override;.",
-                "Notice public/protected labels.",
-                "Do not change access sections yet."
+                "Declare SceneRoot with VisibleAnywhere + BlueprintReadOnly.",
+                "Declare Mesh the same way.",
+                "Declare CollectionSphere the same way.",
+                "Use the Pickup category on all three.",
+                "Check every pointer line ends with a semicolon."
               ],
-              "check": "You can match BeginPlay to Blueprint Event BeginPlay and Tick to Event Tick.",
-              "why": "The underlying gameplay lifecycle is the same even though the syntax changes."
+              "code": [
+                {
+                  "title": "Component declarations",
+                  "content": "UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=\"Pickup\")\nUSceneComponent* SceneRoot;\n\nUPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=\"Pickup\")\nUStaticMeshComponent* Mesh;\n\nUPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=\"Pickup\")\nUSphereComponent* CollectionSphere;"
+                }
+              ],
+              "check": "Three reflected component pointers are declared.",
+              "why": "These components define the Actor's physical/visible structure."
             },
             {
-              "title": "Match declarations to implementations",
-              "where": "TrainingActor.cpp",
-              "do": "Find the function bodies.",
+              "title": "Declare the gameplay data",
+              "where": "TrainingPickup.h → public section",
               "doList": [
-                "Open TrainingActor.cpp.",
-                "Find ATrainingActor::ATrainingActor().",
-                "Find ATrainingActor::BeginPlay().",
-                "Find ATrainingActor::Tick(float DeltaTime).",
-                "Notice each body uses braces { }.",
-                "Notice BeginPlay calls Super::BeginPlay() and Tick calls Super::Tick(DeltaTime).",
-                "Do not remove the Super calls."
+                "Add RotationSpeed as float default 90.0f.",
+                "Add ItemValue as int32 default 10.",
+                "Add bCollected as bool default false.",
+                "Make RotationSpeed and ItemValue EditAnywhere/BlueprintReadWrite.",
+                "Make bCollected VisibleAnywhere/BlueprintReadOnly."
               ],
-              "check": "You can locate the header declaration and corresponding .cpp implementation for each function.",
-              "why": "This declaration/implementation split is fundamental to the rest of the pathway."
+              "code": [
+                {
+                  "title": "Gameplay properties",
+                  "content": "UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=\"Pickup\")\nfloat RotationSpeed = 90.0f;\n\nUPROPERTY(EditAnywhere, BlueprintReadWrite, Category=\"Pickup\")\nint32 ItemValue = 10;\n\nUPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=\"Pickup\")\nbool bCollected = false;"
+                }
+              ],
+              "check": "The class now has editable tuning data and read-only collection state.",
+              "why": "Programmer-owned state and designer-tunable data have different exposure needs."
+            },
+            {
+              "title": "Declare the overlap callback",
+              "where": "TrainingPickup.h → protected section",
+              "doList": [
+                "Keep BeginPlay() override.",
+                "Add UFUNCTION().",
+                "Type the full OnCollectionSphereBeginOverlap signature from the code block.",
+                "Pay attention to pointers, commas, bool and const FHitResult&.",
+                "End the declaration with a semicolon."
+              ],
+              "code": [
+                {
+                  "title": "Overlap callback declaration",
+                  "content": "UFUNCTION()\nvoid OnCollectionSphereBeginOverlap(\n    UPrimitiveComponent* OverlappedComponent,\n    AActor* OtherActor,\n    UPrimitiveComponent* OtherComp,\n    int32 OtherBodyIndex,\n    bool bFromSweep,\n    const FHitResult& SweepResult\n);"
+                }
+              ],
+              "check": "The overlap callback is declared with UFUNCTION().",
+              "why": "Dynamic overlap delegates require a compatible reflected callback."
             }
           ],
           "test": [
-            "You can point to UCLASS and GENERATED_BODY.",
-            "You know ATrainingActor derives from AActor.",
-            "You can find constructor, BeginPlay and Tick in both files."
+            "TrainingPickup.h shows the whole intended class structure.",
+            "The three component properties exist.",
+            "RotationSpeed, ItemValue and bCollected exist.",
+            "The overlap UFUNCTION signature exists."
           ],
-          "doneWhen": "The generated class is readable enough that the next edits have a clear location.",
+          "doneWhen": "Another programmer could understand the class responsibilities by reading the header.",
           "common": [
-            "Do not move normal includes below TrainingActor.generated.h.",
-            "Do not remove Super::BeginPlay() or Super::Tick(DeltaTime) just because you do not yet know why they are there."
+            "If UHT/compile errors appear around a UPROPERTY, check the line immediately above/below for punctuation.",
+            "Do not put component #include lines after TrainingPickup.generated.h."
           ]
         },
         {
           "id": "first-log",
           "number": 3,
-          "title": "First Code Change — Log from BeginPlay",
-          "goal": "Add one UE_LOG line, compile it and prove Unreal executes your C++ when play begins.",
-          "why": "A log message is the smallest useful end-to-end proof of edit → compile → run.",
-          "bridge": "Blueprint equivalent: this is Event BeginPlay → Print String, but written in C++ and sent to Unreal's Output Log.",
+          "title": "Constructor — Build the Component Hierarchy",
+          "goal": "Create SceneRoot, Mesh and CollectionSphere as default subobjects and attach them into a clear hierarchy.",
+          "why": "Unreal Actors are containers for Components. The constructor is where this class defines the components every instance starts with.",
+          "concept": "CreateDefaultSubobject creates components as part of the class default object/instance structure. SetRootComponent establishes the root transform. SetupAttachment creates parent/child relationships.",
+          "practical": [
+            "This is the C++ equivalent of adding components in a Blueprint Components panel.",
+            "Blueprint children will inherit this component hierarchy."
+          ],
+          "algorithm": [
+            "Enable Tick.",
+            "Create SceneRoot.",
+            "Set it as root.",
+            "Create Mesh and attach to root.",
+            "Create CollectionSphere and attach to root.",
+            "Compile and inspect hierarchy in Unreal."
+          ],
+          "review": [
+            {
+              "term": "CreateDefaultSubobject<T>",
+              "text": "Creates a component/object that every instance of the class owns by default."
+            },
+            {
+              "term": "SetRootComponent",
+              "text": "Defines the Actor component whose transform anchors the hierarchy."
+            },
+            {
+              "term": "SetupAttachment",
+              "text": "Declares which component is parented to which."
+            },
+            {
+              "term": "TEXT(\"Mesh\")",
+              "text": "The internal component name shown to Unreal/reflection."
+            }
+          ],
           "steps": [
             {
-              "title": "Add the log line",
-              "where": "Visual Studio → TrainingActor.cpp → BeginPlay()",
-              "do": "Type one line after Super::BeginPlay().",
+              "title": "Add required component includes",
+              "where": "TrainingPickup.cpp → top of file",
               "doList": [
-                "Click inside ATrainingActor::BeginPlay().",
-                "Leave Super::BeginPlay(); as the first line.",
-                "On the next line type the supplied UE_LOG statement exactly.",
-                "End the statement with a semicolon.",
-                "Save TrainingActor.cpp."
+                "Keep #include \"TrainingPickup.h\" first.",
+                "Add SceneComponent.h.",
+                "Add SphereComponent.h.",
+                "Add StaticMeshComponent.h.",
+                "Do not add these beneath generated.h because this is the .cpp file, not the header."
               ],
               "code": [
                 {
-                  "title": "Add inside BeginPlay()",
-                  "content": "UE_LOG(LogTemp, Warning, TEXT(\"TrainingActor BeginPlay is running\"));"
+                  "title": "Includes",
+                  "content": "#include \"TrainingPickup.h\"\n\n#include \"Components/SceneComponent.h\"\n#include \"Components/SphereComponent.h\"\n#include \"Components/StaticMeshComponent.h\""
                 }
               ],
-              "check": "BeginPlay contains Super::BeginPlay(); followed by the UE_LOG line.",
-              "why": "UE_LOG writes diagnostic messages to Unreal's logging system."
+              "check": "TrainingPickup.cpp has the full component type definitions it needs.",
+              "why": "Forward declarations are enough for pointers in the header; construction/member calls require full definitions in the .cpp."
             },
             {
-              "title": "Compile the .cpp-only change",
-              "where": "Unreal Editor + Visual Studio",
-              "do": "Use the small-change route from Mission 0.",
+              "title": "Create SceneRoot",
+              "where": "ATrainingPickup::ATrainingPickup()",
               "doList": [
-                "Make sure TrainingActor.cpp is saved.",
-                "Return to Unreal.",
-                "Trigger Live Coding compile (Ctrl+Alt+F11 or the Editor compile control).",
-                "Wait for the Live Coding result.",
-                "If it fails, read the first compiler error and return to the exact line you typed.",
-                "Do not press Compile repeatedly without changing anything."
+                "Keep PrimaryActorTick.bCanEverTick = true;.",
+                "Create SceneRoot with CreateDefaultSubobject<USceneComponent>.",
+                "Call SetRootComponent(SceneRoot).",
+                "Save."
               ],
-              "check": "Live Coding reports a successful compile.",
-              "why": "This is a small implementation-only .cpp edit—ideal for Live Coding."
+              "code": [
+                {
+                  "title": "Root component",
+                  "content": "SceneRoot = CreateDefaultSubobject<USceneComponent>(TEXT(\"SceneRoot\"));\nSetRootComponent(SceneRoot);"
+                }
+              ],
+              "check": "SceneRoot is the Actor root.",
+              "why": "A neutral scene root makes it easy to attach both visual and collision components."
             },
             {
-              "title": "Place the Actor and read the Output Log",
-              "where": "Unreal Editor → Content Drawer / C++ Classes and Output Log",
-              "do": "Make the class exist in the level before testing BeginPlay.",
+              "title": "Create Mesh and CollectionSphere",
+              "where": "Same constructor",
               "doList": [
-                "Find TrainingActor under C++ Classes/L4CppTraining.",
-                "Drag TrainingActor into the level.",
-                "Open Window → Developer Tools → Output Log if Output Log is hidden.",
-                "Press Play.",
-                "Search/scroll for TrainingActor BeginPlay is running.",
-                "Stop Play."
+                "Create Mesh as UStaticMeshComponent.",
+                "Attach Mesh to SceneRoot.",
+                "Create CollectionSphere as USphereComponent.",
+                "Attach CollectionSphere to SceneRoot.",
+                "Set initial sphere radius to 90.0f.",
+                "Save."
               ],
-              "check": "The Output Log displays your TrainingActor message when Play begins.",
-              "why": "You have now proven that authored C++ compiled, loaded into Unreal and executed in the game."
+              "code": [
+                {
+                  "title": "Child components",
+                  "content": "Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT(\"Mesh\"));\nMesh->SetupAttachment(SceneRoot);\n\nCollectionSphere = CreateDefaultSubobject<USphereComponent>(TEXT(\"CollectionSphere\"));\nCollectionSphere->SetupAttachment(SceneRoot);\nCollectionSphere->InitSphereRadius(90.0f);"
+                }
+              ],
+              "check": "The constructor creates a root with Mesh and CollectionSphere children.",
+              "why": "The class now has visible representation and a dedicated interaction/detection shape."
+            },
+            {
+              "title": "Full build the structural changes",
+              "where": "Visual Studio",
+              "doList": [
+                "Save All.",
+                "Close Unreal Editor.",
+                "Build Development Editor / Win64.",
+                "Wait for 0 failed.",
+                "Reopen Unreal.",
+                "Create/place a raw TrainingPickup instance if available.",
+                "Inspect its component hierarchy in Details."
+              ],
+              "check": "Unreal shows SceneRoot, Mesh and CollectionSphere on the C++ Actor.",
+              "why": "This proves the C++ constructor created the expected Unreal component structure."
             }
           ],
           "test": [
-            "UE_LOG compiles.",
-            "A TrainingActor instance is in the level.",
-            "Output Log shows the BeginPlay message during Play."
+            "Full Build succeeds.",
+            "TrainingPickup exposes all three components.",
+            "Mesh and CollectionSphere are attached under SceneRoot."
           ],
-          "doneWhen": "Your first C++ gameplay instruction has executed inside Unreal.",
+          "doneWhen": "The C++ Actor has its complete component structure.",
           "common": [
-            "If no message appears, make sure an instance of TrainingActor is actually placed in the level.",
-            "If TEXT or quotes are wrong, type the line again carefully rather than replacing unrelated code."
+            "If a component type is incomplete/unknown in the .cpp, check its #include.",
+            "If components are missing after a successful structural build, close/reopen Unreal and ensure you built L4CppTraining."
           ]
         },
         {
           "id": "mesh-component",
           "number": 4,
-          "title": "Give the C++ Actor a Mesh Component",
-          "goal": "Create a UStaticMeshComponent in C++ and make it the Actor's root component.",
-          "why": "Actors are containers for Components. A visible component lets the next code changes produce an obvious result.",
-          "bridge": "Blueprint equivalent: Add Component → Static Mesh, then make it the root. C++ creates that component in the constructor.",
+          "title": "Data + BeginPlay — Make the Class Explain Its Own State",
+          "goal": "Verify editable properties in Unreal and log the pickup's name/value when gameplay starts.",
+          "why": "Before adding collision behaviour, prove the Actor can expose and report its own configuration.",
+          "concept": "Properties are state/data; functions use that data. GetName() returns the object's runtime name and the unary * converts FString to the character pointer expected by this logging format.",
+          "practical": [
+            "Runtime logs are invaluable for checking which instance fired an event and what data it held.",
+            "Later inventory code will use the same idea with item IDs/rows."
+          ],
+          "algorithm": [
+            "Expose/tune RotationSpeed and ItemValue.",
+            "BeginPlay reads ItemValue.",
+            "Log Actor name + ItemValue.",
+            "Place two instances with different values.",
+            "Confirm two different runtime messages."
+          ],
+          "review": [
+            {
+              "term": "GetName()",
+              "text": "Returns this UObject/Actor instance's name as FString."
+            },
+            {
+              "term": "*GetName()",
+              "text": "Provides TCHAR* data from the FString for formatting in UE_LOG."
+            },
+            {
+              "term": "ItemValue",
+              "text": "Per-instance editable state stored on the Actor."
+            },
+            {
+              "term": "BeginPlay",
+              "text": "One-time startup lifecycle point for runtime setup/checks."
+            }
+          ],
           "steps": [
             {
-              "title": "Forward-declare the component type",
-              "where": "Visual Studio → TrainingActor.h",
-              "do": "Tell the header the component class exists without including its full header there.",
+              "title": "Add BeginPlay logging",
+              "where": "TrainingPickup.cpp → BeginPlay()",
               "doList": [
-                "Find the includes at the top of TrainingActor.h.",
-                "Do not add an include below TrainingActor.generated.h.",
-                "Below the includes and before UCLASS(), add the forward declaration supplied.",
-                "Save the header."
+                "Leave Super::BeginPlay();.",
+                "Add the log statement shown.",
+                "Save the .cpp.",
+                "Use Live Coding because this is implementation-only if the header from the previous stage is already built."
               ],
               "code": [
                 {
-                  "title": "Add before UCLASS()",
-                  "content": "class UStaticMeshComponent;"
+                  "title": "BeginPlay log",
+                  "content": "UE_LOG(\n    LogTemp,\n    Log,\n    TEXT(\"%s ready. ItemValue = %d\"),\n    *GetName(),\n    ItemValue\n);"
                 }
               ],
-              "check": "TrainingActor.h contains class UStaticMeshComponent; before UCLASS().",
-              "why": "A forward declaration reduces unnecessary header coupling while allowing a pointer property declaration."
+              "check": "BeginPlay reports the Actor name and ItemValue.",
+              "why": "You can distinguish multiple placed instances in runtime output."
             },
             {
-              "title": "Declare the Mesh property",
-              "where": "TrainingActor.h → inside ATrainingActor class → public section",
-              "do": "Add a reflected component pointer.",
+              "title": "Place two configured instances",
+              "where": "Unreal Editor",
               "doList": [
-                "Find the public: section containing the constructor.",
-                "Add the UPROPERTY line supplied.",
-                "On the next line declare UStaticMeshComponent* Mesh;.",
-                "Keep the semicolon.",
-                "Save the header."
+                "Place two TrainingPickup instances.",
+                "Assign a simple Cube/Sphere mesh to each Mesh component.",
+                "Set one ItemValue to 10 and the other to 50.",
+                "Set different RotationSpeed values too.",
+                "Press Play.",
+                "Find two ready log lines with their distinct values.",
+                "Stop Play."
               ],
-              "code": [
-                {
-                  "title": "Add in the class public section",
-                  "content": "UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=\"Training\")\nUStaticMeshComponent* Mesh;"
-                }
-              ],
-              "check": "The class now declares a reflected Mesh component pointer.",
-              "why": "UPROPERTY lets Unreal track/expose the object reference; VisibleAnywhere shows the component while preventing replacement of the pointer."
-            },
-            {
-              "title": "Include the component in the .cpp file",
-              "where": "TrainingActor.cpp → include section",
-              "do": "Include exactly what the implementation uses.",
-              "doList": [
-                "Keep #include \"TrainingActor.h\" first.",
-                "On the next include line add Components/StaticMeshComponent.h.",
-                "Save TrainingActor.cpp."
-              ],
-              "code": [
-                {
-                  "title": "Add after TrainingActor.h include",
-                  "content": "#include \"Components/StaticMeshComponent.h\""
-                }
-              ],
-              "check": "TrainingActor.cpp includes StaticMeshComponent.h.",
-              "why": "The .cpp needs the full component definition to construct/use it."
-            },
-            {
-              "title": "Create the component in the constructor",
-              "where": "TrainingActor.cpp → ATrainingActor::ATrainingActor()",
-              "do": "Create the component as a default subobject and make it root.",
-              "doList": [
-                "Find the constructor.",
-                "Leave PrimaryActorTick.bCanEverTick = true; in place.",
-                "After it, add the two supplied lines.",
-                "Check the TEXT name is Mesh.",
-                "Save both files."
-              ],
-              "code": [
-                {
-                  "title": "Add inside the constructor",
-                  "content": "Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT(\"Mesh\"));\nRootComponent = Mesh;"
-                }
-              ],
-              "check": "The constructor creates Mesh and assigns it as RootComponent.",
-              "why": "Default subobjects define the component structure every instance of the C++ class starts with."
-            },
-            {
-              "title": "Use a full build for this structural change",
-              "where": "Visual Studio + Unreal",
-              "do": "Use the safe route for the new reflected property/component.",
-              "doList": [
-                "Save All.",
-                "Close Unreal Editor.",
-                "In Visual Studio confirm Development Editor + Win64.",
-                "Build L4CppTraining.",
-                "Wait for 0 failed.",
-                "Reopen L4CppTraining.",
-                "Select the TrainingActor instance and confirm a Mesh component appears."
-              ],
-              "check": "Build succeeds and TrainingActor exposes a Mesh component in Unreal.",
-              "why": "You changed reflected class structure and constructor setup, so a full clean build/reopen is the beginner-safe workflow."
+              "check": "Each Actor reports its own configured ItemValue.",
+              "why": "This proves UPROPERTY data belongs to individual placed instances."
             }
           ],
           "test": [
-            "Mesh is declared in TrainingActor.h.",
-            "The .cpp includes StaticMeshComponent.h.",
-            "Constructor creates Mesh and uses it as RootComponent.",
-            "Full Build succeeds.",
-            "Mesh appears on TrainingActor in Unreal."
+            "Two pickup instances can have different values.",
+            "BeginPlay logs each Actor's name/value.",
+            "Changing editor values changes runtime output."
           ],
-          "doneWhen": "TrainingActor owns a real C++-created Static Mesh component.",
+          "doneWhen": "The class exposes and reports per-instance gameplay data correctly.",
           "common": [
-            "If UStaticMeshComponent is unknown, check the forward declaration and .cpp include.",
-            "If Unreal still shows the old component layout after a successful Build, close/reopen the Editor and confirm you built the correct project/configuration."
+            "If the mesh is invisible, assign a Static Mesh asset—the C++ component exists but has no asset by default.",
+            "If both logs show the same value, check each placed instance rather than the class default only."
           ]
         },
         {
           "id": "rotation-property",
           "number": 5,
-          "title": "Expose RotationSpeed to the Unreal Editor",
-          "goal": "Create your first editable C++ gameplay variable and see it appear in Details.",
-          "why": "Unreal C++ becomes much more useful when programmers expose safe tuning values for Blueprint/designers.",
-          "bridge": "Blueprint equivalent: create a Float variable, set it Instance Editable and give it a category. UPROPERTY metadata controls similar editor exposure from C++.",
+          "title": "Tick — Add Frame-Rate-Independent Rotation",
+          "goal": "Use Tick and DeltaTime to make the pickup spin at the editor-controlled RotationSpeed.",
+          "why": "This is a visible example of per-frame gameplay code and shows why time-based motion uses DeltaTime.",
+          "concept": "Tick runs every frame when enabled. Multiplying degrees-per-second by DeltaTime converts the desired rate into the small amount of rotation to apply this frame.",
+          "practical": [
+            "Rotating pickups/props are common readability feedback.",
+            "The same DeltaTime principle applies to many manual movement/interpolation systems."
+          ],
+          "algorithm": [
+            "Tick receives DeltaTime.",
+            "Calculate YawDelta = RotationSpeed × DeltaTime.",
+            "Create an FRotator.",
+            "Apply local rotation.",
+            "Test 0, 90 and 360 values."
+          ],
+          "review": [
+            {
+              "term": "float DeltaTime",
+              "text": "Seconds elapsed since the previous frame."
+            },
+            {
+              "term": "FRotator(Pitch,Yaw,Roll)",
+              "text": "Unreal rotation representation in degrees."
+            },
+            {
+              "term": "AddActorLocalRotation",
+              "text": "Adds rotation relative to the Actor's local orientation."
+            },
+            {
+              "term": "RotationSpeed * DeltaTime",
+              "text": "Converts a per-second rate into a per-frame increment."
+            }
+          ],
           "steps": [
             {
-              "title": "Declare RotationSpeed",
-              "where": "TrainingActor.h → public section",
-              "do": "Add the editable float below the Mesh property.",
+              "title": "Implement Tick rotation",
+              "where": "TrainingPickup.cpp → Tick(float DeltaTime)",
               "doList": [
-                "Keep the Mesh UPROPERTY unchanged.",
-                "Add a blank line beneath Mesh.",
-                "Type the supplied UPROPERTY specifier.",
-                "Declare float RotationSpeed = 90.0f;.",
-                "Check the final semicolon.",
-                "Save the header."
+                "Leave Super::Tick(DeltaTime);.",
+                "Add AddActorLocalRotation.",
+                "Use FRotator(0.0f, RotationSpeed * DeltaTime, 0.0f).",
+                "Save the .cpp.",
+                "Live Coding compile."
               ],
               "code": [
                 {
-                  "title": "Add below Mesh",
-                  "content": "UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=\"Training\")\nfloat RotationSpeed = 90.0f;"
+                  "title": "Tick implementation",
+                  "content": "AddActorLocalRotation(\n    FRotator(0.0f, RotationSpeed * DeltaTime, 0.0f)\n);"
                 }
               ],
-              "check": "RotationSpeed is a float defaulting to 90.0 and marked EditAnywhere/BlueprintReadWrite.",
-              "why": "The property macro makes the C++ variable visible/editable to Unreal's reflected editor/Blueprint systems."
+              "check": "Tick rotates around Yaw using RotationSpeed × DeltaTime.",
+              "why": "The speed remains approximately consistent across frame rates."
             },
             {
-              "title": "Decode the declaration",
-              "where": "Before compiling",
-              "do": "Understand each part rather than memorising a magic line.",
+              "title": "Test three values",
+              "where": "Unreal Editor",
               "doList": [
-                "UPROPERTY(...) = Unreal should reflect/manage this property.",
-                "EditAnywhere = the value can be edited in class defaults/instances where appropriate.",
-                "BlueprintReadWrite = Blueprint can read and write the exposed property.",
-                "Category=\"Training\" = Unreal groups it under Training in Details.",
-                "float = decimal number type.",
-                "RotationSpeed = your variable name.",
-                "= 90.0f = default value."
+                "Set one instance RotationSpeed = 0 and verify it remains still.",
+                "Set another to 90 and observe a steady spin.",
+                "Set another to 360 and compare.",
+                "Stop Play after the comparison."
               ],
-              "check": "You can explain why RotationSpeed appears in Unreal and what its default is.",
-              "why": "Understanding the specifiers lets you design good programmer-to-designer controls later."
-            },
-            {
-              "title": "Build and find it in Details",
-              "where": "Full build/reopen → Unreal Editor",
-              "do": "Verify reflection/editor exposure.",
-              "doList": [
-                "Because you changed a reflected header property, Save All and use the full close/build/reopen route if Live Coding does not update cleanly.",
-                "Build Development Editor + Win64.",
-                "Reopen Unreal.",
-                "Select your TrainingActor instance.",
-                "Find the Training category in Details.",
-                "Confirm Rotation Speed is visible and currently 90.0.",
-                "Change the instance value to 180.0, then set it back to 90.0."
-              ],
-              "check": "Rotation Speed appears in the Unreal Details panel and can be edited.",
-              "why": "This proves the C++ variable is part of Unreal's reflection/editor workflow."
+              "check": "The three values produce three clearly different behaviours.",
+              "why": "Testing inputs proves the editor property actually controls the native code."
             }
           ],
           "test": [
-            "RotationSpeed is declared with UPROPERTY.",
-            "It appears under Training in Details.",
-            "You can edit the value in Unreal."
+            "RotationSpeed 0 stops rotation.",
+            "90 rotates steadily.",
+            "360 rotates faster.",
+            "You can explain why DeltaTime is multiplied."
           ],
-          "doneWhen": "Your C++ class exposes its first designer-tunable gameplay property.",
+          "doneWhen": "The pickup has visible frame-rate-independent C++ behaviour.",
           "common": [
-            "If the property does not appear, check Build success and that you selected the correct TrainingActor instance/class.",
-            "If the compiler errors near UPROPERTY, look above/below for missing semicolons or invalid macro syntax."
+            "If it never rotates, check PrimaryActorTick.bCanEverTick = true and that the latest .cpp compiled.",
+            "If it spins absurdly fast, check you did not omit DeltaTime."
           ]
         },
         {
           "id": "rotate-tick",
           "number": 6,
-          "title": "Rotate the Actor in Tick Using DeltaTime",
-          "goal": "Use Tick and RotationSpeed to make the Actor rotate at a frame-rate-independent speed.",
-          "why": "This turns the class from a static data example into visible gameplay behaviour.",
-          "bridge": "Blueprint equivalent: Event Tick → RotationSpeed × Delta Seconds → Make Rotator → Add Actor Local Rotation.",
+          "title": "Collision — Configure the Collection Sphere",
+          "goal": "Make CollectionSphere query-only, ignore everything by default and overlap Pawns.",
+          "why": "Collision detection should be deliberate: the pickup needs to detect the player without becoming an invisible physical obstacle.",
+          "concept": "Collision has two separate ideas: whether a component participates in queries/physics, and how it responds to channels. QueryOnly + Pawn Overlap is appropriate for a trigger-style collection sphere.",
+          "practical": [
+            "This pattern is used for pickups, trigger zones, doors, checkpoints and hazards.",
+            "Later missions will create more specific interaction/detection rules."
+          ],
+          "algorithm": [
+            "Enable query collision.",
+            "Ignore all channels.",
+            "Override Pawn to Overlap.",
+            "Keep sphere attached to the Actor.",
+            "Inspect/debug the radius in Unreal."
+          ],
+          "review": [
+            {
+              "term": "ECollisionEnabled::QueryOnly",
+              "text": "Participates in traces/overlaps but not physical collision simulation."
+            },
+            {
+              "term": "ECR_Ignore",
+              "text": "No response to that collision channel."
+            },
+            {
+              "term": "ECC_Pawn",
+              "text": "Built-in collision channel commonly used by Pawn/Character collision."
+            },
+            {
+              "term": "ECR_Overlap",
+              "text": "Generate overlap detection rather than blocking movement."
+            }
+          ],
           "steps": [
             {
-              "title": "Add the rotation code",
-              "where": "TrainingActor.cpp → Tick(float DeltaTime)",
-              "do": "Use the editable property every frame.",
+              "title": "Add collision settings",
+              "where": "TrainingPickup.cpp → constructor after InitSphereRadius",
               "doList": [
-                "Find ATrainingActor::Tick(float DeltaTime).",
-                "Leave Super::Tick(DeltaTime); as the first line.",
-                "On the next line type the supplied AddActorLocalRotation call.",
-                "Check the Yaw value uses RotationSpeed * DeltaTime.",
-                "Save TrainingActor.cpp."
+                "Set Collision Enabled to QueryOnly.",
+                "Set all channel responses to Ignore.",
+                "Set Pawn response to Overlap.",
+                "Save the .cpp."
               ],
               "code": [
                 {
-                  "title": "Add inside Tick()",
-                  "content": "AddActorLocalRotation(FRotator(0.0f, RotationSpeed * DeltaTime, 0.0f));"
+                  "title": "CollectionSphere collision",
+                  "content": "CollectionSphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);\nCollectionSphere->SetCollisionResponseToAllChannels(ECR_Ignore);\nCollectionSphere->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);"
                 }
               ],
-              "check": "Tick applies local rotation using RotationSpeed multiplied by DeltaTime.",
-              "why": "Multiplying by DeltaTime makes the rotation speed approximately degrees-per-second rather than degrees-per-frame."
+              "check": "CollectionSphere is a Pawn-overlap trigger rather than a blocker.",
+              "why": "The player can walk through the pickup while still producing an overlap event."
             },
             {
-              "title": "Compile the implementation change",
+              "title": "Build/test the shape before binding logic",
               "where": "Unreal Editor",
-              "do": "Use Live Coding for this .cpp-only edit.",
               "doList": [
-                "Return to Unreal with the .cpp saved.",
-                "Trigger Live Coding.",
-                "Wait for success.",
-                "If the line fails, read the first compiler error and compare parentheses/commas/semicolon with the supplied line.",
-                "Do not change the header while debugging this stage."
+                "Compile the constructor change using the safe route if Live Coding does not refresh component defaults cleanly.",
+                "Select a TrainingPickup instance.",
+                "Select CollectionSphere and inspect its radius/collision settings.",
+                "Enable collision visualisation in the Editor if your class workflow uses it.",
+                "Walk the player through the pickup; no collection should happen yet."
               ],
-              "check": "Live Coding succeeds.",
-              "why": "No reflected structure changed—only Tick implementation."
-            },
-            {
-              "title": "Understand the numbers",
-              "where": "Before the visual test",
-              "do": "Read the FRotator arguments.",
-              "doList": [
-                "FRotator uses Pitch, Yaw, Roll values.",
-                "This tutorial passes 0.0f for Pitch.",
-                "It passes RotationSpeed * DeltaTime for Yaw.",
-                "It passes 0.0f for Roll.",
-                "At default RotationSpeed 90, the actor aims to rotate about 90 degrees per second around Yaw."
-              ],
-              "check": "You can explain why DeltaTime appears in the calculation.",
-              "why": "Frame-rate independence is a transferable gameplay-programming habit."
+              "check": "The player is not physically blocked, and the sphere exists as the detection volume.",
+              "why": "Detection setup should be proven before event-response code is added."
             }
           ],
           "test": [
-            "Tick compiles.",
-            "Rotation uses RotationSpeed * DeltaTime.",
-            "You can explain what DeltaTime prevents."
+            "CollectionSphere does not block the player.",
+            "It is QueryOnly.",
+            "Pawn response is Overlap."
           ],
-          "doneWhen": "TrainingActor has visible rotation behaviour ready to test with a mesh.",
+          "doneWhen": "The Actor has a correctly configured trigger-style collection volume.",
           "common": [
-            "If it spins wildly, check you multiplied by DeltaTime rather than dividing or omitting it.",
-            "If nothing changes later, confirm PrimaryActorTick.bCanEverTick is true in the constructor."
+            "If the sphere blocks movement, inspect collision enabled/response settings.",
+            "If the sphere settings appear stale after constructor edits, close/rebuild/reopen."
           ]
         },
         {
           "id": "place-test",
           "number": 7,
-          "title": "Assign a Cube and Test the C++ Actor",
-          "goal": "Give the C++ Mesh component a visible cube, press Play, and prove the exposed RotationSpeed changes the behaviour.",
-          "why": "A programmer should test both the default and at least one changed input value.",
+          "title": "Delegates — Bind the Overlap Event to Your Function",
+          "goal": "Connect CollectionSphere's OnComponentBeginOverlap event to the C++ callback declared in the header.",
+          "why": "The sphere can detect overlap, but code only responds if the event/delegate is bound to a function.",
+          "concept": "A delegate is a type-safe way for one system/component to call registered functions when an event occurs. AddDynamic binds this component event to your UFUNCTION callback.",
+          "practical": [
+            "Unreal uses delegates throughout gameplay code for overlaps, UI, timers and events.",
+            "This is the C++ equivalent of using an overlap event node in a Blueprint graph."
+          ],
+          "algorithm": [
+            "CollectionSphere generates BeginOverlap.",
+            "OnComponentBeginOverlap delegate broadcasts.",
+            "Bound callback receives details about the overlap.",
+            "Callback will decide whether collection is valid."
+          ],
+          "review": [
+            {
+              "term": "OnComponentBeginOverlap",
+              "text": "The sphere component's overlap event/delegate."
+            },
+            {
+              "term": "AddDynamic",
+              "text": "Binds a reflected member function to a dynamic multicast delegate."
+            },
+            {
+              "term": "this",
+              "text": "The current ATrainingPickup instance."
+            },
+            {
+              "term": "&ATrainingPickup::OnCollectionSphereBeginOverlap",
+              "text": "Pointer/reference to the member function that should be called."
+            }
+          ],
           "steps": [
             {
-              "title": "Assign a mesh to the C++ component",
-              "where": "Unreal Editor → select TrainingActor instance → Mesh component",
-              "do": "Use a simple cube asset.",
+              "title": "Bind the event",
+              "where": "TrainingPickup.cpp → constructor after collision setup",
               "doList": [
-                "Select TrainingActor in the World Outliner.",
-                "In Details select its Mesh component.",
-                "Set Static Mesh to a basic Cube/Shape_Cube available in the project/Engine content.",
-                "Scale/move the Actor so the cube is clearly visible.",
-                "Save the level."
+                "Add the AddDynamic call shown.",
+                "Use this as the object receiving the callback.",
+                "Use &ATrainingPickup::OnCollectionSphereBeginOverlap as the bound function.",
+                "Save."
               ],
-              "check": "The TrainingActor instance is now visible as a cube.",
-              "why": "The C++ class provides the component; the Editor assigns presentation data."
+              "code": [
+                {
+                  "title": "Delegate binding",
+                  "content": "CollectionSphere->OnComponentBeginOverlap.AddDynamic(\n    this,\n    &ATrainingPickup::OnCollectionSphereBeginOverlap\n);"
+                }
+              ],
+              "check": "The collection sphere event is bound to your callback.",
+              "why": "The component now has somewhere to send overlap notifications."
             },
             {
-              "title": "Test the default speed",
-              "where": "Unreal Editor → Play",
-              "do": "Observe the actual C++ behaviour.",
+              "title": "Create a temporary proof callback body",
+              "where": "TrainingPickup.cpp → OnCollectionSphereBeginOverlap definition",
               "doList": [
-                "Set Rotation Speed to 90.",
-                "Press Play.",
-                "Watch the cube for several seconds.",
-                "Confirm it rotates smoothly around Yaw.",
-                "Stop Play."
+                "Add the full function definition matching the header signature.",
+                "Inside it, add a temporary UE_LOG line: Pickup overlap fired.",
+                "Save and compile.",
+                "Play and walk into the pickup.",
+                "Confirm the log fires, then stop Play."
               ],
-              "check": "The cube rotates while the game is running.",
-              "why": "This is the visual proof that Tick and the exposed property are working together."
-            },
-            {
-              "title": "Test a changed value",
-              "where": "TrainingActor Details",
-              "do": "Prove the Editor value controls C++.",
-              "doList": [
-                "Set Rotation Speed to 360.",
-                "Press Play.",
-                "Compare the speed with the 90 test.",
-                "Stop Play.",
-                "Set Rotation Speed to 0.",
-                "Press Play and confirm the cube does not rotate.",
-                "Stop Play."
+              "code": [
+                {
+                  "title": "Temporary proof inside callback",
+                  "content": "UE_LOG(LogTemp, Warning, TEXT(\"Pickup overlap fired\"));"
+                }
               ],
-              "check": "360 rotates much faster and 0 stops rotation.",
-              "why": "Testing multiple inputs proves the variable is genuinely controlling the code rather than the motion being hard-coded."
+              "check": "Walking the player into CollectionSphere causes the callback log.",
+              "why": "You prove event binding before adding filtering/state logic."
             }
           ],
           "test": [
-            "A visible cube is assigned.",
-            "RotationSpeed=90 rotates.",
-            "RotationSpeed=360 rotates faster.",
-            "RotationSpeed=0 stops rotation."
+            "The callback definition matches the header signature.",
+            "Compile succeeds.",
+            "Player overlap produces the temporary log."
           ],
-          "doneWhen": "A placed C++ Actor visibly responds to an editor-exposed property.",
+          "doneWhen": "A native Unreal component event successfully calls your C++ function.",
           "common": [
-            "If the Actor is invisible, assign a Static Mesh to the Mesh component.",
-            "If the cube is visible but stationary, confirm Tick is enabled and the Tick code compiled successfully."
+            "If AddDynamic errors, compare the callback signature exactly.",
+            "If the callback never fires, debug collision/channel settings before rewriting the function."
           ]
         },
         {
           "id": "blueprint-child",
           "number": 8,
-          "title": "Make a Blueprint Child of the C++ Class",
-          "goal": "Create BP_TrainingActor from the C++ class and tune presentation/values in Blueprint without replacing the C++ system.",
-          "why": "Professional Unreal workflows commonly use C++ for reusable foundations and Blueprint for designer-friendly configuration/presentation.",
-          "bridge": "This is the key hybrid pattern: programmer writes the reusable class once; designers make/tune Blueprint children without rewriting the native behaviour.",
+          "title": "Collection Logic — Validate, Change State, Destroy",
+          "goal": "Replace the temporary overlap log with a real collection response using if, return, Cast<ACharacter>, bCollected, UE_LOG and Destroy().",
+          "why": "This is where the class becomes gameplay: detection is filtered through rules, state changes once, feedback is produced, then the Actor is removed.",
+          "concept": "Early-return checks keep invalid cases out of the main success path. Cast<ACharacter> asks whether the overlapping Actor can be treated as an ACharacter. bCollected prevents duplicate processing.",
+          "practical": [
+            "The same pattern—validate → state change → feedback → consequence—appears in doors, damage, inventory and quests.",
+            "The Character cast is intentional here because the first collectible specifically requires a Character; later Interface missions will show capability-based alternatives."
+          ],
+          "algorithm": [
+            "If already collected or OtherActor is null → return.",
+            "Try Cast<ACharacter>(OtherActor).",
+            "If cast fails → return.",
+            "Set bCollected = true.",
+            "Log Character + pickup + ItemValue.",
+            "Destroy this pickup."
+          ],
+          "review": [
+            {
+              "term": "if (...)",
+              "text": "Runs a block only when the condition is true."
+            },
+            {
+              "term": "||",
+              "text": "Logical OR—either condition being true is enough."
+            },
+            {
+              "term": "return;",
+              "text": "Exit the current function immediately."
+            },
+            {
+              "term": "Cast<ACharacter>",
+              "text": "Checks/converts the generic AActor pointer to ACharacter when valid."
+            },
+            {
+              "term": "Destroy()",
+              "text": "Requests removal of this Actor from the world."
+            }
+          ],
+          "checkpointCode": [
+            {
+              "title": "TrainingPickup.h — complete Mission 1 header",
+              "content": "#pragma once\n\n#include \"CoreMinimal.h\"\n#include \"GameFramework/Actor.h\"\n#include \"TrainingPickup.generated.h\"\n\nclass USceneComponent;\nclass UStaticMeshComponent;\nclass USphereComponent;\nclass UPrimitiveComponent;\n\nUCLASS()\nclass L4CPPTRAINING_API ATrainingPickup : public AActor\n{\n    GENERATED_BODY()\n\npublic:\n    ATrainingPickup();\n\n    virtual void Tick(float DeltaTime) override;\n\n    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=\"Pickup\")\n    USceneComponent* SceneRoot;\n\n    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=\"Pickup\")\n    UStaticMeshComponent* Mesh;\n\n    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=\"Pickup\")\n    USphereComponent* CollectionSphere;\n\n    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=\"Pickup\")\n    float RotationSpeed = 90.0f;\n\n    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=\"Pickup\")\n    int32 ItemValue = 10;\n\n    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=\"Pickup\")\n    bool bCollected = false;\n\nprotected:\n    virtual void BeginPlay() override;\n\n    UFUNCTION()\n    void OnCollectionSphereBeginOverlap(\n        UPrimitiveComponent* OverlappedComponent,\n        AActor* OtherActor,\n        UPrimitiveComponent* OtherComp,\n        int32 OtherBodyIndex,\n        bool bFromSweep,\n        const FHitResult& SweepResult\n    );\n};"
+            },
+            {
+              "title": "TrainingPickup.cpp — complete Mission 1 implementation",
+              "content": "#include \"TrainingPickup.h\"\n\n#include \"Components/SceneComponent.h\"\n#include \"Components/SphereComponent.h\"\n#include \"Components/StaticMeshComponent.h\"\n#include \"GameFramework/Character.h\"\n\nATrainingPickup::ATrainingPickup()\n{\n    PrimaryActorTick.bCanEverTick = true;\n\n    SceneRoot = CreateDefaultSubobject<USceneComponent>(TEXT(\"SceneRoot\"));\n    SetRootComponent(SceneRoot);\n\n    Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT(\"Mesh\"));\n    Mesh->SetupAttachment(SceneRoot);\n\n    CollectionSphere = CreateDefaultSubobject<USphereComponent>(TEXT(\"CollectionSphere\"));\n    CollectionSphere->SetupAttachment(SceneRoot);\n    CollectionSphere->InitSphereRadius(90.0f);\n    CollectionSphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);\n    CollectionSphere->SetCollisionResponseToAllChannels(ECR_Ignore);\n    CollectionSphere->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);\n\n    CollectionSphere->OnComponentBeginOverlap.AddDynamic(\n        this,\n        &ATrainingPickup::OnCollectionSphereBeginOverlap\n    );\n}\n\nvoid ATrainingPickup::BeginPlay()\n{\n    Super::BeginPlay();\n\n    UE_LOG(\n        LogTemp,\n        Log,\n        TEXT(\"%s ready. ItemValue = %d\"),\n        *GetName(),\n        ItemValue\n    );\n}\n\nvoid ATrainingPickup::Tick(float DeltaTime)\n{\n    Super::Tick(DeltaTime);\n\n    AddActorLocalRotation(\n        FRotator(0.0f, RotationSpeed * DeltaTime, 0.0f)\n    );\n}\n\nvoid ATrainingPickup::OnCollectionSphereBeginOverlap(\n    UPrimitiveComponent* OverlappedComponent,\n    AActor* OtherActor,\n    UPrimitiveComponent* OtherComp,\n    int32 OtherBodyIndex,\n    bool bFromSweep,\n    const FHitResult& SweepResult\n)\n{\n    if (bCollected || !OtherActor)\n    {\n        return;\n    }\n\n    ACharacter* Character = Cast<ACharacter>(OtherActor);\n\n    if (!Character)\n    {\n        return;\n    }\n\n    bCollected = true;\n\n    UE_LOG(\n        LogTemp,\n        Warning,\n        TEXT(\"%s collected %s for %d points\"),\n        *Character->GetName(),\n        *GetName(),\n        ItemValue\n    );\n\n    Destroy();\n}"
+            }
+          ],
           "steps": [
             {
-              "title": "Create the Blueprint child",
-              "where": "Unreal Content Drawer",
-              "do": "Make a Blueprint whose parent is TrainingActor.",
+              "title": "Include ACharacter",
+              "where": "TrainingPickup.cpp → includes",
               "doList": [
-                "Find TrainingActor in C++ Classes/L4CppTraining.",
-                "Right-click it and choose Create Blueprint class based on TrainingActor if that option is available.",
-                "If needed, use Add → Blueprint Class → All Classes and search TrainingActor.",
-                "Name the new asset BP_TrainingActor.",
-                "Save it in a sensible Blueprints folder under Content.",
-                "Open BP_TrainingActor."
+                "Add #include \"GameFramework/Character.h\" beneath the component includes.",
+                "Save."
               ],
-              "check": "BP_TrainingActor shows TrainingActor as its C++ parent class.",
-              "why": "The Blueprint inherits the native component/property/behaviour."
+              "code": [
+                {
+                  "title": "Character include",
+                  "content": "#include \"GameFramework/Character.h\""
+                }
+              ],
+              "check": "The .cpp has the full ACharacter definition needed by Cast usage.",
+              "why": "The callback will filter generic overlapping Actors to Characters."
             },
             {
-              "title": "Configure the child",
-              "where": "BP_TrainingActor",
-              "do": "Use Blueprint for presentation/tuning only.",
+              "title": "Add the guard clause",
+              "where": "OnCollectionSphereBeginOverlap()",
               "doList": [
-                "Select the inherited Mesh component.",
-                "Assign the Cube mesh in the Blueprint defaults if it is not already set.",
-                "Find the Training category.",
-                "Set Rotation Speed to 45 for the Blueprint child default.",
-                "Compile and Save the Blueprint.",
-                "Do not recreate Tick/rotation logic in the Blueprint Event Graph."
+                "Remove the temporary Pickup overlap fired log.",
+                "Add if (bCollected || !OtherActor).",
+                "Inside the braces, return;.",
+                "Read the condition aloud: if already collected OR there is no OtherActor, stop."
               ],
-              "check": "The Blueprint child has a cube and Rotation Speed 45 without duplicate rotation nodes.",
-              "why": "The C++ parent owns behaviour; the Blueprint child customises data/presentation."
+              "code": [
+                {
+                  "title": "Early guard",
+                  "content": "if (bCollected || !OtherActor)\n{\n    return;\n}"
+                }
+              ],
+              "check": "Invalid/duplicate overlap cases leave the function immediately.",
+              "why": "Guard clauses keep the success path simpler and prevent duplicate collection."
             },
             {
-              "title": "Replace/test with the Blueprint child",
-              "where": "LV_CPPTraining",
-              "do": "Prove inheritance works.",
+              "title": "Cast and validate the player",
+              "where": "Same callback",
               "doList": [
-                "Place BP_TrainingActor in the level beside or instead of the raw C++ TrainingActor.",
+                "Create ACharacter* Character = Cast<ACharacter>(OtherActor);.",
+                "Add if (!Character) { return; }.",
+                "Do not access Character data before the null check."
+              ],
+              "code": [
+                {
+                  "title": "Character validation",
+                  "content": "ACharacter* Character = Cast<ACharacter>(OtherActor);\n\nif (!Character)\n{\n    return;\n}"
+                }
+              ],
+              "check": "Only ACharacter overlaps continue into the collection success path.",
+              "why": "The sphere event supplies a generic AActor pointer; this mechanic specifically requires a Character."
+            },
+            {
+              "title": "Complete collection",
+              "where": "Same callback after validation",
+              "doList": [
+                "Set bCollected = true;.",
+                "Add the multi-value UE_LOG shown.",
+                "Call Destroy(); last.",
+                "Save the .cpp.",
+                "Compile with Live Coding if the class structure/header is unchanged."
+              ],
+              "code": [
+                {
+                  "title": "Success path",
+                  "content": "bCollected = true;\n\nUE_LOG(\n    LogTemp,\n    Warning,\n    TEXT(\"%s collected %s for %d points\"),\n    *Character->GetName(),\n    *GetName(),\n    ItemValue\n);\n\nDestroy();"
+                }
+              ],
+              "check": "A valid Character overlap changes state, logs the collection and destroys the Actor.",
+              "why": "Detection is now connected to a complete gameplay response."
+            },
+            {
+              "title": "Run the collection test",
+              "where": "Unreal Editor",
+              "doList": [
+                "Place a TrainingPickup with a visible mesh.",
+                "Set ItemValue to 25.",
                 "Press Play.",
-                "Confirm BP_TrainingActor rotates using the inherited C++ Tick.",
-                "Change its Rotation Speed instance value and retest.",
-                "Open the Blueprint Event Graph and confirm no custom rotation logic was needed."
+                "Walk into the CollectionSphere.",
+                "Confirm the pickup disappears.",
+                "Confirm Output Log names the Character/pickup and value 25.",
+                "Stop Play."
               ],
-              "check": "The Blueprint child rotates entirely because of inherited C++ behaviour.",
-              "why": "This demonstrates the hybrid C++ → Blueprint workflow the rest of the pathway will build on."
+              "check": "The pickup is collected once and removed from the level.",
+              "why": "This proves the entire C++ mechanic end-to-end."
             }
           ],
           "test": [
-            "BP_TrainingActor exists.",
-            "Its parent is TrainingActor.",
-            "It inherits Mesh and RotationSpeed.",
-            "It rotates without Blueprint Tick logic."
+            "Non-player/invalid overlap is filtered.",
+            "Player overlap logs the configured ItemValue.",
+            "bCollected is set before destruction.",
+            "The Actor disappears after collection."
           ],
-          "doneWhen": "You have a reusable C++ base class and a designer-tunable Blueprint child.",
+          "doneWhen": "ATrainingPickup is a complete C++ gameplay Actor rather than a demonstration object.",
           "common": [
-            "If you cannot find TrainingActor as a parent, make sure the C++ class compiled and Unreal was reopened after structural changes.",
-            "Do not copy the C++ rotation into Blueprint just to make the child move—fix inheritance/compile issues instead."
+            "If Cast always fails, confirm your playable object derives from ACharacter; if your course template uses another Pawn type, this check must be adapted deliberately.",
+            "If the event fires twice before destruction, confirm bCollected is set before logging/Destroy."
           ]
         },
         {
           "id": "break-fix",
           "number": 9,
-          "title": "Break It, Read the Compiler, Fix It — Then Make Your Own Variant",
-          "goal": "Practise one controlled syntax failure, recover using the compiler message, then independently change the Actor behaviour.",
-          "why": "C++ errors are unavoidable. Students need a repeatable debugging routine before later missions become more complex.",
+          "title": "Blueprint Child, Code Review and Independent Variation",
+          "goal": "Create BP_TrainingPickup as a designer-facing child, review the full native class, deliberately debug one small code error and make one independent variation.",
+          "why": "The finished learning outcome is hybrid Unreal development: C++ owns reusable rules; Blueprint configures assets/default values. You should also be able to read and adapt your own code.",
+          "concept": "C++ and Blueprint are complementary. Native code can define components/state/behaviour; Blueprint children can supply meshes/materials and tuned defaults while inheriting that behaviour.",
+          "practical": [
+            "One C++ pickup class can support coin/key/health Blueprint variants.",
+            "Later inventory missions will extend the native system without discarding this class."
+          ],
+          "algorithm": [
+            "Create Blueprint child.",
+            "Assign mesh/material/defaults.",
+            "Test inherited C++ behaviour.",
+            "Break one known syntax line.",
+            "Use compiler output to fix it.",
+            "Make one code/data variation.",
+            "Explain which responsibility belongs in C++ vs Blueprint."
+          ],
+          "review": [
+            {
+              "term": "C++ base class",
+              "text": "Owns the reusable system and rules."
+            },
+            {
+              "term": "Blueprint child",
+              "text": "Inherits native behaviour and configures presentation/defaults."
+            },
+            {
+              "term": "Compile error workflow",
+              "text": "Last small change → first useful error → fix cause → compile again."
+            },
+            {
+              "term": "Transfer",
+              "text": "Change one requirement independently to prove understanding."
+            }
+          ],
           "steps": [
             {
-              "title": "Create a safe intentional error",
-              "where": "Visual Studio → TrainingActor.cpp → BeginPlay UE_LOG line",
-              "do": "Break one semicolon on purpose.",
+              "title": "Create BP_TrainingPickup",
+              "where": "Content Drawer",
               "doList": [
-                "Save a working copy/commit first if your class workflow requires it.",
-                "Find the UE_LOG line in BeginPlay.",
-                "Delete ONLY the final semicolon from that line.",
-                "Save TrainingActor.cpp.",
-                "Trigger Live Coding."
+                "Create a Blueprint class based on TrainingPickup.",
+                "Name it BP_TrainingPickup.",
+                "Assign a clear mesh/material to inherited Mesh.",
+                "Set default RotationSpeed to 120.",
+                "Set ItemValue to 25.",
+                "Compile/Save the Blueprint.",
+                "Do not recreate Tick or overlap logic in its Event Graph."
               ],
-              "check": "The compile fails and reports an error near/after the changed line.",
-              "why": "A controlled tiny failure teaches what a real compiler error looks like without risking the project."
+              "check": "The Blueprint child is configured but contains no duplicate core gameplay graph.",
+              "why": "Presentation/tuning belongs in Blueprint while the system remains native."
             },
             {
-              "title": "Read the first useful compiler error",
-              "where": "Live Coding/Visual Studio Output",
-              "do": "Use evidence rather than guessing.",
+              "title": "Test inheritance",
+              "where": "LV_CPPTraining",
               "doList": [
-                "Do not edit anything yet.",
-                "Find the first error mentioning TrainingActor.cpp.",
-                "Read the line number/message.",
-                "Double-click the error if Visual Studio provides navigation.",
-                "Compare the reported area to your last change.",
-                "Restore the missing semicolon.",
-                "Save and compile again."
+                "Place BP_TrainingPickup.",
+                "Press Play.",
+                "Confirm it rotates from inherited Tick.",
+                "Walk into it.",
+                "Confirm it logs ItemValue 25 and disappears.",
+                "Stop Play.",
+                "Change only Blueprint ItemValue to 100 and retest."
               ],
-              "check": "The class compiles successfully again after restoring the semicolon.",
-              "why": "The compiler often points near the problem; your last small change provides the strongest clue."
+              "check": "Blueprint values change the inherited C++ outcome without rewriting code.",
+              "why": "This is the hybrid workflow you want students to recognise."
             },
             {
-              "title": "Make one independent variation",
-              "where": "TrainingActor.h/.cpp or BP_TrainingActor",
-              "do": "Choose ONE small change and test it.",
+              "title": "Break and fix one code line",
+              "where": "TrainingPickup.cpp",
               "doList": [
-                "Option A: add an editable float RollSpeed and use it in the FRotator Roll value.",
-                "Option B: add an editable float PitchSpeed and use it in Pitch.",
-                "Option C: create a second Blueprint child with a very different RotationSpeed and mesh.",
-                "Make only one option.",
-                "Compile/build using the appropriate Mission 0 rule.",
-                "Play-test the result.",
-                "Be able to explain whether the change belonged in C++ behaviour or Blueprint configuration."
+                "Remove the semicolon from bCollected = true;.",
+                "Compile once.",
+                "Read the first TrainingPickup.cpp compiler error.",
+                "Restore the semicolon.",
+                "Compile again.",
+                "Do not change unrelated code."
               ],
-              "check": "Your variant works and you can explain the C++/Blueprint responsibility choice.",
-              "why": "Independent adaptation is the proof that you understand the class rather than only copying lines."
+              "check": "You recover using compiler evidence.",
+              "why": "Debugging discipline must scale with the codebase."
             },
             {
-              "title": "Final code/Editor audit",
-              "where": "Visual Studio + Unreal",
-              "do": "Finish Mission 1 cleanly.",
+              "title": "Choose one independent variation",
+              "where": "TrainingPickup.h/.cpp or Blueprint child",
               "doList": [
-                "Confirm TrainingActor.h compiles with its generated header still last among includes.",
-                "Confirm TrainingActor.cpp includes its matching header first.",
-                "Confirm Mesh is created in the constructor.",
-                "Confirm RotationSpeed is exposed through UPROPERTY.",
-                "Confirm Tick uses DeltaTime.",
-                "Confirm BP_TrainingActor inherits rather than duplicates the rotation behaviour.",
-                "Save All."
+                "Option A: add editable float CollectionRadius and use it to set the sphere radius in the constructor (then full rebuild).",
+                "Option B: add editable FString PickupLabel and include it in the collection log.",
+                "Option C: create two Blueprint children—Coin and Key—with different meshes/ItemValue but the same native collection behaviour.",
+                "Choose ONE option.",
+                "Build/compile appropriately.",
+                "Play-test the changed result."
               ],
-              "check": "The project builds and the final Actor/Blueprint child both work.",
-              "why": "Later missions will extend this project, so Mission 1 should end cleanly."
+              "check": "Your variation works and you can explain exactly which data/logic you changed.",
+              "why": "Independent adaptation proves you understand the mechanic, not just the instructions."
+            },
+            {
+              "title": "Explain the class from memory",
+              "where": "Final verbal/written check",
+              "doList": [
+                "Explain what the constructor does.",
+                "Explain what Tick does.",
+                "Explain what CollectionSphere does.",
+                "Explain why AddDynamic is needed.",
+                "Explain why the callback checks bCollected and OtherActor.",
+                "Explain what Cast<ACharacter> proves.",
+                "Explain why the Blueprint child does not need its own overlap logic."
+              ],
+              "check": "You can describe the full mechanic without tracing every line in the guide.",
+              "why": "The goal is transferable understanding, not a copied file."
             }
           ],
           "test": [
-            "You intentionally caused and fixed a compiler error.",
-            "TrainingActor still builds.",
-            "The raw/Blueprint-child Actor works.",
-            "One independent variation has been tested.",
-            "You can explain header vs source and C++ parent vs Blueprint child."
+            "BP_TrainingPickup inherits and runs the native C++ logic.",
+            "You deliberately caused and fixed a compiler error.",
+            "One independent variation works.",
+            "You can explain the complete collection algorithm and class responsibilities."
           ],
-          "doneWhen": "You have completed the first end-to-end Unreal C++ gameplay class and can recover from a simple compiler error.",
+          "doneWhen": "You have built, tested, debugged and adapted a real hybrid C++ collectible system.",
           "common": [
-            "Fix the first error before chasing later ones.",
-            "If structural changes leave Unreal showing stale class data, use the full close/build/reopen route from Mission 0."
+            "If Blueprint child components look stale after native structural changes, close Unreal and full Build/reopen.",
+            "Do not solve a C++ inheritance issue by duplicating the whole mechanic in Blueprint."
           ],
           "challenges": [
-            "Add a second editable speed so the Actor rotates on two axes.",
-            "Make two Blueprint children from TrainingActor with different meshes/speeds.",
-            "Replace the cube with a prop and make a simple 'training hazard' spinner."
+            "Create BP_Coin and BP_Key children with different meshes/values.",
+            "Add a sound/particle reference property for later collection feedback, but do not implement it until you understand the asset pointer type.",
+            "Add a second boolean such as bSpin and only rotate when it is true."
           ]
         }
       ]
