@@ -1,5 +1,5 @@
 window.LEVEL4_SPECIALIST_PROJECTS = {
-  version: '3.58.6',
+  version: '3.58.7',
   intro: {
     title: 'Level 4 Specialist Projects',
     kicker: 'Choose ONE pathway',
@@ -857,8 +857,8 @@ window.LEVEL4_SPECIALIST_PROJECTS = {
     {
       id:'unreal-cpp-programming', icon:'C++', title:'Unreal C++ Skill Missions', role:'Gameplay Programming — C++', time:'Cumulative guided pathway',
       href:'#/cpp-mission/cpp-setup/start',
-      strap:'Start before the code: Visual Studio + Unreal setup → first gameplay Actor → then keep extending the same C++ project mission by mission.',
-      outcome:'A cumulative Unreal C++ training project. Mission 0 proves the Visual Studio/Unreal toolchain; Mission 1 creates a real gameplay Actor and Blueprint child; later missions build variables, functions, arrays, components, collision, interaction, Blueprint communication, data and save/load on top of the same project.'
+      strap:'Learn the toolchain by writing real C++, then build a native collectible with components, data, Tick, collision, delegates and a Blueprint child — all in the same project.',
+      outcome:'A cumulative Unreal C++ gameplay project. Mission 0 now ends with a working ASetupProbe using UPROPERTY, BeginPlay and UE_LOG; Mission 1 builds ATrainingPickup with native components, editable state, Tick, overlap collision, delegate binding, condition checks, Character validation and a Blueprint child. Later missions grow the same codebase into doors, inventory, interaction, data and save/load.'
     }
   ]
 };
