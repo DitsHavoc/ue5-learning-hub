@@ -2101,6 +2101,10 @@ function cppMissionCheckpoint(blocks){
   if(!blocks?.length)return '';
   return `<details class="content-card cpp-checkpoint"><summary>⌨ Full code checkpoint — compare after you have typed the stage</summary><p>Use this to compare your finished file. Do not replace your working file blindly: find the exact difference that matters.</p>${cppMissionCode(blocks)}</details>`;
 }
+function cppCodeGuide(g){
+  if(!g)return '';
+  return `<section class="cpp-code-guide"><div class="cpp-code-guide-head"><span>CODE PLACEMENT</span><strong>Before you type anything</strong></div><div class="cpp-code-guide-grid"><div><small>FILE</small><code>${esc(g.file||'')}</code></div><div><small>FIND</small><p>${esc(g.find||'')}</p></div><div><small>CHANGE</small><strong>${esc(g.action||'')}</strong></div><div><small>PLACE IT HERE</small><p>${esc(g.place||'')}</p></div><div class="after"><small>THEN DO THIS</small><p>${esc(g.after||'')}</p></div></div></section>`;
+}
 function cppCodeRead(read){
   if(!read?.items?.length)return '';
   return `<section class="cpp-code-read"><div class="cpp-code-read-head"><span>READ THIS CODE</span><strong>What the symbols actually mean</strong></div><div class="cpp-code-read-grid">${read.items.map(x=>`<div><code>${esc(x.token||'')}</code><p>${esc(x.meaning||'')}</p></div>`).join('')}</div>${read.note?`<p class="cpp-code-read-note">${esc(read.note)}</p>`:''}</section>`;
@@ -2110,6 +2114,7 @@ function cppMissionStep(step,i){
   return `<article class="skill-step-card cpp-step-card"><div class="skill-step-num">${String(i+1).padStart(2,'0')}</div><div class="skill-step-body"><h3>${esc(step.title)}</h3>
     <div class="skill-step-field where"><span>1 • WHERE TO WORK</span><p>${esc(step.where||'')}</p></div>
     <div class="skill-step-field do"><span>2 • DO THESE ONE AT A TIME — IN THIS EXACT ORDER</span><ol class="skill-action-list">${actions.map(x=>`<li>${esc(x)}</li>`).join('')}</ol></div>
+    ${cppCodeGuide(step.codeGuide)}
     ${cppMissionCode(step.code)}
     ${cppCodeRead(step.codeRead)}
     <div class="skill-step-field check"><span>3 • YOU SHOULD NOW HAVE</span><p>${esc(step.check||'')}</p></div>
