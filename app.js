@@ -2466,6 +2466,7 @@ function lessonPage(id){
     </section>
 
     <section class="content-card" id="homework"><span class="eyebrow">07 • Homework</span><h2>Take the thinking outside Unreal</h2>
+      <div class="homework-inline-access">📱 <b>No Unreal installation required.</b> Use a game, gameplay video, screenshot, paper/notes or browser research. Practical engine work belongs in the stretch or your next college-PC session.</div>
       <div class="task homework"><span class="task-label">⌂ Homework</span><h3>${esc(l.homework.title)}</h3><p>${esc(l.homework.task)}</p>
       <div class="callout"><b>Evidence:</b> ${esc(l.homework.evidence)}</div><div class="callout good"><b>Stretch:</b> ${esc(l.homework.stretch)}</div>
       <button class="button small" data-action="copy-homework" data-lesson="${l.id}">Copy for Teams</button></div>
@@ -3033,12 +3034,39 @@ function challengeBoard(){
   <div id="challengeBoardSections">${section('unreal','Unreal transfer challenges','Take a Blueprint/system skill and make it solve a different gameplay problem.',true)}${section('design','Designer constraints','Remove a crutch and prove the design principle still communicates.',true)}${section('modeling','Build X variations','Change the brief while preserving clean construction and game-ready judgement.')}${section('sculpt','Sculpt variations','Use form, silhouette and observation instead of adding noise.')}</div>
   <div class="empty" id="challengeSearchEmpty" hidden><h2>No challenges match.</h2><p>Try a shorter search or switch back to All.</p></div>`;
 }
+
+const HOMEWORK_MODE_META={
+  research:{icon:'🔎',label:'Research + write'},
+  playwatch:{icon:'🎮',label:'Play / watch + notes'},
+  analyse:{icon:'✍',label:'Analyse + annotate'},
+  planning:{icon:'📝',label:'Plan / diagram'},
+  watch:{icon:'▶',label:'Watch + notes'}
+};
+const UE_HOMEWORK_MODE={
+  'editor':'analyse','actors-components':'analyse','blueprint-classes':'playwatch','events':'planning','variables':'planning',
+  'branches':'playwatch','functions':'planning','framework':'planning','references-casting':'research','interfaces-dispatchers':'planning',
+  'collision':'playwatch','traces':'analyse','timelines':'playwatch','ui':'analyse','savegame':'planning','data':'research',
+  'ai':'watch','animation':'playwatch','practice':'planning','complexity':'analyse'
+};
+function homeworkModeMeta(id){return HOMEWORK_MODE_META[id]||HOMEWORK_MODE_META.research}
 function homeworkItems(){
   const items=[];
-  DATA.lessons.forEach(l=>items.push({id:`ue:${l.id}`,legacyId:l.id,area:'unreal',areaLabel:'Unreal Learning',title:l.homework.title,task:l.homework.task,evidence:l.homework.evidence,stretch:l.homework.stretch,meta:l.title,href:`#/lesson/${l.id}`,linkLabel:'View lesson'}));
-  DESIGN.modules.forEach(m=>(m.researchMissions||[]).forEach((r,i)=>items.push({id:`design:${m.id}:${i}`,area:'design',areaLabel:'Designer field research',title:r.title,task:r.brief,evidence:r.evidence,stretch:'Apply one finding to your own current scene/build and note what changed.',meta:`${m.title} • ${r.duration}`,steps:r.steps||[],href:`#/design/${m.id}`,linkLabel:'Open module'})));
-  MODEL_FOUNDATIONS.chapters.forEach(ch=>{const h=STUDY.modelHomework[ch.id];if(h)items.push({id:`model:${ch.id}`,area:'modeling',areaLabel:'3D Foundations',title:h.title,task:h.task,evidence:h.evidence,stretch:h.stretch,meta:ch.title,href:`#/modeling/foundations/${ch.id}`,linkLabel:'Open chapter'})});
-  (MODEL_VIDEOS.videos||[]).forEach(v=>items.push({id:`video:${v.id}`,area:'video',areaLabel:"Dits' Max series",title:`Watch + practise: ${v.title}`,task:v.task,evidence:'Show the result you made in Max and be ready to explain the move without replaying the video.',stretch:'Use the same tool or idea on a different object so it becomes a transferable skill.',meta:`Video ${String(v.order).padStart(2,'0')} • +${MODEL_VIDEOS.xp||20} XP when completed in the video series`,href:'#/modeling/videos',linkLabel:'Open video series'}));
+  DATA.lessons.forEach(l=>{
+    const mode=UE_HOMEWORK_MODE[l.id]||'research',mm=homeworkModeMeta(mode);
+    items.push({id:`ue:${l.id}`,legacyId:l.id,area:'unreal',areaLabel:'Unreal Learning',mode,modeLabel:mm.label,modeIcon:mm.icon,access:'home',accessLabel:'📱 No development PC needed',title:l.homework.title,task:l.homework.task,evidence:l.homework.evidence,stretch:l.homework.stretch,meta:l.title,href:`#/lesson/${l.id}`,linkLabel:'View lesson'});
+  });
+  DESIGN.modules.forEach(m=>(m.researchMissions||[]).forEach((r,i)=>{
+    const text=(r.title+' '+r.brief).toLowerCase(),mode=/watch|listen|trailer|scene|gameplay|map from memory|eyes-closed/.test(text)?'playwatch':'research',mm=homeworkModeMeta(mode);
+    items.push({id:`design:${m.id}:${i}`,area:'design',areaLabel:'Designer field research',mode,modeLabel:mm.label,modeIcon:mm.icon,access:'home',accessLabel:'📱 No development PC needed',title:r.title,task:r.brief,evidence:r.evidence,stretch:'When you next have access to a development PC, apply one finding to your current scene/build and note what changed.',meta:`${m.title} • ${r.duration}`,steps:r.steps||[],href:`#/design/${m.id}`,linkLabel:'Open module'});
+  }));
+  MODEL_FOUNDATIONS.chapters.forEach(ch=>{
+    const h=STUDY.modelHomework[ch.id];if(!h)return;const mm=homeworkModeMeta('analyse');
+    items.push({id:`model:${ch.id}`,area:'modeling',areaLabel:'3D Foundations',mode:'analyse',modeLabel:mm.label,modeIcon:mm.icon,access:'home',accessLabel:'📱 No Max required',title:h.title,task:h.task,evidence:h.evidence,stretch:h.stretch,meta:ch.title,href:`#/modeling/foundations/${ch.id}`,linkLabel:'Open chapter'});
+  });
+  (MODEL_VIDEOS.videos||[]).forEach(v=>{
+    const mm=homeworkModeMeta('watch');
+    items.push({id:`video:${v.id}`,area:'video',areaLabel:"Dits' Max series",mode:'watch',modeLabel:mm.label,modeIcon:mm.icon,access:'home',accessLabel:'📱 Watch on phone/browser',title:`Watch + notes: ${v.title}`,task:`Watch ${v.title}. Make four short notes: (1) the tool/workflow being shown, (2) what it changes, (3) one situation where you would use it, and (4) one mistake a beginner could make. Add one useful timestamp if you can.`,evidence:'Four short notes plus one timestamp, screenshot or quick sketch showing the important idea. You do not need 3ds Max installed at home.',stretch:`When you next have access to Max, try the practical video task: ${v.task}`,meta:`Video ${String(v.order).padStart(2,'0')} • ${v.title}`,href:'#/modeling/videos',linkLabel:'Open video series'});
+  });
   return items;
 }
 function homeworkPaths(){
@@ -3046,71 +3074,81 @@ function homeworkPaths(){
   const theoryNext=THEORY.lessons.find(x=>!theoryDone(x.id))||THEORY.lessons[0];
   const careerNext=CAREERS.chapters.find(x=>!careerDone(x.id))||CAREERS.chapters[0];
   const modelNext=MODEL_FOUNDATIONS.chapters.find(x=>!modelTheoryDone(x.id))||MODEL_FOUNDATIONS.chapters[0];
+  const uexp=unreal.experience||{};
+  const modelHomework=STUDY.modelHomework?.[modelNext.id];
   return [
-    {id:'unreal-core',icon:'⌘',title:'Unreal Core',time:'30–45 min',summary:'Continue the next Unreal system, prove it in-engine, then retrieve the knowledge instead of only re-reading it.',steps:[
-      {label:'LEARN',title:unreal.title,body:unreal.short||'Continue your next Core System Lesson.',href:`#/lesson/${unreal.id}`,link:'Open lesson'},
-      {label:'DO',title:'Build the proof',body:unreal.homework?.task||'Complete the lesson application and make one change of your own.',href:`#/lesson/${unreal.id}`,link:'Build from the lesson'},
-      {label:'CHECK',title:'Focused revision',body:`Run the focused question set from ${unreal.title}. Use the review links if you miss anything.`,revisionTopic:`ue:${unreal.id}`,link:'Start focused check'},
-      {label:'BRING BACK',title:'One piece of evidence',body:unreal.homework?.evidence||'Bring one screenshot plus a sentence explaining what the system proves.'}
+    {id:'unreal-core',icon:'⌘',title:'Unreal Core — Without Unreal at Home',time:'30–45 min',access:'📱 No development PC required',summary:'Understand the next Unreal system through the lesson, a real game/video example and written analysis. Save the engine build for college.',steps:[
+      {label:'LEARN',mode:'Read',title:unreal.title,body:unreal.short||'Continue your next Unreal system lesson.',href:`#/lesson/${unreal.id}`,link:'Open lesson'},
+      {label:'PLAY / WATCH',mode:'Observe',title:uexp.game||'Find the mechanic in a real game',body:uexp.watch||`Play or watch 10–15 minutes of a game that uses ${unreal.title}. If you cannot access the game, gameplay video is absolutely fine.`,href:`#/lesson/${unreal.id}`,link:'Use the lesson example'},
+      {label:'WRITE / ANALYSE',mode:'Notes',title:unreal.homework?.title||'Explain the mechanic',body:unreal.homework?.task||'Write short notes explaining what the mechanic is doing and why the player needs it.',href:`#/lesson/${unreal.id}`,link:'Open homework task'},
+      {label:'CHECK',mode:'Quiz',title:'Focused revision',body:`Run the focused question set from ${unreal.title}. Use the review links if you miss anything.`,revisionTopic:`ue:${unreal.id}`,link:'Start focused check'},
+      {label:'BRING BACK',mode:'Evidence',title:'One small piece of evidence',body:unreal.homework?.evidence||'Bring notes, an annotated screenshot or a short diagram. No Unreal build is required for this homework route.'}
+    ],pcStretch:'When you are back on a suitable college PC, use the lesson Apply/Practice section to build the mechanic.'},
+    {id:'landscape',icon:'🏔',title:'Landscape & World Building',time:'30–45 min',access:'📱 Play/watch + annotate',summary:'Study how shipped games make large spaces readable. Map routes, landmarks and terrain choices without needing Unreal at home.',steps:[
+      {label:'LEARN',mode:'Read',title:'Landscape design principles',body:'Open the Landscape Designer Studio and read the sections on route readability, landmarks, composition and believable terrain.',href:'#/design/landscape',link:'Open Landscape Studio'},
+      {label:'PLAY / WATCH',mode:'Observe',title:'Travel through one open-world landscape',body:'Play for 10–15 minutes or watch an uninterrupted traversal video. Hide/ignore the UI where possible and watch how the landscape itself communicates direction.',href:'#/design/landscape',link:'Use the game references'},
+      {label:'ANALYSE',mode:'Annotate',title:'Mark three possible routes',body:'Use one screenshot or a rough hand-drawn map. Mark a fast route, a safer route and an exploration/reward route. Label the terrain feature or landmark that makes each route readable.'},
+      {label:'CHECK',mode:'Quiz',title:'Landscape design check',body:'Run a short Designer Studio check to test route readability, landmarks and player guidance.',revisionTopic:'design:landscape',link:'Start focused check'},
+      {label:'BRING BACK',mode:'Evidence',title:'One annotated map',body:'Bring the screenshot/map plus 3–5 sentences explaining what the landscape is doing for the player.'}
+    ],pcStretch:'On a college PC, recreate one of the route/landmark ideas in the Landscape Master Guide.'},
+    {id:'sequencer',icon:'🎬',title:'Cinematics — Watch Like an Editor',time:'25–40 min',access:'📱 Video + notes',summary:'Study a real trailer or cutscene: shot size, movement, cuts, reveals and pacing. No Sequencer project required at home.',steps:[
+      {label:'LEARN',mode:'Read',title:'Camera and cut principles',body:'Open the Cinematics Designer Studio and read the guidance on framing, shot size, pacing and continuity.',href:'#/design/cinematics',link:'Open Cinematics Studio'},
+      {label:'WATCH',mode:'Video',title:'60–90 seconds of one trailer/cutscene',body:'Watch once normally, then watch again with the sound muted so you concentrate on what the camera and edit communicate.',href:'#/design/cinematics',link:'Use the references'},
+      {label:'ANALYSE',mode:'Notes',title:'Shot tally + three cut decisions',body:'Count wide/medium/close shots, moving/static shots and the longest shot. Choose three cuts and write why you think the editor cut at that moment.'},
+      {label:'CHECK',mode:'Quiz',title:'Cinematics design check',body:'Run a focused Designer Studio check on framing, pacing and camera judgement.',revisionTopic:'design:cinematics',link:'Start focused check'},
+      {label:'BRING BACK',mode:'Evidence',title:'Tally + one paragraph',body:'Bring the tally sheet and a short paragraph explaining the strongest camera/editing decision you noticed.'}
+    ],pcStretch:'When you next have Unreal, recreate one shot choice in Sequencer rather than building a whole cinematic at home.'},
+    {id:'unreal-designer',icon:'⚙',title:'Unreal Designer — Research First',time:'30–45 min',access:'📱 Research / play / watch',summary:'Start from a design problem and investigate how a real game solves it. Engine work becomes the follow-up when a suitable PC is available.',steps:[
+      {label:'CHOOSE',mode:'Read',title:'Pick one design discipline',body:'Open Unreal Designer and choose the track closest to what you are currently making: space, lighting, materials, cinematics, audio or polish.',href:'#/unreal-designer',link:'Choose a track'},
+      {label:'PLAY / WATCH',mode:'Observe',title:'Find one strong shipped example',body:'Use the linked games/sources or your own game. Play or watch 10 minutes and focus on one specific design problem, not whether you simply like the game.',href:'#/unreal-designer',link:'Open references'},
+      {label:'RESEARCH / WRITE',mode:'Notes',title:'Explain the solution',body:'Capture one screenshot/timecode or draw a quick diagram. Write: What is the player problem? What did the developer do? What evidence suggests it works?'},
+      {label:'CHECK',mode:'Quiz',title:'Test the design judgement',body:'Use the relevant Designer Studio revision questions to check the principle rather than memorising Unreal buttons.',href:'#/revision',link:'Open Revision'},
+      {label:'BRING BACK',mode:'Evidence',title:'Reference → principle → idea',body:'Bring the reference plus one sentence explaining how you could apply the same principle to your own work.'}
+    ],pcStretch:'On a college PC, use the relevant Master Guide/recipe to implement one small version of the idea.'},
+    {id:'theory',icon:'◈',title:'Game Design Theory',time:'25–40 min',access:'📱 Read / play / write',summary:'Learn one design idea, find it in a real game, explain the evidence and retrieve it through a focused check.',steps:[
+      {label:'LEARN',mode:'Read',title:theoryNext.title,body:theoryNext.short||'Continue your next Game Design Theory lesson.',href:`#/theory/${theoryNext.id}`,link:'Open theory lesson'},
+      {label:'PLAY / WATCH',mode:'Observe',title:'Find one real example',body:'Play a game you already own/have access to, or use a gameplay video. Find one moment where the lesson principle clearly affects the player.',href:`#/theory/${theoryNext.id}`,link:'Use the lesson case study'},
+      {label:'WRITE',mode:'Explain',title:'Explain the design job',body:'Write 4–6 sentences: what happened, what decision/system caused it, what the player understood/felt, and what would change if the design were removed.'},
+      {label:'CHECK',mode:'Quiz',title:'Focused revision',body:`Run the focused question set from ${theoryNext.title}.`,revisionTopic:`theory:${theoryNext.id}`,link:'Start focused check'},
+      {label:'BRING BACK',mode:'Evidence',title:'One useful design decision',body:'Bring the screenshot/timecode/notes and one sentence beginning “This matters because…”'}
     ]},
-    {id:'landscape',icon:'🏔',title:'Landscape & World Building',time:'45–60 min',summary:'Use the long Unreal workflow as the technical spine, then connect it to landscape-design decisions.',steps:[
-      {label:'LEARN',title:'Landscape Master Guide',body:'Continue the authoritative workflow: create, sculpt, paint, foliage, traversal, Edit Layers and Splines.',href:'#/tutorial/landscape-master-guide',link:'Open master guide'},
-      {label:'DO',title:'Design the route, not just the terrain',body:'Use Designer Studio to check route readability, landmarks, composition and believable foliage.',href:'#/design/landscape',link:'Open Landscape Designer Studio'},
-      {label:'CHECK',title:'Landscape knowledge check',body:'Five questions test whether the engine workflow makes sense, not whether you memorised button positions.',revisionTopic:'guide:landscape-master-guide',link:'Start 5-question check'},
-      {label:'BRING BACK',title:'Player-height proof',body:'Bring one player-height screenshot showing the route plus one sentence explaining a change you made after testing it.'}
+    {id:'industry',icon:'◎',title:'Industry & Careers',time:'25–40 min',access:'📱 Browser research',summary:'Use real credits, vacancies, studio sources or career evidence and write what the evidence actually supports.',steps:[
+      {label:'LEARN',mode:'Read',title:careerNext.title,body:careerNext.short||careerNext.summary||'Continue your next Industry & Careers chapter.',href:`#/industry-careers/${careerNext.id}`,link:'Open chapter'},
+      {label:'RESEARCH',mode:'Source',title:'Follow one real piece of evidence',body:'Use one vacancy, credits list, studio source, developer interview or company page from the chapter. Record the source and date where possible.',href:`#/industry-careers/${careerNext.id}`,link:'Use chapter evidence'},
+      {label:'WRITE',mode:'Notes',title:'What can it prove?',body:'Write two short columns: “This evidence suggests…” and “This evidence cannot prove…”. Avoid turning one example into a claim about the whole industry.'},
+      {label:'CHECK',mode:'Quiz',title:'Industry scenario check',body:`Run a focused five-question revision set from ${careerNext.title}.`,revisionTopic:`industry:${careerNext.id}`,link:'Start 5-question check'},
+      {label:'BRING BACK',mode:'Evidence',title:'What changed?',body:'Bring one sentence: “I assumed ___; the evidence made me reconsider because ___.”'}
     ]},
-    {id:'sequencer',icon:'🎬',title:'Sequencer & Cinematics',time:'40–55 min',summary:'Build the technical sequence, then justify the filmmaking decisions and prove the final camera/timing works.',steps:[
-      {label:'LEARN',title:'Sequencer Master Guide',body:'Continue the authoritative workflow: Level Sequence, tracks, keys, Cine Cameras, Camera Cuts, focus and render.',href:'#/tutorial/sequencer-master-guide',link:'Open master guide'},
-      {label:'DO',title:'Make the camera choice purposeful',body:'Use Designer Studio to test framing, lens choice, pacing, continuity and the reason for each shot.',href:'#/design/cinematics',link:'Open Cinematics Designer Studio'},
-      {label:'CHECK',title:'Sequencer knowledge check',body:'Five questions test the core workflow and the mistakes that most often break a render.',revisionTopic:'guide:sequencer-master-guide',link:'Start 5-question check'},
-      {label:'BRING BACK',title:'Short rendered proof',body:'Bring a short render or screen recording plus one sentence explaining why you chose the strongest shot.'}
-    ]},
-    {id:'unreal-designer',icon:'⚙',title:'Unreal Designer — Apply the Theory',time:'35–60 min',summary:'Choose one design discipline, use only the engine skills you need, then bring back evidence of a tested design change.',steps:[
-      {label:'LEARN',title:'Choose one design problem',body:'Open Unreal Designer and choose the track that matches what you are currently making. Read the linked Designer Studio principle before touching the engine.',href:'#/unreal-designer',link:'Choose a track'},
-      {label:'DO',title:'Build one purposeful change',body:'Use the track’s Master Guide or practical recipes to make one playable change. Do not complete recipes just to tick them off.',href:'#/unreal-designer',link:'Open Unreal Designer'},
-      {label:'CHECK',title:'Test the design judgement',body:'Run the five-question Designer Studio check for the discipline you chose from the track page.',href:'#/revision',link:'Open Revision'},
-      {label:'BRING BACK',title:'Before → after → why',body:'Bring one before screenshot, one player-view after screenshot and one sentence explaining what changed after testing.'}
-    ]},
-    {id:'theory',icon:'◈',title:'Game Design Theory',time:'25–40 min',summary:'Continue one theory idea, apply it to an actual game/build, then retrieve it through a focused quiz.',steps:[
-      {label:'LEARN',title:theoryNext.title,body:theoryNext.short||'Continue your next Game Design Theory lesson.',href:`#/theory/${theoryNext.id}`,link:'Open theory lesson'},
-      {label:'DO',title:'Apply one principle',body:'Find one example in a real game or your own project. Capture the moment and explain what design problem it solves.',href:`#/theory/${theoryNext.id}`,link:'Use the lesson examples'},
-      {label:'CHECK',title:'Focused revision',body:`Run the focused question set from ${theoryNext.title}.`,revisionTopic:`theory:${theoryNext.id}`,link:'Start focused check'},
-      {label:'BRING BACK',title:'One useful design decision',body:'Bring the screenshot/example and one sentence beginning “This matters because…”'}
-    ]},
-    {id:'industry',icon:'◎',title:'Industry & Careers',time:'25–40 min',summary:'Continue the current industry chapter, investigate one real case, then test whether your judgement changed.',steps:[
-      {label:'LEARN',title:careerNext.title,body:careerNext.short||careerNext.summary||'Continue your next Industry & Careers chapter.',href:`#/industry-careers/${careerNext.id}`,link:'Open chapter'},
-      {label:'DO',title:'Follow one real piece of evidence',body:'Use one case, vacancy, credit list, company story or source from the chapter. Record what it tells you — and what it cannot prove.',href:`#/industry-careers/${careerNext.id}`,link:'Use chapter evidence'},
-      {label:'CHECK',title:'Industry scenario check',body:`Run a focused five-question revision set from ${careerNext.title}.`,revisionTopic:`industry:${careerNext.id}`,link:'Start 5-question check'},
-      {label:'BRING BACK',title:'What changed?',body:'Bring one sentence: “I assumed ___; the evidence made me reconsider because ___.”'}
-    ]},
-    {id:'3d-foundations',icon:'⬡',title:'3D Foundations',time:'30–45 min',summary:'Continue the next foundation chapter, practise the idea in Max, then test the judgement behind the tool use.',steps:[
-      {label:'LEARN',title:modelNext.title,body:modelNext.intro||'Continue your next 3D Foundations chapter.',href:`#/modeling/foundations/${modelNext.id}`,link:'Open foundation chapter'},
-      {label:'DO',title:'Practise it in 3ds Max',body:'Use the chapter task or the Max video series to reproduce the decision, then try it on a different object.',href:'#/modeling/videos',link:'Open Max video series'},
-      {label:'CHECK',title:'Focused 3D revision',body:`Answer five questions from ${modelNext.title}.`,revisionTopic:`3d:${modelNext.id}`,link:'Start 5-question check'},
-      {label:'BRING BACK',title:'Show the mesh decision',body:'Bring a screenshot that makes the decision visible and be ready to explain why it is game-ready.'}
-    ]}
+    {id:'3d-foundations',icon:'⬡',title:'3D Foundations — Without Max at Home',time:'30–45 min',access:'📱 Video / reference / sketch',summary:'Build modelling judgement through references, wireframes, sketches and video notes. Save the actual Max practice for college.',steps:[
+      {label:'LEARN',mode:'Read',title:modelNext.title,body:modelNext.intro||'Continue your next 3D Foundations chapter.',href:`#/modeling/foundations/${modelNext.id}`,link:'Open foundation chapter'},
+      {label:'WATCH',mode:'Video',title:"Use Dits' Max series as a demonstration",body:'Watch one relevant Max video. Make four notes: tool/idea, what it changes, when you would use it, and one likely mistake. You do not need to follow along in Max.',href:'#/modeling/videos',link:'Open Max videos'},
+      {label:'ANALYSE / SKETCH',mode:'Notes',title:modelHomework?.title||'Analyse the modelling decision',body:modelHomework?.task||'Use a reference image or sketch to explain the modelling decision without opening Max.',href:`#/modeling/foundations/${modelNext.id}`,link:'Open chapter task'},
+      {label:'CHECK',mode:'Quiz',title:'Focused 3D revision',body:`Answer five questions from ${modelNext.title}.`,revisionTopic:`3d:${modelNext.id}`,link:'Start 5-question check'},
+      {label:'BRING BACK',mode:'Evidence',title:'Reference + judgement',body:modelHomework?.evidence||'Bring notes, a sketch or annotated reference showing the modelling decision.'}
+    ],pcStretch:'When you next have Max, use your notes/reference to reproduce the idea and see whether your prediction was right.'}
   ];
 }
 function homeworkPath(id){return homeworkPaths().find(x=>x.id===id)}
 function homeworkPathStep(step,i){
   const action=step.revisionTopic?`<button class="button small primary" data-action="revision-topic-start" data-revision-topic-id="${esc(step.revisionTopic)}" data-revision-count="5">${esc(step.link||'Start check')} →</button>`:step.href?`<a class="button small ${i===0?'primary':'ghost'}" href="${esc(step.href)}">${esc(step.link||'Open')} →</a>`:'';
-  return `<article class="homework-path-step"><span class="homework-path-step-number">${String(i+1).padStart(2,'0')}</span><div><small>${esc(step.label)}</small><h3>${esc(step.title)}</h3><p>${esc(step.body)}</p>${action}</div></article>`;
+  return `<article class="homework-path-step"><span class="homework-path-step-number">${String(i+1).padStart(2,'0')}</span><div><small>${esc(step.label)}${step.mode?` • ${esc(step.mode)}`:''}</small><h3>${esc(step.title)}</h3><p>${esc(step.body)}</p>${action}</div></article>`;
 }
 function homeworkPathPage(id){
   const path=homeworkPath(id);if(!path)return notFound();
-  return `<div class="page-head homework-path-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / <a href="#/homework">Homework</a> / ${esc(path.title)}</div><span class="eyebrow">GUIDED HOMEWORK PATH • ${esc(path.time)}</span><h1>${path.icon} ${esc(path.title)}</h1><p class="muted">${esc(path.summary)}</p></div>
+  return `<div class="page-head homework-path-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / <a href="#/homework">Homework</a> / ${esc(path.title)}</div><span class="eyebrow">GUIDED HOMEWORK PATH • ${esc(path.time)}</span><h1>${path.icon} ${esc(path.title)}</h1><p class="muted">${esc(path.summary)}</p><div class="homework-access-pill">${esc(path.access||'📱 Home-friendly')}</div></div>
   <section class="homework-path-sequence">${path.steps.map(homeworkPathStep).join('')}</section>
-  <section class="content-card homework-path-finish"><div><span class="eyebrow">ONE ROUTE • ONE SMALL PIECE OF EVIDENCE</span><h2>Do not turn homework into a second assignment.</h2><p>Follow the four steps in order. The existing lesson/tutorial keeps its normal progress and XP; this homework path adds no duplicate completion system.</p></div><div class="button-row"><button class="button primary" data-action="copy-homework-path" data-homework-path="${esc(path.id)}">Copy full path for Teams</button><a class="button ghost" href="#/homework">← All homework</a></div></section>`;
+  <section class="content-card homework-path-finish"><div><span class="eyebrow">ONE ROUTE • ONE SMALL PIECE OF EVIDENCE</span><h2>Do not turn homework into a second assignment.</h2><p>These routes are designed to work without a powerful development computer. Notes, research, an annotated screenshot, a diagram or a short written explanation are valid evidence. ${path.pcStretch?`<br><br><b>Development-PC stretch:</b> ${esc(path.pcStretch)}`:''}</p></div><div class="button-row"><button class="button primary" data-action="copy-homework-path" data-homework-path="${esc(path.id)}">Copy full path for Teams</button><a class="button ghost" href="#/homework">← All homework</a></div></section>`;
 }
 function homeworkBoard(){
-  const items=homeworkItems(),paths=homeworkPaths(),areas=[['unreal','⌘','Unreal',items.filter(x=>x.area==='unreal').length],['design','✦','Design research',items.filter(x=>x.area==='design').length],['modeling','⬡','3D theory',items.filter(x=>x.area==='modeling').length],['video','▶','Max videos',items.filter(x=>x.area==='video').length]];
-  const section=(area,title,desc,open=false)=>{const rows=items.filter(x=>x.area===area);return `<details class="study-board-section homework-section" data-study-section ${open?'open':''}><summary><span>${areas.find(a=>a[0]===area)?.[1]||'⌂'}</span><div><strong>${esc(title)}</strong><small>${esc(desc)}</small></div><b>${rows.length}</b></summary><div class="board-grid study-board-grid">${rows.map(x=>`<article class="board-card study-board-card homework-study-card" data-study-card data-area="${x.area}" data-search="${esc((x.title+' '+x.task+' '+x.evidence+' '+x.stretch+' '+x.meta).toLowerCase())}"><span class="eyebrow">${esc(x.areaLabel)} • ${esc(x.meta)}</span><h3>${esc(x.title)}</h3><p>${esc(x.task)}</p><div class="study-evidence"><b>Evidence</b><span>${esc(x.evidence)}</span></div><div class="study-stretch"><b>Stretch</b><span>${esc(x.stretch)}</span></div><div class="button-row"><button class="button small" data-action="copy-homework" data-study-homework="${esc(x.id)}">Copy for Teams</button><a class="button small ghost" href="${x.href}">${esc(x.linkLabel)}</a></div></article>`).join('')}</div></details>`};
-  return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Homework</div><span class="eyebrow">GUIDED STUDY PATHS • TEAMS-READY</span><h1>⌂ Homework & Independent Study</h1><p class="muted">Start with a clear route instead of hunting through the Hub. Each path follows the same rhythm: <b>Learn → Do → Check → Bring Back.</b> Teams remains the place for deadlines, formal briefs and submission.</p></div>
-  <section class="homework-paths-wrap"><div class="section-head"><div><span class="eyebrow">RECOMMENDED</span><h2>Follow a homework path</h2><p>Choose the area you are currently studying. The path points to the real Hub content, a focused revision check and one small piece of evidence to bring back.</p></div></div><div class="homework-path-grid">${paths.map(x=>`<a class="homework-path-card" href="#/homework/${x.id}"><span>${x.icon}</span><div><small>${esc(x.time)}</small><h3>${esc(x.title)}</h3><p>${esc(x.summary)}</p><strong>Learn → Do → Check → Bring Back</strong></div></a>`).join('')}</div></section>
-  <section class="study-tool-intro"><div><strong>Learn.</strong><span>Open the exact lesson, guide or chapter rather than browsing at random.</span></div><div><strong>Do + check.</strong><span>Build/apply something, then use focused retrieval to expose what has not stuck.</span></div><div><strong>Bring back evidence.</strong><span>One screenshot, comparison or short explanation is enough unless Teams says otherwise.</span></div></section>
-  <section class="homework-browse-divider"><span class="eyebrow">NEED ONE SMALL TASK INSTEAD?</span><h2>Browse individual independent-study tasks</h2><p>The task bank is still here for targeted practice; the guided paths above are the default route.</p></section>
-  <div class="study-toolbar"><input id="homeworkSearch" type="search" enterkeyhint="search" placeholder="Search independent study…"><div class="filter-row"><button class="filter active" data-homework-filter="all">All <b>${items.length}</b></button>${areas.map(a=>`<button class="filter" data-homework-filter="${a[0]}">${a[1]} ${a[2]} <b>${a[3]}</b></button>`).join('')}</div></div>
-  <div id="homeworkBoardSections">${section('unreal','Unreal independent learning','Broaden the thinking around a mechanic instead of doing more node-copying.',true)}${section('design','Designer field research','Observe games, spaces and players; then bring the principle back to your own work.',true)}${section('modeling','3D foundations study','Small modelling decisions that reinforce Module 0 before or between practical sessions.')}${section('video',"Dits' Max follow-along practice",'Watch the demonstration, reproduce the move, then apply it somewhere else.')}</div>
+  const items=homeworkItems(),paths=homeworkPaths(),areas=[['unreal','⌘','Unreal',items.filter(x=>x.area==='unreal').length],['design','✦','Design research',items.filter(x=>x.area==='design').length],['modeling','⬡','3D theory',items.filter(x=>x.area==='modeling').length],['video','▶','Watch + notes',items.filter(x=>x.area==='video').length]];
+  const section=(area,title,desc,open=false)=>{const rows=items.filter(x=>x.area===area);return `<details class="study-board-section homework-section" data-study-section ${open?'open':''}><summary><span>${areas.find(a=>a[0]===area)?.[1]||'⌂'}</span><div><strong>${esc(title)}</strong><small>${esc(desc)}</small></div><b>${rows.length}</b></summary><div class="board-grid study-board-grid">${rows.map(x=>`<article class="board-card study-board-card homework-study-card" data-study-card data-area="${x.area}" data-mode="${esc(x.mode||'research')}" data-search="${esc((x.title+' '+x.task+' '+x.evidence+' '+x.stretch+' '+x.meta+' '+x.modeLabel+' '+x.accessLabel).toLowerCase())}"><span class="eyebrow">${esc(x.areaLabel)} • ${esc(x.meta)}</span><div class="homework-card-meta"><span>${esc(x.modeIcon||'🔎')} ${esc(x.modeLabel||'Research + write')}</span><span class="home">${esc(x.accessLabel||'📱 No development PC needed')}</span></div><h3>${esc(x.title)}</h3><p>${esc(x.task)}</p><div class="study-evidence"><b>Evidence</b><span>${esc(x.evidence)}</span></div><div class="study-stretch"><b>Stretch / next college-PC session</b><span>${esc(x.stretch)}</span></div><div class="button-row"><button class="button small" data-action="copy-homework" data-study-homework="${esc(x.id)}">Copy for Teams</button><a class="button small ghost" href="${x.href}">${esc(x.linkLabel)}</a></div></article>`).join('')}</div></details>`};
+  return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Homework</div><span class="eyebrow">HOME-FRIENDLY INDEPENDENT STUDY • TEAMS-READY</span><h1>⌂ Homework & Independent Study</h1><p class="muted">Homework should not depend on owning a gaming/development PC. The default routes use <b>reading, research, play/watch, annotation, diagrams and short written analysis</b>. Unreal/Max practical work is normally a college-PC extension unless the task explicitly says otherwise.</p></div>
+  <section class="homework-access-policy"><div><span class="eyebrow">THE ACCESS RULE</span><h2>No development PC at home? You can still complete the homework properly.</h2><p>Phone, tablet, Chromebook, console, paper and a normal browser are enough for the default tasks. The aim is to come back with better judgement and vocabulary, not a second assignment.</p></div><div class="homework-access-examples"><span>🎮 Play a game</span><span>▶ Watch gameplay/video</span><span>🔎 Research a source</span><span>✍ Make notes</span><span>🖼 Annotate a screenshot</span><span>📝 Draw a diagram</span></div></section>
+  <section class="homework-paths-wrap"><div class="section-head"><div><span class="eyebrow">RECOMMENDED • NO DEV PC REQUIRED</span><h2>Follow a homework path</h2><p>Choose the area you are currently studying. Each route gives you something to learn, observe, analyse, check and bring back.</p></div></div><div class="homework-path-grid">${paths.map(x=>`<a class="homework-path-card" href="#/homework/${x.id}"><span>${x.icon}</span><div><small>${esc(x.time)} • ${esc(x.access||'Home-friendly')}</small><h3>${esc(x.title)}</h3><p>${esc(x.summary)}</p><strong>Learn → Observe → Analyse → Check → Bring Back</strong></div></a>`).join('')}</div></section>
+  <section class="study-tool-intro homework-study-rhythm"><div><strong>Observe.</strong><span>Play something, watch footage, study a screenshot, read a source or look at a real object.</span></div><div><strong>Think + write.</strong><span>Make notes, annotate, compare, sketch or explain the decision in your own words.</span></div><div><strong>Bring back evidence.</strong><span>A page of notes, one annotated image, a table, diagram or short paragraph is enough unless Teams says otherwise.</span></div></section>
+  <section class="homework-browse-divider"><span class="eyebrow">NEED ONE SMALL TASK INSTEAD?</span><h2>Browse individual independent-study tasks</h2><p>These are deliberately mixed: research, writing, game observation, video notes and planning. Practical software work sits mainly in the stretch.</p></section>
+  <div class="study-toolbar"><input id="homeworkSearch" type="search" enterkeyhint="search" placeholder="Search: AI, doors, watch, research, materials…"><div class="filter-row"><button class="filter active" data-homework-filter="all">All <b>${items.length}</b></button>${areas.map(a=>`<button class="filter" data-homework-filter="${a[0]}">${a[1]} ${a[2]} <b>${a[3]}</b></button>`).join('')}</div><div class="homework-mode-key"><span>📱 Default = no dev PC</span><span>💻 Software practice = stretch / college PC</span></div></div>
+  <div id="homeworkBoardSections">${section('unreal','Unreal thinking away from Unreal','Research, observation, diagrams and written explanations around the systems learned in class.',true)}${section('design','Designer field research','Observe games, spaces, sound and cinematics; then explain the design job.',true)}${section('modeling','3D foundations away from Max','Use wireframes, references, sketches and modelling judgement without needing Max at home.')}${section('video',"Dits' Max videos — watch + notes",'Watch the demonstration and make useful notes now; reproduce it when you next have Max.')}</div>
   <div class="empty" id="homeworkSearchEmpty" hidden><h2>No homework tasks match.</h2><p>Try a shorter search or switch back to All.</p></div>`;
 }
 function hubGlossary(){
@@ -3782,7 +3820,7 @@ async function copyHomework(id){
   if(!item){const l=lesson(id);if(l)item=homeworkItems().find(x=>x.legacyId===id)}
   if(!item)return;
   const steps=item.steps?.length?`\n\nSuggested steps:\n${item.steps.map((x,i)=>`${i+1}. ${x}`).join('\n')}`:'';
-  const text=`${item.title}\n\nTask:\n${item.task}${steps}\n\nEvidence:\n${item.evidence}\n\nStretch:\n${item.stretch}\n\nRelated Hub area: ${item.areaLabel}\nReference: ${item.meta}`;
+  const text=`${item.title}\n\nHomework type: ${item.modeLabel||'Research / analysis'}\nAccess: ${item.accessLabel||'No development PC needed'}\n\nTask:\n${item.task}${steps}\n\nEvidence:\n${item.evidence}\n\nStretch / next college-PC session:\n${item.stretch}\n\nRelated Hub area: ${item.areaLabel}\nReference: ${item.meta}`;
   try{await navigator.clipboard.writeText(text);toast('Independent-study task copied — ready for Teams.')}catch(e){toast('Clipboard blocked by browser.')}
 }
 
@@ -3790,14 +3828,15 @@ async function copyHomeworkPath(id){
   const path=homeworkPath(id);if(!path)return;
   const hubBase=`${location.origin}${location.pathname}`;
   const pathUrl=`${hubBase}#/homework/${path.id}`;
-  const lines=[`${path.title} — Guided Homework Path`,`${path.time}`,'',path.summary,'',`Follow the live path: ${pathUrl}`,''];
+  const lines=[`${path.title} — Guided Homework Path`,`${path.time}`,`${path.access||'Home-friendly'}`,'',path.summary,'',`Follow the live path: ${pathUrl}`,''];
   path.steps.forEach((s,i)=>{
     lines.push(`${i+1}. ${s.label} — ${s.title}`,s.body);
     if(s.href)lines.push(`Open: ${hubBase}${s.href}`);
     else if(s.revisionTopic)lines.push(`Check: ${hubBase}#/revision — use the focused ${s.title} check from the homework path.`);
     lines.push('');
   });
-  lines.push('Bring this evidence back to the next lesson unless Teams says otherwise.','The Hub is for learning/practice; Teams remains the formal submission/deadline space.');
+  if(path.pcStretch)lines.push('Development-PC stretch (optional at home):',path.pcStretch,'');
+  lines.push('Bring this evidence back to the next lesson unless Teams says otherwise.','No development PC is required for the core route. The Hub is for learning/practice; Teams remains the formal submission/deadline space.');
   try{await navigator.clipboard.writeText(lines.join('\n'));toast('Guided homework path copied — links included for Teams.')}catch(e){toast('Clipboard blocked by browser.')}
 }
 
