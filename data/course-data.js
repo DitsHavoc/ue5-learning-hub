@@ -1,5 +1,5 @@
 window.UE5_COURSE_DATA = {
-  "version": "3.59.2",
+  "version": "3.59.4",
   "buildDate": "29 Aug 2026",
   "paths": [
     {
@@ -143,10 +143,17 @@ window.UE5_COURSE_DATA = {
         "search": "Portal 2 early test chamber walkthrough"
       },
       "homework": {
-        "title": "Read a Level Like a Developer",
-        "task": "Choose one room from any 3D game and list the separate objects a level designer would probably need to place.",
-        "evidence": "A screenshot plus at least 8 labelled likely Actors/assets.",
-        "stretch": "Group them into environment, lighting, gameplay and decoration."
+        "title": "Level Designer X-Ray — Portal 2",
+        "task": "Play an early Portal 2 test chamber or watch a walkthrough. Pretend the finished room has been exploded back into Unreal. Work out what separate Actors/assets the level designer probably placed to build it.",
+        "evidence": "One screenshot or rough room sketch with at least 12 labelled likely Actors/assets, grouped by job, plus 3–5 sentences explaining which objects guide the player and why.",
+        "stretch": "On your next Unreal session, block out the same room idea using only simple Shapes/Actors and compare your guess with what was actually needed.",
+        "duration": "25–35 min",
+        "steps": [
+          "PLAY / WATCH — Spend 10–15 minutes in one early Portal 2 chamber. Pause on one clear room.",
+          "HUNT — Identify at least 12 separate things you think would exist as placed Actors/assets: walls, floor pieces, lights, doors, buttons, signs, VFX, audio, gameplay objects, decoration, etc.",
+          "DECODE — Group them into Environment, Lighting, Gameplay, Audio/VFX and Decoration. Circle the 3 objects that matter most to player navigation.",
+          "DESIGN — Draw a tiny top-down version of the room and mark where you think the most important Actors sit."
+        ]
       },
       "common": [
         "Lost? Select an Actor in the Outliner and focus it.",
@@ -592,10 +599,17 @@ window.UE5_COURSE_DATA = {
         "search": "Half-Life 2 physics props gameplay"
       },
       "homework": {
-        "title": "Actor Autopsy",
-        "task": "Choose one interactive object from a game and break it into likely Unreal Components.",
-        "evidence": "A labelled sketch naming at least four Components and their jobs.",
-        "stretch": "Choose a Root Component and justify it."
+        "title": "Prop Autopsy — Half-Life 2",
+        "task": "Play or watch a physics-heavy Half-Life 2 section and choose three interactive objects. Treat each object like an Unreal Actor and work out the Components it probably needs to exist and behave properly.",
+        "evidence": "Three labelled Actor diagrams. Each needs at least 4 Components, a chosen Root Component and one 'remove this and it breaks because…' note.",
+        "stretch": "Build one of the three as a simple Blueprint Actor next time you have Unreal and compare the real Components with your prediction.",
+        "duration": "25–35 min",
+        "steps": [
+          "PLAY / WATCH — Find three different interactive props: for example a barrel, door, physics object, light, explosive, lift or button.",
+          "AUTOPSY — For each prop, list the likely Components: Static/Skeletal Mesh, Collision, Audio, Light, Trigger, Scene Component, Particle/VFX, etc.",
+          "ROOT TEST — Choose the Root Component for each and explain why that Component should define the Actor's transform.",
+          "BREAK IT — Remove one Component from your imagined Actor and write what would stop working."
+        ]
       },
       "common": [
         "If a child moves strangely, inspect the Component hierarchy.",
@@ -1083,10 +1097,17 @@ window.UE5_COURSE_DATA = {
         "search": "Super Mario Bros Wonder level walkthrough"
       },
       "homework": {
-        "title": "Spot the Class",
-        "task": "Find five repeated object types in a game and separate shared Class behaviour from per-instance differences.",
-        "evidence": "Five examples with shared vs variable properties.",
-        "stretch": "Suggest three Instance Editable variables for one example."
+        "title": "Class or Instance? — Mario Wonder Detective",
+        "task": "Play or watch a Super Mario Bros. Wonder level and hunt for repeated object types. Reverse-engineer what belongs to the shared Blueprint Class and what is probably different per instance.",
+        "evidence": "A Class-vs-Instance table for 5 object types, plus one 'designer Details panel' sketch showing 5 exposed variables for your chosen object.",
+        "stretch": "When back in Unreal, make a tiny reusable Blueprint with at least 3 of your proposed Instance Editable variables and place several visibly different instances.",
+        "duration": "25–35 min",
+        "steps": [
+          "PLAY / WATCH — Find at least 5 repeated object types: enemies, blocks, pipes, coins, moving platforms, hazards, switches, etc.",
+          "CLASS — For each type, write 2 behaviours/properties every instance probably shares.",
+          "INSTANCE — Write 2 things that could vary per placed copy: position, speed, colour, patrol distance, reward, direction, timing, etc.",
+          "EXPOSE IT — Pick one object and invent at least 5 useful Instance Editable variables a designer could tune without editing the Blueprint graph."
+        ]
       },
       "common": [
         "If only one placed object changes, you probably edited the instance rather than the Class.",
@@ -1528,10 +1549,17 @@ window.UE5_COURSE_DATA = {
         "search": "Fortnite full match gameplay"
       },
       "homework": {
-        "title": "Event → Response",
-        "task": "Write five gameplay moments as EVENT → RESPONSE.",
-        "evidence": "Five pairs plus one simple flow diagram.",
-        "stretch": "For one event, list the data it would need to pass on."
+        "title": "Event Chain Hunt — Fortnite",
+        "task": "Play or watch one Fortnite match and pause at moments where one event clearly causes several responses. Reconstruct the hidden execution chain.",
+        "evidence": "Four EVENT → RESPONSE chains. One must be drawn as a simple execution-flow diagram with the likely data travelling through it.",
+        "stretch": "In Unreal, build one tiny event chain with at least three visible responses and one piece of passed data.",
+        "duration": "25–35 min",
+        "steps": [
+          "PLAY / WATCH — Find 4 clear moments such as taking damage, opening a chest, eliminating a player, entering a zone, firing/reloading or winning/losing.",
+          "EVENT — Name the thing that starts each chain as if it were an Unreal Event.",
+          "CHAIN — Write the immediate responses in execution order. Aim for 3–6 responses per event.",
+          "DATA — Mark what information the event probably passes on: damage amount, instigator, item type, location, player reference, etc."
+        ]
       },
       "common": [
         "Follow the white wire when debugging.",
@@ -1972,10 +2000,18 @@ window.UE5_COURSE_DATA = {
         "search": "Overwatch 2 healing gameplay"
       },
       "homework": {
-        "title": "Variable Hunt",
-        "task": "Identify ten values any game needs to remember and assign each a sensible name and type.",
-        "evidence": "Ten variable names, types and reasons.",
-        "stretch": "Mark which values belong to the player, an Actor or the overall game."
+        "title": "What Is the Game Remembering? — Overwatch Systems Detective",
+        "task": "Play or watch an Overwatch 2 fight and reverse-engineer the hidden variables the game must be storing to make the match work.",
+        "evidence": "A 12+ row 'hidden game state' table with Variable Name, Type, Owner and What Changes It, plus one annotated gameplay screenshot linking visible feedback to at least 4 variables.",
+        "stretch": "Back in Unreal, recreate a tiny 3-variable system (for example Health, MaxHealth and IsAlive) and prove each variable changes from an event.",
+        "duration": "30–40 min",
+        "steps": [
+          "PLAY / WATCH — Follow one hero through 5–10 minutes of combat. Pause when values visibly change.",
+          "HUNT — Identify at least 12 pieces of state the game must remember: CurrentHealth, MaxHealth, Ammo, IsReloading, UltimateCharge, Team, IsAlive, AbilityCooldown, Position, ObjectiveProgress, etc.",
+          "TYPE IT — Give every variable a sensible Unreal-style name and choose a likely type: Boolean, Integer, Float, Name, Vector, Object Reference, Enum, etc.",
+          "OWNER — Decide who should own each variable: Player/Character, Weapon/Ability, GameState/GameMode, UI or another Actor.",
+          "CAUSE → CHANGE — Pick 4 variables and write the event/function that probably changes them."
+        ]
       },
       "common": [
         "A Boolean is a state, not a number.",
@@ -2446,10 +2482,17 @@ window.UE5_COURSE_DATA = {
         "search": "Resident Evil 4 remake locked doors keys gameplay"
       },
       "homework": {
-        "title": "Find Branch logic in games",
-        "task": "Find two game situations that can be described as a true/false decision. For each, write the question being checked, the True outcome and the False outcome.",
-        "evidence": "Two short examples. A screenshot is optional; the important evidence is your explanation of the condition and both outcomes.",
-        "stretch": "Draw a simple flow diagram for one example, then add a second condition that would make the rule more complex."
+        "title": "Find the Invisible IF Statement — Resident Evil 4",
+        "task": "Play or watch Resident Evil 4 exploration and hunt for moments where the game must ask a true/false question before deciding what happens.",
+        "evidence": "Four hidden Branches written as QUESTION → TRUE → FALSE, plus one flowchart containing two combined conditions.",
+        "stretch": "Build your two-condition example in Blueprint next time you have Unreal and deliberately test all possible outcomes.",
+        "duration": "25–35 min",
+        "steps": [
+          "PLAY / WATCH — Find at least 4 gates/decisions: locked door, key item, ammo check, interaction availability, enemy state, inventory space, etc.",
+          "QUESTION — Write the hidden Boolean question as a clean condition: HasKey? IsDoorLocked? Ammo > 0? IsPlayerInRange?",
+          "TRUE / FALSE — Write what happens on both paths. Do not leave the failure path blank.",
+          "COMBINE — Upgrade one example with a second condition using AND/OR and explain how the behaviour changes."
+        ]
       },
       "common": [
         "No meaningful value is connected to Condition.",
@@ -2846,10 +2889,18 @@ window.UE5_COURSE_DATA = {
         "search": "gameplay repeated systems interactions"
       },
       "homework": {
-        "title": "Function Design",
-        "task": "Design three game Functions on paper with name, purpose, inputs and outputs.",
-        "evidence": "Three Function cards or a table.",
-        "stretch": "Choose one that needs a local variable and explain why."
+        "title": "Name the Function — Repeated Behaviour Detective",
+        "task": "Play or watch a systemic game and look for behaviours that happen repeatedly. Your job is to identify what should probably be a reusable Function rather than duplicated logic.",
+        "evidence": "Five Function cards containing Name, Purpose, Inputs and Outputs, plus two local-variable ideas and one paragraph explaining why duplication would become painful.",
+        "stretch": "Implement one Function in Unreal later and call it from at least two different places or instances.",
+        "duration": "30–40 min",
+        "steps": [
+          "PLAY / WATCH — Choose a game with lots of repeated interactions: Fortnite, Minecraft, Zelda, Hitman, an RPG, shooter or similar.",
+          "SPOT THE REPEAT — Find at least 5 behaviours that occur in more than one place: ApplyDamage, AddItem, OpenDoor, SpendAmmo, HealPlayer, UpdateScore, CheckLineOfSight, etc.",
+          "DESIGN THE FUNCTION — Give each a clear Function name and write its Inputs, Outputs and one-sentence job.",
+          "LOCAL THINKING — Pick 2 Functions and identify one local variable/calculation that might exist only while that Function runs.",
+          "BAD VERSION — Choose one Function and describe what the project would look like if its logic were copied into 10 different Blueprints instead."
+        ]
       },
       "common": [
         "A Function should do one recognisable job.",
@@ -3284,10 +3335,17 @@ window.UE5_COURSE_DATA = {
         "search": "game level transition gameplay round restart"
       },
       "homework": {
-        "title": "Framework Map",
-        "task": "Draw a simple diagram showing Character, PlayerController, GameMode and GameInstance and label one responsibility for each.",
-        "evidence": "One labelled framework diagram.",
-        "stretch": "Add one system that should not belong to any of those and explain where it goes."
+        "title": "What Survives the Loading Screen? — Framework Detective",
+        "task": "Play or watch a game move between a level, round, death/restart or menu and reverse-engineer which data probably belongs in Character, PlayerController, GameMode, GameState or GameInstance.",
+        "evidence": "A labelled Gameplay Framework map containing at least 16 pieces of state/logic plus two 'put it in the wrong place and this breaks' examples.",
+        "stretch": "Back in Unreal, inspect your project's Framework classes and move one small piece of logic to a more appropriate owner.",
+        "duration": "30–40 min",
+        "steps": [
+          "OBSERVE — Pick a game with obvious level/round transitions. Record 8 things that reset and 8 things that survive.",
+          "SORT — Place each piece of data/logic into Character, PlayerController, GameMode, GameState, GameInstance or 'another system'.",
+          "JUSTIFY — For every choice, write why that lifetime/owner makes sense.",
+          "BREAK IT — Choose 2 bad ownership choices and explain the bug they might cause."
+        ]
       },
       "common": [
         "Do not use GameInstance as a universal dumping ground.",
@@ -3717,10 +3775,17 @@ window.UE5_COURSE_DATA = {
         "search": "gameplay doors pickups NPC interaction"
       },
       "homework": {
-        "title": "Reference Sources",
-        "task": "List five ways a Blueprint might obtain a useful reference during gameplay.",
-        "evidence": "Five reference sources plus an example use for each.",
-        "stretch": "Mark which references are likely temporary and which should be stored."
+        "title": "Who Am I Talking To? — Reference Detective",
+        "task": "Play or watch an interaction-heavy game and reverse-engineer how one gameplay object might obtain a reference to another before it can do anything useful.",
+        "evidence": "Six interaction examples with Reference Source, Expected Object Type, Cast? yes/no, and Store? yes/no, with one-sentence reasoning.",
+        "stretch": "In Unreal, create one interaction that uses a reference from an overlap or trace rather than searching the whole level.",
+        "duration": "25–35 min",
+        "steps": [
+          "PLAY / WATCH — Find interactions involving a door, pickup, NPC, enemy, weapon and UI prompt.",
+          "REFERENCE — For each, decide how the Blueprint might get the object: overlap Other Actor, Hit Result, Spawn return value, Get Player Character, stored variable, component owner, etc.",
+          "CAST? — Decide whether the logic truly needs a specific class Cast or whether a more generic approach could work.",
+          "STORE OR USE ONCE — Mark whether the reference is temporary for one interaction or worth storing."
+        ]
       },
       "common": [
         "A Cast does not magically find an object; you need a reference first.",
@@ -4151,10 +4216,18 @@ window.UE5_COURSE_DATA = {
         "search": "Hitman alarm distraction sandbox gameplay"
       },
       "homework": {
-        "title": "Communication Choice",
-        "task": "For six gameplay examples, choose Direct Reference, Cast, Interface or Dispatcher and justify each.",
-        "evidence": "Six choices with one-sentence reasons.",
-        "stretch": "Find one example where two approaches could both work and compare them."
+        "title": "Who Needs to Hear This? — Hitman Communication Map",
+        "task": "Watch or play a Hitman sandbox sequence involving alarms, distractions or NPC reactions. Map how one event can affect several systems without everything needing a direct reference to everything else.",
+        "evidence": "Three communication maps showing broadcaster → listeners, with a communication method chosen for each connection and a short coupling explanation.",
+        "stretch": "Build a tiny Dispatcher or Interface example in Unreal where two different listeners react to the same event.",
+        "duration": "30–40 min",
+        "steps": [
+          "PLAY / WATCH — Find 3 moments where one action causes several different objects/systems to react.",
+          "BROADCASTER — Identify what probably starts the message/event.",
+          "LISTENERS — List every system/object that needs to react and whether they all respond the same way.",
+          "CHOOSE — For each connection choose Direct Reference, Cast, Interface or Event Dispatcher and justify it.",
+          "COUPLING TEST — Pick the messiest direct-reference version and explain how an Interface/Dispatcher could reduce dependency."
+        ]
       },
       "common": [
         "Interfaces define a contract; they do not automatically find targets.",
@@ -4630,10 +4703,18 @@ window.UE5_COURSE_DATA = {
         "search": "Dark Souls 3 exploration bonfire gameplay"
       },
       "homework": {
-        "title": "Invisible Boxes Everywhere",
-        "task": "Identify five moments from a game that could plausibly use a trigger volume.",
-        "evidence": "Five examples with what the trigger probably does.",
-        "stretch": "Decide whether each is Begin-only, End-only, both or one-shot."
+        "title": "Invisible Trigger Safari — Dark Souls III",
+        "task": "Play or watch Dark Souls III exploration and hunt for invisible boundaries. Work out where Collision/Overlap volumes probably exist even though the player cannot see them.",
+        "evidence": "Six trigger examples with rough volume placement, event type and filtering rule, plus one false-positive bug explanation.",
+        "stretch": "Build one trigger volume later and intentionally make the filtering wrong first so you can observe the bug, then fix it.",
+        "duration": "25–35 min",
+        "steps": [
+          "PLAY / WATCH — Find 6 moments where crossing a location changes the game: encounter starts, music changes, fog gate, checkpoint, prompt, area title, enemy activation, etc.",
+          "DRAW THE VOLUME — Mark roughly where the invisible trigger probably starts/ends on a screenshot or sketch.",
+          "EVENT TYPE — Decide BeginOverlap, EndOverlap, both or one-shot.",
+          "FILTER — Decide what should trigger it: player only, Pawn, any Actor, specific class, etc.",
+          "FALSE POSITIVE — Explain one bug that would happen if the collision filtering were too broad."
+        ]
       },
       "common": [
         "Check both objects' collision settings if an overlap does not fire.",
@@ -5070,10 +5151,17 @@ window.UE5_COURSE_DATA = {
         "search": "Bioshock interaction pickups gameplay"
       },
       "homework": {
-        "title": "Trace or Trigger?",
-        "task": "Choose Trace, Overlap or another approach for six interactions.",
-        "evidence": "Six choices with reasons.",
-        "stretch": "Find one interaction where either Trace or Overlap could work and compare."
+        "title": "Crosshair Detective — BioShock",
+        "task": "Play or watch BioShock interactions and work out which actions probably use a Line Trace rather than a trigger volume.",
+        "evidence": "A six-row Trace-vs-Overlap table plus one drawn trace diagram showing Start → End → Hit Actor → response.",
+        "stretch": "Build one line-trace interaction next time you have Unreal and print the Hit Actor name before adding gameplay.",
+        "duration": "25–35 min",
+        "steps": [
+          "PLAY / WATCH — Find 6 interactions such as pickups, buttons, doors, loot or aimed targets.",
+          "TRACE OR OVERLAP — Choose the most likely detection method for each and justify it.",
+          "TRACE DATA — For trace examples, list the likely Start, End/Direction, Distance and what information comes back in the Hit Result.",
+          "FAIL CASE — Pick 2 examples and explain what should happen when the trace hits nothing or the wrong object type."
+        ]
       },
       "common": [
         "If the trace points wrong, inspect Start, Forward and End.",
@@ -5520,10 +5608,18 @@ window.UE5_COURSE_DATA = {
         "search": "Resident Evil 2 remake door exploration gameplay"
       },
       "homework": {
-        "title": "Door Study",
-        "task": "Compare three doors, gates, lifts or barriers from games.",
-        "evidence": "Activation, movement style and feedback for three examples.",
-        "stretch": "Sketch the variables your reusable Blueprint would expose."
+        "title": "Reverse-Engineer Three Doors",
+        "task": "Play or watch three very different game doors, gates, lifts or barriers and reverse-engineer the variables, functions and Timeline/Lerp behaviour you think makes each one feel different.",
+        "evidence": "Three door-system cards plus one annotated movement curve and one reusable variable/function list.",
+        "stretch": "In Unreal, build one reusable door and expose the values you predicted so three instances can feel different.",
+        "duration": "30–40 min",
+        "steps": [
+          "OBSERVE — Choose 3 examples with clearly different motion or pacing.",
+          "MEASURE — Estimate open duration, delay, direction, distance/angle and whether movement eases in/out.",
+          "VARIABLES — List the editable values a reusable Blueprint would need: OpenTime, OpenAngle, OpenOffset, IsLocked, AutoCloseDelay, etc.",
+          "FUNCTIONS/EVENTS — Name the likely Open, Close, Lock/Unlock and overlap/interact functions/events.",
+          "CURVE — Sketch the movement curve for one door: instant/linear/ease-in/ease-out and explain the feel."
+        ]
       },
       "common": [
         "If the door jumps, verify stored start/end values.",
@@ -5967,10 +6063,18 @@ window.UE5_COURSE_DATA = {
         "search": "Overwatch 2 gameplay HUD"
       },
       "homework": {
-        "title": "HUD Breakdown",
-        "task": "Screenshot a game HUD and label what information is persistent, contextual and decorative.",
-        "evidence": "One annotated HUD screenshot.",
-        "stretch": "Remove three elements and explain whether the game would still be readable."
+        "title": "HUD Data Detective — Overwatch 2",
+        "task": "Pause an Overwatch 2 fight and treat the HUD like a debugging window. Work out what gameplay variables every UI element is reading and which elements should only appear in certain contexts.",
+        "evidence": "One annotated HUD with 10+ labels and a table linking each element to its likely gameplay data source/owner.",
+        "stretch": "In Unreal, make one Widget that reads a variable from gameplay state rather than storing a duplicate copy in the Widget.",
+        "duration": "30–40 min",
+        "steps": [
+          "PLAY / WATCH — Capture or pause one busy combat frame.",
+          "LABEL — Mark at least 10 HUD elements.",
+          "SOURCE DATA — For each, write the likely gameplay variable/source it reads: CurrentHealth, MaxHealth, Ammo, UltimateCharge, Cooldown, ObjectiveState, etc.",
+          "OWNER TEST — Decide why the UI should display that value rather than own/change it.",
+          "CONTEXT — Mark which elements are Persistent, Contextual or Temporary Feedback."
+        ]
       },
       "common": [
         "Do not let the Widget become the owner of health/ammo rules.",
@@ -6422,10 +6526,18 @@ window.UE5_COURSE_DATA = {
         "search": "Resident Evil 4 remake save typewriter checkpoint"
       },
       "homework": {
-        "title": "What Should Save?",
-        "task": "List ten pieces of game state and decide SaveGame, GameInstance, level-only, or regenerated.",
-        "evidence": "Ten values with lifetime choice and reason.",
-        "stretch": "Identify one value that would cause bugs if saved."
+        "title": "Die, Reload, Compare — Save System Detective",
+        "task": "Play or watch a game around a save/checkpoint, then deliberately compare the world before and after death/reload. Reverse-engineer what was saved, what reset and what was regenerated.",
+        "evidence": "A before/change/reload comparison table with at least 10 values, plus two 'bad save design' bug explanations.",
+        "stretch": "Later, make a tiny SaveGame object that persists just 2–3 values and deliberately verify the reload result.",
+        "duration": "30–40 min",
+        "steps": [
+          "BEFORE — Record at least 10 pieces of state before saving/checkpointing.",
+          "CHANGE — After the save, change as many as possible: health, ammo, items, enemy state, doors, position, currency, puzzle state, etc.",
+          "RELOAD — Die/reload/return to checkpoint and record what persisted versus reset.",
+          "CLASSIFY — Mark each value as SaveGame, session/GameInstance, level-only or regenerated.",
+          "BUG HUNT — Choose 2 values that would cause problems if saved incorrectly."
+        ]
       },
       "common": [
         "GameInstance is not a replacement for disk saves.",
@@ -6824,10 +6936,18 @@ window.UE5_COURSE_DATA = {
         "search": "Pokemon stats team screen gameplay"
       },
       "homework": {
-        "title": "Data Model",
-        "task": "Choose a game with many items/characters and design a Struct for one row of its data.",
-        "evidence": "Struct fields, types and three example rows.",
-        "stretch": "Identify one field that should be an Enum rather than free text."
+        "title": "Build the Data Table Behind Pokémon",
+        "task": "Use Pokémon (or another game with many repeated items/characters) and reverse-engineer the data structure that lets hundreds of entries share the same fields but different values.",
+        "evidence": "A 12+ field Struct design, field types, and three complete example rows laid out like a Data Table.",
+        "stretch": "Back in Unreal, create the Struct/Data Table and enter your three rows rather than hard-coding them into a Blueprint.",
+        "duration": "30–40 min",
+        "steps": [
+          "OBSERVE — Look at 5 different Pokémon/stat screens or equivalent game entities.",
+          "COMMON FIELDS — Identify at least 12 fields every row could share: Name, Type, HP, Attack, Speed, Icon, Mesh, Ability, etc.",
+          "TYPE IT — Give every field a likely Unreal type: FName/String, int, float, bool, Enum, asset reference, Struct, etc.",
+          "ROWS — Fill in 3 example rows using your structure.",
+          "ENUM TEST — Pick at least 2 fields that should use an Enum rather than free text and explain why."
+        ]
       },
       "common": [
         "Use collections instead of numbered duplicate variables.",
@@ -7239,10 +7359,18 @@ window.UE5_COURSE_DATA = {
         "search": "Alien Isolation stealth AI search chase gameplay"
       },
       "homework": {
-        "title": "AI State Diary",
-        "task": "Watch five minutes of stealth/action gameplay and record every visible AI state change.",
-        "evidence": "Timeline of states with likely trigger for each.",
-        "stretch": "Translate the observations into Blackboard keys."
+        "title": "Blackboard Detective — Alien: Isolation",
+        "task": "Watch or play Alien: Isolation stealth gameplay and treat the enemy like a Behaviour Tree you cannot see. Reconstruct the state changes and Blackboard information it probably uses.",
+        "evidence": "A timestamped AI state diary, at least 6 Blackboard keys with likely types, and one simplified Behaviour Tree/decision diagram.",
+        "stretch": "In Unreal, create 3 Blackboard keys from your prediction and use them in a very small Behaviour Tree.",
+        "duration": "30–40 min",
+        "steps": [
+          "WATCH — Follow one enemy for 5–10 minutes and pause every time its behaviour clearly changes.",
+          "STATE DIARY — Record states such as Patrol, Investigate, Search, Chase, Attack, Return.",
+          "TRIGGER — For each transition, write what probably caused it: saw player, heard sound, lost sight, reached location, timer expired, etc.",
+          "BLACKBOARD — Invent likely keys: TargetActor, LastKnownLocation, CanSeePlayer, HeardNoise, CurrentState, SearchTime, etc.",
+          "TREE — Draw a simplified decision tree showing at least 5 transitions."
+        ]
       },
       "common": [
         "A NavMesh problem can look like an AI logic problem.",
@@ -7703,10 +7831,18 @@ window.UE5_COURSE_DATA = {
         "search": "Spider Man gameplay traversal animation"
       },
       "homework": {
-        "title": "Animation State Map",
-        "task": "Choose one playable character and draw a state map for six common animations.",
-        "evidence": "Six states with labelled transition conditions.",
-        "stretch": "Identify where a Blend Space would replace multiple discrete states."
+        "title": "State Machine Detective — Spider-Man",
+        "task": "Watch Spider-Man traversal and reverse-engineer the Animation Blueprint data and transitions needed to make movement look continuous.",
+        "evidence": "An 8-state map with at least 6 labelled transition conditions and a variable/type list that could drive the Animation Blueprint.",
+        "stretch": "Build a tiny locomotion State Machine later and compare your predicted variables with what the template actually uses.",
+        "duration": "30–40 min",
+        "steps": [
+          "WATCH — Focus on the character rather than the spectacle for 3–5 minutes.",
+          "STATE HUNT — Identify at least 8 animation states/blends: Idle, Walk/Run, Sprint, JumpStart, InAir, Land, Turn, Fall, etc.",
+          "DRIVER DATA — For each, write the likely variable driving it: Speed, Direction, IsInAir, VerticalVelocity, IsSprinting, etc.",
+          "TRANSITIONS — Write at least 6 transition rules as Boolean/number conditions.",
+          "BLEND SPACE — Identify where a Blend Space would be better than separate fixed animations."
+        ]
       },
       "common": [
         "Do not confuse Character gameplay logic with AnimGraph pose logic.",
@@ -8152,10 +8288,18 @@ window.UE5_COURSE_DATA = {
         "search": "systemic game damage inventory interactions gameplay"
       },
       "homework": {
-        "title": "System Ownership",
-        "task": "Diagram one mechanic and show which objects communicate without stealing each other's responsibilities.",
-        "evidence": "System diagram plus short ownership explanation.",
-        "stretch": "Identify a tempting but poor place to put the logic."
+        "title": "System Ownership Crime Scene",
+        "task": "Choose one system from a game—health, inventory, damage, objectives, doors or quests—and reconstruct who should own the data, who should request changes and who should only display/react.",
+        "evidence": "A clean ownership/communication diagram, a deliberately bad version, and three specific reasons the clean version is safer.",
+        "stretch": "Review one of your own Blueprint systems in college and move one responsibility to a better owner.",
+        "duration": "30–40 min",
+        "steps": [
+          "PLAY / WATCH — Find a sequence where at least 4 different objects/systems participate in the mechanic.",
+          "OWNER — Circle the one class/system that should be the source of truth for each key piece of data.",
+          "MESSAGES — Draw arrows showing which objects request changes or read state.",
+          "BAD ARCHITECTURE — Redraw one deliberately awful version where everyone owns/edits everything.",
+          "COMPARE — Explain 3 bugs or maintenance problems the bad version would create."
+        ]
       },
       "common": [
         "Working code can still be badly organised.",
@@ -8514,10 +8658,18 @@ window.UE5_COURSE_DATA = {
         "search": "Unreal Engine Blueprint best practices clean graph"
       },
       "homework": {
-        "title": "Future You Test",
-        "task": "Use a Blueprint screenshot you captured in class, an older project screenshot, or a Blueprint breakdown you can view online. Annotate everything future-you might struggle to understand in three months.",
-        "evidence": "One annotated screenshot plus three planned readability improvements. You do not need Unreal installed at home.",
-        "stretch": "When you next have access to Unreal, make the three improvements and capture before/after images."
+        "title": "Blueprint Code Review — Can Future You Read This?",
+        "task": "Use one Blueprint screenshot from your own work or a public Blueprint breakdown. Treat it like a code review: work out what it is trying to do, where the cognitive load is, and how you would refactor it without changing behaviour.",
+        "evidence": "One annotated Blueprint screenshot with at least 8 code-review callouts, five proposed renames and a short refactor plan.",
+        "stretch": "Next time you have Unreal, apply the refactor and capture a before/after image without changing gameplay behaviour.",
+        "duration": "30–40 min",
+        "steps": [
+          "FIRST GLANCE — Give yourself 20 seconds. Write what you think the graph does before zooming/reading carefully.",
+          "READABILITY HUNT — Mark unclear names, crossing wires, duplicate logic, giant blocks, magic numbers and missing comments.",
+          "REFACTOR PLAN — Identify at least 3 groups that could become named Functions or clearer top-level steps.",
+          "RENAME — Propose better names for at least 5 variables/functions/events.",
+          "FUTURE-YOU TEST — Write a 5-line top-level version of what the graph should communicate when zoomed out."
+        ]
       },
       "common": [
         "Commenting every node is not the same as clarity.",
