@@ -1,5 +1,5 @@
 window.UE5_DESIGN_DATA = {
-  "version": "3.42.2",
+  "version": "3.59.2",
   "buildDate": "31 Aug 2026",
   "modules": [
     {
@@ -2485,14 +2485,14 @@ window.UE5_DESIGN_DATA = {
         {
           "title": "Performance Detective",
           "duration": "15 min",
-          "brief": "Look at one visually heavy scene and predict where the cost might be before opening profiling tools.",
+          "brief": "Play or watch one visually heavy game scene and predict where the performance cost might be. You do not need profiling tools at home.",
           "steps": [
             "List likely geometry cost.",
             "List material/VFX cost.",
             "List lighting/shadow cost.",
-            "Then profile and compare your guess."
+            "Write what evidence you would look for in a profiler. If you have access to a development PC later, profile it and compare your guess."
           ],
-          "evidence": "Prediction vs actual findings table."
+          "evidence": "A short prediction table covering geometry, materials/VFX and lighting/shadows. Profiling results are an optional extension when a development PC is available."
         }
       ],
       "challenges": [
