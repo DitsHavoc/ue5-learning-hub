@@ -43,3 +43,24 @@
 @media(max-width:1250px){.unreal-learning-ladder.five-step{grid-template-columns:repeat(3,minmax(0,1fr))}.homework-path-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:900px){.master-guide-grid,.homework-path-grid,.revision-coverage-note{grid-template-columns:1fr}.tutorial-revision-bridge,.homework-path-finish{align-items:flex-start;flex-direction:column}.unreal-learning-ladder.five-step{grid-template-columns:1fr 1fr}}
 @media(max-width:620px){.unreal-learning-ladder.five-step{grid-template-columns:1fr}.master-guide-card{grid-template-columns:44px 1fr}.master-guide-card>strong{grid-column:2}.homework-path-step{grid-template-columns:42px 1fr}.homework-path-step-number{width:40px;height:40px}}
+
+
+/* v3.59.2 — home-accessible homework */
+.homework-access-policy{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(320px,.8fr);gap:16px;margin:18px 0 24px;padding:20px;border:1px solid rgba(89,190,145,.34);background:linear-gradient(145deg,rgba(35,112,78,.13),var(--g-panel,#272c32));border-radius:18px}
+.homework-access-policy h2{margin:4px 0 8px}
+.homework-access-policy p{margin:0;color:var(--g-muted,#a2abb2);line-height:1.6}
+.homework-access-examples{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;align-content:center}
+.homework-access-examples span,.homework-card-meta span,.homework-mode-key span,.homework-access-pill{border:1px solid var(--g-line,#3b424a);background:var(--g-panel-3,#23282e);border-radius:999px;padding:6px 9px;font-size:11px}
+.homework-access-examples span{border-color:rgba(89,190,145,.2)}
+.homework-access-pill{display:inline-flex;margin-top:12px;border-color:rgba(89,190,145,.34);color:#bff1d8;font-weight:800}
+.homework-card-meta{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 10px}
+.homework-card-meta span{color:var(--g-muted,#a2abb2)}
+.homework-card-meta span.home{border-color:rgba(89,190,145,.3);color:#bff1d8}
+.homework-mode-key{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.homework-mode-key span:first-child{border-color:rgba(89,190,145,.3);color:#bff1d8}
+.homework-mode-key span:last-child{border-color:rgba(208,164,90,.3);color:#e6c788}
+.homework-inline-access{margin:0 0 14px;padding:11px 13px;border-left:4px solid rgba(89,190,145,.75);background:rgba(35,112,78,.09);border-radius:10px;line-height:1.55}
+.homework-study-rhythm>div{min-height:100%}
+.homework-path-card small{line-height:1.4}
+@media(max-width:900px){.homework-access-policy{grid-template-columns:1fr}}
+@media(max-width:620px){.homework-access-examples{grid-template-columns:1fr}}
