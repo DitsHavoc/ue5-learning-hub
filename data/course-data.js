@@ -1,5 +1,5 @@
 window.UE5_COURSE_DATA = {
-  "version": "3.39.2",
+  "version": "3.59.2",
   "buildDate": "29 Aug 2026",
   "paths": [
     {
@@ -8515,9 +8515,9 @@ window.UE5_COURSE_DATA = {
       },
       "homework": {
         "title": "Future You Test",
-        "task": "Annotate one of your Blueprints with everything future-you might struggle to understand in three months.",
-        "evidence": "Annotated screenshot plus three planned improvements.",
-        "stretch": "Make the improvements and submit before/after images."
+        "task": "Use a Blueprint screenshot you captured in class, an older project screenshot, or a Blueprint breakdown you can view online. Annotate everything future-you might struggle to understand in three months.",
+        "evidence": "One annotated screenshot plus three planned readability improvements. You do not need Unreal installed at home.",
+        "stretch": "When you next have access to Unreal, make the three improvements and capture before/after images."
       },
       "common": [
         "Commenting every node is not the same as clarity.",
