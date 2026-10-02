@@ -64,3 +64,34 @@
 .homework-path-card small{line-height:1.4}
 @media(max-width:900px){.homework-access-policy{grid-template-columns:1fr}}
 @media(max-width:620px){.homework-access-examples{grid-template-columns:1fr}}
+
+
+/* v3.59.3 — homework access shelves */
+.homework-shelf-guide{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0 26px}
+.homework-shelf-guide-card{display:flex;align-items:center;gap:12px;padding:15px 16px;border:1px solid var(--g-line,#3b424a);border-radius:16px;background:var(--g-panel,#272c32)}
+.homework-shelf-guide-card>span{display:grid;place-items:center;width:42px;height:42px;border-radius:13px;font-size:22px;background:rgba(255,255,255,.045)}
+.homework-shelf-guide-card strong{display:block;font-size:.82rem;letter-spacing:.06em}
+.homework-shelf-guide-card small{display:block;margin-top:4px;color:var(--g-muted,#a2abb2);line-height:1.35}
+.homework-shelf-guide-card.home{border-color:rgba(89,190,145,.32);background:linear-gradient(145deg,rgba(35,112,78,.12),var(--g-panel,#272c32))}
+.homework-shelf-guide-card.observe{border-color:rgba(91,183,224,.3);background:linear-gradient(145deg,rgba(49,105,142,.12),var(--g-panel,#272c32))}
+.homework-shelf-guide-card.practical{border-color:rgba(214,168,83,.34);background:linear-gradient(145deg,rgba(116,79,29,.13),var(--g-panel,#272c32))}
+.homework-shelves{display:grid;gap:28px}
+.homework-shelf{border:1px solid var(--g-line,#3b424a);border-radius:20px;padding:18px;background:rgba(255,255,255,.012)}
+.homework-shelf-home{border-color:rgba(89,190,145,.28);background:linear-gradient(180deg,rgba(35,112,78,.08),rgba(255,255,255,.01) 170px)}
+.homework-shelf-observe{border-color:rgba(91,183,224,.27);background:linear-gradient(180deg,rgba(49,105,142,.08),rgba(255,255,255,.01) 170px)}
+.homework-shelf-practical{border-color:rgba(214,168,83,.3);background:linear-gradient(180deg,rgba(116,79,29,.09),rgba(255,255,255,.01) 170px)}
+.homework-shelf-head{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:start;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,.065)}
+.homework-shelf-icon{display:grid;place-items:center;width:48px;height:48px;border-radius:14px;background:rgba(255,255,255,.045);font-size:24px}
+.homework-shelf-head h2{margin:3px 0 5px}
+.homework-shelf-head p{margin:0;color:var(--g-muted,#a2abb2);line-height:1.55;max-width:900px}
+.homework-shelf-count{display:grid;place-items:center;min-width:38px;height:38px;padding:0 10px;border-radius:999px;background:rgba(255,255,255,.055);font-size:.82rem}
+.homework-shelf-home .homework-shelf-count{color:#bff1d8}
+.homework-shelf-observe .homework-shelf-count{color:#bde8fb}
+.homework-shelf-practical .homework-shelf-count{color:#edd09a}
+.homework-shelf-grid{margin-top:0}
+.homework-practical-card{border-color:rgba(214,168,83,.22)}
+.homework-practical-card .homework-card-meta .college{border-color:rgba(214,168,83,.34);color:#edd09a}
+.homework-practical-card .study-evidence{background:rgba(116,79,29,.07)}
+.homework-shelf-toolbar{position:relative;z-index:2;margin-bottom:18px}
+@media(max-width:900px){.homework-shelf-guide{grid-template-columns:1fr}.homework-shelf-head{grid-template-columns:auto 1fr}.homework-shelf-count{grid-column:2;justify-self:start}}
+@media(max-width:620px){.homework-shelf{padding:14px}.homework-shelf-head{grid-template-columns:1fr}.homework-shelf-icon{width:42px;height:42px}.homework-shelf-count{grid-column:1}}
