@@ -1,5 +1,5 @@
 window.UE5_STUDY_DATA = {
-  version: '3.39.0',
+  version: '3.59.2',
   designRevision: {
     'world-design': [
       ['A blockout looks attractive, but new players keep missing the exit. What should you test first?', ['Add more decorative props','Remove visual noise and test route readability with a fresh player','Increase texture resolution','Add a longer cutscene'], 1, 'Level design should communicate the route before decoration carries the scene. Strip the problem back and test whether space, landmarks and sightlines are doing their job.'],
@@ -45,39 +45,39 @@ window.UE5_STUDY_DATA = {
   modelHomework: {
     'read-the-mesh': {
       title: 'Wireframe Detective',
-      task: 'Open one simple prop in Max with Edged Faces on. Identify three edges that clearly earn their place and one area where extra loops would add nothing.',
-      evidence: 'One annotated screenshot with four short callouts.',
-      stretch: 'Delete or dissolve one genuinely unnecessary loop on a copy and prove the silhouette/shading still works.'
+      task: 'Find a wireframe image or modelling breakdown of one simple game prop (a class screenshot is fine). Identify three edges/loops that clearly earn their place and one area where extra geometry would add little at normal gameplay distance.',
+      evidence: 'One annotated wireframe/reference image with four short callouts. A phone/tablet annotation or paper sketch is fine.',
+      stretch: 'When you next have access to Max, test your judgement by deleting/dissolving one genuinely unnecessary loop on a copy and checking the silhouette/shading.'
     },
     'space-and-views': {
       title: 'Viewpoint Discipline',
-      task: 'Choose a simple real object and photograph or sketch it from front, side and top. Recreate only its blockout in Max using orthographic views for proportion and Perspective for the final check.',
-      evidence: 'Reference + front/side/top Max screenshots + one perspective screenshot.',
-      stretch: 'Write one sentence explaining which view was most useful for which dimension.'
+      task: 'Choose a simple real object and photograph or sketch it from front, side and top. Mark the main dimensions/proportions you would use to block it out from orthographic views.',
+      evidence: 'Front/side/top reference or sketches with proportion notes, plus one short note explaining what a perspective check would reveal.',
+      stretch: 'When you next have Max, build the simple blockout from your references and compare it in Perspective.'
     },
     'spend-geometry': {
       title: 'Polygon Budget Test',
-      task: 'Make three versions of the same cylinder or rounded prop using low, sensible and excessive segment counts. Compare them from the distance a player would actually see them.',
-      evidence: 'Three wireframe screenshots and your chosen version with a one-sentence justification.',
-      stretch: 'Repeat the comparison from a much closer camera and explain whether your choice changes.'
+      task: 'Compare three wireframe references (or draw three quick cylinder sketches) showing low, sensible and excessive segment counts. Decide which would be sensible at normal gameplay distance and explain why.',
+      evidence: 'Three labelled references/sketches and your chosen version with a short silhouette-versus-cost justification.',
+      stretch: 'When you next have Max, build the three versions and check whether your prediction changes at close range.'
     },
     'transforms-and-pivots': {
       title: 'Pivot Audit',
-      task: 'Pick three game props with different movement/placement needs — for example a door, wheel and modular wall piece. Decide where each pivot should be and place it deliberately in Max.',
-      evidence: 'Three screenshots with the pivot visible and one sentence explaining each decision.',
-      stretch: 'Test one prop by rotating or snapping it exactly as it would be used in engine.'
+      task: 'Pick three game props with different movement/placement needs — for example a door, wheel and modular wall piece. On a photo/screenshot/sketch, mark exactly where each pivot should be and explain what would go wrong if it were elsewhere.',
+      evidence: 'Three annotated images/sketches with a pivot marker and one-sentence reason for each.',
+      stretch: 'When you next have Max/Unreal, place one pivot and test the real rotate/snap behaviour.'
     },
     'uvs-and-pbr': {
       title: 'Checker Before Colour',
-      task: 'Apply a checker to one of your models. Find stretching, inconsistent scale or wasted UV space before touching final textures.',
-      evidence: 'Checker screenshot + UV layout + three fixes you made.',
-      stretch: 'Compare two materials with similar Base Colour but different Roughness and explain why they read differently.'
+      task: 'Choose one game prop/reference and sketch where you would place UV seams/islands. Then identify two surfaces with similar colour but different roughness and explain why they read differently.',
+      evidence: 'Annotated reference + rough UV seam/island sketch + two short roughness observations.',
+      stretch: 'When you next have Max, unwrap the prop or apply a checker to an existing model and compare your seam/scale predictions.'
     },
     'game-ready': {
       title: 'Engine-Ready Audit',
-      task: 'Take one finished prop and inspect naming, scale, pivot, collision plan, material slots, UVs and export readiness before it goes to Unreal.',
-      evidence: 'A seven-point checklist with one screenshot of the final Max asset and one Unreal import screenshot if available.',
-      stretch: 'Identify one thing you would simplify if the prop were only ever seen in the background.'
+      task: 'Choose one game prop, marketplace/portfolio asset or class model and complete a seven-point pre-export audit: naming, scale, pivot, collision plan, material slots, UVs and intended viewing distance.',
+      evidence: 'A seven-point checklist plus one annotated image/reference. If you already have a class model screenshot, you can use that.',
+      stretch: 'When you next have Max/Unreal, run the same checklist on one of your own assets and fix the highest-priority issue.'
     }
   },
   glossary: [
