@@ -4752,12 +4752,12 @@ window.UE5_SKILL_MISSIONS = {
             },
             {
               "title": "Consume Battery through the contract",
-              "where": "BP_Generator → PlayerHasItem True",
+              "where": "BP_Generator → HasItem result = True",
               "do": "Call PlayerRemoveItem (Message): Target = Interactor, ItemRow = Battery. Continue only when Removed = True.",
               "check": "Battery disappears from InventoryRows through the Mission 3 RemoveItem Function behind the Interface.",
               "why": "World Actors do not need to know where/how inventory is stored.",
               "doList": [
-                "From the PlayerHasItem True branch add PlayerRemoveItem (Message).",
+                "From the HasItem=True branch add PlayerRemoveItem (Message).",
                 "Set Target = Interactor.",
                 "Set ItemRow = Battery.",
                 "Use Removed with a Branch if required by your node flow.",
