@@ -2662,7 +2662,7 @@ window.UE5_SKILL_MISSIONS = {
               "title": "Open the same project",
               "where": "Unreal Engine → your EscapeRoom project from Missions 1 and 2",
               "do": "Open LV_EscapeRoom and use File → Save All. Do not create a new project or duplicate the gameplay into another level.",
-              "check": "InventoryRows, ST_ItemData, DT_ItemData and BP_ItemPickup all still exist.",
+              "check": "InventoryRows, ST_ItemData, DT_ItemData and one generic BP_ItemPickup path exist, with Battery/ExitKey already migrated to it.",
               "why": "Mission 3 is a code-quality refactor of the game you already built.",
               "doList": [
                 "Launch Unreal Engine 5.8.",
@@ -2671,10 +2671,12 @@ window.UE5_SKILL_MISSIONS = {
                 "Click File → Save All.",
                 "Open BP_ThirdPersonCharacter and confirm InventoryRows still exists.",
                 "Open Content/Data and confirm ST_ItemData and DT_ItemData still exist.",
+                "Confirm Battery and ExitKey in the level are BP_ItemPickup instances using ItemRow = Battery / ExitKey; there should be no placed BP_Battery or BP_Key left from the old one-off version.",
                 "Do not create a new project or duplicate the level.",
-                "Press Play once to confirm the project starts normally."
+                "Compile BP_ThirdPersonCharacter, BP_ItemPickup, BP_Generator and BP_ExitDoor before continuing.",
+                "Press Play once and confirm the project starts normally."
               ],
-              "see": "InventoryRows, ST_ItemData, DT_ItemData and BP_ItemPickup all still exist."
+              "see": "InventoryRows, ST_ItemData, DT_ItemData and one generic BP_ItemPickup path exist, with Battery/ExitKey already migrated to it."
             },
             {
               "title": "Run one clean Mission 2 play-through",
@@ -2752,9 +2754,10 @@ window.UE5_SKILL_MISSIONS = {
             }
           ],
           "test": [
-            "Mission 2 still completes.",
+            "Mission 2 still completes using BP_ItemPickup for Battery and ExitKey.",
             "You have found repeated InventoryRows Contains logic.",
-            "You have found repeated DT_ItemData lookup logic."
+            "You have found repeated DT_ItemData lookup logic.",
+            "The affected Blueprints compile before the Function refactor begins."
           ],
           "doneWhen": "You have a working data-driven game and can name the repeated jobs that Mission 3 will turn into Functions.",
           "common": [
@@ -3974,18 +3977,21 @@ window.UE5_SKILL_MISSIONS = {
               "title": "Open the same working project",
               "where": "Unreal Engine → EscapeRoom project → LV_EscapeRoom",
               "do": "Open the project from Missions 1–3 and File → Save All. Confirm ST_ItemData, DT_ItemData, BP_ItemPickup, BP_Generator, BP_ExitDoor, BP_MaintenanceDoor and the Mission 3 Character Functions still exist.",
-              "check": "The project opens with the complete Mission 3 architecture intact.",
+              "check": "The complete Mission 3 architecture compiles, RemoveItem exposes Removed, and all placed pickups use BP_ItemPickup.",
               "why": "Mission 4 changes communication, not the data or Function systems you already made.",
               "doList": [
                 "Open the EscapeRoom project you used for Missions 1–3.",
                 "Open LV_EscapeRoom.",
                 "Choose File → Save All before changing anything.",
-                "Open BP_ThirdPersonCharacter and confirm the Mission 3 Functions HasItem, AddItem, RemoveItem, GetItemData, PrintInventory and CanUsePoweredItem still exist.",
+                "Open BP_ThirdPersonCharacter and confirm HasItem, AddItem, RemoveItem, GetItemData, PrintInventory and CanUsePoweredItem still exist.",
+                "Open RemoveItem and confirm it has Output Removed (Boolean) connected to Array Remove Item → Return Value. If your project came from the older tutorial, add this output now and Compile.",
                 "Open the Content Drawer → Data and confirm ST_ItemData and DT_ItemData still exist.",
-                "In the Content Drawer confirm BP_ItemPickup, BP_Generator, BP_ExitDoor and BP_MaintenanceDoor still exist.",
+                "Confirm Battery, ExitKey, Coin/Fuse/Wrench in the level all use BP_ItemPickup; there should be no placed BP_Battery or BP_Key using the legacy overlap path.",
+                "Confirm BP_Generator, BP_ExitDoor and BP_MaintenanceDoor still exist.",
+                "Compile BP_ThirdPersonCharacter and each world Actor once before adding any Interface.",
                 "Do not create replacement copies of these assets. Mission 4 refactors the working versions."
               ],
-              "see": "The project opens with the complete Mission 3 architecture intact."
+              "see": "The complete Mission 3 architecture compiles, RemoveItem exposes Removed, and all placed pickups use BP_ItemPickup."
             },
             {
               "title": "Run a complete baseline play-through",
@@ -4058,6 +4064,8 @@ window.UE5_SKILL_MISSIONS = {
           ],
           "test": [
             "Mission 3 still completes.",
+            "RemoveItem(ItemRow) exposes Removed Boolean.",
+            "Every placed pickup follows BP_ItemPickup.",
             "You found the existing Character casts in the world Actors.",
             "You can explain why one shared Interact request would be cleaner than separate object-specific interaction code."
           ],
