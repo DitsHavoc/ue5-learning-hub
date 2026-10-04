@@ -2340,23 +2340,6 @@ window.UE5_SKILL_MISSIONS = {
           "why": "A refactor is unfinished if both old and new systems remain active. Duplicate state causes bugs and confuses future work.",
           "steps": [
             {
-              "title": "Retire the legacy one-off pickup Blueprints",
-              "where": "LV_EscapeRoom + Content Drawer",
-              "do": "Confirm no BP_Battery or BP_Key instances remain in LV_EscapeRoom. Once their BP_ItemPickup replacements work, you may delete the unused BP_Battery and BP_Key assets.",
-              "check": "Every live pickup in the level is BP_ItemPickup; the old one-off classes cannot bypass later Function/Interface refactors.",
-              "why": "Mission 3 and Mission 4 deliberately refactor one generic pickup class. Legacy placed pickups would keep old direct Array access and Character casts alive.",
-              "doList": [
-                "Open LV_EscapeRoom and use the Outliner search for BP_Battery.",
-                "Confirm there is no placed BP_Battery instance.",
-                "Search the Outliner for BP_Key and confirm there is no placed BP_Key instance.",
-                "Play once and confirm Battery and ExitKey are both collectable through BP_ItemPickup.",
-                "If BP_Battery and BP_Key are no longer referenced anywhere, delete those two old assets from the Content Drawer or leave them clearly unused outside the level.",
-                "Use Fix Up Redirectors if your normal project workflow requires it.",
-                "Compile BP_ItemPickup, BP_Generator, BP_ExitDoor and BP_ThirdPersonCharacter, then Save All."
-              ],
-              "see": "Every live pickup in the level is BP_ItemPickup; the old one-off classes cannot bypass later Function/Interface refactors."
-            },
-            {
               "title": "Search for old Inventory use",
               "where": "BP_ThirdPersonCharacter, BP_Battery, BP_Key, BP_Generator, BP_ExitDoor",
               "do": "Inspect each relevant graph. Make sure all live item checks/adds/removes now use InventoryRows rather than the old Inventory String Array.",
@@ -2428,6 +2411,23 @@ window.UE5_SKILL_MISSIONS = {
                 "Confirm InventoryRows is now the only inventory ID array."
               ],
               "see": "The character and dependent Blueprints compile without the old Inventory."
+            },
+            {
+              "title": "Retire the legacy one-off pickup Blueprints",
+              "where": "LV_EscapeRoom + Content Drawer",
+              "do": "Confirm no BP_Battery or BP_Key instances remain in LV_EscapeRoom. Once their BP_ItemPickup replacements work, you may delete the unused BP_Battery and BP_Key assets.",
+              "check": "Every live pickup in the level is BP_ItemPickup; the old one-off classes cannot bypass later Function/Interface refactors.",
+              "why": "Mission 3 and Mission 4 deliberately refactor one generic pickup class. Legacy placed pickups would keep old direct Array access and Character casts alive.",
+              "doList": [
+                "Open LV_EscapeRoom and use the Outliner search for BP_Battery.",
+                "Confirm there is no placed BP_Battery instance.",
+                "Search the Outliner for BP_Key and confirm there is no placed BP_Key instance.",
+                "Play once and confirm Battery and ExitKey are both collectable through BP_ItemPickup.",
+                "If BP_Battery and BP_Key are no longer referenced anywhere, delete those two old assets from the Content Drawer or leave them clearly unused outside the level.",
+                "Use Fix Up Redirectors if your normal project workflow requires it.",
+                "Compile BP_ItemPickup, BP_Generator, BP_ExitDoor and BP_ThirdPersonCharacter, then Save All."
+              ],
+              "see": "Every live pickup in the level is BP_ItemPickup; the old one-off classes cannot bypass later Function/Interface refactors."
             },
             {
               "title": "Clean and label the new graphs",
@@ -2577,13 +2577,15 @@ window.UE5_SKILL_MISSIONS = {
           "test": [
             "The whole Escape Room still completes.",
             "Old Inventory and ItemDescriptions are gone.",
-            "Coin/Fuse/Wrench use one BP_ItemPickup class.",
+            "Battery, ExitKey, Coin, Fuse and Wrench all use BP_ItemPickup in the level.",
             "Editing row data changes the game without editing pickup logic.",
+            "A deliberately missing row is rejected before it can enter InventoryRows.",
             "One independent data field has been added and used."
           ],
-          "doneWhen": "You can complete the game, add/edit item content through DT_ItemData and explain why this is better than hard-coding each item across Blueprint graphs.",
+          "doneWhen": "You can complete the game using BP_ItemPickup for every placed item, add/edit content through DT_ItemData, reject invalid rows safely and explain why this is better than one-off hard-coded pickup graphs.",
           "common": [
             "Do not call the mission complete if BP_ItemPickup still contains fixed item-specific values.",
+            "Do not continue to the Functions mission while placed BP_Battery/BP_Key instances are still driving the quest loop.",
             "If a row fails, test the exact Row Name and Row Not Found path before changing unrelated Blueprints.",
             "Keep the game behaviour stable; this mission is an architecture upgrade, not a redesign."
           ],
@@ -2591,8 +2593,7 @@ window.UE5_SKILL_MISSIONS = {
             "Add an Icon Texture2D field to ST_ItemData and prepare each item for a future visual inventory.",
             "Add Weight as Float and calculate the total weight of everything in InventoryRows.",
             "Use Value to calculate the total sell value of optional loot.",
-            "Add Category as Name or an Enum later and separate Quest, Valuable and Tool items.",
-            "Replace old BP_Battery/BP_Key placed actors with BP_ItemPickup instances once you are confident the generic version is reliable."
+            "Add Category as Name or an Enum later and separate Quest, Valuable and Tool items."
           ]
         }
       ],
@@ -4620,6 +4621,7 @@ window.UE5_SKILL_MISSIONS = {
           "common": [
             "BPI_PlayerGameplay is a contract, not a place to store InventoryRows.",
             "If Unreal reports that BP_ThirdPersonCharacter has a function or graph which conflicts with a function in BPI_PlayerGameplay, rename the Interface member with the Player... prefix, Compile BPI_PlayerGameplay first, then Compile BP_ThirdPersonCharacter.",
+            "If an existing RemoveItem call still shows the old signature after adding Removed, right-click the call and Refresh Node (or Compile the Character/reopen the Blueprint) before rewiring it.",
             "Match Name/Boolean/ST_ItemData pin types exactly.",
             "Do not rewrite HasItem/AddItem/RemoveItem logic inside PlayerHasItem/PlayerAddItem/PlayerRemoveItem; call the Mission 3 Functions you already proved."
           ]
