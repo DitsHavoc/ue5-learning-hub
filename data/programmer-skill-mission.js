@@ -1,5 +1,5 @@
 window.UE5_SKILL_MISSIONS = {
-  "version": "3.58.4",
+  "version": "3.59.6",
   "missions": [
     {
       "id": "arrays-maps-escape-room",
@@ -4407,52 +4407,52 @@ window.UE5_SKILL_MISSIONS = {
                 "Click Add (+) → Blueprints → Blueprint Interface.",
                 "Name it BPI_PlayerGameplay.",
                 "Open it.",
-                "Rename the default function to HasItem or create the functions one by one in the following steps.",
+                "Rename the default function to PlayerHasItem or create the functions one by one in the following steps. Keep the Player... prefix on every BPI_PlayerGameplay service: BP_ThirdPersonCharacter already owns HasItem, AddItem, RemoveItem and GetItemData from Mission 3, and Unreal will report a function/graph conflict if an Interface member reuses one of those names.",
                 "Save the asset before adding all signatures."
               ],
               "see": "A second Interface asset exists beside BPI_Interactable."
             },
             {
-              "title": "Add HasItem",
+              "title": "Add PlayerHasItem",
               "where": "BPI_PlayerGameplay",
-              "do": "Create function HasItem. Input RequiredItem = Name. Output HasItem = Boolean.",
+              "do": "Create function PlayerHasItem. Input RequiredItem = Name. Output HasItem = Boolean.",
               "check": "The signature can ask about any DT_ItemData row name without referencing the Character class.",
               "why": "World objects need inventory checks without direct access to InventoryRows.",
               "doList": [
-                "In BPI_PlayerGameplay create/select function HasItem.",
+                "In BPI_PlayerGameplay create/select function PlayerHasItem.",
                 "In Details → Inputs click +.",
                 "Name the input RequiredItem and set type to Name.",
                 "In Details → Outputs click +.",
                 "Name the output HasItem and set type to Boolean.",
                 "Compile.",
-                "Confirm the signature reads HasItem(RequiredItem Name) → HasItem Boolean."
+                "Confirm the signature reads PlayerHasItem(RequiredItem Name) → HasItem Boolean."
               ],
               "see": "The signature can ask about any DT_ItemData row name without referencing the Character class."
             },
             {
-              "title": "Add AddItem",
+              "title": "Add PlayerAddItem",
               "where": "BPI_PlayerGameplay",
-              "do": "Create function AddItem. Input ItemRow = Name. No output required.",
+              "do": "Create function PlayerAddItem. Input ItemRow = Name. No output required.",
               "check": "The Interface declares a way to request an inventory addition.",
               "why": "Generic pickups need to give items to an Interactor without casting.",
               "doList": [
-                "In BPI_PlayerGameplay add a new function named AddItem.",
+                "In BPI_PlayerGameplay add a new function named PlayerAddItem.",
                 "Add input ItemRow.",
                 "Set ItemRow type to Name.",
                 "Do not add an output.",
                 "Compile.",
-                "Confirm AddItem only requests an item row to be added."
+                "Confirm PlayerAddItem only requests an item row to be added."
               ],
               "see": "The Interface declares a way to request an inventory addition."
             },
             {
-              "title": "Add RemoveItem",
+              "title": "Add PlayerRemoveItem",
               "where": "BPI_PlayerGameplay",
-              "do": "Create function RemoveItem. Input ItemRow = Name. Output Removed = Boolean.",
+              "do": "Create function PlayerRemoveItem. Input ItemRow = Name. Output Removed = Boolean.",
               "check": "The contract can request a consumable/key removal and report whether it succeeded.",
               "why": "Generator and Maintenance Door already rely on the Mission 3 RemoveItem behaviour.",
               "doList": [
-                "Add a function named RemoveItem.",
+                "Add a function named PlayerRemoveItem.",
                 "Add input ItemRow of type Name.",
                 "Add output Removed of type Boolean.",
                 "Compile.",
@@ -4461,13 +4461,13 @@ window.UE5_SKILL_MISSIONS = {
               "see": "The contract can request a consumable/key removal and report whether it succeeded."
             },
             {
-              "title": "Add GetItemData",
+              "title": "Add PlayerGetItemData",
               "where": "BPI_PlayerGameplay",
-              "do": "Create function GetItemData. Input ItemRow = Name. Output ItemData = ST_ItemData and Found = Boolean.",
+              "do": "Create function PlayerGetItemData. Input ItemRow = Name. Output ItemData = ST_ItemData and Found = Boolean.",
               "check": "The Interface uses the Struct made in Mission 2.",
               "why": "Pickups can retrieve DisplayName/PickupMessage through the player's existing data service instead of duplicating table access.",
               "doList": [
-                "Add a function named GetItemData.",
+                "Add a function named PlayerGetItemData.",
                 "Add input ItemRow of type Name.",
                 "Add output ItemData.",
                 "Set ItemData type to ST_ItemData.",
@@ -4480,17 +4480,17 @@ window.UE5_SKILL_MISSIONS = {
             {
               "title": "Add power functions",
               "where": "BPI_PlayerGameplay",
-              "do": "Create GetPowerOn with Boolean output PowerOn. Create SetPowerOn with Boolean input NewPowerOn.",
+              "do": "Create PlayerGetPowerOn with Boolean output PowerOn. Create PlayerSetPowerOn with Boolean input NewPowerOn.",
               "check": "World objects can read/change the small piece of game state they genuinely need.",
               "why": "The Generator and powered doors should not need the concrete Character type.",
               "doList": [
-                "Add function GetPowerOn.",
-                "Give GetPowerOn one output named PowerOn of type Boolean.",
-                "Add function SetPowerOn.",
-                "Give SetPowerOn one input named NewPowerOn of type Boolean.",
-                "Do not add an output to SetPowerOn.",
+                "Add function PlayerGetPowerOn.",
+                "Give PlayerGetPowerOn one output named PowerOn of type Boolean.",
+                "Add function PlayerSetPowerOn.",
+                "Give PlayerSetPowerOn one input named NewPowerOn of type Boolean.",
+                "Do not add an output to PlayerSetPowerOn.",
                 "Compile and Save BPI_PlayerGameplay.",
-                "Review the completed Interface: HasItem, AddItem, RemoveItem, GetItemData, GetPowerOn and SetPowerOn."
+                "Review the completed Interface: PlayerHasItem, PlayerAddItem, PlayerRemoveItem, PlayerGetItemData, PlayerGetPowerOn and PlayerSetPowerOn."
               ],
               "see": "World objects can read/change the small piece of game state they genuinely need."
             },
@@ -4514,17 +4514,17 @@ window.UE5_SKILL_MISSIONS = {
             {
               "title": "Wire Interface functions into your Mission 3 logic",
               "where": "BP_ThirdPersonCharacter → Interfaces / Event Graph",
-              "do": "Implement each Interface function by reusing/calling your existing Mission 3 Functions and variables: HasItem → HasItem Function; AddItem → AddItem Function; RemoveItem → RemoveItem Function; GetItemData → GetItemData Function; GetPowerOn → return PowerOn; SetPowerOn → set PowerOn.",
+              "do": "Implement each Interface function by reusing/calling your existing Mission 3 Functions and variables: PlayerHasItem → HasItem Function; PlayerAddItem → AddItem Function; PlayerRemoveItem → RemoveItem Function; PlayerGetItemData → GetItemData Function; PlayerGetPowerOn → return PowerOn; PlayerSetPowerOn → set PowerOn.",
               "check": "The Interface implementations are thin adapters around working systems rather than duplicate inventory logic.",
               "why": "Mission 3 Functions remain the single source of gameplay logic; the Interface changes how other Actors reach them.",
               "doList": [
-                "Open the BPI_PlayerGameplay HasItem implementation in BP_ThirdPersonCharacter.",
+                "Open the BPI_PlayerGameplay PlayerHasItem implementation in BP_ThirdPersonCharacter.",
                 "Call your existing Mission 3 HasItem Function with RequiredItem and return its Boolean as the Interface output.",
-                "Open AddItem implementation and call your existing AddItem Function with ItemRow.",
-                "Open RemoveItem implementation and call your existing RemoveItem Function with ItemRow; return the existing Removed result.",
-                "Open GetItemData implementation and call your existing GetItemData Function; return ItemData and Found.",
-                "Open GetPowerOn and return the Character's existing PowerOn Boolean.",
-                "Open SetPowerOn and Set the Character's existing PowerOn variable to NewPowerOn.",
+                "Open PlayerAddItem implementation and call your existing AddItem Function with ItemRow.",
+                "Open PlayerRemoveItem implementation and call your existing RemoveItem Function with ItemRow; return the existing Removed result.",
+                "Open PlayerGetItemData implementation and call your existing GetItemData Function; return ItemData and Found.",
+                "Open PlayerGetPowerOn and return the Character's existing PowerOn Boolean.",
+                "Open PlayerSetPowerOn and Set the Character's existing PowerOn variable to NewPowerOn.",
                 "Compile after wiring each one rather than waiting until the end.",
                 "Do not duplicate InventoryRows logic inside these Interface implementations."
               ],
@@ -4546,8 +4546,9 @@ window.UE5_SKILL_MISSIONS = {
           "doneWhen": "World Actors have a capability-based route to player inventory/data/power services without requiring BP_ThirdPersonCharacter.",
           "common": [
             "BPI_PlayerGameplay is a contract, not a place to store InventoryRows.",
+            "If Unreal reports that BP_ThirdPersonCharacter has a function or graph which conflicts with a function in BPI_PlayerGameplay, rename the Interface member with the Player... prefix, Compile BPI_PlayerGameplay first, then Compile BP_ThirdPersonCharacter.",
             "Match Name/Boolean/ST_ItemData pin types exactly.",
-            "Do not rewrite HasItem/AddItem/RemoveItem logic inside each Interface implementation; call the Mission 3 Function you already proved."
+            "Do not rewrite HasItem/AddItem/RemoveItem logic inside PlayerHasItem/PlayerAddItem/PlayerRemoveItem; call the Mission 3 Functions you already proved."
           ]
         },
         {
@@ -4595,14 +4596,14 @@ window.UE5_SKILL_MISSIONS = {
             {
               "title": "Add the item through an Interface Message",
               "where": "BP_ItemPickup → True branch",
-              "do": "Call AddItem (Message) from BPI_PlayerGameplay. Target = Interactor. ItemRow = this pickup's ItemRow.",
+              "do": "Call PlayerAddItem (Message) from BPI_PlayerGameplay. Target = Interactor. ItemRow = this pickup's ItemRow.",
               "check": "The item reaches InventoryRows through the Character's Interface implementation.",
               "why": "The pickup no longer needs access to InventoryRows or a Character reference.",
               "doList": [
-                "From Branch True add AddItem (Message) from BPI_PlayerGameplay.",
-                "Connect Interactor to AddItem Target.",
+                "From Branch True add PlayerAddItem (Message) from BPI_PlayerGameplay.",
+                "Connect Interactor to PlayerAddItem Target.",
                 "Get the existing ItemRow variable from BP_ItemPickup.",
-                "Connect ItemRow to AddItem ItemRow.",
+                "Connect ItemRow to PlayerAddItem ItemRow.",
                 "Compile.",
                 "Do not access InventoryRows directly in BP_ItemPickup."
               ],
@@ -4610,14 +4611,14 @@ window.UE5_SKILL_MISSIONS = {
             },
             {
               "title": "Request item data through the Interface",
-              "where": "BP_ItemPickup → after AddItem",
-              "do": "Call GetItemData (Message). Target = Interactor, ItemRow = this pickup's ItemRow. On Found = True, Break ST_ItemData → Print PickupMessage.",
+              "where": "BP_ItemPickup → after PlayerAddItem",
+              "do": "Call PlayerGetItemData (Message). Target = Interactor, ItemRow = this pickup's ItemRow. On Found = True, Break ST_ItemData → Print PickupMessage.",
               "check": "The same Data Table message from Mission 2 still appears when collected.",
               "why": "Data remains centralised while communication becomes decoupled.",
               "doList": [
-                "After AddItem (Message), add GetItemData (Message).",
-                "Connect Interactor to GetItemData Target.",
-                "Connect the same ItemRow variable to GetItemData ItemRow.",
+                "After PlayerAddItem (Message), add PlayerGetItemData (Message).",
+                "Connect Interactor to PlayerGetItemData Target.",
+                "Connect the same ItemRow variable to PlayerGetItemData ItemRow.",
                 "Use the returned Found Boolean with a Branch if your message node provides it as data after execution.",
                 "From ItemData add Break ST_ItemData.",
                 "From Break ST_ItemData take PickupMessage.",
@@ -4638,7 +4639,7 @@ window.UE5_SKILL_MISSIONS = {
                 "Leave Target as Self.",
                 "Compile.",
                 "Do not destroy the pickup on the unsupported-Interactor/failed path.",
-                "Read the flow: Interact → supported player → AddItem → GetItemData → message → Destroy Self."
+                "Read the flow: Interact → supported player → PlayerAddItem → PlayerGetItemData → message → Destroy Self."
               ],
               "see": "The pickup disappears only after the interaction reaches a gameplay-capable Interactor."
             },
@@ -4735,11 +4736,11 @@ window.UE5_SKILL_MISSIONS = {
             {
               "title": "Ask for Battery",
               "where": "BP_Generator → True branch",
-              "do": "Call HasItem (Message): Target = Interactor, RequiredItem = Battery. Branch on HasItem.",
+              "do": "Call PlayerHasItem (Message): Target = Interactor, RequiredItem = Battery. Branch on the returned HasItem Boolean.",
               "check": "Without Battery, print the existing needs-Battery feedback and do not restore power.",
               "why": "The inventory rule remains the same; only the communication route changes.",
               "doList": [
-                "From the supported-Interactor True path add HasItem (Message).",
+                "From the supported-Interactor True path add PlayerHasItem (Message).",
                 "Set Target = Interactor.",
                 "Set RequiredItem = Battery.",
                 "Use the HasItem Boolean as the Condition of a new Branch.",
@@ -4751,12 +4752,12 @@ window.UE5_SKILL_MISSIONS = {
             },
             {
               "title": "Consume Battery through the contract",
-              "where": "BP_Generator → HasItem True",
-              "do": "Call RemoveItem (Message): Target = Interactor, ItemRow = Battery. Continue only when Removed = True.",
+              "where": "BP_Generator → PlayerHasItem True",
+              "do": "Call PlayerRemoveItem (Message): Target = Interactor, ItemRow = Battery. Continue only when Removed = True.",
               "check": "Battery disappears from InventoryRows through the Mission 3 RemoveItem Function behind the Interface.",
               "why": "World Actors do not need to know where/how inventory is stored.",
               "doList": [
-                "From the HasItem True branch add RemoveItem (Message).",
+                "From the PlayerHasItem True branch add PlayerRemoveItem (Message).",
                 "Set Target = Interactor.",
                 "Set ItemRow = Battery.",
                 "Use Removed with a Branch if required by your node flow.",
@@ -4768,11 +4769,11 @@ window.UE5_SKILL_MISSIONS = {
             {
               "title": "Restore power",
               "where": "BP_Generator → Removed True",
-              "do": "Call SetPowerOn (Message): Target = Interactor, NewPowerOn = True. Then keep your existing Generator visual feedback—Point Light, message, sound if you added one.",
+              "do": "Call PlayerSetPowerOn (Message): Target = Interactor, NewPowerOn = True. Then keep your existing Generator visual feedback—Point Light, message, sound if you added one.",
               "check": "The Generator visibly activates and powered systems can read PowerOn.",
               "why": "Object-specific presentation still belongs inside BP_Generator.",
               "doList": [
-                "After successful RemoveItem, add SetPowerOn (Message).",
+                "After successful PlayerRemoveItem, add PlayerSetPowerOn (Message).",
                 "Set Target = Interactor.",
                 "Set NewPowerOn = True.",
                 "After that, reuse the Generator's existing visual feedback: enable its Point Light and print Power Restored or your existing message.",
@@ -4824,7 +4825,7 @@ window.UE5_SKILL_MISSIONS = {
           ],
           "doneWhen": "Generator gameplay is unchanged for the player except that interaction is deliberate, and all player communication travels through BPI_PlayerGameplay.",
           "common": [
-            "Call SetPowerOn on Interactor, not Self.",
+            "Call PlayerSetPowerOn on Interactor, not Self.",
             "Do not recreate an InventoryRows variable in BP_Generator.",
             "If the Generator is physically blocked by a new interaction collision, use Query Only while still Blocking Visibility."
           ]
@@ -4855,13 +4856,13 @@ window.UE5_SKILL_MISSIONS = {
             {
               "title": "Ask for power",
               "where": "BP_ExitDoor → Event Interact",
-              "do": "Check Interactor implements BPI_PlayerGameplay, then call GetPowerOn (Message).",
+              "do": "Check Interactor implements BPI_PlayerGameplay, then call PlayerGetPowerOn (Message).",
               "check": "The Exit can read power without accessing the Character's PowerOn variable directly.",
               "why": "State access is now provided by the contract.",
               "doList": [
                 "From Event Interact check Interactor implements BPI_PlayerGameplay.",
                 "Branch on that check.",
-                "From True add GetPowerOn (Message).",
+                "From True add PlayerGetPowerOn (Message).",
                 "Set Target = Interactor.",
                 "Keep the returned PowerOn Boolean available for the final condition.",
                 "Do not read the Character PowerOn variable directly."
@@ -4871,16 +4872,16 @@ window.UE5_SKILL_MISSIONS = {
             {
               "title": "Ask for ExitKey",
               "where": "BP_ExitDoor",
-              "do": "Call HasItem (Message) with RequiredItem = ExitKey. Combine PowerOn and HasItem using Boolean AND as before.",
+              "do": "Call PlayerHasItem (Message) with RequiredItem = ExitKey. Combine PowerOn and the returned HasItem Boolean using Boolean AND as before.",
               "check": "Only PowerOn=True AND ExitKey=True reaches the existing door-open movement.",
               "why": "Mission 1 gameplay rules remain intact through a new communication route.",
               "doList": [
-                "From the same supported-player path add HasItem (Message).",
+                "From the same supported-player path add PlayerHasItem (Message).",
                 "Set Target = Interactor.",
                 "Set RequiredItem = ExitKey.",
                 "Add a Boolean AND node.",
-                "Connect GetPowerOn PowerOn to one AND input.",
-                "Connect HasItem output to the other AND input.",
+                "Connect PlayerGetPowerOn PowerOn to one AND input.",
+                "Connect the HasItem output to the other AND input.",
                 "Connect the AND result to a Branch Condition.",
                 "False should keep the door closed and can print your existing locked feedback.",
                 "True should continue to the existing door-open movement."
@@ -4905,7 +4906,7 @@ window.UE5_SKILL_MISSIONS = {
             {
               "title": "Convert BP_MaintenanceDoor",
               "where": "BP_MaintenanceDoor → Class Settings/Event Graph",
-              "do": "Implement BPI_Interactable. On Interact use GetPowerOn (Message) and HasItem (Message) RequiredItem=Fuse → AND. On success RemoveItem (Message) Fuse before opening, matching Mission 3.",
+              "do": "Implement BPI_Interactable. On Interact use PlayerGetPowerOn (Message) and PlayerHasItem (Message) RequiredItem=Fuse → AND. On success PlayerRemoveItem (Message) Fuse before opening, matching Mission 3.",
               "check": "Maintenance Door still requires Power + Fuse and consumes Fuse.",
               "why": "Two doors can share the same contracts but retain different data/rules.",
               "doList": [
@@ -4913,10 +4914,10 @@ window.UE5_SKILL_MISSIONS = {
                 "Add BPI_Interactable in Class Settings and Compile.",
                 "Add Event Interact.",
                 "Check Interactor implements BPI_PlayerGameplay.",
-                "Call GetPowerOn (Message) on Interactor.",
-                "Call HasItem (Message) with RequiredItem = Fuse.",
-                "Combine PowerOn AND HasItem using Boolean AND → Branch.",
-                "From True call RemoveItem (Message), Target = Interactor, ItemRow = Fuse.",
+                "Call PlayerGetPowerOn (Message) on Interactor.",
+                "Call PlayerHasItem (Message) with RequiredItem = Fuse.",
+                "Combine PowerOn AND the returned HasItem Boolean using Boolean AND → Branch.",
+                "From True call PlayerRemoveItem (Message), Target = Interactor, ItemRow = Fuse.",
                 "Only after Removed = True run the existing Maintenance Door opening movement.",
                 "Keep the door's own DoorOpen/repeat protection.",
                 "Compile and Save."
@@ -5195,7 +5196,7 @@ window.UE5_SKILL_MISSIONS = {
                 "Choose one option before you start building it.",
                 "Option A: create a new Actor class such as BP_LoreTerminal and make it implement BPI_Interactable without editing the Character.",
                 "Option B: add GetInteractionText to BPI_Interactable with a Text output, implement different prompt text in at least two Actors, then read/use that prompt through the Interface.",
-                "Option C: create BP_LockedCrate that implements BPI_Interactable and asks BPI_PlayerGameplay HasItem for a required item before opening.",
+                "Option C: create BP_LockedCrate that implements BPI_Interactable and asks BPI_PlayerGameplay PlayerHasItem for a required item before opening.",
                 "Build your chosen option without copying an entire existing Actor graph.",
                 "Compile.",
                 "Play-test the new interaction at least twice.",
