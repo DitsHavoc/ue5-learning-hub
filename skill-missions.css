@@ -198,3 +198,19 @@
 .cpp-code-guide-grid p{margin:0;line-height:1.5;color:var(--muted,#c7cbd2)}
 .cpp-code-guide-grid strong{color:#effff8}
 @media(max-width:720px){.cpp-code-guide-grid{grid-template-columns:1fr}.cpp-code-guide-grid>div,.cpp-code-guide-grid>div:nth-child(-n+2),.cpp-code-guide-grid>div:nth-child(even){border-left:0;border-top:1px solid rgba(255,255,255,.055)}.cpp-code-guide-grid>div:first-child{border-top:0}}
+
+
+/* v3.60.0 — standalone C++ pathway entry */
+.cpp-entry-hero{border-color:rgba(83,190,255,.28);background:radial-gradient(circle at top left,rgba(38,137,190,.18),transparent 42%),linear-gradient(145deg,rgba(35,76,108,.16),rgba(11,20,33,.78))}
+.cpp-entry-bridge-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.cpp-entry-bridge-grid article{display:flex;flex-direction:column;gap:5px;padding:14px 15px;border-radius:14px;border:1px solid rgba(83,190,255,.2);background:rgba(12,22,32,.74)}
+.cpp-entry-bridge-grid small{font-size:.68rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#9edfff}
+.cpp-entry-bridge-grid strong{font-size:.92rem;line-height:1.4}
+.cpp-entry-start{display:flex;justify-content:space-between;gap:20px;align-items:center;padding:20px;border:1px solid rgba(83,190,255,.28);border-radius:18px;background:rgba(41,126,170,.08)}
+.cpp-entry-start h2{margin:3px 0 6px}.cpp-entry-start p{margin:0;max-width:760px;line-height:1.55}
+.cpp-fresh-start-banner{margin:0 0 16px;border-color:rgba(83,190,255,.3);border-left:4px solid rgba(83,190,255,.82);background:rgba(40,119,159,.08)}
+.cpp-fresh-start-banner h2{margin:.25rem 0 .45rem}.cpp-fresh-start-banner p{margin:.2rem 0 .75rem;line-height:1.55}
+.cpp-transition-cta{margin:18px 0 26px;display:flex;justify-content:space-between;gap:20px;align-items:center;border-color:rgba(83,190,255,.24);background:linear-gradient(145deg,rgba(36,112,151,.09),rgba(12,22,32,.72))}
+.cpp-transition-cta h2{margin:.25rem 0 .45rem}.cpp-transition-cta p{margin:0;max-width:760px;line-height:1.55}
+@media(max-width:900px){.cpp-entry-bridge-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.cpp-entry-start,.cpp-transition-cta{align-items:flex-start;flex-direction:column}}
+@media(max-width:620px){.cpp-entry-bridge-grid{grid-template-columns:1fr}}
