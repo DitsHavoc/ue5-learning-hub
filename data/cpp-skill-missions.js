@@ -39,11 +39,6 @@ window.UE5_CPP_SKILL_MISSIONS = {
     ]
   },
   "planned": [
-    "Mission 0 — Toolchain + Your First Working C++",
-    "Mission 1 — Core Gameplay Actor: C++ Collectible",
-    "Mission 2 — Functions & Decisions: Locked Door",
-    "Mission 3 — Arrays & Inventory: Key Unlocks Door",
-    "Mission 4 — Reusable Actor Components & Events",
     "Mission 5 — C++ Interaction",
     "Mission 6 — C++ ↔ Blueprint Communication",
     "Mission 7 — Structs, Enums & Data Tables",
