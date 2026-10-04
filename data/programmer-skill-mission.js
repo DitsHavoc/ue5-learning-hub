@@ -1,5 +1,5 @@
 window.UE5_SKILL_MISSIONS = {
-  "version": "3.59.6",
+  "version": "3.59.7",
   "missions": [
     {
       "id": "arrays-maps-escape-room",
@@ -926,19 +926,19 @@ window.UE5_SKILL_MISSIONS = {
             {
               "title": "Show the menu on BeginPlay",
               "where": "LV_EscapeRoom → Open Level Blueprint",
-              "do": "Event BeginPlay → Get Player Controller → Create Widget (WBP_MainMenu, Owning Player = Player Controller) → Add to Viewport. Then Set Input Mode UI Only using the same Player Controller and set Show Mouse Cursor True.",
+              "do": "On BeginPlay, place a pure Get Player Controller node for the controller reference. Run BeginPlay → Create Widget (WBP_MainMenu) → Add to Viewport → Set Input Mode UI Only → Set Show Mouse Cursor True. Use the same Player Controller reference for Owning Player and the input/cursor nodes.",
               "check": "Press Play. The menu appears, the cursor is visible and the character does not move.",
               "why": "UI Only stops gameplay input while the menu is active. Epic's UE5.8 widget guidance uses these Set Input Mode nodes for this exact kind of handoff.",
               "doList": [
                 "Return to LV_EscapeRoom.",
                 "Click Blueprints in the top toolbar → Open Level Blueprint.",
-                "From Event BeginPlay create Get Player Controller.",
-                "Create Widget and set Class = WBP_MainMenu.",
-                "Connect the Player Controller to Owning Player.",
-                "From Create Widget → Return Value call Add to Viewport.",
-                "Create Set Input Mode UI Only using the same Player Controller.",
-                "From the Player Controller create Set Show Mouse Cursor and tick it True.",
-                "Connect the execution chain in that order.",
+                "Right-click empty graph space and place Get Player Controller. It is a pure data node, so do not try to connect Event BeginPlay into it.",
+                "From Event BeginPlay add Create Widget and set Class = WBP_MainMenu.",
+                "Connect Get Player Controller Return Value → Create Widget Owning Player.",
+                "From Create Widget Return Value call Add to Viewport.",
+                "After Add to Viewport add Set Input Mode UI Only and connect the same Player Controller to its Player Controller input.",
+                "From the same Player Controller reference create Set Show Mouse Cursor and tick it True.",
+                "Connect only the white execution chain: BeginPlay → Create Widget → Add to Viewport → Set Input Mode UI Only → Set Show Mouse Cursor.",
                 "Compile and press Play."
               ],
               "see": "Press Play. The menu appears, the cursor is visible and the character does not move."
@@ -986,15 +986,15 @@ window.UE5_SKILL_MISSIONS = {
             {
               "title": "Make QUIT work",
               "where": "WBP_MainMenu → QUIT → On Clicked",
-              "do": "Get Player Controller → Quit Game.",
+              "do": "Place Get Player Controller as a pure data node. Connect OnClicked execution directly to Quit Game, and connect the Player Controller Return Value to Quit Game → Specific Player.",
               "check": "Use Standalone Game if you want to verify quitting without closing the editor preview unexpectedly.",
               "why": "The menu has a complete second action rather than a dead button.",
               "doList": [
                 "Open WBP_MainMenu → Graph.",
                 "Select the QUIT button in My Blueprint or return to Designer and select it.",
                 "In Details → Events click + next to OnClicked.",
-                "From OnClicked drag an execution wire and search for Get Player Controller.",
-                "From the execution path create Quit Game.",
+                "Right-click empty graph space and place Get Player Controller. Do not drag an execution wire into it; the node is pure.",
+                "From OnClicked execution add Quit Game.",
                 "Connect Get Player Controller Return Value → Quit Game Specific Player.",
                 "Click Compile and Save.",
                 "Use Standalone Game if normal PIE does not visibly close the editor window when you test Quit."
@@ -1071,18 +1071,19 @@ window.UE5_SKILL_MISSIONS = {
             {
               "title": "Show the Win screen",
               "where": "BP_ExitTrigger → Box Collision → On Component Begin Overlap",
-              "do": "Cast Other Actor to BP_ThirdPersonCharacter. On success: Get Player Controller → Create Widget WBP_Win → Add to Viewport → Set Input Mode UI Only → Show Mouse Cursor True.",
+              "do": "Cast Other Actor to BP_ThirdPersonCharacter. On Cast success run Create Widget WBP_Win → Add to Viewport → Set Input Mode UI Only → Set Show Mouse Cursor True. Place Get Player Controller separately as the pure controller reference used by those nodes.",
               "check": "After opening the door and walking through, YOU ESCAPED! appears and gameplay input stops.",
               "why": "The win state should take control away from the running game and hand it to the UI.",
               "doList": [
                 "Open BP_ExitTrigger.",
                 "Select Box Collision → Details → Events → add On Component Begin Overlap.",
                 "Cast Other Actor to BP_ThirdPersonCharacter.",
-                "On Cast success create Get Player Controller.",
-                "Create Widget with Class = WBP_Win and Owning Player = the Player Controller.",
+                "Right-click empty graph space and place Get Player Controller. It is a pure node; do not connect Cast success execution into it.",
+                "From Cast Succeeded execution add Create Widget with Class = WBP_Win.",
+                "Connect Get Player Controller Return Value → Create Widget Owning Player.",
                 "Add the widget to Viewport.",
-                "Set Input Mode UI Only.",
-                "Set Show Mouse Cursor to True.",
+                "Add Set Input Mode UI Only and use the same Player Controller reference.",
+                "Add Set Show Mouse Cursor and set it True using the same Player Controller.",
                 "Compile and Save."
               ],
               "see": "After opening the door and walking through, YOU ESCAPED! appears and gameplay input stops."
@@ -1108,13 +1109,13 @@ window.UE5_SKILL_MISSIONS = {
             {
               "title": "Make the Win screen QUIT button work",
               "where": "WBP_Win → QUIT → On Clicked",
-              "do": "Get Player Controller → Quit Game.",
+              "do": "Place Get Player Controller as a pure data node. Connect OnClicked execution → Quit Game and connect the Player Controller Return Value → Specific Player.",
               "check": "The button is wired and no dead UI remains.",
               "why": "The end screen now gives the player both sensible choices.",
               "doList": [
                 "Open WBP_Win → Graph.",
                 "Select the QUIT button and add its OnClicked event.",
-                "Add Get Player Controller.",
+                "Right-click empty graph space and add Get Player Controller; it has no execution pins.",
                 "Add Quit Game.",
                 "Connect OnClicked execution → Quit Game.",
                 "Connect Get Player Controller Return Value → Quit Game Specific Player.",
@@ -2087,73 +2088,73 @@ window.UE5_SKILL_MISSIONS = {
               "see": "Placed BP_ItemPickup instances expose ItemRow in their Details panel."
             },
             {
-              "title": "Add the selected row to the player",
+              "title": "Validate the selected row before adding it",
               "where": "BP_ItemPickup → Sphere Collision → On Component Begin Overlap",
-              "do": "Cast Other Actor to BP_ThirdPersonCharacter. Get InventoryRows → Add Unique. Connect ItemRow into the Item input instead of typing a fixed row name.",
-              "check": "The Add Unique Item pin is fed by the ItemRow variable.",
-              "why": "The same logic can now collect any row name assigned to the placed instance.",
+              "do": "Cast Other Actor to BP_ThirdPersonCharacter, then Get Data Table Row using DT_ItemData before changing InventoryRows. Connect ItemRow to Row Name and branch naturally through Row Found / Row Not Found.",
+              "check": "A valid ItemRow reaches Row Found; an invalid ItemRow reaches Row Not Found before the inventory is changed.",
+              "why": "Validate first so a typo such as ThisDoesNotExist cannot be inserted into InventoryRows.",
               "doList": [
                 "Open BP_ItemPickup and select Sphere Collision.",
                 "In Details → Events click + beside On Component Begin Overlap.",
                 "Drag from Other Actor and create Cast To BP_ThirdPersonCharacter.",
                 "Connect Begin Overlap execution → Cast execution.",
-                "Drag from As BP Third Person Character and get InventoryRows.",
-                "Drag from InventoryRows Array and add Add Unique.",
-                "Drag ItemRow from My Blueprint into the graph as Get.",
-                "Connect ItemRow → Add Unique Item.",
-                "Connect Cast Succeeded execution → Add Unique execution input.",
+                "After Cast Succeeded place Get Data Table Row.",
+                "Set Data Table = DT_ItemData.",
+                "Drag ItemRow from My Blueprint into the graph as Get and connect ItemRow → Row Name.",
+                "Connect Cast Succeeded execution → Get Data Table Row execution input.",
+                "Leave Row Found, Row Not Found and Out Row visible.",
                 "Click Compile."
               ],
-              "see": "The Add Unique Item pin is fed by the ItemRow variable."
+              "see": "A valid ItemRow reaches Row Found; an invalid ItemRow reaches Row Not Found before the inventory is changed."
             },
             {
-              "title": "Read the selected row data",
-              "where": "BP_ItemPickup → after Add Unique",
-              "do": "Get Data Table Row using DT_ItemData. Connect ItemRow to Row Name. Row Found → Break ST_ItemData → PickupMessage → Print String → Destroy Actor.",
-              "check": "No item-specific name or message is typed into this graph.",
-              "why": "Both identity and feedback now come from the selected data row.",
+              "title": "Add only a valid row to the player",
+              "where": "BP_ItemPickup → Get Data Table Row → Row Found",
+              "do": "From Row Found, Get the player's InventoryRows → Add Unique and connect ItemRow. Then Break ST_ItemData from Out Row → PickupMessage → Print String → Destroy Actor.",
+              "check": "InventoryRows changes only on Row Found, and valid pickups show their own message before disappearing.",
+              "why": "The Data Table is the authority: only IDs that resolve to real item data should enter the inventory.",
               "doList": [
-                "After Add Unique place Get Data Table Row.",
-                "Set Data Table to DT_ItemData.",
-                "Connect ItemRow → Row Name.",
-                "Connect Add Unique execution output → Get Data Table Row execution input.",
-                "Drag from Out Row and place Break ST_ItemData.",
-                "Drag from PickupMessage and create Print String.",
-                "Allow Text→String conversion if required.",
-                "Connect Row Found → Print String execution input.",
-                "From Print String execution output create Destroy Actor.",
-                "Leave Destroy Actor Target as Self.",
+                "From Get Data Table Row → Row Found, continue the success execution path.",
+                "Drag from As BP Third Person Character and get InventoryRows.",
+                "From InventoryRows add Add Unique.",
+                "Connect ItemRow → Add Unique Item.",
+                "Connect Row Found execution → Add Unique execution input.",
+                "From Get Data Table Row Out Row add Break ST_ItemData.",
+                "From PickupMessage create Print String; allow Text→String conversion if Unreal inserts it.",
+                "Connect Add Unique execution output → Print String.",
+                "After Print String add Destroy Actor with Target = Self.",
                 "Compile and Save."
               ],
-              "see": "No item-specific name or message is typed into this graph."
+              "see": "InventoryRows changes only on Row Found, and valid pickups show their own message before disappearing."
             },
             {
               "title": "Handle bad data",
               "where": "BP_ItemPickup → Get Data Table Row",
-              "do": "From Row Not Found, Print String: ERROR: Item data not found! Do not Destroy Actor on the failure path.",
-              "check": "A bad ItemRow gives a clear error and leaves the pickup available to inspect/fix.",
-              "why": "Reusable systems need a useful failure state, not silent breakage.",
+              "do": "From Row Not Found, Print String: ERROR: Item data not found! Do not add ItemRow to InventoryRows and do not Destroy Actor on the failure path.",
+              "check": "A bad ItemRow gives a clear error, remains in the level, and does not pollute InventoryRows.",
+              "why": "Broken data should be visible and harmless rather than becoming a bad inventory entry.",
               "doList": [
                 "Find Get Data Table Row in BP_ItemPickup.",
                 "Drag from Row Not Found execution output.",
                 "Create Print String.",
                 "Set In String to ERROR: Item data not found!",
+                "Do not connect Row Not Found to Add Unique.",
                 "Do not connect Destroy Actor after this failure Print String.",
                 "Click Compile.",
-                "Place a temporary BP_ItemPickup with ItemRow set to a name that is not in DT_ItemData.",
+                "Place a temporary BP_ItemPickup with ItemRow set to ThisDoesNotExist.",
                 "Press Play and touch it.",
-                "Confirm the error prints and the pickup remains in the level for debugging."
+                "Confirm the error prints, the pickup remains, and pressing I does not show a bogus inventory row."
               ],
-              "see": "A bad ItemRow gives a clear error and leaves the pickup available to inspect/fix."
+              "see": "A bad ItemRow gives a clear error, remains in the level, and does not pollute InventoryRows."
             }
           ],
           "flow": [
-            "Placed BP_ItemPickup",
-            "ItemRow",
-            "Add Unique",
-            "Get DT_ItemData Row",
-            "Row Found → message + destroy",
-            "Row Not Found → error"
+            "Overlap",
+            "Cast to Character",
+            "Get DT_ItemData row",
+            "Row Found → Add Unique",
+            "message → Destroy",
+            "Row Not Found → error only"
           ],
           "test": [
             "ItemRow is Instance Editable.",
@@ -2164,6 +2165,7 @@ window.UE5_SKILL_MISSIONS = {
           "common": [
             "ItemRow must be Name, not String.",
             "Remember to enable Instance Editable before looking for ItemRow on a placed Actor.",
+            "Validate the Data Table row before Add Unique; an invalid row must never enter InventoryRows.",
             "Do not Destroy Actor from Row Not Found or the broken item will vanish before you can debug it."
           ]
         },
@@ -2875,28 +2877,30 @@ window.UE5_SKILL_MISSIONS = {
             {
               "title": "Create RemoveItem",
               "where": "BP_ThirdPersonCharacter → My Blueprint → Functions → +",
-              "do": "Create Function RemoveItem with Input ItemRow of type Name. Get InventoryRows → Remove Item and connect ItemRow. Leave Pure OFF.",
-              "check": "RemoveItem compiles with one Name input and an execution path.",
-              "why": "Gameplay systems can consume an item without directly manipulating the Array.",
+              "do": "Create Function RemoveItem with Input ItemRow (Name) and Output Removed (Boolean). Get InventoryRows → Remove Item, connect ItemRow, and return the Remove Item Boolean as Removed. Leave Pure OFF.",
+              "check": "RemoveItem compiles with one Name input, a Removed Boolean output and normal execution pins.",
+              "why": "Later Interface code needs to know whether consuming the item actually succeeded.",
               "doList": [
                 "In BP_ThirdPersonCharacter → My Blueprint → Functions click +.",
                 "Name the Function RemoveItem.",
                 "Select the Function entry node and add Input ItemRow of type Name.",
+                "In Details → Outputs click + and add Removed of type Boolean.",
                 "Leave Pure OFF because RemoveItem changes InventoryRows.",
                 "Drag InventoryRows into the Function graph as Get.",
                 "From InventoryRows add Remove Item.",
                 "Connect Function input ItemRow → Remove Item Item.",
                 "Connect Function entry execution → Remove Item → Return Node.",
+                "Connect Remove Item Return Value → Return Node Removed.",
                 "Click Compile and Save."
               ],
-              "see": "RemoveItem compiles with one Name input and an execution path."
+              "see": "RemoveItem compiles with one Name input, a Removed Boolean output and normal execution pins."
             },
             {
               "title": "Temporary Add/Remove test",
               "where": "BP_ThirdPersonCharacter → Event Graph",
               "do": "Create a temporary J key → AddItem(Coin) and a temporary R key → RemoveItem(Coin). Use your current I inventory display between presses to inspect the result.",
-              "check": "J adds Coin once; pressing J repeatedly does not duplicate it; R removes Coin.",
-              "why": "Both state-changing Functions are proven before other Blueprints depend on them.",
+              "check": "J adds Coin once; R removes Coin and the RemoveItem call exposes Removed=True. Calling RemoveItem again for a missing Coin would return False.",
+              "why": "Both state-changing Functions and the removal success result are proven before later Blueprints depend on them.",
               "doList": [
                 "Open BP_ThirdPersonCharacter → Event Graph.",
                 "Add J Keyboard Event.",
@@ -2905,11 +2909,12 @@ window.UE5_SKILL_MISSIONS = {
                 "Add R Keyboard Event.",
                 "Drag from R Pressed and call RemoveItem.",
                 "Set RemoveItem ItemRow to Coin.",
+                "Confirm the RemoveItem call node now has a Removed Boolean output.",
                 "Compile and press Play.",
                 "Press J, then press I and confirm Coin appears.",
                 "Press R, then press I and confirm Coin disappears."
               ],
-              "see": "J adds Coin once; pressing J repeatedly does not duplicate it; R removes Coin."
+              "see": "J adds Coin once; R removes Coin and the RemoveItem call exposes Removed=True. Calling RemoveItem again for a missing Coin would return False."
             },
             {
               "title": "Delete the temporary keys",
@@ -2932,17 +2937,19 @@ window.UE5_SKILL_MISSIONS = {
           ],
           "flow": [
             "AddItem(ItemRow) → Add Unique",
-            "RemoveItem(ItemRow) → Remove Item"
+            "RemoveItem(ItemRow) → Remove Item → Removed Boolean"
           ],
           "test": [
             "AddItem does not create duplicate row names.",
             "RemoveItem removes the requested row.",
+            "RemoveItem returns Removed=True when an item was removed and False when it was not present.",
             "Both Functions are Impure because they change InventoryRows."
           ],
-          "doneWhen": "The Character owns tested AddItem(ItemRow) and RemoveItem(ItemRow) Functions and outside systems no longer need to manipulate the Array directly once migrated.",
+          "doneWhen": "The Character owns tested AddItem(ItemRow) and RemoveItem(ItemRow) → Removed Functions, ready for later gameplay and Interface callers.",
           "common": [
             "Do not enable Pure on a Function that modifies InventoryRows.",
             "Add Unique is different from Add; use Add Unique here.",
+            "Remove Item already returns a Boolean—wire that Return Value into the Function's Removed output.",
             "If your I display still uses old logic that is fine for this stage; PrintInventory comes later."
           ]
         },
@@ -3217,62 +3224,58 @@ window.UE5_SKILL_MISSIONS = {
               "see": "The successful Cast output gives As BP Third Person Character."
             },
             {
-              "title": "Replace Add Unique with AddItem",
+              "title": "Replace direct Data Table lookup with GetItemData first",
               "where": "BP_ItemPickup → successful Cast path",
-              "do": "Delete the direct Get InventoryRows → Add Unique chain. From As BP Third Person Character call AddItem and pass this pickup's ItemRow.",
-              "check": "BP_ItemPickup no longer directly changes InventoryRows.",
-              "why": "Inventory implementation is now owned by the Character Function.",
+              "do": "Delete the pickup's direct Get Data Table Row node. From the Character reference call GetItemData(ItemRow) immediately after Cast and Branch on Found before changing inventory.",
+              "check": "BP_ItemPickup contains no DT_ItemData asset reference, and invalid ItemRow values fail before AddItem is called.",
+              "why": "The Character owns validation and table access, and invalid IDs never reach inventory.",
               "doList": [
-                "In BP_ItemPickup locate Get InventoryRows → Add Unique.",
-                "Disconnect the white execution wire from Add Unique.",
-                "Drag from As BP Third Person Character and search for AddItem.",
-                "Place AddItem.",
-                "Drag ItemRow from My Blueprint into the graph as Get.",
-                "Connect ItemRow → AddItem ItemRow.",
-                "Connect Cast Succeeded execution → AddItem execution input.",
-                "Delete the old Get InventoryRows → Add Unique nodes once AddItem is wired.",
+                "Find the direct Get Data Table Row node in BP_ItemPickup and disconnect it from the live path.",
+                "Drag from As BP Third Person Character and search for GetItemData.",
+                "Connect Cast Succeeded execution → GetItemData execution input.",
+                "Connect this pickup's ItemRow → GetItemData ItemRow.",
+                "Add a Branch after GetItemData.",
+                "Connect GetItemData execution output → Branch execution input.",
+                "Connect GetItemData Found → Branch Condition.",
+                "Delete the old direct Get Data Table Row node only after GetItemData is wired.",
                 "Compile."
               ],
-              "see": "BP_ItemPickup no longer directly changes InventoryRows."
+              "see": "BP_ItemPickup contains no DT_ItemData asset reference, and invalid ItemRow values fail before AddItem is called."
             },
             {
-              "title": "Replace direct Data Table lookup",
-              "where": "BP_ItemPickup → after AddItem",
-              "do": "Delete Get Data Table Row from the pickup. From the Character reference call GetItemData(ItemRow). Branch on Found.",
-              "check": "BP_ItemPickup contains no DT_ItemData asset reference.",
-              "why": "The Character Function now owns the Data Table lookup and failure handling.",
+              "title": "Replace Add Unique with AddItem on Found True",
+              "where": "BP_ItemPickup → GetItemData → Branch True",
+              "do": "Delete direct Get InventoryRows → Add Unique. From Branch True call AddItem on the Character and pass this pickup's ItemRow.",
+              "check": "BP_ItemPickup no longer directly changes InventoryRows, and AddItem can only run for a valid Data Table row.",
+              "why": "Inventory mutation stays inside the Character and is gated by successful validation.",
               "doList": [
-                "Find the direct Get Data Table Row node in BP_ItemPickup.",
-                "Disconnect it from the live execution path.",
-                "Drag from As BP Third Person Character and search for GetItemData.",
-                "Place GetItemData after AddItem.",
-                "Connect AddItem execution output → GetItemData execution input.",
-                "Connect ItemRow → GetItemData ItemRow.",
-                "Add a Branch after GetItemData.",
-                "Connect GetItemData Found → Branch Condition.",
-                "Connect GetItemData execution output → Branch execution input.",
-                "Delete the old direct Get Data Table Row node only after the Function call is connected.",
+                "Locate the old Get InventoryRows → Add Unique nodes and disconnect them.",
+                "From As BP Third Person Character call AddItem.",
+                "Connect Branch True execution → AddItem execution input.",
+                "Connect this pickup's ItemRow → AddItem ItemRow.",
+                "Delete the old direct InventoryRows/Add Unique nodes.",
+                "Leave Branch False without AddItem or Destroy Actor.",
                 "Compile."
               ],
-              "see": "BP_ItemPickup contains no DT_ItemData asset reference."
+              "see": "BP_ItemPickup no longer directly changes InventoryRows, and AddItem can only run for a valid Data Table row."
             },
             {
               "title": "Use returned item data",
-              "where": "BP_ItemPickup → Found True",
-              "do": "Break returned ST_ItemData → PickupMessage → Print String → Destroy Actor. On Found False, do not Destroy Actor.",
-              "check": "Valid items still show their own message and disappear; invalid rows remain so you can fix them.",
-              "why": "The pickup now coordinates behaviour while reusable Functions perform the common jobs.",
+              "where": "BP_ItemPickup → after AddItem",
+              "do": "Use the ItemData already returned by GetItemData: Break ST_ItemData → PickupMessage → Print String → Destroy Actor. The Found False path neither adds nor destroys.",
+              "check": "Valid items add, show their message and disappear; invalid rows remain and never enter inventory.",
+              "why": "The final order is validate → mutate → feedback, which avoids corrupting state on bad data.",
               "doList": [
                 "Drag from GetItemData ItemData and place Break ST_ItemData.",
                 "Drag from PickupMessage and create Print String.",
                 "Allow Text→String conversion if required.",
-                "Connect Branch True execution → Print String.",
+                "Connect AddItem execution output → Print String.",
                 "From Print String execution create Destroy Actor.",
-                "Leave Branch False without Destroy Actor so bad data remains inspectable.",
+                "Leave Branch False with no AddItem and no Destroy Actor.",
                 "Compile and Save.",
-                "Read the final live path: overlap → Cast → AddItem → GetItemData → Found? → message → Destroy."
+                "Read the final live path: overlap → Cast → GetItemData → Found? → AddItem → message → Destroy."
               ],
-              "see": "Valid items still show their own message and disappear; invalid rows remain so you can fix them."
+              "see": "Valid items add, show their message and disappear; invalid rows remain and never enter inventory."
             },
             {
               "title": "Test three rows",
@@ -3297,9 +3300,9 @@ window.UE5_SKILL_MISSIONS = {
           "flow": [
             "Overlap",
             "Cast to Character",
-            "AddItem(ItemRow)",
             "GetItemData(ItemRow)",
-            "Found → message + destroy"
+            "Found → AddItem(ItemRow)",
+            "message + destroy"
           ],
           "test": [
             "BP_ItemPickup no longer gets InventoryRows directly.",
@@ -3308,8 +3311,9 @@ window.UE5_SKILL_MISSIONS = {
           ],
           "doneWhen": "BP_ItemPickup is a small caller of Character Functions instead of containing inventory and Data Table implementation details.",
           "common": [
-            "Pass the pickup's Instance Editable ItemRow into both Function calls.",
-            "Do not Destroy an invalid pickup on the Found False path.",
+            "Pass the pickup's Instance Editable ItemRow into GetItemData and AddItem.",
+            "GetItemData must run before AddItem so a bad row cannot enter InventoryRows.",
+            "Do not AddItem or Destroy an invalid pickup on the Found False path.",
             "If the Functions cannot be called from the Character reference, Compile BP_ThirdPersonCharacter and confirm the Functions are Public/default access."
           ]
         },
@@ -4397,6 +4401,23 @@ window.UE5_SKILL_MISSIONS = {
           "why": "BPI_Interactable removes target-specific casts from the player, but the Generator and doors still need to ask the Interactor about inventory/power. A player-facing contract removes the Cast in the opposite direction too.",
           "steps": [
             {
+              "title": "Pre-flight the Mission 3 Character services",
+              "where": "BP_ThirdPersonCharacter → My Blueprint → Functions",
+              "do": "Before creating the Interface, confirm HasItem, AddItem, RemoveItem and GetItemData compile. RemoveItem must have Output Removed = Boolean wired from the Array Remove Item node's Return Value.",
+              "check": "The existing Character API is conflict-free and RemoveItem(ItemRow) exposes Removed Boolean.",
+              "why": "The Interface should adapt known-good Character Functions. Fixing the local signature first prevents a second mismatch after the naming issue.",
+              "doList": [
+                "Open BP_ThirdPersonCharacter and Compile once before adding BPI_PlayerGameplay.",
+                "Confirm the local Functions are named HasItem, AddItem, RemoveItem and GetItemData.",
+                "Open RemoveItem.",
+                "If RemoveItem does not already have an Output named Removed, add Removed of type Boolean.",
+                "Connect the Array Remove Item node's Return Value → Return Node Removed.",
+                "Compile BP_ThirdPersonCharacter.",
+                "Do not rename the local Mission 3 Functions; the Interface will use separate Player... names."
+              ],
+              "see": "The existing Character API is conflict-free and RemoveItem(ItemRow) exposes Removed Boolean."
+            },
+            {
               "title": "Create the second Interface",
               "where": "Content Drawer → Add (+) → Blueprints → Blueprint Interface",
               "do": "Create BPI_PlayerGameplay.",
@@ -4506,8 +4527,9 @@ window.UE5_SKILL_MISSIONS = {
                 "In Details → Interfaces → Implemented Interfaces click Add.",
                 "Choose BPI_PlayerGameplay.",
                 "Compile.",
-                "Look in My Blueprint → Interfaces and confirm every BPI_PlayerGameplay function appears.",
-                "Notice that functions with outputs are implemented as functions; no-output Interface calls may appear as events depending on UE's Blueprint presentation."
+                "In My Blueprint → Interfaces, functions with outputs should appear as Interface function graphs: PlayerHasItem, PlayerRemoveItem, PlayerGetItemData and PlayerGetPowerOn.",
+                "PlayerAddItem and PlayerSetPowerOn have no outputs, so implement them as Interface Events in the Event Graph (for example Event PlayerAddItem / Event PlayerSetPowerOn).",
+                "If a newly changed Interface signature looks stale, Compile BPI_PlayerGameplay first, then return and Compile BP_ThirdPersonCharacter."
               ],
               "see": "The Character now promises to provide every function in the player gameplay contract."
             },
@@ -4518,14 +4540,13 @@ window.UE5_SKILL_MISSIONS = {
               "check": "The Interface implementations are thin adapters around working systems rather than duplicate inventory logic.",
               "why": "Mission 3 Functions remain the single source of gameplay logic; the Interface changes how other Actors reach them.",
               "doList": [
-                "Open the BPI_PlayerGameplay PlayerHasItem implementation in BP_ThirdPersonCharacter.",
-                "Call your existing Mission 3 HasItem Function with RequiredItem and return its Boolean as the Interface output.",
-                "Open PlayerAddItem implementation and call your existing AddItem Function with ItemRow.",
-                "Open PlayerRemoveItem implementation and call your existing RemoveItem Function with ItemRow; return the existing Removed result.",
-                "Open PlayerGetItemData implementation and call your existing GetItemData Function; return ItemData and Found.",
+                "Open the BPI_PlayerGameplay PlayerHasItem function implementation and call the existing HasItem Function with RequiredItem; return its Result as HasItem.",
+                "In the Event Graph, use Event PlayerAddItem and call the existing AddItem Function with ItemRow.",
+                "Open PlayerRemoveItem, call the existing RemoveItem Function with ItemRow, and connect its Removed output to the Interface Removed output.",
+                "Open PlayerGetItemData, call the existing GetItemData Function, and return ItemData and Found.",
                 "Open PlayerGetPowerOn and return the Character's existing PowerOn Boolean.",
-                "Open PlayerSetPowerOn and Set the Character's existing PowerOn variable to NewPowerOn.",
-                "Compile after wiring each one rather than waiting until the end.",
+                "In the Event Graph, use Event PlayerSetPowerOn and Set the Character's PowerOn variable to NewPowerOn.",
+                "Compile after wiring each adapter rather than waiting until the end.",
                 "Do not duplicate InventoryRows logic inside these Interface implementations."
               ],
               "see": "The Interface implementations are thin adapters around working systems rather than duplicate inventory logic."
@@ -4538,8 +4559,10 @@ window.UE5_SKILL_MISSIONS = {
             "existing Mission 3 Function/state"
           ],
           "test": [
-            "BPI_PlayerGameplay contains all six contracts.",
-            "Character implements it.",
+            "BPI_PlayerGameplay contains all six Player... contracts.",
+            "Character implements it without function/graph name conflicts.",
+            "PlayerRemoveItem returns the existing RemoveItem Removed Boolean.",
+            "No-output Interface services are implemented as events; output services are implemented as functions.",
             "Interface implementations reuse existing Functions/state.",
             "No inventory Array was moved into the Interface asset."
           ],
@@ -4594,54 +4617,54 @@ window.UE5_SKILL_MISSIONS = {
               "see": "The pickup asks whether the interacting Actor supports the services it needs."
             },
             {
-              "title": "Add the item through an Interface Message",
-              "where": "BP_ItemPickup → True branch",
-              "do": "Call PlayerAddItem (Message) from BPI_PlayerGameplay. Target = Interactor. ItemRow = this pickup's ItemRow.",
-              "check": "The item reaches InventoryRows through the Character's Interface implementation.",
-              "why": "The pickup no longer needs access to InventoryRows or a Character reference.",
+              "title": "Validate item data through the Interface first",
+              "where": "BP_ItemPickup → supported-player True branch",
+              "do": "Call PlayerGetItemData (Message) first. Target = Interactor, ItemRow = this pickup's ItemRow. Branch on Found before requesting any inventory change.",
+              "check": "Invalid ItemRow values stop at Found=False and cannot be added to InventoryRows.",
+              "why": "The Interface refactor must preserve the safe validate-before-mutate rule from the corrected Functions mission.",
               "doList": [
-                "From Branch True add PlayerAddItem (Message) from BPI_PlayerGameplay.",
-                "Connect Interactor to PlayerAddItem Target.",
-                "Get the existing ItemRow variable from BP_ItemPickup.",
-                "Connect ItemRow to PlayerAddItem ItemRow.",
-                "Compile.",
-                "Do not access InventoryRows directly in BP_ItemPickup."
+                "From the supported-player Branch True add PlayerGetItemData (Message).",
+                "Connect Interactor → PlayerGetItemData Target.",
+                "Connect this pickup's ItemRow → PlayerGetItemData ItemRow.",
+                "After the message add a Branch.",
+                "Connect the returned Found Boolean → Branch Condition.",
+                "Keep ItemData available for the success path.",
+                "Leave Found False without PlayerAddItem or Destroy Actor.",
+                "Compile."
               ],
-              "see": "The item reaches InventoryRows through the Character's Interface implementation."
+              "see": "Invalid ItemRow values stop at Found=False and cannot be added to InventoryRows."
             },
             {
-              "title": "Request item data through the Interface",
-              "where": "BP_ItemPickup → after PlayerAddItem",
-              "do": "Call PlayerGetItemData (Message). Target = Interactor, ItemRow = this pickup's ItemRow. On Found = True, Break ST_ItemData → Print PickupMessage.",
-              "check": "The same Data Table message from Mission 2 still appears when collected.",
-              "why": "Data remains centralised while communication becomes decoupled.",
+              "title": "Add the valid item through an Interface Message",
+              "where": "BP_ItemPickup → PlayerGetItemData → Found True",
+              "do": "Only from Found=True, call PlayerAddItem (Message). Target = Interactor, ItemRow = this pickup's ItemRow.",
+              "check": "The item reaches InventoryRows only after its row has been validated.",
+              "why": "The pickup remains decoupled without allowing invalid IDs into the player's state.",
               "doList": [
-                "After PlayerAddItem (Message), add PlayerGetItemData (Message).",
-                "Connect Interactor to PlayerGetItemData Target.",
-                "Connect the same ItemRow variable to PlayerGetItemData ItemRow.",
-                "Use the returned Found Boolean with a Branch if your message node provides it as data after execution.",
-                "From ItemData add Break ST_ItemData.",
-                "From Break ST_ItemData take PickupMessage.",
-                "Convert Text to String only if Print String requires it in your graph.",
-                "Print the PickupMessage on the successful Found path."
+                "From the Found=True Branch output add PlayerAddItem (Message).",
+                "Connect Interactor → PlayerAddItem Target.",
+                "Connect the same ItemRow variable → PlayerAddItem ItemRow.",
+                "Do not access InventoryRows directly in BP_ItemPickup.",
+                "Compile."
               ],
-              "see": "The same Data Table message from Mission 2 still appears when collected."
+              "see": "The item reaches InventoryRows only after its row has been validated."
             },
             {
               "title": "Destroy only after successful collection",
               "where": "BP_ItemPickup → successful path",
-              "do": "After the item is added/data lookup succeeds, Destroy Actor (Self).",
-              "check": "The pickup disappears only after the interaction reaches a gameplay-capable Interactor.",
-              "why": "Unsupported callers should not accidentally consume pickups.",
+              "do": "After PlayerAddItem, Break the ItemData returned by PlayerGetItemData → PickupMessage → Print String → Destroy Actor (Self).",
+              "check": "Only a supported caller with valid item data can consume the pickup.",
+              "why": "Validation, mutation, feedback and destruction now happen in a safe, predictable order.",
               "doList": [
-                "Continue from the successful item-data path.",
-                "Add Destroy Actor.",
-                "Leave Target as Self.",
-                "Compile.",
-                "Do not destroy the pickup on the unsupported-Interactor/failed path.",
-                "Read the flow: Interact → supported player → PlayerAddItem → PlayerGetItemData → message → Destroy Self."
+                "From the ItemData returned by PlayerGetItemData add Break ST_ItemData.",
+                "Take PickupMessage and feed it to Print String; convert Text→String only if Unreal requires it.",
+                "Connect PlayerAddItem execution output → Print String.",
+                "After Print String add Destroy Actor with Target = Self.",
+                "Leave unsupported-Interactor and Found=False paths without Destroy Actor.",
+                "Compile and Save.",
+                "Read the flow: Interact → BPI_PlayerGameplay supported → PlayerGetItemData → Found? → PlayerAddItem → message → Destroy Self."
               ],
-              "see": "The pickup disappears only after the interaction reaches a gameplay-capable Interactor."
+              "see": "Only a supported caller with valid item data can consume the pickup."
             },
             {
               "title": "Disable the old overlap pickup path",
@@ -4680,16 +4703,23 @@ window.UE5_SKILL_MISSIONS = {
             }
           ],
           "test": [
-            "Walking into pickup does not collect it.",
-            "E collects Battery/Coin/Fuse.",
-            "BP_ItemPickup has no Cast To BP_ThirdPersonCharacter in its new interaction path.",
-            "Correct DT_ItemData messages still appear."
+            "Walking into a pickup no longer collects it after the old overlap path is disabled.",
+            "Looking at a valid pickup and pressing E adds it, prints the correct message and destroys it.",
+            "An invalid ItemRow remains in the level and is not added to inventory.",
+            "BP_ItemPickup contains no Cast To BP_ThirdPersonCharacter in the active interaction path."
           ],
           "doneWhen": "All generic pickups are deliberate E interactions and communicate with the player entirely through Interface contracts.",
           "common": [
             "If E hits the pickup but nothing happens, check BPI_Interactable implementation first, then BPI_PlayerGameplay on the Interactor.",
             "If the trace passes through the pickup, make the mesh or a Query Only collision shape Block Visibility.",
             "Do not type item descriptions back into BP_ItemPickup."
+          ],
+          "flow": [
+            "Interact",
+            "BPI_PlayerGameplay supported",
+            "PlayerGetItemData",
+            "Found → PlayerAddItem",
+            "message + Destroy Self"
           ]
         },
         {
