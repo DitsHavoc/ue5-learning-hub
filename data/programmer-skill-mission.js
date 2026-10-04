@@ -2173,9 +2173,47 @@ window.UE5_SKILL_MISSIONS = {
           "id": "data-only-items",
           "number": 7,
           "title": "Prove New Items Can Be Mostly Data",
-          "goal": "Use BP_ItemPickup to add Coin, Fuse and a brand-new Wrench without creating new item pickup Blueprint classes.",
-          "why": "This is the proof that you have moved from one-off hard-coding to reusable code plus editable content data.",
+          "goal": "Use BP_ItemPickup for the original Battery/ExitKey and for new Coin/Fuse/Wrench content so every pickup follows one reusable path.",
+          "why": "This is the proof that you have moved from one-off pickup classes to reusable code plus editable content data.",
           "steps": [
+            {
+              "title": "Replace the original Battery with BP_ItemPickup",
+              "where": "LV_EscapeRoom → original Battery location",
+              "do": "Place a BP_ItemPickup where the old BP_Battery was, set ItemRow = Battery, then remove the placed BP_Battery instance after the generic version passes.",
+              "check": "The Battery quest item is now a BP_ItemPickup instance driven by the Battery Data Table row.",
+              "why": "Later Function and Interface missions refactor BP_ItemPickup. Leaving BP_Battery in the level would bypass those upgrades.",
+              "doList": [
+                "Stop Play mode and find the placed BP_Battery in LV_EscapeRoom.",
+                "Note its location/mesh presentation.",
+                "Drag BP_ItemPickup into the same area.",
+                "Select the new BP_ItemPickup and set ItemRow = Battery.",
+                "Adjust its placed mesh/material/scale if you want it to resemble the old Battery.",
+                "Press Play and collect the new Battery.",
+                "Confirm Battery collected! appears and I shows the Battery description.",
+                "Stop Play mode.",
+                "Delete the placed BP_Battery instance from LV_EscapeRoom only after the BP_ItemPickup version works."
+              ],
+              "see": "The Battery quest item is now a BP_ItemPickup instance driven by the Battery Data Table row."
+            },
+            {
+              "title": "Replace the original Key with BP_ItemPickup",
+              "where": "LV_EscapeRoom → original BP_Key location",
+              "do": "Place another BP_ItemPickup where BP_Key was, set ItemRow = ExitKey, prove the Exit still works, then remove the placed BP_Key instance.",
+              "check": "The Exit Key is now a BP_ItemPickup instance using ItemRow = ExitKey.",
+              "why": "Both required quest pickups must use the same generic class before later refactors can honestly remove pickup-specific casts/graphs.",
+              "doList": [
+                "Find the placed BP_Key in LV_EscapeRoom.",
+                "Drag or duplicate BP_ItemPickup into the same area.",
+                "Set ItemRow = ExitKey.",
+                "Adjust its placed mesh/material/scale if useful.",
+                "Press Play and collect it.",
+                "Confirm Exit Key collected! appears and I shows Exit Key.",
+                "Run the normal power + ExitKey door check once.",
+                "Stop Play mode.",
+                "Delete the placed BP_Key instance only after the generic replacement works."
+              ],
+              "see": "The Exit Key is now a BP_ItemPickup instance using ItemRow = ExitKey."
+            },
             {
               "title": "Place a Coin instance",
               "where": "LV_EscapeRoom → drag BP_ItemPickup into the level",
@@ -2273,20 +2311,22 @@ window.UE5_SKILL_MISSIONS = {
             }
           ],
           "flow": [
-            "Add/choose table row",
-            "Place same BP_ItemPickup",
+            "Choose DT_ItemData row",
+            "Place BP_ItemPickup",
             "Set ItemRow",
-            "Play",
-            "Correct row data appears"
+            "Validate row",
+            "Collect through shared logic"
           ],
           "test": [
+            "Battery and ExitKey now use BP_ItemPickup rather than placed BP_Battery/BP_Key instances.",
             "Coin works from the generic pickup.",
             "Fuse works from the generic pickup.",
             "Wrench is added without a new pickup Blueprint class.",
-            "A missing row produces the planned error."
+            "A missing row produces the planned error and is not added to inventory."
           ],
-          "doneWhen": "At least three different items use BP_ItemPickup and Wrench was added by changing data plus an instance setting, not by writing a new pickup graph.",
+          "doneWhen": "Every placed pickup used by the Escape Room is BP_ItemPickup with an ItemRow, and new Wrench content required data plus an instance setting rather than a new Blueprint graph.",
           "common": [
+            "Do not delete the old placed Battery/Key until their BP_ItemPickup replacements have been tested.",
             "Save DT_ItemData after adding Wrench.",
             "Type Row Names exactly.",
             "Different meshes are optional; the programming proof is the shared BP_ItemPickup logic."
@@ -2299,6 +2339,23 @@ window.UE5_SKILL_MISSIONS = {
           "goal": "Safely delete the original String Inventory and ItemDescriptions Map after proving nothing still depends on them.",
           "why": "A refactor is unfinished if both old and new systems remain active. Duplicate state causes bugs and confuses future work.",
           "steps": [
+            {
+              "title": "Retire the legacy one-off pickup Blueprints",
+              "where": "LV_EscapeRoom + Content Drawer",
+              "do": "Confirm no BP_Battery or BP_Key instances remain in LV_EscapeRoom. Once their BP_ItemPickup replacements work, you may delete the unused BP_Battery and BP_Key assets.",
+              "check": "Every live pickup in the level is BP_ItemPickup; the old one-off classes cannot bypass later Function/Interface refactors.",
+              "why": "Mission 3 and Mission 4 deliberately refactor one generic pickup class. Legacy placed pickups would keep old direct Array access and Character casts alive.",
+              "doList": [
+                "Open LV_EscapeRoom and use the Outliner search for BP_Battery.",
+                "Confirm there is no placed BP_Battery instance.",
+                "Search the Outliner for BP_Key and confirm there is no placed BP_Key instance.",
+                "Play once and confirm Battery and ExitKey are both collectable through BP_ItemPickup.",
+                "If BP_Battery and BP_Key are no longer referenced anywhere, delete those two old assets from the Content Drawer or leave them clearly unused outside the level.",
+                "Use Fix Up Redirectors if your normal project workflow requires it.",
+                "Compile BP_ItemPickup, BP_Generator, BP_ExitDoor and BP_ThirdPersonCharacter, then Save All."
+              ],
+              "see": "Every live pickup in the level is BP_ItemPickup; the old one-off classes cannot bypass later Function/Interface refactors."
+            },
             {
               "title": "Search for old Inventory use",
               "where": "BP_ThirdPersonCharacter, BP_Battery, BP_Key, BP_Generator, BP_ExitDoor",
@@ -3278,23 +3335,22 @@ window.UE5_SKILL_MISSIONS = {
               "see": "Valid items add, show their message and disappear; invalid rows remain and never enter inventory."
             },
             {
-              "title": "Test three rows",
+              "title": "Test quest and optional rows",
               "where": "LV_EscapeRoom → Play",
-              "do": "Collect Coin, Fuse and Wrench generic pickup instances. Press I afterwards.",
-              "check": "All three use correct messages/data and the inventory contains no duplicates.",
-              "why": "A generic caller is only useful if the Functions work with several different inputs.",
+              "do": "Collect Battery, ExitKey, Coin, Fuse and Wrench as BP_ItemPickup instances, then press I.",
+              "check": "The shared BP_ItemPickup Functions work for both required quest items and optional data-only items.",
+              "why": "Mission 4 will convert BP_ItemPickup once; this proves that one class really owns every pickup before the Interface refactor.",
               "doList": [
                 "Return to LV_EscapeRoom.",
-                "Make sure you have BP_ItemPickup instances set to Coin, Fuse and Wrench.",
-                "Press Play.",
-                "Collect Coin and confirm the correct message.",
-                "Collect Fuse and confirm the correct message.",
-                "Collect Wrench and confirm the correct message.",
-                "Press I.",
-                "Confirm PrintInventory shows all three with their Data Table descriptions.",
-                "If one fails, check that placed instance ItemRow exactly matches a DT_ItemData row name."
+                "Confirm Battery and ExitKey are BP_ItemPickup instances with ItemRow = Battery / ExitKey.",
+                "Keep Coin, Fuse and Wrench BP_ItemPickup instances available too.",
+                "Press Play and collect Battery; confirm the correct message.",
+                "Collect ExitKey; confirm the correct message.",
+                "Collect Coin, Fuse and Wrench.",
+                "Press I and confirm PrintInventory shows all currently owned rows with their Data Table descriptions.",
+                "If one fails, check that the placed instance ItemRow exactly matches a DT_ItemData row name."
               ],
-              "see": "All three use correct messages/data and the inventory contains no duplicates."
+              "see": "The shared BP_ItemPickup Functions work for both required quest items and optional data-only items."
             }
           ],
           "flow": [
@@ -3363,21 +3419,21 @@ window.UE5_SKILL_MISSIONS = {
             {
               "title": "Replace Remove Item with RemoveItem",
               "where": "BP_Generator → Battery success path",
-              "do": "Delete direct InventoryRows → Remove Item. Call RemoveItem(Battery) before setting PowerOn True.",
-              "check": "BP_Generator contains no direct InventoryRows Get node.",
-              "why": "Consumption is also handled by the Character's reusable inventory API.",
+              "do": "Delete direct InventoryRows → Remove Item. Call RemoveItem(Battery), then continue to PowerOn=True only when its Removed output is True.",
+              "check": "Generator consumes Battery through RemoveItem and only restores power after a successful removal.",
+              "why": "The Boolean output prevents world state changing if item consumption unexpectedly fails.",
               "doList": [
-                "Find the success path after the Battery Branch True output.",
-                "Disconnect the old InventoryRows → Remove Item Battery node.",
-                "Drag from As BP Third Person Character and search for RemoveItem.",
-                "Place RemoveItem.",
-                "Set RemoveItem ItemRow to Battery.",
-                "Connect Battery Branch True execution → RemoveItem execution input.",
-                "Connect RemoveItem execution output → the existing Set PowerOn True path.",
-                "Delete the old direct Remove Item nodes.",
+                "Find the old direct InventoryRows → Remove Item Battery nodes and disconnect them.",
+                "From the Character reference call RemoveItem with ItemRow = Battery.",
+                "Connect the existing Battery-success execution path → RemoveItem.",
+                "Add a Branch after RemoveItem.",
+                "Connect RemoveItem Removed → Branch Condition.",
+                "Continue to Set PowerOn=True only from Branch True.",
+                "Leave Branch False without restoring power; an optional debug Print String is fine.",
+                "Delete the old direct Remove Item nodes after this path compiles.",
                 "Compile and Save."
               ],
-              "see": "BP_Generator contains no direct InventoryRows Get node."
+              "see": "Generator consumes Battery through RemoveItem and only restores power after a successful removal."
             },
             {
               "title": "Keep Generator-specific behaviour local",
@@ -3646,22 +3702,22 @@ window.UE5_SKILL_MISSIONS = {
             {
               "title": "Consume Fuse and open the door",
               "where": "BP_MaintenanceDoor → Branch True",
-              "do": "Call RemoveItem(Fuse) on the Character. Print String: Maintenance door unlocked! Move the door upward or rotate it using the same simple method you used for the Exit.",
-              "check": "With PowerOn + Fuse, Fuse is removed and the Maintenance Door opens.",
-              "why": "The new puzzle reuses both the condition Function and inventory mutation Function.",
+              "do": "Call RemoveItem(Fuse) on the Character and Branch on Removed. Only Removed=True prints the unlock message and opens the door.",
+              "check": "The Maintenance Door opens only after Fuse removal succeeds.",
+              "why": "The door now respects the same success contract that the later Interface mission will expose.",
               "doList": [
                 "Find Branch True in BP_MaintenanceDoor.",
                 "Drag from As BP Third Person Character and call RemoveItem.",
                 "Set RemoveItem ItemRow to Fuse.",
-                "Connect Branch True execution → RemoveItem.",
-                "After RemoveItem create Print String Maintenance door unlocked!",
-                "Get the door Actor Location or use your existing simple door movement method.",
-                "Move the door upward or rotate it clear of the doorway.",
-                "Connect the success execution path through the movement node.",
+                "Connect the requirement Branch True execution → RemoveItem.",
+                "Add a Branch after RemoveItem and connect Removed → Branch Condition.",
+                "From Removed=True create Print String: Maintenance door unlocked!",
+                "Continue from that True path into the door movement.",
+                "Leave Removed=False without opening the door; optional debug feedback is fine.",
                 "Compile and Save.",
                 "Do not add direct InventoryRows Remove Item nodes; the door must use RemoveItem(Fuse)."
               ],
-              "see": "With PowerOn + Fuse, Fuse is removed and the Maintenance Door opens."
+              "see": "The Maintenance Door opens only after Fuse removal succeeds."
             },
             {
               "title": "Prove the new feature is independent",
@@ -3791,25 +3847,19 @@ window.UE5_SKILL_MISSIONS = {
             {
               "title": "Create one Function independently",
               "where": "BP_ThirdPersonCharacter",
-              "do": "Create ONE extra useful Function without copying this guide node-for-node. Recommended: GetTotalInventoryValue → loop InventoryRows → GetItemData → add each ItemData.Value → return total Integer. Alternative: HasQuestItem, GetInventoryCount or another sensible read-only helper.",
-              "check": "Your Function has a clear name, appropriate inputs/outputs, works in Play and is Pure only if it does not change state.",
-              "why": "Independent adaptation proves you understand what a Function is for rather than only following supplied recipes.",
+              "do": "Create ONE extra useful Function without copying this guide node-for-node. Recommended: GetTotalInventoryValue → loop InventoryRows → GetItemData → add each ItemData.Value → return total Integer. Because GetItemData is Impure, keep GetTotalInventoryValue Impure if you choose that version. Alternatives such as HasQuestItem/GetInventoryCount may be Pure if they only use Pure nodes.",
+              "check": "Your extra Function compiles, uses a Pure/Impure mode compatible with the nodes inside it, and returns the expected result.",
+              "why": "Blueprint Pure functions cannot contain an execution-flow chain; the Function mode must match the implementation.",
               "doList": [
-                "Create a new Function in BP_ThirdPersonCharacter named GetTotalInventoryValue.",
-                "Add an Integer output named TotalValue.",
-                "Create a local Integer variable or accumulator named RunningTotal and start it at 0.",
-                "Get InventoryRows and connect it to a For Each Loop.",
-                "For each Array Element call GetItemData using the row name.",
-                "Branch on GetItemData Found.",
-                "On True, Break ST_ItemData and read Value.",
-                "Add Value to RunningTotal and set RunningTotal to the new amount.",
-                "From For Each Loop Completed, return RunningTotal through TotalValue.",
-                "Compile.",
-                "Temporarily call GetTotalInventoryValue from a keyboard event and Print String the result.",
-                "Collect Coin/Wrench and prove the total changes.",
-                "Remove the temporary keyboard test after the Function works."
+                "Choose one extra helper before building it.",
+                "If you choose GetTotalInventoryValue, create an Integer total, loop InventoryRows, call GetItemData for each row and add ItemData.Value when Found=True.",
+                "Keep GetTotalInventoryValue Impure because it calls the Impure GetItemData Function.",
+                "If you choose a simpler read-only helper such as GetInventoryCount that uses only Pure nodes, it may be marked Pure.",
+                "Compile immediately after setting the Function's Pure/Impure mode.",
+                "Test the helper with at least two inventory states.",
+                "Do not force an Impure call into a Pure Function graph."
               ],
-              "see": "Your Function has a clear name, appropriate inputs/outputs, works in Play and is Pure only if it does not change state."
+              "see": "Your extra Function compiles, uses a Pure/Impure mode compatible with the nodes inside it, and returns the expected result."
             },
             {
               "title": "Explain the before and after",
@@ -4686,20 +4736,20 @@ window.UE5_SKILL_MISSIONS = {
             {
               "title": "Test several ItemRow instances",
               "where": "LV_EscapeRoom → Play",
-              "do": "Test Battery, Coin and Fuse. Look at each → E → verify its correct Data Table PickupMessage and inventory result.",
-              "check": "One Interface implementation works for several data-driven instances.",
-              "why": "The earlier Data Table architecture and new Interface architecture now reinforce each other.",
+              "do": "Test Battery, ExitKey, Coin and Fuse. Look at each → E → verify its correct Data Table PickupMessage and inventory result.",
+              "check": "One Interface implementation works for quest and optional pickup rows.",
+              "why": "The earlier Data Table architecture and new Interface architecture now reinforce each other through one generic pickup class.",
               "doList": [
                 "Place/locate a Battery BP_ItemPickup instance.",
                 "Press Play.",
                 "Walk into it without pressing E; confirm it remains.",
                 "Look at it and press E; confirm Battery is added and the Battery PickupMessage appears.",
-                "Repeat with a Coin instance.",
-                "Repeat with a Fuse instance.",
-                "Press I and confirm the correct items appear in inventory.",
+                "Repeat with an ExitKey BP_ItemPickup instance.",
+                "Repeat with Coin and Fuse instances.",
+                "Press I and confirm the correct currently owned items appear in inventory.",
                 "Stop Play and confirm one generic BP_ItemPickup implementation handled every row."
               ],
-              "see": "One Interface implementation works for several data-driven instances."
+              "see": "One Interface implementation works for quest and optional pickup rows."
             }
           ],
           "test": [
