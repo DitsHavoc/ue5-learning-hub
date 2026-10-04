@@ -1,5 +1,5 @@
 window.UE5_CPP_SKILL_MISSIONS = {
-  "version": "3.59.1",
+  "version": "3.59.8",
   "title": "Unreal C++ Programmer Path",
   "summary": "A cumulative Level 4 Unreal C++ pathway for complete beginners. Every code-bearing step now gives an exact file, class/function/section, ADD/REPLACE/EDIT instruction, placement anchor and compile/build instruction before students type. The project progresses from toolchain to collectible, door, inventory and reusable component/events without leaving intentional linker gaps.",
   "planned": [
@@ -588,13 +588,34 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 "Choose Actor.",
                 "Click Next.",
                 "Name the class SetupProbe.",
-                "Keep the default game module/location.",
+                "Keep the default L4CppTraining game module/location.",
                 "Click Create Class.",
-                "Wait for Unreal/Live Coding and Visual Studio to update.",
-                "Find SetupProbe.h and SetupProbe.cpp in Solution Explorer."
+                "Wait until SetupProbe.h and SetupProbe.cpp have been generated and Visual Studio can open them.",
+                "Do not edit the generated class yet.",
+                "Treat any automatic Live Coding result as provisional only; the next step performs the known-good full registration build."
               ],
-              "check": "ASetupProbe exists as a generated AActor class.",
-              "why": "The Wizard creates the boilerplate and updates the module for you."
+              "check": "SetupProbe.h and SetupProbe.cpp have been generated in Source/L4CppTraining.",
+              "why": "The Wizard creates the source/reflection boilerplate, but source files existing on disk is not yet the same proof as Unreal loading the native class."
+            },
+            {
+              "title": "Register the untouched class with Unreal",
+              "where": "Visual Studio → Development Editor / Win64, then Unreal Editor",
+              "doList": [
+                "Save All in Visual Studio.",
+                "Close Unreal Editor completely.",
+                "In Visual Studio set Solution Configuration = Development Editor and Platform = Win64.",
+                "In Solution Explorer under Games, right-click L4CppTraining and choose Build.",
+                "Watch Output and wait for Build succeeded / 0 failed. If it fails, stop on the FIRST useful compiler/build error and do not continue.",
+                "Reopen L4CppTraining.uproject.",
+                "Open the Content Drawer and open its Settings menu.",
+                "Enable Show C++ Classes. If the Sources panel is hidden, enable Show Sources Panel too.",
+                "In the Sources panel open C++ Classes → L4CppTraining and find SetupProbe.",
+                "If SetupProbe is not visible there, open Tools → Class Viewer and search SetupProbe.",
+                "If neither C++ Classes nor Class Viewer can find SetupProbe after a 0-failed build/restart, stop and diagnose registration/build state before writing gameplay code."
+              ],
+              "check": "SetupProbe is discoverable as a native C++ class in Unreal after a successful full build/restart.",
+              "why": "A native C++ class is not a normal .uasset inside Content. Proving it appears under C++ Classes or Class Viewer confirms Unreal actually loaded the compiled class.",
+              "codeGuide": null
             },
             {
               "title": "Read the generated structure",
@@ -688,13 +709,17 @@ window.UE5_CPP_SKILL_MISSIONS = {
           "test": [
             "SetupProbe.h exists.",
             "SetupProbe.cpp exists.",
+            "A full Development Editor / Win64 build succeeds with 0 failed.",
+            "SetupProbe appears under C++ Classes/L4CppTraining or in Class Viewer.",
             "ASetupProbe derives from AActor.",
             "You can explain header versus .cpp."
           ],
-          "doneWhen": "Your first authored Unreal C++ class exists and its structure is readable.",
+          "doneWhen": "Your first authored Unreal C++ class is generated, fully built, loaded by Unreal and visible as a native class before you edit it.",
           "common": [
             "Class names cannot contain spaces.",
-            "Do not move includes below SetupProbe.generated.h."
+            "Do not move includes below SetupProbe.generated.h.",
+            "Do not look only inside the normal Content folder for a native class; enable Show C++ Classes or use Class Viewer.",
+            "Do not create SetupProbe a second time because it is not visible. First prove the full build/restart succeeded."
           ]
         },
         {
@@ -1104,6 +1129,9 @@ window.UE5_CPP_SKILL_MISSIONS = {
           ],
           "doneWhen": "You can make and verify a small .cpp-only code change efficiently.",
           "common": [
+            "Use Live Coding for implementation-only .cpp edits after the class has already passed a normal full build.",
+            "Do not use Live Coding as the proof that a brand-new UCLASS/UActorComponent is registered.",
+            "For UCLASS/USTRUCT/UENUM/UFUNCTION/UPROPERTY signature or reflected header changes, the beginner-safe route is save → close Unreal → Development Editor / Win64 full Build → reopen.",
             "Do not run Visual Studio Build and Live Coding simultaneously.",
             "If the Editor behaves as if old code is still loaded, use the safe close → full Build → reopen route."
           ]
@@ -1400,36 +1428,47 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 "Choose Actor.",
                 "Click Next.",
                 "Name it TrainingPickup.",
-                "Keep the default L4CppTraining module/location.",
+                "Keep the default L4CppTraining game module/location.",
                 "Click Create Class.",
-                "Wait for Visual Studio/Live Coding to update.",
-                "Open TrainingPickup.h and TrainingPickup.cpp."
+                "Wait until TrainingPickup.h and TrainingPickup.cpp exist and open in Visual Studio.",
+                "Do not add components/properties yet."
               ],
-              "check": "A generated ATrainingPickup class exists.",
-              "why": "The Wizard handles UCLASS/generated header/module plumbing."
+              "check": "TrainingPickup.h/.cpp exist in the L4CppTraining module.",
+              "why": "The Wizard creates the UCLASS source files; the next step proves Unreal has actually loaded the compiled class."
             },
             {
-              "title": "Compile before changing it",
-              "where": "Unreal / Visual Studio",
+              "title": "Full build and prove the native class is visible",
+              "where": "Visual Studio → Unreal Content Drawer / Class Viewer",
               "doList": [
                 "Save the untouched generated files.",
-                "Compile once using Live Coding if Unreal has created/loaded the class normally.",
-                "If the class does not appear correctly, close Unreal and full Build Development Editor / Win64.",
-                "Reopen Unreal and confirm TrainingPickup appears under C++ Classes."
+                "Close Unreal Editor completely.",
+                "Select Development Editor / Win64 in Visual Studio.",
+                "Right-click L4CppTraining under Games in Solution Explorer → Build.",
+                "Wait for Build succeeded / 0 failed.",
+                "Reopen the L4CppTraining project.",
+                "Content Drawer → Settings → enable Show C++ Classes.",
+                "Open C++ Classes → L4CppTraining and find TrainingPickup.",
+                "If it is not listed there, Tools → Class Viewer → search TrainingPickup.",
+                "Only continue when Unreal can see ATrainingPickup.",
+                "If it is still missing, do not make a duplicate class and do not start editing components—capture the first build/module error instead."
               ],
-              "check": "The untouched class compiles and is visible to Unreal.",
-              "why": "This makes the generated class your new known-good checkpoint."
+              "check": "ATrainingPickup builds with 0 failed and is visible to Unreal as a native class.",
+              "why": "New UCLASS registration is a structural step. A full Editor build/restart gives beginners a deterministic checkpoint before Live Coding is used for later implementation-only edits."
             }
           ],
           "test": [
             "TrainingPickup.h/.cpp exist.",
             "ATrainingPickup derives from AActor.",
-            "The untouched class compiles."
+            "Development Editor / Win64 builds with 0 failed.",
+            "TrainingPickup appears under C++ Classes/L4CppTraining or Class Viewer."
           ],
-          "doneWhen": "The new gameplay class is recognised by Unreal.",
+          "doneWhen": "The untouched ATrainingPickup class is compiled, registered and visible in Unreal.",
           "common": [
-            "Do not add all components and overlap code before the generated class has compiled once.",
-            "If class creation fails, use the first Wizard/Build error rather than editing random module files."
+            "Do not add all components and overlap code before the generated class has passed this registration build.",
+            "A native C++ class does not appear as a normal Content .uasset.",
+            "If C++ Classes is missing, Content Drawer → Settings → Show C++ Classes.",
+            "If the source files exist but Unreal cannot find the class, do not create it again—fix the build/load state first.",
+            "Use the first Wizard/Build error rather than editing random module files."
           ]
         },
         {
@@ -2747,18 +2786,22 @@ window.UE5_CPP_SKILL_MISSIONS = {
           "steps": [
             {
               "title": "Create BP_TrainingPickup",
-              "where": "Content Drawer",
+              "where": "Content Drawer → C++ Classes/L4CppTraining (or Tools → Class Viewer)",
               "doList": [
-                "Create a Blueprint class based on TrainingPickup.",
-                "Name it BP_TrainingPickup.",
+                "In the Content Drawer open Settings and ensure Show C++ Classes is enabled.",
+                "Open C++ Classes → L4CppTraining and find TrainingPickup.",
+                "If the native class is not there, use Tools → Class Viewer and search TrainingPickup. If neither finds it, stop and return to the class registration/full-build step.",
+                "Right-click TrainingPickup and choose Create Blueprint class based on TrainingPickup (or use Create Blueprint from Class Viewer).",
+                "Save the new Blueprint in your normal project Content folder and name it BP_TrainingPickup.",
+                "Open BP_TrainingPickup.",
                 "Assign a clear mesh/material to inherited Mesh.",
                 "Set default RotationSpeed to 120.",
                 "Set ItemValue to 25.",
                 "Compile/Save the Blueprint.",
                 "Do not recreate Tick or overlap logic in its Event Graph."
               ],
-              "check": "The Blueprint child is configured but contains no duplicate core gameplay graph.",
-              "why": "Presentation/tuning belongs in Blueprint while the system remains native."
+              "check": "BP_TrainingPickup is a normal Content .uasset whose parent is the registered native ATrainingPickup class.",
+              "why": "The native C++ class lives in the compiled module; the Blueprint child is the Content asset used for presentation/tuning."
             },
             {
               "title": "Test inheritance",
@@ -3020,12 +3063,18 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 "Choose Actor.",
                 "Name it TrainingDoor.",
                 "Create Class.",
-                "Wait for project update.",
-                "Open TrainingDoor.h/.cpp.",
-                "Compile the untouched class before editing."
+                "Wait for TrainingDoor.h/.cpp to be generated and open them in Visual Studio.",
+                "Do not edit the generated class yet.",
+                "Save All and close Unreal Editor.",
+                "Set Visual Studio to Development Editor / Win64.",
+                "Build L4CppTraining and wait for 0 failed.",
+                "Reopen Unreal.",
+                "Content Drawer → Settings → Show C++ Classes.",
+                "Confirm TrainingDoor appears in C++ Classes → L4CppTraining or search TrainingDoor in Tools → Class Viewer.",
+                "Only then continue to read/add the door functions."
               ],
-              "check": "ATrainingDoor exists and compiles.",
-              "why": "The generated baseline isolates later authored-code errors."
+              "check": "ATrainingDoor compiles with 0 failed and Unreal can find the native class.",
+              "why": "This isolates class registration/toolchain problems before any authored door code is added."
             },
             {
               "title": "Read three function signatures",
@@ -3041,14 +3090,18 @@ window.UE5_CPP_SKILL_MISSIONS = {
             }
           ],
           "test": [
-            "TrainingDoor compiles untouched.",
+            "TrainingDoor.h/.cpp exist.",
+            "ATrainingDoor builds untouched with 0 failed.",
+            "TrainingDoor is visible under C++ Classes/L4CppTraining or Class Viewer.",
             "You can explain bool versus void.",
             "You can identify a function parameter."
           ],
           "doneWhen": "You can read the function shapes before implementing them.",
           "common": [
             "Do not confuse the semicolon-ended header declaration with the brace-bodied .cpp implementation.",
-            "const after the parentheses is about the member function, not about a local variable."
+            "const after the parentheses is about the member function, not about a local variable.",
+            "Do not rely on normal Content-folder browsing to prove a native class exists.",
+            "If TrainingDoor is missing after restart, return to the full build output before editing or recreating the class."
           ]
         },
         {
@@ -5370,14 +5423,21 @@ window.UE5_CPP_SKILL_MISSIONS = {
               "where": "Unreal Editor → Tools → New C++ Class",
               "doList": [
                 "Choose Actor Component if shown in Common Classes.",
-                "If not, use Show All Classes and search ActorComponent.",
+                "If not, use All Classes and search ActorComponent.",
                 "Name the class InventoryComponent.",
-                "Create it in the project module.",
-                "Open InventoryComponent.h/.cpp.",
-                "Compile the untouched generated class."
+                "Create it in the L4CppTraining project module.",
+                "Wait for InventoryComponent.h/.cpp to be generated and open them in Visual Studio.",
+                "Do not edit the generated class yet.",
+                "Save All and close Unreal Editor.",
+                "Set Development Editor / Win64.",
+                "Build L4CppTraining and wait for 0 failed.",
+                "Reopen Unreal.",
+                "Content Drawer → Settings → Show C++ Classes.",
+                "Confirm InventoryComponent appears under C++ Classes → L4CppTraining or in Tools → Class Viewer.",
+                "Only then edit the component constructor."
               ],
-              "check": "UInventoryComponent exists and compiles.",
-              "why": "Start from a clean generated component baseline."
+              "check": "UInventoryComponent builds untouched with 0 failed and is registered with Unreal.",
+              "why": "A clean registration build separates native component/toolchain problems from the inventory logic added afterwards."
             },
             {
               "title": "Disable unnecessary component Tick",
@@ -5420,14 +5480,17 @@ window.UE5_CPP_SKILL_MISSIONS = {
             }
           ],
           "test": [
-            "UInventoryComponent compiles.",
-            "It derives from UActorComponent.",
-            "Tick is disabled."
+            "InventoryComponent.h/.cpp exist.",
+            "UInventoryComponent derives from UActorComponent.",
+            "The untouched class full-builds with 0 failed and appears in Unreal's native class views.",
+            "Tick is disabled after the constructor edit."
           ],
           "doneWhen": "The reusable component class exists.",
           "common": [
             "Do not choose SceneComponent—inventory has no position/rotation.",
-            "Do not create a separate Inventory Actor just to store non-spatial behaviour."
+            "Do not create a separate Inventory Actor just to store non-spatial behaviour.",
+            "Do not expect InventoryComponent to appear as an ordinary .uasset in Content.",
+            "If the native component class is absent after restart, fix the full build/load state before continuing."
           ]
         },
         {
