@@ -1,5 +1,5 @@
 window.LEVEL4_SPECIALIST_PROJECTS = {
-  version: '3.59.1',
+  version: '3.60.0',
   intro: {
     title: 'Level 4 Specialist Projects',
     kicker: 'Choose ONE pathway',
@@ -855,10 +855,10 @@ window.LEVEL4_SPECIALIST_PROJECTS = {
       stretch:'After all four missions, add one new interactable puzzle object using the data-driven, reusable and Interface-based systems without editing the universal Character interaction caller.'
     },
     {
-      id:'unreal-cpp-programming', icon:'C++', title:'Unreal C++ Skill Missions', role:'Gameplay Programming — C++', time:'Cumulative guided pathway',
-      href:'#/cpp-mission/cpp-setup/start',
-      strap:'Complete-newbie C++ pathway with exact code placement: every coding step tells students the file, function/section, ADD/REPLACE action, precise insertion point and build method.',
-      outcome:'A cumulative Unreal C++ gameplay project for complete beginners. Missions 0–4 now use a consistent code-placement system: FILE → FIND → CHANGE → PLACE IT HERE → THEN DO THIS. Students build ASetupProbe, ATrainingPickup, ATrainingDoor, a TArray<FName> key inventory, then refactor it into UInventoryComponent with events—without being expected to guess where code belongs.'
+      id:'unreal-cpp-programming', icon:'C++', title:'Unreal C++ Programmer Path', role:'Gameplay Programming — C++', time:'Standalone cumulative pathway',
+      href:'#/cpp-path',
+      strap:'Start fresh in a new L4CppTraining project. Blueprint is recommended preparation, not a prerequisite; the C++ route stands alone and rebuilds familiar programming ideas natively.',
+      outcome:'A standalone Unreal C++ gameplay pathway for complete beginners. Students create a brand-new Third Person C++ project named L4CppTraining, prove the toolchain, then build ASetupProbe, ATrainingPickup, ATrainingDoor, a TArray<FName> inventory and UInventoryComponent with events. Blueprint concepts transfer; the Blueprint Escape Room project does not.'
     }
   ]
 };
