@@ -1,7 +1,43 @@
 window.UE5_CPP_SKILL_MISSIONS = {
-  "version": "3.59.8",
-  "title": "Unreal C++ Programmer Path",
-  "summary": "A cumulative Level 4 Unreal C++ pathway for complete beginners. Every code-bearing step now gives an exact file, class/function/section, ADD/REPLACE/EDIT instruction, placement anchor and compile/build instruction before students type. The project progresses from toolchain to collectible, door, inventory and reusable component/events without leaving intentional linker gaps.",
+  "version": "3.60.0",
+  "title": "Unreal C++ Programmer Path — Fresh Project",
+  "summary": "A standalone Level 4 Unreal C++ pathway for complete beginners. Blueprint knowledge is useful preparation, but this route starts from a brand-new C++ Third Person project named L4CppTraining and does not continue or depend on the Blueprint Escape Room.",
+  "entry": {
+    "kicker": "LEVEL 4 • STANDALONE SPECIALIST PATHWAY",
+    "title": "Unreal C++ — Start Fresh",
+    "summary": "Bring the ideas you learned in Blueprint if you have them, but leave the Blueprint project behind. C++ begins in a new project so every student starts from the same known state and every build problem is easier to diagnose.",
+    "required": "No Blueprint mission completion is required.",
+    "recommended": "The Blueprint Programmer Skill Missions are recommended preparation because they introduce variables, arrays, functions, data and Interfaces visually first.",
+    "project": "L4CppTraining",
+    "template": "Games → Third Person → C++",
+    "rule": "Do not open, convert or continue the EscapeRoom project for this pathway.",
+    "bridge": [
+      {
+        "from": "Blueprint Variables",
+        "to": "C++ properties and member variables"
+      },
+      {
+        "from": "Blueprint Functions",
+        "to": "C++ function declarations and implementations"
+      },
+      {
+        "from": "Blueprint Arrays",
+        "to": "TArray"
+      },
+      {
+        "from": "Blueprint Branches",
+        "to": "if / return decisions"
+      },
+      {
+        "from": "Blueprint Components",
+        "to": "native Actor Components"
+      },
+      {
+        "from": "Blueprint Events",
+        "to": "delegates, callbacks and Unreal lifecycle functions"
+      }
+    ]
+  },
   "planned": [
     "Mission 0 — Toolchain + Your First Working C++",
     "Mission 1 — Core Gameplay Actor: C++ Collectible",
@@ -22,10 +58,10 @@ window.UE5_CPP_SKILL_MISSIONS = {
       "discipline": "Unreal C++",
       "icon": "C++",
       "title": "Toolchain + Your First Working C++",
-      "subtitle": "Set up Visual Studio correctly, understand the Unreal C++ file/build workflow, then prove the whole toolchain by creating ASetupProbe, exposing a real C++ variable and printing it from BeginPlay.",
+      "subtitle": "Start a completely new C++ Third Person project named L4CppTraining, set up Visual Studio correctly, learn the Unreal C++ build workflow, then prove the toolchain with ASetupProbe. Nothing from the Blueprint Escape Room is copied into this project.",
       "duration": "90 minutes–2 hours",
       "difficulty": "Absolute beginner",
-      "summary": "This is no longer only an installation checklist. You will verify Visual Studio, create L4CppTraining, learn where C++ lives, build the untouched project, then write and run a tiny Unreal Actor class. By the end you will have edited a header, edited a .cpp file, compiled, placed the Actor, changed an editor-exposed value, read UE_LOG output and fixed a real compiler error.",
+      "summary": "This pathway starts from zero in a fresh project. You will verify Visual Studio, create a new C++ Third Person project named L4CppTraining, learn where native code lives, full-build the untouched project, then write and run a tiny Unreal Actor class. Blueprint experience helps with the concepts, but no Blueprint project files are required.",
       "guideRule": "Work like a programmer from the first lesson: understand the small system, predict what the code should do, type it yourself, compile after each change and use the first useful error as evidence.",
       "skills": [
         "Visual Studio Installer",
@@ -44,7 +80,9 @@ window.UE5_CPP_SKILL_MISSIONS = {
         "Compiler errors"
       ],
       "rules": [
-        "Use one project for the whole pathway: L4CppTraining.",
+        "START FRESH: create a new C++ project named L4CppTraining. Do not continue or convert the Blueprint EscapeRoom project.",
+        "Use one project for the whole C++ pathway: L4CppTraining.",
+        "Blueprint Programmer missions are recommended preparation, not a technical prerequisite.",
         "Do not skip a READ THIS CODE box. New C++ punctuation/operators are explained at first use so you are never expected to guess what a symbol means.",
         "Type the code shown in the guide. Do not paste an entire finished file and hope it works.",
         "Compile after each code checkpoint so one error has one likely cause.",
@@ -53,6 +91,7 @@ window.UE5_CPP_SKILL_MISSIONS = {
         "If STOP & TEST fails, do not unlock the next stage."
       ],
       "gameFlow": [
+        "NEW PROJECT",
         "Toolchain",
         "L4CppTraining",
         "First full Build",
@@ -87,6 +126,7 @@ window.UE5_CPP_SKILL_MISSIONS = {
           "why": "The hardest part for a first-time Unreal C++ student is often not syntax. It is knowing which program to use, when to compile and how to tell whether the code actually ran.",
           "concept": "Unreal C++ development is one project viewed through two main tools. Unreal Editor owns levels, assets and play-testing. Visual Studio owns the source code and compiler workflow. The project only becomes useful when the two agree.",
           "practical": [
+            "You are starting a separate project named L4CppTraining; EscapeRoom is not opened or converted.",
             "You will keep Unreal and Visual Studio as two parts of the same L4CppTraining project.",
             "Every later C++ mission will use the same compile/test loop.",
             "You will deliberately use Output/Build messages as evidence rather than guessing."
@@ -147,13 +187,15 @@ window.UE5_CPP_SKILL_MISSIONS = {
           "test": [
             "You can explain the role of Unreal Editor.",
             "You can explain the role of Visual Studio.",
-            "You can state the edit → build → test loop."
+            "You can state the edit → build → test loop.",
+            "You can state that this C++ pathway uses L4CppTraining, not the Blueprint EscapeRoom."
           ],
           "doneWhen": "The workflow makes sense before you install or write anything.",
           "common": [
             "Do not create several versions of the project just because a build fails.",
             "Do not treat red IntelliSense squiggles as more authoritative than the actual compiler result while Visual Studio is still indexing."
-          ]
+          ],
+          "bridge": "Blueprint taught you the gameplay ideas visually. C++ now rebuilds those ideas in a new project using source files, types, functions and compiler feedback. Conceptual continuation: yes. Project continuation: no."
         },
         {
           "id": "vs-installer",
@@ -297,7 +339,7 @@ window.UE5_CPP_SKILL_MISSIONS = {
         {
           "id": "create-project",
           "number": 3,
-          "title": "Create the One Project: L4CppTraining",
+          "title": "Create the Fresh C++ Project: L4CppTraining",
           "goal": "Create the Third Person C++ project that every mission in this pathway will extend.",
           "why": "The Third Person C++ template gives every student the same playable Character, camera, input and GameMode. That makes later collision, inventory, door and interaction tutorials predictable.",
           "concept": "A C++ Unreal template is a starting project with working systems already wired. The Third Person template includes a controllable Character. You will learn by extending that working codebase rather than spending the first lessons rebuilding movement/input.",
@@ -336,7 +378,8 @@ window.UE5_CPP_SKILL_MISSIONS = {
               "title": "Create the project",
               "where": "Unreal Engine 5.8 → Project Browser → Games → Third Person",
               "doList": [
-                "Choose Games.",
+                "If the Blueprint EscapeRoom project is open, close it. This C++ pathway does not continue that project.",
+                "From the Unreal Project Browser choose Games.",
                 "Choose the Third Person template.",
                 "Choose C++ as the project type/programming language where shown.",
                 "Use Desktop/normal college target settings.",
@@ -344,10 +387,11 @@ window.UE5_CPP_SKILL_MISSIONS = {
                 "Set the location chosen earlier.",
                 "Name the project exactly L4CppTraining.",
                 "Click Create and wait for generation/build tasks to finish.",
-                "When the Editor opens, press Play.",
+                "When the Editor opens, check the project title/path says L4CppTraining.",
+                "Press Play.",
                 "Move/jump with the template controls and confirm the Character/camera work before continuing."
               ],
-              "check": "L4CppTraining opens as a Third Person C++ project and the generated Character is playable.",
+              "check": "A brand-new L4CppTraining Third Person C++ project is open and playable; it is not the Blueprint EscapeRoom.",
               "why": "This gives every later mission the same known-good player code to build on."
             },
             {
@@ -365,11 +409,11 @@ window.UE5_CPP_SKILL_MISSIONS = {
           ],
           "test": [
             "The project is called L4CppTraining.",
-            "It was created from Third Person + C++.",
+            "It was created as a new Third Person + C++ project, not by converting EscapeRoom.",
             "The template Character can move/jump in Play mode.",
             "A Source/L4CppTraining module and L4CppTrainingCharacter source files exist."
           ],
-          "doneWhen": "The cumulative C++ training project exists with a working native Third Person Character.",
+          "doneWhen": "The standalone C++ training project exists with a working native Third Person Character and no dependency on the Blueprint EscapeRoom.",
           "common": [
             "The first C++ project creation can take longer than a Blueprint-only project.",
             "If creation fails, capture the first meaningful build error rather than the final cascade."
@@ -1251,7 +1295,7 @@ window.UE5_CPP_SKILL_MISSIONS = {
       "discipline": "Unreal C++",
       "icon": "C++",
       "title": "Core Gameplay Actor — Build a C++ Collectible",
-      "subtitle": "Continue L4CppTraining and build a real collectible Actor entirely from C++ foundations: component hierarchy, editable data, per-frame rotation, overlap collision, delegate binding, condition checks, a Character cast, collection state, logging and a Blueprint child.",
+      "subtitle": "Continue the standalone L4CppTraining project and build a real collectible Actor entirely from C++ foundations: component hierarchy, editable data, per-frame rotation, overlap collision, delegate binding, condition checks, a Character cast, collection state, logging and a Blueprint child.",
       "duration": "3–4 hours",
       "difficulty": "Guided beginner gameplay code",
       "summary": "Mission 1 now behaves like a small gameplay-programming chapter rather than a syntax demo. You will plan the collection algorithm, review the class responsibilities, then build ATrainingPickup in layers. The finished object spins, detects a player overlap, checks state/type, logs who collected it and its value, and destroys itself. Blueprint is used to assign presentation/tuning—not to replace the native gameplay logic.",
@@ -1383,9 +1427,11 @@ window.UE5_CPP_SKILL_MISSIONS = {
           ],
           "doneWhen": "You know what the class must own and what event makes collection happen.",
           "common": [
+            "Stay in L4CppTraining. Do not copy Blueprints/assets from the EscapeRoom tutorial to make this mission work.",
             "Do not start by searching for a giant finished pickup class online.",
             "If you cannot describe what triggers collection, revisit the algorithm before coding."
-          ]
+          ],
+          "bridge": "Blueprint connection: an Actor Blueprint can own Components, editable variables and Event logic. Here you build the same class responsibilities natively with an AActor header/.cpp pair, UPROPERTY data, components, Tick and an overlap callback."
         },
         {
           "id": "create-class",
@@ -2889,7 +2935,7 @@ window.UE5_CPP_SKILL_MISSIONS = {
       "discipline": "Unreal C++",
       "icon": "C++",
       "title": "Functions & Decisions — Build a Locked Door",
-      "subtitle": "Continue L4CppTraining by building a native door that detects the player, asks functions whether it can open, changes state, moves only its mesh, closes when the player leaves, and exposes a C++ SetLocked function to Blueprint.",
+      "subtitle": "Continue the standalone L4CppTraining project by building a native door that detects the player, asks functions whether it can open, changes state, moves only its mesh, closes when the player leaves, and exposes a C++ SetLocked function to Blueprint.",
       "duration": "3–4 hours",
       "difficulty": "Guided beginner gameplay logic",
       "summary": "Mission 1 taught you how an Actor owns components/data and reacts to an event. Mission 2 makes the code more organised. You will build ATrainingDoor and separate the mechanic into small functions: CanOpenDoor, OpenDoor, CloseDoor and SetLocked. Along the way you will learn return types, parameters, const member functions, &&, the ternary operator, FVector arithmetic and why a good function should have one clear job.",
@@ -3015,9 +3061,11 @@ window.UE5_CPP_SKILL_MISSIONS = {
           ],
           "doneWhen": "The mechanic has been decomposed before code is added.",
           "common": [
+            "Stay in L4CppTraining. Do not copy Blueprints/assets from the EscapeRoom tutorial to make this mission work.",
             "Do not start with animation/Timeline complexity; first make the state/decision structure correct.",
             "Do not move the entire Actor if the trigger needs to remain around the doorway."
-          ]
+          ],
+          "bridge": "Blueprint connection: reusable Blueprint Functions and Branches become typed C++ function declarations/definitions, bool return values and if/return decisions. The mechanic is familiar; the expression of it is now code."
         },
         {
           "id": "create-class",
@@ -4101,7 +4149,7 @@ window.UE5_CPP_SKILL_MISSIONS = {
       "discipline": "Unreal C++",
       "icon": "C++",
       "title": "Arrays & Inventory — Collect a Key, Unlock the Door",
-      "subtitle": "Upgrade the same project into a connected gameplay system: add a TArray<FName> inventory to AL4CppTrainingCharacter, refactor TrainingPickup to add ItemIds, and make TrainingDoor require ExitKey before it unlocks.",
+      "subtitle": "Upgrade the standalone L4CppTraining project into a connected gameplay system: add a TArray<FName> inventory to AL4CppTrainingCharacter, refactor TrainingPickup to add ItemIds, and make TrainingDoor require ExitKey before it unlocks.",
       "duration": "4–5 hours",
       "difficulty": "Guided cumulative gameplay system",
       "summary": "This mission connects the classes you already built. The Third Person Character becomes the owner of a simple inventory array. TrainingPickup stops merely logging collection and actually adds an FName item. TrainingDoor checks that inventory for a required key. You will learn TArray, FName, AddUnique, Contains, Remove, Num, range-based for loops, equality/greater-than comparisons and cross-class function calls.",
@@ -4227,9 +4275,11 @@ window.UE5_CPP_SKILL_MISSIONS = {
           ],
           "doneWhen": "The inventory architecture makes sense before code changes.",
           "common": [
+            "Stay in L4CppTraining. Do not copy Blueprints/assets from the EscapeRoom tutorial to make this mission work.",
             "Do not create TArray inventories on every Actor that needs to know about items.",
             "Do not jump to a full item struct/count/UI system yet; this mission is about arrays and communication."
-          ]
+          ],
+          "bridge": "Blueprint connection: the Name Array and HasItem/AddItem/RemoveItem ideas map directly to TArray<FName> plus small Character functions. You are learning the native version inside L4CppTraining, not importing the Blueprint inventory."
         },
         {
           "id": "array-header",
@@ -5376,9 +5426,11 @@ window.UE5_CPP_SKILL_MISSIONS = {
           ],
           "doneWhen": "You have a clear safe refactor plan.",
           "common": [
+            "Stay in L4CppTraining. Do not copy Blueprints/assets from the EscapeRoom tutorial to make this mission work.",
             "Do not rewrite pickup, door and Character simultaneously before the component itself compiles.",
             "Refactoring is not an excuse to change gameplay rules at the same time."
-          ]
+          ],
+          "bridge": "Blueprint connection: moving logic into a reusable Blueprint Component/Interface-like service becomes composition with UActorComponent plus events/delegates. The architecture idea transfers even though the project is separate."
         },
         {
           "id": "create-component",
