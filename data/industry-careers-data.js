@@ -3,7 +3,6 @@ window.UE5_INDUSTRY_CAREERS_DATA = {
   buildDate: '2026-09-10',
   title: 'Find Your Place in the Games Industry',
   subtitle: 'Level 4 • Industry roles, real careers, skills, evidence and your next move',
-  xp: 25,
   passPercent: 80,
   chapters: [
     {
