@@ -23,6 +23,7 @@
   <link rel="stylesheet" href="last-light-studio.css?v=3.55.1">
   <link rel="stylesheet" href="level4-specialist.css?v=3.58.1">
   <link rel="stylesheet" href="skill-missions.css?v=3.60.0">
+  <link rel="stylesheet" href="ux-overhaul.css?v=3.61.0">
 </head>
 <body>
   <div id="bootError" class="boot-error" hidden>
@@ -37,36 +38,29 @@
         <span class="brand-copy"><strong>UE5</strong><small>Learning Hub</small></span>
       </a>
 
-      <nav class="nav" id="mainNav">
-        <a href="#/" data-route="home">⌂ <span>Home</span></a>
+      <nav class="nav ux-nav" id="mainNav">
+        <a href="#/" data-route="home" class="ux-nav-home">⌂ <span>Home</span></a>
         <a href="#/classes" data-route="classes" id="classesNav" class="classes-nav" hidden>🏫 <span id="classesNavLabel">Classes</span><small id="classesNavSub">Students • codes • progress</small></a>
-        <div class="nav-heading">Main areas</div>
-        <a href="#/pathways" data-route="pathways" class="pathways-nav">↠ <span>Guided Paths</span><small>Optional • what to learn next</small></a>
-        <a href="#/programming" data-route="programming" class="programming-nav">⌘ <span>Unreal Learning</span><small>blocks • systems • master guides • recipes</small></a>
-        <a href="#/theory" data-route="theory" class="theory-nav">◈ <span>Game Design Theory</span><small>Players • systems • balance • process</small></a>
-        <a href="#/industry-careers" data-route="industry-careers" class="industry-careers-nav">◎ <span>Industry & Careers</span><small>Level 4 • roles • skills • portfolio</small></a>
-        <a href="#/level4" data-route="level4" class="level4-nav">◆ <span>Level 4 Specialist Projects</span><small>Choose one • art • audio • cinematic • code</small></a>
-        <a href="#/design" data-route="design" class="design-nav">✦ <span>Designer Studio</span><small>Understand • analyse • critique</small></a>
-        <a href="#/unreal-designer" data-route="unreal-designer" class="unreal-designer-nav">⚙ <span>Unreal Designer</span><small>Apply theory • build • test • prove</small></a>
-        <a href="#/critique" data-route="critique" class="critique-nav" style="display:none" aria-hidden="true">💬 <span>Critique Guide</span><small id="critiqueNavCount">Peer review prompts • no uploads</small></a>
-        <a href="#/modeling" data-route="modeling" class="modeling-nav">⬡ <span>3D Modelling Studio</span><small>Reference • 3ds Max • game assets</small></a>
-        <a href="#/news" data-route="news" class="news-nav">◉ <span>News & Industry</span><small>Live stories • podcasts • trailers</small></a>
 
-        <div class="nav-heading">Unreal learning</div>
-        <a href="#/blocks" data-route="blocks">🧱 <span>Building Blocks</span><small>What Unreal terms actually mean</small></a>
-        <a href="#/tutorials" data-route="tutorials">🛠 <span>Quick Tutorials</span><small>Recipe families • practical builds</small></a>
+        <div class="nav-heading">Choose what you need</div>
+        <a href="#/paths" data-route="paths" class="ux-nav-primary">🧭 <span>Paths</span><small>Follow a clear route</small></a>
+        <a href="#/learn" data-route="learn" class="ux-nav-primary">📚 <span>Learn</span><small>Understand a subject</small></a>
+        <a href="#/build" data-route="build" class="ux-nav-primary">🛠 <span>Build</span><small>Tutorials • challenges • apply</small></a>
+        <a href="#/study" data-route="study" class="ux-nav-primary">↻ <span>Study</span><small>Homework • revision • support</small></a>
+        <a href="#/level4" data-route="level4" class="level4-nav ux-nav-primary">◆ <span>Level 4</span><small>Choose a specialist route</small></a>
 
-        <div class="nav-heading">Study tools</div>
-        <a href="#/challenges" data-route="challenges">🔥 <span>Challenge Board</span><small>Unreal • design • 3D</small></a>
-        <a href="#/homework" data-route="homework">⌂ <span>Homework</span><small>guided study paths • Teams-ready</small></a>
-        <a href="#/revision" data-route="revision">↻ <span>Revision Quizzes</span><small>Unreal • industry • design • 3D</small></a>
-        <a href="blueprint-checks.html" class="blueprint-checks-nav">✓ <span>Blueprint Checks</span><small>Required proofs • quick quizzes</small></a>
-
-        <div class="nav-heading">Reference</div>
-        <a href="cheatsheet.html" class="cheatsheet-nav">⚡ <span>UE5 Cheat Sheet</span><small>Shortcuts • Blueprint • debug • materials</small></a>
-        <a href="#/resources" data-route="resources" class="resource-nav">🧰 <span>Resource Library</span><small>Assets • sound • game reference</small></a>
-        <a href="#/snippets" data-route="snippets" class="snippet-nav">⚡ <span>Epic Paste Assists</span><small>Searchable clipboard reference shelf</small></a>
-        <a href="#/glossary" data-route="glossary">? <span>Glossary</span></a>
+        <details class="ux-nav-more">
+          <summary>More & reference</summary>
+          <div class="ux-nav-more-links">
+            <a href="#/news" data-route="news" class="news-nav">◉ <span>News & Industry</span></a>
+            <a href="#/resources" data-route="resources" class="resource-nav">🧰 <span>Resource Library</span></a>
+            <a href="#/snippets" data-route="snippets" class="snippet-nav">⚡ <span>Epic Paste Assists</span></a>
+            <a href="#/glossary" data-route="glossary">? <span>Glossary</span></a>
+            <a href="cheatsheet.html" class="cheatsheet-nav">⚡ <span>UE5 Cheat Sheet</span></a>
+            <a href="blueprint-checks.html" class="blueprint-checks-nav">✓ <span>Blueprint Checks</span></a>
+            <a href="#/critique" data-route="critique" class="critique-nav" style="display:none" aria-hidden="true">💬 <span>Critique Guide</span><small id="critiqueNavCount">Peer review prompts • no uploads</small></a>
+          </div>
+        </details>
 
         <!-- Kept in the DOM for legacy app.js compatibility; hidden in local-only mode. -->
         <div class="nav-heading local-only-retired-nav" style="display:none" aria-hidden="true">Progress & support</div>
@@ -88,7 +82,7 @@
         <button class="icon-button mobile-only" id="menuButton" aria-label="Open menu">☰</button>
         <div class="global-search">
           <span>⌕</span>
-          <input id="globalSearch" type="search" placeholder="Search paths, lessons, theory, builds, design, modelling…">
+          <input id="globalSearch" type="search" placeholder="Search a tutorial, path, system, term or task…">
           <kbd>/</kbd>
           <div class="search-panel" id="searchPanel" hidden></div>
         </div>
