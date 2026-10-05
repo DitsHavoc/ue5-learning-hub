@@ -5,7 +5,7 @@
 (() => {
   'use strict';
 
-  const VERSION = '3.61.2';
+  const VERSION = '3.61.3';
   const WORK_KEY = 'ue5hub:v345:personal-work';
   const NAV_KEY = 'ue5hub:v345:nav-groups';
   const FOCUS_CACHE_MS = 20000;

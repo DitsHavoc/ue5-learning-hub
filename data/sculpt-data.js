@@ -24,7 +24,7 @@ window.UE5_SCULPT_DATA = {
   ],
   practices:[
     {
-      id:'sculpt-camera',order:1,icon:'👀',title:'Hands Off the Clay',time:'5–10 min',xp:40,
+      id:'sculpt-camera',order:1,icon:'👀',title:'Hands Off the Clay',time:'5–10 min',
       newSkill:'Camera control + Undo',
       aim:'Learn to inspect a 3D form from every side before making any sculpting decisions.',
       tools:['Camera','Undo'],
@@ -36,7 +36,7 @@ window.UE5_SCULPT_DATA = {
       challenge:'Without sculpting, find the most useful front, side and three-quarter views of the sphere.'
     },
     {
-      id:'sculpt-brush-smooth',order:2,icon:'🖐',title:'Fingerprints in Clay',time:'10–15 min',xp:50,
+      id:'sculpt-brush-smooth',order:2,icon:'🖐',title:'Fingerprints in Clay',time:'10–15 min',
       newSkill:'Brush + Smooth',
       aim:'Learn that form is built gradually with controlled strokes, then cleaned with Smooth.',
       tools:['Brush','Smooth','Undo'],
@@ -48,7 +48,7 @@ window.UE5_SCULPT_DATA = {
       challenge:'Make three bumps of different sizes while keeping all three smooth and intentional.'
     },
     {
-      id:'sculpt-symmetry-face',order:3,icon:'👽',title:'Friendly Alien Face',time:'20–30 min',xp:70,
+      id:'sculpt-symmetry-face',order:3,icon:'👽',title:'Friendly Alien Face',time:'20–30 min',
       newSkill:'Symmetry + Inflate',
       aim:'Use symmetry to establish simple facial proportions without worrying about tiny detail.',
       tools:['Brush','Inflate','Smooth','Symmetry'],
@@ -61,7 +61,7 @@ window.UE5_SCULPT_DATA = {
       challenge:'Change the alien’s personality only by adjusting brow height, cheek volume and mouth curve.'
     },
     {
-      id:'sculpt-rock',order:4,icon:'🪨',title:'Rock, Not Potato',time:'15–25 min',xp:60,
+      id:'sculpt-rock',order:4,icon:'🪨',title:'Rock, Not Potato',time:'15–25 min',
       newSkill:'Drag + Flatten + silhouette',
       aim:'Turn a sphere into a believable rock by changing the silhouette and introducing planes.',
       tools:['Drag','Flatten','Smooth','Camera'],
@@ -73,7 +73,7 @@ window.UE5_SCULPT_DATA = {
       challenge:'Make a second rock from a fresh sphere that has a clearly different silhouette but uses the same three tools.'
     },
     {
-      id:'sculpt-silhouette',order:5,icon:'🎭',title:'Three Silhouettes',time:'20 min',xp:70,
+      id:'sculpt-silhouette',order:5,icon:'🎭',title:'Three Silhouettes',time:'20 min',
       newSkill:'Designing from the outline',
       aim:'Prove that character and object ideas can read before surface detail exists.',
       tools:['Drag','Brush','Smooth','Camera'],
@@ -85,7 +85,7 @@ window.UE5_SCULPT_DATA = {
       challenge:'Ask another student to guess the adjective for each sculpt without telling them first.'
     },
     {
-      id:'sculpt-export-inspect',order:6,icon:'🔬',title:'Pretty Surface, Messy Mesh?',time:'15–25 min',xp:80,
+      id:'sculpt-export-inspect',order:6,icon:'🔬',title:'Pretty Surface, Messy Mesh?',time:'15–25 min',
       newSkill:'Wireframe + OBJ export + topology inspection',
       aim:'Understand that sculpting for form and modelling for a production pipeline are related but different skills.',
       tools:['Wireframe','OBJ Export','3ds Max'],

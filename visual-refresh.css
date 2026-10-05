@@ -224,10 +224,6 @@ body{
   border-top:3px solid #a884ff;
   box-shadow:none!important;
 }
-.mission-xp{
-  border-radius:3px;
-  background:#101a23;
-}
 .next-unlock,
 .equipped-badge{
   border-radius:5px;
@@ -555,7 +551,7 @@ body{
 .designer-deep-card:hover,.designer-resource-card:hover,.designer-pro-resource:hover{transform:none}
 .designer-case-card,.designer-research-card,.designer-industry-card,.designer-constraint-card{background:#0a1016}
 .designer-industry-video,.designer-case-image,.designer-video-play{border-radius:4px}
-.source-xp-complete{border-radius:3px}
+.source-task-complete{border-radius:3px}
 .designer-black-box{background:#0b1118}
 
 /* Resource Library follows the same workstation-like treatment. */
