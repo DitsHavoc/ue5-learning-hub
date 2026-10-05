@@ -1,11 +1,11 @@
-/* v3.46.2 — Remove Sculpt Playground
-   Student Journey + Class Focus + learning-flow refinement layer.
+/* v3.61.0 — Student Journey + Class Focus + intent-led navigation support.
+   Learning-flow refinement layer.
    Does not replace core learning data, app.js, backend.js, roster controls or existing progress logic.
 */
 (() => {
   'use strict';
 
-  const VERSION = '3.46.2';
+  const VERSION = '3.61.0';
   const WORK_KEY = 'ue5hub:v345:personal-work';
   const NAV_KEY = 'ue5hub:v345:nav-groups';
   const FOCUS_CACHE_MS = 20000;
@@ -81,6 +81,8 @@
   }
 
   function workArea(hash) {
+    if (/^#\/skill-mission\//.test(hash)) return 'Blueprint Programmer Path';
+    if (/^#\/(cpp-path|cpp-mission)/.test(hash)) return 'Unreal C++ Path';
     if (/^#\/pathways\//.test(hash)) return 'Guided Path';
     if (/^#\/modeling/.test(hash)) return '3D Modelling';
     if (/^#\/design/.test(hash)) return 'Designer Studio';
@@ -96,12 +98,12 @@
     if (['#/programming','#/theory','#/design','#/modeling'].includes(hash)) return true;
     return [
       '#/pathways/','#/lesson/','#/path/','#/tutorial/','#/tutorial-family/',
-      '#/design/','#/modeling/','#/theory/','#/chapter-build/'
+      '#/design/','#/modeling/','#/theory/','#/chapter-build/','#/skill-mission/','#/cpp-mission/'
     ].some(prefix => hash.startsWith(prefix));
   }
 
   function isSupportRoute(hash) {
-    return ['#/blocks','#/tutorials','#/revision','#/resources','#/snippets','#/glossary','#/critique','#/news','#/homework','#/challenges']
+    return ['#/study','#/blocks','#/tutorials','#/revision','#/resources','#/snippets','#/glossary','#/critique','#/news','#/homework','#/challenges']
       .some(prefix => hash === prefix || hash.startsWith(prefix + '/'));
   }
 
@@ -155,9 +157,9 @@
       return `<article class="journey-start-card personal">
         <span class="journey-card-kicker">▶ YOUR WORK</span>
         <h2>Choose your own direction</h2>
-        <p>Working independently? Pick an area and the Hub will remember what you were doing without changing the class focus.</p>
+        <p>Working independently? Choose the kind of work first. The Hub will remember the actual lesson, mission or tutorial once you start it.</p>
         <div class="journey-mini-actions">
-          <a href="#/modeling">⬡ 3D</a><a href="#/programming">⌘ Unreal</a><a href="#/design">✦ Design</a><a href="#/theory">◈ Theory</a>
+          <a href="#/paths">🧭 Paths</a><a href="#/learn">📚 Learn</a><a href="#/build">🛠 Build</a><a href="#/study">↻ Study</a>
         </div>
       </article>`;
     }
@@ -170,12 +172,11 @@
   }
 
   function exploreMarkup() {
-    const count = window.UE5_PATHWAY_DATA?.paths?.length || 0;
     return `<article class="journey-start-card explore">
-      <span class="journey-card-kicker">⌕ FIND / EXPLORE</span>
-      <h2>Know what you need?</h2>
-      <p>Search the whole Hub, browse freely, or use a Guided Path when you want the site to suggest an order.</p>
-      <div class="journey-card-actions"><button class="button primary" type="button" data-journey-search>Search the Hub</button><a class="button ghost" href="#/pathways">${count} Guided Paths →</a></div>
+      <span class="journey-card-kicker">🧭 FIND YOUR ROUTE</span>
+      <h2>Not sure where it lives?</h2>
+      <p>Use Paths for a full sequence, or search the whole Hub when you already know the mechanic, term or task.</p>
+      <div class="journey-card-actions"><a class="button primary" href="#/paths">Choose a path →</a><button class="button ghost" type="button" data-journey-search>Search the Hub</button></div>
     </article>`;
   }
 
@@ -238,7 +239,7 @@
     if (!host || host.dataset.loading === '1') return;
     if (!force && host.dataset.journeyRendered === '1') return;
     host.dataset.loading = '1';
-    host.innerHTML = `<article class="journey-start-card class-focus quiet loading"><span class="journey-card-kicker">📌 CLASS FOCUS</span><h2>Loading class focus…</h2></article>${personalWorkMarkup()}${exploreMarkup()}`;
+    host.innerHTML = `<article class="journey-start-card class-focus quiet loading"><span class="journey-card-kicker">📌 CLASS FOCUS</span><h2>Loading class focus…</h2></article>${personalWorkMarkup()}`;
     const focus = await classFocusMarkup();
     if (!host.isConnected) return;
     const first = host.firstElementChild;
@@ -337,6 +338,10 @@
   }
 
   const ORIENTATION = {
+    '#/paths': ['WANT THE HUB TO TELL YOU WHAT COMES NEXT?','Use Paths for full sequential learning routes.','Choose one route that matches your subject or specialist goal.','Stay on that route until the current checkpoint works.'],
+    '#/learn': ['LEARNING A SUBJECT?','Use Learn to choose Unreal, game design, 3D or industry knowledge.','Pick the subject first; the subject page then gives you its proper structure.','Move to Build only when you need to make a practical outcome.'],
+    '#/build': ['KNOW WHAT YOU WANT TO MAKE?','Use Build for tutorials, practical application and bigger projects.','Start with Quick Tutorials when you need one mechanic.','Use Challenges or Level 4 when you want less hand-holding or a larger outcome.'],
+    '#/study': ['HOMEWORK, REVISION OR STUCK?','Use Study for work away from the main lesson and fast support.','Choose Homework, Revision or a short reference tool.','Return to your main learning/build route when the immediate study task is done.'],
     '#/pathways': ['WANT A COMPLETE JOURNEY?','Start here when you want the Hub to suggest a sensible order.','Choose an outcome, follow the current step, then use the linked lesson/tutorial only when it appears.','Leave whenever you want — normal browsing stays open.'],
     '#/programming': ['LEARNING UNREAL SYSTEMATICALLY?','Start here for the structured Unreal route.','Learn a Building Block → use it in a system lesson → apply it in a practical build.','If you only need one mechanic, jump to Quick Tutorials instead.'],
     '#/blocks': ["DON'T UNDERSTAND A TERM?",'Use Building Blocks as a quick explanation shelf.','Open the unfamiliar term, get the short mental model, then go back to the build that sent you here.','This is support, not another course to complete.'],
@@ -398,9 +403,9 @@
   }
 
   function classifySearch(href='') {
-    if (/^#\/(lesson|path\/|programming|theory)/.test(href)) return ['LEARN','Learn the idea or system'];
-    if (/^#\/(tutorial|chapter-build|design|modeling)/.test(href)) return ['MAKE','Build or apply something'];
-    if (/^#\/(blocks|revision|critique|glossary)/.test(href)) return ['FIX / CHECK','Unstick or test yourself'];
+    if (/^#\/(paths|learn|lesson|path\/|programming|theory|skill-mission|cpp-path|cpp-mission)/.test(href)) return ['LEARN','Follow a route or learn the idea/system'];
+    if (/^#\/(build|tutorial|chapter-build|design|modeling|unreal-designer|challenges|level4)/.test(href)) return ['MAKE','Build or apply something'];
+    if (/^#\/(study|blocks|revision|homework|critique|glossary)/.test(href)) return ['FIX / CHECK','Study, unstick or test yourself'];
     return ['REFERENCE','Look something up'];
   }
 
@@ -520,41 +525,26 @@
   }
 
   function ensureActiveNavVisible() {
-    const nav = $('#mainNav');
-    if (!nav) return;
-    $$('#mainNav a').forEach(link => {
-      link.classList.remove('journey-nav-hidden','journey-main-extra-hidden');
-      link.hidden = false;
-    });
-    nav.querySelector('.journey-more-areas')?.remove();
+    const active = $('#mainNav a.active');
+    const more = active?.closest('details.ux-nav-more');
+    if (more) more.open = true;
   }
 
   function enhanceSidebar() {
     const nav = $('#mainNav');
     if (!nav) return;
-
-    // v3.46.1: every student-facing destination stays visible.
-    // Do not hide sections behind headings or a "More areas" reveal.
     nav.dataset.journeyReady = '1';
     nav.querySelector('.journey-more-areas')?.remove();
-    nav.querySelector('a[href="#/sculpt"]')?.remove();
-
-    $$('#mainNav a').forEach(link => {
-      link.classList.remove('journey-nav-hidden','journey-main-extra-hidden');
-      link.hidden = false;
-    });
-
-    $$('.nav-heading', nav).forEach(heading => {
-      heading.classList.remove('collapsed');
-      heading.removeAttribute('data-journey-group');
-      heading.removeAttribute('role');
-      heading.removeAttribute('tabindex');
-      heading.removeAttribute('aria-expanded');
-    });
+    // v3.61.0: the primary sidebar is intentionally small.
+    // Do not force hidden/secondary destinations back into view.
   }
 
   function focusTargetOptions() {
     const options = [
+      {href:'#/paths',title:'Paths',kind:'path_hub',label:'🧭 Paths — choose a route'},
+      {href:'#/learn',title:'Learn',kind:'learn_hub',label:'📚 Learn — choose a subject'},
+      {href:'#/build',title:'Build',kind:'build_hub',label:'🛠 Build — tutorials & practical work'},
+      {href:'#/study',title:'Study',kind:'study_hub',label:'↻ Study — homework & revision'},
       {href:'#/programming',title:'Unreal Learning',kind:'unreal',label:'⌘ Unreal Learning'},
       {href:'#/theory',title:'Game Design Theory',kind:'theory',label:'◈ Game Design Theory'},
       {href:'#/design',title:'Designer Studio',kind:'design',label:'✦ Designer Studio'},

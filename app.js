@@ -1151,8 +1151,16 @@ function masterGuideStrip(){
 }
 function tutorialLibrary(){
   const families=TOOLS.families||[],featured=families.filter(f=>f.featured),visibleTutorials=TOOLS.tutorials.filter(t=>!t.libraryHidden),done=visibleTutorials.filter(t=>tutorialDone(t.id)).length;
-  return `<div class="page-head tutorial-library-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Quick Tutorials</div><span class="eyebrow">${families.length} recipe families • ${visibleTutorials.length} practical builds</span><h1>🛠 Quick Tutorials</h1><p class="muted">Find the kind of system you need first, then choose the exact outcome. Similar builds live together so you can get to the exact outcome without wading through near-duplicate cards.</p></div><section class="tutorial-blocks-bridge"><div><span class="deep-label">SEE A TERM YOU DON'T KNOW?</span><h2>Don't abandon the build.</h2><p>Each recipe still shows the Building Blocks it uses. Open an unfamiliar term for a short explanation, then come straight back.</p></div><a class="button ghost" href="#/blocks">🧱 Browse Building Blocks</a></section><section class="tutorial-blocks-bridge snippet-reference-bridge"><div><span class="deep-label">⚡ EPIC PASTE ASSISTS</span><h2>Use the snippet where you learn the system.</h2><p>Use the relevant Epic clipboard assist inside the lesson or recipe where you learn the system. The standalone bank is there when you need to search for one quickly.</p></div><a class="button ghost" href="#/snippets">Search all ${SNIPPETS.snippets.length} assists →</a></section>${masterGuideStrip()}<section class="tutorial-library-tools"><div class="tutorial-search-box"><span>⌕</span><input id="tutorialSearch" type="search" enterkeyhint="search" placeholder="Try: dash, locked door, fog, health, AI, HUD…"></div><div class="tutorial-filter-row"><button class="tutorial-filter active" data-tutorial-filter="all">All</button>${TOOLS.categories.map(c=>`<button class="tutorial-filter" data-tutorial-filter="${c.id}">${c.icon} ${esc(c.title)}</button>`).join('')}</div><div class="tutorial-library-count"><strong>${done}/${visibleTutorials.length}</strong><span>practical builds tried</span></div></section><section class="section" id="tutorialFeaturedSection"><div class="section-head"><div><h2>Start with something useful</h2><p>Common system families students reach for constantly.</p></div></div><div class="quick-tutorial-grid featured">${featured.map(tutorialFamilyCard).join('')}</div></section><section class="section"><div class="section-head"><div><h2>All recipe families</h2><p id="tutorialResultCount">${families.length} recipe families</p></div></div><div class="quick-tutorial-grid" id="tutorialGrid">${families.map(tutorialFamilyCard).join('')}</div><div class="empty" id="tutorialSearchEmpty" hidden><h2>No recipe families match that search.</h2><p>Try a broader term, mechanic, node or clear the category filter.</p></div></section><section class="lesson-application-note"><span>⌘</span><div><strong>Some practical builds sit inside the Core Lesson that teaches them.</strong><p>Find Smooth Timeline Door with <a href="#/lesson/timelines">Timelines & Lerp</a>, Save a Checkpoint Between Sessions with <a href="#/lesson/savegame">SaveGame</a>, and Struct + Data Table with <a href="#/lesson/data">Data Structures & Data Tables</a>. Site-wide search still finds each build directly.</p></div></section><section class="section chapter-build-library"><div class="section-head"><div><span class="eyebrow">BIGGER APPLICATION TASKS</span><h2>🎮 Chapter Builds</h2><p>Finish a learning path and a new guided mini-game/system unlocks. The tutorial can still be step-by-step — you must test it and prove it works.</p></div></div><div class="chapter-build-grid">${TOOLS.chapterBuilds.map(b=>chapterBuildCard(b)).join('')}</div></section>`;
+  return `<div class="page-head tutorial-library-head"><div class="breadcrumb"><a href="#/">Home</a> / <a href="#/build">Build</a> / Quick Tutorials</div><span class="eyebrow">🛠 FIND THE OUTCOME FIRST</span><h1>What do you want to build?</h1><p class="muted">Search the result you need — door, HUD, AI, checkpoint, fog, landscape, Sequencer — then choose the closest recipe family. Supporting theory stays out of the way until you need it.</p></div>
+  <section class="tutorial-library-tools ux-tutorial-search-first"><div class="tutorial-search-box"><span>⌕</span><input id="tutorialSearch" type="search" enterkeyhint="search" placeholder="What do you want to make? Try: locked door, HUD, AI, fog, save…"></div><div class="tutorial-filter-row"><button class="tutorial-filter active" data-tutorial-filter="all">All</button>${TOOLS.categories.map(c=>`<button class="tutorial-filter" data-tutorial-filter="${c.id}">${c.icon} ${esc(c.title)}</button>`).join('')}</div><div class="tutorial-library-count"><strong>${done}/${visibleTutorials.length}</strong><span>practical builds tried</span></div></section>
+  <section class="section ux-tutorial-featured" id="tutorialFeaturedSection"><div class="section-head"><div><span class="eyebrow">GOOD PLACES TO START</span><h2>Common recipe families</h2><p>Useful systems students reach for repeatedly.</p></div></div><div class="quick-tutorial-grid featured">${featured.map(tutorialFamilyCard).join('')}</div></section>
+  <section class="section"><div class="section-head"><div><h2>All recipe families</h2><p id="tutorialResultCount">${families.length} recipe families</p></div></div><div class="quick-tutorial-grid" id="tutorialGrid">${families.map(tutorialFamilyCard).join('')}</div><div class="empty" id="tutorialSearchEmpty" hidden><h2>No recipe families match that search.</h2><p>Try a broader mechanic, node name or category.</p></div></section>
+  <details class="content-card ux-tutorial-support"><summary>Need more than a quick recipe?</summary><div class="ux-tutorial-support-grid"><article><span>🧱</span><h3>Don't understand a term?</h3><p>Use Building Blocks for the short explanation, then return here.</p><a class="button ghost small" href="#/blocks">Building Blocks →</a></article><article><span>🧭</span><h3>Need the full workflow?</h3><p>Master Guides live with Unreal Learning because they are longer than a quick recipe.</p><a class="button ghost small" href="#/programming">Unreal Learning →</a></article><article><span>⚡</span><h3>Need an Epic paste assist?</h3><p>Use the snippet reference after you understand the system.</p><a class="button ghost small" href="#/snippets">Paste Assists →</a></article></div></details>
+  ${masterGuideStrip()}
+  <section class="lesson-application-note"><span>⌘</span><div><strong>Some builds live inside the Core Lesson that teaches them.</strong><p>Site-wide search still finds them directly. Use the lesson when the mechanic depends on understanding the transferable system, not just copying the result.</p></div></section>
+  <section class="section chapter-build-library"><div class="section-head"><div><span class="eyebrow">BIGGER APPLICATION TASKS</span><h2>🎮 Chapter Builds</h2><p>Finish a learning path, then combine what you learned into a larger guided build.</p></div></div><div class="chapter-build-grid">${TOOLS.chapterBuilds.map(b=>chapterBuildCard(b)).join('')}</div></section>`;
 }
+
 
 function renderTutorialStep(step,i,designMode=false){
   if(Array.isArray(step)){
@@ -1896,34 +1904,98 @@ async function renderHomeLeaderboardPreview(){
   }catch(e){document.getElementById('homeLeaderboard')?.remove()}
 }
 
+
+function uxRouteCard({href,icon,kicker,title,text,meta=[],cta='Open →',tone=''}) {
+  return `<a class="ux-route-card ${esc(tone)}" href="${esc(href)}"><div class="ux-route-icon">${icon}</div><div><span class="eyebrow">${esc(kicker)}</span><h2>${esc(title)}</h2><p>${esc(text)}</p>${meta.length?`<div class="ux-route-meta">${meta.map(x=>`<span>${esc(x)}</span>`).join('')}</div>`:''}</div><strong>${esc(cta)}</strong></a>`;
+}
+function uxProgressLabel(done,total){
+  if(!total)return 'Ready to start';
+  return `${done}/${total} complete`;
+}
+function pathsHubPage(){
+  const bp=(SKILL_MISSIONS.missions||[]).reduce((a,m)=>{const p=skillMissionProgress(m.id);a.done+=p.done;a.total+=p.total;return a},{done:0,total:0});
+  const cpp=(CPP_SKILL_MISSIONS.missions||[]).reduce((a,m)=>{const p=cppMissionProgress(m.id);a.done+=p.done;a.total+=p.total;return a},{done:0,total:0});
+  const mp=modelProgress();
+  const theoryDone=(state.theoryCompleted||[]).length;
+  const careerDone=(state.careerCompleted||[]).length;
+  return `<div class="ux-hub-shell">
+    <section class="ux-hub-hero"><div><span class="eyebrow">🧭 PATHS • FOLLOW ONE THING IN ORDER</span><h1>Choose a clear learning route.</h1><p>If you want the site to tell you what comes next, start here. These are the proper sequential routes; tutorials and reference tools sit elsewhere.</p></div><a class="button ghost" href="#/pathways">Outcome Guided Paths →</a></section>
+    <section class="ux-decision-note"><strong>Pick one route.</strong><span>You do not need to complete the whole Hub. Follow the pathway that matches what you are learning or making.</span></section>
+    <div class="ux-route-grid">
+      ${uxRouteCard({href:'#/programming',icon:'⌘',kicker:'UNREAL FOUNDATIONS',title:'Unreal Core Systems',text:'Learn the engine systematically from Building Blocks into full system lessons and practical applications.',meta:[uxProgressLabel(completedLessons().length,DATA.lessons.length),'Beginner → deeper systems'],cta:'Follow Unreal route →',tone:'unreal'})}
+      ${uxRouteCard({href:'#/skill-mission/arrays-maps-escape-room/start',icon:'⌘',kicker:'BLUEPRINT PROGRAMMER',title:'Blueprint Programmer Path',text:'One Escape Room grows through Arrays & Maps, Structs/Data Tables, Functions and Blueprint Interfaces.',meta:[uxProgressLabel(bp.done,bp.total),'4 linked missions'],cta:'Start / continue Blueprint →',tone:'blueprint'})}
+      ${uxRouteCard({href:'#/cpp-path',icon:'C++',kicker:'STANDALONE C++ PATH',title:'Unreal C++ Programmer Path',text:'Start fresh in L4CppTraining and move from the toolchain to native Actors, functions, inventory and reusable components.',meta:[uxProgressLabel(cpp.done,cpp.total),'Fresh project • no Blueprint dependency'],cta:'Open C++ path →',tone:'cpp'})}
+      ${uxRouteCard({href:'#/modeling',icon:'⬡',kicker:'3D MODELLING',title:'Game-ready 3D Path',text:'Foundations, guided 3ds Max learning, Build X tasks, topology, UVs and Unreal-ready asset production.',meta:[uxProgressLabel(mp.done,mp.total),'Foundations → independent assets'],cta:'Follow 3D route →',tone:'modeling'})}
+      ${uxRouteCard({href:'#/theory',icon:'◈',kicker:'GAME DESIGN',title:'Game Design Theory',text:'Learn why games work through players, systems, choices, balance, pacing, level readability, prototyping and playtesting.',meta:[uxProgressLabel(theoryDone,THEORY.lessons.length),'Theory + real game case studies'],cta:'Follow design theory →',tone:'theory'})}
+      ${uxRouteCard({href:'#/industry-careers',icon:'◎',kicker:'LEVEL 4 • INDUSTRY',title:'Industry & Careers',text:'Work through roles, hard and soft skills, vacancy evidence, portfolio thinking and your place in the games industry.',meta:[uxProgressLabel(careerDone,(CAREERS.chapters||[]).length),'Career evidence route'],cta:'Follow careers route →',tone:'career'})}
+    </div>
+    <section class="ux-hub-secondary"><div><span class="eyebrow">BUILDING A PORTFOLIO PIECE?</span><h2>Level 4 Specialist Projects</h2><p>Choose one specialist outcome in art, audio, cinematic, Blueprint or C++ and follow its production route.</p></div><a class="button primary" href="#/level4">Choose a Level 4 project →</a></section>
+    <section class="ux-hub-secondary subtle"><div><span class="eyebrow">WANT AN OUTCOME RATHER THAN A SUBJECT?</span><h2>Guided Paths</h2><p>The optional outcome routes connect existing Theory, Unreal and Designer content without locking the rest of the Hub.</p></div><a class="button ghost" href="#/pathways">See Guided Paths →</a></section>
+  </div>`;
+}
+function learnHubPage(){
+  return `<div class="ux-hub-shell">
+    <section class="ux-hub-hero"><div><span class="eyebrow">📚 LEARN • UNDERSTAND THE SUBJECT</span><h1>What are you learning?</h1><p>Choose the subject area first. Each area then gives you the right lessons, sequence and supporting material.</p></div><a class="button ghost" href="#/paths">Need a full path? →</a></section>
+    <div class="ux-route-grid ux-subject-grid">
+      ${uxRouteCard({href:'#/programming',icon:'⌘',kicker:'ENGINE + BLUEPRINTS',title:'Unreal Learning',text:'Building Blocks, core system lessons, Master Guides and practical Unreal applications.',meta:[`${DATA.lessons.length} core lessons`,`${BLOCKS.blocks.filter(b=>b.tier==='core').length} core Building Blocks`],cta:'Learn Unreal →',tone:'unreal'})}
+      ${uxRouteCard({href:'#/theory',icon:'◈',kicker:'PLAYERS + SYSTEMS',title:'Game Design Theory',text:'Core loops, agency, meaningful choice, balance, pacing, level readability, prototyping and playtesting.',meta:[`${THEORY.lessons.length} lessons`,'Real game case studies'],cta:'Learn game design →',tone:'theory'})}
+      ${uxRouteCard({href:'#/design',icon:'✦',kicker:'SPACE + ATMOSPHERE',title:'Designer Studio',text:'Learn level design, lighting, materials, terrain, sound, cinematic and environmental storytelling decisions.',meta:[`${DESIGN.modules.length} disciplines`,'Analyse → judge → improve'],cta:'Open Designer Studio →',tone:'design'})}
+      ${uxRouteCard({href:'#/modeling',icon:'⬡',kicker:'3DS MAX + GAME ASSETS',title:'3D Modelling Studio',text:'Reference, form, topology, UVs, materials, export and independent game-ready asset production.',meta:[`${MODEL.lessons.length} deep lessons`,`${MODEL.builds.length} Build X tasks`],cta:'Learn 3D →',tone:'modeling'})}
+      ${uxRouteCard({href:'#/industry-careers',icon:'◎',kicker:'GAMES INDUSTRY',title:'Industry & Careers',text:'Understand roles, pipelines, skills, vacancies, portfolios and how different disciplines fit together.',meta:[`${(CAREERS.chapters||[]).length} chapters`,'Level 4'],cta:'Learn the industry →',tone:'career'})}
+    </div>
+    <section class="ux-programmer-choice"><div><span class="eyebrow">LEARNING PROGRAMMING?</span><h2>Choose Blueprint or C++ deliberately.</h2><p>Blueprint is the visual programming route. C++ is a separate fresh-project pathway. You can learn either; Blueprint is useful preparation for C++ but not required.</p></div><div class="button-row"><a class="button primary" href="#/skill-mission/arrays-maps-escape-room/start">⌘ Blueprint path</a><a class="button ghost" href="#/cpp-path">C++ path</a></div></section>
+  </div>`;
+}
+function buildHubPage(){
+  return `<div class="ux-hub-shell">
+    <section class="ux-hub-hero"><div><span class="eyebrow">🛠 BUILD • MAKE SOMETHING WORK</span><h1>What do you want to make?</h1><p>Use this area when you already know the outcome you need. Start with a tutorial, apply design in Unreal, or take on a bigger challenge.</p></div><a class="button primary" href="#/tutorials">Find a Quick Tutorial →</a></section>
+    <div class="ux-route-grid ux-build-grid">
+      ${uxRouteCard({href:'#/tutorials',icon:'🛠',kicker:'FASTEST ROUTE',title:'Quick Tutorials',text:'Search by outcome — door, HUD, AI, fog, checkpoint, landscape, Sequencer and more — then follow the exact practical steps.',meta:[`${(TOOLS.families||[]).length} recipe families`,`${TOOLS.tutorials.filter(t=>!t.libraryHidden).length} builds`],cta:'Find a tutorial →',tone:'build'})}
+      ${uxRouteCard({href:'#/unreal-designer',icon:'⚙',kicker:'THEORY → ENGINE',title:'Unreal Designer',text:'Turn design ideas into playable Unreal work with focused engine tasks, testing and evidence.',meta:[`${UNREAL_DESIGNER.tracks.length} live tracks`,'Build → test → prove'],cta:'Apply design in Unreal →',tone:'design'})}
+      ${uxRouteCard({href:'#/challenges',icon:'🔥',kicker:'LESS HAND-HOLDING',title:'Challenge Board',text:'Combine systems without every node or click being handed to you. Use it when you are ready to prove independence.',meta:['Unreal • design • 3D','Practice, not first explanation'],cta:'Take a challenge →',tone:'challenge'})}
+      ${uxRouteCard({href:'#/level4',icon:'◆',kicker:'BIGGER OUTCOME',title:'Level 4 Specialist Projects',text:'Choose one substantial specialist task and work through a staged production route toward portfolio evidence.',meta:['Art • audio • cinematic • code','Choose one'],cta:'Choose specialist project →',tone:'level4'})}
+      ${uxRouteCard({href:'#/resources',icon:'🧰',kicker:'ASSETS + REFERENCE',title:'Resource Library',text:'Find useful assets, sound, textures, level explorers and professional reference without random-tab hunting.',meta:[`${DESIGN.resources.length} curated resources`,'Licences/context labelled'],cta:'Find resources →',tone:'resource'})}
+    </div>
+    <section class="ux-hub-secondary subtle"><div><span class="eyebrow">NEED THE FULL WORKFLOW, NOT A QUICK RECIPE?</span><h2>Unreal Master Guides live inside Unreal Learning.</h2><p>Landscape, Sequencer and other long workflows are kept with the system learning rather than mixed into the quick tutorial shelf.</p></div><a class="button ghost" href="#/programming">Open Unreal Learning →</a></section>
+  </div>`;
+}
+function studyHubPage(){
+  return `<div class="ux-hub-shell">
+    <section class="ux-hub-hero"><div><span class="eyebrow">↻ STUDY • HOMEWORK • REVISE • UNSTICK</span><h1>What kind of study do you need?</h1><p>Homework is for structured work away from the main lesson. Revision checks recall. Support tools explain one thing quickly and get you back to the task.</p></div></section>
+    <div class="ux-route-grid ux-study-grid">
+      ${uxRouteCard({href:'#/homework',icon:'⌂',kicker:'SET WORK / HOME',title:'Homework',text:'Systems Detective missions, research/watch tasks and college-PC follow-ups with clear stages and Teams-ready copy.',meta:['Home-friendly routes','Bring-back evidence'],cta:'Open Homework →',tone:'homework'})}
+      ${uxRouteCard({href:'#/revision',icon:'↻',kicker:'TEST RECALL',title:'Revision Quizzes',text:'Focused or mixed checks across Unreal, design, industry and 3D. Use them after learning the idea.',meta:['Find weak areas','Jump back to learning'],cta:'Start revision →',tone:'revision'})}
+      ${uxRouteCard({href:'#/blocks',icon:'🧱',kicker:'EXPLAIN ONE TERM',title:'Building Blocks',text:'Short explanations for Unreal terms such as Interfaces, Structs, NavMesh, AnimBP and more.',meta:['3–8 minute explanations','Return to your build'],cta:'Explain a term →',tone:'blocks'})}
+      ${uxRouteCard({href:'blueprint-checks.html',icon:'✓',kicker:'QUICK PROOF',title:'Blueprint Checks',text:'Required Blueprint proofs and short checks when you need to confirm the system really works.',meta:['Fast checks','Blueprint'],cta:'Open Blueprint Checks →',tone:'checks'})}
+      ${uxRouteCard({href:'cheatsheet.html',icon:'⚡',kicker:'QUICK REFERENCE',title:'UE5 Cheat Sheet',text:'Shortcuts, Blueprint reminders, debugging and common Unreal reference without opening a full lesson.',meta:['Reference only','Fast lookup'],cta:'Open Cheat Sheet →',tone:'reference'})}
+      ${uxRouteCard({href:'#/glossary',icon:'?',kicker:'WORDS + DEFINITIONS',title:'Glossary',text:'Look up Unreal, game design and 3D terminology when a word is blocking the rest of the task.',meta:['Unreal • design • 3D','Searchable'],cta:'Open Glossary →',tone:'reference'})}
+    </div>
+    <section class="ux-hub-secondary subtle"><div><span class="eyebrow">NEED AN OFFICIAL EPIC GRAPH ASSIST?</span><h2>Epic Paste Assists</h2><p>Use these as a reference after you understand the system, not as a substitute for learning it.</p></div><a class="button ghost" href="#/snippets">Search Paste Assists →</a></section>
+  </div>`;
+}
 function dashboard(){
-  return `<section class="portal-hero portal-hero-clean">
-    <div><span class="eyebrow">UE5 LEARNING HUB</span><h1>Choose where to learn.</h1><p>Learn systems. Understand game design. Build worlds and assets. Practise, critique and keep an eye on the industry.</p></div>
+  return `<section class="portal-hero portal-hero-clean ux-home-hero">
+    <div><span class="eyebrow">UE5 LEARNING HUB</span><h1>What do you need today?</h1><p>Follow a route, learn a subject, build something practical or study. Start with the reason you opened the Hub — the detail comes after.</p></div>
   </section>
 
   ${classHomeShortcut()}
 
-  ${homeLeaderboardPreview()}
-
-  <a class="guided-home-cta" href="#/pathways"><div class="guided-home-icon">↠</div><div><span class="portal-kicker">NOT SURE WHAT TO DO NEXT?</span><h2>Try a Guided Path</h2><p>Three optional outcome-based routes connect Theory, Designer Studio and Unreal in a sensible order. Nothing else gets locked.</p><div class="portal-chip-row"><span>3 guided paths</span><span>Existing XP counts</span><span>Browse freely anytime</span></div></div><strong>See Guided Paths →</strong></a>
-
-  <section class="portal-path-grid" aria-label="Choose a Learning Hub area">
-    <a class="portal-path-card programming" href="#/programming"><div class="portal-path-icon">⌘</div><span class="portal-kicker">BUILDING BLOCKS • SYSTEMS • BLUEPRINTS</span><h2>Unreal Learning</h2><p>Learn Unreal terms in tiny Building Blocks, understand the deeper systems, then apply them in practical tutorials and challenge builds.</p><div class="portal-chip-row"><span>${BLOCKS.blocks.filter(b=>b.tier==='core').length} core blocks</span><span>${DATA.lessons.length} system lessons</span><span>${unrealMasterGuides().length} master guides</span><span>${(TOOLS.families||[]).length} recipe families</span></div><strong>Enter Unreal Learning →</strong></a>
-    <a class="portal-path-card theory" href="#/theory"><div class="portal-path-icon">◈</div><span class="portal-kicker">PLAYERS • SYSTEMS • BALANCE • PROCESS</span><h2>Game Design Theory</h2><p>Understand why games work: core loops, agency, meaningful choices, economies, pacing, level readability, prototyping and playtesting.</p><div class="portal-chip-row"><span>${THEORY.lessons.length} theory lessons</span><span>${THEORY.lessons.length} different game case studies</span><span>${THEORY.lessons.length*THEORY.xp} XP</span></div><strong>Think like a designer →</strong></a>
-    <a class="portal-path-card design" href="#/design"><div class="portal-path-icon">✦</div><span class="portal-kicker">LEVELS • ART • LIGHT • SOUND</span><h2>Design</h2><p>Build readable spaces, create atmosphere, guide players and learn why strong game worlds communicate rather than simply decorate.</p><div class="portal-chip-row"><span>${DESIGN.modules.length} disciplines</span><span>24 different games</span><span>Black Box challenges</span></div><strong>Enter Designer Studio →</strong></a>
-    <a class="portal-path-card unreal-designer" href="#/unreal-designer"><div class="portal-path-icon">⚙</div><span class="portal-kicker">THEORY → ENGINE → TEST → EVIDENCE</span><h2>Unreal Designer</h2><p>Take the design ideas from Designer Studio and turn them into playable Unreal work using the right guides, recipes, Studio Builds and critique.</p><div class="portal-chip-row"><span>${UNREAL_DESIGNER.tracks.length} live tracks</span><span>Landscape + Sequencer guides</span><span>${UNREAL_DESIGNER.expansionTracks.length} growing next</span></div><strong>Apply the theory →</strong></a>
-    <a class="portal-path-card modeling" href="#/modeling"><div class="portal-path-icon">⬡</div><span class="portal-kicker">3DS MAX • TOPOLOGY • UVS</span><h2>3D Modelling</h2><p>Start from reference, plan the form, follow clear 3ds Max steps, inspect the mesh and finish with a game-ready asset you can explain.</p><div class="portal-chip-row"><span>${MODEL_FOUNDATIONS.chapters.length} foundations chapters</span><span>${MODEL.lessons.length} deep lessons</span><span>${MODEL.builds.length} Build X</span></div><strong>Open 3D Modelling Studio →</strong></a>
-    <a class="portal-path-card sculpt" href="#/sculpt"><div class="portal-path-icon">🗿</div><span class="portal-kicker">DIGITAL CLAY • FORM • SILHOUETTE</span><h2>Sculpt Playground</h2><p>Push and pull digital clay in SculptGL with six tiny guided exercises, then inspect what exists underneath the surface.</p><div class="portal-chip-row"><span>${SCULPT.practices.length} exercises</span><span>Browser sculpting</span><span>OBJ → Max</span></div><strong>Play with clay →</strong></a>
-    <a class="portal-path-card news" href="#/news"><div class="portal-path-icon">◉</div><span class="portal-kicker">LIVE • INDUSTRY • WATCH & LISTEN</span><h2>News & Industry</h2><p>Follow games and development stories, trailers, podcasts and industry discussion. Save what matters and come back later.</p><div class="portal-chip-row"><span>Live feeds</span><span>Read later</span><span>Discussion</span></div><strong>See what is happening →</strong></a>
+  <section class="ux-home-intro"><div><span class="eyebrow">START HERE</span><h2>Choose the kind of work.</h2><p>Four choices replace the old wall of sections. Everything is still here; it is just grouped by what you are trying to achieve.</p></div></section>
+  <section class="ux-intent-grid">
+    ${uxRouteCard({href:'#/paths',icon:'🧭',kicker:'FOLLOW A SEQUENCE',title:'Paths',text:'I want a proper route and I want the Hub to tell me what comes next.',meta:['Blueprint • C++ • Unreal • 3D • Design'],cta:'Choose a path →',tone:'paths'})}
+    ${uxRouteCard({href:'#/learn',icon:'📚',kicker:'UNDERSTAND IT',title:'Learn',text:'I am learning Unreal, game design, 3D or the games industry.',meta:['Lessons • theory • subjects'],cta:'Choose a subject →',tone:'learn'})}
+    ${uxRouteCard({href:'#/build',icon:'🛠',kicker:'MAKE IT WORK',title:'Build',text:'I know what I want to make and need a tutorial, challenge or practical route.',meta:['Tutorials • Unreal Designer • projects'],cta:'Build something →',tone:'build'})}
+    ${uxRouteCard({href:'#/study',icon:'↻',kicker:'HOMEWORK / REVISE / SUPPORT',title:'Study',text:'I need homework, revision, a quick explanation or a reference tool.',meta:['Homework • quizzes • blocks • checks'],cta:'Study / revise →',tone:'study'})}
   </section>
 
-  <a class="portal-resource-home" href="#/resources"><div class="portal-resource-home-icon">🧰</div><div><span class="portal-kicker">FREE ASSETS • SOUND • LEVEL EXPLORERS • INDUSTRY REFERENCE</span><h2>Resource Library</h2><p>Need a texture, placeholder kit, sound effect, level to dissect, UI reference or professional design talk? Start here instead of opening twenty random tabs.</p><div class="portal-chip-row"><span>${DESIGN.resources.length} curated links</span><span>CC0 clearly labelled</span><span>noclip.website</span><span>ambientCG</span></div></div><strong>Open the useful cupboard →</strong></a>
-
-  <section class="portal-session-grid">
-    ${continueMissionCard()}
-    ${featuredStudentCard()}
-  </section>`;
+  <section class="ux-home-featured"><div class="section-head"><div><span class="eyebrow">COMMON STRUCTURED ROUTES</span><h2>Popular student pathways</h2><p>These are the routes most likely to be followed over several lessons.</p></div><a class="button ghost" href="#/paths">See all paths →</a></div><div class="ux-featured-path-grid">
+    <a href="#/skill-mission/arrays-maps-escape-room/start"><span>⌘</span><div><small>BLUEPRINT PROGRAMMER</small><strong>Escape Room Path</strong><p>Arrays → Data → Functions → Interfaces</p></div><b>→</b></a>
+    <a href="#/cpp-path"><span>C++</span><div><small>UNREAL C++</small><strong>Fresh C++ Path</strong><p>Toolchain → Actors → functions → components</p></div><b>→</b></a>
+    <a href="#/modeling"><span>⬡</span><div><small>3D MODELLING</small><strong>Game-ready 3D</strong><p>Foundations → Max → Build X → export</p></div><b>→</b></a>
+    <a href="#/level4"><span>◆</span><div><small>LEVEL 4</small><strong>Specialist Projects</strong><p>Choose one substantial portfolio route</p></div><b>→</b></a>
+  </div></section>`;
 }
+
 
 
 const SKILL_MISSION_STORE='ue5hub:skill-missions:v1';
@@ -2199,18 +2271,29 @@ function completeCppMissionStage(missionId,stageId){
 function programmingPage(){
   const i=level(),n=nextLesson(),np=pathProgress(n.path),pb=pendingUnlockedBuild(),blocksDone=(state.blockCompleted||[]).length,coreBlocks=BLOCKS.blocks.filter(b=>b.tier==='core'),coreDone=coreBlocks.filter(b=>blockDone(b.id)).length;
   const guides=unrealMasterGuides();
-  return `<div class="page-head programming-page-head"><div class="breadcrumb"><a href="#/">Home</a> / Unreal Learning</div><span class="eyebrow">UNDERSTAND THE ENGINE • BUILD SYSTEMS • APPLY THEM</span><h1>⌘ Unreal Learning</h1><p class="muted">One Unreal area, three different depths: learn the language, understand the system, then choose either a full workflow or a quick recipe when you need it.</p></div>
-  <section class="unreal-learning-ladder five-step"><a href="#/blocks"><span>01</span><div><small>3–8 MINUTE MICRO-LEARNING</small><h2>🧱 Building Blocks</h2><p>What does IA, BPI, Struct, AnimBP, NavMesh or Skeletal Mesh actually mean? Learn the term once with a tiny proof exercise.</p><strong>${coreDone}/${coreBlocks.length} Core learned →</strong></div></a><a href="#/path/${n.path}"><span>02</span><div><small>DEEPER SYSTEM UNDERSTANDING</small><h2>⌘ Core System Lessons</h2><p>Understand why systems work, build them carefully, debug them and apply them in a larger mechanic.</p><strong>${completedLessons().length}/${DATA.lessons.length} lessons complete →</strong></div></a><button type="button" data-action="scroll" data-target="master-guides"><span>03</span><div><small>END-TO-END ENGINE WORKFLOWS</small><h2>🧭 Master Guides</h2><p>Some topics need more than a five-minute recipe. Master Guides take a complete workflow from setup to a tested result — including engine workflows and team production habits.</p><strong>${guides.length} full workflows ↓</strong></div></button><a href="#/tutorials"><span>04</span><div><small>JUST-IN-TIME BUILDING</small><h2>🛠 Quick Tutorials</h2><p>Need one mechanic or fix? Choose a recipe family, build the exact outcome, then return to your project.</p><strong>${(TOOLS.families||[]).length} families • ${TOOLS.tutorials.filter(t=>!t.libraryHidden).length} practical builds →</strong></div></a><a href="#/challenges"><span>05</span><div><small>REMOVE THE TRAINING WHEELS</small><h2>🔥 Challenges & Practice</h2><p>Combine systems without every node being handed to you. This is where copying becomes understanding.</p><strong>Prove it →</strong></div></a></section>
-  <section class="content-card tutorial-next github-team-home-card"><div><span class="eyebrow">PAIR JAM • TEAM SETUP + PROGRAMMER ROUTE</span><h2>🔀 GitHub first. ⚡ Then build the Power mechanic.</h2><p>For the two-person jam, get the same project safely onto both PCs first. Then the Programmer follows the photographed Power Jam guide while the Designer owns the main level.</p></div><div class="tutorial-next-links"><a class="button primary" href="#/tutorial/github-unreal-team-workflow">🔀 GitHub team setup →</a><a class="button" href="#/tutorial/power-jam-programmer">⚡ Programmer mechanic guide →</a></div></section>
-  <section class="section master-guides-programming" id="master-guides"><div class="section-head"><div><span class="eyebrow">03 • FULL WORKFLOWS</span><h2>🧭 Unreal Master Guides</h2><p>These are part of Unreal Learning — not separate mini-sites. Each guide has one authoritative start-to-finish workflow, clear checkpoints and a focused Revision check. Engine guides may also bridge into Unreal Designer application tasks.</p></div><a class="button ghost" href="#/tutorials">See Quick Tutorials →</a></div><div class="master-guide-grid">${guides.map(masterGuideCard).join('')}</div></section>
-  <section class="programming-continue"><div><span class="eyebrow">CONTINUE CORE SYSTEMS • ${esc(path(n.path).title)}</span><h2>${esc(n.title)}</h2><p>${esc(n.short)}</p><div class="path-meta"><span>${n.duration} • ${n.xp} XP</span><span>${np.pct}% path complete</span></div><div class="progress"><span style="width:${np.pct}%"></span></div></div><div class="programming-continue-actions"><a class="button primary" href="${pb?`#/chapter-build/${pb.path}`:`#/lesson/${n.id}`}">${pb?`🎮 Build: ${esc(pb.title)}`:'▶ Continue core lesson'}</a><a class="button ghost" href="#/blocks">🧱 Building Blocks</a></div></section>
-  ${(SKILL_MISSIONS.missions||[]).length?`<section class="section skill-mission-section"><div class="section-head"><div><span class="eyebrow">LEVEL 4 • SOLO PROGRAMMER BUILDS</span><h2>⌘ Programmer Skill Missions</h2><p>Build one small Escape Room step by step. Mission 1 makes it work with Arrays & Maps; Mission 2 moves content into Structs & Data Tables; Mission 3 refactors repeated logic into Functions; Mission 4 replaces tight casting with Blueprint Interfaces.</p></div></div><div class="skill-mission-grid">${SKILL_MISSIONS.missions.map(skillMissionCard).join('')}</div></section>`:''}
-  <section class="content-card cpp-transition-cta"><div><span class="eyebrow">NEXT SPECIALIST OPTION • C++ • FRESH PROJECT</span><h2>Finished with Blueprint? Carry the concepts forward — not the project.</h2><p>The C++ Programmer Path is separate. Blueprint is recommended preparation, but C++ starts from a clean <strong>L4CppTraining</strong> project so every student has the same baseline.</p></div><div class="button-row"><a class="button primary" href="#/cpp-path">Open the C++ pathway →</a><a class="button ghost" href="#/skill-mission/arrays-maps-escape-room/start">Blueprint path →</a></div></section>
-  <section class="snippet-programming-cta integrated"><div><span class="eyebrow">⚡ EPIC PASTE ASSISTS</span><h2>Learn the system first; use the shortcut at the right moment.</h2><p>Use the official Epic paste assists inside the relevant Unreal Learning lessons and recipe families. The standalone bank remains a searchable reference shelf when you need to find one directly.</p></div><a class="button ghost" href="#/snippets">Search the reference bank →</a></section>
-  <div class="stat-grid programming-stats"><div class="stat"><small>Building Blocks</small><strong>${blocksDone}/${BLOCKS.blocks.length}</strong></div><div class="stat"><small>Core lessons</small><strong>${completedLessons().length}/${DATA.lessons.length}</strong></div><div class="stat"><small>Master Guides</small><strong>${guides.filter(t=>tutorialDone(t.id)).length}/${guides.length}</strong></div><div class="stat"><small>Total XP</small><strong>${i.xp}</strong></div></div>
-  <section class="section"><div class="section-head"><div><span class="eyebrow">WHEN YOU WANT THE DEEPER VERSION</span><h2>Core System Lessons</h2><p>These are not prerequisites for every tutorial. Follow them in order as a course, or open the system your project needs.</p></div></div><div class="path-grid">${DATA.paths.map(p=>{const x=pathProgress(p.id);return `<a class="path-card" href="#/path/${p.id}"><div class="path-icon">${p.icon}</div><h3>${esc(p.title)}</h3><p>${esc(p.description)}</p><div class="path-meta"><span>${x.done}/${x.total} lessons</span><span>${x.pct}%</span></div><div class="progress"><span style="width:${x.pct}%"></span></div></a>`}).join('')}</div></section>
-  <section class="blocks-mini-cta"><div><span class="deep-label">DON'T KNOW A TERM?</span><h2>Search the Building Blocks, not YouTube roulette.</h2><p>${BLOCKS.blocks.length} concise Unreal concepts are organised into Core, Common and Later. Only ${coreBlocks.length} are suggested early; the rest appear when tutorials need them.</p></div><a class="button primary" href="#/blocks">Open Building Blocks →</a></section>
-  ${pb?`<section class="section dashboard-unlock"><div class="section-head"><div><span class="eyebrow">YOU FINISHED A CHAPTER</span><h2>🎮 New Chapter Build unlocked</h2><p>Combine what you learned into something playable before moving on.</p></div></div>${chapterBuildCard(pb,{compact:true})}</section>`:''}`;
+  const bp=(SKILL_MISSIONS.missions||[]).reduce((a,m)=>{const p=skillMissionProgress(m.id);a.done+=p.done;a.total+=p.total;return a},{done:0,total:0});
+  return `<div class="page-head programming-page-head"><div class="breadcrumb"><a href="#/">Home</a> / <a href="#/learn">Learn</a> / Unreal Learning</div><span class="eyebrow">⌘ UNREAL LEARNING</span><h1>Learn Unreal without getting lost in the library.</h1><p class="muted">Use Core Systems when you are learning the engine in order. Use the Blueprint Programmer Path for a linked coding project. Use Quick Tutorials when you already know the outcome you need.</p></div>
+
+  <section class="ux-unreal-entry-grid">
+    <a class="ux-unreal-entry primary" href="${pb?`#/chapter-build/${pb.path}`:`#/lesson/${n.id}`}"><span>▶</span><div><small>CONTINUE CORE LEARNING</small><h2>${esc(pb?`Build: ${pb.title}`:n.title)}</h2><p>${esc(pb?'You completed a chapter. Apply it in the unlocked build before moving on.':n.short)}</p><div class="progress"><span style="width:${np.pct}%"></span></div><b>${np.pct}% of ${esc(path(n.path).title)} →</b></div></a>
+    <a class="ux-unreal-entry" href="#/skill-mission/arrays-maps-escape-room/start"><span>⌘</span><div><small>STRUCTURED PROGRAMMER ROUTE</small><h2>Blueprint Programmer Path</h2><p>One Escape Room grows through Arrays, Data Tables, Functions and Interfaces.</p><b>${uxProgressLabel(bp.done,bp.total)} →</b></div></a>
+    <a class="ux-unreal-entry" href="#/tutorials"><span>🛠</span><div><small>I KNOW WHAT I NEED</small><h2>Quick Tutorials</h2><p>Search by outcome and build one working mechanic without browsing the whole course.</p><b>${(TOOLS.families||[]).length} recipe families →</b></div></a>
+  </section>
+
+  <section class="section ux-core-paths"><div class="section-head"><div><span class="eyebrow">CORE SYSTEM COURSE</span><h2>Follow these learning paths in order</h2><p>Each path contains the deeper system lessons. Finish the current path before treating the next one as your checklist.</p></div><a class="button ghost" href="#/blocks">🧱 Need a term explained?</a></div><div class="path-grid">${DATA.paths.map(p=>{const x=pathProgress(p.id);return `<a class="path-card" href="#/path/${p.id}"><div class="path-icon">${p.icon}</div><h3>${esc(p.title)}</h3><p>${esc(p.description)}</p><div class="path-meta"><span>${x.done}/${x.total} lessons</span><span>${x.pct}%</span></div><div class="progress"><span style="width:${x.pct}%"></span></div></a>`}).join('')}</div></section>
+
+  <details class="content-card ux-secondary-section"><summary><span>🧭 Master Guides</span><small>${guides.length} longer end-to-end workflows</small></summary><div class="ux-secondary-section-body"><p>Use these when the job is too large for a quick recipe. They stay secondary so they do not compete with the core course.</p><div class="master-guide-grid">${guides.map(masterGuideCard).join('')}</div></div></details>
+
+  <details class="content-card ux-secondary-section"><summary><span>🧰 Unreal support & extras</span><small>Open only when you need one</small></summary><div class="ux-secondary-link-grid">
+    <a href="#/blocks"><strong>🧱 Building Blocks</strong><span>${coreDone}/${coreBlocks.length} core learned • explain one Unreal term</span></a>
+    <a href="#/tutorials"><strong>🛠 Quick Tutorials</strong><span>Find a concrete mechanic or result</span></a>
+    <a href="#/challenges"><strong>🔥 Challenges</strong><span>Practise without every step handed to you</span></a>
+    <a href="#/snippets"><strong>⚡ Epic Paste Assists</strong><span>Reference after you understand the system</span></a>
+    <a href="#/tutorial/github-unreal-team-workflow"><strong>🔀 GitHub Team Workflow</strong><span>Use when a project is being shared between PCs</span></a>
+    <a href="#/tutorial/power-jam-programmer"><strong>⚡ Power Jam Programmer</strong><span>Pair-jam programming route</span></a>
+  </div></details>
+
+  <section class="content-card cpp-transition-cta"><div><span class="eyebrow">C++ IS A DIFFERENT PATH</span><h2>Want to move from Blueprint ideas into C++?</h2><p>The C++ route starts from a clean <strong>L4CppTraining</strong> project. It does not continue this Unreal/Blueprint project.</p></div><a class="button ghost" href="#/cpp-path">Open standalone C++ path →</a></section>`;
 }
 
 const NEWS_CACHE_STORE='ue5hub:v3331:news-cache';
@@ -3677,6 +3760,10 @@ function route(options={}){
   const parts=currentHash.replace(/^#\//,'').split('/').filter(Boolean),app=$('#app');
   $$('.nav a').forEach(a=>a.classList.remove('active'));
   if(!parts.length){app.innerHTML=dashboard();activate('home')}
+  else if(parts[0]==='paths'){app.innerHTML=pathsHubPage();activate('paths')}
+  else if(parts[0]==='learn'){app.innerHTML=learnHubPage();activate('learn')}
+  else if(parts[0]==='build'){app.innerHTML=buildHubPage();activate('build')}
+  else if(parts[0]==='study'){app.innerHTML=studyHubPage();activate('study')}
   else if(parts[0]==='pathways'&&parts[1]){app.innerHTML=guidedPathPage(parts[1]);activate('pathways')}
   else if(parts[0]==='pathways'){app.innerHTML=guidedPathsPage();activate('pathways')}
   else if(parts[0]==='level4'&&parts[1]){app.innerHTML=level4SpecialistProjectPage(parts[1]);activate('level4')}
@@ -3688,8 +3775,8 @@ function route(options={}){
   else if(parts[0]==='blocks'){app.innerHTML=blocksPage();activate('blocks')}
   else if(parts[0]==='block'&&parts[1]){app.innerHTML=blockPage(parts[1]);activate('blocks')}
   else if(parts[0]==='news'){app.innerHTML=newsPage();activate('news')}
-  else if(parts[0]==='path'){app.innerHTML=pathPage(parts[1]);activate(parts[1])}
-  else if(parts[0]==='lesson'){app.innerHTML=lessonPage(parts[1]);const l=lesson(parts[1]);if(l)activate(l.path)}
+  else if(parts[0]==='path'){app.innerHTML=pathPage(parts[1]);activate('learn')}
+  else if(parts[0]==='lesson'){app.innerHTML=lessonPage(parts[1]);activate('learn')}
   else if(parts[0]==='my-game'||parts[0]==='projects'){app.innerHTML=teamsProjectNoticePage();activate('home')}
   else if(parts[0]==='classes'){app.innerHTML=classesPage();activate('classes')}
   else if(parts[0]==='leaderboard'){app.innerHTML=leaderboardPage();activate('leaderboard')}
@@ -3750,7 +3837,18 @@ function route(options={}){
   else if(parts[0]==='teacher') renderTeacher();
 }
 function activate(key){
-  const a=$(`[data-route="${key}"]`);if(a)a.classList.add('active');
+  const hubMap={
+    pathways:'paths',
+    programming:'learn',theory:'learn','industry-careers':'learn',design:'learn',modeling:'learn',sculpt:'learn',
+    tutorials:'build','unreal-designer':'build',challenges:'build',critique:'build',
+    blocks:'study',homework:'study',revision:'study',glossary:'study',snippets:'study'
+  };
+  const target=hubMap[key]||key;
+  const a=$(`[data-route="${target}"]`);
+  if(a){
+    a.classList.add('active');
+    const more=a.closest('details.ux-nav-more');if(more)more.open=true;
+  }
 }
 function bindRevisionBuilder(){
   const form=$('#revisionFocusedForm');if(!form)return;
@@ -4943,6 +5041,13 @@ function buildGlobalSearchIndex(){
   const entries=[];
   const add=e=>{if(e?.title&&e?.href)entries.push(makeSearchEntry(e))};
 
+  [
+    ['Paths','Sequential learning routes: Unreal Core, Blueprint Programmer, C++, 3D Modelling, Game Design and Industry & Careers','#/paths','🧭','hub'],
+    ['Learn','Choose a subject area: Unreal, game design, Designer Studio, 3D Modelling or Industry & Careers','#/learn','📚','hub'],
+    ['Build','Quick Tutorials, Unreal Designer, Challenge Board, Level 4 projects and practical resources','#/build','🛠','hub'],
+    ['Study','Homework, revision quizzes, Building Blocks, Blueprint Checks, Cheat Sheet and glossary','#/study','↻','hub']
+  ].forEach(([title,data,href,icon,kind])=>add({title,meta:'Student hub',href,icon,kind,data}));
+
   (DATA.lessons||[]).forEach(l=>add({
     title:l.title,meta:`Unreal Learning • ${l.projectTask?.name||path(l.path)?.title||'Core lesson'}`,
     href:`#/lesson/${l.id}`,icon:'◇',kind:'lesson',data:deepSearchText(l)
@@ -5001,7 +5106,7 @@ function buildGlobalSearchIndex(){
   [
     ['Guided Paths','Optional outcome-based routes through Theory, Unreal, Designer Studio and 3D without locking the rest of the Hub','#/pathways','↠'],
     ['Unreal Learning','Core lessons, learning paths and practical Unreal Engine progression','#/programming','◇'],
-    ['Unreal C++ Skill Missions','Level 4 Visual Studio setup, native gameplay classes, hybrid C++ and Blueprint progression','#/cpp-mission/cpp-setup/start','C++'],
+    ['Unreal C++ Programmer Path','Standalone Level 4 C++ route: fresh L4CppTraining project, Visual Studio setup, native gameplay classes, functions, inventory and components','#/cpp-path','C++'],
     ['Blueprint Snippet Bank','Official Epic paste assists and reusable Blueprint graph helpers','#/snippets','⚡'],
     ['Quick Tutorials','Recipe families and practical UE5 build outcomes','#/tutorials','🛠'],
     ['Game Design Theory','Core loops, MDA, agency, choices, balance, pacing, accessibility, prototyping, playtesting and adaptation','#/theory','◈'],
