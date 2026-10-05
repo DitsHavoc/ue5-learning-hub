@@ -1,7 +1,6 @@
 window.UE5_THEORY_DATA = {
   "version": "3.41.3",
   "buildDate": "2026-08-31",
-  "xp": 25,
   "passPercent": 67,
   "paths": [
     {
