@@ -10,7 +10,7 @@
     theory:'GD', design:'WORLD', critique:'CRIT', modeling:'3D', news:'NEWS',
     blocks:'TERM', tutorials:'MAKE', challenges:'TASK', homework:'HW',
     revision:'TEST', resources:'REF', snippets:'BP', glossary:'A-Z',
-    leaderboard:'XP', progress:'ME', requests:'IDEA', teacher:'STAFF'
+    leaderboard:'OLD', progress:'ME', requests:'IDEA', teacher:'STAFF'
   };
 
   const HOME_CODES = {
