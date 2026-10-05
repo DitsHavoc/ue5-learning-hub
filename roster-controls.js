@@ -69,7 +69,7 @@ function rerenderCurrentRoute(){
 async function moveStudent({fromClassId,toClassId,studentId,name,panel}){
   if (!toClassId) throw new Error('Choose the class to move the student to.');
   if (fromClassId === toClassId) throw new Error('Choose a different class.');
-  if (!confirm(`Move ${name} to the selected class?\n\nTheir account, XP and completed learning will be kept.`)) return false;
+  if (!confirm(`Move ${name} to the selected class?\n\nTheir account and completed learning will be kept.`)) return false;
 
   setStatus(panel, `Moving ${name}…`);
   await BACKEND.addClassMember(toClassId, studentId);
@@ -86,7 +86,7 @@ async function moveStudent({fromClassId,toClassId,studentId,name,panel}){
 }
 
 async function removeStudent({classId,studentId,name,className,panel}){
-  if (!confirm(`Remove ${name} from ${className || 'this class'}?\n\nThis only removes them from the teaching group. Their account, XP and completed learning are NOT deleted.`)) return false;
+  if (!confirm(`Remove ${name} from ${className || 'this class'}?\n\nThis only removes them from the teaching group. Their account and completed learning are NOT deleted.`)) return false;
   setStatus(panel, `Removing ${name}…`);
   await BACKEND.removeClassMember(classId, studentId);
   setStatus(panel, `${name} removed from the class.`);
@@ -125,7 +125,7 @@ async function renderDetailPanel(){
     panel.dataset.rosterTools = classId;
     panel.innerHTML = `
       <div class="roster-tools-head">
-        <div><span class="eyebrow">STUDENT MANAGEMENT</span><h2>Move or remove students</h2><p>Move a student between your active teaching groups or remove them from this class. Their Learning Hub account, XP and completed learning stay untouched.</p></div>
+        <div><span class="eyebrow">STUDENT MANAGEMENT</span><h2>Move or remove students</h2><p>Move a student between your active teaching groups or remove them from this class. Their Learning Hub account and completed learning stay untouched.</p></div>
         <span class="roster-tools-badge">${students.length} student${students.length===1?'':'s'}</span>
       </div>
       <div class="roster-tools-list">

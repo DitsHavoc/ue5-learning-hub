@@ -8,7 +8,7 @@
    Student-facing shorthand:
    LEARN → MAKE → PROVE
 
-   No XP is duplicated. Existing lessons/tutorials still own their XP.
+   Completion is recorded only once against the original lesson or tutorial.
 */
 (() => {
   'use strict';
@@ -723,7 +723,7 @@
   // 3. GUIDED PATH — PROJECT JOURNEY, NOT WEBSITE CHECKLIST
   // -----------------------------------------------------------------------
 
-  PATHWAYS.intro = 'Guided Paths are optional project journeys through learning that already exists in the Hub. They connect live teaching, useful theory, making and practical checkpoints around a real outcome without locking the rest of the site or duplicating XP.';
+  PATHWAYS.intro = 'Guided Paths are optional project journeys through learning that already exists in the Hub. They connect live teaching, useful theory, making and practical checkpoints around a real outcome without locking the rest of the site or duplicating completion credit.';
 
   PATHWAYS.principles = PATHWAYS.principles || [];
   const methodPrinciple = 'Practical paths use LEARN → MAKE → PROVE: theory appears when it helps a decision, making produces something real, and checkpoints test or improve the result.';

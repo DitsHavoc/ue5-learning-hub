@@ -36,7 +36,7 @@
       ['A-Z','Glossary','index.html#/glossary']
     ]],
     ['Community & progress', [
-      ['XP','Leaderboard','index.html#/leaderboard'],
+      
       ['ME','My Progress','index.html#/progress'],
       ['IDEA','Feature Requests','index.html#/requests']
     ]]
