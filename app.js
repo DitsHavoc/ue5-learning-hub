@@ -21,7 +21,7 @@ const STUDY = window.UE5_STUDY_DATA;
 const BACKEND = window.UE5_BACKEND;
 const SKILL_MISSIONS = window.UE5_SKILL_MISSIONS || {missions:[]};
 const CPP_SKILL_MISSIONS = window.UE5_CPP_SKILL_MISSIONS || {missions:[],planned:[]};
-const HUB_VERSION = '3.61.2';
+const HUB_VERSION = '3.61.3';
 
 // V3.19 deepens Designer Studio using the same Quick Tutorial recipe system so students can
 // search programming and design help from one place while still having a dedicated design curriculum.
@@ -404,7 +404,6 @@ function finishInlineUpdate(becameComplete=false){
 function updateChrome(){
   const teacherRole=isTeacher();
   const topDone=$('#topDone');if(topDone)topDone.textContent=completedLessons().length;
-  const version=$('#hubVersionText');if(version)version.textContent=`v${HUB_VERSION}`;
 
   const btn=$('#accountButton');
   const txt=$('#accountText');
@@ -479,7 +478,6 @@ async function syncCloudProgress(){
     state.sculptCompleted=[...new Set([...(state.sculptCompleted||[]),...cloudCompleted.filter(id=>id.startsWith('sculpt:')).map(id=>id.slice(7))])];
     state.pathwayCheckpoints=[...new Set([...(state.pathwayCheckpoints||[]),...rows.filter(r=>r.lesson_id?.startsWith('pathway:')&&r.completed_at).map(r=>r.lesson_id.slice(8))])];
     state.studioStepCompleted=[...new Set([...(state.studioStepCompleted||[]),...rows.filter(r=>r.lesson_id?.startsWith('studiostep:')&&r.completed_at).map(r=>r.lesson_id.slice(11))])];
-    await BACKEND.refreshXpSummary();
     saveState();
     // Projects are Teams-first from v3.39.3. The old Signal Lost practice state remains local-only
     // so signing in no longer reads legacy project_progress/student_projects on every boot.
@@ -502,7 +500,6 @@ function lessonRow(l,index){
         ${ps==='complete'?'<span class="tag beginner">GAME ✓</span>':ps==='building'?'<span class="tag">GAME: BUILDING</span>':''}
       </span>
     </span>
-    <span class="lesson-xp"></span>
   </a>`;
 }
 function zoomableImage({src,alt,caption='',sourceUrl='',sourceTitle='',kind='local',eager=false}){
@@ -1004,7 +1001,7 @@ function designIndustryDeepDiveCard(m,d,i){
   const url=safeUrl(d.url),videoId=String(d.youtubeId||'').replace(/[^A-Za-z0-9_-]/g,''),isVideo=!!videoId,done=designSourceDone(m,i),key=designSourceKey(m,i);
   const embed=isVideo?`https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1`:'';
   const media=isVideo?`<div class="designer-industry-video" data-video-shell><img src="https://i.ytimg.com/vi/${videoId}/hqdefault.jpg" alt="${esc(d.title)} video preview" loading="lazy"><button class="designer-video-play" data-action="load-video" data-embed="${esc(embed)}" data-title="${esc(d.title)}"><span>▶</span><b>Watch here</b><small>${esc(d.duration||'Video')}</small></button></div>`:'';
-  return `<article class="designer-industry-card ${isVideo?'video':''} ${done?'source-complete':''}">${media}<div class="designer-industry-body"><div class="designer-industry-head"><span class="designer-industry-num">${done?'✓':String(i+1).padStart(2,'0')}</span><div><span class="eyebrow">${esc(String(d.type||'deep dive').toUpperCase())} • ${esc(d.source||'INDUSTRY SOURCE')}</span><h3>${esc(d.title)}</h3></div></div><div class="designer-industry-focus"><b>WHY THIS MATTERS</b><p>${esc(d.focus||'Study how a shipped game solved the same design problem.')}</p></div><div class="designer-industry-watch"><b>WATCH / READ FOR</b><p>${esc(d.watchFor||'Identify the decision, the constraint and the trade-off.')}</p></div><div class="designer-industry-task"><b>DO SOMETHING WITH IT</b><p>${esc(d.task||'Write down one principle you can test in your own project.')}</p></div><div class="designer-source-actions">${url?`<a class="button ghost small" href="${esc(url)}" target="_blank" rel="noopener">Open original source ↗</a>`:''}${done?`<span class="source-xp-complete">✓ Source task complete</span>`:`<button class="button small source-xp-button" data-action="complete-design-source" data-source-key="${esc(key)}">✓ Watched/read + did the task</button>`}</div></div></article>`;
+  return `<article class="designer-industry-card ${isVideo?'video':''} ${done?'source-complete':''}">${media}<div class="designer-industry-body"><div class="designer-industry-head"><span class="designer-industry-num">${done?'✓':String(i+1).padStart(2,'0')}</span><div><span class="eyebrow">${esc(String(d.type||'deep dive').toUpperCase())} • ${esc(d.source||'INDUSTRY SOURCE')}</span><h3>${esc(d.title)}</h3></div></div><div class="designer-industry-focus"><b>WHY THIS MATTERS</b><p>${esc(d.focus||'Study how a shipped game solved the same design problem.')}</p></div><div class="designer-industry-watch"><b>WATCH / READ FOR</b><p>${esc(d.watchFor||'Identify the decision, the constraint and the trade-off.')}</p></div><div class="designer-industry-task"><b>DO SOMETHING WITH IT</b><p>${esc(d.task||'Write down one principle you can test in your own project.')}</p></div><div class="designer-source-actions">${url?`<a class="button ghost small" href="${esc(url)}" target="_blank" rel="noopener">Open original source ↗</a>`:''}${done?`<span class="source-task-complete">✓ Source task complete</span>`:`<button class="button small source-task-button" data-action="complete-design-source" data-source-key="${esc(key)}">✓ Watched/read + did the task</button>`}</div></div></article>`;
 }
 function designChallengeCard(c,i){
   return `<article class="designer-constraint-card"><span class="designer-challenge-mark">${['◆','◈','✦'][i%3]}</span><span class="eyebrow">CONSTRAINT CHALLENGE</span><h3>${esc(c.title)}</h3><div><b>RULE</b><p>${esc(c.constraint)}</p></div><div><b>WIN CONDITION</b><p>${esc(c.goal)}</p></div></article>`;
@@ -1374,7 +1371,7 @@ function modelVideoProgress(){const done=MODEL_VIDEOS.videos.filter(v=>modelVide
 function relatedModelVideos(lessonId){return MODEL_VIDEOS.videos.filter(v=>(v.relatedLessons||[]).includes(lessonId))}
 function modelVideoCard(v,{compact=false}={}){
   const done=modelVideoDone(v.id),lessonNames=(v.relatedLessons||[]).map(id=>modelLesson(id)?.title).filter(Boolean);
-  return `<article class="model-video-card ${done?'done':''} ${compact?'compact':''}"><div class="model-video-player" data-video-shell><div class="model-video-placeholder"><span class="model-video-number">${done?'✓':String(v.order).padStart(2,'0')}</span><div class="model-video-playmark">▶</div><strong>${esc(v.title)}</strong><button class="button small primary" type="button" data-action="load-video" data-embed="${esc(v.embed)}" data-title="${esc(v.title)}">▶ Watch in Hub</button></div></div><div class="model-video-body"><span class="eyebrow">DITS' MAX SERIES${lessonNames.length?' • '+esc(lessonNames[0]):''}</span><h3>${esc(v.title)}</h3><div class="model-video-focus"><b>WATCH FOR</b><p>${esc(v.watchFor)}</p></div><div class="model-video-task"><b>DO IT IN MAX</b><p>${esc(v.task)}</p></div><div class="model-video-actions"><a class="button ghost small" href="${esc(v.url)}" target="_blank" rel="noopener">Open in Drive ↗</a>${done?`<span class="source-xp-complete">✓ Video task complete</span>`:`<button class="button small source-xp-button" data-action="complete-model-video" data-model-video="${esc(v.id)}">✓ Watched + did the task</button>`}</div></div></article>`;
+  return `<article class="model-video-card ${done?'done':''} ${compact?'compact':''}"><div class="model-video-player" data-video-shell><div class="model-video-placeholder"><span class="model-video-number">${done?'✓':String(v.order).padStart(2,'0')}</span><div class="model-video-playmark">▶</div><strong>${esc(v.title)}</strong><button class="button small primary" type="button" data-action="load-video" data-embed="${esc(v.embed)}" data-title="${esc(v.title)}">▶ Watch in Hub</button></div></div><div class="model-video-body"><span class="eyebrow">DITS' MAX SERIES${lessonNames.length?' • '+esc(lessonNames[0]):''}</span><h3>${esc(v.title)}</h3><div class="model-video-focus"><b>WATCH FOR</b><p>${esc(v.watchFor)}</p></div><div class="model-video-task"><b>DO IT IN MAX</b><p>${esc(v.task)}</p></div><div class="model-video-actions"><a class="button ghost small" href="${esc(v.url)}" target="_blank" rel="noopener">Open in Drive ↗</a>${done?`<span class="source-task-complete">✓ Video task complete</span>`:`<button class="button small source-task-button" data-action="complete-model-video" data-model-video="${esc(v.id)}">✓ Watched + did the task</button>`}</div></div></article>`;
 }
 function modelVideoCourseLaunch(){
   const p=modelVideoProgress(),next=MODEL_VIDEOS.videos.find(v=>!modelVideoDone(v.id))||MODEL_VIDEOS.videos[0];
@@ -2020,7 +2017,7 @@ function skillMissionStep(step,i){
 function skillMissionRoadmap(currentId){
   const missions=(SKILL_MISSIONS.missions||[]).slice().sort((a,b)=>(a.sequence||0)-(b.sequence||0));
   if(!missions.length)return '';
-  return `<section class="skill-path-roadmap"><div class="skill-path-roadmap-head"><span class="eyebrow">YOUR ${missions.length}-MISSION PROGRAMMER PATH</span><h2>See the whole journey before you start</h2><p>All ${missions.length} missions continue the same Escape Room. Finish one and the next unlocks automatically.</p></div><div class="skill-path-roadmap-grid">${missions.map(x=>{const xp=skillMissionProgress(x.id),ready=skillMissionPrereqMet(x),idx=skillMissionNextIndex(x),st=x.stages?.[idx]||x.stages?.[0],current=x.id===currentId;return `<a class="skill-path-roadmap-card ${current?'current':''} ${xp.complete?'done':''} ${ready?'':'locked'}" href="#/skill-mission/${x.id}/${st?.id||'start'}"><span class="skill-path-roadmap-num">${xp.complete?'✓':ready?(x.sequence||'•'):'🔒'}</span><div><small>MISSION ${x.sequence||''}${current?' • YOU ARE HERE':''}</small><strong>${esc(x.title)}</strong><em>${xp.complete?'Complete':ready?`${xp.done}/${xp.total} stages complete`:`Unlocks after Mission ${Math.max(1,(x.sequence||2)-1)}`}</em></div></a>`}).join('')}</div></section>`;
+  return `<section class="skill-path-roadmap"><div class="skill-path-roadmap-head"><span class="eyebrow">YOUR ${missions.length}-MISSION PROGRAMMER PATH</span><h2>See the whole journey before you start</h2><p>All ${missions.length} missions continue the same Escape Room. Finish one and the next unlocks automatically.</p></div><div class="skill-path-roadmap-grid">${missions.map(x=>{const progress=skillMissionProgress(x.id),ready=skillMissionPrereqMet(x),idx=skillMissionNextIndex(x),st=x.stages?.[idx]||x.stages?.[0],current=x.id===currentId;return `<a class="skill-path-roadmap-card ${current?'current':''} ${progress.complete?'done':''} ${ready?'':'locked'}" href="#/skill-mission/${x.id}/${st?.id||'start'}"><span class="skill-path-roadmap-num">${progress.complete?'✓':ready?(x.sequence||'•'):'🔒'}</span><div><small>MISSION ${x.sequence||''}${current?' • YOU ARE HERE':''}</small><strong>${esc(x.title)}</strong><em>${progress.complete?'Complete':ready?`${progress.done}/${progress.total} stages complete`:`Unlocks after Mission ${Math.max(1,(x.sequence||2)-1)}`}</em></div></a>`}).join('')}</div></section>`;
 }
 function skillMissionPage(id,requestedStage){
   const m=skillMission(id);if(!m)return notFound();
@@ -2167,7 +2164,7 @@ function cppPathwayLanding(){
 function cppMissionRoadmap(currentId){
   const missions=(CPP_SKILL_MISSIONS.missions||[]).slice().sort((a,b)=>(a.sequence??0)-(b.sequence??0));
   if(!missions.length)return '';
-  return `<section class="skill-path-roadmap cpp-path-roadmap"><div class="skill-path-roadmap-head"><span class="eyebrow">LEVEL 4 • STANDALONE UNREAL C++ PATH</span><h2>Fresh start, then one cumulative C++ project.</h2><p>Mission 0 creates <strong>L4CppTraining</strong> from scratch. After that, each C++ mission upgrades that project. The Blueprint Escape Room is preparation only and is never required by this route.</p></div><div class="skill-path-roadmap-grid cpp-roadmap-grid">${missions.map(x=>{const xp=cppMissionProgress(x.id),ready=cppMissionPrereqMet(x),idx=cppMissionNextIndex(x),st=x.stages?.[idx]||x.stages?.[0],current=x.id===currentId;return `<a class="skill-path-roadmap-card ${current?'current':''} ${xp.complete?'done':''} ${ready?'':'locked'}" href="#/cpp-mission/${x.id}/${st?.id||'start'}"><span class="skill-path-roadmap-num">${xp.complete?'✓':ready?cppMissionSeq(x):'🔒'}</span><div><small>MISSION ${esc(String(cppMissionSeq(x)))}${current?' • YOU ARE HERE':''}</small><strong>${esc(x.title)}</strong><em>${xp.complete?'Complete':ready?`${xp.done}/${xp.total} stages complete`:`Unlocks after Mission ${esc(String(cppMissionSeq(cppMission(x.requiresMission))))}`}</em></div></a>`}).join('')}</div>${(CPP_SKILL_MISSIONS.planned||[]).length?`<details class="cpp-future-path"><summary>See where the C++ pathway goes next</summary><div>${CPP_SKILL_MISSIONS.planned.map(x=>`<span>${esc(x)}</span>`).join('')}</div></details>`:''}</section>`;
+  return `<section class="skill-path-roadmap cpp-path-roadmap"><div class="skill-path-roadmap-head"><span class="eyebrow">LEVEL 4 • STANDALONE UNREAL C++ PATH</span><h2>Fresh start, then one cumulative C++ project.</h2><p>Mission 0 creates <strong>L4CppTraining</strong> from scratch. After that, each C++ mission upgrades that project. The Blueprint Escape Room is preparation only and is never required by this route.</p></div><div class="skill-path-roadmap-grid cpp-roadmap-grid">${missions.map(x=>{const progress=cppMissionProgress(x.id),ready=cppMissionPrereqMet(x),idx=cppMissionNextIndex(x),st=x.stages?.[idx]||x.stages?.[0],current=x.id===currentId;return `<a class="skill-path-roadmap-card ${current?'current':''} ${progress.complete?'done':''} ${ready?'':'locked'}" href="#/cpp-mission/${x.id}/${st?.id||'start'}"><span class="skill-path-roadmap-num">${progress.complete?'✓':ready?cppMissionSeq(x):'🔒'}</span><div><small>MISSION ${esc(String(cppMissionSeq(x)))}${current?' • YOU ARE HERE':''}</small><strong>${esc(x.title)}</strong><em>${progress.complete?'Complete':ready?`${progress.done}/${progress.total} stages complete`:`Unlocks after Mission ${esc(String(cppMissionSeq(cppMission(x.requiresMission))))}`}</em></div></a>`}).join('')}</div>${(CPP_SKILL_MISSIONS.planned||[]).length?`<details class="cpp-future-path"><summary>See where the C++ pathway goes next</summary><div>${CPP_SKILL_MISSIONS.planned.map(x=>`<span>${esc(x)}</span>`).join('')}</div></details>`:''}</section>`;
 }
 function cppMissionPage(id,requestedStage){
   const m=cppMission(id);if(!m)return notFound();
@@ -3194,24 +3191,41 @@ function homeworkPath(id){
 }
 function homeworkSafeHref(href){
   const raw=String(href||'').trim();
-  if(!raw.startsWith('#/'))return raw||'#/study';
+  if(!raw)return '#/study';
+  if(!raw.startsWith('#/'))return raw;
   const parts=raw.replace(/^#\//,'').split('/').filter(Boolean),root=parts[0],id=parts[1],sub=parts[2];
   if(root==='lesson')return lesson(id)?raw:'#/programming';
-  if(root==='design')return designModule(id)?raw:'#/design';
-  if(root==='theory')return theoryLesson(id)?raw:'#/theory';
-  if(root==='industry-careers')return careerChapter(id)?raw:'#/industry-careers';
+  if(root==='design')return !id||designModule(id)?raw:'#/design';
+  if(root==='theory')return !id||theoryLesson(id)?raw:'#/theory';
+  if(root==='industry-careers')return !id||careerChapter(id)?raw:'#/industry-careers';
   if(root==='unreal-designer')return !id||unrealDesignerTrack(id)?raw:'#/unreal-designer';
   if(root==='modeling'){
-    if(id==='videos')return raw;
+    if(!id)return '#/modeling';
+    if(id==='videos')return (MODEL_VIDEOS.videos||[]).length?raw:'#/modeling';
     if(id==='foundations'&&sub)return modelTheoryChapter(sub)?raw:'#/modeling/foundations';
     if(id==='foundations')return raw;
+    if(id==='lesson'&&sub)return modelLesson(sub)?raw:'#/modeling';
+    if(id==='build'&&sub)return modelBuild(sub)?raw:'#/modeling';
     return '#/modeling';
   }
-  if(root==='revision'||root==='homework'||root==='study'||root==='learn'||root==='build'||root==='paths')return raw;
-  return raw;
+  if(root==='homework')return !id||homeworkPath(id)?raw:'#/homework';
+  if(['revision','study','learn','build','paths','programming'].includes(root))return raw;
+  return '#/study';
+}
+function homeworkRevisionTopicValid(topicId){
+  const raw=String(topicId||''),split=raw.indexOf(':');
+  if(split<1)return false;
+  const type=raw.slice(0,split),id=raw.slice(split+1);
+  if(type==='ue')return !!lesson(id)?.quiz?.length;
+  if(type==='theory')return !!theoryLesson(id)?.quiz?.length;
+  if(type==='industry')return !!careerChapter(id)?.quiz?.length;
+  if(type==='design')return !!designModule(id)&&(STUDY.designRevision?.[id]||[]).length>0;
+  if(type==='3d')return !!modelTheoryChapter(id)?.quiz?.length;
+  return revisionTopics().some(t=>t.id===raw&&t.questions?.length);
 }
 function homeworkPathStep(step,i){
-  const action=step.revisionTopic?`<button class="button small primary" data-action="revision-topic-start" data-revision-topic-id="${esc(step.revisionTopic)}" data-revision-count="5">${esc(step.link||'Start check')} →</button>`:step.href?`<a class="button small ${i===0?'primary':'ghost'}" href="${esc(homeworkSafeHref(step.href))}">${esc(step.link||'Open')} →</a>`:'';
+  const validRevision=step.revisionTopic&&homeworkRevisionTopicValid(step.revisionTopic);
+  const action=validRevision?`<button class="button small primary" data-action="revision-topic-start" data-revision-topic-id="${esc(step.revisionTopic)}" data-revision-count="5">${esc(step.link||'Start check')} →</button>`:step.revisionTopic?`<a class="button small ghost" href="#/revision">Open Revision →</a>`:step.href?`<a class="button small ${i===0?'primary':'ghost'}" href="${esc(homeworkSafeHref(step.href))}">${esc(step.link||'Open')} →</a>`:'';
   return `<article class="homework-path-step"><span class="homework-path-step-number">${String(i+1).padStart(2,'0')}</span><div><small>${esc(step.label)}${step.mode?` • ${esc(step.mode)}`:''}</small><h3>${esc(step.title)}</h3><p>${esc(step.body)}</p>${action}</div></article>`;
 }
 function homeworkPathPage(id){
