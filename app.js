@@ -3127,7 +3127,7 @@ function challengeItems(){
 }
 function challengeBoard(){
   const items=challengeItems(),areas=[['unreal','⌘','Unreal',items.filter(x=>x.area==='unreal').length],['design','✦','Design',items.filter(x=>x.area==='design').length],['modeling','⬡','3D Modelling',items.filter(x=>x.area==='modeling').length],['sculpt','🗿','Sculpt',items.filter(x=>x.area==='sculpt').length]];
-  const section=(area,title,desc,open=false)=>{const rows=items.filter(x=>x.area===area);return `<details class="study-board-section" data-study-section ${open?'open':''}><summary><span>${areas.find(a=>a[0]===area)?.[1]||'◆'}</span><div><strong>${esc(title)}</strong><small>${esc(desc)}</small></div><b>${rows.length}</b></summary><div class="board-grid study-board-grid">${rows.map(x=>`<article class="board-card study-board-card" data-study-card data-area="${x.area}" data-search="${esc((x.title+' '+x.task+' '+x.meta+' '+x.requirements.join(' ')).toLowerCase())}"><span class="eyebrow">${esc(x.areaLabel)} • ${esc(x.meta)}</span><h3>${esc(x.title)}</h3><p>${esc(x.task)}</p>${requirements(x.requirements)}<div class="button-row"><a class="button small" href="${x.href}">${esc(x.linkLabel)}</a></div></article>`).join('')}</div></details>`};
+  const section=(area,title,desc,open=false)=>{const rows=items.filter(x=>x.area===area);return `<details class="study-board-section" data-study-section ${open?'open':''}><summary><span>${areas.find(a=>a[0]===area)?.[1]||'◆'}</span><div><strong>${esc(title)}</strong><small>${esc(desc)}</small></div><b>${rows.length}</b></summary><div class="board-grid study-board-grid">${rows.map(x=>`<article class="board-card study-board-card" data-study-card data-area="${x.area}" data-search="${esc((x.title+' '+x.task+' '+x.meta+' '+x.requirements.join(' ')).toLowerCase())}"><span class="eyebrow">${esc(x.areaLabel)} • ${esc(x.meta)}</span><h3>${esc(x.title)}</h3><p>${esc(x.task)}</p>${requirements(x.requirements)}<div class="button-row"><a class="button small" href="${esc(x.href)}">${esc(x.linkLabel)}</a></div></article>`).join('')}</div></details>`};
   return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Challenges</div><span class="eyebrow">${items.length} transfer challenges across the Hub</span><h1>🔥 Challenge Board</h1><p class="muted">Programming, design, modelling and sculpting challenges that make you apply a skill without following another walkthrough.</p></div>
   <section class="study-tool-intro"><div><strong>Choose a skill you already know.</strong><span>Then solve a fresh problem with less scaffolding.</span></div><div><strong>Do not clone the example.</strong><span>The challenge only counts as useful practice if you make decisions yourself.</span></div><div><strong>Get another human to test it.</strong><span>Use the Critique Board when the result needs a second pair of eyes.</span></div></section>
   <div class="study-toolbar"><input id="challengeSearch" type="search" enterkeyhint="search" placeholder="Search challenges…"><div class="filter-row"><button class="filter active" data-challenge-filter="all">All <b>${items.length}</b></button>${areas.map(a=>`<button class="filter" data-challenge-filter="${a[0]}">${a[1]} ${a[2]} <b>${a[3]}</b></button>`).join('')}</div></div>
@@ -3224,9 +3224,38 @@ function homeworkPaths(){
     ],pcStretch:'When you next have Max, use your notes/reference to reproduce the idea and see whether your prediction was right.'}
   ];
 }
-function homeworkPath(id){return homeworkPaths().find(x=>x.id===id)}
+const HOMEWORK_PATH_ALIASES={
+  unreal:'unreal-core','unreal-learning':'unreal-core',
+  cinematics:'sequencer','sequencer-cinematics':'sequencer',
+  designer:'unreal-designer',
+  'game-design':'theory',
+  careers:'industry','industry-careers':'industry',
+  '3d':'3d-foundations',modeling:'3d-foundations',modelling:'3d-foundations'
+};
+function homeworkPath(id){
+  const key=HOMEWORK_PATH_ALIASES[id]||id;
+  return homeworkPaths().find(x=>x.id===key);
+}
+function homeworkSafeHref(href){
+  const raw=String(href||'').trim();
+  if(!raw.startsWith('#/'))return raw||'#/study';
+  const parts=raw.replace(/^#\//,'').split('/').filter(Boolean),root=parts[0],id=parts[1],sub=parts[2];
+  if(root==='lesson')return lesson(id)?raw:'#/programming';
+  if(root==='design')return designModule(id)?raw:'#/design';
+  if(root==='theory')return theoryLesson(id)?raw:'#/theory';
+  if(root==='industry-careers')return careerChapter(id)?raw:'#/industry-careers';
+  if(root==='unreal-designer')return !id||unrealDesignerTrack(id)?raw:'#/unreal-designer';
+  if(root==='modeling'){
+    if(id==='videos')return raw;
+    if(id==='foundations'&&sub)return modelTheoryChapter(sub)?raw:'#/modeling/foundations';
+    if(id==='foundations')return raw;
+    return '#/modeling';
+  }
+  if(root==='revision'||root==='homework'||root==='study'||root==='learn'||root==='build'||root==='paths')return raw;
+  return raw;
+}
 function homeworkPathStep(step,i){
-  const action=step.revisionTopic?`<button class="button small primary" data-action="revision-topic-start" data-revision-topic-id="${esc(step.revisionTopic)}" data-revision-count="5">${esc(step.link||'Start check')} →</button>`:step.href?`<a class="button small ${i===0?'primary':'ghost'}" href="${esc(step.href)}">${esc(step.link||'Open')} →</a>`:'';
+  const action=step.revisionTopic?`<button class="button small primary" data-action="revision-topic-start" data-revision-topic-id="${esc(step.revisionTopic)}" data-revision-count="5">${esc(step.link||'Start check')} →</button>`:step.href?`<a class="button small ${i===0?'primary':'ghost'}" href="${esc(homeworkSafeHref(step.href))}">${esc(step.link||'Open')} →</a>`:'';
   return `<article class="homework-path-step"><span class="homework-path-step-number">${String(i+1).padStart(2,'0')}</span><div><small>${esc(step.label)}${step.mode?` • ${esc(step.mode)}`:''}</small><h3>${esc(step.title)}</h3><p>${esc(step.body)}</p>${action}</div></article>`;
 }
 function homeworkPathPage(id){
@@ -3262,9 +3291,9 @@ function homeworkBoard(){
     const steps=x.steps||[];
     const mission=steps.length?`<div class="homework-mission"><div class="homework-mission-head"><b>${x.mode==='detective'?'Systems Detective mission':'Mission'}</b><span>${steps.length}-stage mission</span></div><ol>${steps.map((raw,i)=>{const parts=String(raw).split(' — '),label=parts.length>1?parts.shift():`STEP ${i+1}`,body=parts.length?parts.join(' — '):raw;return `<li><span class="homework-mission-step-no">${String(i+1).padStart(2,'0')}</span><div><strong>${esc(label)}</strong><span>${esc(body)}</span></div></li>`}).join('')}</ol></div>`:'';
     const missionCount=steps.length?`<span class="mission-count">${steps.length}-stage mission</span>`:'';
-    return `<article class="board-card study-board-card homework-study-card ${x.mode==='detective'?'homework-detective-card':''}" data-study-card data-area="${x.area}" data-mode="${esc(x.mode||'research')}" data-search="${esc((x.title+' '+x.task+' '+steps.join(' ')+' '+x.evidence+' '+(x.stretch||'')+' '+x.meta+' '+(x.modeLabel||'')+' '+(x.accessLabel||'')).toLowerCase())}"><span class="eyebrow">${esc(x.areaLabel)} • ${esc(x.meta)}</span><div class="homework-card-meta"><span>${esc(x.modeIcon||'🔎')} ${esc(x.modeLabel||'Research + investigate')}</span>${missionCount}<span class="home">${esc(x.accessLabel||'📱 No development PC needed')}</span></div><h3>${esc(x.title)}</h3><p class="homework-mission-brief">${esc(x.task)}</p>${mission}<div class="study-evidence"><b>Bring back</b><span>${esc(x.evidence)}</span></div><div class="study-stretch"><b>Build it later</b><span>${esc(x.stretch||'Apply the same idea practically when a suitable development PC is available.')}</span></div><div class="button-row"><button class="button small" data-action="copy-homework" data-study-homework="${esc(x.id)}">Copy for Teams</button><a class="button small ghost" href="${x.href}">${esc(x.linkLabel)}</a></div></article>`;
+    return `<article class="board-card study-board-card homework-study-card ${x.mode==='detective'?'homework-detective-card':''}" data-study-card data-area="${x.area}" data-mode="${esc(x.mode||'research')}" data-search="${esc((x.title+' '+x.task+' '+steps.join(' ')+' '+x.evidence+' '+(x.stretch||'')+' '+x.meta+' '+(x.modeLabel||'')+' '+(x.accessLabel||'')).toLowerCase())}"><span class="eyebrow">${esc(x.areaLabel)} • ${esc(x.meta)}</span><div class="homework-card-meta"><span>${esc(x.modeIcon||'🔎')} ${esc(x.modeLabel||'Research + investigate')}</span>${missionCount}<span class="home">${esc(x.accessLabel||'📱 No development PC needed')}</span></div><h3>${esc(x.title)}</h3><p class="homework-mission-brief">${esc(x.task)}</p>${mission}<div class="study-evidence"><b>Bring back</b><span>${esc(x.evidence)}</span></div><div class="study-stretch"><b>Build it later</b><span>${esc(x.stretch||'Apply the same idea practically when a suitable development PC is available.')}</span></div><div class="button-row"><button class="button small" data-action="copy-homework" data-study-homework="${esc(x.id)}">Copy for Teams</button><a class="button small ghost" href="${esc(homeworkSafeHref(x.href))}">${esc(x.linkLabel)}</a></div></article>`;
   };
-  const practicalCard=x=>`<article class="board-card study-board-card homework-study-card homework-practical-card" data-study-card data-area="${x.area}" data-mode="practical" data-search="${esc((x.title+' '+x.task+' '+x.evidence+' '+x.meta+' practical college pc unreal max build').toLowerCase())}"><span class="eyebrow">${esc(x.areaLabel)} • ${esc(x.meta)}</span><div class="homework-card-meta"><span>💻 Practical build</span><span class="college">🏫 College / suitable PC</span></div><h3>${esc(x.title)}</h3><p>${esc(x.task)}</p><div class="study-evidence"><b>Evidence</b><span>${esc(x.evidence)}</span></div><div class="button-row"><a class="button small primary" href="${x.href}">${esc(x.linkLabel)} →</a></div></article>`;
+  const practicalCard=x=>`<article class="board-card study-board-card homework-study-card homework-practical-card" data-study-card data-area="${x.area}" data-mode="practical" data-search="${esc((x.title+' '+x.task+' '+x.evidence+' '+x.meta+' practical college pc unreal max build').toLowerCase())}"><span class="eyebrow">${esc(x.areaLabel)} • ${esc(x.meta)}</span><div class="homework-card-meta"><span>💻 Practical build</span><span class="college">🏫 College / suitable PC</span></div><h3>${esc(x.title)}</h3><p>${esc(x.task)}</p><div class="study-evidence"><b>Evidence</b><span>${esc(x.evidence)}</span></div><div class="button-row"><a class="button small primary" href="${esc(homeworkSafeHref(x.href))}">${esc(x.linkLabel)} →</a></div></article>`;
   const shelf=(id,icon,kicker,title,desc,rows,kind,open=true)=>`<section class="homework-shelf homework-shelf-${kind}" id="${id}" data-study-section><header class="homework-shelf-head"><div class="homework-shelf-icon">${icon}</div><div><span class="eyebrow">${esc(kicker)}</span><h2>${esc(title)}</h2><p>${esc(desc)}</p></div><strong class="homework-shelf-count">${rows.length}</strong></header><div class="board-grid study-board-grid homework-shelf-grid">${rows.map(kind==='practical'?practicalCard:taskCard).join('')}</div></section>`;
   return `<div class="page-head"><div class="breadcrumb"><a href="#/">Dashboard</a> / Homework</div><span class="eyebrow">HOME-FRIENDLY INDEPENDENT STUDY • TEAMS-READY</span><h1>⌂ Homework & Independent Study</h1><p class="muted">Homework should not depend on owning a gaming/development PC. Pick the shelf that matches what you can access at home; practical engine/software work is clearly separated for college or a suitable machine.</p></div>
   <section class="homework-access-policy"><div><span class="eyebrow">THE ACCESS RULE</span><h2>No development PC at home? You can still complete the homework properly.</h2><p>Phone, tablet, Chromebook, console, paper and a normal browser are enough for the first two shelves. The aim is to come back with better judgement and vocabulary, not a second assignment.</p></div><div class="homework-access-examples"><span>🎮 Play a game</span><span>▶ Watch gameplay/video</span><span>🔎 Research a source</span><span>✍ Make notes</span><span>🖼 Annotate a screenshot</span><span>📝 Draw a diagram</span></div></section>
@@ -3758,6 +3787,16 @@ function route(options={}){
   const savedState=history.state||{};
   const restoreHistoryScroll=!preserveScroll&&savedState.hubRoute===currentHash&&Number.isFinite(savedState.hubScrollY);
   const parts=currentHash.replace(/^#\//,'').split('/').filter(Boolean),app=$('#app');
+  const legacyRouteAliases={
+    industry_careers:'industry-careers',
+    'industry-career':'industry-careers',
+    'unreal-learning':'programming',
+    'quick-tutorials':'tutorials',
+    'designer-studio':'design',
+    '3d-modeling':'modeling',
+    '3d-modelling':'modeling'
+  };
+  if(parts[0]&&legacyRouteAliases[parts[0]])parts[0]=legacyRouteAliases[parts[0]];
   $$('.nav a').forEach(a=>a.classList.remove('active'));
   if(!parts.length){app.innerHTML=dashboard();activate('home')}
   else if(parts[0]==='paths'){app.innerHTML=pathsHubPage();activate('paths')}
@@ -3965,24 +4004,27 @@ async function copyHomework(id){
   if(!item){const l=lesson(id);if(l)item=homeworkItems().find(x=>x.legacyId===id)}
   if(!item)return;
   const fallbackStretch=item.stretch||'Apply the same idea practically when a suitable development PC is available.';
+  const cleanPath=String(location.pathname||'/').replace(/\/index\.html?$/i,'/').replace(/\/+$/,'/');
+  const hubLink=`${location.origin}${cleanPath}${homeworkSafeHref(item.href)}`;
   let text;
   if(item.mode==='detective'){
     const stages=(item.steps||[]).map((x,i)=>`${i+1}. ${x}`).join('\n');
-    text=`🕵️ SYSTEMS DETECTIVE — ${item.title}\n\nDuration: ${item.duration||'25–40 min'}\nAccess: ${item.accessLabel||'Play/watch + paper/browser'}\n\nMISSION BRIEF\n${item.task}\n\nMISSION STAGES\n${stages}\n\nBRING BACK\n${item.evidence}\n\nBUILD IT LATER\n${fallbackStretch}\n\nHub area: ${item.areaLabel}\nLesson: ${item.meta}`;
+    text=`🕵️ SYSTEMS DETECTIVE — ${item.title}\n\nDuration: ${item.duration||'25–40 min'}\nAccess: ${item.accessLabel||'Play/watch + paper/browser'}\n\nMISSION BRIEF\n${item.task}\n\nMISSION STAGES\n${stages}\n\nBRING BACK\n${item.evidence}\n\nBUILD IT LATER\n${fallbackStretch}\n\nHub area: ${item.areaLabel}\nLesson: ${item.meta}\nOpen in Hub: ${hubLink}`;
   }else{
     const steps=item.steps?.length?`\n\nSuggested steps:\n${item.steps.map((x,i)=>`${i+1}. ${x}`).join('\n')}`:'';
-    text=`${item.title}\n\nHomework type: ${item.modeLabel||'Research / analysis'}\nAccess: ${item.accessLabel||'No development PC needed'}\n\nTask:\n${item.task}${steps}\n\nEvidence:\n${item.evidence}\n\nStretch / next college-PC session:\n${fallbackStretch}\n\nRelated Hub area: ${item.areaLabel}\nReference: ${item.meta}`;
+    text=`${item.title}\n\nHomework type: ${item.modeLabel||'Research / analysis'}\nAccess: ${item.accessLabel||'No development PC needed'}\n\nTask:\n${item.task}${steps}\n\nEvidence:\n${item.evidence}\n\nStretch / next college-PC session:\n${fallbackStretch}\n\nRelated Hub area: ${item.areaLabel}\nReference: ${item.meta}\nOpen in Hub: ${hubLink}`;
   }
   try{await navigator.clipboard.writeText(text);toast('Independent-study task copied — ready for Teams.')}catch(e){toast('Clipboard blocked by browser.')}
 }
 async function copyHomeworkPath(id){
   const path=homeworkPath(id);if(!path)return;
-  const hubBase=`${location.origin}${location.pathname}`;
+  const cleanPath=String(location.pathname||'/').replace(/\/index\.html?$/i,'/').replace(/\/+$/,'/');
+  const hubBase=`${location.origin}${cleanPath}`;
   const pathUrl=`${hubBase}#/homework/${path.id}`;
   const lines=[`${path.title} — Guided Homework Path`,`${path.time}`,`${path.access||'Home-friendly'}`,'',path.summary,'',`Follow the live path: ${pathUrl}`,''];
   path.steps.forEach((s,i)=>{
     lines.push(`${i+1}. ${s.label} — ${s.title}`,s.body);
-    if(s.href)lines.push(`Open: ${hubBase}${s.href}`);
+    if(s.href)lines.push(`Open: ${hubBase}${homeworkSafeHref(s.href)}`);
     else if(s.revisionTopic)lines.push(`Check: ${hubBase}#/revision — use the focused ${s.title} check from the homework path.`);
     lines.push('');
   });
