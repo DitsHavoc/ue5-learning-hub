@@ -239,7 +239,7 @@
     if (!host || host.dataset.loading === '1') return;
     if (!force && host.dataset.journeyRendered === '1') return;
     host.dataset.loading = '1';
-    host.innerHTML = `<article class="journey-start-card class-focus quiet loading"><span class="journey-card-kicker">📌 CLASS FOCUS</span><h2>Loading class focus…</h2></article>${personalWorkMarkup()}${exploreMarkup()}`;
+    host.innerHTML = `<article class="journey-start-card class-focus quiet loading"><span class="journey-card-kicker">📌 CLASS FOCUS</span><h2>Loading class focus…</h2></article>${personalWorkMarkup()}`;
     const focus = await classFocusMarkup();
     if (!host.isConnected) return;
     const first = host.firstElementChild;
