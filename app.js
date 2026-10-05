@@ -1943,7 +1943,7 @@ function learnHubPage(){
       ${uxRouteCard({href:'#/modeling',icon:'⬡',kicker:'3DS MAX + GAME ASSETS',title:'3D Modelling Studio',text:'Reference, form, topology, UVs, materials, export and independent game-ready asset production.',meta:[`${MODEL.lessons.length} deep lessons`,`${MODEL.builds.length} Build X tasks`],cta:'Learn 3D →',tone:'modeling'})}
       ${uxRouteCard({href:'#/industry-careers',icon:'◎',kicker:'GAMES INDUSTRY',title:'Industry & Careers',text:'Understand roles, pipelines, skills, vacancies, portfolios and how different disciplines fit together.',meta:[`${(CAREERS.chapters||[]).length} chapters`,'Level 4'],cta:'Learn the industry →',tone:'career'})}
     </div>
-    <section class="ux-programmer-choice"><div><span class="eyebrow">LEARNING PROGRAMMING?</span><h2>Choose Blueprint or C++ deliberately.</h2><p>Blueprint is the visual programming route. C++ is a separate fresh-project pathway. You can learn either; Blueprint is useful preparation for C++ but not required.</p></div><div class="button-row"><a class="button primary" href="#/skill-mission/arrays-maps-escape-room/start">⌘ Blueprint path</a><a class="button ghost" href="#/cpp-path">C++ C++ path</a></div></section>
+    <section class="ux-programmer-choice"><div><span class="eyebrow">LEARNING PROGRAMMING?</span><h2>Choose Blueprint or C++ deliberately.</h2><p>Blueprint is the visual programming route. C++ is a separate fresh-project pathway. You can learn either; Blueprint is useful preparation for C++ but not required.</p></div><div class="button-row"><a class="button primary" href="#/skill-mission/arrays-maps-escape-room/start">⌘ Blueprint path</a><a class="button ghost" href="#/cpp-path">C++ path</a></div></section>
   </div>`;
 }
 function buildHubPage(){
