@@ -426,7 +426,7 @@ function updateChrome(){
     const name=BACKEND.profile?.display_name || BACKEND.user.email?.split('@')[0] || 'Account';
     txt.textContent=name;
     btn.classList.add(BACKEND.profile?.role==='teacher'?'teacher':'cloud');
-    mode.textContent=BACKEND.profile?.role==='teacher'?'• TEACHER CLOUD':'• CLOUD';
+    if(mode)mode.textContent=BACKEND.profile?.role==='teacher'?'• TEACHER CLOUD':'• CLOUD';
     teacher.hidden=BACKEND.profile?.role!=='teacher';
     if(classesNav){
       classesNav.hidden=false;
@@ -436,7 +436,7 @@ function updateChrome(){
     }
   }else{
     txt.textContent=BACKEND.mode==='cloud'?'SIGN IN':'LOCAL MODE';
-    mode.textContent=BACKEND.mode==='cloud'?'• GUEST + CLOUD':'• LOCAL';
+    if(mode)mode.textContent=BACKEND.mode==='cloud'?'• GUEST + CLOUD':'• LOCAL';
     if(BACKEND.mode==='cloud')btn.classList.add('cloud');
     teacher.hidden=true;
     if(classesNav)classesNav.hidden=true;
