@@ -91,8 +91,6 @@ let studioStageView = null;
 let authView = 'signin';
 let revisionSession = null;
 let blocksTier = 'core';
-let leaderboardPeriod = 'week';
-let leaderboardClassId = 'all';
 let critiqueClassId = '';
 let critiqueFilter = 'all';
 let critiquePostsCache = [];
@@ -296,11 +294,6 @@ function nextBadgeTarget(){
   const badge=badgeById(c.id)||[c.id,c.id,'',false,'★'];
   return {...c,badge,pct:Math.round(c.current/c.target*100)};
 }
-function levelRingMarkup(){
-  if(isTeacher())return `<div class="level-ring teacher-max"><div><strong>MAX</strong><span>LEVEL</span></div></div>`;
-  const i=level();
-  return `<div class="level-ring" style="--level-pct:${i.pct*3.6}deg"><div><strong>${i.n}</strong><span>LEVEL</span></div></div>`;
-}
 function continueMissionCard(){
   const n=nextLesson(),np=pathProgress(n.path),b=nextBadgeTarget();
   return `<section class="portal-mission-card"><div class="mission-card-top"><div><span class="eyebrow">NEXT MISSION</span><h2>${esc(n.title)}</h2><p>${esc(n.short)}</p></div></div><div class="mission-path-line"><span>${esc(path(n.path).title)}</span><b>${np.pct}% path</b></div><div class="progress"><span style="width:${np.pct}%"></span></div><div class="next-unlock"><div class="next-unlock-icon ${BADGE_META[b.id]?.tone||'common'}">${b.badge[4]}</div><div><span class="deep-label">NEXT BADGE</span><strong>${esc(b.badge[1])}</strong><small>${b.current}/${b.target} • ${esc(BADGE_META[b.id]?.rarity||'Common')}</small></div><div class="next-unlock-progress"><span style="width:${b.pct}%"></span></div></div><div class="mission-actions"><a class="button primary" href="#/lesson/${n.id}">▶ Continue lesson</a><a class="button ghost" href="#/tutorials">🛠 Find a recipe</a></div></section>`;
@@ -315,14 +308,6 @@ function lesson(id){return DATA.lessons.find(x=>x.id===id)}
 function path(id){return DATA.paths.find(x=>x.id===id)}
 function mechanic(id){return PROJECT.mechanics[id]}
 function completedLessons(){return DATA.lessons.filter(l=>state.completed.includes(l.id))}
-function totalXp(){
-  if(BACKEND.user&&!isTeacher()&&BACKEND.xpSummary&&Number.isFinite(Number(BACKEND.xpSummary.all_time_xp)))return Number(BACKEND.xpSummary.all_time_xp);
-  return (state.blockCompleted||[]).length*25+(state.tutorialCompleted||[]).length*25+completedLessons().reduce((n,l)=>n+l.xp,0)+TOOLS.chapterBuilds.filter(b=>state.chapterBuildCompleted.includes(b.path)).reduce((n,b)=>n+(b.xp||0),0)+(state.designBuildCompleted||[]).length*300+(state.designSourceCompleted||[]).length*20+(state.theoryCompleted||[]).length*(THEORY.xp||25)+(state.careerCompleted||[]).length*(CAREERS.xp||25)+(state.modelVideoCompleted||[]).length*(MODEL_VIDEOS.xp||20)+(state.modelTheoryCompleted||[]).length*(MODEL_FOUNDATIONS.chapterXp||20)+(state.modelFoundationFinal?(MODEL_FOUNDATIONS.finalXp||100):0)+(state.modelLessonCompleted||[]).length*100+(state.modelBuildCompleted||[]).length*250+(state.modelFixCompleted||[]).length*75+(state.sculptCompleted||[]).reduce((n,id)=>n+(SCULPT.practices.find(x=>x.id===id)?.xp||0),0)
-}
-function level(){
-  const xp=totalXp(),n=Math.floor(xp/500)+1,into=xp%500;
-  return {n,xp,into,left:500-into,pct:into/5};
-}
 function pathProgress(id){
   const ls=DATA.lessons.filter(l=>l.path===id);
   const done=ls.filter(l=>state.completed.includes(l.id)).length;
@@ -1269,7 +1254,7 @@ function modelTheorySection(sec,ch,i){
 }
 function modelTheoryChapterCard(ch){
   const done=modelTheoryDone(ch.id),unlocked=modelTheoryUnlocked(ch.id),score=modelTheoryScore(ch.id);
-  return `<a class="foundation-chapter-card ${done?'done':''} ${unlocked?'':'locked'}" href="${unlocked?`#/modeling/foundations/${ch.id}`:'#/modeling/foundations'}" ${unlocked?'':'aria-disabled="true"'}><div class="foundation-card-number">${done?'✓':String(ch.order).padStart(2,'0')}</div><div class="foundation-card-copy"><span>${esc(ch.kicker)}</span><h3>${ch.icon} ${esc(ch.title)}</h3><p>${esc(ch.intro)}</p><small>${esc(ch.duration)} • ${MODEL_FOUNDATIONS.chapterXp} progress • quiz ${MODEL_FOUNDATIONS.passPercent}% to pass${score?` • best ${score.bestPct||score.pct}%`:''}</small></div><b>${done?'Revisit →':unlocked?'Start →':'LOCKED'}</b></a>`;
+  return `<a class="foundation-chapter-card ${done?'done':''} ${unlocked?'':'locked'}" href="${unlocked?`#/modeling/foundations/${ch.id}`:'#/modeling/foundations'}" ${unlocked?'':'aria-disabled="true"'}><div class="foundation-card-number">${done?'✓':String(ch.order).padStart(2,'0')}</div><div class="foundation-card-copy"><span>${esc(ch.kicker)}</span><h3>${ch.icon} ${esc(ch.title)}</h3><p>${esc(ch.intro)}</p><small>${esc(ch.duration)} • quiz ${MODEL_FOUNDATIONS.passPercent}% to pass${score?` • best ${score.bestPct||score.pct}%`:''}</small></div><b>${done?'Revisit →':unlocked?'Start →':'LOCKED'}</b></a>`;
 }
 function modelFoundationsLaunch(){
   const p=modelFoundationProgress(),next=MODEL_FOUNDATIONS.chapters.find(x=>!modelTheoryDone(x.id)),target=modelFoundationDone()?MODEL_FOUNDATIONS.chapters[0]:next||null;
@@ -1501,7 +1486,7 @@ function theoryPage(){
   const done=(state.theoryCompleted||[]).length,total=THEORY.lessons.length,pct=total?Math.round(done/total*100):0,lab=THEORY.lab;
   return `<div class="page-head theory-page-head"><div class="breadcrumb"><a href="#/">Home</a> / Game Design Theory</div><span class="eyebrow">SYSTEMS • PLAYERS • BALANCE • EprogressERIENCE • PROCESS</span><h1>◈ Game Design Theory</h1><p class="muted">Learn why games work, not just how to build them. Every lesson uses a different game case study, breaks down what the design is doing, then lets you watch the principle in action before you try it yourself.</p></div>
   ${careerHubPromo()}
-  <section class="theory-dashboard"><div><span class="eyebrow">YOUR THEORY PROGRESS</span><h2>${done}/${total} lessons • ${done*THEORY.xp}/${total*THEORY.xp} progress earned</h2><div class="progress"><span style="width:${pct}%"></span></div></div><div class="theory-method"><span>UNDERSTAND</span><b>→</b><span>SEE IT</span><b>→</b><span>WATCH</span><b>→</b><span>TRY IT</span><b>→</b><span>QUIZ</span><b>→</b><span>APPLY</span></div></section>
+  <section class="theory-dashboard"><div><span class="eyebrow">YOUR THEORY PROGRESS</span><h2>${done}/${total} lessons complete</h2><div class="progress"><span style="width:${pct}%"></span></div></div><div class="theory-method"><span>UNDERSTAND</span><b>→</b><span>SEE IT</span><b>→</b><span>WATCH</span><b>→</b><span>TRY IT</span><b>→</b><span>QUIZ</span><b>→</b><span>APPLY</span></div></section>
   <section class="theory-lab" id="boardGameLab"><div class="theory-lab-mark">🎲</div><div><span class="eyebrow">OPTIONAL PRACTICAL DESIGN LAB</span><h2>${esc(lab.title)}</h2><p>${esc(lab.intro)}</p><div class="callout good"><b>TABLETOP ADAPTATION PROJECT?</b> Your teacher may ask you to complete this lab before your group commits to its design.</div><div class="theory-lab-columns"><div><h3>How to run it</h3><ol>${lab.rules.map(x=>`<li>${esc(x)}</li>`).join('')}</ol></div><div><h3>Design evidence to collect</h3><ul>${lab.prompts.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div></div><div class="callout"><b>EVIDENCE:</b> ${esc(lab.evidence)}</div><p class="muted"><b>Why try it?</b> ${esc(lab.note)}</p></div></section>
   <div class="study-toolbar theory-toolbar"><input id="theorySearch" type="search" enterkeyhint="search" placeholder="Search agency, balance, pacing, playtesting…"><div class="filter-row"><button class="filter active" data-theory-filter="all">All <b>${total}</b></button>${THEORY.paths.map(p=>`<button class="filter" data-theory-filter="${esc(p.id)}">${p.icon} ${esc(p.title)}</button>`).join('')}</div><span class="study-result-count" id="theoryResultCount">${total} lessons</span></div>
   <div class="theory-path-overview">${THEORY.paths.map(p=>{const x=theoryPathProgress(p.id);return `<article><span>${p.icon}</span><div><strong>${esc(p.title)}</strong><p>${esc(p.short)}</p><div class="progress"><span style="width:${x.pct}%"></span></div><small>${x.done}/${x.total} complete</small></div></article>`}).join('')}</div>
@@ -1586,7 +1571,7 @@ async function completeReadyCareerChaptersFromSavedScores(){
       catch(err){toast('Completed locally; cloud chapter sync failed.');}
     }
   }
-  const names=ready.map(ch=>ch.title).join(', '),xp=ready.length*CAREERS.xp;
+  const names=ready.map(ch=>ch.title).join(', ');
   badgeUnlockAfter(before,`${names} complete`);
   return ready;
 }
@@ -1622,7 +1607,7 @@ function careerHubPromo(){
 function careerHubPage(){
   const x=careerChapterProgress(),p=careerProfile();
   return `<div class="page-head career-page-head"><div class="breadcrumb"><a href="#/">Home</a> / <a href="#/theory">Theory</a> / Industry & Careers</div><span class="eyebrow">📌 LEVEL 4 REQUIRED PATHWAY • ASSIGNMENT 1</span><h1>◎ ${esc(CAREERS.title)}</h1><p>${esc(CAREERS.subtitle)}</p></div>
-  <section class="career-dashboard"><div><span class="eyebrow">YOUR PATHWAY</span><h2>${x.done}/${x.total} chapters • ${x.done*CAREERS.xp}/${x.total*CAREERS.xp} progress</h2><div class="progress"><span style="width:${x.pct}%"></span></div><p>Use this live with the presentation. A chapter only completes after its required checkpoint is saved and the scenario check is passed.</p></div>${careerProfileMini()}</section>
+  <section class="career-dashboard"><div><span class="eyebrow">YOUR PATHWAY</span><h2>${x.done}/${x.total} chapters complete</h2><div class="progress"><span style="width:${x.pct}%"></span></div><p>Use this live with the presentation. A chapter only completes after its required checkpoint is saved and the scenario check is passed.</p></div>${careerProfileMini()}</section>
   <section class="career-how"><span class="eyebrow">HOW THIS WORKS IN CLASS</span><div class="career-how-flow"><span>🎤 TEACH</span><b>→</b><span>🎮 STORY</span><b>→</b><span>💬 DISCUSS</span><b>→</b><span>◎ HUB CHECKPOINT</span><b>→</b><span>✓ SAVE EVIDENCE</span></div><p>The Hub does not replace the presentation. It catches the parts that are better when you investigate, choose, test yourself and leave useful evidence behind.</p></section>
   <div class="career-chapter-grid">${(CAREERS.chapters||[]).map(ch=>{const done=careerDone(ch.id),req=careerRequirementStatus(ch),score=careerScore(ch.id);return `<a class="career-chapter-card ${done?'done':''}" href="#/industry-careers/${ch.id}"><span class="career-chapter-number">${done?'✓':String(ch.order).padStart(2,'0')}</span><div><span class="eyebrow">PRESENTATION SLIDES ${esc(ch.slides)}</span><h2>${esc(ch.icon)} ${esc(ch.title)}</h2><p>${esc(ch.short)}</p><div class="career-card-foot"><span class="${req.ready?'ready':'waiting'}">${req.ready?'✓ checkpoint saved':'◌ '+esc(req.label)}</span><b>${score?`Best ${score.bestPct||score.pct}%`:'Open chapter →'}</b></div></div></a>`}).join('')}</div>
   <section class="career-assignment-preview"><div><span class="eyebrow">WHERE THIS IS HEADING</span><h2>Your Assignment 1 evidence grows as you go</h2><p>By the end you should have a specific target role, real employer and vacancy evidence, a hard/soft skills audit, a Green / Amber / Red gap analysis, a targeted portfolio challenge and a 6 / 12 / 24-month plan.</p></div><div>${careerProfileMini()}</div></section>`;
@@ -1876,21 +1861,6 @@ function classHomeShortcut(){
     <div class="portal-class-shortcut-actions"><a class="button primary" href="#/classes">${teacher?'Open Classes':'Open My Class'} →</a><a class="button ghost" href="${teacher?'#/teacher':'#/progress'}">${teacher?'Teacher dashboard':'My Progress'}</a></div>
   </section>`;
 }
-
-function homeLeaderboardPreview(){
-  if(!BACKEND.user)return '';
-  return `<section class="home-leaderboard" id="homeLeaderboard"><div class="home-leaderboard-head"><div><span class="eyebrow">🏆 HUB RIVALRY • THIS WEEK</span><h2>Who is making moves?</h2><p>Everyone in leaderboard-enabled classes • learning progress only • never grades.</p></div><a class="button ghost small" href="#/progress">Full leaderboard →</a></div><div class="home-leaderboard-body"><div class="empty">Loading this week's Hub leaders…</div></div></section>`;
-}
-async function renderHomeLeaderboardPreview(){
-  const box=$('#homeLeaderboard .home-leaderboard-body');if(!box||!BACKEND.user)return;
-  try{
-    const rows=await BACKEND.getHubLeaderboard('week');
-    const top=rows.slice(0,3),me=rows.find(r=>r.user_id===BACKEND.user.id);
-    if(!rows.length){box.innerHTML=`<div class="home-leaderboard-empty"><b>Everyone</b><span>No progress on the board yet. First useful completion takes the lead.</span></div>`;return}
-    box.innerHTML=`<div class="home-leaderboard-class"><span>🌐 Everyone</span><small>${rows.length} student${rows.length===1?'':'s'} ranked</small></div><div class="home-leaderboard-podium">${top.map(r=>`<div class="home-rival ${r.user_id===BACKEND.user.id?'is-you':''}"><span class="home-rival-rank">${leaderboardMedal(r.rank_position)}</span><div><strong>${esc(r.display_name)}${r.user_id===BACKEND.user.id?' <em>YOU</em>':''}</strong><small>${Number(r.weekly_xp||0).toLocaleString()} progress${r.current_streak?` • 🔥 ${r.current_streak}`:''}</small></div></div>`).join('')}</div>${!isTeacher()&&me&&!top.some(r=>r.user_id===BACKEND.user.id)?`<div class="home-your-rank"><span>Your position</span><b>#${me.rank_position}</b><strong>${Number(me.weekly_xp||0).toLocaleString()} progress</strong></div>`:''}`;
-  }catch(e){document.getElementById('homeLeaderboard')?.remove()}
-}
-
 
 function uxRouteCard({href,icon,kicker,title,text,meta=[],cta='Open →',tone=''}) {
   return `<a class="ux-route-card ${esc(tone)}" href="${esc(href)}"><div class="ux-route-icon">${icon}</div><div><span class="eyebrow">${esc(kicker)}</span><h2>${esc(title)}</h2><p>${esc(text)}</p>${meta.length?`<div class="ux-route-meta">${meta.map(x=>`<span>${esc(x)}</span>`).join('')}</div>`:''}</div><strong>${esc(cta)}</strong></a>`;
@@ -2256,7 +2226,7 @@ function completeCppMissionStage(missionId,stageId){
 }
 
 function programmingPage(){
-  const i=level(),n=nextLesson(),np=pathProgress(n.path),pb=pendingUnlockedBuild(),blocksDone=(state.blockCompleted||[]).length,coreBlocks=BLOCKS.blocks.filter(b=>b.tier==='core'),coreDone=coreBlocks.filter(b=>blockDone(b.id)).length;
+  const n=nextLesson(),np=pathProgress(n.path),pb=pendingUnlockedBuild(),blocksDone=(state.blockCompleted||[]).length,coreBlocks=BLOCKS.blocks.filter(b=>b.tier==='core'),coreDone=coreBlocks.filter(b=>blockDone(b.id)).length;
   const guides=unrealMasterGuides();
   const bp=(SKILL_MISSIONS.missions||[]).reduce((a,m)=>{const p=skillMissionProgress(m.id);a.done+=p.done;a.total+=p.total;return a},{done:0,total:0});
   return `<div class="page-head programming-page-head"><div class="breadcrumb"><a href="#/">Home</a> / <a href="#/learn">Learn</a> / Unreal Learning</div><span class="eyebrow">⌘ UNREAL LEARNING</span><h1>Learn Unreal without getting lost in the library.</h1><p class="muted">Use Core Systems when you are learning the engine in order. Use the Blueprint Programmer Path for a linked coding project. Use Quick Tutorials when you already know the outcome you need.</p></div>
@@ -3451,7 +3421,7 @@ async function renderTeacherClass(classId){
         <div class="teacher-stat"><small>Guided checkpoints</small><strong>${checkpointDone}</strong><span>required path evidence</span></div>
       </div>
 
-      <section class="section class-snapshot-section"><div class="section-head"><div><span class="eyebrow">AT-A-GLANCE</span><h2>Student learning snapshot</h2><p>The fast scan: core progress, Theory, Designer Studio, 3D, Guided Paths and recent activity.</p></div><a class="button small ghost" href="#/progress">🏆 Full leaderboard</a></div><div class="class-snapshot-scroll"><table class="class-snapshot-table"><thead><tr><th>Student</th><th>Unreal</th><th>Theory</th><th>Industry</th><th>Designer</th><th>3D / Sculpt</th><th>Guided Paths</th><th>Last activity</th></tr></thead><tbody>${members.map(p=>{
+      <section class="section class-snapshot-section"><div class="section-head"><div><span class="eyebrow">AT-A-GLANCE</span><h2>Student learning snapshot</h2><p>The fast scan: core progress, Theory, Designer Studio, 3D, Guided Paths and recent activity.</p></div></div><div class="class-snapshot-scroll"><table class="class-snapshot-table"><thead><tr><th>Student</th><th>Unreal</th><th>Theory</th><th>Industry</th><th>Designer</th><th>3D / Sculpt</th><th>Guided Paths</th><th>Last activity</th></tr></thead><tbody>${members.map(p=>{
         const core=count(p.id,DATA.lessons),tutorials=count(p.id,TOOLS.tutorials,'tutorial:'),chapters=count(p.id,TOOLS.chapterBuilds.map(x=>({id:x.path})),'chapter:'),theory=count(p.id,THEORY.lessons,'theory:'),career=CAREERS.chapters.filter(ch=>done(p.id,`theory:industry-${ch.id}`)).length,design=count(p.id,DESIGN.modules.map(m=>({id:m.id})),'designbuild:'),sources=count(p.id,designSourceItems(),'designsource:'),foundation=count(p.id,MODEL_FOUNDATIONS.chapters,'modeltheory:')+(done(p.id,'modelfoundation:final')?1:0),modelVideos=count(p.id,modelVideoItems(),'modelvideo:'),model=count(p.id,MODEL.lessons,'model:'),buildX=count(p.id,MODEL.builds||[],'modelbuild:'),modelFix=count(p.id,MODEL.fixes||[],'modelfix:'),sculpt=count(p.id,SCULPT.practices,'sculpt:');
         const pathChips=PATHWAYS.paths.map(path=>{const x=guidedPathProgressForStudent(path,progress,p.id);return `<span class="path-mini ${x.pct===100?'done':''}" title="${esc(path.title)}">${path.icon} ${x.pct}%</span>`}).join('');
         return `<tr><td><strong>${esc(p.display_name)}</strong></td><td><b>${core}/${DATA.lessons.length}</b><small>${tutorials} practical • ${chapters} chapter</small></td><td><b>${theory}/${THEORY.lessons.length}</b></td><td><b>${career}/${CAREERS.chapters.length}</b><small>${esc(careerRole(careerProfileFor(p.id).targetRole)?.title||'exploring')}</small></td><td><b>${design}/${DESIGN.modules.length}</b><small>${sources} source tasks</small></td><td><b>${foundation}/${MODEL_FOUNDATIONS.chapters.length+1}</b><small>${modelVideos}/${MODEL_VIDEOS.videos.length} Max videos • ${model}/${MODEL.lessons.length} lessons • ${buildX} Build X • ${modelFix} fixes • ${sculpt} sculpt</small></td><td><div class="path-mini-row">${pathChips}</div></td><td><span class="teacher-activity ${lastActivity(p.id)?'active':''}">${teacherActivityLabel(lastActivity(p.id))}</span></td></tr>`;
@@ -3508,7 +3478,7 @@ function critiqueLondonDay(value){
 }
 function critiqueFeedbackMarkup(f,post){
   const staff=f.author_role==='teacher',canDelete=isTeacher();
-  return `<article class="critique-feedback ${staff?'teacher-feedback':''}"><div class="critique-feedback-head"><div><strong>${esc(f.author_name||'Classmate')}${staff?' <span class="staff-role-pill compact">🎓 TEACHER</span>':''}</strong><small>${new Date(f.created_at).toLocaleString()}${f.xp_awarded?' rewarded':''}</small></div>${canDelete?`<button class="link-button danger-link" data-action="delete-critique-feedback" data-feedback="${f.id}">Delete</button>`:''}</div><div class="critique-feedback-grid"><div><b>✓ WHAT WORKS</b><p>${esc(f.works_well)}</p></div><div><b>?</b><span>WHAT COULD BE CLEARER</span><p>${esc(f.clearer)}</p></div><div><b>→</b><span>ONE CHANGE I’D TRY</span><p>${esc(f.change_try)}</p></div></div></article>`;
+  return `<article class="critique-feedback ${staff?'teacher-feedback':''}"><div class="critique-feedback-head"><div><strong>${esc(f.author_name||'Classmate')}${staff?' <span class="staff-role-pill compact">🎓 TEACHER</span>':''}</strong><small>${new Date(f.created_at).toLocaleString()}</small></div>${canDelete?`<button class="link-button danger-link" data-action="delete-critique-feedback" data-feedback="${f.id}">Delete</button>`:''}</div><div class="critique-feedback-grid"><div><b>✓ WHAT WORKS</b><p>${esc(f.works_well)}</p></div><div><b>?</b><span>WHAT COULD BE CLEARER</span><p>${esc(f.clearer)}</p></div><div><b>→</b><span>ONE CHANGE I’D TRY</span><p>${esc(f.change_try)}</p></div></div></article>`;
 }
 function critiquePostCard(post){
   const mine=post.author_id===BACKEND.user?.id,feedback=post.feedback||[],already=feedback.some(f=>f.author_id===BACKEND.user?.id),needs=!mine&&feedback.length<2,staff=post.author_role==='teacher';
@@ -3549,57 +3519,7 @@ function randomCritiquePost(){
 }
 
 
-function leaderboardPage(){
-  if(!BACKEND.user){
-    return `<div class="page-head"><div class="breadcrumb"><a href="#/">Home</a> / Leaderboard</div><span class="eyebrow">HUB progress</span><h1>My progress</h1><p class="muted">Sign in to see Hub-wide and class rankings, progress and streaks.</p></div><div class="offline-note">Sign in with your Learning Hub account to continue.</div>`;
-  }
-  return `<div class="page-head leaderboard-page-head"><div class="breadcrumb"><a href="#/">Home</a> / Leaderboard</div><span class="eyebrow">HUB + CLASS PROGRESSION</span><h1>My progress</h1><p class="muted">Useful progress earns progress. Compare across the Hub or switch to one of your classes. Grades and assessment marks are never ranked here.</p></div><div id="leaderboardContent"><div class="empty">Loading leaderboard…</div></div>`;
-}
-function leaderboardTitle(levelNo){
-  const n=Number(levelNo)||1;
-  if(n>=10)return 'Engine Architect';
-  if(n>=8)return 'Systems Director';
-  if(n>=6)return 'Prototype Ranger';
-  if(n>=4)return 'Blueprint Adept';
-  if(n>=2)return 'UE Explorer';
-  return 'New Recruit';
-}
-function leaderboardMedal(pos){return Number(pos)===1?'🥇':Number(pos)===2?'🥈':Number(pos)===3?'🥉':`#${pos}`}
-function leaderboardRow(row,me=false){
-  const initial=String(row.display_name||'?').trim().slice(0,1).toUpperCase()||'?';
-  return `<div class="leaderboard-row ${me?'is-you':''}"><div class="leaderboard-rank">${leaderboardMedal(row.rank_position)}</div><div class="leaderboard-person"><span class="leaderboard-avatar">${esc(initial)}</span><div><strong>${esc(row.display_name||'Student')}${me?' <span class="you-chip">YOU</span>':''}</strong><small>Level ${row.current_level} • ${esc(leaderboardTitle(row.current_level))}</small></div></div><div class="leaderboard-streak">${row.current_streak?`🔥 ${row.current_streak}`:'—'}<small>streak</small></div><div class="leaderboard-xp"><strong>${Number(row.score_xp||0).toLocaleString()}</strong><small>${leaderboardPeriod==='week'?'weekly progress':'total progress'}</small></div></div>`;
-}
-async function renderLeaderboard(){
-  const box=$('#leaderboardContent');if(!box||!BACKEND.user)return;
-  try{
-    const classes=await BACKEND.getLeaderboardClasses();
-    if(!leaderboardClassId)leaderboardClassId='all';
-    if(leaderboardClassId!=='all'&&!classes.some(c=>String(c.id)===String(leaderboardClassId)))leaderboardClassId='all';
-    const globalView=leaderboardClassId==='all';
-    const cls=globalView?null:(classes.find(c=>String(c.id)===String(leaderboardClassId))||null);
-    if(!globalView&&!cls){leaderboardClassId='all';return renderLeaderboard()}
-    const enabled=globalView?true:cls.leaderboard_enabled!==false;
-    const options=`<option value="all" ${globalView?'selected':''}>🌐 Everyone</option>${classes.map(c=>`<option value="${c.id}" ${!globalView&&String(c.id)===String(cls?.id)?'selected':''}>${esc(c.name)}${c.academic_year?' • '+esc(c.academic_year):''}</option>`).join('')}`;
-    if(!globalView&&!enabled&&!isTeacher()){
-      box.innerHTML=`<section class="leaderboard-toolbar"><label>View<select id="leaderboardClassSelect">${options}</select></label></section><div class="empty leaderboard-paused"><h3>My progress paused</h3><p>Your teacher has switched the leaderboard off for this class. You can still use the Hub-wide view if you belong to another leaderboard-enabled class.</p></div>`;return;
-    }
-    const rows=globalView?await BACKEND.getHubLeaderboard(leaderboardPeriod):await BACKEND.getClassLeaderboard(cls.id,leaderboardPeriod);
-    const me=rows.find(r=>r.user_id===BACKEND.user.id)||null;
-    const top=rows.slice(0,10),podium=rows.slice(0,3);
-    const improving=[...rows].sort((a,b)=>((b.weekly_xp||0)-(b.previous_week_xp||0))-((a.weekly_xp||0)-(a.previous_week_xp||0)))[0]||null;
-    const active=[...rows].sort((a,b)=>(b.current_streak||0)-(a.current_streak||0))[0]||null;
-    const scopeLabel=globalView?'across the Hub':`in ${esc(cls.name)}`;
-    box.innerHTML=`
-      <section class="leaderboard-toolbar"><label>View<select id="leaderboardClassSelect">${options}</select></label><div class="leaderboard-period-tabs"><button class="${leaderboardPeriod==='week'?'active':''}" data-action="leaderboard-period" data-period="week">This week</button><button class="${leaderboardPeriod==='all'?'active':''}" data-action="leaderboard-period" data-period="all">All time</button></div>${isTeacher()&&!globalView?`<button class="button ghost small" data-action="toggle-leaderboard" data-class="${cls.id}" data-enabled="${enabled?'1':'0'}">${enabled?'Pause for students':'Enable for students'}</button>`:''}</section>
-      ${isTeacher()&&!globalView&&!enabled?'<div class="teacher-security-banner"><b>LEADERBOARD PAUSED FOR STUDENTS</b><span>You can still preview it here. Students in this class cannot see rankings until you enable it again.</span></div>':''}
-      ${globalView?'<div class="teacher-security-banner hub-rivalry-note"><b>🌐 HUB-WIDE RIVALRY</b><span>Each student appears once, even if they belong to more than one class. Only active, leaderboard-enabled classes feed this board.</span></div>':''}
-      ${rows.length?`<section class="leaderboard-podium">${podium.map((r,i)=>`<article class="podium-card place-${i+1}"><span class="podium-medal">${leaderboardMedal(r.rank_position)}</span><span class="podium-avatar">${esc(String(r.display_name||'?').slice(0,1).toUpperCase())}</span><h3>${esc(r.display_name)}</h3><p>Level ${r.current_level} • ${esc(leaderboardTitle(r.current_level))}</p><strong>${Number(r.score_xp||0).toLocaleString()} progress</strong>${r.current_streak?`<small>🔥 ${r.current_streak} day streak</small>`:'<small>No current streak</small>'}</article>`).join('')}</section>`:''}
-      <section class="leaderboard-spotlights">${improving?`<article><span>📈</span><div><small>BIGGEST PROGRESS THIS WEEK</small><strong>${esc(improving.display_name)}</strong><p> vs last week</p></div></article>`:''}${active?`<article><span>🔥</span><div><small>CURRENT STREAK</small><strong>${esc(active.display_name)}</strong><p>${active.current_streak||0} active day${Number(active.current_streak)===1?'':'s'}</p></div></article>`:''}</section>
-      <section class="section leaderboard-board"><div class="section-head"><div><h2>${leaderboardPeriod==='week'?'This week':'All-time'} Top 10 ${scopeLabel}</h2><p>progress comes from genuine learning progress. Repeating the same completion does not award it twice.</p></div><span class="sync-chip">${rows.length} student${rows.length===1?'':'s'}</span></div><div class="leaderboard-list">${top.map(r=>leaderboardRow(r,r.user_id===BACKEND.user.id)).join('')||'<div class="empty">No progress activity yet.</div>'}</div></section>
-      ${!isTeacher()&&me&&!top.some(r=>r.user_id===BACKEND.user.id)?`<section class="your-rank-card"><span class="eyebrow">YOUR POSITION</span>${leaderboardRow(me,true)}</section>`:''}
-      <section class="leaderboard-rules"><span class="eyebrow">HOW progress WORKS</span><h2>Progress, not grades.</h2><div class="leaderboard-rule-grid"><span><b>Core learning</b>Uses the progress already attached to Hub lessons and chapter builds.</span><span><b></b>Complete an industry video/article source task in Designer Studio.</span><span><b></b>Meaningful structured peer critique — first 3 rewarded each day.</span><span><b></b>Quick Tutorial or Building Block completion.</span><span><b></b>First genuine activity of the day.</span><span><b>No farming</b>One reward per source/post; critique progress has a daily cap.</span></div></section>`;
-  }catch(err){box.innerHTML=`<div class="empty"><h3>Could not load the leaderboard.</h3><p>${esc(err.message)}</p></div>`}
-}
+function leaderboardPage(){return progressPage();}
 
 async function renderClassesHub(){
   const box=$('#classesHubContent');if(!box||!BACKEND.user)return;
@@ -3610,13 +3530,13 @@ async function renderClassesHub(){
       <section class="classes-hub-grid">${active.length?active.map(c=>{
         const members=(c.class_members||[]).length;
         const owner=c.teacher_id===BACKEND.user.id;
-        return `<article class="classes-hub-card ${owner?'owned':'co-taught'}"><div class="classes-hub-card-top"><div><span class="eyebrow">${owner?'OWNER':'CO-TEACHER'}</span><h2>${esc(c.name)}</h2><p>${esc(c.academic_year||'Current class')}</p></div><span class="classes-hub-count"><b>${members}</b> student${members===1?'':'s'}</span></div><div class="classes-hub-code"><small>JOIN CODE</small><code>${esc(c.join_code||'Not set')}</code><span>${c.join_enabled?'Accepting joins':'Joins paused'}</span></div><div class="classes-hub-actions"><a class="button primary" href="#/teacher/class/${c.id}">Open class →</a><a class="button ghost" href="#/progress">My progress</a><a class="button ghost" href="#/teacher">Manage classes</a></div></article>`;
+        return `<article class="classes-hub-card ${owner?'owned':'co-taught'}"><div class="classes-hub-card-top"><div><span class="eyebrow">${owner?'OWNER':'CO-TEACHER'}</span><h2>${esc(c.name)}</h2><p>${esc(c.academic_year||'Current class')}</p></div><span class="classes-hub-count"><b>${members}</b> student${members===1?'':'s'}</span></div><div class="classes-hub-code"><small>JOIN CODE</small><code>${esc(c.join_code||'Not set')}</code><span>${c.join_enabled?'Accepting joins':'Joins paused'}</span></div><div class="classes-hub-actions"><a class="button primary" href="#/teacher/class/${c.id}">Open class →</a><a class="button ghost" href="#/teacher">Manage classes</a></div></article>`;
       }).join(''):`<div class="empty classes-hub-empty"><h3>No active classes yet.</h3><p>Create your first class from the Teacher dashboard.</p><a class="button primary" href="#/teacher">Create a class →</a></div>`}</section>`;
       return;
     }
 
     const classes=await BACKEND.getMyClasses();
-    box.innerHTML=`${classes.length?`<section class="classes-hub-grid student-classes">${classes.map(c=>`<article class="classes-hub-card student"><div class="classes-hub-card-top"><div><span class="eyebrow">YOUR CLASS</span><h2>${esc(c.name)}</h2><p>${esc(c.academic_year||'Teaching group')}</p></div><span class="classes-hub-count student">🏫</span></div><p class="classes-hub-note">Use the shortcuts below for the work connected to your Learning Hub account.</p><div class="classes-hub-actions"><a class="button primary" href="#/progress">My Progress →</a><a class="button ghost" href="#/progress">My progress</a><a class="button ghost" href="#/critique">💬 Critique Board</a></div></article>`).join('')}</section>`:`<div class="empty classes-hub-empty"><h3>You are not in a class yet.</h3><p>Enter the class code your teacher gave you.</p></div>`}
+    box.innerHTML=`${classes.length?`<section class="classes-hub-grid student-classes">${classes.map(c=>`<article class="classes-hub-card student"><div class="classes-hub-card-top"><div><span class="eyebrow">YOUR CLASS</span><h2>${esc(c.name)}</h2><p>${esc(c.academic_year||'Teaching group')}</p></div><span class="classes-hub-count student">🏫</span></div><p class="classes-hub-note">Use the shortcuts below for the work connected to your Learning Hub account.</p><div class="classes-hub-actions"><a class="button primary" href="#/progress">My Progress →</a><a class="button ghost" href="#/critique">💬 Critique Board</a></div></article>`).join('')}</section>`:`<div class="empty classes-hub-empty"><h3>You are not in a class yet.</h3><p>Enter the class code your teacher gave you.</p></div>`}
     <section class="classes-join-panel"><div><span class="eyebrow">${classes.length?'NEED ANOTHER CLASS?':'JOIN YOUR CLASS'}</span><h2>Use a class code</h2><p>Your teacher can give you the current code for the teaching group.</p></div><form class="join-class-inline" data-action-form="join-class"><input name="classCode" maxlength="20" required placeholder="CLASS CODE"><button class="button primary" type="submit">Join class</button></form></section>`;
   }catch(err){box.innerHTML=`<div class="empty"><h3>Could not load classes.</h3><p>${esc(err.message)}</p></div>`}
 }
@@ -3849,7 +3769,7 @@ function route(options={}){
   app.focus({preventScroll:true});
   $('#sidebar').classList.remove('open');
 
-  if(!parts.length&&BACKEND.user) renderHomeLeaderboardPreview();
+  
   if(parts[0]==='lesson'&&BACKEND.user)loadComments(parts[1]);
   if(parts[0]==='news') loadNewsFeed();
   
@@ -4231,7 +4151,7 @@ function renderAuth(){
         </div>
         <button class="button primary" type="submit">Create account</button>
       </form>
-      <p class="auth-message"><b>Guest mode remains available:</b> close this window and the whole learning course still works. An account is needed for cloud sync, classes, Critique Board, lesson feedback, requests, leaderboards and notifications. Formal assignment submission stays in Microsoft Teams.</p>
+      <p class="auth-message"><b>Guest mode remains available:</b> close this window and the whole learning course still works. An account is needed for cloud sync, classes, Critique Board, lesson feedback, requests and notifications. Formal assignment submission stays in Microsoft Teams.</p>
       <div class="teacher-account-links">
         <button class="link-button" data-action="auth-view" data-view="teacher-invite">I have a teacher invite</button>
         <button class="link-button teacher-setup-link" data-action="auth-view" data-view="teacher-setup">First installation only: create the first teacher</button>
@@ -4496,20 +4416,6 @@ document.addEventListener('click',async e=>{
       try{await BACKEND.removeClassTeacher(b.dataset.class,BACKEND.user.id);await renderTeacher();toast('You left the teaching team.')}catch(err){toast(err.message)}
     }
   }
-  else if(a==='leaderboard-period'){
-    leaderboardPeriod=b.dataset.period==='all'?'all':'week';
-    await renderLeaderboard();
-  }
-  else if(a==='toggle-leaderboard'){
-    try{
-      const enable=b.dataset.enabled!=='1';
-      await BACKEND.setClassLeaderboardEnabled(b.dataset.class,enable);
-      const classes=await BACKEND.getLeaderboardClasses();
-      const current=classes.find(c=>String(c.id)===String(b.dataset.class));
-      if(current)current.leaderboard_enabled=enable;
-      await renderLeaderboard();toast(enable?'Leaderboard enabled for students.':'Leaderboard paused for students.');
-    }catch(err){toast(err.message)}
-  }
   else if(a==='toggle-class-join'){
     try{await BACKEND.setClassJoinEnabled(b.dataset.class,b.dataset.enabled!=='1');await renderTeacher();toast(b.dataset.enabled==='1'?'Class code paused.':'Class code enabled.')}catch(err){toast(err.message)}
   }
@@ -4624,10 +4530,6 @@ document.addEventListener('click',async e=>{
 });
 
 document.addEventListener('change',async e=>{
-  if(e.target?.id==='leaderboardClassSelect'){
-    leaderboardClassId=String(e.target.value||'');
-    await renderLeaderboard();
-  }
   if(e.target?.id==='critiqueClassSelect'){
     critiqueClassId=String(e.target.value||'');
     critiqueFilter='all';
@@ -4725,7 +4627,7 @@ document.addEventListener('submit',async e=>{
   }
   if(e.target.dataset.actionForm==='critique-feedback'){
     e.preventDefault();const fd=new FormData(e.target);
-    try{const row=await BACKEND.postCritiqueFeedback(e.target.dataset.post,{worksWell:fd.get('worksWell'),clearer:fd.get('clearer'),changeTry:fd.get('changeTry')});await renderCritiqueBoard();toast(row?.xp_awarded?'Useful critique posted':'Critique posted. Daily progress cap reached, but the feedback still counts.');}catch(err){toast(err.message)}return;
+    try{const row=await BACKEND.postCritiqueFeedback(e.target.dataset.post,{worksWell:fd.get('worksWell'),clearer:fd.get('clearer'),changeTry:fd.get('changeTry')});await renderCritiqueBoard();toast('Critique posted.');}catch(err){toast(err.message)}return;
   }
   if(e.target.dataset.actionForm==='news-comment'){
     e.preventDefault();const key=e.target.dataset.story,story=newsStoryByKey(key);if(!story)return;
