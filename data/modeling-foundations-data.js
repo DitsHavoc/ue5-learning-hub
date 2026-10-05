@@ -3,7 +3,6 @@ window.UE5_MODELING_FOUNDATIONS = {
   "title": "Game-Ready 3D Foundations",
   "short": "Six short chapters that teach you what to look for, what to change and why before you start chasing buttons in Max.",
   "passPercent": 80,
-  "chapterXp": 20,
   "finalXp": 100,
   "sourceNote": "These are the decisions behind the practical modelling builds: read the mesh, use geometry deliberately, control transforms and pivots, unwrap cleanly, build believable materials and check the asset in-engine.",
   "chapters": [
