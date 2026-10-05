@@ -3775,8 +3775,8 @@ function route(options={}){
   else if(parts[0]==='blocks'){app.innerHTML=blocksPage();activate('blocks')}
   else if(parts[0]==='block'&&parts[1]){app.innerHTML=blockPage(parts[1]);activate('blocks')}
   else if(parts[0]==='news'){app.innerHTML=newsPage();activate('news')}
-  else if(parts[0]==='path'){app.innerHTML=pathPage(parts[1]);activate(parts[1])}
-  else if(parts[0]==='lesson'){app.innerHTML=lessonPage(parts[1]);const l=lesson(parts[1]);if(l)activate(l.path)}
+  else if(parts[0]==='path'){app.innerHTML=pathPage(parts[1]);activate('learn')}
+  else if(parts[0]==='lesson'){app.innerHTML=lessonPage(parts[1]);activate('learn')}
   else if(parts[0]==='my-game'||parts[0]==='projects'){app.innerHTML=teamsProjectNoticePage();activate('home')}
   else if(parts[0]==='classes'){app.innerHTML=classesPage();activate('classes')}
   else if(parts[0]==='leaderboard'){app.innerHTML=leaderboardPage();activate('leaderboard')}
