@@ -1,5 +1,5 @@
-/* v3.46.2 — Remove Sculpt Playground
-   Student Journey + Class Focus + learning-flow refinement layer.
+/* v3.61.0 — Student Journey + Class Focus + intent-led navigation support.
+   Learning-flow refinement layer.
    Does not replace core learning data, app.js, backend.js, roster controls or existing progress logic.
 */
 (() => {
@@ -103,7 +103,7 @@
   }
 
   function isSupportRoute(hash) {
-    return ['#/blocks','#/tutorials','#/revision','#/resources','#/snippets','#/glossary','#/critique','#/news','#/homework','#/challenges']
+    return ['#/study','#/blocks','#/tutorials','#/revision','#/resources','#/snippets','#/glossary','#/critique','#/news','#/homework','#/challenges']
       .some(prefix => hash === prefix || hash.startsWith(prefix + '/'));
   }
 
@@ -157,9 +157,9 @@
       return `<article class="journey-start-card personal">
         <span class="journey-card-kicker">▶ YOUR WORK</span>
         <h2>Choose your own direction</h2>
-        <p>Working independently? Pick an area and the Hub will remember what you were doing without changing the class focus.</p>
+        <p>Working independently? Choose the kind of work first. The Hub will remember the actual lesson, mission or tutorial once you start it.</p>
         <div class="journey-mini-actions">
-          <a href="#/modeling">⬡ 3D</a><a href="#/programming">⌘ Unreal</a><a href="#/design">✦ Design</a><a href="#/theory">◈ Theory</a>
+          <a href="#/paths">🧭 Paths</a><a href="#/learn">📚 Learn</a><a href="#/build">🛠 Build</a><a href="#/study">↻ Study</a>
         </div>
       </article>`;
     }
