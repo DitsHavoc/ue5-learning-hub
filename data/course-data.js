@@ -48,7 +48,6 @@ window.UE5_COURSE_DATA = {
       "short": "Find, place, organise and edit things without getting lost.",
       "difficulty": "Beginner",
       "duration": "25 min",
-      "xp": 100,
       "aim": "Use the main Level Editor panels confidently.",
       "goals": [
         "Navigate the Viewport",
@@ -505,7 +504,6 @@ window.UE5_COURSE_DATA = {
       "short": "Understand the pieces behind objects placed in a level.",
       "difficulty": "Beginner",
       "duration": "30 min",
-      "xp": 120,
       "aim": "Explain how Actors are built from Components and create a simple Actor Blueprint.",
       "goals": [
         "Explain what an Actor is",
@@ -1003,7 +1001,6 @@ window.UE5_COURSE_DATA = {
       "short": "Build reusable game objects instead of one-off level hacks.",
       "difficulty": "Beginner",
       "duration": "35 min",
-      "xp": 130,
       "aim": "Create a reusable Blueprint Class and distinguish a Class from an instance.",
       "goals": [
         "Create an Actor Blueprint Class",
@@ -1455,7 +1452,6 @@ window.UE5_COURSE_DATA = {
       "short": "Understand what starts Blueprint logic and the order it runs.",
       "difficulty": "Beginner",
       "duration": "35 min",
-      "xp": 140,
       "aim": "Trace Blueprint execution from an Event through connected actions.",
       "goals": [
         "Identify Events",
@@ -1893,7 +1889,6 @@ window.UE5_COURSE_DATA = {
       "short": "Let the game remember health, ammo, state and references.",
       "difficulty": "Beginner",
       "duration": "40 min",
-      "xp": 150,
       "aim": "Create, read and change variables using suitable data types.",
       "goals": [
         "Choose sensible variable types",
@@ -2355,7 +2350,6 @@ window.UE5_COURSE_DATA = {
       "short": "Make your Blueprint choose what happens next using true/false logic.",
       "difficulty": "Beginner",
       "duration": "45 min",
-      "xp": 160,
       "aim": "Understand how a Branch evaluates a true/false condition and use it to control a real gameplay decision.",
       "goals": [
         "Explain what a Branch does in plain English",
@@ -2795,7 +2789,6 @@ window.UE5_COURSE_DATA = {
       "short": "Package repeated logic behind clear names.",
       "difficulty": "Intermediate",
       "duration": "45 min",
-      "xp": 180,
       "aim": "Create reusable Functions with inputs and outputs and choose when abstraction helps.",
       "goals": [
         "Create a Function",
@@ -3237,7 +3230,6 @@ window.UE5_COURSE_DATA = {
       "short": "Know where rules, player bodies and persistent data belong.",
       "difficulty": "Intermediate",
       "duration": "50 min",
-      "xp": 200,
       "aim": "Explain the roles of key Gameplay Framework classes.",
       "goals": [
         "Distinguish Actor, Pawn and Character",
@@ -3682,7 +3674,6 @@ window.UE5_COURSE_DATA = {
       "short": "Get hold of the object you actually want to talk to.",
       "difficulty": "Intermediate",
       "duration": "50 min",
-      "xp": 210,
       "aim": "Use object references and understand what Casting is checking.",
       "goals": [
         "Explain an object reference",
@@ -4122,7 +4113,6 @@ window.UE5_COURSE_DATA = {
       "short": "Build communication that scales beyond one tightly-coupled pair of Blueprints.",
       "difficulty": "Intermediate",
       "duration": "60 min",
-      "xp": 240,
       "aim": "Choose between direct communication, Interfaces and Event Dispatchers.",
       "goals": [
         "Describe an Interface message",
@@ -4608,7 +4598,6 @@ window.UE5_COURSE_DATA = {
       "short": "Detect entering, leaving, touching and blocking in a controlled way.",
       "difficulty": "Beginner",
       "duration": "45 min",
-      "xp": 180,
       "aim": "Configure collision and use overlap events to trigger gameplay.",
       "goals": [
         "Add collision Components",
@@ -5056,7 +5045,6 @@ window.UE5_COURSE_DATA = {
       "short": "Ask what is in front of the player.",
       "difficulty": "Intermediate",
       "duration": "55 min",
-      "xp": 230,
       "aim": "Run a line trace, inspect a Hit Result and use debug drawing.",
       "goals": [
         "Define Start and End",
@@ -5513,7 +5501,6 @@ window.UE5_COURSE_DATA = {
       "short": "Animate values over time instead of teleporting gameplay objects.",
       "difficulty": "Intermediate",
       "duration": "55 min",
-      "xp": 220,
       "aim": "Use a Timeline and Lerp to create smooth reversible movement.",
       "goals": [
         "Create a Timeline",
@@ -5969,7 +5956,6 @@ window.UE5_COURSE_DATA = {
       "short": "Display health, counters and objectives without turning the Widget into the game logic.",
       "difficulty": "Intermediate",
       "duration": "60 min",
-      "xp": 230,
       "aim": "Create a UMG Widget and connect it to gameplay values.",
       "goals": [
         "Create a Widget Blueprint",
@@ -6432,7 +6418,6 @@ window.UE5_COURSE_DATA = {
       "short": "Store data that needs to survive beyond the current play session.",
       "difficulty": "Intermediate",
       "duration": "55 min",
-      "xp": 230,
       "aim": "Create a SaveGame object and save/load simple progress data.",
       "goals": [
         "Create a SaveGame Class",
@@ -6823,7 +6808,6 @@ window.UE5_COURSE_DATA = {
       "short": "Stop creating Health1, Health2, Health3 and organise data properly.",
       "difficulty": "Intermediate",
       "duration": "65 min",
-      "xp": 260,
       "aim": "Choose suitable Blueprint data structures for collections and structured data.",
       "goals": [
         "Use an Array",
@@ -7265,7 +7249,6 @@ window.UE5_COURSE_DATA = {
       "short": "Give enemies goals and decisions instead of scripting one giant chase graph.",
       "difficulty": "Intermediate",
       "duration": "70 min",
-      "xp": 280,
       "aim": "Set up simple AI navigation and explain the roles of Blackboard and Behaviour Tree.",
       "goals": [
         "Use a NavMesh",
@@ -7737,7 +7720,6 @@ window.UE5_COURSE_DATA = {
       "short": "Connect character movement data to animation states.",
       "difficulty": "Intermediate",
       "duration": "65 min",
-      "xp": 260,
       "aim": "Explain the role of Animation Blueprint EventGraph, AnimGraph and State Machines.",
       "goals": [
         "Create an Animation Blueprint",
@@ -8194,7 +8176,6 @@ window.UE5_COURSE_DATA = {
       "short": "Put behaviour where it belongs so changes happen in one place.",
       "difficulty": "Intermediate",
       "duration": "45 min",
-      "xp": 220,
       "aim": "Decide which Blueprint should own state and behaviour.",
       "goals": [
         "Explain responsibility",
@@ -8563,7 +8544,6 @@ window.UE5_COURSE_DATA = {
       "short": "Use abstraction, comments, categories and names so another human can read your work.",
       "difficulty": "Intermediate",
       "duration": "45 min",
-      "xp": 220,
       "aim": "Refactor a complex Blueprint for readability without changing behaviour.",
       "goals": [
         "Use abstraction appropriately",
