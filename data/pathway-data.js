@@ -1,14 +1,14 @@
 window.UE5_PATHWAY_DATA = {
   version: '3.41.1',
   buildDate: '2026-08-31',
-  intro: 'Guided Paths are optional routes through learning that already exists in the Hub. They connect different areas around a real outcome without locking the rest of the site or creating duplicate XP.',
+  intro: 'Guided Paths are optional routes through learning that already exists in the Hub. They connect different areas around a real outcome without locking the rest of the site or duplicating completion credit.',
   principles: [
     'Everything in the Hub remains freely browsable.',
     'A path recommends an order; it does not lock the rest of the site.',
     'Work you already completed counts automatically.',
     'Choice steps adapt to the option you pick and include any missing foundation first.',
-    'Practical checkpoints can be required for a path without awarding XP.',
-    'XP still comes from the real lesson, tutorial or build — never twice.'
+    'Practical checkpoints can be required for a path without adding a second reward layer.',
+    'Completion is recorded against the real lesson, tutorial or build — never twice.'
   ],
   paths: [
     {
