@@ -4004,13 +4004,15 @@ async function copyHomework(id){
   if(!item){const l=lesson(id);if(l)item=homeworkItems().find(x=>x.legacyId===id)}
   if(!item)return;
   const fallbackStretch=item.stretch||'Apply the same idea practically when a suitable development PC is available.';
+  const cleanPath=String(location.pathname||'/').replace(/\/index\.html?$/i,'/').replace(/\/+$/,'/');
+  const hubLink=`${location.origin}${cleanPath}${homeworkSafeHref(item.href)}`;
   let text;
   if(item.mode==='detective'){
     const stages=(item.steps||[]).map((x,i)=>`${i+1}. ${x}`).join('\n');
-    text=`🕵️ SYSTEMS DETECTIVE — ${item.title}\n\nDuration: ${item.duration||'25–40 min'}\nAccess: ${item.accessLabel||'Play/watch + paper/browser'}\n\nMISSION BRIEF\n${item.task}\n\nMISSION STAGES\n${stages}\n\nBRING BACK\n${item.evidence}\n\nBUILD IT LATER\n${fallbackStretch}\n\nHub area: ${item.areaLabel}\nLesson: ${item.meta}`;
+    text=`🕵️ SYSTEMS DETECTIVE — ${item.title}\n\nDuration: ${item.duration||'25–40 min'}\nAccess: ${item.accessLabel||'Play/watch + paper/browser'}\n\nMISSION BRIEF\n${item.task}\n\nMISSION STAGES\n${stages}\n\nBRING BACK\n${item.evidence}\n\nBUILD IT LATER\n${fallbackStretch}\n\nHub area: ${item.areaLabel}\nLesson: ${item.meta}\nOpen in Hub: ${hubLink}`;
   }else{
     const steps=item.steps?.length?`\n\nSuggested steps:\n${item.steps.map((x,i)=>`${i+1}. ${x}`).join('\n')}`:'';
-    text=`${item.title}\n\nHomework type: ${item.modeLabel||'Research / analysis'}\nAccess: ${item.accessLabel||'No development PC needed'}\n\nTask:\n${item.task}${steps}\n\nEvidence:\n${item.evidence}\n\nStretch / next college-PC session:\n${fallbackStretch}\n\nRelated Hub area: ${item.areaLabel}\nReference: ${item.meta}`;
+    text=`${item.title}\n\nHomework type: ${item.modeLabel||'Research / analysis'}\nAccess: ${item.accessLabel||'No development PC needed'}\n\nTask:\n${item.task}${steps}\n\nEvidence:\n${item.evidence}\n\nStretch / next college-PC session:\n${fallbackStretch}\n\nRelated Hub area: ${item.areaLabel}\nReference: ${item.meta}\nOpen in Hub: ${hubLink}`;
   }
   try{await navigator.clipboard.writeText(text);toast('Independent-study task copied — ready for Teams.')}catch(e){toast('Clipboard blocked by browser.')}
 }
