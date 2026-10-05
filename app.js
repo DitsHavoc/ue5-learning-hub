@@ -3749,6 +3749,10 @@ function route(options={}){
   const parts=currentHash.replace(/^#\//,'').split('/').filter(Boolean),app=$('#app');
   $$('.nav a').forEach(a=>a.classList.remove('active'));
   if(!parts.length){app.innerHTML=dashboard();activate('home')}
+  else if(parts[0]==='paths'){app.innerHTML=pathsHubPage();activate('paths')}
+  else if(parts[0]==='learn'){app.innerHTML=learnHubPage();activate('learn')}
+  else if(parts[0]==='build'){app.innerHTML=buildHubPage();activate('build')}
+  else if(parts[0]==='study'){app.innerHTML=studyHubPage();activate('study')}
   else if(parts[0]==='pathways'&&parts[1]){app.innerHTML=guidedPathPage(parts[1]);activate('pathways')}
   else if(parts[0]==='pathways'){app.innerHTML=guidedPathsPage();activate('pathways')}
   else if(parts[0]==='level4'&&parts[1]){app.innerHTML=level4SpecialistProjectPage(parts[1]);activate('level4')}
@@ -3822,7 +3826,18 @@ function route(options={}){
   else if(parts[0]==='teacher') renderTeacher();
 }
 function activate(key){
-  const a=$(`[data-route="${key}"]`);if(a)a.classList.add('active');
+  const hubMap={
+    pathways:'paths',
+    programming:'learn',theory:'learn','industry-careers':'learn',design:'learn',modeling:'learn',sculpt:'learn',
+    tutorials:'build','unreal-designer':'build',challenges:'build',critique:'build',
+    blocks:'study',homework:'study',revision:'study',glossary:'study',snippets:'study'
+  };
+  const target=hubMap[key]||key;
+  const a=$(`[data-route="${target}"]`);
+  if(a){
+    a.classList.add('active');
+    const more=a.closest('details.ux-nav-more');if(more)more.open=true;
+  }
 }
 function bindRevisionBuilder(){
   const form=$('#revisionFocusedForm');if(!form)return;
@@ -5015,6 +5030,13 @@ function buildGlobalSearchIndex(){
   const entries=[];
   const add=e=>{if(e?.title&&e?.href)entries.push(makeSearchEntry(e))};
 
+  [
+    ['Paths','Sequential learning routes: Unreal Core, Blueprint Programmer, C++, 3D Modelling, Game Design and Industry & Careers','#/paths','🧭','hub'],
+    ['Learn','Choose a subject area: Unreal, game design, Designer Studio, 3D Modelling or Industry & Careers','#/learn','📚','hub'],
+    ['Build','Quick Tutorials, Unreal Designer, Challenge Board, Level 4 projects and practical resources','#/build','🛠','hub'],
+    ['Study','Homework, revision quizzes, Building Blocks, Blueprint Checks, Cheat Sheet and glossary','#/study','↻','hub']
+  ].forEach(([title,data,href,icon,kind])=>add({title,meta:'Student hub',href,icon,kind,data}));
+
   (DATA.lessons||[]).forEach(l=>add({
     title:l.title,meta:`Unreal Learning • ${l.projectTask?.name||path(l.path)?.title||'Core lesson'}`,
     href:`#/lesson/${l.id}`,icon:'◇',kind:'lesson',data:deepSearchText(l)
@@ -5073,7 +5095,7 @@ function buildGlobalSearchIndex(){
   [
     ['Guided Paths','Optional outcome-based routes through Theory, Unreal, Designer Studio and 3D without locking the rest of the Hub','#/pathways','↠'],
     ['Unreal Learning','Core lessons, learning paths and practical Unreal Engine progression','#/programming','◇'],
-    ['Unreal C++ Skill Missions','Level 4 Visual Studio setup, native gameplay classes, hybrid C++ and Blueprint progression','#/cpp-mission/cpp-setup/start','C++'],
+    ['Unreal C++ Programmer Path','Standalone Level 4 C++ route: fresh L4CppTraining project, Visual Studio setup, native gameplay classes, functions, inventory and components','#/cpp-path','C++'],
     ['Blueprint Snippet Bank','Official Epic paste assists and reusable Blueprint graph helpers','#/snippets','⚡'],
     ['Quick Tutorials','Recipe families and practical UE5 build outcomes','#/tutorials','🛠'],
     ['Game Design Theory','Core loops, MDA, agency, choices, balance, pacing, accessibility, prototyping, playtesting and adaptation','#/theory','◈'],
