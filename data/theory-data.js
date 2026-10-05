@@ -1430,7 +1430,7 @@ window.UE5_THEORY_DATA = {
         "Teach one idea, test it, then combine it with another.",
         "Player power and game challenge can both rise.",
         "Difficulty settings should ideally change meaningful demands, not only numbers.",
-        "Mastery can be progression even without levels or XP."
+        "Mastery can be progression even without levels or points."
       ],
       "mistakes": [
         "Difficulty = more health and damage only.",
@@ -1515,7 +1515,7 @@ window.UE5_THEORY_DATA = {
           "q": "Which is progression without a level-up screen?",
           "options": [
             "The player learns enemy tells and can solve encounters more reliably",
-            "Nothing can count without XP",
+            "Nothing can count without points",
             "Only new graphics",
             "A loading screen"
           ],
