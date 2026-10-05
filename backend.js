@@ -16,7 +16,6 @@
     client: null,
     user: null,
     profile: null,
-    xpSummary: null,
     recoveryMode: false,
     microsoftEnabled: false,
     emailAuthEnabled: false,
@@ -25,7 +24,6 @@
     async init() {
       this.user = null;
       this.profile = null;
-      this.xpSummary = null;
       this.recoveryMode = false;
       this.emit();
     },
@@ -50,10 +48,6 @@
     async validateClassCode() { return accountsRemoved(); },
     async validateTeacherBootstrap() { return accountsRemoved(); },
 
-    async refreshXpSummary() {
-      this.xpSummary = null;
-      return null;
-    }
   };
 
   // app.js contains older cloud-only screens. They are hidden by the v3.56.0
