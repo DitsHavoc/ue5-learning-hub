@@ -7237,7 +7237,6 @@ window.UE5_TUTORIAL_DATA = {
       "title": "The Locked Room",
       "icon": "▣",
       "duration": "45–60 min",
-      "xp": 250,
       "summary": "Build a tiny playable room/escape space that proves you can organise an Unreal project and create reusable world objects.",
       "brief": "You arrive in a small maintenance room. The exit is visible but the space must be readable, organised and built from reusable pieces. This is deliberately more level-building than scripting: prove you can control the Editor before the Blueprint-heavy chapters.",
       "uses": [
@@ -7305,7 +7304,6 @@ window.UE5_TUTORIAL_DATA = {
       "title": "Power Failure",
       "icon": "⚡",
       "duration": "60–90 min",
-      "xp": 300,
       "summary": "Combine Events, Variables, Branches and Functions into a tiny objective: restore power and open the exit.",
       "brief": "The room is dark and the exit has no power. The player must collect/activate a power cell, restore the system and then use the exit. You are allowed to follow the steps — the important part is understanding which state changes and why.",
       "uses": [
@@ -7383,7 +7381,6 @@ window.UE5_TUTORIAL_DATA = {
       "title": "Emergency Override",
       "icon": "↔",
       "duration": "60–90 min",
-      "xp": 325,
       "summary": "Build several interactable objects that communicate cleanly without turning the player Blueprint into a giant switchboard.",
       "brief": "A facility emergency override must activate three different systems: a door, warning light and lift/bridge. Build one interaction route that can talk to different objects cleanly.",
       "uses": [
@@ -7461,7 +7458,6 @@ window.UE5_TUTORIAL_DATA = {
       "title": "Escape the Facility",
       "icon": "⚙",
       "duration": "90–120 min",
-      "xp": 400,
       "summary": "Build a compact playable escape sequence using collision, traces, a moving door, HUD feedback and a checkpoint/save-style rule.",
       "brief": "Create a 2–4 minute escape prototype. The player must find access, interact with the world, pass a moving barrier, understand an objective and survive/recover from one hazard.",
       "uses": [
@@ -7542,7 +7538,6 @@ window.UE5_TUTORIAL_DATA = {
       "title": "Avoid the Security Drone",
       "icon": "◉",
       "duration": "90–120 min",
-      "xp": 425,
       "summary": "Create a simple patrol/chase enemy with readable animation/state and at least one piece of data-driven configuration.",
       "brief": "The exit route is watched by a security drone/guard. It patrols, detects the player, chases, then returns to normal when the player escapes. Make the state readable to the player and configure at least one behaviour value from structured data.",
       "uses": [
@@ -7622,7 +7617,6 @@ window.UE5_TUTORIAL_DATA = {
       "title": "Blueprint Rescue: Fix This Game",
       "icon": "✓",
       "duration": "60–90 min",
-      "xp": 450,
       "summary": "Take intentionally messy gameplay logic and refactor it so another developer can understand, test and extend it.",
       "brief": "You inherit a small working prototype with ugly Blueprint logic. Your job is not to add ten features — it is to make the existing feature safe, readable and maintainable without changing what the player experiences.",
       "uses": [
