@@ -2,7 +2,6 @@ window.UE5_MODELING_VIDEOS = {
   version: '3.38.1',
   title: "Dits' 3ds Max Video Series",
   short: 'Short follow-along videos for the exact Max skills used in the Modelling Studio. Watch, reproduce the move in Max, then mark the source task complete.',
-  xp: 20,
   folderUrl: 'https://drive.google.com/drive/folders/1MyV_-iYs79ClRzrRk-X1agZL57_Oh91Q',
   groups: [
     {id:'start', title:'Start in Max', kicker:'GET COMFORTABLE • BUILD WITH PRIMITIVES', note:'Learn the interface, basic primitives, parameters and the everyday tools before Editable Poly enters the room.'},
