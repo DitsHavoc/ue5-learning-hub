@@ -1,6 +1,6 @@
 /* UE5 Learning Hub v3.56.1 — LOCAL ONLY / CLEANUP
    Removes account-backed leftovers that no longer make sense in the local-only Hub.
-   Local completion/XP still works internally; the dedicated Progress page is simply no longer exposed.
+   Local completion tracking still works internally; the dedicated Progress page is simply no longer exposed.
 */
 (() => {
   'use strict';
