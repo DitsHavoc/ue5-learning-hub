@@ -175,5 +175,5 @@
 
   clearOldAccountCache();
   enforce();
-  console.info('[UE5 Hub] v3.56.2 homepage hotfix active');
+  console.info('[UE5 Hub] v3.61.4 local-only cleanup active');
 })();
