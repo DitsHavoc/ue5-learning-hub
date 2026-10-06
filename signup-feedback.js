@@ -5,7 +5,7 @@
 (() => {
   'use strict';
 
-  const VERSION = '3.56.2';
+  const VERSION = '3.61.4';
   const BLOCKED_PREFIXES = [
     '#/classes', '#/teacher', '#/requests', '#/projects',
     '#/leaderboard', '#/progress', '#/critique'
@@ -16,7 +16,8 @@
   style.textContent = `
     #accountButton,#notificationButton,#authModal,#classesNav,#teacherNav,
     .leaderboard-nav,[data-route="leaderboard"],[data-route="requests"],
-    [data-route="progress"],[data-route="critique"],.local-only-retired-nav{display:none!important}
+    [data-route="progress"],[data-route="critique"],.local-only-retired-nav,
+    .side-progress,.version-badge,#sideXp,#sideLevel,#sideBar,#sideNext,#topXp,#topXpUnit{display:none!important}
     [data-action="open-auth"],[data-action="news-save"],[data-action="news-vote"],[data-action="news-discuss"],
     [data-news-filter="saved"],a[href="#/progress"],a[href="#/critique"]{display:none!important}
     .journey-start-card.class-focus{display:none!important}
@@ -91,8 +92,15 @@
 
     const mode = document.getElementById('modeBadge');
     if (mode) mode.textContent = '• LOCAL ONLY';
-    const badge = document.querySelector('.version-badge b');
-    if (badge) badge.textContent = `v${VERSION}`;
+
+    // Retired UI from older cached shells: remove rather than update it.
+    document.querySelectorAll('.side-progress,.version-badge').forEach(node => node.remove());
+    ['sideXp','sideLevel','sideBar','sideNext','topXp','topXpUnit'].forEach(id => {
+      const node=document.getElementById(id);
+      if(!node)return;
+      const statusRow=(id==='topXp'||id==='topXpUnit')?node.closest('.top-status > span'):null;
+      if(statusRow)statusRow.remove(); else node.remove();
+    });
   }
 
   function scrubPage(root = document) {
