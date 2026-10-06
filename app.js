@@ -21,7 +21,7 @@ const STUDY = window.UE5_STUDY_DATA;
 const BACKEND = window.UE5_BACKEND;
 const SKILL_MISSIONS = window.UE5_SKILL_MISSIONS || {missions:[]};
 const CPP_SKILL_MISSIONS = window.UE5_CPP_SKILL_MISSIONS || {missions:[],planned:[]};
-const HUB_VERSION = '3.61.3';
+const HUB_VERSION = '3.61.4';
 
 // V3.19 deepens Designer Studio using the same Quick Tutorial recipe system so students can
 // search programming and design help from one place while still having a dedicated design curriculum.
@@ -1492,7 +1492,7 @@ function theoryPage(){
 function theoryLessonPage(id){
   const l=theoryLesson(id);if(!l)return notFound();const p=theoryPath(l.path),done=theoryDone(l.id),s=theoryScore(l.id),passed=(s?.bestPct||s?.pct||0)>=THEORY.passPercent,idx=THEORY.lessons.indexOf(l),prev=THEORY.lessons[idx-1],next=THEORY.lessons[idx+1];
   return `<div class="breadcrumb"><a href="#/">Home</a> / <a href="#/theory">Game Design Theory</a> / ${esc(l.title)}</div>
-  <section class="theory-lesson-hero"><div><span class="eyebrow">${p?.icon||'◈'} ${esc(p?.title||'Game Design Theory')} • ${esc(l.duration)}</span><h1>${l.icon||'◈'} ${esc(l.title)}</h1><p>${esc(l.short)}</p></div><div class="theory-status ${done?'done':''}"><strong>${done?'✓ Complete':s?`Best score ${s.bestPct||s.pct}%`:`Pass ${THEORY.passPercent}% to complete`}</strong><span>${done?'progress is awarded once on the first pass.':'The quiz uses design scenarios, not just definitions.'}</span></div></section>
+  <section class="theory-lesson-hero"><div><span class="eyebrow">${p?.icon||'◈'} ${esc(p?.title||'Game Design Theory')} • ${esc(l.duration)}</span><h1>${l.icon||'◈'} ${esc(l.title)}</h1><p>${esc(l.short)}</p></div><div class="theory-status ${done?'done':''}"><strong>${done?'✓ Complete':s?`Best score ${s.bestPct||s.pct}%`:`Pass ${THEORY.passPercent}% to complete`}</strong><span>${done?'completion is recorded once on the first pass.':'The quiz uses design scenarios, not just definitions.'}</span></div></section>
   <section class="theory-definition"><div><span class="eyebrow">THE IDEA</span><h2>What is it?</h2><p>${esc(l.definition)}</p></div><div><span class="eyebrow">WHY IT MATTERS</span><h2>Why should a designer care?</h2><p>${esc(l.why)}</p></div></section>
   ${theoryDiagram(l.diagram)}
   <section class="content-card"><span class="eyebrow">KEY IDEAS</span><h2>What to remember</h2><div class="theory-key-grid">${(l.keyIdeas||[]).map((x,i)=>`<article><span>${String(i+1).padStart(2,'0')}</span><p>${esc(x)}</p></article>`).join('')}</div></section>
