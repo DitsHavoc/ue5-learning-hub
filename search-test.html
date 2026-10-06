@@ -46,17 +46,11 @@
         <a href="#/glossary" data-route="glossary">? <span>Glossary</span></a>
 
         <div class="nav-heading">Community & progress</div>
-        <a href="#/leaderboard" data-route="leaderboard" class="leaderboard-nav">🏆 <span>Leaderboard</span><small>Class XP • weekly • streaks</small></a>
-        <a href="#/progress" data-route="progress" class="project-nav">◎ <span>My Progress</span><small>Learning • XP • badges</small></a>
+        <a href="#/leaderboard" data-route="leaderboard" class="leaderboard-nav">🏆 <span>Leaderboard</span><small>Class activity • weekly • streaks</small></a>
+        <a href="#/progress" data-route="progress" class="project-nav">◎ <span>My Progress</span><small>Learning progress</small></a>
         <a href="#/requests" data-route="requests" class="project-nav">✦ <span>Feature Requests</span><small>Ideas & teacher replies</small></a>
         <a href="#/teacher" data-route="teacher" id="teacherNav" hidden>▣ <span>Teacher</span></a>
       </nav>
-
-      <div class="side-progress">
-        <div><span id="sideLevel">LEVEL 1</span><strong id="sideXp">0 XP</strong></div>
-        <div class="progress"><span id="sideBar"></span></div>
-        <small id="sideNext">500 XP to Level 2</small>
-      </div>
     </aside>
 
     <div class="page">
@@ -70,7 +64,6 @@
         </div>
         <div class="top-status">
           <span><b id="topDone">0</b> complete</span>
-          <span><b id="topXp">0</b> <span id="topXpUnit">XP</span></span>
         </div>
         <button class="notification-button" id="notificationButton" data-action="open-progress" title="Notifications">🔔 <b id="notificationCount" hidden>0</b></button>
         <button class="account-button" id="accountButton" data-action="open-auth">
@@ -85,11 +78,6 @@
         <button id="resetProgress" class="link-button">Reset local progress</button>
       </footer>
     </div>
-  </div>
-
-  <div class="version-badge" title="Build version">
-    <span class="version-dot"></span>
-    UE5 HUB <b>v3.34.18</b> <span id="modeBadge">• LOCAL</span>
   </div>
 
   <div class="modal-backdrop" id="authModal" hidden>
