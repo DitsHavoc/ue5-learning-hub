@@ -21,7 +21,8 @@ const STUDY = window.UE5_STUDY_DATA;
 const BACKEND = window.UE5_BACKEND;
 const SKILL_MISSIONS = window.UE5_SKILL_MISSIONS || {missions:[]};
 const CPP_SKILL_MISSIONS = window.UE5_CPP_SKILL_MISSIONS || {missions:[],planned:[]};
-const HUB_VERSION = '3.61.4';
+const CONTENT = window.UE5_CONTENT_ARCHITECTURE || {roles:{},canonicalAreas:[],retiredEntryPoints:[],rules:[]};
+const HUB_VERSION = '3.62.0';
 
 // V3.19 deepens Designer Studio using the same Quick Tutorial recipe system so students can
 // search programming and design help from one place while still having a dedicated design curriculum.
@@ -112,6 +113,73 @@ function safeVideoEmbed(value){
     if(u.origin==='https://drive.google.com'&&/^\/file\/d\/[A-Za-z0-9_-]+\/preview$/.test(u.pathname))return u.href;
     return '';
   }catch(e){return ''}
+}
+
+const SEARCH_ROLE_META={
+  hub:{label:'START HERE',weight:24},
+  learn:{label:'LEARN',weight:20},
+  path:{label:'PATH',weight:18},
+  build:{label:'BUILD',weight:14},
+  guide:{label:'FULL WORKFLOW',weight:11},
+  study:{label:'STUDY',weight:6},
+  support:{label:'SUPPORT',weight:2}
+};
+function contentRoleForKind(kind){
+  if(['hub','area'].includes(kind))return 'hub';
+  if(['lesson','theory','career','career-role','design','model-theory','model-lesson'].includes(kind))return 'learn';
+  if(['cpp-skill-mission','skill-mission','guided-path'].includes(kind))return 'path';
+  if(['tutorial','tutorial-family','model-build','chapter-build','level4-project'].includes(kind))return 'build';
+  if(['master-guide'].includes(kind))return 'guide';
+  if(['homework-path','revision'].includes(kind))return 'study';
+  return 'support';
+}
+function contentRoleLabel(role){return SEARCH_ROLE_META[role]?.label||'SUPPORT'}
+function hubHrefExists(href){
+  const raw=String(href||'').trim();
+  if(!raw)return false;
+  if(!raw.startsWith('#/'))return /^(?:blueprint-checks|cheatsheet)\.html(?:[?#].*)?$/.test(raw)||/^https?:\/\//.test(raw);
+  const parts=raw.replace(/^#\//,'').split('/').filter(Boolean),root=parts[0],id=parts[1],sub=parts[2];
+  const roots=new Set(['','paths','learn','build','study','level4','cpp-path','programming','blocks','news','classes','leaderboard','critique','progress','requests','challenges','homework','modeling','industry-careers','theory','design','resources','tutorials','snippets','revision','glossary','teacher','my-game','projects']);
+  if(!root||roots.has(root)){
+    if(root==='level4'&&id)return (window.LEVEL4_SPECIALIST_PROJECTS?.projects||[]).some(x=>x.id===id);
+    if(root==='homework'&&id)return !!homeworkPath(id);
+    if(root==='industry-careers'&&id)return !!careerChapter(id);
+    if(root==='theory'&&id)return !!theoryLesson(id);
+    if(root==='design'&&id)return !!designModule(id);
+    if(root==='modeling'&&id){
+      if(id==='videos')return true;
+      if(id==='foundations')return !sub||sub==='final'||!!modelTheoryChapter(sub);
+      if(id==='lesson')return !!modelLesson(sub);
+      if(id==='build')return !!modelBuild(sub);
+      if(id==='fix')return !!modelFix(sub);
+      return false;
+    }
+    return true;
+  }
+  if(root==='pathways')return !id||(PATHWAYS.paths||[]).some(x=>x.id===id);
+  if(root==='path')return !!DATA.paths.find(x=>x.id===id);
+  if(root==='lesson')return !!lesson(id);
+  if(root==='block')return !!block(id);
+  if(root==='tutorial-family')return !!tutorialFamily(id);
+  if(root==='tutorial')return !!tutorial(id);
+  if(root==='chapter-build')return !!TOOLS.chapterBuilds.find(x=>x.id===id);
+  if(root==='skill-mission'){
+    const m=skillMission(id);return !!m&&(!sub||m.stages?.some(x=>x.id===sub));
+  }
+  if(root==='cpp-mission'){
+    const m=cppMission(id);return !!m&&(!sub||m.stages?.some(x=>x.id===sub));
+  }
+  // Retired entry points still resolve through compatibility redirects.
+  if(root==='unreal-designer')return !id||(UNREAL_DESIGNER.tracks||[]).some(x=>x.id===id)||(UNREAL_DESIGNER.expansionTracks||[]).some(x=>x.id===id);
+  if(root==='sculpt')return true;
+  return false;
+}
+function resolveHubHref(href,fallback='#/'){
+  return hubHrefExists(href)?String(href):fallback;
+}
+function contentRoleNotice(role,title,body){
+  const meta=SEARCH_ROLE_META[role]||SEARCH_ROLE_META.support;
+  return `<aside class="content-role-notice role-${esc(role)}"><strong>${esc(meta.label)} • ${esc(title)}</strong><span>${esc(body)}</span></aside>`;
 }
 
 // Project briefs are teacher/student-authored rich text. Keep the format deliberately small,
