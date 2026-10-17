@@ -68,7 +68,7 @@ window.UE5_PATHWAY_DATA = {
           {type:'tutorial', id:'camera-shake'}
         ]},
         {type:'theory', id:'playtesting-iteration', why:'Test the behaviour rather than assuming your intention is obvious.'},
-        {type:'checkpoint', id:'gameplay-mechanic-playtest-change', title:'One-player test → one real change', icon:'💬', area:'Practical playtest', href:'#/critique', description:'Give the mechanic to another student without teaching them how it works. Watch one useful behaviour, make one evidence-based change, then test it again. Critique Board is available if you want to record/share the feedback.', actionLabel:'Playtest + revision complete'}
+        {type:'checkpoint', id:'gameplay-mechanic-playtest-change', title:'One-player test → one real change', icon:'💬', area:'Practical playtest', description:'Give the mechanic to another student without teaching them how it works. Watch one useful behaviour, make one evidence-based change, then test it again. Record the observation in your notes or in Teams if your teacher asks for it.', actionLabel:'Playtest + revision complete'}
       ]
     },
     {
@@ -136,7 +136,7 @@ window.UE5_PATHWAY_DATA = {
       {icon:'🛠', title:'Make a Collectable Counter', meta:'Quick Tutorial', href:'#/tutorial/collectable', why:'Build a simple resource source and track its value.'}
     ],
     'balance-counterplay': [
-      {icon:'💬', title:'Critique Board', meta:'Test with another human', href:'#/critique', why:'Balance claims need evidence from players, not just spreadsheet confidence.'}
+      {icon:'↠', title:'Create a Gameplay Mechanic', meta:'Guided Path • playtest checkpoint', href:'#/pathways/gameplay-mechanic', why:'Balance claims need evidence from players, so use the route that finishes with a real player test and revision.'}
     ],
     'progression-difficulty': [
       {icon:'⚙', title:'Create a Gameplay Mechanic', meta:'Guided Path', href:'#/pathways/gameplay-mechanic', why:'Build a small system first, then think about how its challenge changes over time.'}
@@ -178,7 +178,7 @@ window.UE5_PATHWAY_DATA = {
       {icon:'🎲', title:'Digital Game → Tabletop', meta:'Guided Path', href:'#/pathways/digital-to-tabletop', why:'Use paper components to test translated systems cheaply.'}
     ],
     'playtesting-iteration': [
-      {icon:'💬', title:'Critique Board', meta:'Peer testing', href:'#/critique', why:'Show the work, collect a useful observation and make one visible revision.'},
+      {icon:'↠', title:'Build a Playable Level', meta:'Guided Path • silent playtest', href:'#/pathways/playable-level', why:'Use the route that ends with a silent player test, one useful observation and one visible revision.'},
       {icon:'◇', title:'Build a Playable Level', meta:'Guided Path', href:'#/pathways/playable-level', why:'Finish the route by testing it silently with another player.'}
     ],
     'translating-between-media': [
