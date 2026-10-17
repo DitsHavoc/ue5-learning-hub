@@ -414,3 +414,6 @@
   .content-flow-map article:not(:last-child)::after{content:'↓';right:auto;left:50%;top:auto;bottom:-13px;transform:translateX(-50%)}
   .content-role-notice{flex-direction:column;gap:5px}
 }
+
+/* v3.62.0 — retire legacy version / XP chrome */
+.version-badge,.side-progress,#sideXp,#sideLevel,#sideBar,#sideNext,#topXp,#topXpUnit{display:none!important}
