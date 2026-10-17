@@ -67,6 +67,22 @@ async function run(){
       await page.waitForTimeout(100);
       if(!(await page.locator('#searchPanel a.search-result[href^="#/mini-projects/"]').count()))
         fail.push(device.name+' Mini-Projects missing from global search');
+      // The download CTA must not point students to a 404 while binary assets
+      // are pending. Once the archive is hosted, it should appear automatically.
+      await page.goto(base+'/#/mini-projects/balloon-popper',{waitUntil:'load'});
+      await page.waitForSelector('[data-mini-assets]',{timeout:10000});
+      await page.waitForTimeout(130);
+      if(await page.locator('[data-mini-assets-link]').isVisible())
+        fail.push(device.name+' unavailable model ZIP exposed a broken link');
+      if(!(await page.locator('[data-mini-assets-fallback]').isVisible()))
+        fail.push(device.name+' missing-asset fallback was not visible');
+      await page.route('**/assets/mini-projects/Assets.zip',route=>route.fulfill({status:200,headers:{'content-type':'application/zip'},body:''}));
+      await page.goto(base+'/#/mini-projects/bowling',{waitUntil:'load'});
+      await page.locator('[data-mini-assets-link]').waitFor({state:'visible',timeout:6000});
+      if(!((await page.locator('[data-mini-assets-link]').getAttribute('href'))||'').endsWith('/assets/mini-projects/Assets.zip'))
+        fail.push(device.name+' linked model ZIP path incorrect');
+      await page.unroute('**/assets/mini-projects/Assets.zip');
+      console.log('ASSETS '+device.name+' absent archive safely hidden; hosted archive exposes download.');
       if(errors.length)fail.push(device.name+' browser exceptions:\n'+[...new Set(errors)].slice(0,3).join('\n'));
       console.log('COMPLETE '+device.name+' tested '+definitions.reduce((n,p)=>n+p.stages.length,0)+' stage routes and local progress.');
       await page.close();
