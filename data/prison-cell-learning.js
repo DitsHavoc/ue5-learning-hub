@@ -861,9 +861,8 @@
         id: 'prison-cell-final-proof',
         title: 'PROVE • One player, one observation, one change',
         icon: '💬',
-        area: 'Final playtest / Critique Board',
-        href: '#/critique',
-        description: 'Give the finished cell to another student without explaining it. Record one useful observation about movement, readability, scale or mood. Make one evidence-based change and keep a final screenshot. Finish with: What did you plan? What did you make? How did you test it? What changed because of the test?',
+        area: 'Final playtest / peer check',
+        description: 'Give the finished cell to another student without explaining it. Record one useful observation about movement, readability, scale or mood. Make one evidence-based change and keep a final screenshot. Record the observation in your notes or Teams if your teacher asks for it. Finish with: What did you plan? What did you make? How did you test it? What changed because of the test?',
         actionLabel: 'Final revision complete'
       }
     ]
