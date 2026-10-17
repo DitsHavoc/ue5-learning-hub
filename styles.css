@@ -1081,5 +1081,6 @@ button:disabled{opacity:.48;cursor:not-allowed;transform:none!important}
 @media(max-width:900px){.home-leaderboard-podium{grid-template-columns:1fr}.teacher-class-pulse-head{align-items:flex-start;flex-direction:column}.teacher-class-pulse-head .button{width:100%;justify-content:center}}
 
 
-/* v3.61.4 — retired gamification/build chrome */
-.side-progress,.version-badge,#sideXp,#sideLevel,#sideBar,#sideNext,#topXp,#topXpUnit{display:none!important}
+/* v3.61.5 — XP/version chrome fully retired */
+.side-progress,.version-badge,#sideXp,#sideLevel,#sideBar,#sideNext,#topXp,#topXpUnit,
+.xp-bar,.xp-progress,.xp-meter,.xp-pill,.xp-label,[data-xp]{display:none!important}
