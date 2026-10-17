@@ -5,7 +5,7 @@
 (() => {
   'use strict';
 
-  const VERSION = '3.61.4';
+  const VERSION = '3.62.0';
   const BLOCKED_PREFIXES = [
     '#/classes', '#/teacher', '#/requests', '#/projects',
     '#/leaderboard', '#/progress', '#/critique'
@@ -175,5 +175,5 @@
 
   clearOldAccountCache();
   enforce();
-  console.info('[UE5 Hub] v3.61.4 local-only cleanup active');
+  console.info('[UE5 Hub] v3.62.0 local-only cleanup active');
 })();
