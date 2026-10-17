@@ -1,0 +1,22 @@
+name: Path navigation browser regression
+
+on:
+  push:
+    branches: [hotfix/path-navigation-v3.62.1]
+  pull_request:
+
+jobs:
+  paths-browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Add browser automation runner
+        run: npm install --no-save --no-audit --no-fund playwright-core@1.56.1
+      - name: Run desktop and mobile path-click smoke test
+        run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium-browser || command -v chromium)"
+          test -n "$CHROME_PATH"
+          node scripts/test-path-navigation.cjs
