@@ -101,7 +101,14 @@ async function run(){
         fail.push(device.name+' Mini-Projects missing from global search');
       // The real user-supplied archive is now hosted, not a mocked placeholder.
       await page.goto(base+'/#/mini-projects/balloon-popper',{waitUntil:'load'});
-      await page.locator('[data-mini-assets-link]').waitFor({state:'visible',timeout:6000});
+      await page.locator('[data-mini-assets-link]').waitFor({state:'visible',timeout:6000}).catch(async()=>{
+        const probe=await page.evaluate(async()=>{
+          const link=document.querySelector('[data-mini-assets-link]'),fallback=document.querySelector('[data-mini-assets-fallback]');
+          let head;try{const r=await fetch(link.href,{method:'HEAD',cache:'no-store'});head={status:r.status,ok:r.ok};}catch(e){head={error:String(e)};}
+          return {url:location.href,linkHidden:link?.hidden,fallbackHidden:fallback?.hidden,head};
+        });
+        throw Error('Hosted ZIP availability probe failed: '+JSON.stringify(probe));
+      });
       if(await page.locator('[data-mini-assets-fallback]').isVisible())
         fail.push(device.name+': fallback visible even though hosted ZIP exists');
       const [download]=await Promise.all([
