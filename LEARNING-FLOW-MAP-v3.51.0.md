@@ -78,3 +78,22 @@ Before adding any new page or tutorial, answer:
 - **Could it become a Homework Path step instead of a new standalone destination?**
 
 If those answers are unclear, do not add another navigation item yet.
+
+
+## v3.62 — enforced guide placement
+
+The rules above are now reinforced by [AGENTS.md](AGENTS.md) (the mandatory brief for future Codex/contributor changes), the zero-dependency `scripts/validate-content-placement.cjs` checker and `.github/workflows/content-placement.yml`.
+
+**How new content slots in:** existing pages are data-driven. A new Core Lesson appears in the correct `course-data.js` path; a Quick Tutorial belongs to exactly one recipe family and appears in its searchable list; a Master Guide uses `unrealHome: true` and `libraryHidden: true` to appear in Unreal Learning without also entering Quick Tutorials; a Designer recipe belongs to its existing module, and a studio project uses that module's `studioLesson` reference. A Blueprint lab practical can instead be owned by a Guided Path's tutorial step. Students should **not** receive another top-level navigation choice for a new guide.
+
+The validator loads the same curriculum-data files in `index.html` order, rather than keeping a second hand-maintained list. It fails on duplicate IDs, missing/ambiguous owners, broken family/module/course links, unregistered guide files, invalid mission prerequisites and unapproved top-level navigation. Two existing intentional cross-category Quick Tutorial references have documented exceptions; new exceptions need an explicit teaching reason.
+
+After each content addition, run:
+
+```sh
+node scripts/validate-content-placement.cjs
+node scripts/test-content-placement.cjs
+node --check app.js
+```
+
+CI runs these checks on pull requests. Browser QA still verifies actual student discovery, completion and direct navigation; programmatic checks cannot prove educational quality or route usability.

@@ -1,0 +1,24 @@
+name: Validate learning content placement
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  content-placement:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check JavaScript parses
+        run: |
+          node --check app.js
+          node --check journey-cleanup.js
+          node --check scripts/validate-content-placement.cjs
+      - name: Verify that new content has a learning home
+        run: node scripts/validate-content-placement.cjs
+      - name: Prove invalid guide additions are rejected
+        run: node scripts/test-content-placement.cjs
