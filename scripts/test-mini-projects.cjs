@@ -46,6 +46,12 @@ async function run(){
       if(!page.url().endsWith('#/mini-projects'))fail.push(device.name+': Build link wrong hash');
       const cards=page.locator('.mini-project-card');
       if(await cards.count()!==4)fail.push(device.name+': expected four project cards');
+      if(await page.getByText('How to use this series',{exact:true}).count())
+        fail.push(device.name+': removed How to use this series section still visible');
+      if(await page.getByText('Course source:',{exact:false}).count())
+        fail.push(device.name+': removed course source block still visible');
+      if(await page.locator('.mini-header').count()!==1)
+        fail.push(device.name+': Mini-Projects header missing after intro removal');
       const definitions=await page.evaluate(()=>window.UE5_MINI_PROJECT_DATA.projects.map(p=>({id:p.id,stages:p.stages.map(s=>s.id)})));
       if(definitions.reduce((n,p)=>n+p.stages.length,0)!==16)fail.push(device.name+': expected 16 stages');
       for(const p of definitions){
