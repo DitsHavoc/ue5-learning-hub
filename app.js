@@ -5198,14 +5198,20 @@ function setupSearch(){
     const index=buildGlobalSearchIndex();
     if(!q){panel.hidden=true;panel.innerHTML='';return}
     const tokens=q.split(' ').filter(Boolean);
-    const rows=index
+    const ranked=index
       .map(entry=>({entry,score:scoreSearchEntry(entry,q,tokens)}))
       .filter(x=>x.score>=0)
-      .sort((a,b)=>b.score-a.score||a.entry.title.localeCompare(b.entry.title))
-      .slice(0,24);
+      .sort((a,b)=>b.score-a.score||a.entry.title.localeCompare(b.entry.title));
+    const seenHref=new Set(),rows=[];
+    for(const row of ranked){
+      if(seenHref.has(row.entry.href))continue;
+      seenHref.add(row.entry.href);
+      rows.push(row);
+      if(rows.length>=14)break;
+    }
     panel.innerHTML=rows.length
-      ?`<div class="search-panel-head"><strong>${rows.length}${rows.length===24?'+' : ''} results</strong><small>Searches the full Hub content, not just page titles.</small></div>${rows.map(({entry})=>`<a class="search-result" href="${esc(entry.href)}"><strong>${esc(entry.icon)} ${esc(entry.title)}</strong><small>${esc(entry.meta)}</small></a>`).join('')}`
-      :'<div class="search-result search-empty"><strong>No results</strong><small>Try a broader term, node name, mechanic or workflow.</small></div>';
+      ?`<div class="search-panel-head"><strong>${rows.length}${ranked.length>rows.length?'+' : ''} useful result${rows.length===1?'':'s'}</strong><small>Main learning and paths are prioritised; support appears when it is specifically relevant.</small></div>${rows.map(({entry})=>`<a class="search-result role-${esc(entry.role)}" href="${esc(entry.href)}"><span class="search-role-chip">${esc(contentRoleLabel(entry.role))}</span><strong>${esc(entry.icon)} ${esc(entry.title)}</strong><small>${esc(entry.meta)}</small></a>`).join('')}`
+      :'<div class="search-result search-empty"><strong>No valid Hub result</strong><small>Try a broader term, mechanic or workflow. Retired/broken routes are deliberately filtered out.</small></div>';
     panel.hidden=false;
   };
   input.addEventListener('input',render);
