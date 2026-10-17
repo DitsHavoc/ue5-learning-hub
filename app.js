@@ -21,7 +21,7 @@ const STUDY = window.UE5_STUDY_DATA;
 const BACKEND = window.UE5_BACKEND;
 const SKILL_MISSIONS = window.UE5_SKILL_MISSIONS || {missions:[]};
 const CPP_SKILL_MISSIONS = window.UE5_CPP_SKILL_MISSIONS || {missions:[],planned:[]};
-const HUB_VERSION = '3.62.0';
+const HUB_VERSION = '3.62.1';
 
 const RETIRED_XP_CHROME = [
   '.side-progress','.version-badge',
@@ -426,7 +426,9 @@ function updateChrome(){
   const dot=$('#accountButton .account-dot');
   const theme=avatarTheme(profilePrefs.theme);
 
-  btn.classList.remove('cloud','teacher');
+  // The local-only privacy layer removes retired account controls from the DOM.
+  // Chrome updates must stay safe after that cleanup so routes and saved progress can finish.
+  btn?.classList.remove('cloud','teacher');
   if(dot){
     dot.textContent=profilePrefs.glyph||'⌘';
     dot.style.background=theme.bg;
@@ -435,10 +437,10 @@ function updateChrome(){
   }
   if(BACKEND.user){
     const name=BACKEND.profile?.display_name || BACKEND.user.email?.split('@')[0] || 'Account';
-    txt.textContent=name;
-    btn.classList.add(BACKEND.profile?.role==='teacher'?'teacher':'cloud');
+    if(txt)txt.textContent=name;
+    btn?.classList.add(BACKEND.profile?.role==='teacher'?'teacher':'cloud');
     if(mode)mode.textContent=BACKEND.profile?.role==='teacher'?'• TEACHER CLOUD':'• CLOUD';
-    teacher.hidden=BACKEND.profile?.role!=='teacher';
+    if(teacher)teacher.hidden=BACKEND.profile?.role!=='teacher';
     if(classesNav){
       classesNav.hidden=false;
       const staff=BACKEND.profile?.role==='teacher';
@@ -446,10 +448,10 @@ function updateChrome(){
       if(classesNavSub)classesNavSub.textContent=staff?'Students • codes • progress':'Teaching group • progress';
     }
   }else{
-    txt.textContent=BACKEND.mode==='cloud'?'SIGN IN':'LOCAL MODE';
+    if(txt)txt.textContent=BACKEND.mode==='cloud'?'SIGN IN':'LOCAL MODE';
     if(mode)mode.textContent=BACKEND.mode==='cloud'?'• GUEST + CLOUD':'• LOCAL';
-    if(BACKEND.mode==='cloud')btn.classList.add('cloud');
-    teacher.hidden=true;
+    if(BACKEND.mode==='cloud')btn?.classList.add('cloud');
+    if(teacher)teacher.hidden=true;
     if(classesNav)classesNav.hidden=true;
   }
 }
