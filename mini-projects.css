@@ -64,3 +64,13 @@
 .mini-assets [hidden]{display:none!important}
 .mini-assets .button{margin:10px 0 4px}
 .mini-assets [data-mini-assets-fallback]{font-size:12px;color:#aebfd0}
+
+/* Licensed course illustrations belong next to their corresponding instructions. */
+.mini-illustration{max-width:100%;min-width:0;margin:14px 0 22px;border:1px solid #41576c;border-radius:12px;overflow:hidden;background:#0b1622}
+.mini-illustration a{display:flex;align-items:center;justify-content:center;padding:12px;min-height:100px;background:#101d2b}
+.mini-illustration a:focus-visible{outline:3px solid #6ed9ff;outline-offset:-3px}
+.mini-illustration img{display:block;width:auto;height:auto;max-width:100%;max-height:480px;object-fit:contain;border-radius:6px}
+.mini-illustration figcaption{border-top:1px solid #34465a;padding:9px 12px;color:#c6dce9;font-size:12px;line-height:1.55}
+.mini-illustration a:hover{background:#1a3448}
+.mini-source-page[open] .mini-page-text{min-width:0}
+@media(max-width:700px){.mini-illustration{margin:12px 0 18px}.mini-illustration a{padding:8px}.mini-illustration img{max-height:310px}.mini-illustration figcaption{font-size:11px}}
