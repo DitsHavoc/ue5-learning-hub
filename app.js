@@ -1983,7 +1983,10 @@ function bindMiniIllustrations(){
     if(!body)return;
     const paragraphs=Array.from(body.querySelectorAll(':scope > p'));
     const page=Number(pageEl.dataset.miniPage);
-    figures.forEach((fig,i)=>{
+    // Insert from last to first so multiple figures anchored to the same
+    // paragraph retain their original PDF reading order.
+    figures.slice().reverse().forEach((fig,reversedIndex)=>{
+      const i=figures.length-1-reversedIndex;
       if(typeof fig.file!=='string'||!fig.file.startsWith('assets/mini-projects/images/')||fig.file.includes('..')||!(fig.file.endsWith('.png')||fig.file.endsWith('.jpg')))return;
       const n=Math.max(-1,Math.min(paragraphs.length-1,Number(fig.afterParagraph??-1)));
       const context=(paragraphs[Math.max(0,n)]?.textContent||'Unreal Engine Blueprint instructions').replace(/\s+/g,' ').trim();
