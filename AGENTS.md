@@ -20,6 +20,7 @@ Before writing a new guide, search the existing data and decide whether an exist
 | 3D knowledge, 3ds Max process, portfolio asset | 3D Foundations in `data/modeling-foundations-data.js`; practical Max lessons and Build X in `data/modeling-data.js`; videos remain linked to the matching lesson instead of making another independent course |
 | Blueprint programmer / standalone C++ | Extend `data/programmer-skill-mission.js` or `data/cpp-skill-missions.js` respectively. **Never** make C++ depend on progress in the Blueprint project |
 | Industry understanding / career scenarios | `data/industry-careers-data.js`; use central Revision instead of a duplicate mini-quiz |
+| Mini-Projects | **Build → Mini-Projects** using `data/mini-projects-data.js` and `data/mini-projects-source-notes.js`: one of four canonical project owners, ordered stages, page-specific source notes, explicit outcome/test/fix, and links back to Core lessons. Do not copy these projects into the Quick Tutorial families or create a new primary tab. |
 | Homework | Reuse the existing lesson/design/3D content through `app.js` Homework paths. Formal tasks and submission stay in Teams |
 | Level 4 specialist outcome | `data/level4-specialist-projects.js`, only for a substantial portfolio project; link to existing lessons/guides |
 

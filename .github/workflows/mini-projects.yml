@@ -1,0 +1,20 @@
+name: Mini-Projects browser regression
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  mini-projects-browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser test runner
+        run: npm install --no-save --no-audit --no-fund playwright-core@1.56.1
+      - name: Test Mini-Projects routes, walkthroughs, progress and search
+        run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium-browser || command -v chromium)"
+          test -n "$CHROME_PATH"
+          node scripts/test-mini-projects.cjs

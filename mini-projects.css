@@ -1,0 +1,76 @@
+/* Mini-Projects: canonical Build practical route, not a new top-level nav. */
+.mini-shell{max-width:1220px;margin:0 auto;padding-bottom:54px}
+.mini-shell .breadcrumb{margin-bottom:16px;font-size:13px}
+.mini-header{margin-bottom:24px;padding:28px 30px;border-radius:20px;border:1px solid #34495d;background:linear-gradient(135deg,#14283b,#111a28 65%,#121725)}
+.mini-header h1{font-size:clamp(28px,3vw,42px);line-height:1.12;margin:9px 0 12px}
+.mini-header>p{max-width:780px;color:#d2dfec;font-size:16px;line-height:1.6;margin-bottom:14px}
+.mini-header .button{margin-top:20px}
+.mini-chips{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.mini-chips>span{border:1px solid #41536b;background:#132435;border-radius:100px;padding:6px 11px;font-size:11px;color:#d7e9f5}
+.mini-project-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.mini-project-card{display:flex;flex-direction:column;gap:10px;min-height:264px;padding:22px;border:1px solid #344a5e;border-radius:17px;color:inherit;text-decoration:none;background:#111b29;transition:border-color .18s,transform .18s}
+.mini-project-card:hover,.mini-stage-link:hover{border-color:#58bff8;background:#16283b;transform:translateY(-1px)}
+.mini-project-card-head{display:flex;justify-content:space-between;align-items:center;gap:15px}
+.mini-project-icon{font-size:25px;color:#6bcbf8}
+.mini-stage-counter{color:#bdd3e4;font-size:11px}
+.mini-project-card h2{font-size:23px;line-height:1.2;margin:0}
+.mini-project-card p{font-size:13px;line-height:1.7;color:#c1d2df;margin:0;flex:1}
+.mini-project-card .mini-chips>span{font-size:10px}
+.mini-meter{height:6px;background:#203245;border-radius:10px;overflow:hidden}
+.mini-meter span{display:block;height:100%;background:#58bbef;transition:width .2s}
+.mini-project-card>strong{font-size:13px;color:#93d9fd}
+.mini-project-overview,.mini-information{background:#121d2a;border:1px solid #34465b;border-radius:17px;padding:22px 24px;margin:17px 0}
+.mini-project-overview h2,.mini-information h2{margin:0 0 13px;font-size:21px}
+.mini-information p{line-height:1.75;color:#d2dfed;font-size:14px}
+.mini-information a{color:#93d9ff;text-decoration:underline;text-underline-offset:3px}
+.mini-stage-list{display:grid;gap:10px}
+.mini-stage-link{display:grid;grid-template-columns:44px 1fr 20px;align-items:center;gap:12px;text-decoration:none;color:inherit;border-radius:11px;padding:12px 14px;border:1px solid #35475a;background:#162333;transition:border-color .18s,transform .18s}
+.mini-stage-link .mini-stage-number{display:grid;place-items:center;width:38px;height:38px;border-radius:10px;background:#21394b;border:1px solid #446078;color:#b5e8ff;font-size:12px;font-weight:750}
+.mini-stage-link strong{font-size:15px;display:block;margin-bottom:5px}
+.mini-stage-link small{color:#b5c8d7;font-size:12px;line-height:1.5;display:block}
+.mini-link-arrow{color:#9bdcff}
+.mini-lesson-grid{display:grid;grid-template-columns:minmax(0,1fr) 265px;gap:20px;align-items:start}
+.mini-main-column{min-width:0}
+.mini-lesson .mini-header{margin-bottom:10px}
+.mini-lesson .mini-information{margin:12px 0}
+.mini-information .eyebrow{display:block;margin-bottom:8px}
+.mini-task-list{display:grid;gap:10px;padding:0 0 0 26px;margin:0}
+.mini-task-list li{padding-left:8px;color:#dce9f2;font-size:14px;line-height:1.75}
+.mini-task-list li::marker{color:#6ad4ff;font-weight:800}
+.mini-small-note{font-size:12px!important;color:#aebfd0!important}
+.mini-source-page{margin:8px 0;border:1px solid #35485c;border-radius:11px;background:#172432;overflow:hidden}
+.mini-source-page summary{padding:13px 16px;cursor:pointer;font-weight:700;color:#cdeeff;display:flex;justify-content:space-between;gap:10px}
+.mini-source-page summary span{font-size:11px;color:#aabccd;font-weight:500}
+.mini-source-page[open] summary{border-bottom:1px solid #35485c}
+.mini-page-text{padding:13px 17px}
+.mini-page-text p{margin:0 0 12px;line-height:1.7;font-size:13px}
+.mini-page-text p:last-child{margin-bottom:0}
+.mini-proof{border-color:#487366}
+.mini-proof details{margin-top:16px}
+.mini-proof details summary{cursor:pointer;font-weight:700;color:#a4e5d1}
+.mini-complete-panel{display:flex;justify-content:space-between;gap:18px;align-items:center;border:1px solid #385b72;border-radius:13px;background:#142738;padding:18px 20px;margin:18px 0}
+.mini-complete-panel p{margin:0;color:#c5d8e7;line-height:1.6;font-size:12px;max-width:540px}
+.mini-stage-bottom{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:20px}
+.mini-side-column{position:sticky;top:84px}
+.mini-side-column .mini-information{padding:17px;margin:12px 0}
+.mini-side-column strong{font-size:14px;display:block;margin-bottom:14px}
+.mini-side-stages a{display:flex;gap:10px;padding:11px 8px;border-radius:8px;border:1px solid transparent;text-decoration:none;color:#d4e5ee;line-height:1.35;font-size:12px}
+.mini-side-stages a:hover,.mini-side-stages a.current{background:#203447;border-color:#48637b;color:#fff}
+.mini-side-stages a span{min-width:20px;color:#81dafa;font-weight:750}
+@media(max-width:1000px){.mini-lesson-grid{grid-template-columns:minmax(0,1fr)}.mini-side-column{position:static;display:grid;grid-template-columns:1fr 1fr;gap:12px}}
+@media(max-width:700px){.mini-project-grid{grid-template-columns:1fr}.mini-header{padding:22px 17px}.mini-information,.mini-project-overview{padding:18px 15px}.mini-stage-link{grid-template-columns:35px 1fr 14px;padding:10px;gap:9px}.mini-stage-link .mini-stage-number{width:31px;height:31px}.mini-side-column{display:block}.mini-complete-panel{flex-direction:column;align-items:stretch}.mini-complete-panel .button{width:100%}.mini-source-page summary{font-size:12px}}
+
+/* A failed asset check must never expose a broken download CTA. */
+.mini-assets [hidden]{display:none!important}
+.mini-assets .button{margin:10px 0 4px}
+.mini-assets [data-mini-assets-fallback]{font-size:12px;color:#aebfd0}
+
+/* Licensed course illustrations belong next to their corresponding instructions. */
+.mini-illustration{max-width:100%;min-width:0;margin:14px 0 22px;border:1px solid #41576c;border-radius:12px;overflow:hidden;background:#0b1622}
+.mini-illustration a{display:flex;align-items:center;justify-content:center;padding:12px;min-height:100px;background:#101d2b}
+.mini-illustration a:focus-visible{outline:3px solid #6ed9ff;outline-offset:-3px}
+.mini-illustration img{display:block;width:auto;height:auto;max-width:100%;max-height:480px;object-fit:contain;border-radius:6px}
+.mini-illustration figcaption{border-top:1px solid #34465a;padding:9px 12px;color:#c6dce9;font-size:12px;line-height:1.55}
+.mini-illustration a:hover{background:#1a3448}
+.mini-source-page[open] .mini-page-text{min-width:0}
+@media(max-width:700px){.mini-illustration{margin:12px 0 18px}.mini-illustration a{padding:8px}.mini-illustration img{max-height:310px}.mini-illustration figcaption{font-size:11px}}

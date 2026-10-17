@@ -21,7 +21,9 @@ const STUDY = window.UE5_STUDY_DATA;
 const BACKEND = window.UE5_BACKEND;
 const SKILL_MISSIONS = window.UE5_SKILL_MISSIONS || {missions:[]};
 const CPP_SKILL_MISSIONS = window.UE5_CPP_SKILL_MISSIONS || {missions:[],planned:[]};
-const HUB_VERSION = '3.62.1';
+const HUB_VERSION = '3.63.0';
+const MINI = window.UE5_MINI_PROJECT_DATA || {projects:[]};
+const MINI_NOTES = window.UE5_MINI_PROJECT_NOTES || {};
 
 const RETIRED_XP_CHROME = [
   '.side-progress','.version-badge',
@@ -1912,6 +1914,7 @@ function buildHubPage(){
   return `<div class="ux-hub-shell">
     <section class="ux-hub-hero"><div><span class="eyebrow">🛠 BUILD • MAKE SOMETHING WORK</span><h1>What do you want to make?</h1><p>Use this area when you already know the outcome you need. Start with a tutorial, apply design in Unreal, or take on a bigger challenge.</p></div><a class="button primary" href="#/tutorials">Find a Quick Tutorial →</a></section>
     <div class="ux-route-grid ux-build-grid">
+      ${uxRouteCard({href:'#/mini-projects',icon:'◉',kicker:'PROJECT-LED PRACTICE',title:'Mini-Projects',text:'Follow four full builds — Balloon Popper, Loops & Spawning, Bowling and Clicker — with staged walkthroughs and local progress.',meta:['4 projects','16 guided stages'],cta:'Choose a mini-project →',tone:'build'})}
       ${uxRouteCard({href:'#/tutorials',icon:'🛠',kicker:'FASTEST ROUTE',title:'Quick Tutorials',text:'Search by outcome — door, HUD, AI, fog, checkpoint, landscape, Sequencer and more — then follow the exact practical steps.',meta:[`${(TOOLS.families||[]).length} recipe families`,`${TOOLS.tutorials.filter(t=>!t.libraryHidden).length} builds`],cta:'Find a tutorial →',tone:'build'})}
       ${uxRouteCard({href:'#/unreal-designer',icon:'⚙',kicker:'THEORY → ENGINE',title:'Unreal Designer',text:'Turn design ideas into playable Unreal work with focused engine tasks, testing and evidence.',meta:[`${UNREAL_DESIGNER.tracks.length} live tracks`,'Build → test → prove'],cta:'Apply design in Unreal →',tone:'design'})}
       ${uxRouteCard({href:'#/challenges',icon:'🔥',kicker:'LESS HAND-HOLDING',title:'Challenge Board',text:'Combine systems without every node or click being handed to you. Use it when you are ready to prove independence.',meta:['Unreal • design • 3D','Practice, not first explanation'],cta:'Take a challenge →',tone:'challenge'})}
@@ -1921,6 +1924,128 @@ function buildHubPage(){
     <section class="ux-hub-secondary subtle"><div><span class="eyebrow">NEED THE FULL WORKFLOW, NOT A QUICK RECIPE?</span><h2>Unreal Master Guides live inside Unreal Learning.</h2><p>Landscape, Sequencer and other long workflows are kept with the system learning rather than mixed into the quick tutorial shelf.</p></div><a class="button ghost" href="#/programming">Open Unreal Learning →</a></section>
   </div>`;
 }
+
+/* Mini-Projects have one canonical Build home. Course/lesson IDs and existing
+   student completion storage are deliberately untouched. */
+const MINI_STORE='ue5hub:mini-projects:v1';
+function miniCompleted(){
+  try{
+    const raw=JSON.parse(localStorage.getItem(MINI_STORE)||'[]');
+    return Array.isArray(raw)?raw.filter(x=>typeof x==='string'):[];
+  }catch(e){return []}
+}
+function miniProgress(p){
+  const done=new Set(miniCompleted()),stages=p?.stages||[];
+  return {done:stages.filter(s=>done.has(s.id)).length,total:stages.length};
+}
+function miniProject(id){return MINI.projects.find(x=>x.id===id)}
+function miniStage(p,id){return p?.stages?.find(x=>x.id===id)}
+function miniHref(project,stage){return '#/mini-projects/'+project+(stage?'/'+stage:'')}
+function miniTrail(items){return '<nav class="breadcrumb" aria-label="Breadcrumb">'+items.map(x=>x.href?'<a href="'+esc(x.href)+'">'+esc(x.title)+'</a>':esc(x.title)).join(' / ')+'</nav>'}
+function miniCard(p){
+  const z=miniProgress(p),n=p.stages.length;
+  return '<a class="mini-project-card" href="'+miniHref(p.id)+'"><div class="mini-project-card-head"><span class="mini-project-icon">'+p.icon+'</span><span class="mini-stage-counter">'+z.done+'/'+n+' stages complete</span></div><h2>'+esc(p.title)+'</h2><p>'+esc(p.description)+'</p><div class="mini-chips"><span>'+esc(p.level)+'</span><span>'+n+' guided stages</span><span>'+esc(p.skills.slice(0,2).join(' • '))+'</span></div><div class="mini-meter" aria-hidden="true"><span style="width:'+(n?Math.round(z.done/n*100):0)+'%"></span></div><strong>Open project →</strong></a>';
+}
+function miniProjectsPage(){
+  return '<div class="mini-shell">'+miniTrail([{title:'Build',href:'#/build'},{title:'Mini-Projects'}])+
+  '<header class="mini-header"><span class="eyebrow">BUILD • PROJECT-LED PRACTICE</span><h1>Unreal Engine Mini-Projects</h1><p>Four complete practical routes. Work through the guided stages, test what you have built, and mark each stage complete when it works. You can revisit every guide at any time.</p><div class="mini-chips"><span>'+MINI.projects.length+' mini-projects</span><span>'+MINI.projects.reduce((n,p)=>n+p.stages.length,0)+' stages</span><span>Unreal Engine 5.8 source notes</span></div></header>'+
+  '<div class="mini-project-grid">'+MINI.projects.map(miniCard).join('')+'</div>'+
+  '<section class="mini-information"><h2>How to use this series</h2><p>These are hands-on builds rather than a second Unreal fundamentals course. Start with Balloon Popper or Loops, then take on Bowling and Clicker. If a concept is unfamiliar, use the linked existing Core lesson instead of starting another unrelated tutorial.</p><p>Use your supplied project models and Unreal project files. The detailed walkthrough notes follow the 2026 source course, with updated checks and troubleshooting for classroom use. Formal evidence and submission remain in Microsoft Teams.</p><small>Course source: '+esc(MINI.source)+' • Used with permission of the rights holder.</small></section></div>';
+}
+function miniAssetCard(p){
+  if(!['balloon-popper','bowling'].includes(p?.id))return '';
+  const specific=p.id==='balloon-popper'?'BalloonModel.fbx (use FBX for UE5.6+).':'BowlingPin.fbx. Build the ball from Unreal Engine\'s standard Sphere mesh.';
+  return '<section class="mini-information mini-assets" data-mini-assets><span class="eyebrow">COURSE ASSETS</span><h2>Your models</h2><p>'+esc(specific)+'</p>'+
+    '<a class="button primary" href="/'+esc(MINI.assetBundle||'assets/mini-projects/Assets.zip')+'" download="MiniProjects-Assets.zip" data-mini-assets-link hidden>Download the supplied models ZIP ↓</a>'+
+    '<p data-mini-assets-fallback>Your teacher provides the course models ZIP through Teams until the verified site download is available. There is no download link here unless the asset file is actually present.</p></section>';
+}
+function bindMiniAssetCard(){
+  const holder=$('[data-mini-assets]');if(!holder)return;
+  const button=holder.querySelector('[data-mini-assets-link]'),fallback=holder.querySelector('[data-mini-assets-fallback]');
+  if(!button)return;
+  fetch(button.href,{method:'HEAD',cache:'no-store'}).then(r=>{
+    if(!holder.isConnected)return;
+    if(r.ok){button.hidden=false;if(fallback)fallback.hidden=true;}
+  }).catch(()=>{});
+}
+// Load the authoritative page/figure manifest once. Figures are only mounted
+// when the student opens the corresponding source-page notes.
+let miniFigureManifestPromise;
+function bindMiniIllustrations(){
+  const host=document.querySelector('.mini-page-notes[data-mini-stage]');
+  if(!host)return;
+  const stage=host.dataset.miniStage,project=host.dataset.miniProject;
+  const mount=(details,figures)=>{
+    if(!details.open||details.dataset.figuresMounted)return;
+    details.dataset.figuresMounted='1';
+    const body=details.querySelector('.mini-page-text');
+    if(!body)return;
+    const paragraphs=Array.from(body.querySelectorAll(':scope > p'));
+    const page=Number(details.dataset.miniPage);
+    figures.forEach((fig,i)=>{
+      if(typeof fig.file!=='string'||!fig.file.startsWith('assets/mini-projects/images/')||fig.file.includes('..')||!(fig.file.endsWith('.png')||fig.file.endsWith('.jpg')))return;
+      const n=Math.max(-1,Math.min(paragraphs.length-1,Number(fig.afterParagraph??-1)));
+      const context=(paragraphs[Math.max(0,n)]?.textContent||'Unreal Engine Blueprint instructions').replace(/\s+/g,' ').trim();
+      const summary=context.length>115?context.slice(0,112).trimEnd()+'…':context;
+      const figure=document.createElement('figure');figure.className='mini-illustration';
+      const link=document.createElement('a');link.href='/'+fig.file;link.target='_blank';link.rel='noopener noreferrer';link.title='Open illustration at full size in a new tab';
+      const img=document.createElement('img');img.src='/'+fig.file;img.loading='lazy';img.decoding='async';img.width=fig.width;img.height=fig.height;
+      img.alt='Unreal Engine tutorial screenshot, source page '+page+', figure '+(i+1)+': '+summary;
+      link.appendChild(img);figure.appendChild(link);
+      const caption=document.createElement('figcaption');caption.textContent='Figure '+(i+1)+' · Source page '+page+' · '+summary;figure.appendChild(caption);
+      const before=n<0?paragraphs[0]:(paragraphs[n]?.nextSibling||null);
+      body.insertBefore(figure,before);
+    });
+  };
+  if(!miniFigureManifestPromise){
+    miniFigureManifestPromise=fetch('/assets/mini-projects/images/manifest.json',{cache:'force-cache'}).then(r=>{
+      if(!r.ok)throw Error('Mini-Projects illustration manifest not available');
+      return r.json();
+    }).catch(err=>{miniFigureManifestPromise=null;throw err});
+  }
+  miniFigureManifestPromise.then(manifest=>{
+    if(!host.isConnected)return;
+    const figures=manifest.stage_figures?.[project+'/'+stage]||[];
+    const perPage=new Map();
+    figures.forEach(f=>{const items=perPage.get(f.page)||[];items.push(f);perPage.set(f.page,items)});
+    host.querySelectorAll('.mini-source-page[data-mini-page]').forEach(details=>{
+      const figuresForPage=perPage.get(Number(details.dataset.miniPage))||[];
+      if(!figuresForPage.length)return;
+      details.addEventListener('toggle',()=>mount(details,figuresForPage));
+      mount(details,figuresForPage);
+    });
+  }).catch(()=>{
+    if(!host.isConnected)return;
+    const notice=document.createElement('p');notice.className='mini-small-note';notice.textContent='Illustrations could not be loaded. Text instructions remain available; please retry the page.';
+    host.prepend(notice);
+  });
+}
+function miniProjectPage(id){
+  const p=miniProject(id);if(!p)return notFound();
+  const z=miniProgress(p),done=new Set(miniCompleted()),first=p.stages.find(x=>!done.has(x.id))||p.stages[0];
+  return '<div class="mini-shell">'+miniTrail([{title:'Build',href:'#/build'},{title:'Mini-Projects',href:'#/mini-projects'},{title:p.title}])+
+  '<header class="mini-header"><span class="eyebrow">'+p.icon+' • '+esc(p.level)+' • '+z.done+'/'+z.total+' STAGES COMPLETE</span><h1>'+esc(p.title)+'</h1><p>'+esc(p.description)+'</p><div class="mini-chips">'+p.skills.map(x=>'<span>'+esc(x)+'</span>').join('')+'</div><a class="button primary" href="'+miniHref(p.id,first.id)+'">'+(z.done?'Continue the build':'Start at Stage 1')+' →</a></header>'+
+  '<section class="mini-project-overview"><h2>Your project stages</h2><div class="mini-stage-list">'+p.stages.map((s,i)=>'<a class="mini-stage-link" href="'+miniHref(p.id,s.id)+'"><span class="mini-stage-number">'+(done.has(s.id)?'✓':String(i+1).padStart(2,'0'))+'</span><span><strong>'+esc(s.title)+'</strong><small>'+esc(s.outcome)+'</small></span><span class="mini-link-arrow">→</span></a>').join('')+'</div></section>'+
+  miniAssetCard(p)+'<section class="mini-information"><h2>Before you start</h2><p><strong>Course assets:</strong> '+esc(p.assets.join('; '))+'.</p><p>Helpful existing Core lessons: '+p.lessonIds.map(id=>{const l=lesson(id);return l?'<a href="#/lesson/'+esc(id)+'">'+esc(l.title)+'</a>':''}).filter(Boolean).join(' · ')+'</p><p>The stage notes are from the supplied 2026 course document. Refer to the page numbers where needed.</p></section></div>';
+}
+function miniStagePage(projectId,stageId){
+  const p=miniProject(projectId),st=miniStage(p,stageId);if(!p||!st)return notFound();
+  const idx=p.stages.findIndex(s=>s.id===stageId);
+  const prev=p.stages[idx-1],next=p.stages[idx+1],done=miniCompleted().includes(st.id);
+  const pages=MINI_NOTES[st.id]||[];
+  return '<div class="mini-shell mini-lesson">'+miniTrail([{title:'Build',href:'#/build'},{title:'Mini-Projects',href:'#/mini-projects'},{title:p.title,href:miniHref(p.id)},{title:st.title}])+
+  '<header class="mini-header"><span class="eyebrow">'+esc(p.title)+' • STAGE '+(idx+1)+' OF '+p.stages.length+'</span><h1>'+esc(st.title)+'</h1><p>'+esc(st.outcome)+'</p><div class="mini-chips"><span>'+esc(p.level)+'</span><span>Source PDF pp. '+st.pages[0]+'–'+st.pages[1]+'</span><span>'+(done?'✓ Completed':'Build → test → prove')+'</span></div></header>'+
+  '<div class="mini-lesson-grid"><div class="mini-main-column">'+
+  '<section class="mini-information mini-stage-summary"><span class="eyebrow">01 • YOUR BUILD TARGET</span><h2>Make this work</h2><p>'+esc(st.outcome)+'</p></section>'+
+  '<section class="mini-information"><span class="eyebrow">02 • GUIDED CHECKLIST</span><h2>Build and verify</h2><ol class="mini-task-list">'+st.tasks.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ol></section>'+
+  '<section class="mini-information"><span class="eyebrow">03 • FULL SOURCE WALKTHROUGH</span><h2>Detailed lesson notes</h2><p class="mini-small-note">Step-by-step text and original course screenshots appear together, in source-page order. Click a screenshot to view it full size. For UE5.6+, use the supplied BalloonModel.fbx rather than the legacy OBJ steps shown in some source images.</p>'+
+  '<div class="mini-page-notes" data-mini-stage="'+esc(st.id)+'" data-mini-project="'+esc(p.id)+'">'+pages.map((page,i)=>'<details class="mini-source-page" data-mini-page="'+page.page+'" '+(i===0?'open':'')+'><summary>Source page '+page.page+' <span>Read instructions and illustrations ▾</span></summary><div class="mini-page-text">'+page.paragraphs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</div></details>').join('')+'</div></section>'+
+  '<section class="mini-information mini-proof"><span class="eyebrow">04 • CHECK YOUR WORK</span><h2>Prove it works</h2><p>'+esc(st.check)+'</p><details><summary>If something does not work</summary><p>'+esc(st.troubleshoot)+'</p></details></section>'+
+  '<section class="mini-complete-panel"><p>Only mark this stage complete after you have run the game or tested the feature yourself. This saves progress in this browser, not to Teams.</p><button class="button '+(done?'success':'primary')+'" data-action="mini-complete" data-stage="'+esc(st.id)+'">'+(done?'✓ Completed — click to undo':'Mark this stage complete ✓')+'</button></section>'+
+  '<nav class="mini-stage-bottom" aria-label="Stage navigation">'+(prev?'<a class="button ghost" href="'+miniHref(p.id,prev.id)+'">← Previous stage</a>':'<a class="button ghost" href="'+miniHref(p.id)+'">← Project overview</a>')+(next?'<a class="button primary" href="'+miniHref(p.id,next.id)+'">Next stage →</a>':'<a class="button primary" href="'+miniHref(p.id)+'">Project overview ✓</a>')+'</nav>'+
+  '</div><aside class="mini-side-column">'+miniAssetCard(p)+'<div class="mini-information mini-side-stages"><strong>'+esc(p.title)+' stages</strong>'+p.stages.map((x,i)=>'<a class="'+(x.id===st.id?'current':'')+'" href="'+miniHref(p.id,x.id)+'"><span>'+(miniCompleted().includes(x.id)?'✓':i+1)+'</span>'+esc(x.title)+'</a>').join('')+'</div><div class="mini-information"><strong>Need the concept first?</strong><p>'+p.lessonIds.map(id=>{const l=lesson(id);return l?'<a href="#/lesson/'+esc(id)+'">'+esc(l.title)+'</a>':''}).filter(Boolean).join('</p><p>')+'</p></div></aside></div></div>';
+}
+
 function studyHubPage(){
   return `<div class="ux-hub-shell">
     <section class="ux-hub-hero"><div><span class="eyebrow">↻ STUDY • HOMEWORK • REVISE • UNSTICK</span><h1>What kind of study do you need?</h1><p>Homework is for structured work away from the main lesson. Revision checks recall. Support tools explain one thing quickly and get you back to the task.</p></div></section>
@@ -3731,6 +3856,9 @@ function route(options={}){
   else if(parts[0]==='paths'){app.innerHTML=pathsHubPage();activate('paths')}
   else if(parts[0]==='learn'){app.innerHTML=learnHubPage();activate('learn')}
   else if(parts[0]==='build'){app.innerHTML=buildHubPage();activate('build')}
+  else if(parts[0]==='mini-projects'&&parts[1]&&parts[2]){app.innerHTML=miniStagePage(parts[1],parts[2]);activate('build')}
+  else if(parts[0]==='mini-projects'&&parts[1]){app.innerHTML=miniProjectPage(parts[1]);activate('build')}
+  else if(parts[0]==='mini-projects'){app.innerHTML=miniProjectsPage();activate('build')}
   else if(parts[0]==='study'){app.innerHTML=studyHubPage();activate('study')}
   else if(parts[0]==='pathways'&&parts[1]){app.innerHTML=guidedPathPage(parts[1]);activate('pathways')}
   else if(parts[0]==='pathways'){app.innerHTML=guidedPathsPage();activate('pathways')}
@@ -3902,6 +4030,8 @@ function bindNewsPage(){
   }));
 }
 function bindPageInputs(){
+  bindMiniAssetCard();
+  bindMiniIllustrations();
   const ts=$('#theorySearch');
   if(ts){
     let area='all';
@@ -4285,7 +4415,17 @@ document.addEventListener('click',async e=>{
   const b=e.target.closest('[data-action]');if(!b)return;
   const r=b.getBoundingClientRect();completionBurstPoint={x:r.left+r.width/2,y:r.top+r.height/2};
   const a=b.dataset.action;
-  if(a==='rich-command'){
+  if(a==='mini-complete'){
+    const id=b.dataset.stage||'';
+    const all=MINI.projects.flatMap(p=>p.stages).map(x=>x.id);
+    if(!all.includes(id))return;
+    const completed=new Set(miniCompleted());
+    if(completed.has(id))completed.delete(id);else completed.add(id);
+    localStorage.setItem(MINI_STORE,JSON.stringify([...completed]));
+    route({preserveScroll:true});
+    toast(completed.has(id)?'Stage marked complete.':'Stage marked incomplete.');
+  }
+  else if(a==='rich-command'){
     const editor=b.closest('[data-rich-editor]'),surface=editor?.querySelector('[data-rich-surface]');
     if(!editor||!surface)return;
     surface.focus();
@@ -5001,6 +5141,10 @@ function buildGlobalSearchIndex(){
     ['Study','Homework, revision quizzes, Building Blocks, Blueprint Checks, Cheat Sheet and glossary','#/study','↻','hub']
   ].forEach(([title,data,href,icon,kind])=>add({title,meta:'Student hub',href,icon,kind,data}));
 
+  (MINI.projects||[]).forEach(p=>{
+    add({title:p.title,meta:'Build • Mini-Project • '+p.stages.length+' stages',href:miniHref(p.id),icon:p.icon||'◉',kind:'mini-project',data:deepSearchText(p)});
+    (p.stages||[]).forEach(st=>add({title:p.title+' — '+st.title,meta:'Mini-Project • Stage • '+st.outcome,href:miniHref(p.id,st.id),icon:'◉',kind:'mini-stage',data:deepSearchText(st)}));
+  });
   (DATA.lessons||[]).forEach(l=>add({
     title:l.title,meta:`Unreal Learning • ${l.projectTask?.name||path(l.path)?.title||'Core lesson'}`,
     href:`#/lesson/${l.id}`,icon:'◇',kind:'lesson',data:deepSearchText(l)
@@ -5126,7 +5270,7 @@ $('#resetProgress').addEventListener('click',()=>{
   if(confirm('Reset all locally saved lesson progress and game-project status on this browser?')){
     state={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],designSourceCompleted:[],theoryCompleted:[],theoryScores:{},careerCompleted:[],careerScores:{},careerProfile:{version:1,updatedAt:null,roleInterests:{},signals:{},hardSkills:[],softSkills:[],vacancies:[],trafficLights:[],goals:{},industryBeliefs:{},industryDebate:{}},modelVideoCompleted:[],modelTheoryCompleted:[],modelTheoryScores:{},modelFoundationFinal:false,modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[],blockCompleted:[],pathwayCheckpoints:[],studioStepCompleted:[]};
     projectState={project_title:'Signal Lost',theme:PROJECT.themes[0],pitch:'',mechanics:{}};
-    try{localStorage.removeItem(SKILL_MISSION_STORE);localStorage.removeItem(CPP_MISSION_STORE)}catch(e){}
+    try{localStorage.removeItem(SKILL_MISSION_STORE);localStorage.removeItem(CPP_MISSION_STORE);localStorage.removeItem(MINI_STORE)}catch(e){}
     saveState();saveProjectState();route();toast('Local progress reset.');
   }
 });
