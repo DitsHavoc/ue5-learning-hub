@@ -23,15 +23,19 @@ Page 194 is the course conclusion and pages 195–201 provide full-source refere
 - Source and stage ownership checks run in `scripts/validate-content-placement.cjs`.
 - Desktop/mobile E2E tests run in `scripts/test-mini-projects.cjs`, on each PR and push to main.
 
-## Source asset gap before final production rollout
-The user has the supplied models but **has not yet uploaded their asset ZIP to this ChatGPT conversation/repository**. The public site should not display non-working download links.
+## Asset ZIP received and verified — hosting step pending
 
-Needed:
-- Balloon Popper: supplied `BalloonModel.fbx` (UE5.6+ guidance prefers this instead of the legacy OBJ)
-- Bowling: supplied pin/ball models and any matching material or texture dependencies
-- Any optional project files, inputs, level examples, sound effects or related materials the user wants students to download
+The user has now uploaded `Assets.zip` twice; both archives are **byte-for-byte identical**, with CRC validation passing. SHA-256: `722fa6ec2012600e342b7426bae6b405fce866513a215490c69c0ed9ebaf0ef5`, size **59,165 bytes**.
 
-Once received, verify names and contents, put files in an appropriate versioned `assets/mini-projects/` location, add one clearly labelled download to the relevant project page, and test actual HTTP 200 downloads in the production candidate.
+Contents:
+- `Assets/Balloon Popper/BalloonModel.fbx` (32,416 bytes): **use this in UE5.6+**
+- `Assets/Balloon Popper/BalloonModel.obj` (48,338 bytes): older alternative
+- `Assets/Bowling/BowlingPin.fbx` (31,788 bytes): actual bowling pin
+- **No bowling ball model:** model with Unreal Engine's built-in sphere and apply material. Guide updated.
+
+All four projects and all sixteen stages have working source notes. The site now checks for a hosted asset at `/assets/mini-projects/Assets.zip` using an HTTP HEAD request and **only displays the download button if present**. Until then it tells students to obtain the ZIP through Teams; there are no broken links.
+
+**Not yet hosted on GitHub.** The provided binary ZIP is available in the conversation/container; the GitHub connector here cannot use a local file path for its write action. `assets/mini-projects/README.md` documents the exact upload location and checked file hash, for one remaining binary upload to the PR branch before release.
 
 The owner also approved the PDF's images for reuse. Follow-up work can add a curated, correctly attributed and compressed set of its annotated screenshots so students can see the relevant Unreal Blueprint wiring directly on each stage page rather than relying on separate PDF access.
 
