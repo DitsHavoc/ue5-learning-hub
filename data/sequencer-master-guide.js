@@ -17,7 +17,7 @@
   "unrealNextEyebrow": "NEXT • DESIGN THE CUTSCENE",
   "unrealNextTitle": "Now make the camera choices mean something",
   "unrealNextText": "This guide teaches the Unreal Sequencer workflow. Unreal Designer joins it to shot purpose, framing, lens language, pacing, continuity, the applied Studio Build and evidence from playback or critique.",
-  "unrealNextHref": "#/unreal-designer/cinematics",
+  "unrealNextHref": "#/design/cinematics",
   "unrealNextLabel": "Apply Cinematics in Unreal Designer →",
   "duration": "75–100 min",
   "difficulty": "Beginner → Intermediate",
