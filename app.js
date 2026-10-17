@@ -5040,112 +5040,156 @@ function deepSearchText(value,seen=new WeakSet()){
     .filter(([k])=>!['src','url','sourceUrl','image','images','referenceImages','visuals'].includes(k))
     .map(([k,v])=>`${k} ${deepSearchText(v,seen)}`).join(' ');
 }
-function makeSearchEntry({title,meta,href,icon='',data='',kind=''}){
-  const titleText=normaliseSearchText(title);
-  return {title,meta,href,icon,kind,titleText,text:normaliseSearchText(`${title} ${meta} ${data}`)};
+function makeSearchEntry({title,meta,href,icon='',data='',kind='',role=null}){
+  const titleText=normaliseSearchText(title),resolvedRole=role||contentRoleForKind(kind);
+  return {title,meta,href,icon,kind,role:resolvedRole,titleText,text:normaliseSearchText(`${title} ${meta} ${data}`)};
 }
 function buildGlobalSearchIndex(){
   const entries=[];
-  const add=e=>{if(e?.title&&e?.href)entries.push(makeSearchEntry(e))};
+  const add=e=>{
+    if(!e?.title||!e?.href)return;
+    if(String(e.href).startsWith('#/')&&!hubHrefExists(e.href))return;
+    entries.push(makeSearchEntry(e));
+  };
 
   [
-    ['Paths','Sequential learning routes: Unreal Core, Blueprint Programmer, C++, 3D Modelling, Game Design and Industry & Careers','#/paths','🧭','hub'],
-    ['Learn','Choose a subject area: Unreal, game design, Designer Studio, 3D Modelling or Industry & Careers','#/learn','📚','hub'],
-    ['Build','Quick Tutorials, Unreal Designer, Challenge Board, Level 4 projects and practical resources','#/build','🛠','hub'],
-    ['Study','Homework, revision quizzes, Building Blocks, Blueprint Checks, Cheat Sheet and glossary','#/study','↻','hub']
-  ].forEach(([title,data,href,icon,kind])=>add({title,meta:'Student hub',href,icon,kind,data}));
+    ['Paths','Sequential learning routes: Unreal Core, Blueprint Programmer, C++, 3D Modelling, Game Design and Industry & Careers','#/paths','🧭'],
+    ['Learn','Choose a subject area: Unreal, game design, Designer Studio, 3D Modelling or Industry & Careers','#/learn','📚'],
+    ['Build','Quick Tutorials, Challenge Board, Level 4 projects and practical resources','#/build','🛠'],
+    ['Study','Homework, revision quizzes, Building Blocks, Blueprint Checks, Cheat Sheet and glossary','#/study','↻']
+  ].forEach(([title,data,href,icon])=>add({title,meta:'Student hub',href,icon,kind:'hub',role:'hub',data}));
 
   (DATA.lessons||[]).forEach(l=>add({
-    title:l.title,meta:`Unreal Learning • ${l.projectTask?.name||path(l.path)?.title||'Core lesson'}`,
-    href:`#/lesson/${l.id}`,icon:'◇',kind:'lesson',data:deepSearchText(l)
-  }));
-  (TOOLS.families||[]).forEach(f=>add({
-    title:f.title,meta:`Quick Tutorial family • ${familyTutorials(f).length} build${familyTutorials(f).length===1?'':'s'} • ${tutorialCategory(f.category)?.title||'UE5'}`,
-    href:familyHref(f),icon:f.icon||'🛠',kind:'tutorial-family',data:deepSearchText({...f,outcomes:familyTutorials(f)})
-  }));
-  (TOOLS.tutorials||[]).forEach(t=>{const f=t.familyId?tutorialFamily(t.familyId):null;add({
-    title:t.title,meta:t.unrealHome?`Unreal Learning • ${t.unrealSection||'Engine Workflow'} • ${t.duration||''}`:t.libraryHidden?`Core lesson application • ${lesson(t.lessonHome||t.referenceLesson)?.title||'Unreal Learning'}`:`Practical build • ${f?.title||tutorialCategory(t.category)?.title||'UE5'} • ${t.duration||''}`,
-    href:`#/tutorial/${t.id}`,icon:t.unrealHome?(t.icon||'⌘'):'🛠',kind:'tutorial',data:deepSearchText(t)
-  })});
-  (THEORY.lessons||[]).forEach(t=>add({
-    title:t.title,meta:`Game Design Theory • ${theoryPath(t.path)?.title||'Theory'}`,href:`#/theory/${t.id}`,icon:t.icon||'◈',kind:'theory',data:deepSearchText(t)
-  }));
-  (CAREERS.chapters||[]).forEach(ch=>add({title:ch.title,meta:`Industry & Careers • Level 4 • Chapter ${ch.order}`,href:`#/industry-careers/${ch.id}`,icon:ch.icon||'◎',kind:'career',data:deepSearchText(ch)}));
-  (CAREERS.roles||[]).forEach(r=>add({title:r.title,meta:`Industry & Careers • ${r.discipline} role`,href:'#/industry-careers/people',icon:r.icon||'◉',kind:'career-role',data:deepSearchText(r)}));
-  (PATHWAYS.paths||[]).forEach(p=>add({title:p.title,meta:'Guided Path • optional route through existing Hub content',href:`#/pathways/${p.id}`,icon:p.icon||'↠',kind:'guided-path',data:deepSearchText(p)}));
-  (CPP_SKILL_MISSIONS.missions||[]).forEach(m=>{const i=cppMissionNextIndex(m),s=m.stages?.[i]||m.stages?.[0];add({title:`C++ Mission ${cppMissionSeq(m)} — ${m.title}`,meta:`Level 4 Unreal C++ • ${m.duration||'guided build'} • cumulative L4CppTraining project`,href:`#/cpp-mission/${m.id}/${s?.id||'start'}`,icon:'C++',kind:'cpp-skill-mission',data:deepSearchText(m)})});
-  homeworkPaths().forEach(p=>add({title:`Homework: ${p.title}`,meta:`Guided Homework • ${p.time} • Learn → Do → Check → Bring Back`,href:`#/homework/${p.id}`,icon:p.icon||'⌂',kind:'homework-path',data:deepSearchText(p)}));
-  (UNREAL_DESIGNER.tracks||[]).forEach(t=>{const m=designModule(t.moduleId);add({title:`Unreal Designer: ${t.shortTitle||m?.title||t.id}`,meta:'Unreal Designer • Theory → Engine → Test → Evidence',href:`#/unreal-designer/${t.id}`,icon:t.icon||'⚙',kind:'unreal-designer',data:deepSearchText({...t,module:m})})});
-  (UNREAL_DESIGNER.expansionTracks||[]).forEach(t=>add({title:`Unreal Designer: ${t.title}`,meta:`Unreal Designer • ${t.status||'Growing track'}`,href:'#/unreal-designer',icon:t.icon||'⚙',kind:'unreal-designer-next',data:deepSearchText(t)}));
-  (DESIGN.modules||[]).forEach(m=>add({
-    title:m.title,meta:'Designer Studio • Discipline',href:`#/design/${m.id}`,icon:m.icon||'◆',kind:'design',data:deepSearchText(m)
-  }));
-  (DESIGN.resources||[]).forEach(r=>add({
-    title:r.title,meta:`Resource Library • ${r.type||'Resource'} • ${r.license||'check terms'}`,href:'#/resources',icon:r.icon||'🎁',kind:'resource',data:deepSearchText(r)
-  }));
-  (MODEL_FOUNDATIONS.chapters||[]).forEach(ch=>add({
-    title:ch.title,meta:`3D Modelling Studio • Foundations Chapter ${ch.order}`,href:`#/modeling/foundations/${ch.id}`,icon:ch.icon||'⬡',kind:'model-theory',data:deepSearchText(ch)
-  }));
-  add({title:'Model Doctor',meta:'3D Modelling Studio • Foundations final check',href:'#/modeling/foundations/final',icon:'🩺',kind:'model-theory',data:deepSearchText(MODEL_FOUNDATIONS.finalQuiz||[])});
-  (MODEL_VIDEOS.videos||[]).forEach(v=>add({title:v.title,meta:`3D Modelling Studio • Dits' Max Video ${v.order}`,href:'#/modeling/videos',icon:'🎬',kind:'model-video',data:deepSearchText(v)}));
-  (MODEL.lessons||[]).forEach(l=>add({
-    title:l.title,meta:`3D Modelling Studio • Lesson ${l.order||''}`,href:`#/modeling/lesson/${l.id}`,icon:'⬡',kind:'model-lesson',data:deepSearchText(l)
-  }));
-  (MODEL.builds||[]).forEach(b=>add({
-    title:`How to build: ${b.title}`,meta:'3D Modelling Studio • Build',href:`#/modeling/build/${b.id}`,icon:b.icon||'⬡',kind:'model-build',data:deepSearchText(b)
-  }));
-  (MODEL.fixes||[]).forEach(f=>add({
-    title:f.title,meta:'3D Modelling Studio • Fix This Model',href:`#/modeling/fix/${f.id}`,icon:f.icon||'⚕',kind:'model-fix',data:deepSearchText(f)
-  }));
-  (SCULPT.practices||[]).forEach(p=>add({
-    title:p.title,meta:`Sculpt Playground • ${p.time||''}`,href:`#/sculpt/${p.id}`,icon:'🗿',kind:'sculpt',data:deepSearchText(p)
-  }));
-  (BLOCKS.blocks||[]).forEach(b=>add({
-    title:b.title,meta:`${BLOCKS.tiers?.[b.tier]?.title||'UE5'} Building Block • ${b.minutes||''} min`,href:`#/block/${b.id}`,icon:'🧱',kind:'block',data:deepSearchText(b)
-  }));
-  (SNIPPETS.snippets||[]).forEach(x=>{const l=lesson((x.relatedLessons||[])[0]);add({
-    title:x.title,meta:`Official Epic paste assist • ${l?`inside ${l.title}`:`UE ${x.sourceVersion||'5'}`}`,href:l?`#/lesson/${l.id}`:'#/snippets',icon:'⚡',kind:'snippet',data:deepSearchText(x)
-  })});
-  hubGlossary().forEach(g=>add({
-    title:g[0],meta:`${g[2]} glossary • ${g[1]}`,href:'#/glossary',icon:'?',kind:'glossary',data:g.join(' ')
+    title:l.title,meta:`LEARN • Unreal Core • ${l.projectTask?.name||path(l.path)?.title||'Core lesson'}`,
+    href:`#/lesson/${l.id}`,icon:'◇',kind:'lesson',role:'learn',data:deepSearchText(l)
   }));
 
+  (THEORY.lessons||[]).forEach(t=>add({
+    title:t.title,meta:`LEARN • Game Design Theory • ${theoryPath(t.path)?.title||'Theory'}`,
+    href:`#/theory/${t.id}`,icon:t.icon||'◈',kind:'theory',role:'learn',data:deepSearchText(t)
+  }));
+
+  (CAREERS.chapters||[]).forEach(ch=>add({
+    title:ch.title,meta:`LEARN • Industry & Careers • Chapter ${ch.order}`,
+    href:`#/industry-careers/${ch.id}`,icon:ch.icon||'◎',kind:'career',role:'learn',data:deepSearchText(ch)
+  }));
+  (CAREERS.roles||[]).forEach(r=>add({
+    title:r.title,meta:`LEARN • Industry role • ${r.discipline}`,
+    href:'#/industry-careers/people',icon:r.icon||'◉',kind:'career-role',role:'learn',data:deepSearchText(r)
+  }));
+
+  (DESIGN.modules||[]).forEach(m=>{
+    const application=(UNREAL_DESIGNER.tracks||[]).find(t=>t.moduleId===m.id);
+    add({
+      title:m.title,meta:'LEARN + APPLY • Designer Studio',href:`#/design/${m.id}`,
+      icon:m.icon||'◆',kind:'design',role:'learn',data:deepSearchText({module:m,application})
+    });
+  });
+
+  (MODEL_FOUNDATIONS.chapters||[]).forEach(ch=>add({
+    title:ch.title,meta:`LEARN • 3D Foundations • Chapter ${ch.order}`,
+    href:`#/modeling/foundations/${ch.id}`,icon:ch.icon||'⬡',kind:'model-theory',role:'learn',data:deepSearchText(ch)
+  }));
+  (MODEL.lessons||[]).forEach(l=>add({
+    title:l.title,meta:`LEARN • 3ds Max tool lesson ${l.order||''}`,
+    href:`#/modeling/lesson/${l.id}`,icon:'⬡',kind:'model-lesson',role:'learn',data:deepSearchText(l)
+  }));
+
+  (SKILL_MISSIONS.missions||[]).forEach(m=>{
+    const i=skillMissionNextIndex(m),stage=m.stages?.[i]||m.stages?.[0];
+    add({title:`Blueprint Mission ${m.sequence||''} — ${m.title}`,meta:'PATH • Blueprint Programmer • cumulative Escape Room',href:`#/skill-mission/${m.id}/${stage?.id||'start'}`,icon:'⌘',kind:'skill-mission',role:'path',data:deepSearchText(m)});
+  });
+  (CPP_SKILL_MISSIONS.missions||[]).forEach(m=>{
+    const i=cppMissionNextIndex(m),stage=m.stages?.[i]||m.stages?.[0];
+    add({title:`C++ Mission ${cppMissionSeq(m)} — ${m.title}`,meta:'PATH • Unreal C++ • standalone L4CppTraining project',href:`#/cpp-mission/${m.id}/${stage?.id||'start'}`,icon:'C++',kind:'cpp-skill-mission',role:'path',data:deepSearchText(m)});
+  });
+  (PATHWAYS.paths||[]).forEach(p=>add({
+    title:p.title,meta:'PATH • Optional outcome route through existing Hub content',
+    href:`#/pathways/${p.id}`,icon:p.icon||'↠',kind:'guided-path',role:'path',data:deepSearchText(p)
+  }));
+
+  (TOOLS.families||[]).forEach(f=>add({
+    title:f.title,meta:`BUILD • Quick Tutorial family • ${familyTutorials(f).length} outcome${familyTutorials(f).length===1?'':'s'}`,
+    href:familyHref(f),icon:f.icon||'🛠',kind:'tutorial-family',role:'build',data:deepSearchText({...f,outcomes:familyTutorials(f)})
+  }));
+  (TOOLS.tutorials||[]).filter(t=>!t.libraryHidden).forEach(t=>{
+    const fam=t.familyId?tutorialFamily(t.familyId):null;
+    const role=t.unrealHome?'guide':'build';
+    add({
+      title:t.title,
+      meta:t.unrealHome?`FULL WORKFLOW • ${t.unrealSection||'Unreal Master Guide'} • ${t.duration||''}`:`BUILD • ${fam?.title||tutorialCategory(t.category)?.title||'Practical UE5'} • ${t.duration||''}`,
+      href:`#/tutorial/${t.id}`,icon:t.unrealHome?(t.icon||'🧭'):'🛠',kind:t.unrealHome?'master-guide':'tutorial',role,data:deepSearchText(t)
+    });
+  });
+  (MODEL.builds||[]).forEach(b=>add({
+    title:`Build X: ${b.title}`,meta:'BUILD • 3D Modelling production brief',href:`#/modeling/build/${b.id}`,
+    icon:b.icon||'⬡',kind:'model-build',role:'build',data:deepSearchText(b)
+  }));
+  (window.LEVEL4_SPECIALIST_PROJECTS?.projects||[]).forEach(p=>add({
+    title:p.title,meta:`BUILD • Level 4 specialist brief • ${p.role||''}`,href:`#/level4/${p.id}`,
+    icon:p.icon||'◆',kind:'level4-project',role:'build',data:deepSearchText(p)
+  }));
+
+  homeworkPaths().forEach(p=>add({
+    title:`Homework: ${p.title}`,meta:`STUDY • ${p.time} • retrieval/application`,
+    href:`#/homework/${p.id}`,icon:p.icon||'⌂',kind:'homework-path',role:'study',data:deepSearchText(p)
+  }));
+
+  // Support content stays searchable, but it is deliberately ranked below canonical learning/build content.
+  (BLOCKS.blocks||[]).forEach(b=>add({
+    title:b.title,meta:`SUPPORT • Building Block • ${b.minutes||''} min`,href:`#/block/${b.id}`,
+    icon:'🧱',kind:'block',role:'support',data:deepSearchText(b)
+  }));
+  (MODEL.fixes||[]).forEach(f=>add({
+    title:f.title,meta:'SUPPORT • Fix This Model clinic',href:`#/modeling/fix/${f.id}`,
+    icon:f.icon||'⚕',kind:'model-fix',role:'support',data:deepSearchText(f)
+  }));
+  (SNIPPETS.snippets||[]).forEach(x=>{
+    const l=lesson((x.relatedLessons||[])[0]);
+    add({title:x.title,meta:`SUPPORT • Epic paste assist${l?` • ${l.title}`:''}`,href:l?`#/lesson/${l.id}`:'#/snippets',icon:'⚡',kind:'snippet',role:'support',data:deepSearchText(x)});
+  });
+  hubGlossary().forEach(g=>add({
+    title:g[0],meta:`SUPPORT • Glossary • ${g[2]}`,href:'#/glossary',icon:'?',kind:'glossary',role:'support',data:g.join(' ')
+  }));
+
+  // Collapse many same-destination support records into one useful searchable destination.
+  add({title:"Dits' 3ds Max Video Series",meta:`SUPPORT • ${MODEL_VIDEOS.videos.length} follow-along videos`,href:'#/modeling/videos',icon:'🎬',kind:'model-video',role:'support',data:deepSearchText(MODEL_VIDEOS.videos)});
+  add({title:'Resource Library',meta:`SUPPORT • ${DESIGN.resources.length} curated asset/reference sources`,href:'#/resources',icon:'🧰',kind:'resource',role:'support',data:deepSearchText(DESIGN.resources)});
+  add({title:'Revision Quizzes',meta:'STUDY • retrieve existing learning and follow misses back to source',href:'#/revision',icon:'↻',kind:'revision',role:'study',data:'Unreal systems Master Guides Game Design Theory Industry Careers Designer Studio 3D Foundations'});
+  add({title:'Building Blocks',meta:'SUPPORT • short Unreal explanations when one term is blocking your build',href:'#/blocks',icon:'🧱',kind:'area',role:'support',data:deepSearchText(BLOCKS.blocks)});
+
   [
-    ['Guided Paths','Optional outcome-based routes through Theory, Unreal, Designer Studio and 3D without locking the rest of the Hub','#/pathways','↠'],
-    ['Unreal Learning','Core lessons, learning paths and practical Unreal Engine progression','#/programming','◇'],
-    ['Unreal C++ Programmer Path','Standalone Level 4 C++ route: fresh L4CppTraining project, Visual Studio setup, native gameplay classes, functions, inventory and components','#/cpp-path','C++'],
-    ['Blueprint Snippet Bank','Official Epic paste assists and reusable Blueprint graph helpers','#/snippets','⚡'],
-    ['Quick Tutorials','Recipe families and practical UE5 build outcomes','#/tutorials','🛠'],
-    ['Game Design Theory','Core loops, MDA, agency, choices, balance, pacing, accessibility, prototyping, playtesting and adaptation','#/theory','◈'],
-    ['Industry & Careers','Level 4 games industry roles, hard and soft skills, career evidence, vacancies and portfolio planning','#/industry-careers','◎'],
-    ['Designer Studio','Level design, lighting, materials, terrain, cinematic and environment design','#/design','◆'],
-    ['Critique Board','Class studio wall, screenshots, peer feedback, structured critique and improvement','#/critique','💬'],
-    ['Resource Library','Free assets, CC0 textures, HDRIs, sound libraries, level explorers, UI reference, documentaries and professional talks','#/resources','🧰'],
-    ['3D Modelling Studio','3ds Max modelling lessons, builds, video series and topology repair','#/modeling','⬡'],
-    ["Dits' 3ds Max Video Series",'14 follow-along videos covering interface, primitives, Editable Poly, modifiers, Array, mini builds and materials','#/modeling/videos','🎬'],
-    ['Glossary','Unreal Engine, game design and 3D modelling terminology','#/glossary','?'],
-    ['Revision Quizzes','Focused and mixed checks across Unreal systems, Master Guides, Game Design Theory, Industry & Careers, Designer Studio and 3D Foundations','#/revision','↻'],
-    ['Homework','Guided Learn → Do → Check → Bring Back routes across Unreal, Landscape, Sequencer, Theory, Industry and 3D','#/homework','⌂'],
-    ['GitHub + Unreal Team Workflow','GitHub Desktop version control two-person team collaboration clone commit push pull Unreal project asset ownership conflict safety','#/tutorial/github-unreal-team-workflow','🔀'],
-    ['Power Jam Programmer: Maps, Switches & Doors','Blueprint programming power map switch door PowerStates ActivatePower HasPower Instance Editable overlap cast branch POWER_A POWER_B pair jam programmer','#/tutorial/power-jam-programmer','⚡']
-  ].forEach(([title,data,href,icon])=>add({title,meta:'Hub area',href,icon,kind:'area',data}));
+    ['Unreal Learning','Canonical Unreal/Blueprint concept lessons and core system progression','#/programming','◇','learn'],
+    ['Blueprint Programmer Path','Four cumulative Escape Room missions: Arrays/Maps → Data Tables → Functions → Interfaces','#/skill-mission/arrays-maps-escape-room/start','⌘','path'],
+    ['Unreal C++ Programmer Path','Fresh L4CppTraining project: toolchain, Actors, functions, inventory and reusable components','#/cpp-path','C++','path'],
+    ['Game Design Theory','Core loops, MDA, agency, choices, balance, pacing, accessibility, prototyping and playtesting','#/theory','◈','learn'],
+    ['Designer Studio','Canonical level/environment/material/lighting/landscape/cinematic/audio/polish learning plus UE5 application','#/design','◆','learn'],
+    ['Industry & Careers','Games industry roles, skills, evidence, vacancies and portfolio planning','#/industry-careers','◎','learn'],
+    ['3D Modelling Studio','3D Foundations → 3ds Max tool lessons → support videos → Build X → repair clinics','#/modeling','⬡','learn'],
+    ['Quick Tutorials','Concrete UE5 outcomes and practical mechanic recipes','#/tutorials','🛠','build'],
+    ['Level 4 Specialist Projects','Portfolio-style specialist briefs that link back to existing learning','#/level4','◆','build'],
+    ['Homework','Guided retrieval/application routes that point back to canonical learning','#/homework','⌂','study']
+  ].forEach(([title,data,href,icon,role])=>add({title,meta:`${contentRoleLabel(role)} • Hub area`,href,icon,kind:'area',role,data}));
+
   return entries;
 }
 function scoreSearchEntry(entry,q,tokens){
   if(!tokens.every(t=>entry.text.includes(t)))return -1;
-  let score=0;
-  if(entry.titleText===q)score+=120;
-  if(entry.titleText.startsWith(q))score+=70;
-  if(entry.titleText.includes(q))score+=45;
+  let score=SEARCH_ROLE_META[entry.role]?.weight||0;
+  if(entry.titleText===q)score+=140;
+  if(entry.titleText.startsWith(q))score+=75;
+  if(entry.titleText.includes(q))score+=48;
   tokens.forEach(t=>{
-    if(entry.titleText===t)score+=30;
-    else if(entry.titleText.startsWith(t))score+=18;
-    else if(entry.titleText.includes(t))score+=10;
+    if(entry.titleText===t)score+=34;
+    else if(entry.titleText.startsWith(t))score+=19;
+    else if(entry.titleText.includes(t))score+=11;
     else score+=2;
   });
-  if(entry.kind==='lesson'||entry.kind==='tutorial'||entry.kind==='tutorial-family')score+=3;
+  // Exact support lookups should still win when the user explicitly names the support item.
+  if(entry.role==='support'&&entry.titleText===q)score+=45;
   return score;
 }
+
 function setupSearch(){
   const input=$('#globalSearch'),panel=$('#searchPanel');
   if(!input||!panel)return;
