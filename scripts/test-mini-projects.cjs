@@ -63,11 +63,25 @@ async function run(){
           await page.waitForSelector('.mini-task-list li',{timeout:10000});
           const st=await page.evaluate(()=>({hash:location.hash,title:document.querySelector('#app h1')?.textContent?.trim(),tasks:document.querySelectorAll('.mini-task-list li').length,sourcePages:document.querySelectorAll('.mini-source-page').length,check:!!document.querySelector('.mini-proof'),complete:!!document.querySelector('[data-action="mini-complete"]')}));
           const correct=st.hash==='#/mini-projects/'+p.id+'/'+id&&st.tasks>=4&&st.sourcePages>=1&&st.check&&st.complete;
+          // Task-based sections replace the old per-PDF-page headings. Source
+          // page elements still exist for exact image placement and attribution.
+          const headings=await page.locator('.mini-source-section > summary').allTextContents();
+          const allLabels=headings.map(x=>x.trim());
+          if(allLabels.length<2||allLabels.some(x=>/Source page|Read instructions and illustrations/i.test(x)))
+            fail.push(device.name+' '+id+': generic or missing walkthrough task headings '+JSON.stringify(allLabels));
+          const sectionData=await page.evaluate(stageId=>{
+            const st=window.UE5_MINI_PROJECT_DATA.projects.flatMap(x=>x.stages).find(x=>x.id===stageId);
+            const expected=st.walkthroughSections.flatMap(x=>Array.from({length:x.end-x.start+1},(_,i)=>x.start+i));
+            const pageIds=[...document.querySelectorAll('.mini-source-page')].map(x=>Number(x.dataset.miniPage));
+            return {expected,pageIds,sections:st.walkthroughSections.length,unique:new Set(st.walkthroughSections.map(x=>x.title)).size};
+          },id);
+          if(sectionData.expected.join(',')!==sectionData.pageIds.join(',')||sectionData.sections!==allLabels.length||sectionData.unique!==allLabels.length)
+            fail.push(device.name+' '+id+': source pages missing, duplicated or unclear heading');
           if(!correct)fail.push(device.name+' '+id+' bad lesson '+JSON.stringify(st));
-          // Expand each PDF source page: every screenshot must be in the same
-          // stage and appear directly beside its anchor paragraph.
+          // Open each student-facing task: figures must still be attached to
+          // their original source page and paragraph, not floated to the end.
           const expectedFigures=(figureGroups[p.id+'/'+id]||[]).length;
-          await page.locator('.mini-source-page').evaluateAll(items=>items.forEach(el=>el.open=true));
+          await page.locator('.mini-source-section').evaluateAll(items=>items.forEach(el=>el.open=true));
           try {
             await page.waitForFunction(count=>document.querySelectorAll('.mini-illustration img').length===count,expectedFigures,{timeout:8000});
           }catch(e){fail.push(device.name+' '+id+': did not mount '+expectedFigures+' illustrations');}
