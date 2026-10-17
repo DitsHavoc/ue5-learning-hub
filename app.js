@@ -1968,6 +1968,58 @@ function bindMiniAssetCard(){
     if(r.ok){button.hidden=false;if(fallback)fallback.hidden=true;}
   }).catch(()=>{});
 }
+// Load the authoritative page/figure manifest once. Figures are only mounted
+// when the student opens the corresponding source-page notes.
+let miniFigureManifestPromise;
+function bindMiniIllustrations(){
+  const host=document.querySelector('.mini-page-notes[data-mini-stage]');
+  if(!host)return;
+  const stage=host.dataset.miniStage,project=host.dataset.miniProject;
+  const mount=(details,figures)=>{
+    if(!details.open||details.dataset.figuresMounted)return;
+    details.dataset.figuresMounted='1';
+    const body=details.querySelector('.mini-page-text');
+    if(!body)return;
+    const paragraphs=Array.from(body.querySelectorAll(':scope > p'));
+    const page=Number(details.dataset.miniPage);
+    figures.forEach((fig,i)=>{
+      if(!/^assets\\/mini-projects\\/images\\/[a-z0-9/_-]+\\.(png|jpg)$/.test(fig.file))return;
+      const n=Math.max(-1,Math.min(paragraphs.length-1,Number(fig.afterParagraph??-1)));
+      const context=(paragraphs[Math.max(0,n)]?.textContent||'Unreal Engine Blueprint instructions').replace(/\\s+/g,' ').trim();
+      const summary=context.length>115?context.slice(0,112).trimEnd()+'…':context;
+      const figure=document.createElement('figure');figure.className='mini-illustration';
+      const link=document.createElement('a');link.href='/'+fig.file;link.target='_blank';link.rel='noopener noreferrer';link.title='Open illustration at full size in a new tab';
+      const img=document.createElement('img');img.src='/'+fig.file;img.loading='lazy';img.decoding='async';img.width=fig.width;img.height=fig.height;
+      img.alt='Unreal Engine tutorial screenshot, source page '+page+', figure '+(i+1)+': '+summary;
+      link.appendChild(img);figure.appendChild(link);
+      const caption=document.createElement('figcaption');caption.textContent='Figure '+(i+1)+' · Source page '+page+' · '+summary;figure.appendChild(caption);
+      const before=n<0?paragraphs[0]:(paragraphs[n]?.nextSibling||null);
+      body.insertBefore(figure,before);
+    });
+  };
+  if(!miniFigureManifestPromise){
+    miniFigureManifestPromise=fetch('/assets/mini-projects/images/manifest.json',{cache:'force-cache'}).then(r=>{
+      if(!r.ok)throw Error('Mini-Projects illustration manifest not available');
+      return r.json();
+    }).catch(err=>{miniFigureManifestPromise=null;throw err});
+  }
+  miniFigureManifestPromise.then(manifest=>{
+    if(!host.isConnected)return;
+    const figures=manifest.stage_figures?.[project+'/'+stage]||[];
+    const perPage=new Map();
+    figures.forEach(f=>{const items=perPage.get(f.page)||[];items.push(f);perPage.set(f.page,items)});
+    host.querySelectorAll('.mini-source-page[data-mini-page]').forEach(details=>{
+      const figuresForPage=perPage.get(Number(details.dataset.miniPage))||[];
+      if(!figuresForPage.length)return;
+      details.addEventListener('toggle',()=>mount(details,figuresForPage));
+      mount(details,figuresForPage);
+    });
+  }).catch(()=>{
+    if(!host.isConnected)return;
+    const notice=document.createElement('p');notice.className='mini-small-note';notice.textContent='Illustrations could not be loaded. Text instructions remain available; please retry the page.';
+    host.prepend(notice);
+  });
+}
 function miniProjectPage(id){
   const p=miniProject(id);if(!p)return notFound();
   const z=miniProgress(p),done=new Set(miniCompleted()),first=p.stages.find(x=>!done.has(x.id))||p.stages[0];
@@ -1986,8 +2038,8 @@ function miniStagePage(projectId,stageId){
   '<div class="mini-lesson-grid"><div class="mini-main-column">'+
   '<section class="mini-information mini-stage-summary"><span class="eyebrow">01 • YOUR BUILD TARGET</span><h2>Make this work</h2><p>'+esc(st.outcome)+'</p></section>'+
   '<section class="mini-information"><span class="eyebrow">02 • GUIDED CHECKLIST</span><h2>Build and verify</h2><ol class="mini-task-list">'+st.tasks.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ol></section>'+
-  '<section class="mini-information"><span class="eyebrow">03 • FULL SOURCE WALKTHROUGH</span><h2>Detailed lesson notes</h2><p class="mini-small-note">Complete text notes from the authorised source PDF. Page labels match the original document; annotated screenshots remain in the original PDF.</p>'+
-  '<div class="mini-page-notes">'+pages.map((page,i)=>'<details class="mini-source-page" '+(i===0?'open':'')+'><summary>Source page '+page.page+' <span>Read instructions ▾</span></summary><div class="mini-page-text">'+page.paragraphs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</div></details>').join('')+'</div></section>'+
+  '<section class="mini-information"><span class="eyebrow">03 • FULL SOURCE WALKTHROUGH</span><h2>Detailed lesson notes</h2><p class="mini-small-note">Step-by-step text and original course screenshots appear together, in source-page order. Click a screenshot to view it full size. For UE5.6+, use the supplied BalloonModel.fbx rather than the legacy OBJ steps shown in some source images.</p>'+
+  '<div class="mini-page-notes" data-mini-stage="'+esc(st.id)+'" data-mini-project="'+esc(p.id)+'">'+pages.map((page,i)=>'<details class="mini-source-page" data-mini-page="'+page.page+'" '+(i===0?'open':'')+'><summary>Source page '+page.page+' <span>Read instructions and illustrations ▾</span></summary><div class="mini-page-text">'+page.paragraphs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</div></details>').join('')+'</div></section>'+
   '<section class="mini-information mini-proof"><span class="eyebrow">04 • CHECK YOUR WORK</span><h2>Prove it works</h2><p>'+esc(st.check)+'</p><details><summary>If something does not work</summary><p>'+esc(st.troubleshoot)+'</p></details></section>'+
   '<section class="mini-complete-panel"><p>Only mark this stage complete after you have run the game or tested the feature yourself. This saves progress in this browser, not to Teams.</p><button class="button '+(done?'success':'primary')+'" data-action="mini-complete" data-stage="'+esc(st.id)+'">'+(done?'✓ Completed — click to undo':'Mark this stage complete ✓')+'</button></section>'+
   '<nav class="mini-stage-bottom" aria-label="Stage navigation">'+(prev?'<a class="button ghost" href="'+miniHref(p.id,prev.id)+'">← Previous stage</a>':'<a class="button ghost" href="'+miniHref(p.id)+'">← Project overview</a>')+(next?'<a class="button primary" href="'+miniHref(p.id,next.id)+'">Next stage →</a>':'<a class="button primary" href="'+miniHref(p.id)+'">Project overview ✓</a>')+'</nav>'+
@@ -3979,6 +4031,7 @@ function bindNewsPage(){
 }
 function bindPageInputs(){
   bindMiniAssetCard();
+  bindMiniIllustrations();
   const ts=$('#theorySearch');
   if(ts){
     let area='all';
