@@ -36,13 +36,17 @@ async function run(){
       if(definitions.reduce((n,p)=>n+p.stages.length,0)!==16)fail.push(device.name+': expected 16 stages');
       for(const p of definitions){
         await page.goto(base+'/#/mini-projects',{waitUntil:'load'});
+        await page.waitForSelector('.mini-project-card',{timeout:10000});
         await page.locator('.mini-project-card[href="#/mini-projects/'+p.id+'"]').click();
+        await page.waitForSelector('.mini-stage-link',{timeout:10000});
         const overview=await page.evaluate(()=>({hash:location.hash,title:document.querySelector('#app h1')?.textContent?.trim(),count:document.querySelectorAll('.mini-stage-link').length}));
         if(overview.hash!=='#/mini-projects/'+p.id||overview.count!==p.stages.length)fail.push(device.name+' '+p.id+' project overview '+JSON.stringify(overview));
         console.log('PROJECT '+device.name+' '+p.id+' '+JSON.stringify(overview));
         for(const id of p.stages){
           await page.goto(base+'/#/mini-projects/'+p.id,{waitUntil:'load'});
+          await page.waitForSelector('.mini-stage-link',{timeout:10000});
           await page.locator('.mini-stage-link[href="#/mini-projects/'+p.id+'/'+id+'"]').click();
+          await page.waitForSelector('.mini-task-list li',{timeout:10000});
           const st=await page.evaluate(()=>({hash:location.hash,title:document.querySelector('#app h1')?.textContent?.trim(),tasks:document.querySelectorAll('.mini-task-list li').length,sourcePages:document.querySelectorAll('.mini-source-page').length,check:!!document.querySelector('.mini-proof'),complete:!!document.querySelector('[data-action="mini-complete"]')}));
           const correct=st.hash==='#/mini-projects/'+p.id+'/'+id&&st.tasks>=4&&st.sourcePages>=1&&st.check&&st.complete;
           if(!correct)fail.push(device.name+' '+id+' bad lesson '+JSON.stringify(st));
@@ -50,6 +54,7 @@ async function run(){
         }
       }
       await page.goto(base+'/#/mini-projects/balloon-popper/balloon-1',{waitUntil:'load'});
+      await page.waitForSelector('[data-action="mini-complete"]',{timeout:10000});
       await page.locator('[data-action="mini-complete"]').click();
       let completed=await page.evaluate(()=>JSON.parse(localStorage.getItem('ue5hub:mini-projects:v1')||'[]').includes('balloon-1'));
       if(!completed)fail.push(device.name+' progress was not saved');
