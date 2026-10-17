@@ -45,6 +45,8 @@ function audit(root = path.resolve(__dirname, '..')) {
   const level4 = w.LEVEL4_SPECIALIST_PROJECTS || {};
   const study = w.UE5_STUDY_DATA || {};
   const guided = w.UE5_PATHWAY_DATA || {};
+  const mini = w.UE5_MINI_PROJECT_DATA || {projects:[]};
+  const miniNotes = w.UE5_MINI_PROJECT_NOTES || {};
   const items = obj => Array.isArray(obj) ? obj : [];
   const ids = arr => new Set(items(arr).map(x => x.id));
   const unique = (name, arr) => {
@@ -90,6 +92,28 @@ function audit(root = path.resolve(__dirname, '..')) {
     ['Level 4 projects', level4.projects]
   ].forEach(([label, records]) => unique(label, records));
   unique('All practical tutorial IDs', [...items(tutorials.tutorials), ...items(design.tutorials)]);
+  unique('Mini-Projects', mini.projects);
+  unique('Mini-Project stages', items(mini.projects).flatMap(p=>items(p.stages)));
+  const registeredStages=new Set();
+  for(const p of items(mini.projects)){
+    if(!items(p.stages).length)fail('Mini-Project '+p.id,'project has no stages');
+    for(const link of items(p.lessonIds))reference('Mini-Project '+p.id+' concept link',link,coreLessons);
+    for(const stage of items(p.stages)){
+      registeredStages.add(stage.id);
+      if(!stage.title||!stage.outcome||!items(stage.tasks).length||!stage.check||!stage.troubleshoot)
+        fail('Mini-Project '+stage.id,'needs title, outcome, guided tasks, check and troubleshooting');
+      if(!Array.isArray(stage.pages)||stage.pages.length!==2||stage.pages[1]<stage.pages[0])
+        fail('Mini-Project '+stage.id,'invalid source page range');
+      const notes=items(miniNotes[stage.id]);
+      if(!notes.length)fail('Mini-Project '+stage.id,'missing source notes');
+      for(const note of notes){
+        if(note.page<stage.pages[0]||note.page>stage.pages[1]||!items(note.paragraphs).length)
+          fail('Mini-Project '+stage.id,'source notes page out of range or empty');
+      }
+    }
+  }
+  for(const key of Object.keys(miniNotes))
+    if(!registeredStages.has(key))fail('Mini source notes '+key,'no owning stage');
 
   for (const x of items(course.lessons)) {
     reference('Core lesson ' + x.id, x.path, subjectPaths);
