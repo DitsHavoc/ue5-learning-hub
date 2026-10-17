@@ -5200,7 +5200,7 @@ $('#resetProgress').addEventListener('click',()=>{
   if(confirm('Reset all locally saved lesson progress and game-project status on this browser?')){
     state={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],designSourceCompleted:[],theoryCompleted:[],theoryScores:{},careerCompleted:[],careerScores:{},careerProfile:{version:1,updatedAt:null,roleInterests:{},signals:{},hardSkills:[],softSkills:[],vacancies:[],trafficLights:[],goals:{},industryBeliefs:{},industryDebate:{}},modelVideoCompleted:[],modelTheoryCompleted:[],modelTheoryScores:{},modelFoundationFinal:false,modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[],blockCompleted:[],pathwayCheckpoints:[],studioStepCompleted:[]};
     projectState={project_title:'Signal Lost',theme:PROJECT.themes[0],pitch:'',mechanics:{}};
-    try{localStorage.removeItem(SKILL_MISSION_STORE);localStorage.removeItem(CPP_MISSION_STORE)}catch(e){}
+    try{localStorage.removeItem(SKILL_MISSION_STORE);localStorage.removeItem(CPP_MISSION_STORE);localStorage.removeItem(MINI_STORE)}catch(e){}
     saveState();saveProjectState();route();toast('Local progress reset.');
   }
 });
