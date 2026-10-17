@@ -125,7 +125,8 @@ async function run(){
       if(await page.locator('[data-mini-assets-link]').isVisible())fail.push(device.name+': unavailable ZIP exposed download CTA');
       if(!(await page.locator('[data-mini-assets-fallback]').isVisible()))fail.push(device.name+': missing ZIP fallback absent');
       await page.unroute('**/assets/mini-projects/Assets.zip');
-      await page.goto(base+'/#/mini-projects/bowling',{waitUntil:'load'});
+      // Reload, not a same-hash navigation, so the asset HEAD check runs again.
+      await page.reload({waitUntil:'load'});
       await page.locator('[data-mini-assets-link]').waitFor({state:'visible',timeout:6000});
       console.log('ASSETS '+device.name+' real ZIP downloaded and verified; 404 fallback tested.');
       if(errors.length)fail.push(device.name+' browser exceptions:\n'+[...new Set(errors)].slice(0,3).join('\n'));
