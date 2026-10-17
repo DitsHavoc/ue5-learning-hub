@@ -59,3 +59,8 @@
 .mini-side-stages a span{min-width:20px;color:#81dafa;font-weight:750}
 @media(max-width:1000px){.mini-lesson-grid{grid-template-columns:minmax(0,1fr)}.mini-side-column{position:static;display:grid;grid-template-columns:1fr 1fr;gap:12px}}
 @media(max-width:700px){.mini-project-grid{grid-template-columns:1fr}.mini-header{padding:22px 17px}.mini-information,.mini-project-overview{padding:18px 15px}.mini-stage-link{grid-template-columns:35px 1fr 14px;padding:10px;gap:9px}.mini-stage-link .mini-stage-number{width:31px;height:31px}.mini-side-column{display:block}.mini-complete-panel{flex-direction:column;align-items:stretch}.mini-complete-panel .button{width:100%}.mini-source-page summary{font-size:12px}}
+
+/* A failed asset check must never expose a broken download CTA. */
+.mini-assets [hidden]{display:none!important}
+.mini-assets .button{margin:10px 0 4px}
+.mini-assets [data-mini-assets-fallback]{font-size:12px;color:#aebfd0}
