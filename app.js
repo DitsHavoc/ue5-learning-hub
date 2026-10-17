@@ -21,7 +21,7 @@ const STUDY = window.UE5_STUDY_DATA;
 const BACKEND = window.UE5_BACKEND;
 const SKILL_MISSIONS = window.UE5_SKILL_MISSIONS || {missions:[]};
 const CPP_SKILL_MISSIONS = window.UE5_CPP_SKILL_MISSIONS || {missions:[],planned:[]};
-const HUB_VERSION = '3.63.1';
+const HUB_VERSION = '3.63.2';
 const MINI = window.UE5_MINI_PROJECT_DATA || {projects:[]};
 const MINI_NOTES = window.UE5_MINI_PROJECT_NOTES || {};
 
@@ -1949,8 +1949,7 @@ function miniCard(p){
 function miniProjectsPage(){
   return '<div class="mini-shell">'+miniTrail([{title:'Build',href:'#/build'},{title:'Mini-Projects'}])+
   '<header class="mini-header"><span class="eyebrow">BUILD • PROJECT-LED PRACTICE</span><h1>Unreal Engine Mini-Projects</h1><p>Four complete practical routes. Work through the guided stages, test what you have built, and mark each stage complete when it works. You can revisit every guide at any time.</p><div class="mini-chips"><span>'+MINI.projects.length+' mini-projects</span><span>'+MINI.projects.reduce((n,p)=>n+p.stages.length,0)+' stages</span><span>Unreal Engine 5.8 source notes</span></div></header>'+
-  '<div class="mini-project-grid">'+MINI.projects.map(miniCard).join('')+'</div>'+
-  '<section class="mini-information"><h2>How to use this series</h2><p>These are hands-on builds rather than a second Unreal fundamentals course. Start with Balloon Popper or Loops, then take on Bowling and Clicker. If a concept is unfamiliar, use the linked existing Core lesson instead of starting another unrelated tutorial.</p><p>Use your supplied project models and Unreal project files. The detailed walkthrough notes follow the 2026 source course, with updated checks and troubleshooting for classroom use. Formal evidence and submission remain in Microsoft Teams.</p><small>Course source: '+esc(MINI.source)+' • Used with permission of the rights holder.</small></section></div>';
+  '<div class="mini-project-grid">'+MINI.projects.map(miniCard).join('')+'</div></div>';
 }
 function miniAssetCard(p){
   if(!['balloon-popper','bowling'].includes(p?.id))return '';
