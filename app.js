@@ -21,7 +21,7 @@ const STUDY = window.UE5_STUDY_DATA;
 const BACKEND = window.UE5_BACKEND;
 const SKILL_MISSIONS = window.UE5_SKILL_MISSIONS || {missions:[]};
 const CPP_SKILL_MISSIONS = window.UE5_CPP_SKILL_MISSIONS || {missions:[],planned:[]};
-const HUB_VERSION = '3.63.0';
+const HUB_VERSION = '3.63.1';
 const MINI = window.UE5_MINI_PROJECT_DATA || {projects:[]};
 const MINI_NOTES = window.UE5_MINI_PROJECT_NOTES || {};
 
