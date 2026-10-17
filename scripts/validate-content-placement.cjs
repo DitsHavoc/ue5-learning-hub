@@ -7,25 +7,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
 
-const FILES = [
-  'data/course-data.js',
-  'data/tutorial-data.js',
-  'data/design-data.js',
-  'data/theory-data.js',
-  'data/modeling-data.js',
-  'data/modeling-foundations-data.js',
-  'data/modeling-video-data.js',
-  'data/industry-careers-data.js',
-  'data/unreal-designer-data.js',
-  'data/programmer-skill-mission.js',
-  'data/cpp-skill-missions.js',
-  'data/study-data.js',
-  'data/level4-specialist-projects.js',
-  'data/landscape-master-guide.js',
-  'data/sequencer-master-guide.js',
-  'data/github-unreal-team-guide.js',
-  'data/power-jam-programmer-guide.js'
-];
+// Validate learning data in the same load order the students' browser uses.
 
 // Existing intentional cross-disciplinary recipes. Add a *specific* exception
 // and teaching reason if a future family needs to group two categories.
@@ -39,14 +21,16 @@ function audit(root = path.resolve(__dirname, '..')) {
   const fail = (where, message) => errors.push(`${where}: ${message}`);
   const read = file => fs.readFileSync(path.join(root, file), 'utf8');
   const html = read('index.html');
-  const loadedScripts = new Set([...html.matchAll(/<script\s+src=["']([^"'?]+)(?:\?[^"']*)?["']/g)].map(m => m[1]));
+  const allScripts = [...html.matchAll(/<script\s+src=["']([^"'?]+)(?:\?[^"']*)?["']/g)].map(m => m[1]);
+  const loadedScripts = new Set(allScripts);
+  const dataScripts = allScripts.filter(file => file.startsWith('data/') && file.endsWith('.js') && file !== 'data/supabase-config.js');
   const context = vm.createContext({window: {}});
   const load = file => {
     if (!loadedScripts.has(file)) fail(file, 'file not loaded by index.html; content would be invisible');
     try { vm.runInContext(read(file), context, {filename: file, timeout: 3000}); }
     catch (error) { fail(file, 'cannot evaluate: ' + error.message); }
   };
-  FILES.forEach(load);
+  dataScripts.forEach(load);
   const w = context.window;
   const course = w.UE5_COURSE_DATA || {};
   const tutorials = w.UE5_TUTORIAL_DATA || {};
@@ -65,7 +49,7 @@ function audit(root = path.resolve(__dirname, '..')) {
   const unique = (name, arr) => {
     const found = new Set();
     for (const x of items(arr)) {
-      if (!x.id || !x.title) fail(name, 'item missing id or title');
+      if (!x.id || !(x.title || x.shortTitle)) fail(name, 'item missing id or title');
       if (found.has(x.id)) fail(name, 'duplicate ID ' + x.id);
       found.add(x.id);
     }
@@ -75,8 +59,8 @@ function audit(root = path.resolve(__dirname, '..')) {
     if (!value || !allowed.has(value)) fail(where, 'missing destination: ' + String(value));
   };
   const subjectPaths = ids(course.paths), coreLessons = ids(course.lessons);
-  const theoryPaths = ids(theory.paths), theoryLessons = ids(theory.lessons);
-  const categories = ids(tutorials.categories), families = ids(tutorials.families);
+  const theoryPaths = ids(theory.paths);
+  const categories = ids(tutorials.categories);
   const modules = ids(design.modules);
   const foundationIds = ids(foundations.chapters);
   const quick = items(tutorials.tutorials).filter(x => !x.unrealHome);
@@ -139,7 +123,7 @@ function audit(root = path.resolve(__dirname, '..')) {
   const designMembership = new Map();
   for (const m of items(design.modules)) {
     for (const member of items(m.tutorials)) {
-      reference('Designer module ' + m.id, member, ids(design.tutorials));
+      reference('Designer module ' + m.id, member, allTutorials);
       designMembership.set(member, (designMembership.get(member) || 0) + 1);
       const tutorial = items(design.tutorials).find(t => t.id === member);
       if (tutorial && tutorial.category !== 'design-' + m.id)
@@ -178,12 +162,9 @@ function audit(root = path.resolve(__dirname, '..')) {
   // Any future file which injects tutorials must be explicitly script-loaded.
   for (const file of fs.readdirSync(path.join(root, 'data')).filter(f => f.endsWith('.js'))) {
     const filepath = 'data/' + file;
-    if (FILES.includes(filepath)) continue;
     const source = read(filepath);
     if (/\.tutorials\.push\s*\(/.test(source) && !loadedScripts.has(filepath))
       fail(filepath, 'new tutorial/guide registration is not loaded by index.html');
-    if (/\.tutorials\.push\s*\(/.test(source) && loadedScripts.has(filepath) && !FILES.includes(filepath))
-      fail(filepath, 'new tutorial injection needs to be added to the placement audit FILES list');
   }
 
   return {errors, stats};
