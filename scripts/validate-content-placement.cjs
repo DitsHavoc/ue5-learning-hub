@@ -44,6 +44,7 @@ function audit(root = path.resolve(__dirname, '..')) {
   const cpp = w.UE5_CPP_SKILL_MISSIONS || {};
   const level4 = w.LEVEL4_SPECIALIST_PROJECTS || {};
   const study = w.UE5_STUDY_DATA || {};
+  const guided = w.UE5_PATHWAY_DATA || {};
   const items = obj => Array.isArray(obj) ? obj : [];
   const ids = arr => new Set(items(arr).map(x => x.id));
   const unique = (name, arr) => {
@@ -66,6 +67,16 @@ function audit(root = path.resolve(__dirname, '..')) {
   const quick = items(tutorials.tutorials).filter(x => !x.unrealHome);
   const masters = items(tutorials.tutorials).filter(x => x.unrealHome);
   const allTutorials = ids([...items(tutorials.tutorials), ...items(design.tutorials)]);
+  // A tutorial may belong to a single guided lab route instead of a recipe family.
+  const guidedTutorialIds = new Set();
+  const collectGuidedTutorials = steps => {
+    for (const step of items(steps)) {
+      if (step.type === 'tutorial') guidedTutorialIds.add(step.id);
+      collectGuidedTutorials(step.items);
+      collectGuidedTutorials(step.options);
+    }
+  };
+  for (const p of items(guided.paths)) collectGuidedTutorials(p.steps);
 
   [
     ['Core Unreal lessons', course.lessons], ['Core paths', course.paths],
@@ -109,8 +120,8 @@ function audit(root = path.resolve(__dirname, '..')) {
     if (t.libraryHidden) {
       if (membership.has(t.id)) fail('Tutorial ' + t.id, 'hidden lesson application is also in a visible family');
       reference('Lesson-owned tutorial ' + t.id, t.lessonHome || t.referenceLesson, coreLessons);
-    } else if (membership.get(t.id) !== 1) {
-      fail('Tutorial ' + t.id, 'must appear in exactly one recipe family; found ' + (membership.get(t.id) || 0));
+    } else if (membership.get(t.id) !== 1 && !(membership.get(t.id) === undefined && guidedTutorialIds.has(t.id))) {
+      fail('Tutorial ' + t.id, 'needs one recipe family OR a guided-path tutorial step; family count = ' + (membership.get(t.id) || 0));
     }
   }
   for (const t of masters) {
@@ -130,8 +141,12 @@ function audit(root = path.resolve(__dirname, '..')) {
         fail('Designer recipe ' + member, 'category disagrees with owner ' + m.id);
     }
   }
-  for (const t of items(design.tutorials))
-    if (designMembership.get(t.id) !== 1) fail('Designer recipe ' + t.id, 'needs exactly one Designer Studio module owner');
+  for (const t of items(design.tutorials)) {
+    const studio = items(design.modules).find(m => m.id === t.designModule && m.studioLesson?.id === t.id);
+    const studioOwned = t.studioProject === true && t.libraryHidden === true && !!studio;
+    if (designMembership.get(t.id) !== 1 && !(studioOwned && !designMembership.has(t.id)))
+      fail('Designer recipe ' + t.id, 'needs exactly one Designer module, or a matching studioLesson for a hidden studio project');
+  }
   for (const t of items(designer.tracks)) {
     reference('Unreal Designer track ' + t.id, t.moduleId, modules);
     for (const guide of items(t.masterGuideIds))
