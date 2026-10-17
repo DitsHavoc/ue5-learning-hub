@@ -32,7 +32,7 @@ async function run(){
   const sha256=filename=>crypto.createHash('sha256').update(fs.readFileSync(filename)).digest('hex');
   if(!fs.existsSync(archivePath))fail.push('hosted models ZIP is missing');
   else if(sha256(archivePath)!=='722fa6ec2012600e342b7426bae6b405fce866513a215490c69c0ed9ebaf0ef5')fail.push('hosted models ZIP SHA-256 mismatch');
-  modified++
+
   try {
     browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_PATH||'/usr/bin/google-chrome',args:['--no-sandbox','--disable-dev-shm-usage']});
     for(const device of [{name:'desktop',viewport:{width:1380,height:850}},{name:'mobile',viewport:{width:390,height:844},isMobile:true,hasTouch:true}]){
