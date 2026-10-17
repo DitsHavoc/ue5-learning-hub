@@ -52,6 +52,53 @@ const server = http.createServer((req,res)=>{
       const lessonState=await page.evaluate(()=>({hash:location.hash,title:document.querySelector('#app h1')?.textContent?.trim()||''}));
       if(lessonState.hash!==lessonHref)failures.push(device.name+' lesson navigation: '+JSON.stringify(lessonState));
       console.log('CHECK '+device.name+' core lesson -> '+JSON.stringify(lessonState));
+
+      // The reported regression is NOT the path cards: the inner lesson rows
+      // must open their actual lesson on desktop and mobile, including rows
+      // marked completed in a student's saved browser progress.
+      const lessonIds = await page.evaluate(()=>window.UE5_COURSE_DATA.lessons.map(l=>l.id));
+      for(const completed of [false,true]){
+        if(completed){
+          await page.evaluate(ids=>{
+            const key='ue5hub:v2:progress';
+            const value=JSON.parse(localStorage.getItem(key)||'null')||{};
+            value.completed=ids;
+            localStorage.setItem(key,JSON.stringify(value));
+          },lessonIds);
+          await page.reload({waitUntil:'load'});
+        }
+        for(const c of cards){
+          await page.goto(url+c.href,{waitUntil:'load'});
+          await page.waitForSelector('.lesson-row',{timeout:12000});
+          const links=await page.locator('.lesson-row').evaluateAll(nodes=>nodes.map(n=>({
+            href:n.getAttribute('href'),
+            title:n.querySelector('strong')?.textContent?.trim()||''
+          })));
+          for(const link of links){
+            try{
+              await page.locator('.lesson-row[href="'+link.href+'"]').click({timeout:5000});
+              await page.waitForTimeout(90);
+              const got=await page.evaluate(()=>({
+                hash:location.hash,
+                title:document.querySelector('#app h1')?.textContent?.trim()||'',
+                lesson:!!document.querySelector('#app .lesson-layout'),
+                sectionCount:document.querySelectorAll('#app .content-card').length,
+                breadcrumb:!!document.querySelector('#app .breadcrumb a[href^="#/path/"]')
+              }));
+              const pass=got.hash===link.href&&got.lesson&&got.sectionCount>=5&&got.title===link.title&&got.breadcrumb;
+              if(!pass)failures.push(device.name+' '+(completed?'COMPLETED':'FRESH')+' '+link.title+' -> '+JSON.stringify(got));
+              console.log((pass?'PASS':'FAIL')+' '+device.name+' '+(completed?'COMPLETED':'FRESH')+' '+link.title+' -> '+JSON.stringify(got));
+              await page.goto(url+c.href,{waitUntil:'load'});
+              await page.waitForSelector('.lesson-row',{timeout:10000});
+            }catch(error){
+              failures.push(device.name+' '+(completed?'COMPLETED':'FRESH')+' '+link.title+' -> '+(error.stack||error.message).slice(0,650));
+              await page.goto(url+c.href,{waitUntil:'load'});
+            }
+          }
+        }
+      }
+      if(lessonIds.length!==20)failures.push(device.name+': expected 20 original core lessons; found '+lessonIds.length);
+
       if(errors.length)failures.push(device.name+' uncaught browser errors:\n'+[...new Set(errors)].slice(0,4).join('\n'));
       await page.close();
     }
