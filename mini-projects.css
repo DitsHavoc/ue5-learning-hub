@@ -38,11 +38,21 @@
 .mini-task-list li{padding-left:8px;color:#dce9f2;font-size:14px;line-height:1.75}
 .mini-task-list li::marker{color:#6ad4ff;font-weight:800}
 .mini-small-note{font-size:12px!important;color:#aebfd0!important}
-.mini-source-page{margin:8px 0;border:1px solid #35485c;border-radius:11px;background:#172432;overflow:hidden}
-.mini-source-page summary{padding:13px 16px;cursor:pointer;font-weight:700;color:#cdeeff;display:flex;justify-content:space-between;gap:10px}
-.mini-source-page summary span{font-size:11px;color:#aabccd;font-weight:500}
-.mini-source-page[open] summary{border-bottom:1px solid #35485c}
-.mini-page-text{padding:13px 17px}
+.mini-source-section{margin:10px 0;border:1px solid #35485c;border-radius:12px;background:#172432;overflow:hidden}
+.mini-source-section>summary{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:16px 18px;cursor:pointer;list-style:none;color:#d4f0ff}
+.mini-source-section>summary::-webkit-details-marker{display:none}
+.mini-source-section>summary:focus-visible{outline:3px solid #6fd8ff;outline-offset:-3px}
+.mini-source-section>summary:hover{background:#20374b}
+.mini-source-section[open]>summary{border-bottom:1px solid #35485c;background:#1b3042}
+.mini-section-title{display:flex;flex-direction:column;gap:5px;min-width:0}
+.mini-section-title strong{font-size:15px;line-height:1.4;font-weight:750}
+.mini-section-title small{font-size:11px;font-weight:500;color:#b8cbdc}
+.mini-section-reference{flex-shrink:0;font-size:11px;color:#b8cbdc;font-weight:550;white-space:nowrap}
+.mini-section-reference span{display:inline-block;font-size:20px;vertical-align:middle;margin-left:7px;transition:transform .15s}
+.mini-source-section[open] .mini-section-reference span{transform:rotate(180deg)}
+.mini-section-content{padding:6px 0 8px}
+.mini-source-page+.mini-source-page{border-top:1px dashed #2e455b}
+.mini-page-text{padding:14px 18px}
 .mini-page-text p{margin:0 0 12px;line-height:1.7;font-size:13px}
 .mini-page-text p:last-child{margin-bottom:0}
 .mini-proof{border-color:#487366}
@@ -58,7 +68,7 @@
 .mini-side-stages a:hover,.mini-side-stages a.current{background:#203447;border-color:#48637b;color:#fff}
 .mini-side-stages a span{min-width:20px;color:#81dafa;font-weight:750}
 @media(max-width:1000px){.mini-lesson-grid{grid-template-columns:minmax(0,1fr)}.mini-side-column{position:static;display:grid;grid-template-columns:1fr 1fr;gap:12px}}
-@media(max-width:700px){.mini-project-grid{grid-template-columns:1fr}.mini-header{padding:22px 17px}.mini-information,.mini-project-overview{padding:18px 15px}.mini-stage-link{grid-template-columns:35px 1fr 14px;padding:10px;gap:9px}.mini-stage-link .mini-stage-number{width:31px;height:31px}.mini-side-column{display:block}.mini-complete-panel{flex-direction:column;align-items:stretch}.mini-complete-panel .button{width:100%}.mini-source-page summary{font-size:12px}}
+@media(max-width:700px){.mini-project-grid{grid-template-columns:1fr}.mini-header{padding:22px 17px}.mini-information,.mini-project-overview{padding:18px 15px}.mini-stage-link{grid-template-columns:35px 1fr 14px;padding:10px;gap:9px}.mini-stage-link .mini-stage-number{width:31px;height:31px}.mini-side-column{display:block}.mini-complete-panel{flex-direction:column;align-items:stretch}.mini-complete-panel .button{width:100%}.mini-source-section>summary{padding:13px 12px;align-items:flex-start;gap:8px}.mini-section-title strong{font-size:13px}.mini-section-reference{font-size:10px}.mini-page-text{padding:13px 12px}}
 
 /* A failed asset check must never expose a broken download CTA. */
 .mini-assets [hidden]{display:none!important}
