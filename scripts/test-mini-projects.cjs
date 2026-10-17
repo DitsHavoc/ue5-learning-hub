@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 'use strict';
-const fs=require('node:fs'),path=require('node:path'),http=require('node:http');
+const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),crypto=require('node:crypto');
 const {chromium}=require('playwright-core');
 const root=path.resolve(__dirname,'..');
-const mime={'.html':'text/html','.js':'text/javascript','.css':'text/css','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg'};
+const mime={'.html':'text/html','.js':'text/javascript','.css':'text/css','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.json':'application/json','.zip':'application/zip'};
 const server=http.createServer((req,res)=>{
   const pathname=new URL(req.url,'http://localhost').pathname;
   const target=path.resolve(root,'.'+decodeURIComponent(pathname==='/'?'/index.html':pathname));
@@ -17,12 +17,26 @@ const server=http.createServer((req,res)=>{
 async function run(){
   await new Promise(r=>server.listen(0,'127.0.0.1',r));
   const base='http://127.0.0.1:'+server.address().port;
+
   let browser;
   const fail=[];
+  const figureManifest=JSON.parse(fs.readFileSync(path.join(root,'assets/mini-projects/images/manifest.json'),'utf8'));
+  const figureGroups=figureManifest.stage_figures;
+  const figureFiles=Object.values(figureGroups).flat();
+  if(figureFiles.length!==320)fail.push('figure count expected 320, got '+figureFiles.length);
+  for(const figure of figureFiles){
+    if(!Number.isInteger(figure.afterParagraph)||figure.afterParagraph<-1)fail.push('missing source paragraph anchor '+figure.file);
+    if(!fs.existsSync(path.join(root,figure.file)))fail.push('missing illustration '+figure.file);
+  }
+  const archivePath=path.join(root,'assets/mini-projects/Assets.zip');
+  const sha256=filename=>crypto.createHash('sha256').update(fs.readFileSync(filename)).digest('hex');
+  if(!fs.existsSync(archivePath))fail.push('hosted models ZIP is missing');
+  else if(sha256(archivePath)!=='722fa6ec2012600e342b7426bae6b405fce866513a215490c69c0ed9ebaf0ef5')fail.push('hosted models ZIP SHA-256 mismatch');
+  modified++
   try {
     browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_PATH||'/usr/bin/google-chrome',args:['--no-sandbox','--disable-dev-shm-usage']});
     for(const device of [{name:'desktop',viewport:{width:1380,height:850}},{name:'mobile',viewport:{width:390,height:844},isMobile:true,hasTouch:true}]){
-      const page=await browser.newPage({viewport:device.viewport,isMobile:!!device.isMobile,hasTouch:!!device.hasTouch});
+      const page=await browser.newPage({viewport:device.viewport,isMobile:!!device.isMobile,hasTouch:!!device.hasTouch,acceptDownloads:true});
       const errors=[];page.on('pageerror',e=>errors.push(e.stack||e.message));
       await page.goto(base+'/#/build',{waitUntil:'load'});
       const entry=page.locator('.ux-route-card[href="#/mini-projects"]');
@@ -50,6 +64,24 @@ async function run(){
           const st=await page.evaluate(()=>({hash:location.hash,title:document.querySelector('#app h1')?.textContent?.trim(),tasks:document.querySelectorAll('.mini-task-list li').length,sourcePages:document.querySelectorAll('.mini-source-page').length,check:!!document.querySelector('.mini-proof'),complete:!!document.querySelector('[data-action="mini-complete"]')}));
           const correct=st.hash==='#/mini-projects/'+p.id+'/'+id&&st.tasks>=4&&st.sourcePages>=1&&st.check&&st.complete;
           if(!correct)fail.push(device.name+' '+id+' bad lesson '+JSON.stringify(st));
+          // Expand each PDF source page: every screenshot must be in the same
+          // stage and appear directly beside its anchor paragraph.
+          const expectedFigures=(figureGroups[p.id+'/'+id]||[]).length;
+          await page.locator('.mini-source-page').evaluateAll(items=>items.forEach(el=>el.open=true));
+          try {
+            await page.waitForFunction(count=>document.querySelectorAll('.mini-illustration img').length===count,expectedFigures,{timeout:8000});
+          }catch(e){fail.push(device.name+' '+id+': did not mount '+expectedFigures+' illustrations');}
+          const placed=await page.locator('.mini-illustration img').count();
+          if(placed!==expectedFigures)fail.push(device.name+' '+id+': figure count '+placed+'/'+expectedFigures);
+          if(placed){
+            const image=page.locator('.mini-illustration img').first();
+            await image.scrollIntoViewIfNeeded();
+            try{
+              await page.waitForFunction(()=>{const img=document.querySelector('.mini-illustration img');return img?.complete&&img.naturalWidth>0;},null,{timeout:8000});
+            }catch(e){fail.push(device.name+' '+id+': first course image failed to load');}
+            const info=await image.evaluate(img=>({alt:img.alt,width:img.getBoundingClientRect().width,parent:img.closest('.mini-page-text')?.getBoundingClientRect().width}));
+            if(!info.alt.includes('source page')||!info.parent||info.width>info.parent+1)fail.push(device.name+' '+id+': missing caption or image overflows layout');
+          }
           console.log((correct?'PASS ':'FAIL ')+device.name+' '+id+' '+JSON.stringify(st));
         }
       }
@@ -67,28 +99,34 @@ async function run(){
       await page.waitForTimeout(100);
       if(!(await page.locator('#searchPanel a.search-result[href^="#/mini-projects/"]').count()))
         fail.push(device.name+' Mini-Projects missing from global search');
-      // The download CTA must not point students to a 404 while binary assets
-      // are pending. Once the archive is hosted, it should appear automatically.
+      // The real user-supplied archive is now hosted, not a mocked placeholder.
       await page.goto(base+'/#/mini-projects/balloon-popper',{waitUntil:'load'});
-      await page.waitForSelector('[data-mini-assets]',{timeout:10000});
-      await page.waitForTimeout(130);
-      if(await page.locator('[data-mini-assets-link]').isVisible())
-        fail.push(device.name+' unavailable model ZIP exposed a broken link');
-      if(!(await page.locator('[data-mini-assets-fallback]').isVisible()))
-        fail.push(device.name+' missing-asset fallback was not visible');
-      await page.route('**/assets/mini-projects/Assets.zip',route=>route.fulfill({status:200,headers:{'content-type':'application/zip'},body:''}));
+      await page.locator('[data-mini-assets-link]').waitFor({state:'visible',timeout:6000});
+      if(await page.locator('[data-mini-assets-fallback]').isVisible())
+        fail.push(device.name+': fallback visible even though hosted ZIP exists');
+      const [download]=await Promise.all([
+        page.waitForEvent('download',{timeout:10000}),
+        page.locator('[data-mini-assets-link]').click()
+      ]);
+      if(sha256(await download.path())!=='722fa6ec2012600e342b7426bae6b405fce866513a215490c69c0ed9ebaf0ef5')
+        fail.push(device.name+': browser download contents incorrect');
+      // Simulate a missing asset: students must never receive a broken CTA.
+      await page.route('**/assets/mini-projects/Assets.zip',route=>route.fulfill({status:404,body:''}));
+      await page.goto(base+'/#/mini-projects/bowling',{waitUntil:'load'});
+      await page.waitForSelector('[data-mini-assets]',{timeout:6000});
+      await page.waitForTimeout(200);
+      if(await page.locator('[data-mini-assets-link]').isVisible())fail.push(device.name+': unavailable ZIP exposed download CTA');
+      if(!(await page.locator('[data-mini-assets-fallback]').isVisible()))fail.push(device.name+': missing ZIP fallback absent');
+      await page.unroute('**/assets/mini-projects/Assets.zip');
       await page.goto(base+'/#/mini-projects/bowling',{waitUntil:'load'});
       await page.locator('[data-mini-assets-link]').waitFor({state:'visible',timeout:6000});
-      if(!((await page.locator('[data-mini-assets-link]').getAttribute('href'))||'').endsWith('/assets/mini-projects/Assets.zip'))
-        fail.push(device.name+' linked model ZIP path incorrect');
-      await page.unroute('**/assets/mini-projects/Assets.zip');
-      console.log('ASSETS '+device.name+' absent archive safely hidden; hosted archive exposes download.');
+      console.log('ASSETS '+device.name+' real ZIP downloaded and verified; 404 fallback tested.');
       if(errors.length)fail.push(device.name+' browser exceptions:\n'+[...new Set(errors)].slice(0,3).join('\n'));
       console.log('COMPLETE '+device.name+' tested '+definitions.reduce((n,p)=>n+p.stages.length,0)+' stage routes and local progress.');
       await page.close();
     }
     if(fail.length){console.error('MINI-PROJECTS FAILED:\n'+fail.join('\n'));process.exitCode=1;}
-    else console.log('MINI-PROJECTS PASS: four project overviews, all 16 stages, desktop/mobile, completion persistence and search');
+    else console.log('MINI-PROJECTS PASS: 320 source-linked illustrations, model download checksum, four overviews, 16 stages, desktop/mobile, progress and search');
   }finally{
     if(browser)await browser.close();
     await new Promise(r=>server.close(r));
