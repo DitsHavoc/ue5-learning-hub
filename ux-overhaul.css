@@ -415,5 +415,5 @@
   .content-role-notice{flex-direction:column;gap:5px}
 }
 
-/* v3.62.0 — retire legacy version / XP chrome */
+/* v3.62.0 — retire legacy version / gamification chrome */
 .version-badge,.side-progress,#sideXp,#sideLevel,#sideBar,#sideNext,#topXp,#topXpUnit{display:none!important}
