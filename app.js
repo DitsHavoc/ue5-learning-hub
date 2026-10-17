@@ -159,7 +159,7 @@ function hubHrefExists(href){
   if(root==='pathways')return !id||(PATHWAYS.paths||[]).some(x=>x.id===id);
   if(root==='path')return !!DATA.paths.find(x=>x.id===id);
   if(root==='lesson')return !!lesson(id);
-  if(root==='block')return !!block(id);
+  if(root==='block')return !!buildingBlock(id);
   if(root==='tutorial-family')return !!tutorialFamily(id);
   if(root==='tutorial')return !!tutorial(id);
   if(root==='chapter-build')return !!TOOLS.chapterBuilds.find(x=>x.id===id);
