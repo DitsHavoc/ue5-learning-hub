@@ -17,7 +17,7 @@
   "unrealNextEyebrow": "NEXT • DESIGN THE ENVIRONMENT",
   "unrealNextTitle": "Now use the tools for a reason",
   "unrealNextText": "This guide teaches the Unreal Landscape workflow. Unreal Designer joins it to route readability, landmarks, terrain composition, believable foliage, the applied Studio Build and evidence from playtesting.",
-  "unrealNextHref": "#/unreal-designer/landscape",
+  "unrealNextHref": "#/design/landscape",
   "unrealNextLabel": "Apply Landscape in Unreal Designer →",
   "duration": "90–120 min",
   "difficulty": "Beginner → Advanced",
