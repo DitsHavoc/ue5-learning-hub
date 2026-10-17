@@ -5,6 +5,8 @@ window.UE5_MINI_PROJECT_DATA = {
   "version": "3.63.0",
   "source": "Unreal Engine Mini-Projects — Daniel Buckley / Zenva (2026)",
   "engine": "Unreal Engine 5.8",
+  "assetBundle": "assets/mini-projects/Assets.zip",
+  "assetBundleContents": ["BalloonModel.fbx", "BalloonModel.obj", "BowlingPin.fbx"],
   "projects": [
     {
       "id": "balloon-popper",
@@ -225,7 +227,7 @@ window.UE5_MINI_PROJECT_DATA = {
         "collision"
       ],
       "assets": [
-        "Bowling pin and bowling ball meshes from supplied course assets"
+        "BowlingPin.fbx from the supplied assets; create the bowling ball using an Unreal Engine Sphere mesh"
       ],
       "stages": [
         {
@@ -238,7 +240,7 @@ window.UE5_MINI_PROJECT_DATA = {
           "outcome": "A prepared bowling lane with visible reusable pins.",
           "tasks": [
             "Create the bowling content folder and a dedicated Bowling level.",
-            "Import the supplied bowling pin model into the project.",
+            "Import the supplied BowlingPin.fbx model from the Assets ZIP into the project.",
             "Create a BP_BowlingPin Actor containing the pin mesh, collision and appropriate physics settings.",
             "Create materials for pin and lane and apply them through the correct mesh slots.",
             "Build the lane using a scaled static mesh and arrange pins at the far end.",
@@ -256,7 +258,7 @@ window.UE5_MINI_PROJECT_DATA = {
           ],
           "outcome": "A bowling ball Actor plus explicit move/throw input assets.",
           "tasks": [
-            "Create BP_BowlingBall as an Actor containing a Static Mesh component and suitable ball material.",
+            "Create BP_BowlingBall as an Actor with a Static Mesh component. Use Unreal Engine's built-in Sphere mesh (the supplied ZIP contains a bowling pin, not a separate ball model) and apply a suitable ball material.",
             "Configure appropriate collision and physics on the ball mesh.",
             "Create Enhanced Input Action assets for movement and throwing.",
             "Create an Input Mapping Context that maps arrow keys and Space to those actions.",
