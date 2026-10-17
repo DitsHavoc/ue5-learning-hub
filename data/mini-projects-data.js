@@ -2,11 +2,15 @@
    4 projects • 16 parts. Companion detailed notes are in mini-projects-source-notes.js.
    Stage IDs and local-completion key remain stable across future edits. */
 window.UE5_MINI_PROJECT_DATA = {
-  "version": "3.63.0",
+  "version": "3.63.1",
   "source": "Unreal Engine Mini-Projects — Daniel Buckley / Zenva (2026)",
   "engine": "Unreal Engine 5.8",
   "assetBundle": "assets/mini-projects/Assets.zip",
-  "assetBundleContents": ["BalloonModel.fbx", "BalloonModel.obj", "BowlingPin.fbx"],
+  "assetBundleContents": [
+    "BalloonModel.fbx",
+    "BalloonModel.obj",
+    "BowlingPin.fbx"
+  ],
   "projects": [
     {
       "id": "balloon-popper",
@@ -48,7 +52,24 @@ window.UE5_MINI_PROJECT_DATA = {
             "Drag the imported balloon mesh into the level, check its size and orientation, and save the level."
           ],
           "check": "Close and reopen the level: the balloon remains present, correctly oriented and in the right project folder.",
-          "troubleshoot": "If the mesh appears tiny or rotated, confirm you imported the supplied FBX, not the older OBJ. Inspect the Static Mesh asset and its import settings."
+          "troubleshoot": "If the mesh appears tiny or rotated, confirm you imported the supplied FBX, not the older OBJ. Inspect the Static Mesh asset and its import settings.",
+          "walkthroughSections": [
+            {
+              "title": "Create your project and level",
+              "start": 3,
+              "end": 4
+            },
+            {
+              "title": "Import the balloon model using FBX",
+              "start": 5,
+              "end": 7
+            },
+            {
+              "title": "Place the balloon and check the result",
+              "start": 8,
+              "end": 9
+            }
+          ]
         },
         {
           "id": "balloon-2",
@@ -66,7 +87,24 @@ window.UE5_MINI_PROJECT_DATA = {
             "Check the material under the level lighting and compile/save the asset."
           ],
           "check": "The mesh is recognisably shiny and coloured, and the material survives reopening the editor.",
-          "troubleshoot": "If the model stays grey, confirm the material is saved and assigned to the correct mesh material slot."
+          "troubleshoot": "If the model stays grey, confirm the material is saved and assigned to the correct mesh material slot.",
+          "walkthroughSections": [
+            {
+              "title": "Prepare the scene and create a material",
+              "start": 10,
+              "end": 11
+            },
+            {
+              "title": "Choose the balloon colour and finish",
+              "start": 12,
+              "end": 13
+            },
+            {
+              "title": "Apply the material and prepare for Blueprints",
+              "start": 14,
+              "end": 17
+            }
+          ]
         },
         {
           "id": "balloon-3",
@@ -85,7 +123,24 @@ window.UE5_MINI_PROJECT_DATA = {
             "Compile and save every Blueprint before pressing Play."
           ],
           "check": "Press Play: several balloons are visible and the mouse cursor remains visible.",
-          "troubleshoot": "If the cursor is missing, check GameMode Override first, then the GameMode Player Controller Class and the controller's Show Mouse Cursor setting."
+          "troubleshoot": "If the cursor is missing, check GameMode Override first, then the GameMode Player Controller Class and the controller's Show Mouse Cursor setting.",
+          "walkthroughSections": [
+            {
+              "title": "Create the reusable balloon Blueprint",
+              "start": 18,
+              "end": 21
+            },
+            {
+              "title": "Show the mouse cursor",
+              "start": 22,
+              "end": 24
+            },
+            {
+              "title": "Create and activate the Game Mode",
+              "start": 25,
+              "end": 29
+            }
+          ]
         },
         {
           "id": "balloon-4",
@@ -104,7 +159,24 @@ window.UE5_MINI_PROJECT_DATA = {
             "Test each balloon separately in Play In Editor."
           ],
           "check": "Each click makes only the clicked balloon grow; once sufficiently large, it disappears and other balloons remain interactive.",
-          "troubleshoot": "If clicks do nothing, check Enable Click Events on the *active* Player Controller and verify the mesh can receive visibility-channel clicks."
+          "troubleshoot": "If clicks do nothing, check Enable Click Events on the *active* Player Controller and verify the mesh can receive visibility-channel clicks.",
+          "walkthroughSections": [
+            {
+              "title": "Detect clicks on the balloon",
+              "start": 30,
+              "end": 33
+            },
+            {
+              "title": "Grow the balloon when clicked",
+              "start": 34,
+              "end": 37
+            },
+            {
+              "title": "Pop the balloon at the target size",
+              "start": 38,
+              "end": 42
+            }
+          ]
         },
         {
           "id": "balloon-5",
@@ -122,7 +194,24 @@ window.UE5_MINI_PROJECT_DATA = {
             "Adjust the level lighting and test the full game from a fresh Play session."
           ],
           "check": "Change a variable in the editor and confirm the game changes without rewiring the graph.",
-          "troubleshoot": "If different instances seem identical, ensure the Blueprint variable is actually connected and mark Instance Editable where needed."
+          "troubleshoot": "If different instances seem identical, ensure the Blueprint variable is actually connected and mark Instance Editable where needed.",
+          "walkthroughSections": [
+            {
+              "title": "Control balloon size with variables",
+              "start": 43,
+              "end": 47
+            },
+            {
+              "title": "Set the player's starting view",
+              "start": 48,
+              "end": 50
+            },
+            {
+              "title": "Adjust the lighting and polish",
+              "start": 51,
+              "end": 53
+            }
+          ]
         }
       ]
     },
@@ -164,7 +253,29 @@ window.UE5_MINI_PROJECT_DATA = {
             "Record what becomes difficult to maintain as the node count increases."
           ],
           "check": "Press Play: the level creates new actors at runtime without manually placing them.",
-          "troubleshoot": "If nothing appears, verify the class selected on Spawn Actor and the active GameMode; check the spawn transform and collision handling."
+          "troubleshoot": "If nothing appears, verify the class selected on Spawn Actor and the active GameMode; check the spawn transform and collision handling.",
+          "walkthroughSections": [
+            {
+              "title": "Create a box you can spawn",
+              "start": 55,
+              "end": 58
+            },
+            {
+              "title": "Set up the Game Mode",
+              "start": 59,
+              "end": 61
+            },
+            {
+              "title": "Spawn a box when play begins",
+              "start": 62,
+              "end": 64
+            },
+            {
+              "title": "Understand why repetition is a problem",
+              "start": 65,
+              "end": 66
+            }
+          ]
         },
         {
           "id": "loops-2",
@@ -182,7 +293,19 @@ window.UE5_MINI_PROJECT_DATA = {
             "Increase the Last Index and note how quickly the work scales."
           ],
           "check": "The loop executes the intended number of times from a compact Blueprint graph.",
-          "troubleshoot": "If you get one more actor than expected, remember First Index 0 through Last Index 9 runs ten iterations."
+          "troubleshoot": "If you get one more actor than expected, remember First Index 0 through Last Index 9 runs ten iterations.",
+          "walkthroughSections": [
+            {
+              "title": "Add and configure a For Loop",
+              "start": 67,
+              "end": 68
+            },
+            {
+              "title": "Test the loop index and challenge yourself",
+              "start": 69,
+              "end": 70
+            }
+          ]
         },
         {
           "id": "loops-3",
@@ -201,7 +324,29 @@ window.UE5_MINI_PROJECT_DATA = {
             "Stretch: attempt two rows, then explain how a nested loop would work."
           ],
           "check": "Every spawned item occupies its own visible position and the count changes predictably.",
-          "troubleshoot": "If all objects stack together, confirm the Index is wired into a position rather than using the same transform each time."
+          "troubleshoot": "If all objects stack together, confirm the Index is wired into a position rather than using the same transform each time.",
+          "walkthroughSections": [
+            {
+              "title": "Spawn 15 boxes with a loop",
+              "start": 71,
+              "end": 74
+            },
+            {
+              "title": "Space the boxes using the loop index",
+              "start": 75,
+              "end": 76
+            },
+            {
+              "title": "Enable physics and adjust the spawn height",
+              "start": 77,
+              "end": 80
+            },
+            {
+              "title": "Test and extend your stacked tower",
+              "start": 81,
+              "end": 82
+            }
+          ]
         }
       ]
     },
@@ -247,7 +392,29 @@ window.UE5_MINI_PROJECT_DATA = {
             "Play-test the pin arrangement and adjust collisions if the pins start unstable."
           ],
           "check": "The lane looks readable and pins are positioned in a consistent formation.",
-          "troubleshoot": "If pins fall before they are hit, inspect mesh collision, physics/gravity settings, placement height and accidental overlaps."
+          "troubleshoot": "If pins fall before they are hit, inspect mesh collision, physics/gravity settings, placement height and accidental overlaps.",
+          "walkthroughSections": [
+            {
+              "title": "Import the pins and create a Blueprint",
+              "start": 84,
+              "end": 88
+            },
+            {
+              "title": "Give the pins a material",
+              "start": 89,
+              "end": 93
+            },
+            {
+              "title": "Arrange the pins and build a lane",
+              "start": 94,
+              "end": 98
+            },
+            {
+              "title": "Style the lane and check your setup",
+              "start": 99,
+              "end": 103
+            }
+          ]
         },
         {
           "id": "bowling-2",
@@ -266,7 +433,29 @@ window.UE5_MINI_PROJECT_DATA = {
             "Compile/save the Blueprints and Input assets."
           ],
           "check": "Input actions and mapping context exist and have the intended key bindings.",
-          "troubleshoot": "If you cannot find the actions in Blueprint, check their asset folders and whether Enhanced Input is enabled."
+          "troubleshoot": "If you cannot find the actions in Blueprint, check their asset folders and whether Enhanced Input is enabled.",
+          "walkthroughSections": [
+            {
+              "title": "Create the bowling ball Blueprint",
+              "start": 104,
+              "end": 105
+            },
+            {
+              "title": "Give the ball a material",
+              "start": 106,
+              "end": 108
+            },
+            {
+              "title": "Create an Input Mapping Context",
+              "start": 109,
+              "end": 110
+            },
+            {
+              "title": "Set up the throw and movement controls",
+              "start": 111,
+              "end": 115
+            }
+          ]
         },
         {
           "id": "bowling-3",
@@ -285,7 +474,29 @@ window.UE5_MINI_PROJECT_DATA = {
             "Use Print String briefly to verify the controls respond."
           ],
           "check": "The correct GameMode/controller are active and key presses fire the intended input events.",
-          "troubleshoot": "If input never fires, inspect GameMode Override, Input Mapping Context addition and controller ownership before changing ball logic."
+          "troubleshoot": "If input never fires, inspect GameMode Override, Input Mapping Context addition and controller ownership before changing ball logic.",
+          "walkthroughSections": [
+            {
+              "title": "Create the Controller, Camera and Game Mode",
+              "start": 116,
+              "end": 119
+            },
+            {
+              "title": "Position the camera above the lane",
+              "start": 120,
+              "end": 122
+            },
+            {
+              "title": "Activate input and test the controls",
+              "start": 123,
+              "end": 126
+            },
+            {
+              "title": "Find the bowling ball in the Controller",
+              "start": 127,
+              "end": 130
+            }
+          ]
         },
         {
           "id": "bowling-4",
@@ -303,7 +514,29 @@ window.UE5_MINI_PROJECT_DATA = {
             "Test one throw at a time and watch the ball collide with the pins."
           ],
           "check": "Pressing Space drives the ball down the lane and it can physically knock over pins.",
-          "troubleshoot": "If force does nothing, call Add Impulse on a Simulate Physics mesh component, not an actor whose mesh has physics disabled."
+          "troubleshoot": "If force does nothing, call Add Impulse on a Simulate Physics mesh component, not an actor whose mesh has physics disabled.",
+          "walkthroughSections": [
+            {
+              "title": "Create the Bowl and Move events",
+              "start": 131,
+              "end": 133
+            },
+            {
+              "title": "Connect input actions to the ball",
+              "start": 134,
+              "end": 136
+            },
+            {
+              "title": "Launch the ball with force",
+              "start": 137,
+              "end": 139
+            },
+            {
+              "title": "Enable pin physics and test the throw",
+              "start": 140,
+              "end": 142
+            }
+          ]
         },
         {
           "id": "bowling-5",
@@ -322,7 +555,19 @@ window.UE5_MINI_PROJECT_DATA = {
             "Test left, right and throw together from a restarted level."
           ],
           "check": "Arrow keys move the ball left and right, and Space still bowls toward the pins.",
-          "troubleshoot": "If the ball moves forward instead of sideways, inspect the level orientation, sign and axis chosen for Move Direction."
+          "troubleshoot": "If the ball moves forward instead of sideways, inspect the level orientation, sign and axis chosen for Move Direction.",
+          "walkthroughSections": [
+            {
+              "title": "Move the ball left and right to aim",
+              "start": 143,
+              "end": 145
+            },
+            {
+              "title": "Make aiming speed independent of frame rate",
+              "start": 146,
+              "end": 150
+            }
+          ]
         }
       ]
     },
@@ -365,7 +610,29 @@ window.UE5_MINI_PROJECT_DATA = {
             "Preview at both desktop and phone-like resolutions in the Widget Designer."
           ],
           "check": "The clicker button and label remain visible, readable and accessible across viewport sizes.",
-          "troubleshoot": "If a widget disappears at runtime, examine its anchors, Canvas slot position, visibility and Z-order."
+          "troubleshoot": "If a widget disappears at runtime, examine its anchors, Canvas slot position, visibility and Z-order.",
+          "walkthroughSections": [
+            {
+              "title": "Create the level and UI widget",
+              "start": 152,
+              "end": 154
+            },
+            {
+              "title": "Add the button and text widgets",
+              "start": 155,
+              "end": 158
+            },
+            {
+              "title": "Style your button and label",
+              "start": 159,
+              "end": 164
+            },
+            {
+              "title": "Anchor the layout for different screens",
+              "start": 165,
+              "end": 167
+            }
+          ]
         },
         {
           "id": "clicker-2",
@@ -384,7 +651,24 @@ window.UE5_MINI_PROJECT_DATA = {
             "Decide where the authoritative score should live before adding more UI logic."
           ],
           "check": "Play immediately displays the widget and clicking the button triggers exactly one event.",
-          "troubleshoot": "If the button is visible but inert, check widget hit testing, UI input mode, Show Mouse Cursor and whether the OnClicked event targets the actual button."
+          "troubleshoot": "If the button is visible but inert, check widget hit testing, UI input mode, Show Mouse Cursor and whether the OnClicked event targets the actual button.",
+          "walkthroughSections": [
+            {
+              "title": "Design the on-screen score display",
+              "start": 168,
+              "end": 171
+            },
+            {
+              "title": "Display the widget in the level",
+              "start": 172,
+              "end": 176
+            },
+            {
+              "title": "Send button clicks to the Game Mode",
+              "start": 177,
+              "end": 180
+            }
+          ]
         },
         {
           "id": "clicker-3",
@@ -403,7 +687,29 @@ window.UE5_MINI_PROJECT_DATA = {
             "Stretch: add a reset button, then a multiplier as a separate change."
           ],
           "check": "After ten clicks the UI shows ten; the displayed score remains synchronised with the stored value.",
-          "troubleshoot": "If the score changes internally but not on screen, validate the widget reference and conversion to text. Avoid updating a discarded widget instance."
+          "troubleshoot": "If the score changes internally but not on screen, validate the widget reference and conversion to text. Avoid updating a discarded widget instance.",
+          "walkthroughSections": [
+            {
+              "title": "Count clicks with a score variable",
+              "start": 181,
+              "end": 182
+            },
+            {
+              "title": "Update the score text in the widget",
+              "start": 183,
+              "end": 185
+            },
+            {
+              "title": "Connect the score to the UI",
+              "start": 186,
+              "end": 188
+            },
+            {
+              "title": "Show zero before the first click",
+              "start": 189,
+              "end": 192
+            }
+          ]
         }
       ]
     }
