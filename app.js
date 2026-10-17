@@ -21,7 +21,17 @@ const STUDY = window.UE5_STUDY_DATA;
 const BACKEND = window.UE5_BACKEND;
 const SKILL_MISSIONS = window.UE5_SKILL_MISSIONS || {missions:[]};
 const CPP_SKILL_MISSIONS = window.UE5_CPP_SKILL_MISSIONS || {missions:[],planned:[]};
-const HUB_VERSION = '3.61.4';
+const HUB_VERSION = '3.61.5';
+
+const RETIRED_XP_CHROME = [
+  '.side-progress','.version-badge',
+  '#sideXp','#sideLevel','#sideBar','#sideNext','#topXp','#topXpUnit',
+  '.xp-bar','.xp-progress','.xp-meter','.xp-pill','.xp-label','[data-xp]'
+].join(',');
+function retireLegacyXpChrome(){
+  document.querySelectorAll(RETIRED_XP_CHROME).forEach(node=>node.remove());
+}
+
 
 // V3.19 deepens Designer Studio using the same Quick Tutorial recipe system so students can
 // search programming and design help from one place while still having a dedicated design curriculum.
@@ -402,6 +412,7 @@ function finishInlineUpdate(becameComplete=false){
 }
 
 function updateChrome(){
+  retireLegacyXpChrome();
   const teacherRole=isTeacher();
   const topDone=$('#topDone');if(topDone)topDone.textContent=completedLessons().length;
 
@@ -5143,6 +5154,7 @@ BACKEND.onChange(async ()=>{
 });
 
 (async function boot(){
+  retireLegacyXpChrome();
   setupSearch();
   setupKonamiCode();
   updateChrome();
