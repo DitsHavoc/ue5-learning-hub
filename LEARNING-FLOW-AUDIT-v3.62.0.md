@@ -37,6 +37,7 @@
 - Core Unreal lesson DOM sequence is now **01 Goals -> 02 Understand -> 03 Guided Build -> When Stuck Debugging -> 04 Check -> 05 Apply in a Game -> 06 Stretch -> 07 Play/Watch -> 08 Homework -> 09 Teams Proof -> 10 Reflection**.
 - The short lesson concept is visible before building; detailed diagrams and reference material remain inside expandable support. This avoids turning a shorter pathway into a large prerequisite reading wall.
 - All existing lesson, quiz, practical, homework, completion and route IDs are untouched.
+- Quick Tutorials is search-first with one canonical list of 26 recipe families. The featured-family shelf, which repeated cards from the full list, is removed.
 - Master Guides no longer repeat below Quick Tutorial search; Chapter Builds now sit with the Unreal core stages which unlock them.
 - Removed one duplicated 'Guided Paths' CTA from the Paths header. The destination remains available in the contextual section.
 - Repaired malformed labels introduced by historic XP text replacement (`Eprogress...`), plus misleading 'no progress' wording.
