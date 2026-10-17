@@ -1952,13 +1952,29 @@ function miniProjectsPage(){
   '<div class="mini-project-grid">'+MINI.projects.map(miniCard).join('')+'</div>'+
   '<section class="mini-information"><h2>How to use this series</h2><p>These are hands-on builds rather than a second Unreal fundamentals course. Start with Balloon Popper or Loops, then take on Bowling and Clicker. If a concept is unfamiliar, use the linked existing Core lesson instead of starting another unrelated tutorial.</p><p>Use your supplied project models and Unreal project files. The detailed walkthrough notes follow the 2026 source course, with updated checks and troubleshooting for classroom use. Formal evidence and submission remain in Microsoft Teams.</p><small>Course source: '+esc(MINI.source)+' • Used with permission of the rights holder.</small></section></div>';
 }
+function miniAssetCard(p){
+  if(!['balloon-popper','bowling'].includes(p?.id))return '';
+  const specific=p.id==='balloon-popper'?'BalloonModel.fbx (use FBX for UE5.6+).':'BowlingPin.fbx. Build the ball from Unreal Engine\'s standard Sphere mesh.';
+  return '<section class="mini-information mini-assets" data-mini-assets><span class="eyebrow">COURSE ASSETS</span><h2>Your models</h2><p>'+esc(specific)+'</p>'+
+    '<a class="button primary" href="/'+esc(MINI.assetBundle||'assets/mini-projects/Assets.zip')+'" download="MiniProjects-Assets.zip" data-mini-assets-link hidden>Download the supplied models ZIP ↓</a>'+
+    '<p data-mini-assets-fallback>Your teacher provides the course models ZIP through Teams until the verified site download is available. There is no download link here unless the asset file is actually present.</p></section>';
+}
+function bindMiniAssetCard(){
+  const holder=$('[data-mini-assets]');if(!holder)return;
+  const button=holder.querySelector('[data-mini-assets-link]'),fallback=holder.querySelector('[data-mini-assets-fallback]');
+  if(!button)return;
+  fetch(button.href,{method:'HEAD',cache:'no-store'}).then(r=>{
+    if(!holder.isConnected)return;
+    if(r.ok){button.hidden=false;if(fallback)fallback.hidden=true;}
+  }).catch(()=>{});
+}
 function miniProjectPage(id){
   const p=miniProject(id);if(!p)return notFound();
   const z=miniProgress(p),done=new Set(miniCompleted()),first=p.stages.find(x=>!done.has(x.id))||p.stages[0];
   return '<div class="mini-shell">'+miniTrail([{title:'Build',href:'#/build'},{title:'Mini-Projects',href:'#/mini-projects'},{title:p.title}])+
   '<header class="mini-header"><span class="eyebrow">'+p.icon+' • '+esc(p.level)+' • '+z.done+'/'+z.total+' STAGES COMPLETE</span><h1>'+esc(p.title)+'</h1><p>'+esc(p.description)+'</p><div class="mini-chips">'+p.skills.map(x=>'<span>'+esc(x)+'</span>').join('')+'</div><a class="button primary" href="'+miniHref(p.id,first.id)+'">'+(z.done?'Continue the build':'Start at Stage 1')+' →</a></header>'+
   '<section class="mini-project-overview"><h2>Your project stages</h2><div class="mini-stage-list">'+p.stages.map((s,i)=>'<a class="mini-stage-link" href="'+miniHref(p.id,s.id)+'"><span class="mini-stage-number">'+(done.has(s.id)?'✓':String(i+1).padStart(2,'0'))+'</span><span><strong>'+esc(s.title)+'</strong><small>'+esc(s.outcome)+'</small></span><span class="mini-link-arrow">→</span></a>').join('')+'</div></section>'+
-  '<section class="mini-information"><h2>Before you start</h2><p><strong>Course assets:</strong> '+esc(p.assets.join('; '))+'.</p><p>Helpful existing Core lessons: '+p.lessonIds.map(id=>{const l=lesson(id);return l?'<a href="#/lesson/'+esc(id)+'">'+esc(l.title)+'</a>':''}).filter(Boolean).join(' · ')+'</p><p>The stage notes are from the supplied 2026 course document. Refer to the page numbers where needed.</p></section></div>';
+  miniAssetCard(p)+'<section class="mini-information"><h2>Before you start</h2><p><strong>Course assets:</strong> '+esc(p.assets.join('; '))+'.</p><p>Helpful existing Core lessons: '+p.lessonIds.map(id=>{const l=lesson(id);return l?'<a href="#/lesson/'+esc(id)+'">'+esc(l.title)+'</a>':''}).filter(Boolean).join(' · ')+'</p><p>The stage notes are from the supplied 2026 course document. Refer to the page numbers where needed.</p></section></div>';
 }
 function miniStagePage(projectId,stageId){
   const p=miniProject(projectId),st=miniStage(p,stageId);if(!p||!st)return notFound();
@@ -1975,7 +1991,7 @@ function miniStagePage(projectId,stageId){
   '<section class="mini-information mini-proof"><span class="eyebrow">04 • CHECK YOUR WORK</span><h2>Prove it works</h2><p>'+esc(st.check)+'</p><details><summary>If something does not work</summary><p>'+esc(st.troubleshoot)+'</p></details></section>'+
   '<section class="mini-complete-panel"><p>Only mark this stage complete after you have run the game or tested the feature yourself. This saves progress in this browser, not to Teams.</p><button class="button '+(done?'success':'primary')+'" data-action="mini-complete" data-stage="'+esc(st.id)+'">'+(done?'✓ Completed — click to undo':'Mark this stage complete ✓')+'</button></section>'+
   '<nav class="mini-stage-bottom" aria-label="Stage navigation">'+(prev?'<a class="button ghost" href="'+miniHref(p.id,prev.id)+'">← Previous stage</a>':'<a class="button ghost" href="'+miniHref(p.id)+'">← Project overview</a>')+(next?'<a class="button primary" href="'+miniHref(p.id,next.id)+'">Next stage →</a>':'<a class="button primary" href="'+miniHref(p.id)+'">Project overview ✓</a>')+'</nav>'+
-  '</div><aside class="mini-side-column"><div class="mini-information mini-side-stages"><strong>'+esc(p.title)+' stages</strong>'+p.stages.map((x,i)=>'<a class="'+(x.id===st.id?'current':'')+'" href="'+miniHref(p.id,x.id)+'"><span>'+(miniCompleted().includes(x.id)?'✓':i+1)+'</span>'+esc(x.title)+'</a>').join('')+'</div><div class="mini-information"><strong>Need the concept first?</strong><p>'+p.lessonIds.map(id=>{const l=lesson(id);return l?'<a href="#/lesson/'+esc(id)+'">'+esc(l.title)+'</a>':''}).filter(Boolean).join('</p><p>')+'</p></div></aside></div></div>';
+  '</div><aside class="mini-side-column">'+miniAssetCard(p)+'<div class="mini-information mini-side-stages"><strong>'+esc(p.title)+' stages</strong>'+p.stages.map((x,i)=>'<a class="'+(x.id===st.id?'current':'')+'" href="'+miniHref(p.id,x.id)+'"><span>'+(miniCompleted().includes(x.id)?'✓':i+1)+'</span>'+esc(x.title)+'</a>').join('')+'</div><div class="mini-information"><strong>Need the concept first?</strong><p>'+p.lessonIds.map(id=>{const l=lesson(id);return l?'<a href="#/lesson/'+esc(id)+'">'+esc(l.title)+'</a>':''}).filter(Boolean).join('</p><p>')+'</p></div></aside></div></div>';
 }
 
 function studyHubPage(){
@@ -3962,6 +3978,7 @@ function bindNewsPage(){
   }));
 }
 function bindPageInputs(){
+  bindMiniAssetCard();
   const ts=$('#theorySearch');
   if(ts){
     let area='all';
