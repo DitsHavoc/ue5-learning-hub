@@ -2,7 +2,7 @@ name: Path navigation browser regression
 
 on:
   push:
-    branches: [hotfix/path-navigation-v3.62.1]
+    branches: [hotfix/path-navigation-v3.62.1, hotfix/lesson-card-navigation-v3.62.2]
   pull_request:
 
 jobs:
