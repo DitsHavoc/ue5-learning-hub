@@ -1983,9 +1983,9 @@ function bindMiniIllustrations(){
     const paragraphs=Array.from(body.querySelectorAll(':scope > p'));
     const page=Number(details.dataset.miniPage);
     figures.forEach((fig,i)=>{
-      if(!/^assets\\/mini-projects\\/images\\/[a-z0-9/_-]+\\.(png|jpg)$/.test(fig.file))return;
+      if(typeof fig.file!=='string'||!fig.file.startsWith('assets/mini-projects/images/')||fig.file.includes('..')||!(fig.file.endsWith('.png')||fig.file.endsWith('.jpg')))return;
       const n=Math.max(-1,Math.min(paragraphs.length-1,Number(fig.afterParagraph??-1)));
-      const context=(paragraphs[Math.max(0,n)]?.textContent||'Unreal Engine Blueprint instructions').replace(/\\s+/g,' ').trim();
+      const context=(paragraphs[Math.max(0,n)]?.textContent||'Unreal Engine Blueprint instructions').replace(/\s+/g,' ').trim();
       const summary=context.length>115?context.slice(0,112).trimEnd()+'…':context;
       const figure=document.createElement('figure');figure.className='mini-illustration';
       const link=document.createElement('a');link.href='/'+fig.file;link.target='_blank';link.rel='noopener noreferrer';link.title='Open illustration at full size in a new tab';
