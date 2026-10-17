@@ -12,7 +12,7 @@ Four outcomes from the user-supplied *Unreal Engine Mini-Projects* course (Danie
 | Bowling | `bowling-1` through `bowling-5` | 84–150; source quiz 151 |
 | Clicker | `clicker-1` through `clicker-3` | 152–192; source quiz 193 |
 
-Page 194 is the course conclusion and pages 195–201 provide full-source reference. The 16 staged guides incorporate the **complete text notes on the stage pages** with original page labels, plus separate actionable checklists, outcomes, test criteria and troubleshooting. The source PDF's page images/screenshots have **not** been bundled yet and **should not be implied to be present**.
+Page 194 is the course conclusion and pages 195–201 provide full-source reference. The 16 staged guides incorporate the **complete text notes on the stage pages** with original page labels, plus separate actionable checklists, outcomes, test criteria and troubleshooting. All **320 course illustrations** are included under `assets/mini-projects/images` and mapped to their original source pages and nearby instructional paragraphs. They are loaded on demand when students open the relevant source page.
 
 ## Learning and progress
 - The four project routes are data-driven in `data/mini-projects-data.js`.
@@ -23,21 +23,15 @@ Page 194 is the course conclusion and pages 195–201 provide full-source refere
 - Source and stage ownership checks run in `scripts/validate-content-placement.cjs`.
 - Desktop/mobile E2E tests run in `scripts/test-mini-projects.cjs`, on each PR and push to main.
 
-## Asset ZIP received and verified — hosting step pending
+## Source assets and illustrations — integrated
 
-The user has now uploaded `Assets.zip` twice; both archives are **byte-for-byte identical**, with CRC validation passing. SHA-256: `722fa6ec2012600e342b7426bae6b405fce866513a215490c69c0ed9ebaf0ef5`, size **59,165 bytes**.
+The original archive `assets/mini-projects/Assets.zip` is hosted in this branch (59,165 bytes; SHA-256 `722fa6ec2012600e342b7426bae6b405fce866513a215490c69c0ed9ebaf0ef5`).
 
-Contents:
-- `Assets/Balloon Popper/BalloonModel.fbx` (32,416 bytes): **use this in UE5.6+**
-- `Assets/Balloon Popper/BalloonModel.obj` (48,338 bytes): older alternative
-- `Assets/Bowling/BowlingPin.fbx` (31,788 bytes): actual bowling pin
-- **No bowling ball model:** model with Unreal Engine's built-in sphere and apply material. Guide updated.
+Models: `BalloonModel.fbx` (UE5.6+ recommended), legacy `BalloonModel.obj`, and `BowlingPin.fbx`; use the built-in Sphere mesh for the bowling ball.
 
-All four projects and all sixteen stages have working source notes. The site now checks for a hosted asset at `/assets/mini-projects/Assets.zip` using an HTTP HEAD request and **only displays the download button if present**. Until then it tells students to obtain the ZIP through Teams; there are no broken links.
+The 320 source screenshots, across all 16 stages, are stored in `assets/mini-projects/images/`. Their manifest contains each original PDF source-page number and `afterParagraph` insertion point, based on matching the PDF's actual illustration location to its text reading order. In the stage walkthrough, source pages expand individually and illustrations are loaded on demand, linked to full-size versions, and have context-dependent accessible captions. Other tutorials/IDs and primary navigation are untouched.
 
-**Not yet hosted on GitHub.** The provided binary ZIP is available in the conversation/container; the GitHub connector here cannot use a local file path for its write action. `assets/mini-projects/README.md` documents the exact upload location and checked file hash, for one remaining binary upload to the PR branch before release.
-
-The owner also approved the PDF's images for reuse. Follow-up work can add a curated, correctly attributed and compressed set of its annotated screenshots so students can see the relevant Unreal Blueprint wiring directly on each stage page rather than relying on separate PDF access.
+Browser regression checks all 16 stages at desktop and mobile sizes, figures, real ZIP checksum/download, source walkthroughs, persistence and global search. A 404 download fallback is also exercised.
 
 ## Deployment gate
 PR #15 is intentionally a **draft** until source assets and rendered browser QA are agreed. The Hub's previous release was not auto-deployed by Render despite configured autoDeploy: after merge, explicitly verify the deployed Render commit against GitHub `main` and check the live route, rather than trusting a green CI badge alone.
