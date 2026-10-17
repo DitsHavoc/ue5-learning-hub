@@ -26,7 +26,7 @@ const server = http.createServer((req,res)=>{
     for(const device of [{name:'desktop',viewport:{width:1400,height:850}},{name:'mobile',viewport:{width:390,height:844},isMobile:true,hasTouch:true}]){
       const page=await browser.newPage({viewport:device.viewport,isMobile:device.isMobile||false,hasTouch:device.hasTouch||false});
       const errors=[];
-      page.on('pageerror',err=>errors.push(err.message));
+      page.on('pageerror',err=>errors.push(err.stack||err.message));
       await page.goto(url+'/#/programming',{waitUntil:'load'});
       await page.waitForSelector('.path-card',{timeout:15000});
       const cards=await page.locator('.path-card').evaluateAll(nodes=>nodes.map(n=>({title:n.querySelector('h3')?.textContent?.trim(),href:n.getAttribute('href')})));
@@ -52,7 +52,7 @@ const server = http.createServer((req,res)=>{
       const lessonState=await page.evaluate(()=>({hash:location.hash,title:document.querySelector('#app h1')?.textContent?.trim()||''}));
       if(lessonState.hash!==lessonHref)failures.push(device.name+' lesson navigation: '+JSON.stringify(lessonState));
       console.log('CHECK '+device.name+' core lesson -> '+JSON.stringify(lessonState));
-      if(errors.length)console.log('BROWSER ERRORS '+device.name+': '+errors.join(' | '));
+      if(errors.length)failures.push(device.name+' uncaught browser errors:\n'+[...new Set(errors)].slice(0,4).join('\n'));
       await page.close();
     }
     if(failures.length){console.error('PATH NAVIGATION FAILED\n'+failures.join('\n'));process.exitCode=1;}
