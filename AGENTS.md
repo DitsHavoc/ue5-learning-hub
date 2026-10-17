@@ -12,9 +12,11 @@ Before writing a new guide, search the existing data and decide whether an exist
 | Transferable Unreal system | `data/course-data.js`, inside one of the six core paths; revision from the authoritative lesson |
 | End-to-end Unreal workflow (Landscape, Sequencer, team workflow) | Register a tutorial with `unrealHome: true`, `libraryHidden: true`, `unrealSection`, and real `steps`; load its data script from `index.html`. It appears under **Unreal Learning → Master Guides**, not Quick Tutorials |
 | Specific build outcome / small mechanic | `data/tutorial-data.js`: one visible `category`, **exactly one** `families[].members` entry; belongs to **Build → Quick Tutorials** |
+| Guided laboratory practical inside an existing cross-subject path | Can register a tutorial from a loaded data patch, **only** when the owning `data/pathway-data.js` path references it as a `type: 'tutorial'` step; do not also place it in Quick Tutorial families |
 | Lesson-owned application of a core concept | Tutorial with `libraryHidden: true` and valid `lessonHome`; searchable, linked from the existing Core Lesson; *not* an extra top-level Quick Tutorial |
 | Game design principle or analysis | `data/theory-data.js`, in one theory path; associated scenario questions live here and feed Revision |
 | Design discipline, judgement or Unreal application | `data/design-data.js`: each new Designer recipe appears in exactly one `modules[].tutorials` list, with `category: 'design-' + module.id`; link to the relevant principle and an existing engine guide rather than copying it |
+| Long-form Designer Studio project | Hidden `studioProject: true` tutorial with `designModule` set, and one matching module `studioLesson.id`; not a second normal recipe or path |
 | 3D knowledge, 3ds Max process, portfolio asset | 3D Foundations in `data/modeling-foundations-data.js`; practical Max lessons and Build X in `data/modeling-data.js`; videos remain linked to the matching lesson instead of making another independent course |
 | Blueprint programmer / standalone C++ | Extend `data/programmer-skill-mission.js` or `data/cpp-skill-missions.js` respectively. **Never** make C++ depend on progress in the Blueprint project |
 | Industry understanding / career scenarios | `data/industry-careers-data.js`; use central Revision instead of a duplicate mini-quiz |
