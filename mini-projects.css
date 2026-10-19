@@ -47,9 +47,8 @@
 .mini-section-title{display:flex;flex-direction:column;gap:5px;min-width:0}
 .mini-section-title strong{font-size:15px;line-height:1.4;font-weight:750}
 .mini-section-title small{font-size:11px;font-weight:500;color:#b8cbdc}
-.mini-section-reference{flex-shrink:0;font-size:11px;color:#b8cbdc;font-weight:550;white-space:nowrap}
-.mini-section-reference span{display:inline-block;font-size:20px;vertical-align:middle;margin-left:7px;transition:transform .15s}
-.mini-source-section[open] .mini-section-reference span{transform:rotate(180deg)}
+.mini-section-toggle{flex-shrink:0;display:inline-block;font-size:20px;color:#b8cbdc;line-height:1;transition:transform .15s}
+.mini-source-section[open] .mini-section-toggle{transform:rotate(180deg)}
 .mini-section-content{padding:6px 0 8px}
 .mini-source-page+.mini-source-page{border-top:1px dashed #2e455b}
 .mini-page-text{padding:14px 18px}
@@ -68,7 +67,7 @@
 .mini-side-stages a:hover,.mini-side-stages a.current{background:#203447;border-color:#48637b;color:#fff}
 .mini-side-stages a span{min-width:20px;color:#81dafa;font-weight:750}
 @media(max-width:1000px){.mini-lesson-grid{grid-template-columns:minmax(0,1fr)}.mini-side-column{position:static;display:grid;grid-template-columns:1fr 1fr;gap:12px}}
-@media(max-width:700px){.mini-project-grid{grid-template-columns:1fr}.mini-header{padding:22px 17px}.mini-information,.mini-project-overview{padding:18px 15px}.mini-stage-link{grid-template-columns:35px 1fr 14px;padding:10px;gap:9px}.mini-stage-link .mini-stage-number{width:31px;height:31px}.mini-side-column{display:block}.mini-complete-panel{flex-direction:column;align-items:stretch}.mini-complete-panel .button{width:100%}.mini-source-section>summary{padding:13px 12px;align-items:flex-start;gap:8px}.mini-section-title strong{font-size:13px}.mini-section-reference{font-size:10px}.mini-page-text{padding:13px 12px}}
+@media(max-width:700px){.mini-project-grid{grid-template-columns:1fr}.mini-header{padding:22px 17px}.mini-information,.mini-project-overview{padding:18px 15px}.mini-stage-link{grid-template-columns:35px 1fr 14px;padding:10px;gap:9px}.mini-stage-link .mini-stage-number{width:31px;height:31px}.mini-side-column{display:block}.mini-complete-panel{flex-direction:column;align-items:stretch}.mini-complete-panel .button{width:100%}.mini-source-section>summary{padding:13px 12px;align-items:flex-start;gap:8px}.mini-section-title strong{font-size:13px}.mini-page-text{padding:13px 12px}}
 
 /* A failed asset check must never expose a broken download CTA. */
 .mini-assets [hidden]{display:none!important}
