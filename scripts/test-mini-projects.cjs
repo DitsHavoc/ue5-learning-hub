@@ -69,6 +69,16 @@ async function run(){
           await page.waitForSelector('.mini-task-list li',{timeout:10000});
           const st=await page.evaluate(()=>({hash:location.hash,title:document.querySelector('#app h1')?.textContent?.trim(),tasks:document.querySelectorAll('.mini-task-list li').length,sourcePages:document.querySelectorAll('.mini-source-page').length,check:!!document.querySelector('.mini-proof'),complete:!!document.querySelector('[data-action="mini-complete"]')}));
           const correct=st.hash==='#/mini-projects/'+p.id+'/'+id&&st.tasks>=4&&st.sourcePages>=1&&st.check&&st.complete;
+          // Page numbers remain internal image-placement metadata, never
+          // student-facing labels, titles, captions or alt text.
+          const studentLabels=await page.evaluate(()=>({
+            header:document.querySelector('.mini-header')?.textContent||'',
+            tasks:[...document.querySelectorAll('.mini-source-section > summary')].map(x=>x.textContent)
+          }));
+          if(/(?:\bpp\.\s*\d|\bsource page\b|\bguide pages?\b)/i.test(studentLabels.header+' '+studentLabels.tasks.join(' ')))
+            fail.push(device.name+' '+id+': legacy PDF page references are still visible');
+          if(await page.locator('.mini-section-toggle').count()!==studentLabels.tasks.length)
+            fail.push(device.name+' '+id+': missing compact task chevrons');
           // Task-based sections replace the old per-PDF-page headings. Source
           // page elements still exist for exact image placement and attribution.
           const headings=await page.locator('.mini-source-section > summary').allTextContents();
@@ -99,8 +109,9 @@ async function run(){
             try{
               await page.waitForFunction(()=>{const img=document.querySelector('.mini-illustration img');return img?.complete&&img.naturalWidth>0;},null,{timeout:8000});
             }catch(e){fail.push(device.name+' '+id+': first course image failed to load');}
-            const info=await image.evaluate(img=>({alt:img.alt,width:img.getBoundingClientRect().width,parent:img.closest('.mini-page-text')?.getBoundingClientRect().width}));
-            if(!info.alt.includes('source page')||!info.parent||info.width>info.parent+1)fail.push(device.name+' '+id+': missing caption or image overflows layout');
+            const info=await image.evaluate(img=>({alt:img.alt,caption:img.closest('.mini-illustration')?.querySelector('figcaption')?.textContent||'',width:img.getBoundingClientRect().width,parent:img.closest('.mini-page-text')?.getBoundingClientRect().width}));
+            if(!info.alt.startsWith('Unreal Engine tutorial screenshot')||!info.caption.startsWith('Screenshot ')||/(?:source page|\bpp\.\s*\d|\bpage\s+\d)/i.test(info.alt+' '+info.caption)||!info.parent||info.width>info.parent+1)
+              fail.push(device.name+' '+id+': screenshot is missing context, has page-number wording, or overflows layout');
           }
           console.log((correct?'PASS ':'FAIL ')+device.name+' '+id+' '+JSON.stringify(st));
         }
