@@ -21,7 +21,7 @@ const STUDY = window.UE5_STUDY_DATA;
 const BACKEND = window.UE5_BACKEND;
 const SKILL_MISSIONS = window.UE5_SKILL_MISSIONS || {missions:[]};
 const CPP_SKILL_MISSIONS = window.UE5_CPP_SKILL_MISSIONS || {missions:[],planned:[]};
-const HUB_VERSION = '3.63.2';
+const HUB_VERSION = '3.63.3';
 const MINI = window.UE5_MINI_PROJECT_DATA || {projects:[]};
 const MINI_NOTES = window.UE5_MINI_PROJECT_NOTES || {};
 
@@ -1981,7 +1981,6 @@ function bindMiniIllustrations(){
     const body=pageEl.querySelector('.mini-page-text');
     if(!body)return;
     const paragraphs=Array.from(body.querySelectorAll(':scope > p'));
-    const page=Number(pageEl.dataset.miniPage);
     // Insert from last to first so multiple figures anchored to the same
     // paragraph retain their original PDF reading order.
     figures.slice().reverse().forEach((fig,reversedIndex)=>{
@@ -1993,9 +1992,9 @@ function bindMiniIllustrations(){
       const figure=document.createElement('figure');figure.className='mini-illustration';
       const link=document.createElement('a');link.href='/'+fig.file;link.target='_blank';link.rel='noopener noreferrer';link.title='Open illustration at full size in a new tab';
       const img=document.createElement('img');img.src='/'+fig.file;img.loading='lazy';img.decoding='async';img.width=fig.width;img.height=fig.height;
-      img.alt='Unreal Engine tutorial screenshot, source page '+page+', figure '+(i+1)+': '+summary;
+      img.alt='Unreal Engine tutorial screenshot '+(i+1)+': '+summary;
       link.appendChild(img);figure.appendChild(link);
-      const caption=document.createElement('figcaption');caption.textContent='Figure '+(i+1)+' · Source page '+page+' · '+summary;figure.appendChild(caption);
+      const caption=document.createElement('figcaption');caption.textContent='Screenshot '+(i+1)+' · '+summary;figure.appendChild(caption);
       const before=n<0?paragraphs[0]:(paragraphs[n]?.nextSibling||null);
       body.insertBefore(figure,before);
     });
@@ -2040,12 +2039,12 @@ function miniStagePage(projectId,stageId){
   const pages=MINI_NOTES[st.id]||[];
   const sections=st.walkthroughSections||[{title:'Follow the steps',start:st.pages[0],end:st.pages[1]}];
   return '<div class="mini-shell mini-lesson">'+miniTrail([{title:'Build',href:'#/build'},{title:'Mini-Projects',href:'#/mini-projects'},{title:p.title,href:miniHref(p.id)},{title:st.title}])+
-  '<header class="mini-header"><span class="eyebrow">'+esc(p.title)+' • STAGE '+(idx+1)+' OF '+p.stages.length+'</span><h1>'+esc(st.title)+'</h1><p>'+esc(st.outcome)+'</p><div class="mini-chips"><span>'+esc(p.level)+'</span><span>Original guide pp. '+st.pages[0]+'–'+st.pages[1]+'</span><span>'+(done?'✓ Completed':'Build → test → prove')+'</span></div></header>'+
+  '<header class="mini-header"><span class="eyebrow">'+esc(p.title)+' • STAGE '+(idx+1)+' OF '+p.stages.length+'</span><h1>'+esc(st.title)+'</h1><p>'+esc(st.outcome)+'</p><div class="mini-chips"><span>'+esc(p.level)+'</span><span>'+(done?'✓ Completed':'Build → test → prove')+'</span></div></header>'+
   '<div class="mini-lesson-grid"><div class="mini-main-column">'+
   '<section class="mini-information mini-stage-summary"><span class="eyebrow">01 • YOUR BUILD TARGET</span><h2>Make this work</h2><p>'+esc(st.outcome)+'</p></section>'+
   '<section class="mini-information"><span class="eyebrow">02 • GUIDED CHECKLIST</span><h2>Build and verify</h2><ol class="mini-task-list">'+st.tasks.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ol></section>'+
   '<section class="mini-information"><span class="eyebrow">03 • FOLLOW THE BUILD</span><h2>Step-by-step walkthrough</h2><p class="mini-small-note">Open each task to follow the instructions and matching screenshots. Select an image to view it full size.'+(p.id==='balloon-popper'?' For UE5.6+, import BalloonModel.fbx rather than the older OBJ shown in some screenshots.':'')+'</p>'+
-  '<div class="mini-page-notes" data-mini-stage="'+esc(st.id)+'" data-mini-project="'+esc(p.id)+'">'+sections.map((section,i)=>'<details class="mini-source-section" '+(i===0?'open':'')+'><summary><span class="mini-section-title"><strong>'+esc(section.title)+'</strong><small>Task '+(i+1)+' of '+sections.length+'</small></span><span class="mini-section-reference">Guide pp. '+section.start+(section.end===section.start?'':'–'+section.end)+' <span aria-hidden="true">⌄</span></span></summary><div class="mini-section-content">'+pages.filter(page=>page.page>=section.start&&page.page<=section.end).map(page=>'<div class="mini-source-page" data-mini-page="'+page.page+'"><div class="mini-page-text">'+page.paragraphs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</div></div>').join('')+'</div></details>').join('')+'</div></section>'+
+  '<div class="mini-page-notes" data-mini-stage="'+esc(st.id)+'" data-mini-project="'+esc(p.id)+'">'+sections.map((section,i)=>'<details class="mini-source-section" '+(i===0?'open':'')+'><summary><span class="mini-section-title"><strong>'+esc(section.title)+'</strong><small>Task '+(i+1)+' of '+sections.length+'</small></span><span class="mini-section-toggle" aria-hidden="true">⌄</span></summary><div class="mini-section-content">'+pages.filter(page=>page.page>=section.start&&page.page<=section.end).map(page=>'<div class="mini-source-page" data-mini-page="'+page.page+'"><div class="mini-page-text">'+page.paragraphs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</div></div>').join('')+'</div></details>').join('')+'</div></section>'+
   '<section class="mini-information mini-proof"><span class="eyebrow">04 • CHECK YOUR WORK</span><h2>Prove it works</h2><p>'+esc(st.check)+'</p><details><summary>If something does not work</summary><p>'+esc(st.troubleshoot)+'</p></details></section>'+
   '<section class="mini-complete-panel"><p>Only mark this stage complete after you have run the game or tested the feature yourself. This saves progress in this browser, not to Teams.</p><button class="button '+(done?'success':'primary')+'" data-action="mini-complete" data-stage="'+esc(st.id)+'">'+(done?'✓ Completed — click to undo':'Mark this stage complete ✓')+'</button></section>'+
   '<nav class="mini-stage-bottom" aria-label="Stage navigation">'+(prev?'<a class="button ghost" href="'+miniHref(p.id,prev.id)+'">← Previous stage</a>':'<a class="button ghost" href="'+miniHref(p.id)+'">← Project overview</a>')+(next?'<a class="button primary" href="'+miniHref(p.id,next.id)+'">Next stage →</a>':'<a class="button primary" href="'+miniHref(p.id)+'">Project overview ✓</a>')+'</nav>'+
