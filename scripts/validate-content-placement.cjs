@@ -176,6 +176,26 @@ function audit(root = path.resolve(__dirname, '..')) {
     fail('Bowling HUD','binding functions need actual labels rather than unlabelled numbers');
   if(!bowlingHUD.includes('RefreshBowlingResult')||!bowlingHUD.includes('Event Construct'))
     fail('Bowling final result','must show persistent result timer and its callback');
+  const balloonScore=guideText('balloon-popper','score');
+  const balloonRespawnSteps=items(findUpgrade('balloon-popper','respawn')?.steps);
+  const balloonRespawn=guideText('balloon-popper','respawn');
+  const balloonTimer=guideText('balloon-popper','timer');
+  const balloonResults=guideText('balloon-popper','results');
+  const balloonDanger=guideText('balloon-popper','risk');
+  if(!balloonScore.includes('PopScale')||!balloonScore.includes('BP_BalloonGameMode'))
+    fail('Balloon scoring','must retain original pop branch and shared GameMode');
+  if(!balloonRespawn.includes('Balloon Popper Level')||!balloonRespawn.includes('SpawnArea')||!balloonRespawn.includes('Random Point in Bounding Box'))
+    fail('Balloon respawning','must use original level name and the random spawner');
+  const placeIdx=balloonRespawnSteps.findIndex(x=>x.title==='Place the spawner and test its first five balloons');
+  const removeIdx=balloonRespawnSteps.findIndex(x=>x.title==='Put the spawn box where the camera can see it');
+  if(placeIdx<0||removeIdx<=placeIdx)
+    fail('Balloon respawning','must test a placed spawner before deleting original targets');
+  if(!balloonTimer.includes('Score: {Value}')||!balloonTimer.includes('Time: {Value}')||!balloonTimer.includes('Set Input Mode Game and UI'))
+    fail('Balloon HUD','must preserve labels and allow world click and replay button input');
+  if(!balloonResults.includes('RefreshRoundScreen')||!balloonResults.includes('ReplayButton')||!balloonResults.includes('Get Current Level Name'))
+    fail('Balloon results','requires a visible final score and working map replay');
+  if(!balloonDanger.includes('M_Balloon is already red')&&!balloonDanger.includes('original M_Balloon is already red'))
+    fail('Balloon danger','must distinguish new danger balloon from original red material');
   const bowlPower=guideText('bowling','power');
   if(!bowlPower.includes('Add Force')||!bowlPower.includes('200000')||!bowlPower.includes('Accel Change'))
     fail('Bowling power upgrade','must reuse original Bowl Add Force X 200000, Accel Change');
