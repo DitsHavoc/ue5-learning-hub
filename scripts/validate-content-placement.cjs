@@ -163,6 +163,19 @@ function audit(root = path.resolve(__dirname, '..')) {
   const milestone=guideText('clicker','goal');
   if(!milestone.includes('restore MilestoneTarget=500')||!milestone.includes('MilestoneText'))
     fail('Clicker milestone','temporary proof test must restore target and displayed text');
+  const bowlingPins=guideText('bowling','pin-score');
+  const bowlingThrows=guideText('bowling','throws');
+  const bowlingHUD=guideText('bowling','polish');
+  if(!bowlingPins.includes('BP_BowlingPin')||!bowlingPins.includes('Dot Product')||!bowlingPins.includes('GoalPins'))
+    fail('Bowling pin scoring','must establish one-count-per-pin test and actual GoalPins');
+  if(!bowlingThrows.includes('BowlingBall')||!bowlingThrows.includes('FinishThrow')||!bowlingThrows.includes('Delay(Duration=4.0)')||!bowlingThrows.includes('ResetBall'))
+    fail('Bowling three-throw system','must use original saved ball ref and show how Delay calls FinishThrow before ResetBall');
+  if(!bowlingThrows.includes('RoundFinished')||!bowlingThrows.includes('all pins'))
+    fail('Bowling end condition','must explain the early-all-pins-down path');
+  if(!bowlingHUD.includes('Score: {Value}')||!bowlingHUD.includes('Pins down: {Value}')||!bowlingHUD.includes('Throws left: {Value}'))
+    fail('Bowling HUD','binding functions need actual labels rather than unlabelled numbers');
+  if(!bowlingHUD.includes('RefreshBowlingResult')||!bowlingHUD.includes('Event Construct'))
+    fail('Bowling final result','must show persistent result timer and its callback');
   const bowlPower=guideText('bowling','power');
   if(!bowlPower.includes('Add Force')||!bowlPower.includes('200000')||!bowlPower.includes('Accel Change'))
     fail('Bowling power upgrade','must reuse original Bowl Add Force X 200000, Accel Change');

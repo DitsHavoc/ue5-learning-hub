@@ -1,6 +1,6 @@
-/* Clicker student-perspective UE5.8 walkthrough refinement; original illustrated projects untouched. */
+/* Bowling-only student walkthrough refinement for UE5.8; original tutorial lessons untouched. */
 window.UE5_MINI_UPGRADE_DATA = {
-  "version": "3.66.2",
+  "version": "3.66.3",
   "title": "Mini-Project Upgrade Walkthroughs",
   "intro": "Finish one original guided Mini-Project, then follow these text-only expansions. Start with Essential stages; the Creative stage gives your pair room to make it yours. Save your Unreal project after every stage.",
   "projects": [
@@ -417,7 +417,7 @@ window.UE5_MINI_UPGRADE_DATA = {
     {
       "project": "bowling",
       "title": "Bowling → Arcade Bowling",
-      "intro": "Work towards a playable three-throw round: score fallen pins, reset the ball without resetting pins, then add a scoreboard and result. Optional power controls come afterwards. Follow the root-mesh setup before trying to reset physics.",
+      "intro": "Follow the actual original bowling setup: count each pin once, add three throws that reset only the ball, and build a labelled scoreboard with a final result. Keep the existing BowlingInputs, IA_Bowl, BP_BowlingPlayerController and BP_BowlingBall references; optional Q/E power comes last.",
       "stages": [
         {
           "id": "pin-score",
@@ -429,9 +429,9 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Give the GameMode a pin counter",
               "where": "Content Drawer → Bowling → BP_BowlingGameMode → Variables.",
-              "do": "Create PinsDown (Integer; 0), Score (Integer; 0), GoalPins (Integer; set to the number of BP_BowlingPin actors in your lane, e.g. 6) and RoundFinished (Boolean; false). Compile.",
+              "do": "Open BowlingLevel first and count the placed BP_BowlingPin actors in World Outliner (not the imported pin mesh asset). Write down this number: it will be GoalPins. Then in BP_BowlingGameMode create PinsDown (Integer=0), Score (Integer=0), GoalPins (Integer=that actual number) and RoundFinished (Boolean=false). Compile and Save.",
               "why": "The GameMode keeps one shared score for the full set of pins.",
-              "check": "Counters start at zero; GoalPins matches the number of placed pins."
+              "check": "GoalPins equals the number of placed BP_BowlingPin actors (e.g. six if the lane contains six), not a guessed fixed total."
             },
             {
               "title": "Create the RecordPin input",
@@ -452,7 +452,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "where": "BP_BowlingGameMode → RecordPin → True output of the Branch.",
               "do": "Set PinsDown = PinsDown + 1, then Set Score = Score + PinValue using green Integer arithmetic nodes. Wire both white execution pins in order; add Print String after Set Score using a string of your updated Score.",
               "why": "Pin count measures physical pins; score measures their value.",
-              "check": "One call to RecordPin(1) increases both totals once."
+              "check": "RecordPin now has the full execution chain: entry → NOT RoundFinished Branch True → Set PinsDown → Set Score → Print String. You will test actual points when you connect a pin below."
             },
             {
               "title": "Detect when all pins are down",
@@ -469,18 +469,18 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "The event does nothing once Counted becomes true."
             },
             {
-              "title": "Read the pin mesh up direction",
-              "where": "BP_BowlingPin → Event Graph after NOT Counted Branch True output.",
-              "do": "Drag the pin Static Mesh component (Model) into the graph as Get. From it call Get Up Vector. Add Dot Product (Vector); connect Get Up Vector to A and set B to X=0, Y=0, Z=1.",
-              "why": "When the pin is upright its direction agrees with world up, giving a dot product near 1.",
-              "check": "A placed upright pin should have a dot value close to 1 in a Blueprint watch/Print String test."
+              "title": "Check which way an upright pin points",
+              "where": "BP_BowlingPin → Event Graph → the True output of your NOT Counted Branch.",
+              "do": "Drag the existing Model (Static Mesh) component into the graph as Get. From it add Get Up Vector, then Dot Product (Vector). Set the second Vector to X=0, Y=0, Z=1. Temporarily convert the Dot Product float to String and Print String from the NOT Counted True execution path; Compile and Play.",
+              "why": "A pin that starts upright should report a value near +1. If it starts near 0 or -1, its mesh or component orientation needs checking before using this test.",
+              "check": "Without touching the pins, the printed dot value is close to 1. Stop Play and remove the temporary Print String before the next step."
             },
             {
-              "title": "Only count a pin that has tipped",
-              "where": "BP_BowlingPin → same graph.",
-              "do": "Add a Float < Float node to compare Dot Product < 0.65. Add a second Branch, wire the earlier NOT Counted True execution output into it, and wire the comparison into Condition.",
-              "why": "A pin counts only after it has tipped far enough, not for ordinary tiny wobbling.",
-              "check": "Upright pins do not pass; a pin lying sideways passes once."
+              "title": "Compare the tip angle to the threshold",
+              "where": "BP_BowlingPin → Event Graph, where Get Up Vector feeds Dot Product.",
+              "do": "Add Float < Float, wire the Dot Product output into A and set B=0.65. Add a second Branch: connect the earlier NOT Counted True white execution output into this Branch and connect the Float comparison into Condition. Compile.",
+              "why": "A tilted pin has a lower up-vector dot product than an upright pin.",
+              "check": "The second Branch is only True for sufficiently tipped pins; it does not count a pin just standing still."
             },
             {
               "title": "Award points only on the first fall",
@@ -490,24 +490,32 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "A single fallen pin adds exactly one to both PinsDown and Score."
             },
             {
+              "title": "Confirm pin counting before making a bonus target",
+              "where": "BowlingLevel → Play In Editor, after saving both GameMode and BP_BowlingPin.",
+              "do": "Press Space once. Keep the Output Log or temporary RecordPin Print String visible. Knock over one pin and check PinsDown increases to 1, Score to 1. Watch the fallen pin for a few more seconds; the numbers should NOT increase again. Repeat with another pin.",
+              "why": "Event Tick runs many times each second, so Counted must prevent repeated scores.",
+              "check": "One fallen pin awards one point only once, even as it rolls on the floor."
+            },
+            {
               "title": "Test one pin at a time",
               "where": "Open the Bowling level → Play.",
-              "do": "Throw at the pins. Watch the score print. Check a single fallen pin does not keep awarding points and that the final pin triggers \"ALL PINS DOWN!\".",
+              "do": "Play the BowlingLevel. If you cannot aim at different pins, press R only after the next upgrade is built; for this first scoring test use Stop then Play again. Knock down at least one pin and confirm each Score increment is one. For an all-pins-down test, you may temporarily place just TWO BP_BowlingPin actors in a test copy of the level and set GoalPins=2; when both tip, RoundFinished should turn true. Restore the normal lane and GoalPins afterwards.",
               "why": "Physics bugs are easier to diagnose before adding time pressure.",
-              "check": "Each pin is counted once and the target number ends the round."
+              "check": "One tilted pin counts once; the game ends when the actual GoalPins number has tipped. Restore any temporary two-pin test layout before continuing."
             }
           ],
           "check": "Six placed pins with GoalPins=6 can earn six points, and the round finishes when all six are knocked down.",
-          "fix": "If no score appears, confirm pins are BP_BowlingPin actors, the pin mesh simulates physics, and the mesh up-axis is Z when upright. Adjust the 0.65 threshold only after watching the dot-product value while testing.",
+          "fix": "If no score appears, confirm pins are BP_BowlingPin actors, the pin mesh simulates physics, and the mesh up-axis is Z when upright. Adjust the 0.65 threshold only after watching the dot-product value while testing. If the first pin instantly counts before being hit, inspect Model rotation and the upright Dot Product; it should be close to +1. If the test uses two pins, reset GoalPins to the restored lane count afterwards.",
           "designerSteps": [
             "Plan: Design a scorecard and a clear way to show how many pins remain standing. Draw a small mock-up of the lane, throw marker and scoreboard.",
             "Create: make one original element for Count knocked-down pins using scoreboard, lane markings or bonus-pin textures. Export as FBX or PNG to your shared Teams folder.",
             "Integrate and test: ask the programmer to import your asset; play together and confirm three throws remain clear and pin score is legible."
           ],
           "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
-          "beforeStart": "You should have the original bowling ball aiming and colliding with physics-enabled BP_BowlingPin actors. Count the number of placed pin Blueprints.",
-          "commonMistake": "Test one pin fall with a debug print before trying to score every pin.",
-          "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
+          "beforeStart": "You finished the five-stage original Bowling tutorial. In BowlingLevel, one BP_BowlingBall responds to IA_Bowl (Space) and IA_Move (arrows), and all placed BP_BowlingPin actors simulate physics. BP_BowlingGameMode is active in World Settings.",
+          "commonMistake": "Do not use the imported Static Mesh on its own in the lane; place BP_BowlingPin Blueprints, or their Event Tick scoring cannot run. GoalPins must equal the actual placed Blueprint pin count.",
+          "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one.",
+          "intro": "Count each pin one time. Test the up-vector first, then connect the scoring function and verify the last pin finishes the game."
         },
         {
           "id": "throws",
@@ -519,14 +527,14 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Keep the physics mesh and aiming in the same place",
               "where": "BP_BowlingBall → Viewport → Components hierarchy.",
-              "do": "Select the ball Static Mesh component (called Model in the source tutorial). If it is a child of DefaultSceneRoot, drag it onto DefaultSceneRoot to make Model the root component. Compile. Keep using Add World Offset on this Model component for the original left/right aiming. In the level, check the placed ball still starts at the lane entrance.",
+              "do": "Open BP_BowlingBall → Viewport. Select the original Model sphere mesh. If it is below DefaultSceneRoot, drag Model onto the root so Model becomes the Actor root (do not add another mesh). Compile and save. In BowlingLevel reselect the placed BP_BowlingBall and confirm it still sits at the lane starting position. Test Play: Left/Right still move the ball and Space still bowls before continuing.",
               "why": "In UE5.8 a simulated single-body mesh detaches from a parent; making the ball mesh the root keeps its position and the Actor transform together.",
-              "check": "Model appears at the top of the Components hierarchy as the root. Arrow keys still move the ball before throwing."
+              "check": "Model is the root in Components; the original Move and Bowl events work after this change."
             },
             {
               "title": "Save the Actor starting transform",
               "where": "BP_BowlingBall → Event Graph → Event BeginPlay.",
-              "do": "Create StartingBallTransform (Transform) in My Blueprint. From Event BeginPlay, call Get Actor Transform → Set StartingBallTransform. Keep any existing BeginPlay work connected (use a Sequence if needed). Compile.",
+              "do": "In BP_BowlingBall → Event Graph, make a new variable StartingBallTransform of type Transform. From Event BeginPlay call Get Actor Transform (Self) and then Set StartingBallTransform. Compile. This happens before the player moves the ball. Keep all other Event BeginPlay nodes if present.",
               "why": "With Model as the root, the Actor transform is the launch position and matches the mesh used for aiming.",
               "check": "StartingBallTransform stores the ball’s launch position when Play begins."
             },
@@ -535,21 +543,28 @@ window.UE5_MINI_UPGRADE_DATA = {
               "where": "BP_BowlingBall → Event Graph → Add Custom Event ResetBall.",
               "do": "Drag the Model (root Static Mesh) component onto the graph. Wire ResetBall → Set Simulate Physics (Model, false) → Set Actor Transform (New Transform=StartingBallTransform; Sweep=false; Teleport=true). Compile.",
               "why": "Moving the ball with physics disabled avoids the simulation fighting the new transform.",
-              "check": "The node chain stops with the ball back at its original Actor transform."
+              "check": "ResetBall contains its first chain: ResetBall → Set Simulate Physics(false) → Set Actor Transform(StartingBallTransform). It will not run in Play until you call it from the Player Controller later."
             },
             {
               "title": "Turn physics on and clear movement",
               "where": "BP_BowlingBall → immediately after Set Actor Transform in ResetBall.",
               "do": "Wire Set Simulate Physics (Model, true) → Set Physics Linear Velocity (0,0,0) → Set Physics Angular Velocity in Degrees (0,0,0), all targeting Model. Compile and save.",
               "why": "Zeroing both velocity types makes sure the ball remains ready for the next shot.",
-              "check": "Calling ResetBall returns the ball to its launch mark and leaves it stationary."
+              "check": "The full ResetBall chain compiles. It is not yet callable through the player controls; you will run the first real reset after connecting FinishThrow."
+            },
+            {
+              "title": "Check the original BowlingBall reference is valid",
+              "where": "BP_BowlingPlayerController → Event Graph → Event BeginPlay.",
+              "do": "In BP_BowlingPlayerController → Event Graph find the original BeginPlay path: Add Mapping Context(BowlingInputs) → Get Actor of Class(BP_BowlingBall) → Set BowlingBall. Select the existing Get Actor of Class node: its Return Value must connect to Set BowlingBall. Place exactly one BP_BowlingBall in BowlingLevel. Compile and Play once; confirm the original arrow keys still move it and Space still bowls. Do NOT add a second ball variable or duplicate this lookup.",
+              "why": "ResetBall will use the SAME saved ball object already used by the Bowl and Move input actions.",
+              "check": "The original input actions operate the one BP_BowlingBall found at BeginPlay, so ResetBall will target the same actor."
             },
             {
               "title": "Count throws in the Player Controller",
               "where": "BP_BowlingPlayerController → Variables.",
               "do": "Create ThrowsUsed (Integer; default 0), MaxThrows (Integer; default 3) and IsBallInMotion (Boolean; default false). Compile. Keep the existing BP_BowlingBall reference from the original IA_Bowl/IA_Move tutorial; do not add a new ball reference.",
               "why": "The controller owns the player input and knows when another throw is allowed.",
-              "check": "All three variables start with 0, 3 and false."
+              "check": "ThrowsUsed=0, MaxThrows=3 and IsBallInMotion=false. The original BowlingBall reference is still in the controller."
             },
             {
               "title": "Disable sideways aiming while the ball is rolling",
@@ -561,64 +576,72 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Check the round is still active",
               "where": "BP_BowlingPlayerController → existing IA_Bowl input (Started pin; use your original tutorial name).",
-              "do": "Use Get Game Mode → Cast To BP_BowlingGameMode → Get RoundFinished → NOT. Also Get IsBallInMotion and apply NOT.",
+              "do": "In BP_BowlingPlayerController, locate the existing IA_Bowl Input Action Event. Use ONLY its Started execution pin, as taught in the original tutorial. Add Get Game Mode → Cast To BP_BowlingGameMode and read RoundFinished. Add NOT Boolean for RoundFinished and another NOT for IsBallInMotion. Keep the original Bowl call but disconnect its old white execution input until the next step.",
               "why": "The controller must avoid another throw during a roll or after the game ends.",
               "check": "You have two Boolean values, each true when another throw is allowed."
             },
             {
               "title": "Check there is at least one throw left",
               "where": "Same Player Controller → throw input.",
-              "do": "Compare ThrowsUsed < MaxThrows. Combine this with the two NOT values using AND (Boolean); connect to a Branch Condition. Wire only True into your existing BP_BowlingBall.Bowl event.",
+              "do": "Compare ThrowsUsed < MaxThrows. Use AND(Boolean) to combine NOT RoundFinished, NOT IsBallInMotion and the throws comparison (add an input pin to AND if needed). Add a Branch: wire Cast To BP_BowlingGameMode Success white execution into the Branch input and AND to Condition. Wire ONLY Branch True towards your existing Bowl call. False does nothing.",
               "why": "Every valid Space press must use one remaining throw, not start several balls at once.",
               "check": "Only the first input while idle reaches the old Bowl event."
             },
             {
               "title": "Track a successful throw",
               "where": "BP_BowlingPlayerController → True branch of the new throw gate.",
-              "do": "Immediately before the existing ball Bowl call, set ThrowsUsed = ThrowsUsed + 1 and IsBallInMotion = true. Then call the original Bowl event exactly once. Compile.",
+              "do": "Move the original Bowl call AFTER Set ThrowsUsed=ThrowsUsed+1 and Set IsBallInMotion=true, chaining the white execution pins in that order from Branch True. Keep Bowl Target connected to the saved BowlingBall object reference. Compile. Press Space once: one throw is used. Press Space repeatedly during the roll: no extra throw is counted.",
               "why": "Each valid throw consumes one attempt, regardless of whether it hits any pins.",
               "check": "After the first Space press, ThrowsUsed is 1 and IsBallInMotion is true."
             },
             {
               "title": "Allow time for physics to settle",
               "where": "BP_BowlingPlayerController → after the successful Bowl event.",
-              "do": "Add Delay (Duration 4.0) → call a new Custom Event FinishThrow in the same controller. On FinishThrow set IsBallInMotion=false. Use Delay from the controller Event Graph, not inside a Blueprint Function.",
+              "do": "From the white execution output of the original Bowl call, add Delay(Duration=4.0). Add a Custom Event in BP_BowlingPlayerController called FinishThrow, and connect the Delay Completed white execution to a CALL of FinishThrow (not to the red event definition node). Inside the FinishThrow event, add Set IsBallInMotion=false. This is in the Event Graph: do not create a Blueprint Function containing Delay.",
               "why": "Pin collisions should be allowed to settle before the ball is reset or the round is scored.",
-              "check": "Four seconds after throwing, the controller becomes ready for the next decision."
+              "check": "Exactly four seconds after a valid Bowl call, FinishThrow runs once and sets IsBallInMotion=false. Repeated presses while rolling never start a second Delay."
             },
             {
               "title": "Reset for another shot when available",
               "where": "BP_BowlingPlayerController → FinishThrow, after IsBallInMotion=false.",
-              "do": "Get Game Mode → Cast To BP_BowlingGameMode → Branch (NOT RoundFinished AND ThrowsUsed < MaxThrows). On True call ResetBall on the same saved BP_BowlingBall reference used for the existing Bowl action. Do NOT reset any pin actors.",
+              "do": "In BP_BowlingPlayerController → FinishThrow, AFTER Set IsBallInMotion=false, use Get Game Mode → Cast To BP_BowlingGameMode. From Cast Success white execution go to Branch (NOT RoundFinished AND ThrowsUsed<MaxThrows). On True, drag BowlingBall variable as Get and call ResetBall on it. False does nothing. Do not call Open Level here, and do not reset BP_BowlingPin actors.",
               "why": "You keep the first throw’s successful knockdowns and try to finish the remaining pins.",
-              "check": "After the first two throws, the ball returns to the start and fallen pins stay down."
+              "check": "On shot 1 and shot 2, the ball returns to its original launch mark after four seconds; the pin positions and Score remain unchanged."
+            },
+            {
+              "title": "Play-test the first two throws before building the last-shot result",
+              "where": "BowlingLevel → Play In Editor.",
+              "do": "Press Space once, aiming to knock over only some pins (not all). Wait four seconds: the ball should reset and arrow keys should aim again. Press Space a second time, again leaving at least one pin standing. The ball resets a second time. Confirm the first throw’s fallen pins stay down and Score remains. If every pin falls early, RoundFinished correctly ends the game; restart Play to test the two-reset case.",
+              "why": "This catches a bad physics reset before you spend time building UI or final scoring.",
+              "check": "On a round with pins still standing, ball resets after throw 1 and throw 2, and previous pin score is preserved. A complete strike ends the round early instead."
             },
             {
               "title": "End the round after the last shot",
               "where": "BP_BowlingGameMode → Functions → add FinishRound.",
-              "do": "Create FinishRound with no inputs. Put Branch (NOT RoundFinished) → on True Set RoundFinished=true → Print String with Score and PinsDown (use Format Text or Append after converting integers). Then back in BP_BowlingPlayerController → FinishThrow, on the branch where ThrowsUsed >= MaxThrows and RoundFinished is still false, call GameMode.FinishRound.",
+              "do": "First open BP_BowlingGameMode → Functions and create FinishRound. Branch on NOT RoundFinished; only True sets RoundFinished=true then prints the final Score and PinsDown. Compile GameMode. Next open BP_BowlingPlayerController → FinishThrow: after the existing Branch that checks NOT RoundFinished AND ThrowsUsed<MaxThrows, use its False path to check (ThrowsUsed>=MaxThrows) AND (NOT RoundFinished). On True get the cast BP_BowlingGameMode reference and call FinishRound. Do this after the four-second Delay, not on the third Space press.",
               "why": "A final score should be reported after physics settles; finishing early is also possible if all pins are down.",
-              "check": "The third valid throw is followed by a final score; Space no longer throws."
+              "check": "After the third throw settles, the final score prints and RoundFinished becomes true. If all pins were already down, do not call FinishRound again."
             },
             {
               "title": "Add R to replay the whole round",
               "where": "Bowling Input Mapping Context and BP_BowlingPlayerController.",
-              "do": "Create IA_Restart (Boolean) and map to keyboard R in the already active Input Mapping Context. In the Player Controller, IA_Restart Started → Get Current Level Name (Remove Prefix String=true) → Open Level by Name. Compile.",
+              "do": "Inside the existing Content/Bowling/Inputs folder, create an Input Action named IA_Restart (Value Type=Digital Boolean). Open the already active BowlingInputs Mapping Context and add a mapping for IA_Restart with Keyboard R. In BP_BowlingPlayerController Event Graph, add IA_Restart action event and use its Started pin → Get Current Level Name (Remove Prefix String checked) → Open Level (by Name), passing the level name output into Level Name. Save BowlingInputs and Compile the controller.",
               "why": "Restarting the level resets the pins, ball, throw counter and score together.",
-              "check": "R gives a clean three-throw round from any state."
+              "check": "After a finished round, R reloads BowlingLevel with the ball at its start, standing pins, Score=0 and ThrowsUsed=0."
             }
           ],
           "check": "Make three throws without restarting: the ball comes back for shots two and three, fallen pins remain fallen, final score appears, and the fourth Space press does nothing.",
-          "fix": "Ball fails to reset? Confirm Model is the Actor root and you stored StartingBallTransform from Get Actor Transform before physics moved it, and ResetBall uses the same mesh component. One press spends multiple throws? Check IA_Bowl uses Started, not Triggered. Score missing after last shot? Ensure FinishRound is called after Delay 4 seconds. If arrows stop moving the ball after reset, check Model is the root mesh and the Move event still offsets Model. Do not add another physics mesh or reset a child component independently.",
+          "fix": "Ball fails to reset? Confirm Model is the Actor root and you stored StartingBallTransform from Get Actor Transform before physics moved it, and ResetBall uses the same mesh component. One press spends multiple throws? Check IA_Bowl uses Started, not Triggered. Score missing after last shot? Ensure FinishRound is called after Delay 4 seconds. If arrows stop moving the ball after reset, check Model is the root mesh and the Move event still offsets Model. Do not add another physics mesh or reset a child component independently. If pressing Space a second time does nothing, inspect IsBallInMotion after Delay, the RoundFinished flag, and whether the pin count reached GoalPins. If pins reset as well as the ball, the controller is reloading the level instead of calling ResetBall. In Unreal 5.8 enabling simulated physics detaches a child mesh; keeping Model as root avoids that specific parent-transform problem.",
           "designerSteps": [
             "Plan: Design a clear Throws Left indicator and short instructions: arrow keys aim, Space throws, R restarts the round. Draw a small mock-up of the lane, throw marker and scoreboard.",
             "Create: make one original element for Reset the ball and allow three throws using scoreboard, lane markings or bonus-pin textures. Export as FBX or PNG to your shared Teams folder.",
             "Integrate and test: ask the programmer to import your asset; play together and confirm three throws remain clear and pin score is legible."
           ],
           "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
-          "beforeStart": "Pin scoring must work first. You need the placed ball reference already used by the Player Controller, and its original Move and Throw events.",
-          "commonMistake": "Avoid running the new reset while the ball is still moving. Put the ball mesh at the root and test sideways aiming before adding throw limits.",
-          "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
+          "beforeStart": "Stage 1 pin scoring works. From the original tutorial, BP_BowlingPlayerController stores one BP_BowlingBall Object Reference named BowlingBall. It runs IA_Bowl Started → Bowl and IA_Move Triggered → Move. BP_BowlingGameMode is active.",
+          "commonMistake": "The four-second Delay must be in the Player Controller Event Graph after the original Bowl call, and should CALL FinishThrow when Completed. Do not wire Delay directly into a Custom Event definition or put it inside a Blueprint Function.",
+          "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one.",
+          "intro": "First verify your ball and existing BowlingBall reference; then build ResetBall, use the original IA_Bowl once per throw and test all three turns without resetting the fallen pins."
         },
         {
           "id": "polish",
@@ -630,37 +653,44 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Make the HUD widget",
               "where": "Content Drawer → Bowling → User Interface → Widget Blueprint → User Widget.",
-              "do": "Create WBP_BowlingHUD. In Designer add three Text widgets ScoreText, PinsText and ThrowsText, and mark Is Variable on each. Start with “Score: 0”, “Pins: 0” and “Throws left: 3”. Choose a compact background panel that does not obscure the pins. R remains the restart key.",
+              "do": "Create WBP_BowlingHUD (User Widget). In Designer add ScoreText, PinsText and ThrowsText as Text widgets (tick Is Variable), with placeholder labels \"Score: 0\", \"Pins down: 0\" and \"Throws left: 3\". Keep the HUD compact in a corner so the lane is visible. No buttons are needed because the player restarts with R.",
               "why": "The player needs to see progress without watching Print String debug output.",
               "check": "All labels fit the game viewport without covering the lane."
             },
             {
-              "title": "Read the score and remaining pins",
-              "where": "WBP_BowlingHUD → Designer → ScoreText then PinsText → Text → Bind → Create Binding.",
-              "do": "In ScoreText binding, Get Game Mode → Cast To BP_BowlingGameMode → Get Score → ToText (Integer) → Return. Do the same for PinsText using PinsDown. Use Format Text or separate fixed labels so players know what the numbers mean.",
-              "why": "The single GameMode record remains the authoritative score.",
-              "check": "After knocking down pins, both values update and match the printed debug numbers."
+              "title": "Bind ScoreText to the live GameMode score",
+              "where": "WBP_BowlingHUD → Designer → ScoreText → Details → Content → Text → Bind → Create Binding.",
+              "do": "In WBP_BowlingHUD → Designer, select ScoreText → Details → Content → Text → Bind → Create Binding. In the generated binding Function, wire the purple Entry execution to Cast To BP_BowlingGameMode, with Get Game Mode → Cast Object. Wire Cast Success execution to Return Node execution. From the cast result Get Score, use Format Text \"Score: {Value}\" with Score connected to Value, then connect the text output to Return Value. Compile.",
+              "why": "The scoreboard needs a label AND the live number; a bare integer would replace the text \"Score:\".",
+              "check": "When one normal pin falls, the HUD binding returns \"Score: 1\"."
+            },
+            {
+              "title": "Bind PinsText to the number knocked down",
+              "where": "WBP_BowlingHUD → Designer → PinsText → Details → Content → Text → Bind → Create Binding.",
+              "do": "WBP_BowlingHUD → Designer → PinsText → Text → Bind → Create Binding. In the generated Function, connect Entry white execution → Cast To BP_BowlingGameMode (Object=Get Game Mode) → Return Node white execution. From the cast result Get PinsDown → Format Text \"Pins down: {Value}\" → Return Value. Compile. Do not drag the pin Actor counter into this widget; both values belong to the GameMode.",
+              "why": "The GameMode keeps pins already knocked down across multiple throws.",
+              "check": "After two different pins fall, this binding shows \"Pins down: 2\"."
             },
             {
               "title": "Read shots remaining",
               "where": "WBP_BowlingHUD → ThrowsText → Text → Bind → Create Binding.",
-              "do": "Get Owning Player → Cast To BP_BowlingPlayerController → Get ThrowsUsed and MaxThrows. Subtract ThrowsUsed from MaxThrows, clamp with Max (Integer) against 0, convert to Text and return.",
+              "do": "WBP_BowlingHUD → Designer → ThrowsText → Text → Bind → Create Binding. In the generated Function, connect Entry white execution → Cast To BP_BowlingPlayerController (Object=Get Owning Player) → Return Node white execution. From cast result Get ThrowsUsed and MaxThrows, compute Max(0,MaxThrows-ThrowsUsed) with Integer math. Use Format Text \"Throws left: {Value}\" and connect its output to the Return Node Text value.",
               "why": "The HUD reads the same counter that gates the throw input.",
-              "check": "Before playing, Throws left displays 3; after the first shot it shows 2."
+              "check": "With a successful Owning Player cast, ThrowsText returns \"Throws left: 3\" at start and \"Throws left: 2\" after pressing Space once; the integer is not displayed without its label."
             },
             {
               "title": "Show the widget",
               "where": "BP_BowlingPlayerController → Event BeginPlay.",
-              "do": "After the original Add Mapping Context setup, add Create Widget (WBP_BowlingHUD; Owning Player=Self) → Add to Viewport. Use Sequence if the existing BeginPlay already has multiple independent chains. Compile.",
+              "do": "BP_BowlingPlayerController → Event BeginPlay: keep the original chain Add Mapping Context(BowlingInputs) → Get Actor of Class(BP_BowlingBall) → Set BowlingBall. AFTER Set BowlingBall, create WBP_BowlingHUD using Create Widget (Owning Player=Self) and then Add to Viewport (connect Create Widget Return Value to the Add to Viewport Target). Compile. Avoid disconnecting the old input mapping or ball reference.",
               "why": "Each level start shows the HUD automatically.",
               "check": "The scoreboard is present as soon as Play starts."
             },
             {
               "title": "Make pin points editable",
               "where": "BP_BowlingPin → Variables.",
-              "do": "Create PinValue (Integer; default 1) and enable Instance Editable. In the existing RecordPin call use Get PinValue as the input rather than the fixed value 1. Compile.",
+              "do": "Open BP_BowlingPin → Variables → + and create PinValue (Integer, default=1). Tick Instance Editable (eye icon) in Details, then Compile. Find the old BP_BowlingPin Event Graph where Cast To BP_BowlingGameMode → RecordPin currently has fixed PinValue=1. Replace that fixed pin with Get PinValue from this BP_BowlingPin instance. Compile. Do NOT change GoalPins or Counted.",
               "why": "Each pin can have a different value without duplicating the whole physics system.",
-              "check": "The selected pin in a level exposes PinValue in the Details panel."
+              "check": "Each placed BP_BowlingPin has a PinValue field in Details. Normal pins still award 1 and Counted still prevents repeats."
             },
             {
               "title": "Place one bonus pin",
@@ -670,29 +700,43 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "Knocking over the special pin adds 3 to Score but just 1 to PinsDown."
             },
             {
-              "title": "Make the result obvious",
-              "where": "WBP_BowlingHUD → Designer and Graph.",
-              "do": "Add a Text named ResultText, set Is Variable and default Visibility=Collapsed. Create a function RefreshResult reading BP_BowlingGameMode.RoundFinished. When true, use SetText with a message such as “ROUND OVER – SCORE: {Score}” and make ResultText Visible. In Event Construct start Set Timer by Event (0.25 sec, Looping=true) that calls RefreshResult.",
-              "why": "A persistent result is better than a momentary debug message.",
-              "check": "At the end of the third throw or after every pin is knocked over, the result remains visible until R is pressed."
+              "title": "Create a hidden end-of-round message",
+              "where": "WBP_BowlingHUD → Designer.",
+              "do": "Add a Text widget named ResultText, tick Is Variable, set initial text to \"ROUND OVER\" and set Visibility=Collapsed. Make sure it is readable but does not hide the main Score, Pins or Throws display. Compile.",
+              "why": "The final result stays hidden until RoundFinished becomes true.",
+              "check": "On a new round, the HUD appears without ResultText."
+            },
+            {
+              "title": "Create the result-refresh event",
+              "where": "WBP_BowlingHUD → Graph → Event Graph.",
+              "do": "In WBP_BowlingHUD → Event Graph, add Custom Event RefreshBowlingResult. From its white output connect Get Game Mode → Cast To BP_BowlingGameMode → Branch (Condition=Get RoundFinished). On True, use Get Score → Format Text \"ROUND OVER – SCORE: {Value}\" → Set Text(ResultText) → Set Visibility(ResultText,Visible), wiring white execution Set Text → Set Visibility. On False Set Visibility(ResultText,Collapsed). Compile.",
+              "why": "A separate event updates the final panel without changing the normal live score bindings.",
+              "check": "Both the True and False Branch paths have visible execution wires into the correct ResultText widget; the result will be refreshed by the timer added next."
+            },
+            {
+              "title": "Refresh that result without using Event Tick",
+              "where": "WBP_BowlingHUD → Graph → Event Construct.",
+              "do": "From Event Construct call Set Timer by Event, Time=0.25, Looping=true. Drag from the red Event delegate pin and select Create Event; bind it to RefreshBowlingResult. Only add ONE timer to this HUD instance. Compile.",
+              "why": "This checks the end condition four times a second while keeping the result visible.",
+              "check": "When the last shot ends or all pins fall, the ResultText appears and stays visible. On R restart, it is hidden again."
             },
             {
               "title": "Test two very different rounds",
               "where": "Play the level twice.",
-              "do": "Try a first game with some misses, then press R and try another. Confirm ThrowsUsed, fallen-pin state, Scores and ResultText all reset. Ask another pair whether the score and controls make sense.",
+              "do": "Play two full test rounds. First, deliberately miss at least one shot and verify Score, Pins down and Throws left are visible while the ball resets twice. After the third shot, wait four seconds and check ROUND OVER displays the final Score. Press R. In the second round, knock over the coloured bonus pin: Score increases by 3 but Pins down by only 1. Test R again.",
               "why": "The complete loop matters more than a single successful throw.",
               "check": "The second round starts with three throws and no leftover score."
             }
           ],
           "check": "Score, Pins Down and Throws Left update correctly; the special pin awards 3 points; a final result appears; R resets the full round.",
-          "fix": "Scores differ? Ensure each pin has Counted true after first fall and passes PinValue into RecordPin. Result never shows? RefreshResult must run on a repeating timer and read RoundFinished from the assigned GameMode.",
+          "fix": "Scores differ? Ensure each pin has Counted true after first fall and passes PinValue into RecordPin. Result never shows? RefreshResult must run on a repeating timer and read RoundFinished from the assigned GameMode. If a Text binding only shows a number without the word Score/Pins/Throws, use Format Text instead of returning the bare integer. If controls stop working after the HUD is added, restore the original Player Controller BeginPlay chain that assigns BowlingInputs and BowlingBall.",
           "designerSteps": [
             "Plan: Create a scoreboard, one marked bonus target and on-screen controls. Playtest legibility and whether the bonus is visible before the shot. Draw a small mock-up of the lane, throw marker and scoreboard.",
             "Create: make one original element for Add a throw counter, scoreboard and bonus pin using scoreboard, lane markings or bonus-pin textures. Export as FBX or PNG to your shared Teams folder.",
             "Integrate and test: ask the programmer to import your asset; play together and confirm three throws remain clear and pin score is legible."
           ],
           "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
-          "beforeStart": "Three limited throws should now work, and the player must be able to press R for a fresh round.",
+          "beforeStart": "The original camera view is already working. Stage 2 now allows three shots, resets the ball after each of the first two, keeps fallen pins down, and uses keyboard R to restart the level. Do not create a second BowlingBall Actor.",
           "commonMistake": "If the score is correct in the GameMode but the HUD is blank, check the active Player Controller and GameMode classes.",
           "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         },
@@ -708,14 +752,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "where": "BP_BowlingBall → Event Graph → original Bowl Custom Event from Mini-Project Stage 4.",
               "do": "Select the red Bowl Custom Event and add a Float input named Strength (default 200000) in Details → Inputs. Find the original Add Force node targeting Model, originally Force X=200000, Y=0, Z=0 with Accel Change enabled. Replace its fixed Force vector with Make Vector: X=Strength, Y=0, Z=0. Keep Accel Change ticked. Compile.",
               "why": "The original source tutorial uses Add Force with a Vector, not a separate impulse-magnitude input. Strength changes only the forward X force.",
-              "check": "The Bowl event has a Float Strength input and Add Force receives Make Vector(X=Strength,Y=0,Z=0)."
+              "check": "The original Bowl event now passes Strength into Make Vector.X and Add Force; Accel Change is still enabled. The next step sets the existing caller to 200000 so the ball moves."
             },
             {
               "title": "Keep the original bowl working while you build the controls",
               "where": "BP_BowlingPlayerController → Event Graph → original IA_Bowl Started → Bowl call.",
               "do": "The Bowl call now has a new Strength input pin. Set its pin default to 200000 (the original tutorial value) for now, then Compile and Play once. Do not leave the new Strength input at 0. You will replace this fixed value with the adjustable one later.",
               "why": "If the new Float input is left at zero, the ball appears broken until you finish the rest of the optional upgrade.",
-              "check": "Press Space once: the ball still moves towards the pins exactly as before adding the Strength input."
+              "check": "Space still launches the ball before adding Q/E. If the Force input receives zero, go back and set the Bowl call Strength pin to 200000."
             },
             {
               "title": "Store the player’s chosen power",
@@ -727,7 +771,7 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Add Q and E input actions",
               "where": "Content Drawer → Bowling → Input folder.",
-              "do": "Create two Boolean Input Actions IA_PowerDown and IA_PowerUp. Add them to the existing Bowling Input Mapping Context: Q = IA_PowerDown; E = IA_PowerUp. Save.",
+              "do": "In Content/Bowling/Inputs, create IA_PowerDown and IA_PowerUp as Input Action assets with Value Type=Digital (Boolean). Open BowlingInputs (the original Input Mapping Context already active in the controller) and add mappings IA_PowerDown=Q and IA_PowerUp=E. Save. Do not create a new Mapping Context.",
               "why": "Separate one-shot key events are easier to debug than an unconfigured input axis.",
               "check": "The mapping context lists Q and E next to the new actions."
             },
@@ -741,7 +785,7 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Pass the chosen strength into Bowl",
               "where": "BP_BowlingPlayerController → existing gated IA_Bowl chain from Upgrade 2.",
-              "do": "Multiply BaseThrowPower × PowerMultiplier and connect the result to the new Strength pin on the existing BP_BowlingBall Bowl call. Do not create a second Bowl call. Compile.",
+              "do": "BP_BowlingPlayerController → existing IA_Bowl Started chain → original Bowl call. Keep the three-throw gate and counters. Multiply BaseThrowPower × PowerMultiplier (Float × Float) and connect that value to the SAME existing Bowl call Strength pin, replacing the temporary 200000 constant. Compile. Do not add another Bowl call or Add Force node.",
               "why": "The power setting must use the same limited-throws counter.",
               "check": "Low power and high power produce visibly different travel distances."
             },
@@ -754,7 +798,7 @@ window.UE5_MINI_UPGRADE_DATA = {
             }
           ],
           "check": "At least three power settings produce distinguishable throws while throw limits, score and restarts still work.",
-          "fix": "No power difference? Check Bowl.Strength feeds Make Vector.X, which connects to Add Force → Force, and Accel Change remains checked. Make sure IA_Bowl still calls Bowl exactly once. If the ball stops moving immediately after introducing Strength, check that the existing Bowl call sends 200000, not zero.",
+          "fix": "No power difference? Check Bowl.Strength feeds Make Vector.X, which connects to Add Force → Force, and Accel Change remains checked. Make sure IA_Bowl still calls Bowl exactly once. If the ball stops moving immediately after introducing Strength, check that the existing Bowl call sends 200000, not zero. If Q/E do nothing, check the two actions are mapped inside the existing BowlingInputs and the Started pins are connected.",
           "designerSteps": [
             "Plan: Make a simple power meter with low/high markings, and ask a playtester whether changes are noticeable and fair. Draw a small mock-up of the lane, throw marker and scoreboard.",
             "Create: make one original element for Optional: give players a choice of shot power using scoreboard, lane markings or bonus-pin textures. Export as FBX or PNG to your shared Teams folder.",
