@@ -575,14 +575,14 @@ window.UE5_MINI_UPGRADE_DATA = {
     {
       "project": "clicker",
       "title": "Clicker → Upgrade Shop",
-      "intro": "Turn the one-point-per-click tutorial into a small progression game. Players buy upgrades, watch their earnings grow and race to a target.",
+      "intro": "Start with the original click and shop, then build an incremental economy: points to spend, lifetime earnings, Grannies producing one point per second, Granny training and larger producer types. The automation keeps running while you play. This is an original student game, not a copy of Cookie Clicker artwork.",
       "stages": [
         {
           "id": "shop",
-          "title": "1. Buy more powerful clicks",
+          "title": "1. Buy more powerful manual clicks",
           "tier": "Essential",
           "outcome": "Points can buy an upgrade; each purchase increases the points earned per click and doubles the next price.",
-          "designer": "Sketch a shop button and a layout that makes the cost and benefit obvious.",
+          "designer": "Create a theme for your shop and main click button. For the first purchase, design an icon or button state that clearly suggests increased points per click.",
           "steps": [
             {
               "title": "Add two shop variables",
@@ -639,7 +639,7 @@ window.UE5_MINI_UPGRADE_DATA = {
         },
         {
           "id": "display",
-          "title": "2. Make the shop information visible",
+          "title": "2. Show your shop balance and costs",
           "tier": "Essential",
           "outcome": "The interface shows live score, points per click and next upgrade cost.",
           "designer": "Create a tidy arrangement for three numbers and the two buttons. Try it at 1280×720 as well as full screen.",
@@ -692,63 +692,271 @@ window.UE5_MINI_UPGRADE_DATA = {
         },
         {
           "id": "goal",
-          "title": "3. Add a win target and replay button",
-          "tier": "Creative",
-          "outcome": "Reach 100 points to win; clicking stops and the player can restart for another run.",
-          "designer": "Design a clear success message and a Restart button. Use original typography, iconography or animation.",
+          "title": "3. Track lifetime earnings and show a milestone",
+          "tier": "Essential",
+          "outcome": "The game tracks spendable Score separately from TotalEarned. Spending never reduces TotalEarned, and the first 500 earned points trigger a milestone message without stopping the game.",
+          "designer": "Design a small “500 earned” achievement banner and decide how the player can see their total production over time.",
           "steps": [
             {
-              "title": "Add a win target",
-              "where": "Clicker GameMode → Variables.",
-              "do": "Create TargetScore (Integer; default 100) and GameWon (Boolean; default false). Compile.",
-              "why": "The player now has a meaningful goal rather than an endless counter.",
-              "check": "Both variables appear with correct defaults."
+              "title": "Keep two separate point values",
+              "where": "Clicker GameMode → My Blueprint → Variables.",
+              "do": "Keep the existing Score integer as the balance the player spends. Create TotalEarned (Integer; 0), MilestoneTarget (Integer; 500) and MilestoneReached (Boolean; false). Compile.",
+              "why": "TotalEarned should measure progress even if the player buys many upgrades.",
+              "check": "Score and TotalEarned both begin at zero; MilestoneTarget reads 500."
             },
             {
-              "title": "Finish the round on the winning click",
-              "where": "Clicker GameMode → AddClick function.",
-              "do": "Add Branch on NOT GameWon at the start. Only True continues to the existing Score + ClickPower logic. After Set Score add a comparison Score >= TargetScore → Branch. When True set GameWon = true.",
-              "why": "The win happens at a predictable score and repeated clicks cannot inflate it afterwards.",
-              "check": "When Score reaches or passes 100, GameWon becomes true."
+              "title": "Make a reusable earning function",
+              "where": "Clicker GameMode → Functions → +.",
+              "do": "Create GainPoints with an Integer input Amount. In the function add Branch (Amount > 0). On True set Score = Score + Amount and then set TotalEarned = TotalEarned + Amount. Wire both Set nodes in sequence.",
+              "why": "Manual clicks and later automated Grannies should award points through one shared function.",
+              "check": "A single GainPoints(10) increases both values by 10."
             },
             {
-              "title": "Display a permanent result",
-              "where": "Clicker Widget → Designer.",
-              "do": "Add a Text widget named ResultText, set text \"TARGET REACHED!\", tick Is Variable and set its initial Visibility to Collapsed.",
-              "why": "A persistent message tells the player they have finished.",
-              "check": "The result text does not appear at the start of play."
+              "title": "Check the milestone from earned points",
+              "where": "Clicker GameMode → GainPoints, immediately after Set TotalEarned.",
+              "do": "Add Branch with condition (NOT MilestoneReached) AND (TotalEarned >= MilestoneTarget). On True set MilestoneReached=true; Print String \"500 lifetime points earned!\". Do not reset Score or disable any buttons.",
+              "why": "A milestone celebrates progress without ending a game that can continue growing.",
+              "check": "The banner condition only becomes true once when lifetime earnings reach 500."
             },
             {
-              "title": "Update the win state in the UI",
-              "where": "Clicker Widget → RefreshShop function, after the score/power/cost updates.",
-              "do": "From the GameMode cast, read GameWon and use Branch. When True set ResultText Visibility = Visible and Set Is Enabled = false on the main click button. When False set ResultText Visibility = Collapsed and keep the main click button enabled.",
-              "why": "Players can see the finish state, and the button matches it.",
-              "check": "The result appears as soon as the target is achieved and the main button is disabled."
+              "title": "Replace only the manual earning calculation",
+              "where": "Clicker GameMode → AddClick function from Upgrade 1.",
+              "do": "Remove the old Set Score = Score + ClickPower chain. Instead call GainPoints and feed the existing ClickPower integer into Amount. Keep the original widget button calling AddClick once. Compile.",
+              "why": "The manual click should update both counters but still earn the same amount as before.",
+              "check": "A new game gives Score=1 and TotalEarned=1 after one click."
             },
             {
-              "title": "Create a restart button",
-              "where": "Clicker Widget → Designer and Graph.",
-              "do": "Add a Button named RestartButton with text \"Play Again\". Create its OnClicked event → Get Current Level Name (Remove Prefix String = true) → Open Level (by Name). Wire the returned current level name to Level Name.",
-              "why": "Reloading the current level resets the small tutorial GameMode and widget in one step.",
-              "check": "Click Play Again and see Score = 0, ClickPower = 1, UpgradeCost = 10, GameWon = false."
+              "title": "Keep purchasing connected only to balance",
+              "where": "Clicker GameMode → BuyUpgrade function.",
+              "do": "Confirm the purchase checks Score >= UpgradeCost and reduces Score on success. Do NOT subtract anything from TotalEarned. Leave the existing ClickPower increase and rising UpgradeCost as they are.",
+              "why": "Buying an upgrade should never erase lifetime progress.",
+              "check": "Earn 10, purchase for 10: Score=0 but TotalEarned=10."
             },
             {
-              "title": "Replace the default appearance",
-              "where": "Artist/designer PC → Photoshop or 3ds Max; share exported PNG/FBX via Teams.",
-              "do": "Make an original theme, e.g. bakery, salvage yard or robot factory. Import PNG UI assets, apply them to buttons, and retest readability with the designer.",
-              "why": "A distinctive theme helps a simple clicker become recognisably your game.",
-              "check": "The final widget uses at least one team-made visual asset."
+              "title": "Show lifetime progress and the milestone",
+              "where": "Existing Clicker Widget → Designer.",
+              "do": "Add two Text widgets LifetimeText and MilestoneText and mark both Is Variable. LifetimeText starts \"Lifetime: 0\". MilestoneText starts with \"500 EARNED!\" and Visibility=Collapsed.",
+              "why": "The player should see progress towards the next goal.",
+              "check": "The initial UI has a lifetime label but no achievement banner."
+            },
+            {
+              "title": "Refresh these new HUD values",
+              "where": "Clicker Widget → existing RefreshShop function.",
+              "do": "Read TotalEarned and MilestoneReached from the same GameMode cast used for score/power/cost. Use SetText on LifetimeText after integer-to-text conversion. Branch on MilestoneReached: Visible for MilestoneText when true, Collapsed otherwise. Compile.",
+              "why": "Using RefreshShop keeps the new labels consistent with the current economy.",
+              "check": "After a purchase, Score goes down but Lifetime remains unchanged, and the milestone appears at 500."
+            },
+            {
+              "title": "Prove lifetime earnings are correct",
+              "where": "Play the Clicker game.",
+              "do": "Click ten times, buy the first upgrade, then click five times more. Expected: TotalEarned=20 (10 + five clicks worth two each), and Score=10 after the purchase. Later verify the milestone still appears after 500 total points.",
+              "why": "A numerical test catches double counting and accidental spending of lifetime progress.",
+              "check": "The values match the expected totals and buttons remain clickable after the first milestone."
             }
           ],
-          "check": "From a fresh launch, earning 100 points displays a win state, disables clicking and supports a clean restart.",
-          "fix": "No win message? Check the Score comparison occurs AFTER Set Score, RefreshShop is called after AddClick and ResultText is set to Visible when GameWon is true."
+          "check": "Buying an upgrade reduces spendable Score but never TotalEarned. Reaching 500 earned points shows an achievement without stopping play.",
+          "fix": "Lifetime never changes? Ensure AddClick calls GainPoints, not the original Set Score. A purchase changes TotalEarned? Remove any TotalEarned Set nodes from BuyUpgrade. If the milestone never appears, check RefreshShop reads the Boolean from the correct GameMode."
+        },
+        {
+          "id": "granny",
+          "title": "4. Hire Grannies for automatic income",
+          "tier": "Essential",
+          "outcome": "Buying a Granny costs 15 points; each owned Granny adds one point per second automatically. The next Granny costs more, and the number owned is visible.",
+          "designer": "Design a Granny producer card, icon and Buy Granny button. Make it clear that this earns points per second without clicking.",
+          "steps": [
+            {
+              "title": "Create the Granny economy variables",
+              "where": "Clicker GameMode → My Blueprint → Variables.",
+              "do": "Create GranniesOwned (Integer; default 0), GrannyRate (Integer; default 1) and GrannyCost (Integer; default 15). Compile.",
+              "why": "These three values describe how many producers you own, their production, and the next price.",
+              "check": "Starting values are 0 Grannies, 1 point/second each, and a price of 15."
+            },
+            {
+              "title": "Make the purchase function",
+              "where": "Clicker GameMode → Functions → +.",
+              "do": "Create BuyGranny. Add Branch with condition Score >= GrannyCost. On True, wire Set Score = Score - GrannyCost → Set GranniesOwned = GranniesOwned + 1 → Set GrannyCost = Ceiling(GrannyCost × 1.25). Ceiling converts the float price calculation back to an integer. False does nothing.",
+              "why": "Buying more producers becomes progressively expensive, but can never spend negative points.",
+              "check": "When Score=15, one purchase changes Score to 0, GranniesOwned to 1 and the next GrannyCost to 19."
+            },
+            {
+              "title": "Calculate production per second in one place",
+              "where": "Clicker GameMode → Functions → +.",
+              "do": "Create a PURE function GetProductionPerSecond with one Integer output Production. Get GranniesOwned and GrannyRate, multiply the integers, connect to the Return Node output and compile.",
+              "why": "All automated producers can share one game timer and one production calculation.",
+              "check": "One Granny returns 1; three Grannies return 3; no Grannies returns 0."
+            },
+            {
+              "title": "Create the automatic one-second timer",
+              "where": "Clicker GameMode → Event Graph → Event BeginPlay.",
+              "do": "Connect Event BeginPlay to Set Timer by Event, Time=1.0, Looping=true. Create a Custom Event named ProduceIncome and connect a Create Event reference for it to the timer red Event input. Save the returned Timer Handle if you want to stop it in a later mode.",
+              "why": "The GameMode can automatically award points once per second without pressing the click button or using Event Tick.",
+              "check": "ProduceIncome runs once each second when Play starts."
+            },
+            {
+              "title": "Pay the player every second",
+              "where": "Clicker GameMode → ProduceIncome.",
+              "do": "Call GetProductionPerSecond and feed its Integer result to GainPoints(Amount). GainPoints already ignores zero amounts and updates Score and TotalEarned. Compile.",
+              "why": "This simulates automatic clicks using the same earning rules as manual clicks.",
+              "check": "Buy one Granny, leave the mouse alone for five seconds: both counters rise by about five. Buy a second Granny: they rise by about two each second."
+            },
+            {
+              "title": "Add a Granny shop button and labels",
+              "where": "Clicker Widget → Designer.",
+              "do": "Add a Button named BuyGrannyButton with text \"Buy Granny\". Add Text widgets GranniesText and PassiveIncomeText; tick Is Variable. Placeholder text: \"Grannies: 0\" and \"Auto: 0 / sec\".",
+              "why": "The player must understand what the new upgrade does and how many producers they own.",
+              "check": "A visible button and both labels fit the shop."
+            },
+            {
+              "title": "Connect Granny purchases",
+              "where": "Clicker Widget → Graph → BuyGrannyButton → OnClicked.",
+              "do": "Use Get Game Mode → Cast To the Clicker GameMode → BuyGranny, then call RefreshShop on the widget. Compile.",
+              "why": "The UI requests the purchase while GameMode owns the economy.",
+              "check": "The button buys one Granny only when you have enough points."
+            },
+            {
+              "title": "Show the next price and automatic income",
+              "where": "Clicker Widget → RefreshShop function.",
+              "do": "From the Clicker GameMode cast, read GranniesOwned and GrannyCost. Format the labels into text such as \"Grannies: 2 | Next: 24\" using Format Text. Call GetProductionPerSecond and SetText on PassiveIncomeText using \"Auto: {Production} / sec\".",
+              "why": "Players can see that another Granny increases automatic earnings.",
+              "check": "After each purchase, the count, next cost and points/second are correct."
+            },
+            {
+              "title": "Refresh the display while nobody clicks",
+              "where": "Clicker Widget → Event Construct.",
+              "do": "Keep the existing first RefreshShop call. Add Set Timer by Event, Time=0.25, Looping=true, and connect a Custom Event RefreshAutoHUD to the timer red Event input; RefreshAutoHUD simply calls RefreshShop. Do not duplicate the timer in multiple widget event paths.",
+              "why": "Passive income changes the score even when no button event triggers RefreshShop.",
+              "check": "Hands off the mouse: Score and Lifetime update on screen as the timer pays income."
+            },
+            {
+              "title": "Test increasing purchase costs",
+              "where": "Play the game from a fresh level.",
+              "do": "Earn 15 points and buy one Granny: the next cost should be 19. Earn 19 and buy a second: the next cost should be 24. Let both run for three seconds and confirm approximately six points are generated.",
+              "why": "The production logic and price curve should remain understandable.",
+              "check": "With two Grannies, the passive rate displays 2 per second and continues without clicking."
+            }
+          ],
+          "check": "The first Granny costs 15 and produces 1 point/sec; buying two produces 2/sec, with increasing costs and a live automatic score display.",
+          "fix": "No passive income? Check ProduceIncome is bound to the repeating GameMode timer, and GainPoints is called with a positive amount. Income changes internally but not on screen? Check the widget refresh timer and RefreshShop. Buying creates negative points? Branch must run BEFORE reducing Score."
+        },
+        {
+          "id": "training",
+          "title": "5. Train Grannies to double their output",
+          "tier": "Essential",
+          "outcome": "A 100-point training upgrade doubles production from every owned Granny. Repeated training increases the rate 1→2→4→8 points per second per Granny.",
+          "designer": "Make an upgrade card showing the current Granny rate and the next training cost. Communicate the benefit clearly.",
+          "steps": [
+            {
+              "title": "Add the upgrade price",
+              "where": "Clicker GameMode → Variables.",
+              "do": "Create GrannyTrainingCost (Integer; default 100). Keep existing GrannyRate (Integer; default 1). Compile.",
+              "why": "A single price governs the next training purchase.",
+              "check": "The default rate is 1 and the training price is 100."
+            },
+            {
+              "title": "Make the training purchase function",
+              "where": "Clicker GameMode → Functions → +.",
+              "do": "Create TrainGrannies. Add Branch using (Score >= GrannyTrainingCost) AND (GranniesOwned > 0). From True: Set Score = Score - GrannyTrainingCost → Set GrannyRate = GrannyRate × 2 → Set GrannyTrainingCost = GrannyTrainingCost × 2. False does nothing. Compile.",
+              "why": "The training has a price and only works when at least one Granny exists.",
+              "check": "With one Granny and 100 points, training leaves Score lower by 100, GrannyRate=2 and next cost=200."
+            },
+            {
+              "title": "Add the upgrade button",
+              "where": "Clicker Widget → Designer.",
+              "do": "Add Button TrainGranniesButton with child Text \"Train Grannies\" and a Text widget TrainingInfoText marked Is Variable. Position them next to the Granny purchase controls.",
+              "why": "The player can choose between hiring more producers and making existing ones stronger.",
+              "check": "Both shop options are readable and do not overlap."
+            },
+            {
+              "title": "Connect the upgrade click",
+              "where": "Clicker Widget → TrainGranniesButton → OnClicked.",
+              "do": "Use Get Game Mode → Cast To Clicker GameMode → TrainGrannies → RefreshShop. Compile.",
+              "why": "The button invokes the shared economy rules rather than changing widget-only numbers.",
+              "check": "At enough balance, a press changes GrannyRate and the next training cost exactly once."
+            },
+            {
+              "title": "Make the effect visible",
+              "where": "Clicker Widget → RefreshShop.",
+              "do": "Read GrannyRate and GrannyTrainingCost and use Format Text to show \"Each Granny: {Rate}/sec | Train: {Cost}\". Keep PassiveIncomeText reading GetProductionPerSecond so the total updates automatically.",
+              "why": "Players should immediately see the benefit of the upgrade.",
+              "check": "With 2 Grannies trained once, Auto shows 4/sec; trained twice it shows 8/sec."
+            },
+            {
+              "title": "Check training never affects spending history",
+              "where": "Play the game.",
+              "do": "Earn enough for 2 Grannies and one training. Buy training and watch Auto jump from 2 to 4/sec. Confirm Score decreases by the price but TotalEarned remains unchanged when buying.",
+              "why": "Purchase and production must remain separate bookkeeping operations.",
+              "check": "The income rate doubles while lifetime earnings only increase as new cookies are generated."
+            }
+          ],
+          "check": "Each Granny can be upgraded: two Grannies produce 2/sec initially, then 4/sec, 8/sec and beyond as training is purchased.",
+          "fix": "Rate unchanged? Make sure GetProductionPerSecond multiplies GranniesOwned by GrannyRate and RefreshShop reads that function. If training buys at zero Grannies, add the GranniesOwned > 0 condition to the Branch."
+        },
+        {
+          "id": "farm",
+          "title": "6. Optional: add a second producer type",
+          "tier": "Creative",
+          "outcome": "Players can buy Farms producing 5 points per second each. Granny and Farm income accumulate through the same single production timer.",
+          "designer": "Create an original second producer with distinctive artwork, price and theme. Rebrand Grannies and Farms if your game is about robots, potion shops or a spaceship.",
+          "steps": [
+            {
+              "title": "Add Farm variables",
+              "where": "Clicker GameMode → Variables.",
+              "do": "Create FarmsOwned (Integer; default 0), FarmRate (Integer; default 5) and FarmCost (Integer; default 100). Compile.",
+              "why": "Every producer can be represented by owned, rate and cost; the pattern can be repeated for new ideas.",
+              "check": "The three starting values are 0, 5 and 100."
+            },
+            {
+              "title": "Build the Farm purchase function",
+              "where": "Clicker GameMode → Functions → +.",
+              "do": "Create BuyFarm. Add Branch (Score >= FarmCost). From True: Set Score = Score - FarmCost → Set FarmsOwned = FarmsOwned + 1 → Set FarmCost = Ceiling(FarmCost × 1.30). Compile.",
+              "why": "This uses the same proven purchase structure as BuyGranny, so students can expand independently.",
+              "check": "After buying the first Farm for 100, the next one costs 130."
+            },
+            {
+              "title": "Extend the one income calculation",
+              "where": "Clicker GameMode → GetProductionPerSecond function.",
+              "do": "Keep the original GranniesOwned × GrannyRate calculation. Add FarmsOwned × FarmRate, then add both integer products and connect the sum to the Return Node Production output.",
+              "why": "One timer should award the combined income; do not create a second Set Timer by Event.",
+              "check": "With two normal Grannies and one Farm, the function returns 7 per second."
+            },
+            {
+              "title": "Add Farm to the shop",
+              "where": "Clicker Widget → Designer.",
+              "do": "Add a Farm button named BuyFarmButton and a Text widget FarmInfoText, tick Is Variable. Set the placeholder to \"Farms: 0 | Next: 100\".",
+              "why": "Each producer needs a clear cost and a recognisable visual identity.",
+              "check": "The shop displays both producer types without hiding either."
+            },
+            {
+              "title": "Connect Farm purchases and their UI",
+              "where": "Clicker Widget → Graph.",
+              "do": "BuyFarmButton OnClicked → GameMode BuyFarm → RefreshShop. Extend RefreshShop to read FarmsOwned and FarmCost and SetText on FarmInfoText using Format Text. Leave the existing automatic UI refresh timer untouched.",
+              "why": "The new producer uses the same GameMode and UI update pattern as the first.",
+              "check": "One Farm appears in the shop and 5 extra points/second are added immediately."
+            },
+            {
+              "title": "Test combined income and milestone",
+              "where": "Play the game.",
+              "do": "With 3 Grannies at 2/sec each and 2 Farms at 5/sec each, check Auto is (3×2)+(2×5)=16/sec. Leave the mouse still for five seconds, and confirm the score rises by about 80 (unless you spend).",
+              "why": "Different systems must sum correctly without triggering separate duplicated timers.",
+              "check": "Automatic income and TotalEarned rise by roughly 16 each second; the milestone still works."
+            },
+            {
+              "title": "Plan your own next producer",
+              "where": "With your partner, sketch a third producer in the shared Teams folder.",
+              "do": "Choose a name, starting cost, income rate and artwork. Describe which variables and single GameMode functions you would reuse; only build it if the game is already playable.",
+              "why": "This is the independent creative step: apply a familiar pattern to a new producer.",
+              "check": "You can explain how your third producer would feed into GetProductionPerSecond without a new timer."
+            }
+          ],
+          "check": "Grannies and Farms stack their earnings (for example, 3×2 + 2×5 = 16/sec), prices rise after purchases, and the game still uses one automatic income timer.",
+          "fix": "Income wrong? Check GetProductionPerSecond includes both terms and ProduceIncome calls it once per second. If income doubles unexpectedly, look for a second timer or an old direct Set Score chain."
         }
       ]
     },
     {
       "project": "loops",
       "title": "Loops & Spawning → Target Rush",
-      "intro": "The original tutorial only creates patterns of actors. These upgrades turn the spawned shapes into a game: click every target before time runs out.",
+      "intro": "Turn the original spawned cubes into a wave-based target challenge. Five targets are just the first wave: new waves appear automatically, target counts increase, the overall race is timed and every wave can use random visible positions.",
       "stages": [
         {
           "id": "targets",
@@ -811,64 +1019,205 @@ window.UE5_MINI_UPGRADE_DATA = {
           "fix": "Click does nothing? Confirm the cursor and Enable Click Events are set, target collision blocks the Visibility trace, and World Settings selects the intended GameMode."
         },
         {
-          "id": "race",
-          "title": "2. Add a 30-second challenge and replay",
+          "id": "waves",
+          "title": "2. Automatically spawn harder waves",
           "tier": "Essential",
-          "outcome": "The target-clearing game becomes a 30-second race with a restart key.",
-          "designer": "Design a simple instruction panel with the target count, deadline and R to restart.",
+          "outcome": "Clearing every target creates a fresh wave, growing from 5 to 6 to 7 targets and finishing after five waves.",
+          "designer": "Design a subtle new-wave announcement and keep enough screen space for later waves with 9 targets.",
           "steps": [
             {
-              "title": "Add a countdown value",
-              "where": "Your Loops GameMode → Variables.",
-              "do": "Create SecondsLeft (Integer; default 30). Keep Finished from Upgrade 1. Compile.",
-              "why": "The timer gives the targets a reason to be clicked quickly.",
-              "check": "SecondsLeft begins at 30."
+              "title": "Create the wave state",
+              "where": "Your existing Loops GameMode → Variables.",
+              "do": "Create WaveNumber (Integer; default 1), FinalWave (Integer; default 5), and TargetsHit (Integer; default 0). Keep TargetsLeft and Finished from Upgrade 1. Compile.",
+              "why": "Waves increase difficulty, while TargetsHit tracks the player’s achievements across all of them.",
+              "check": "WaveNumber starts at 1; FinalWave=5; TargetsHit=0."
             },
             {
-              "title": "Start a once-per-second event",
-              "where": "Loops GameMode → Event Graph → Event BeginPlay.",
-              "do": "After the existing spawn loop has been started, add Set Timer by Event, Time = 1.0, Looping = true. Attach a Custom Event TickRush to its red Event pin and promote the returned Timer Handle to RushTimerHandle. Use a Sequence after BeginPlay if needed to start the loop and timer separately.",
-              "why": "A stable one-second callback is easier to understand than Event Tick.",
-              "check": "The event fires once per second during play."
+              "title": "Move the original spawn loop into a function",
+              "where": "Loops GameMode → Functions → +.",
+              "do": "Create a function StartWave. Cut the existing For Loop plus its Spawn Actor chain out of Event BeginPlay and paste them into StartWave. Connect the function entry to the For Loop. From BeginPlay call StartWave ONCE.",
+              "why": "A function lets each later wave reuse the same spawn logic without repeating nodes.",
+              "check": "Play still shows five targets in the first wave."
             },
             {
-              "title": "Time out cleanly",
-              "where": "Loops GameMode → TickRush.",
-              "do": "Branch on NOT Finished. From True set SecondsLeft = Max (Integer)(0, SecondsLeft - 1). If SecondsLeft <= 0, set Finished = true, Print String \"TIME UP!\" and Clear and Invalidate Timer by Handle using RushTimerHandle.",
-              "why": "The countdown must have a definite ending and must not go negative.",
-              "check": "After 30 seconds the number is 0 and target clicks stop working."
+              "title": "Calculate a new target count for each wave",
+              "where": "StartWave function, before the For Loop.",
+              "do": "Create a local Integer CurrentWaveCount and set it to 4 + WaveNumber. Set TargetsLeft = CurrentWaveCount. Then set the For Loop First Index = 0 and Last Index = CurrentWaveCount - 1. Connect execution in this order: Set count → Set TargetsLeft → For Loop.",
+              "why": "A loop from 0 to N-1 spawns exactly N targets; the counter must agree with the number spawned.",
+              "check": "Wave 1 spawns 5, wave 2 spawns 6 and wave 3 spawns 7."
             },
             {
-              "title": "Stop the clock when all targets are cleared",
-              "where": "Loops GameMode → HitTarget function → final True branch.",
-              "do": "After Set Finished = true on the five-target win, add Clear and Invalidate Timer by Handle using RushTimerHandle.",
-              "why": "The time is frozen at the moment the player wins.",
-              "check": "Clearing all five targets before the deadline stops the countdown."
+              "title": "Record every hit",
+              "where": "Loops GameMode → HitTarget function from Upgrade 1.",
+              "do": "After the existing Set TargetsLeft = Max(0, TargetsLeft-1), add Set TargetsHit = TargetsHit + 1. Preserve the original ClickTarget code that destroys an actor only once.",
+              "why": "TargetsHit is a useful score across several waves.",
+              "check": "Click three targets: TargetsLeft falls by 3 and TargetsHit increases by 3."
             },
             {
-              "title": "Add a replay key",
-              "where": "Content Drawer → Loops folder → Input → Input Action.",
-              "do": "Create IA_RestartRush (Boolean) and IMC_TargetRush (Input Mapping Context) mapping the action to R. In BP_LoopsPlayerController BeginPlay, add IMC_TargetRush via Enhanced Input Local Player Subsystem → Add Mapping Context.",
-              "why": "An action asset makes the replay key consistent with the other Unreal projects.",
-              "check": "The context is added on BeginPlay."
+              "title": "Replace the old immediate win",
+              "where": "HitTarget function → final Branch TargetsLeft <= 0.",
+              "do": "Remove the old immediate Set Finished = true and \"ALL TARGETS CLEARED\" path. Instead compare WaveNumber >= FinalWave. If True: Set Finished=true and Print String \"ALL WAVES COMPLETE!\". If False: schedule the next wave in the following steps.",
+              "why": "Reaching zero targets should mean the next wave, not the end of the game, until the final wave.",
+              "check": "The final-wave condition exists and is checked after the last target."
             },
             {
-              "title": "Restart the current level",
-              "where": "BP_LoopsPlayerController → Event Graph.",
-              "do": "Add IA_RestartRush event → Started → Get Current Level Name (Remove Prefix String true) → Open Level (by Name). Compile.",
-              "why": "Reloading the current map respawns targets and resets its GameMode values.",
-              "check": "Press R: five targets and a fresh 30-second clock are ready."
+              "title": "Schedule one new wave",
+              "where": "Loops GameMode → Event Graph.",
+              "do": "Create a Custom Event called AdvanceWave. Wire it to Set WaveNumber = WaveNumber + 1 → StartWave. In HitTarget when TargetsLeft reaches 0 and WaveNumber < FinalWave, use Set Timer by Event (Time=0.75, Looping=false) and connect a Create Event reference to AdvanceWave.",
+              "why": "A short pause gives players feedback before the next set appears and avoids spawning inside the existing target’s click event.",
+              "check": "Clear five targets: after a short pause the next wave appears with six."
             },
             {
-              "title": "Make the target rush yours",
-              "where": "Artist/designer PC → Photoshop, 3ds Max or Substance Painter.",
-              "do": "Make one original target mesh/material or backdrop. Share FBX/PNG through Teams, import it into BP_ClickTarget, and adjust spacing so everything fits the camera. Give the game a title and short on-screen control instructions.",
-              "why": "The prototype now has a visual identity and a fair, readable challenge.",
-              "check": "A partner can understand how to play without explanation."
+              "title": "Prevent duplicate wave scheduling",
+              "where": "In HitTarget function, before the existing decrement.",
+              "do": "Add a Branch with condition (NOT Finished) AND (TargetsLeft > 0). Only the True path may decrement TargetsLeft and test for the wave end. Keep BP_ClickTarget.Destroy Actor after calling HitTarget.",
+              "why": "Extra events should not start more than one replacement wave.",
+              "check": "The final hit schedules only one new wave."
+            },
+            {
+              "title": "Complete a full five-wave test",
+              "where": "Play the Loops level.",
+              "do": "Clear each wave without changing any Blueprint during play. Record the target counts: 5, 6, 7, 8, 9. At the final target in wave 5, the game should set Finished=true and print the win message.",
+              "why": "Testing progression across all waves catches off-by-one loop errors.",
+              "check": "There are 35 targets total across five waves, each counted once, and the final wave finishes the game."
             }
           ],
-          "check": "Players must click all five targets within 30 seconds; R resets the entire challenge.",
-          "fix": "If R does nothing, confirm the Enhanced Input Mapping Context was added to the active controller and the action uses Started. If the clock does not run, confirm the timer is connected after BeginPlay."
+          "check": "Clearing each wave produces the next (5→6→7→8→9 targets), and clearing wave 5 ends the run with 35 recorded hits.",
+          "fix": "Still ends after five clicks? The old Finished=true path is still in HitTarget. Extra waves spawn? Ensure the gate requires TargetsLeft>0 before decrement and Set Timer by Event is not looping. Wrong count? Last Index must be CurrentWaveCount-1."
+        },
+        {
+          "id": "race",
+          "title": "3. Add a 90-second wave race and replay",
+          "tier": "Essential",
+          "outcome": "A 90-second clock, wave number and target counter are visible. The player either clears all five waves or reaches Time Up, then can replay.",
+          "designer": "Design an on-screen wave/timer/targets HUD and a result message for success or timeout.",
+          "steps": [
+            {
+              "title": "Set a realistic overall time",
+              "where": "Loops GameMode → Variables.",
+              "do": "Create SecondsLeft (Integer; default 90). Keep Finished, WaveNumber, TargetsLeft and TargetsHit from the earlier upgrades. Compile.",
+              "why": "Five waves are too much for the earlier 30-second limit; 90 seconds is a better first test value.",
+              "check": "SecondsLeft starts at 90."
+            },
+            {
+              "title": "Run a single countdown timer",
+              "where": "Loops GameMode → Event Graph → Event BeginPlay.",
+              "do": "Keep StartWave running on BeginPlay. Also run Set Timer by Event with Time=1.0, Looping=true and event TickRush (create a Custom Event in the Event Graph, then link via Create Event). Promote the Timer Handle to RushTimerHandle. Use a Sequence if necessary so wave spawning and the timer are both started once.",
+              "why": "The timer measures one whole run, not 30 seconds per wave.",
+              "check": "SecondsLeft drops by one each second during Play."
+            },
+            {
+              "title": "Stop on time out",
+              "where": "Loops GameMode → Custom Event TickRush.",
+              "do": "Branch on NOT Finished. On True set SecondsLeft = Max(0, SecondsLeft-1). If SecondsLeft <= 0, set Finished=true, Print String \"TIME UP!\" and Clear and Invalidate Timer by Handle with RushTimerHandle.",
+              "why": "A definite timeout makes the challenge replayable.",
+              "check": "At 0 seconds the timer stops and no more targets can be scored."
+            },
+            {
+              "title": "Stop the clock on victory",
+              "where": "Loops GameMode → HitTarget → final-wave True path.",
+              "do": "After Set Finished=true, add Clear and Invalidate Timer by Handle with RushTimerHandle. Keep the \"ALL WAVES COMPLETE!\" message.",
+              "why": "Winning early should preserve the remaining time.",
+              "check": "Finishing wave 5 stops SecondsLeft wherever it is."
+            },
+            {
+              "title": "Do not spawn after timeout",
+              "where": "Loops GameMode → AdvanceWave custom event.",
+              "do": "Before incrementing WaveNumber and calling StartWave, add Branch on NOT Finished. Only True may advance.",
+              "why": "A pending 0.75-second wave timer might finish after the overall clock ends.",
+              "check": "At Time Up, no additional wave appears even if the previous wave just ended."
+            },
+            {
+              "title": "Build a simple HUD",
+              "where": "Content Drawer → Loops folder → User Interface → Widget Blueprint → User Widget.",
+              "do": "Create WBP_TargetRushHUD and add three Text widgets WaveText, TargetsText and TimeText. Tick Is Variable. Set clear placeholder labels \"Wave: 1\", \"Targets: 5\", \"Time: 90\".",
+              "why": "Players need to understand the escalating objective at a glance.",
+              "check": "The three labels are visible and legible in the chosen viewport."
+            },
+            {
+              "title": "Connect the HUD values",
+              "where": "WBP_TargetRushHUD → each text element → Details → Text → Bind → Create Binding.",
+              "do": "Read the assigned Loops GameMode using Get Game Mode → Cast. WaveText reads WaveNumber; TargetsText reads TargetsLeft; TimeText reads SecondsLeft. Convert to Text (Integer) or use Format Text with labels. Compile.",
+              "why": "The HUD reads the one GameMode state rather than maintaining duplicate values.",
+              "check": "When wave 2 appears, the display reads Wave 2 and Targets 6."
+            },
+            {
+              "title": "Display a persistent end message",
+              "where": "WBP_TargetRushHUD → Designer.",
+              "do": "Add ResultText with \"GAME OVER\" initially Collapsed and tick Is Variable. Add a function RefreshResult: Get Game Mode → Cast to Loops GameMode → check Finished. When true, show ResultText and choose \"WAVES CLEARED!\" if WaveNumber >= FinalWave AND TargetsLeft == 0; otherwise show \"TIME UP!\". In Event Construct use repeating Set Timer by Event (0.25 sec) to run RefreshResult.",
+              "why": "The game should tell the player whether they won or ran out of time.",
+              "check": "After the run, a visible message stays until replay."
+            },
+            {
+              "title": "Create a replay input",
+              "where": "Content Drawer → Loops → Input folder and BP_LoopsPlayerController.",
+              "do": "Create IA_RestartRush (Boolean) and IMC_TargetRush with an R binding. On the controller BeginPlay add the mapping context via Enhanced Input Local Player Subsystem; use IA_RestartRush Started → Get Current Level Name (Remove Prefix String=true) → Open Level by Name. Compile.",
+              "why": "Reopening the current map returns wave, targets, scores and timer to their defaults.",
+              "check": "Press R at any point: five new targets and a 90-second clock appear."
+            },
+            {
+              "title": "Put the HUD in the controller",
+              "where": "BP_LoopsPlayerController → Event BeginPlay.",
+              "do": "After the existing Show Mouse Cursor / Enable Click Events setup, add Create Widget (WBP_TargetRushHUD, Owning Player=Self) → Add to Viewport. Use Sequence if needed so click events, input mapping and UI creation all run. Compile.",
+              "why": "The controller is already active in the original target game.",
+              "check": "Wave, targets and timer are visible immediately on starting Play."
+            }
+          ],
+          "check": "Waves and targets count correctly, the time drops 90→0, a win or loss result appears, and R starts a fresh five-wave run.",
+          "fix": "Timer or labels missing? Check you use the active Loops GameMode and Controller via World Settings. If the UI remains unchanged after a new wave, confirm each Text binding reads the GameMode variables; refresh end message on a widget timer."
+        },
+        {
+          "id": "random",
+          "title": "4. Optional: randomise target positions safely",
+          "tier": "Creative",
+          "outcome": "Every new wave spawns within a marked, visible area rather than lining targets up at fixed coordinates.",
+          "designer": "Design a level that is readable with targets appearing anywhere inside the playfield. Keep target shapes and colours easy to distinguish.",
+          "steps": [
+            {
+              "title": "Create a visible spawn area actor",
+              "where": "Content Drawer → Loops → Blueprint Class → Actor.",
+              "do": "Name it BP_TargetSpawnArea. Add a Box Collision component named SpawnBounds. Set Collision Presets to NoCollision and initially use box extents X=50, Y=380, Z=220. Compile.",
+              "why": "A level designer can move and resize one box to control random spawn positions.",
+              "check": "The Box Collision component exists and does not block mouse traces."
+            },
+            {
+              "title": "Place the area in the player view",
+              "where": "Open the Loops level.",
+              "do": "Drag one BP_TargetSpawnArea actor into the map. Move and resize the SpawnBounds box so its whole volume sits in the camera view, above the floor and away from the HUD. Save the level.",
+              "why": "Random positions are only useful when targets remain visible and clickable.",
+              "check": "The box fits the available playfield."
+            },
+            {
+              "title": "Get a random point in the area",
+              "where": "Loops GameMode → StartWave function.",
+              "do": "Before the existing Spawn Actor node, use Get Actor of Class (BP_TargetSpawnArea) → Cast To BP_TargetSpawnArea → Get SpawnBounds component. Call Get World Location and Get Scaled Box Extent on SpawnBounds, then feed those values into Random Point in Bounding Box (Origin / Box Extent).",
+              "why": "The box controls location even if the level designer moves it later.",
+              "check": "A random Vector is produced inside the placed box."
+            },
+            {
+              "title": "Use the random location for every target",
+              "where": "Loops GameMode → Spawn Actor From Class inside the existing For Loop.",
+              "do": "Replace the old Loop Index × Spacing vector feeding Make Transform.Location with the Random Point in Bounding Box result. Keep the For Loop number of iterations unchanged. Set Spawn Collision Handling Override to Always Spawn, Ignore Collisions for the controlled test arena.",
+              "why": "The loop still controls quantity; only the placement strategy changes.",
+              "check": "Wave 1 still makes five targets, but they appear in different places on each restart."
+            },
+            {
+              "title": "Check clickability and overlapping",
+              "where": "Play In Editor.",
+              "do": "Restart with R at least three times. Confirm that every target is visible and clickable. If targets overlap too often, increase box dimensions or reduce target scale. Keep SpawnBounds non-colliding.",
+              "why": "Randomness needs quality checks or it can create unfair layouts.",
+              "check": "No target is hidden behind the HUD or unreachable."
+            },
+            {
+              "title": "Use the system for your own game idea",
+              "where": "Artist/designer PC and shared Teams folder.",
+              "do": "Replace the cube with your own target asset or design a new themed playfield. Adjust the area and target size together so difficulty remains fair.",
+              "why": "A reusable wave and random-spawn system can support whack-a-mole, defence, shooting galleries or collection games.",
+              "check": "Your pair can demonstrate a recognisably original game built from the same core mechanic."
+            }
+          ],
+          "check": "Wave target counts remain 5→9, but each wave spawns targets at varied clickable positions inside a designer-controlled zone.",
+          "fix": "No targets? Confirm a BP_TargetSpawnArea is placed and the Get Actor of Class cast succeeds. Overlap hides targets? Expand SpawnBounds, scale down targets or keep fixed positions for the required version."
         }
       ]
     }
