@@ -182,6 +182,10 @@ function audit(root = path.resolve(__dirname, '..')) {
   const balloonTimer=guideText('balloon-popper','timer');
   const balloonResults=guideText('balloon-popper','results');
   const balloonDanger=guideText('balloon-popper','risk');
+  const balloonPath=items(upgrade.projects).find(x=>x.project==='balloon-popper');
+  if(balloonPath?.minimumStage!=='results' || !String(balloonPath.minimumOutcome||'').includes('Play Again'))
+    fail('Balloon minimum playable','must include a final score and replay, not just a one-shot timer');
+
   if(!balloonScore.includes('PopScale')||!balloonScore.includes('BP_BalloonGameMode'))
     fail('Balloon scoring','must retain original pop branch and shared GameMode');
   if(!balloonRespawn.includes('Balloon Popper Level')||!balloonRespawn.includes('SpawnArea')||!balloonRespawn.includes('Random Point in Bounding Box'))
@@ -194,6 +198,11 @@ function audit(root = path.resolve(__dirname, '..')) {
     fail('Balloon HUD','must preserve labels and allow world click and replay button input');
   if(!balloonResults.includes('RefreshRoundScreen')||!balloonResults.includes('ReplayButton')||!balloonResults.includes('Get Current Level Name'))
     fail('Balloon results','requires a visible final score and working map replay');
+  if(!balloonDanger.includes('Select') || !balloonDanger.includes('ONE Spawn Actor From Class') ||
+     !balloonDanger.includes('RESTORE the threshold to 0.2'))
+    fail('Balloon danger','use one pure Select Boolean to choose a class and restore the 20% chance after tests');
+  if(balloonDanger.includes('SelectedBalloonClass'))
+    fail('Balloon danger','do not reintroduce complex shared-class variable/branch merging');
   if(!balloonDanger.includes('M_Balloon is already red')&&!balloonDanger.includes('original M_Balloon is already red'))
     fail('Balloon danger','must distinguish new danger balloon from original red material');
   const bowlPower=guideText('bowling','power');
