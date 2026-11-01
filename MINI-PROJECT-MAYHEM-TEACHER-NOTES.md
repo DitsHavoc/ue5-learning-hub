@@ -83,3 +83,13 @@ Only the follow-on Bowling upgrade guide has changed. The original five illustra
 - The optional shot-power upgrade still uses the ORIGINAL Bowl Add Force(X=200000) on Model with Accel Change ticked, and uses Q/E inside BowlingInputs.
 
 Browser and content validation verify the website routes and instruction structure. They do not physically compile or playtest the Blueprint instructions in UE5.8.
+
+## Individual Balloon Popper student review (v3.66.4)
+Only the Balloon Popper **upgrade** guide changed. Original five illustrated Balloon Popper stages, assets, routes and saved progress remain untouched.
+
+- Start in the exact original folder **Content/Balloon Popper** and map **Balloon Popper Level**, with the original BP_Balloon PopScale growth logic. Call BP_BalloonGameMode.AwardPoints(+1) only when the original pop Branch is True and BEFORE Destroy Actor.
+- Make one BP_BalloonSpawner with an unrotated, non-colliding SpawnArea box. Its function uses Random Point in Bounding Box (Center + Half Size) to Spawn Actor from Class. Place exactly ONE spawner in the map, prove five new balloons appear, THEN delete the original hand-placed balloons. Each pop requests one replacement before destroying itself.
+- In BP_BalloonGameMode use a single 1-second countdown timer, RoundEnded gate for AwardPoints, and block future BP_Balloon.On Actor Clicked actions when the timer reaches zero. WBP_BalloonHUD uses Score and Time bindings with **Format Text** labels, root Canvas **Not Hit-Testable (Self Only)** and a BP_BalloonPlayerController using **Game and UI** input so ordinary balloons and later ReplayButton remain clickable.
+- For the results, reuse the one WBP_BalloonHUD, use a single 0.25-second widget timer calling RefreshRoundScreen, show a final Score and button that reopens the CURRENT level. Temporarily set SecondsLeft=5 for tests, then restore 60.
+- The original M_Balloon is already **red**, so the optional M_DangerBalloon must be a distinct **purple/blue** (prefer a warning symbol/texture too); its mesh is named **BalloonModel**. Danger AwardPoints(-2) uses the same clamp and single replacement path as normal balloons.
+- Browser/content checks validate instructional structure and routes, **not** physical Blueprint compilation in UE5.8.
