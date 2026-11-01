@@ -23,7 +23,7 @@ The original Mini-Projects are foundations, not finished games. Do **not** requi
 - **Balloon Popper:** score → random five-target respawning → 60-second timer/HUD → final score and Play Again → optional random danger targets.
 - **Bowling:** pin-scoring → root mesh and ball reset between three throws, preserving fallen pins and score → live HUD/bonus pin → optional Q/E power control. The earlier 45-second limit has been removed from the main bowling route.
 - **Clicker:** manual shop → live balance → Granny automation → Granny training → optional lifetime milestone and Farms. Use **one** GameMode production timer and keep spendable balance separate from lifetime earnings.
-- **Loops & Spawning:** five clickable targets → waves of 5, 6, 7, 8, 9 targets → overall 90-second race/HUD/replay → optional random spawn volume.
+- **Loops & Spawning:** five clickable targets → waves of 5, 6, 7, 8, 9 targets → overall 90-second race/HUD/replay → optional safe random offsets in each grid cell.
 
 Each new upgrade stage contains precise Blueprint nodes/actions, a designer task, a concrete test and troubleshooting. The text guides do **not** replace or edit the original illustrated source tutorials.
 
@@ -93,3 +93,13 @@ Only the Balloon Popper **upgrade** guide changed. Original five illustrated Bal
 - For the results, reuse the one WBP_BalloonHUD, use a single 0.25-second widget timer calling RefreshRoundScreen, show a final Score and button that reopens the CURRENT level. Temporarily set SecondsLeft=5 for tests, then restore 60.
 - The original M_Balloon is already **red**, so the optional M_DangerBalloon must be a distinct **purple/blue** (prefer a warning symbol/texture too); its mesh is named **BalloonModel**. Danger AwardPoints(-2) uses the same clamp and single replacement path as normal balloons.
 - Browser/content checks validate instructional structure and routes, **not** physical Blueprint compilation in UE5.8.
+
+## Individual Loops & Spawning student review (v3.66.5)
+This final individual walkthrough changes only the upgrade routes. The original three illustrated Loops tutorials, `BP_Box` source, screenshots, and progress IDs remain untouched.
+
+- **Stage 1:** The original `BP_Box` tower is physics-enabled. Keep it unchanged, make a separate stationary `BP_ClickTarget` with Simulate Physics **unchecked**, use the existing `BP_LoopsGameMode` `For Loop` but swap Spawn Actor Class, then add mouse events, `BP_LoopsPlayerController`, and a placed `Cam_TargetRush`. In this first step `TargetsLeft` is the remaining-target counter; `TargetsHit` comes next.
+- **Stage 2:** Copy the original working spawn graph into `StartWave` before disconnecting old BeginPlay. Use local `CurrentWaveCount=4+WaveNumber`; `For Loop` lasts `CurrentWaveCount-1`, so waves have 5/6/7/8/9 targets. Grid maths: Column=(Index%3)-1, Row=Integer Divide(Index,3), X=200, Y=Column*180, Z=150+Row*130. For a temporary nine-target camera check, set `WaveNumber=5` then **restore 1**. Replace the stage-1 immediate-win path with `FinalWave` decision. The `HitTarget` function calls `ScheduleNextWave`, a Custom Event in GameMode Event Graph which uses one `Set Timer by Event` Time 0.75, Looping **false**, bound to `AdvanceWave`.
+- **Stage 3:** One full-run `TickRush` countdown timer (90 seconds), not one timer per wave. `AdvanceWave` must guard `NOT Finished` to avoid spawning after timeout. `WBP_TargetRushHUD` displays four formatted, labelled values: Wave, Targets, Time and Hits, without intercepting 3D clicks; one widget result-refresh event distinguishes win and timeout. In the same original Player Controller, enable `IMC_TargetRush`, map R to reload the current level, and preserve the fixed camera. Briefly test a 5-second failure, then **restore 90** and clear all 35 targets to prove a successful run.
+- **Stage 4 (optional):** New players no longer need to invent a second unrestricted spawn-area Actor. Keep one target per existing grid cell; use small independent `Random Float in Range` offsets in Y (±20) and Z (±10). That adds replay variety without overlapping 100cm default cubes. If art targets grow larger, retune spacing and reframe the camera.
+
+The three original Loops tutorials and images were NOT edited. Website CI verifies content, routes and interaction, not Unreal Editor Blueprint graph compilation or gameplay physics.
