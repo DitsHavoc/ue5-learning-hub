@@ -1,4 +1,4 @@
-/* More student-friendly text-only upgrade walkthroughs; original 16 Mini-Project lessons unchanged. */
+/* Student-tested reading flow and exact starter names; original source Mini-Projects unchanged. */
 window.UE5_MINI_UPGRADE_DATA = {
   "version": "3.66.0",
   "title": "Mini-Project Upgrade Walkthroughs",
@@ -118,12 +118,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "where": "BP_BalloonSpawner → Event Graph → Event BeginPlay.",
               "do": "Add a For Loop with First Index 0 and Last Index 4. Connect Loop Body to SpawnOneBalloon. Five iterations create five targets; the loop Completed output needs no further node. Compile.",
               "why": "The player starts with a small, predictable number of targets.",
-              "check": "One press of Play shows five newly created balloons."
+              "check": "Drag one BP_BalloonSpawner into BalloonPopperLevel and press Play: five NEW balloons should appear. Leave the manually placed ones until this works, then remove the old placed balloons in the next step."
             },
             {
               "title": "Put the spawn box where the camera can see it",
               "where": "Open BalloonPopperLevel.",
-              "do": "Delete the old manually placed BP_Balloon target actors (leave the camera, lighting and other scenery). Place one BP_BalloonSpawner in the level, move it into the camera view and scale its SpawnArea box to suit your framing. Set SpawnArea Collision Presets to NoCollision so the box never blocks click traces.",
+              "do": "Only after the previous step successfully spawned five new balloons, delete the OLD manually placed BP_Balloon actors (keep the new BP_BalloonSpawner, camera, lighting and scenery). Move and resize SpawnArea to fit the camera. Set SpawnArea Collision Presets to NoCollision so the box cannot block click traces.",
               "why": "Only the spawner should create the balloons now; otherwise you would have extras.",
               "check": "Play shows five visible, clickable balloons inside the intended screen area."
             },
@@ -547,7 +547,7 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Count throws in the Player Controller",
               "where": "BP_BowlingPlayerController → Variables.",
-              "do": "Create ThrowsUsed (Integer; default 0), MaxThrows (Integer; default 3) and IsBallInMotion (Boolean; default false). Compile.",
+              "do": "Create ThrowsUsed (Integer; default 0), MaxThrows (Integer; default 3) and IsBallInMotion (Boolean; default false). Compile. Keep the existing BP_BowlingBall reference from the original IA_Bowl/IA_Move tutorial; do not add a new ball reference.",
               "why": "The controller owns the player input and knows when another throw is allowed.",
               "check": "All three variables start with 0, 3 and false."
             },
@@ -560,7 +560,7 @@ window.UE5_MINI_UPGRADE_DATA = {
             },
             {
               "title": "Check the round is still active",
-              "where": "BP_BowlingPlayerController → existing IA_Bowl or IA_Throw input (Started pin; use your original tutorial name).",
+              "where": "BP_BowlingPlayerController → existing IA_Bowl input (Started pin; use your original tutorial name).",
               "do": "Use Get Game Mode → Cast To BP_BowlingGameMode → Get RoundFinished → NOT. Also Get IsBallInMotion and apply NOT.",
               "why": "The controller must avoid another throw during a roll or after the game ends.",
               "check": "You have two Boolean values, each true when another throw is allowed."
@@ -568,20 +568,20 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Check there is at least one throw left",
               "where": "Same Player Controller → throw input.",
-              "do": "Compare ThrowsUsed < MaxThrows. Combine this with the two NOT values using AND (Boolean); connect to a Branch Condition. Wire only True into your existing BP_BowlingBall.Throw event.",
+              "do": "Compare ThrowsUsed < MaxThrows. Combine this with the two NOT values using AND (Boolean); connect to a Branch Condition. Wire only True into your existing BP_BowlingBall.Bowl event.",
               "why": "Every valid Space press must use one remaining throw, not start several balls at once.",
-              "check": "Only the first input while idle reaches the old Throw event."
+              "check": "Only the first input while idle reaches the old Bowl event."
             },
             {
               "title": "Track a successful throw",
               "where": "BP_BowlingPlayerController → True branch of the new throw gate.",
-              "do": "Immediately before the existing ball throw call, set ThrowsUsed = ThrowsUsed + 1 and IsBallInMotion = true. Then call the original throw event exactly once. Compile.",
+              "do": "Immediately before the existing ball throw call, set ThrowsUsed = ThrowsUsed + 1 and IsBallInMotion = true. Then call the original Bowl event exactly once. Compile.",
               "why": "Each valid throw consumes one attempt, regardless of whether it hits any pins.",
               "check": "After the first Space press, ThrowsUsed is 1 and IsBallInMotion is true."
             },
             {
               "title": "Allow time for physics to settle",
-              "where": "BP_BowlingPlayerController → after the successful throw event.",
+              "where": "BP_BowlingPlayerController → after the successful Bowl event.",
               "do": "Add Delay (Duration 4.0) → call a new Custom Event FinishThrow in the same controller. On FinishThrow set IsBallInMotion=false. Use Delay from the controller Event Graph, not inside a Blueprint Function.",
               "why": "Pin collisions should be allowed to settle before the ball is reset or the round is scored.",
               "check": "Four seconds after throwing, the controller becomes ready for the next decision."
@@ -589,7 +589,7 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Reset for another shot when available",
               "where": "BP_BowlingPlayerController → FinishThrow, after IsBallInMotion=false.",
-              "do": "Get Game Mode → Cast To BP_BowlingGameMode → Branch (NOT RoundFinished AND ThrowsUsed < MaxThrows). On True call ResetBall on the same saved BP_BowlingBall reference used for the existing Throw action. Do NOT reset any pin actors.",
+              "do": "Get Game Mode → Cast To BP_BowlingGameMode → Branch (NOT RoundFinished AND ThrowsUsed < MaxThrows). On True call ResetBall on the same saved BP_BowlingBall reference used for the existing Bowl action. Do NOT reset any pin actors.",
               "why": "You keep the first throw’s successful knockdowns and try to finish the remaining pins.",
               "check": "After the first two throws, the ball returns to the start and fallen pins stay down."
             },
@@ -705,9 +705,9 @@ window.UE5_MINI_UPGRADE_DATA = {
           "steps": [
             {
               "title": "Make the working throw strength configurable",
-              "where": "BP_BowlingBall → Event Graph → existing custom Throw event.",
-              "do": "On the custom Throw event, add a Float input named Strength. Replace the current fixed strength or impulse-magnitude value with the Strength input, retaining the original direction calculation. Note the value that used to work before making the change.",
-              "why": "Power belongs to the throw event rather than multiple duplicated throw Blueprints.",
+              "where": "BP_BowlingBall → Event Graph → existing custom Bowl event.",
+              "do": "On the custom Bowl event, add a Float input named Strength. Replace the current fixed strength or impulse-magnitude value with the Strength input, retaining the original direction calculation. Note the value that used to work before making the change.",
+              "why": "Power belongs to the Bowl event rather than multiple duplicated throw Blueprints.",
               "check": "Throw compiles and expects a Float Strength input."
             },
             {
@@ -733,8 +733,8 @@ window.UE5_MINI_UPGRADE_DATA = {
             },
             {
               "title": "Pass the chosen strength into Throw",
-              "where": "BP_BowlingPlayerController → existing gated IA_Throw chain from Upgrade 2.",
-              "do": "Multiply BaseThrowPower × PowerMultiplier and connect the result to the new Strength pin on the existing BP_BowlingBall Throw call. Do not create a second Throw call. Compile.",
+              "where": "BP_BowlingPlayerController → existing gated IA_Bowl chain from Upgrade 2.",
+              "do": "Multiply BaseThrowPower × PowerMultiplier and connect the result to the new Strength pin on the existing BP_BowlingBall Bowl call. Do not create a second Bowl call. Compile.",
               "why": "The power setting must use the same limited-throws counter.",
               "check": "Low power and high power produce visibly different travel distances."
             },
@@ -776,14 +776,14 @@ window.UE5_MINI_UPGRADE_DATA = {
           "steps": [
             {
               "title": "Add two shop variables",
-              "where": "Open the Clicker project → your existing Clicker GameMode Blueprint → Variables.",
+              "where": "Open the Clicker project → BP_ClickerGameMode Blueprint → Variables.",
               "do": "Create ClickPower (Integer; default 1) and UpgradeCost (Integer; default 10). Keep the existing Score variable from the tutorial. Compile.",
               "why": "The existing Score remains the only balance; upgrades alter how quickly it grows.",
               "check": "The GameMode now contains Score, ClickPower and UpgradeCost."
             },
             {
               "title": "Create AddClick in the existing GameMode",
-              "where": "Open your original Clicker GameMode → Functions → +.",
+              "where": "Open your original BP_ClickerGameMode → Functions → +.",
               "do": "Name the function AddClick. Drag Score as Get and ClickPower as Get, add them with Integer + Integer, and set Score to the result. Connect the AddClick function entry white execution to Set Score. Compile.",
               "why": "We are changing one existing score, not creating a second one.",
               "check": "Calling AddClick once changes Score by ClickPower."
@@ -791,13 +791,13 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Replace the old +1 event",
               "where": "Open your existing Clicker Widget Blueprint → the main button OnClicked event.",
-              "do": "Find the original chain that increments the GameMode Score by 1. Replace that increment with Get Game Mode → Cast To your Clicker GameMode → AddClick. Remove or disconnect the old +1 chain.",
+              "do": "Find the original chain that increments the GameMode Score by 1. Replace that increment with Get Game Mode → Cast To BP_ClickerGameMode → AddClick. Remove or disconnect the old +1 chain.",
               "why": "The new function must be the ONLY place a click changes the score.",
               "check": "Ten clicks give exactly 10 points before buying upgrades, not 20."
             },
             {
               "title": "Create a BuyUpgrade function",
-              "where": "Clicker GameMode → Functions → + → name it BuyUpgrade.",
+              "where": "BP_ClickerGameMode → Functions → + → name it BuyUpgrade.",
               "do": "Add Branch with condition Score >= UpgradeCost. From True set Score = Score - UpgradeCost, then ClickPower = ClickPower + 1, then UpgradeCost = UpgradeCost * 2. Connect the white execution wire through all three Set nodes in that order. False does nothing.",
               "why": "Buying requires enough points and raises the price for the next upgrade.",
               "check": "At Score = 10, the first upgrade should leave Score = 0, ClickPower = 2 and UpgradeCost = 20."
@@ -812,7 +812,7 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Connect the purchase button",
               "where": "Clicker Widget → Graph.",
-              "do": "Select BuyUpgradeButton in the Designer, then in Details → Events click + beside OnClicked. Connect the new event to Get Game Mode → Cast To your Clicker GameMode → BuyUpgrade. Compile.",
+              "do": "Select BuyUpgradeButton in the Designer, then in Details → Events click + beside OnClicked. Connect the new event to Get Game Mode → Cast To BP_ClickerGameMode → BuyUpgrade. Compile.",
               "why": "The purchase remains in GameMode, not as separate widget-only money.",
               "check": "Earn 10, buy once, and the next click awards 2."
             },
@@ -853,7 +853,7 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Create a RefreshShop function",
               "where": "Clicker Widget → Graph → Functions → +.",
-              "do": "Name the new function RefreshShop. Add Get Game Mode → Cast To your Clicker GameMode. Read Score, ClickPower and UpgradeCost. Convert each Integer with ToText (Integer) or Format Text, then call SetText on the corresponding Text widgets. Wire the white execution pins so all three SetText calls run.",
+              "do": "Name the new function RefreshShop. Add Get Game Mode → Cast To BP_ClickerGameMode. Read Score, ClickPower and UpgradeCost. Convert each Integer with ToText (Integer) or Format Text, then call SetText on the corresponding Text widgets. Wire the white execution pins so all three SetText calls run.",
               "why": "A single refresh function updates related UI together.",
               "check": "RefreshShop compiles and references the three correct Text widgets."
             },
@@ -907,21 +907,21 @@ window.UE5_MINI_UPGRADE_DATA = {
           "steps": [
             {
               "title": "Create the Granny economy variables",
-              "where": "Clicker GameMode → My Blueprint → Variables.",
+              "where": "BP_ClickerGameMode → My Blueprint → Variables.",
               "do": "Create GranniesOwned (Integer; default 0), GrannyRate (Integer; default 1) and GrannyCost (Integer; default 15). Compile.",
               "why": "These three values describe how many producers you own, their production, and the next price.",
               "check": "Starting values are 0 Grannies, 1 point/second each, and a price of 15."
             },
             {
               "title": "Create a separate lifetime earnings counter",
-              "where": "Clicker GameMode → My Blueprint → Variables.",
+              "where": "BP_ClickerGameMode → My Blueprint → Variables.",
               "do": "Keep Score as your spendable points balance. Create TotalEarned (Integer; default 0), then Compile. Do not deduct from TotalEarned when buying anything.",
               "why": "Manual and passive production should both earn points, while only Score is spent.",
               "check": "The GameMode has Score and TotalEarned, each initially zero."
             },
             {
               "title": "Make GainPoints take an amount",
-              "where": "Clicker GameMode → My Blueprint → Functions → +.",
+              "where": "BP_ClickerGameMode → My Blueprint → Functions → +.",
               "do": "Create GainPoints. Select its purple entry node, then Details → Inputs → +, add Amount (Integer). Compile.",
               "why": "Both manual clicking and the timed Granny income should use the same function.",
               "check": "GainPoints has a green Amount integer input."
@@ -942,45 +942,45 @@ window.UE5_MINI_UPGRADE_DATA = {
             },
             {
               "title": "Send manual clicking through GainPoints",
-              "where": "Clicker GameMode → existing AddClick function from Upgrade 1.",
+              "where": "BP_ClickerGameMode → existing AddClick function from Upgrade 1.",
               "do": "Remove or disconnect Set Score = Score + ClickPower. Instead call GainPoints(Amount=ClickPower). Keep the widget main button calling AddClick once, and keep BuyUpgrade spending Score only.",
               "why": "Every manually earned point now increases lifetime earnings without duplicating clicks.",
               "check": "One click at ClickPower=2 changes both Score and TotalEarned by exactly 2."
             },
             {
               "title": "Make the purchase function",
-              "where": "Clicker GameMode → Functions → +.",
+              "where": "BP_ClickerGameMode → Functions → +.",
               "do": "Create BuyGranny. Add Branch with condition Score >= GrannyCost. On True, wire Set Score = Score - GrannyCost → Set GranniesOwned = GranniesOwned + 1 → Set GrannyCost = Ceiling(GrannyCost × 1.25). Ceiling converts the float price calculation back to an integer. False does nothing.",
               "why": "Buying more producers becomes progressively expensive, but can never spend negative points.",
               "check": "When Score=15, one purchase changes Score to 0, GranniesOwned to 1 and the next GrannyCost to 19."
             },
             {
               "title": "Calculate production per second in one place",
-              "where": "Clicker GameMode → Functions → +.",
+              "where": "BP_ClickerGameMode → Functions → +.",
               "do": "Create a PURE function GetProductionPerSecond with one Integer output Production. Get GranniesOwned and GrannyRate, multiply the integers, connect to the Return Node output and compile.",
               "why": "All automated producers can share one game timer and one production calculation.",
               "check": "One Granny returns 1; three Grannies return 3; no Grannies returns 0."
             },
             {
               "title": "Add the callback but keep the original widget",
-              "where": "Clicker GameMode → Event Graph in empty space.",
+              "where": "BP_ClickerGameMode → Event Graph in empty space.",
               "do": "Create a Custom Event called ProduceIncome. Leave your original BeginPlay → Create Widget → Add to Viewport chain untouched. Compile.",
               "why": "The starting interface must still load even when we add passive production.",
               "check": "A Custom Event ProduceIncome exists and the original UI still shows in Play."
             },
             {
               "title": "Start exactly one repeating production timer",
-              "where": "Clicker GameMode → Event BeginPlay.",
+              "where": "BP_ClickerGameMode → Event BeginPlay.",
               "do": "Use Sequence after BeginPlay if needed: Then 0 starts the original widget chain and Then 1 starts Set Timer by Event with Time=1.0 and Looping=true. On the red Event delegate pin select ProduceIncome (or connect a Create Event assigned to ProduceIncome).",
               "why": "One GameMode timer will pay all Grannies; creating one timer per Granny would be harder to manage.",
               "check": "The production timer starts once; do not add another timer to BuyGranny."
             },
             {
               "title": "Pay the player every second",
-              "where": "Clicker GameMode → ProduceIncome.",
+              "where": "BP_ClickerGameMode → ProduceIncome.",
               "do": "Call GetProductionPerSecond and feed its Integer result to GainPoints(Amount). GainPoints already ignores zero amounts and updates Score and TotalEarned. Compile.",
               "why": "This simulates automatic clicks using the same earning rules as manual clicks.",
-              "check": "Buy one Granny, leave the mouse alone for five seconds: both counters rise by about five. Buy a second Granny: they rise by about two each second."
+              "check": "Before building the Granny shop UI, temporarily use Print String after GainPoints to show Score. Confirm the number rises once each second with one Granny, then remove the debug print."
             },
             {
               "title": "Add a Granny shop button and labels",
@@ -992,14 +992,14 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Connect Granny purchases",
               "where": "Clicker Widget → Graph → BuyGrannyButton → OnClicked.",
-              "do": "Use Get Game Mode → Cast To the Clicker GameMode → BuyGranny, then call RefreshShop on the widget. Compile.",
+              "do": "Use Get Game Mode → Cast To the BP_ClickerGameMode → BuyGranny, then call RefreshShop on the widget. Compile.",
               "why": "The UI requests the purchase while GameMode owns the economy.",
               "check": "The button buys one Granny only when you have enough points."
             },
             {
               "title": "Show the next price and automatic income",
               "where": "Clicker Widget → RefreshShop function.",
-              "do": "From the Clicker GameMode cast, read GranniesOwned and GrannyCost. Format the labels into text such as \"Grannies: 2 | Next: 24\" using Format Text. Call GetProductionPerSecond and SetText on PassiveIncomeText using \"Auto: {Production} / sec\". Read TotalEarned from GameMode and update LifetimeText with Format Text (\"Lifetime: {Earned}\").",
+              "do": "From the BP_ClickerGameMode cast, read GranniesOwned and GrannyCost. Format the labels into text such as \"Grannies: 2 | Next: 24\" using Format Text. Call GetProductionPerSecond and SetText on PassiveIncomeText using \"Auto: {Production} / sec\". Read TotalEarned from GameMode and update LifetimeText with Format Text (\"Lifetime: {Earned}\").",
               "why": "Players can see that another Granny increases automatic earnings.",
               "check": "After each purchase, the count, next cost and points/second are correct."
             },
@@ -1039,14 +1039,14 @@ window.UE5_MINI_UPGRADE_DATA = {
           "steps": [
             {
               "title": "Add the upgrade price",
-              "where": "Clicker GameMode → Variables.",
+              "where": "BP_ClickerGameMode → Variables.",
               "do": "Create GrannyTrainingCost (Integer; default 100). Keep existing GrannyRate (Integer; default 1). Compile.",
               "why": "A single price governs the next training purchase.",
               "check": "The default rate is 1 and the training price is 100."
             },
             {
               "title": "Make the training purchase function",
-              "where": "Clicker GameMode → Functions → +.",
+              "where": "BP_ClickerGameMode → Functions → +.",
               "do": "Create TrainGrannies. Add Branch using (Score >= GrannyTrainingCost) AND (GranniesOwned > 0). From True: Set Score = Score - GrannyTrainingCost → Set GrannyRate = GrannyRate × 2 → Set GrannyTrainingCost = GrannyTrainingCost × 2. False does nothing. Compile.",
               "why": "The training has a price and only works when at least one Granny exists.",
               "check": "With one Granny and 100 points, training leaves Score lower by 100, GrannyRate=2 and next cost=200."
@@ -1061,7 +1061,7 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Connect the upgrade click",
               "where": "Clicker Widget → TrainGranniesButton → OnClicked.",
-              "do": "Use Get Game Mode → Cast To Clicker GameMode → TrainGrannies → RefreshShop. Compile.",
+              "do": "Use Get Game Mode → Cast To BP_ClickerGameMode → TrainGrannies → RefreshShop. Compile.",
               "why": "The button invokes the shared economy rules rather than changing widget-only numbers.",
               "check": "At enough balance, a press changes GrannyRate and the next training cost exactly once."
             },
@@ -1101,14 +1101,14 @@ window.UE5_MINI_UPGRADE_DATA = {
           "steps": [
             {
               "title": "Add milestone variables",
-              "where": "Clicker GameMode → Variables.",
+              "where": "BP_ClickerGameMode → Variables.",
               "do": "Create MilestoneTarget (Integer; default 500) and MilestoneReached (Boolean; default false). Keep Score and TotalEarned from the Granny upgrade. Compile.",
               "why": "The game can recognise progress across all purchases and all production.",
               "check": "MilestoneReached is false at the start and the goal is 500."
             },
             {
               "title": "Check the milestone when points are earned",
-              "where": "Clicker GameMode → GainPoints function from the Granny upgrade.",
+              "where": "BP_ClickerGameMode → GainPoints function from the Granny upgrade.",
               "do": "After Set TotalEarned, add a Branch with condition (NOT MilestoneReached) AND (TotalEarned >= MilestoneTarget). On True set MilestoneReached=true and optionally Print String \"500 earned!\". Do not stop the production timer or disable the click button.",
               "why": "Earning points, not spending them, should trigger milestones only once.",
               "check": "When TotalEarned first reaches 500, MilestoneReached turns true and remains true."
@@ -1156,21 +1156,21 @@ window.UE5_MINI_UPGRADE_DATA = {
           "steps": [
             {
               "title": "Add Farm variables",
-              "where": "Clicker GameMode → Variables.",
+              "where": "BP_ClickerGameMode → Variables.",
               "do": "Create FarmsOwned (Integer; default 0), FarmRate (Integer; default 5) and FarmCost (Integer; default 100). Compile.",
               "why": "Every producer can be represented by owned, rate and cost; the pattern can be repeated for new ideas.",
               "check": "The three starting values are 0, 5 and 100."
             },
             {
               "title": "Build the Farm purchase function",
-              "where": "Clicker GameMode → Functions → +.",
+              "where": "BP_ClickerGameMode → Functions → +.",
               "do": "Create BuyFarm. Add Branch (Score >= FarmCost). From True: Set Score = Score - FarmCost → Set FarmsOwned = FarmsOwned + 1 → Set FarmCost = Ceiling(FarmCost × 1.30). Compile.",
               "why": "This uses the same proven purchase structure as BuyGranny, so students can expand independently.",
               "check": "After buying the first Farm for 100, the next one costs 130."
             },
             {
               "title": "Extend the one income calculation",
-              "where": "Clicker GameMode → GetProductionPerSecond function.",
+              "where": "BP_ClickerGameMode → GetProductionPerSecond function.",
               "do": "Keep the original GranniesOwned × GrannyRate calculation. Add FarmsOwned × FarmRate, then add both integer products and connect the sum to the Return Node Production output.",
               "why": "One timer should award the combined income; do not create a second Set Timer by Event.",
               "check": "With two normal Grannies and one Farm, the function returns 7 per second."
@@ -1325,7 +1325,7 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Copy your working spawn loop",
               "where": "Loops GameMode → Event Graph.",
-              "do": "Select the existing For Loop and the connected Spawn Actor / Make Transform nodes. Press Ctrl+C to COPY them (do not cut or delete anything yet).",
+              "do": "Select the existing For Loop and the connected Spawn Actor / Make Transform nodes. Press Ctrl+C to COPY them (do not cut or delete anything yet). If you select only the For Loop without its Spawn Actor / transform nodes, the paste will be incomplete; box-select all connected nodes before Ctrl+C.",
               "why": "Copying preserves the original working version until the new function is tested.",
               "check": "The old BeginPlay spawning still works before you change it."
             },
