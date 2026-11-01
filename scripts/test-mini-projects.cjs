@@ -68,6 +68,55 @@ async function run(){
       if(!page.url().endsWith('#/mini-projects/balloon-popper'))fail.push(device.name+': starter project link broken');
       await page.goto(base+'/#/mini-projects',{waitUntil:'load'});
       await page.waitForSelector('.mini-project-card');
+      // Upgrade routes are text-only and belong to the existing four projects.
+      await page.goto(base+'/#/mini-projects/upgrades',{waitUntil:'load'});
+      await page.waitForSelector('.mini-upgrade-card',{timeout:10000});
+      if(await page.locator('.mini-upgrade-card').count()!==4)fail.push(device.name+': expected four upgrade pathways');
+      const allUpgrades=await page.evaluate(()=>window.UE5_MINI_UPGRADE_DATA.projects.map(p=>({id:p.project,stages:p.stages.map(s=>s.id)})));
+      if(allUpgrades.reduce((n,p)=>n+p.stages.length,0)!==11)fail.push(device.name+': wrong total upgrade stages');
+      for(const group of allUpgrades){
+        await page.goto(base+'/#/mini-projects/'+group.id,{waitUntil:'load'});
+        if(await page.locator('.mini-upgrade-promo a[href="#/mini-projects/upgrades/'+group.id+'"]').count()!==1)fail.push(device.name+': '+group.id+' overview upgrade link missing');
+        await page.locator('.mini-upgrade-promo a').click();
+        if(await page.locator('.mini-upgrade-card').count()!==group.stages.length)fail.push(device.name+': '+group.id+' upgrade cards missing');
+        for(const stageId of group.stages){
+          await page.goto(base+'/#/mini-projects/upgrades/'+group.id+'/'+stageId,{waitUntil:'load'});
+          await page.waitForSelector('.mini-upgrade-step',{timeout:10000});
+          const result=await page.evaluate(()=>({
+            title:document.querySelector('#app h1')?.textContent,
+            steps:document.querySelectorAll('#app .mini-upgrade-step').length,
+            details:document.querySelectorAll('#app .mini-upgrade-step .mini-upgrade-instructions p').length,
+            open:document.querySelector('#app .mini-upgrade-step')?.open,
+            images:document.querySelectorAll('#app .mini-upgrade-stage img').length,
+            hasDesigner:!!document.querySelector('#app .mini-upgrade-designer p'),
+            hasProof:!!document.querySelector('#app .mini-proof details'),
+            hasButton:!!document.querySelector('#app [data-action="mini-upgrade-complete"]'),
+            overflow:document.documentElement.scrollWidth>window.innerWidth+2
+          }));
+          if(!result.title||result.steps<4||result.details!==result.steps*4||!result.open||result.images||!result.hasDesigner||!result.hasProof||!result.hasButton||result.overflow)
+            fail.push(device.name+' '+group.id+'/'+stageId+': incomplete upgrade page '+JSON.stringify(result));
+        }
+      }
+      await page.goto(base+'/#/mini-projects/upgrades/balloon-popper/score',{waitUntil:'load'});
+      await page.locator('[data-action="mini-upgrade-complete"]').click();
+      let upgradeDone=await page.evaluate(()=>JSON.parse(localStorage.getItem('ue5hub:mini-upgrades:v1')||'[]').includes('score'));
+      if(!upgradeDone)fail.push(device.name+': upgrade progress not persisted');
+      let originalDone=await page.evaluate(()=>JSON.parse(localStorage.getItem('ue5hub:mini-projects:v1')||'[]'));
+      if(originalDone.length)fail.push(device.name+': upgrade changed original tutorial progress');
+      await page.reload({waitUntil:'load'});
+      if(!(await page.locator('[data-action="mini-upgrade-complete"]').innerText()).includes('Completed'))fail.push(device.name+': upgrade completion missing after refresh');
+      await page.locator('[data-action="mini-upgrade-complete"]').click();
+      upgradeDone=await page.evaluate(()=>JSON.parse(localStorage.getItem('ue5hub:mini-upgrades:v1')||'[]').includes('score'));
+      if(upgradeDone)fail.push(device.name+': cannot undo upgrade completion');
+      const upgradeSearch=page.locator('#globalSearch');await upgradeSearch.fill('Balloon Popper upgrade');await page.waitForTimeout(100);
+      if(!(await page.locator('#searchPanel a.search-result[href^="#/mini-projects/upgrades/"]').count()))
+        fail.push(device.name+': upgrade walkthroughs missing from global search');
+      await page.goto(base+'/#/mini-projects/jam',{waitUntil:'load'});
+      if(await page.locator('.mini-upgrade-promo a[href="#/mini-projects/upgrades"]').count()!==1)
+        fail.push(device.name+': jam page upgrade link missing');
+      await page.goto(base+'/#/mini-projects',{waitUntil:'load'});
+      if(await page.locator('.mini-upgrade-promo a[href="#/mini-projects/upgrades"]').count()!==1)
+        fail.push(device.name+': Mini-Projects landing upgrade link missing');
       const definitions=await page.evaluate(()=>window.UE5_MINI_PROJECT_DATA.projects.map(p=>({id:p.id,stages:p.stages.map(s=>s.id)})));
       if(definitions.reduce((n,p)=>n+p.stages.length,0)!==16)fail.push(device.name+': expected 16 stages');
       for(const p of definitions){
