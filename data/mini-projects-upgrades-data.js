@@ -1,4 +1,4 @@
-/* Student walkthrough fixes aligned to the original illustrated Unreal 5.8 Mini-Projects. */
+/* Final student-path clarity fixes for the original Unreal 5.8 Mini-Projects. */
 window.UE5_MINI_UPGRADE_DATA = {
   "version": "3.66.1",
   "title": "Mini-Project Upgrade Walkthroughs",
@@ -706,9 +706,16 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Make the working throw strength configurable",
               "where": "BP_BowlingBall → Event Graph → original Bowl Custom Event from Mini-Project Stage 4.",
-              "do": "Select the red Bowl custom event and add a Float input called Strength in Details → Inputs (+). Find the ORIGINAL Add Force node targeting Model. It has Force set to X=200000, Y=0, Z=0 and Accel Change ticked. Replace that constant Force vector with Make Vector: X=Strength, Y=0, Z=0; connect it to Add Force → Force. Keep Accel Change ticked. Compile.",
+              "do": "Select the red Bowl Custom Event and add a Float input named Strength (default 200000) in Details → Inputs. Find the original Add Force node targeting Model, originally Force X=200000, Y=0, Z=0 with Accel Change enabled. Replace its fixed Force vector with Make Vector: X=Strength, Y=0, Z=0. Keep Accel Change ticked. Compile.",
               "why": "The original source tutorial uses Add Force with a Vector, not a separate impulse-magnitude input. Strength changes only the forward X force.",
               "check": "The Bowl event has a Float Strength input and Add Force receives Make Vector(X=Strength,Y=0,Z=0)."
+            },
+            {
+              "title": "Keep the original bowl working while you build the controls",
+              "where": "BP_BowlingPlayerController → Event Graph → original IA_Bowl Started → Bowl call.",
+              "do": "The Bowl call now has a new Strength input pin. Set its pin default to 200000 (the original tutorial value) for now, then Compile and Play once. Do not leave the new Strength input at 0. You will replace this fixed value with the adjustable one later.",
+              "why": "If the new Float input is left at zero, the ball appears broken until you finish the rest of the optional upgrade.",
+              "check": "Press Space once: the ball still moves towards the pins exactly as before adding the Strength input."
             },
             {
               "title": "Store the player’s chosen power",
@@ -747,7 +754,7 @@ window.UE5_MINI_UPGRADE_DATA = {
             }
           ],
           "check": "At least three power settings produce distinguishable throws while throw limits, score and restarts still work.",
-          "fix": "No power difference? Check Bowl.Strength feeds Make Vector.X, which connects to Add Force → Force, and Accel Change remains checked. Make sure IA_Bowl still calls Bowl exactly once.",
+          "fix": "No power difference? Check Bowl.Strength feeds Make Vector.X, which connects to Add Force → Force, and Accel Change remains checked. Make sure IA_Bowl still calls Bowl exactly once. If the ball stops moving immediately after introducing Strength, check that the existing Bowl call sends 200000, not zero.",
           "designerSteps": [
             "Plan: Make a simple power meter with low/high markings, and ask a playtester whether changes are noticeable and fair. Draw a small mock-up of the lane, throw marker and scoreboard.",
             "Create: make one original element for Optional: give players a choice of shot power using scoreboard, lane markings or bonus-pin textures. Export as FBX or PNG to your shared Teams folder.",
