@@ -118,29 +118,11 @@ function audit(root = path.resolve(__dirname, '..')) {
   // The original 16 source stages stay canonical; game-jam extensions belong
   // only to the Mini-Projects branch and have their own local progress.
 
-  // Student-facing artist work starts without a selected game concept and
-  // stays inside the existing Mini-Project Mayhem owning route.
+  // Keep Mini-Project Mayhem as a single teacher-led brief, without a separate designer route.
   const jam=w.UE5_MINI_JAM_DATA||{};
-  const designerTrackSpec=jam.designerTrack||{},jamArtMissions=items(designerTrackSpec.missions),jamArtKits=items(designerTrackSpec.kits);
-  if(jamArtMissions.length!==6||jamArtKits.length!==4||!designerTrackSpec.sharedFolder||!designerTrackSpec.handoverRule||!designerTrackSpec.soloRule)
-    fail('Mayhem Designer Track','needs six practical jamArtMissions, four specific jamArtKits, Teams handover and solo differentiation');
-  if(jamArtMissions[0]?.id!=='observe'||jamArtMissions[1]?.id!=='style-lab'||!jamArtMissions[0]?.independent||!jamArtMissions[1]?.independent)
-    fail('Mayhem Designer Track','first two sessions must be independent of a final game concept');
-  const missionIds=new Set();
-  for(const mission of jamArtMissions){
-    if(missionIds.has(mission.id))fail('Mayhem Designer Track','duplicate mission id '+mission.id);
-    missionIds.add(mission.id);
-    if(!mission.id||!mission.title||!mission.when||!mission.goal||!mission.deliver||!mission.handover||!mission.solo||items(mission.steps).length<4)
-      fail('Designer mission '+mission.id,'missing guided actions, evidence, handover or solo alternative');
-    for(const [i,step] of items(mission.steps).entries())
-      if(!step.title||!step.where||!step.do||!step.check)fail('Designer mission '+mission.id,'action '+(i+1)+' missing where/do/check');
-  }
-  const kitsByProject=new Set(jamArtKits.map(x=>x.project));
-  if(kitsByProject.size!==4||items(mini.projects).some(p=>!kitsByProject.has(p.id)))
-    fail('Mayhem Designer Track','must give one unique kit to every source mini-project');
-  for(const kit of jamArtKits)
-    if(!kit.title||!kit.minimum||!kit.firstAsset||!kit.handover||!kit.stretch||items(kit.tasks).length<4)
-      fail('Designer kit '+kit.project,'needs minimum, safe first export, game-specific actions and integration note');
+  if(jam.designerTrack)fail('Mini-Project Mayhem','standalone Designer Track was retired');
+  if(items(jam.starters).length!==4||items(jam.milestones).length!==4)
+    fail('Mini-Project Mayhem','the four source games and jam milestones must remain');
 
   const upgrade=w.UE5_MINI_UPGRADE_DATA || {projects:[]};
   unique('Mini-Project upgrade pathways',items(upgrade.projects).map(x=>({...x,id:x.project,title:x.title})));
@@ -152,10 +134,9 @@ function audit(root = path.resolve(__dirname, '..')) {
     if(!minimum||minimum.tier!=='Essential'||!p.minimumOutcome)fail('Mini-Project upgrades '+p.project,'needs an Essential minimum playable stage and outcome');
     if(items(p.stages).findIndex(st=>st.id===p.minimumStage)>3)fail('Mini-Project upgrades '+p.project,'minimum playable game comes too late');
     for(const stage of items(p.stages)){
-      if(!stage.title||!stage.outcome||!stage.designer||!stage.check||!stage.fix||!items(stage.steps).length)
+      if(!stage.title||!stage.outcome||!stage.check||!stage.fix||!items(stage.steps).length)
         fail('Upgrade '+stage.id,'needs title, outcome, designer task, test, troubleshooting and guided steps');
       if(items(stage.steps).length<4)fail('Upgrade '+stage.id,'less than four guided actions');
-      if(items(stage.designerSteps).length!==3||!stage.designerCheck)fail('Upgrade '+stage.id,'needs three artist steps and a final check');
       if(!stage.beforeStart||!stage.commonMistake||!stage.studentPromise)fail('Upgrade '+stage.id,'needs a prior-state check and a common-mistake recovery');
       for(const [i,step] of items(stage.steps).entries()){
         if(!step.title||!step.where||!step.do||!step.why||!step.check)
