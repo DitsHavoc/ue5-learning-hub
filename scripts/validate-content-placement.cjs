@@ -115,6 +115,26 @@ function audit(root = path.resolve(__dirname, '..')) {
   for(const key of Object.keys(miniNotes))
     if(!registeredStages.has(key))fail('Mini source notes '+key,'no owning stage');
 
+  // The original 16 source stages stay canonical; game-jam extensions belong
+  // only to the Mini-Projects branch and have their own local progress.
+  const upgrade=w.UE5_MINI_UPGRADE_DATA || {projects:[]};
+  unique('Mini-Project upgrade pathways',items(upgrade.projects).map(x=>({...x,id:x.project,title:x.title})));
+  unique('Mini-Project upgrade stages',items(upgrade.projects).flatMap(x=>items(x.stages)));
+  for(const p of items(upgrade.projects)){
+    reference('Mini-Project upgrade pathway '+p.project,p.project,ids(mini.projects));
+    if(!items(p.stages).length)fail('Mini-Project upgrades '+p.project,'no upgrade stages');
+    for(const stage of items(p.stages)){
+      if(!stage.title||!stage.outcome||!stage.designer||!stage.check||!stage.fix||!items(stage.steps).length)
+        fail('Upgrade '+stage.id,'needs title, outcome, designer task, test, troubleshooting and guided steps');
+      if(items(stage.steps).length<4)fail('Upgrade '+stage.id,'less than four guided actions');
+      for(const [i,step] of items(stage.steps).entries()){
+        if(!step.title||!step.where||!step.do||!step.why||!step.check)
+          fail('Upgrade '+stage.id+' step '+(i+1),'missing where, do, why or check');
+      }
+    }
+  }
+  if(items(upgrade.projects).length!==items(mini.projects).length)fail('Mini-Project upgrades','each original Mini-Project needs one matching upgrade pathway');
+
   for (const x of items(course.lessons)) {
     reference('Core lesson ' + x.id, x.path, subjectPaths);
     if (!items(x.quiz).length) fail('Core lesson ' + x.id, 'no knowledge check');
