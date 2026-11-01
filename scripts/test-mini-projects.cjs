@@ -64,6 +64,36 @@ async function run(){
         text:document.querySelector('#app')?.textContent||''
       }));
       if(jam.hash!=='#/mini-projects/jam'||jam.title!=='Mini-Project Mayhem'||jam.starters!==4||jam.roles!==2||jam.overflow||!jam.text.includes('Friday 13 November'))fail.push(device.name+': jam page incorrect '+JSON.stringify(jam));
+      // Designer has a meaningful independent route before the team's idea exists.
+      const designerLink=page.locator('.mini-designer-entry a[href="#/mini-projects/jam/designer"]');
+      if(await designerLink.count()!==1)fail.push(device.name+': missing designer entry on Mayhem brief');
+      await designerLink.click();
+      await page.waitForSelector('.mini-designer-mission');
+      const designer=await page.evaluate(()=>({
+        hash:location.hash,
+        title:document.querySelector('#app h1')?.textContent,
+        missions:document.querySelectorAll('.mini-designer-mission').length,
+        steps:document.querySelectorAll('.mini-designer-actions li').length,
+        kits:document.querySelectorAll('.mini-designer-kit').length,
+        independentText:document.querySelector('.mini-designer-quick')?.textContent||'',
+        solo:document.querySelector('.mini-designer-handover')?.textContent||'',
+        overflow:document.documentElement.scrollWidth>window.innerWidth+2
+      }));
+      if(designer.hash!=='#/mini-projects/jam/designer'||designer.missions!==6||designer.steps!==24||
+        designer.kits!==4||!designer.independentText.includes('No final')&&!designer.independentText.includes('final theme')||
+        !designer.solo.includes('Solo students')||designer.overflow)
+        fail.push(device.name+': designer track missing content or mobile-safe layout '+JSON.stringify(designer));
+      const namedKits=['balloon-popper','bowling','clicker','loops'];
+      for(const kitId of namedKits){
+        await page.goto(base+'/#/mini-projects/jam/designer/'+kitId,{waitUntil:'load'});
+        const count=await page.locator('.mini-designer-kit').count();
+        if(count!==1||await page.locator('.mini-designer-mission').count()!==6||
+          await page.locator('.mini-designer-kit a[href="#/mini-projects/upgrades/'+kitId+'"]').count()!==1)
+          fail.push(device.name+': focused '+kitId+' designer kit missing');
+        if(await page.evaluate(()=>document.documentElement.scrollWidth>window.innerWidth+2))
+          fail.push(device.name+': focused '+kitId+' designer kit overflows');
+      }
+      await page.goto(base+'/#/mini-projects/jam',{waitUntil:'load'});
       await page.locator('.mini-jam-starter[href="#/mini-projects/balloon-popper"]').click();
       if(!page.url().endsWith('#/mini-projects/balloon-popper'))fail.push(device.name+': starter project link broken');
       await page.goto(base+'/#/mini-projects',{waitUntil:'load'});
@@ -104,6 +134,7 @@ async function run(){
             open:document.querySelector('#app .mini-upgrade-step')?.open,
             images:document.querySelectorAll('#app .mini-upgrade-stage img').length,
             hasDesigner:!!document.querySelector('#app .mini-upgrade-designer p'),
+            designerLink:!!document.querySelector('#app .mini-upgrade-designer a[href^="#/mini-projects/jam/designer/"]'),
             designerSteps:document.querySelectorAll('#app .mini-designer-tasks li').length,
             hasProof:!!document.querySelector('#app .mini-proof details'),
             hasPreflight:!!document.querySelector('#app .mini-upgrade-ready p'),
@@ -111,7 +142,7 @@ async function run(){
             hasButton:!!document.querySelector('#app [data-action="mini-upgrade-complete"]'),
             overflow:document.documentElement.scrollWidth>window.innerWidth+2
           }));
-          if(!result.title||result.steps<4||result.details!==result.steps*4||!result.open||result.images||(!result.hasDesigner||result.designerSteps!==3)||!result.hasPreflight||!result.hasPitfall||!result.hasProof||!result.hasButton||result.overflow)
+          if(!result.title||result.steps<4||result.details!==result.steps*4||!result.open||result.images||(!result.hasDesigner||!result.designerLink||result.designerSteps!==3)||!result.hasPreflight||!result.hasPitfall||!result.hasProof||!result.hasButton||result.overflow)
             fail.push(device.name+' '+group.id+'/'+stageId+': incomplete upgrade page '+JSON.stringify(result));
         }
       }

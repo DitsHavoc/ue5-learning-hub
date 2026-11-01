@@ -21,7 +21,7 @@ const STUDY = window.UE5_STUDY_DATA;
 const BACKEND = window.UE5_BACKEND;
 const SKILL_MISSIONS = window.UE5_SKILL_MISSIONS || {missions:[]};
 const CPP_SKILL_MISSIONS = window.UE5_CPP_SKILL_MISSIONS || {missions:[],planned:[]};
-const HUB_VERSION = '3.66.6';
+const HUB_VERSION = '3.66.7';
 const MINI = window.UE5_MINI_PROJECT_DATA || {projects:[]};
 const MINI_NOTES = window.UE5_MINI_PROJECT_NOTES || {};
 const MINI_UPGRADES = window.UE5_MINI_UPGRADE_DATA || {projects:[]};
@@ -1960,22 +1960,23 @@ function miniJamPage(){
     <header class="mini-header mini-jam-hero">
       <span class="eyebrow">TWO-WEEK GAME JAM • 2–13 NOVEMBER 2026</span>
       <h1>${esc(j.title)}</h1><p>${esc(j.subtitle)}</p>
-      <div class="mini-chips"><span>Pairs</span><span>One programmer + one artist/designer</span><span>Unreal Engine 5</span><span>Friday 13 November showcase</span></div>
+      <div class="mini-chips"><span>Pairs or solo</span><span>Parallel programmer / artist roles</span><span>Unreal Engine 5.8</span><span>Friday 13 November showcase</span></div>
       <a class="button primary" href="#/mini-projects">Explore the four tutorials →</a>
     </header>
     <section class="mini-jam-intro mini-information">
       <span class="eyebrow">THE CHALLENGE</span><h2>Build it. Change it. Make it yours.</h2>
       <p><strong>Start with a tutorial, not a blank project.</strong> Get one of the four Mini-Projects working first. Then turn that mechanic into an original game using new decisions, a new look and at least one gameplay extension.</p>
-      <p><strong>Keep it small:</strong> one playable space, one main mechanic, a clear goal and around 2–5 minutes of gameplay. A finished small game beats an unfinished big idea.</p>
+      <p><strong>Keep it small:</strong> one playable space, one main mechanic, and a short replayable round or repeatable progression loop. The showcase demonstration lasts 2–5 minutes. A finished small game beats an unfinished big idea.</p>
     </section>
+    <section class="mini-information mini-designer-entry"><span class="eyebrow">ARTIST / DESIGNER • START WITHOUT THE FINAL IDEA</span><h2>A full parallel pathway from Lesson 1</h2><p>While the programmer builds the starter, the designer has meaningful work: playtest, compare styles, export reusable assets, then help decide the game. First two sessions do not require a final theme. Solo students follow the lighter version.</p><a class="button primary" href="#/mini-projects/jam/designer">Open the Artist & Designer Track →</a></section>
     <section class="mini-jam-section"><span class="eyebrow">STEP 1 • PICK YOUR FOUNDATION</span><h2>Choose one starting project</h2>
       <div class="mini-jam-starters">${j.starters.map(s=>`<a class="mini-jam-starter" href="${miniHref(s.project)}"><span class="mini-jam-starter-icon" aria-hidden="true">${esc(s.icon)}</span><h3>${esc(s.name)}</h3><p>${esc(s.foundation)}</p><small><strong>Make it yours:</strong> ${esc(s.ideas)}</small><b>Open guided project →</b></a>`).join('')}</div>
     </section>
     <section class="mini-information mini-upgrade-promo"><span class="eyebrow">GOT THE TUTORIAL WORKING?</span><h2>Follow the upgrade walkthroughs</h2><p>Build the missing game loop first: respawning balloons, repeatable bowling throws, automatic Granny income or escalating target waves. Each text-only guide provides exact Blueprint steps, checks and an artist/designer task.</p><a class="button primary" href="#/mini-projects/upgrades">Find your upgrade steps →</a></section>
-    <section class="mini-jam-section"><span class="eyebrow">STEP 2 • WORK AS A TWO-PERSON STUDIO</span><h2>One team, two PCs</h2>
+    <section class="mini-jam-section"><span class="eyebrow">STEP 2 • WORK AS A TWO-PERSON STUDIO</span><h2>Two clear roles — or one scaled-down solo project</h2>
       <div class="mini-jam-roles">
         <div class="mini-information"><h3>Programmer</h3><p>Own the Unreal project. Complete the tutorial, build the gameplay extension, import assets, handle logic and help test the finished game.</p></div>
-        <div class="mini-information"><h3>Artist / designer</h3><p>Own the visual direction. Create 3D models, textures or UI; shape the level and player experience; test whether the game is understandable and fun.</p></div>
+        <div class="mini-information"><h3>Artist / designer</h3><p>Follow the <a href="#/mini-projects/jam/designer">parallel Designer Track</a>: investigate the mechanic first, test two visual directions, make an original asset and lead UI, playtesting and polish. No final concept required in Sessions 1–2.</p></div>
       </div>
       <div class="mini-information mini-jam-workflow"><h3>How you share work</h3><p>Use a shared Teams folder for exported <code>.fbx</code> models, <code>.png</code> textures and UI files, concepts and screenshots. The programmer imports finished assets into Unreal. <strong>Do not edit the same Unreal project on both PCs or run it from a Teams-synchronised folder.</strong> Save a project backup after each session.</p><p>Start each lesson with a quick conversation: What works? What is needed? What will each of you complete today?</p></div>
     </section>
@@ -1987,6 +1988,57 @@ function miniJamPage(){
       <div class="mini-information mini-jam-awards"><h3>Game Jam Awards</h3><div class="mini-chips">${j.awards.map(a=>`<span>${esc(a)}</span>`).join('')}</div><p>Play each other’s games, give useful feedback and celebrate the best ideas.</p></div>
     </section>
     <nav class="mini-stage-bottom" aria-label="Continue learning"><a class="button ghost" href="#/mini-projects">← Back to Mini-Projects</a><a class="button primary" href="#/mini-projects">Choose your starting project →</a></nav>
+  </div>`;
+}
+
+function miniJamDesignerPage(projectId){
+  const j=window.UE5_MINI_JAM_DATA,track=j?.designerTrack;
+  if(!track)return notFound();
+  const chosen=projectId?track.kits.find(k=>k.project===projectId):null;
+  if(projectId&&!chosen)return notFound();
+  const projects=chosen?[chosen]:track.kits;
+  const root='#/mini-projects/jam/designer';
+  return `<div class="mini-shell mini-jam mini-designer-track">
+    ${miniTrail([{title:'Build',href:'#/build'},{title:'Mini-Projects',href:'#/mini-projects'},{title:'Mini-Project Mayhem',href:'#/mini-projects/jam'},{title:'Artist & Game Designer Track'}])}
+    <header class="mini-header mini-jam-hero"><span class="eyebrow">MINI-PROJECT MAYHEM • INDEPENDENT STUDIO ROLE</span>
+      <h1>${esc(track.title)}</h1><p>${esc(track.intro)}</p>
+      <div class="mini-chips"><span>Begin in Session 1</span><span>No final idea required</span><span>Photoshop / 3ds Max / Testing</span><span>Solo-friendly</span></div>
+      <a class="button primary" href="${root}">View all four game kits →</a>
+    </header>
+    <section class="mini-information mini-designer-quick"><span class="eyebrow">DO THIS FIRST — EVEN IF YOUR GAME IDEA IS UNKNOWN</span>
+      <h2>Start straight away</h2>
+      <p><strong>Session 1:</strong> play/observe the starter mechanic, identify confusing feedback and make two rough screen thumbnails.</p>
+      <p><strong>Session 2:</strong> compare two visual directions, make one original icon or simple mesh and export a test PNG/FBX. You do not need a final theme for either session.</p>
+      <p class="mini-small-note">Your own work is useful evidence and reusable design exploration even if the team changes its idea in Session 3.</p>
+    </section>
+    <section class="mini-jam-section"><span class="eyebrow">YOUR WORK PLAN</span><h2>Six guided studio missions</h2>
+      <p>Open the mission for the stage you are on. Every action has a specific output and a check; do not wait for the programmer to finish a level.</p>
+      <div class="mini-designer-missions">${track.missions.map((m,i)=>`
+        <details class="mini-source-section mini-designer-mission" ${i===0?'open':''}>
+          <summary><span class="mini-section-title"><small>${esc(m.when)} ${m.independent?'• NO CONCEPT NEEDED':'• USE YOUR TEAM\'S WORKING GAME'}</small><strong>${i+1}. ${esc(m.title)}</strong><small>${esc(m.goal)}</small></span><span class="mini-section-toggle" aria-hidden="true">⌄</span></summary>
+          <div class="mini-designer-mission-body">
+            <ol class="mini-designer-actions">${m.steps.map(step=>`<li><strong>${esc(step.title)}</strong><p><b>Where:</b> ${esc(step.where)}</p><p><b>Do:</b> ${esc(step.do)}</p><p class="mini-designer-verified"><b>Check:</b> ${esc(step.check)}</p></li>`).join('')}</ol>
+            <div class="mini-designer-deliver"><p><strong>Hand in / show:</strong> ${esc(m.deliver)}</p><p><strong>Send to programmer:</strong> ${esc(m.handover)}</p><p><strong>Working solo?</strong> ${esc(m.solo)}</p></div>
+          </div>
+        </details>`).join('')}</div>
+    </section>
+    <section class="mini-jam-section"><span class="eyebrow">AFTER YOUR GAME IS CHOSEN</span><h2>${chosen?'Your '+esc(chosen.title)+' art & UX kit':'Pick your game-specific art & UX kit'}</h2>
+      <p>The kits below provide concrete, useful work tied to the actual tutorial. Start with the first asset, not a complete redesign. Keep the minimum visual outcome manageable.</p>
+      ${!chosen?`<div class="mini-designer-kit-links">${track.kits.map(k=>`<a href="${root}/${esc(k.project)}">${esc(k.title)} — view focused kit →</a>`).join('')}</div>`:''}
+      <div class="mini-designer-kits">${projects.map(k=>`<article class="mini-information mini-designer-kit">
+        <span class="eyebrow">${esc(k.title)}</span><h3>Your minimum art package</h3><p>${esc(k.minimum)}</p>
+        <p><strong>First safe asset:</strong> ${esc(k.firstAsset)}</p>
+        <ol class="mini-task-list">${k.tasks.map(t=>`<li>${esc(t)}</li>`).join('')}</ol>
+        <p><strong>Programmer handover:</strong> ${esc(k.handover)}</p>
+        <p class="mini-small-note"><strong>Only if time:</strong> ${esc(k.stretch)}</p>
+        <a href="#/mini-projects/upgrades/${esc(k.project)}">See the matching programmer upgrades →</a>
+      </article>`).join('')}</div>
+    </section>
+    <section class="mini-information mini-designer-handover"><span class="eyebrow">WORK SAFELY TOGETHER</span><h2>Share files, not one live Unreal project</h2>
+      <p>${esc(track.sharedFolder)}</p><p>${esc(track.handoverRule)}</p>
+      <p><strong>Solo students:</strong> ${esc(track.soloRule)}</p>
+    </section>
+    <nav class="mini-stage-bottom"><a class="button ghost" href="#/mini-projects/jam">← Game jam brief</a><a class="button primary" href="#/mini-projects/upgrades">Programmer upgrade paths →</a></nav>
   </div>`;
 }
 
@@ -2035,7 +2087,7 @@ function miniUpgradeStagePage(id,stageId){
     '<section class="mini-information mini-upgrade-walkthrough"><span class="eyebrow">PROGRAMMER • GUIDED BUILD</span><h2>Follow these steps</h2><div class="mini-upgrade-steps">'+st.steps.map((step,i)=>
       '<details class="mini-source-section mini-upgrade-step" '+(i===0?'open':'')+'><summary><span class="mini-section-title"><strong>'+(i+1)+'. '+esc(step.title)+'</strong><small>Where → Do → Why → Check</small></span><span class="mini-section-toggle" aria-hidden="true">⌄</span></summary><div class="mini-upgrade-instructions">'+
       '<p><strong>Go to</strong><span>'+esc(step.where)+'</span></p><p><strong>Do this</strong><span>'+esc(step.do)+'</span></p><p><strong>Why</strong><span>'+esc(step.why)+'</span></p><p class="mini-upgrade-step-check"><strong>Check</strong><span>'+esc(step.check)+'</span></p></div></details>').join('')+'</div></section>'+
-    '<section class="mini-information mini-upgrade-designer"><span class="eyebrow">ARTIST / DESIGNER • PARALLEL TASK</span><h2>Your three steps</h2><ol class="mini-task-list mini-designer-tasks">'+(st.designerSteps||[]).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ol><p class="mini-small-note"><strong>Check:</strong> '+esc(st.designerCheck||st.designer)+'</p><p class="mini-small-note">Work on your own PC; share FBX/PNG/TGA files through Teams. The programmer imports them into the local Unreal project.</p></section>'+
+    '<section class="mini-information mini-upgrade-designer"><span class="eyebrow">ARTIST / DESIGNER • PARALLEL TASK</span><h2>Your three steps</h2><ol class="mini-task-list mini-designer-tasks">'+(st.designerSteps||[]).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ol><p class="mini-small-note"><strong>Check:</strong> '+esc(st.designerCheck||st.designer)+'</p><p class="mini-small-note">Work on your own PC; share FBX/PNG/TGA files through Teams. The programmer imports them into the local Unreal project.</p><p><a href="#/mini-projects/jam/designer/'+esc(id)+'">Open the full parallel Designer Track and '+esc(original.title)+' art kit →</a></p></section>'+
     (st.id===p.minimumStage?'<section class="mini-information mini-upgrade-mvp"><span class="eyebrow">YOUR FIRST FINISH LINE</span><h2>Minimum Playable Game</h2><p>Pass the final test below and you have a playable prototype. You can stop to polish, or continue with extra features.</p></section>':'')+
     '<section class="mini-information mini-proof"><span class="eyebrow">PROVE IT WORKS</span><h2>Final test</h2><p>'+esc(st.check)+'</p><details><summary>If something does not work</summary><p><strong>Common mistake:</strong> '+esc(st.commonMistake||'Check the last step you changed.')+'</p><p>'+esc(st.fix)+'</p></details></section>'+
     '<section class="mini-complete-panel"><p>Mark complete only after running the game and passing the final test. Upgrade progress is local to this browser and does not change the original tutorial checkmarks.</p><button class="button '+(done?'success':'primary')+'" data-action="mini-upgrade-complete" data-stage="'+esc(st.id)+'">'+(done?'✓ Completed — click to undo':'Mark upgrade complete ✓')+'</button></section>'+
@@ -3957,6 +4009,7 @@ function route(options={}){
   else if(parts[0]==='learn'){app.innerHTML=learnHubPage();activate('learn')}
   else if(parts[0]==='build'){app.innerHTML=buildHubPage();activate('build')}
   else if(parts[0]==='mini-projects'&&parts[1]==='jam'&&!parts[2]){app.innerHTML=miniJamPage();activate('build')}
+  else if(parts[0]==='mini-projects'&&parts[1]==='jam'&&parts[2]==='designer'&&!parts[4]){app.innerHTML=miniJamDesignerPage(parts[3]);activate('build')}
   else if(parts[0]==='mini-projects'&&parts[1]==='upgrades'&&parts[2]&&parts[3]){app.innerHTML=miniUpgradeStagePage(parts[2],parts[3]);activate('build')}
   else if(parts[0]==='mini-projects'&&parts[1]==='upgrades'&&parts[2]){app.innerHTML=miniUpgradeProjectPage(parts[2]);activate('build')}
   else if(parts[0]==='mini-projects'&&parts[1]==='upgrades'){app.innerHTML=miniUpgradeLanding();activate('build')}
@@ -5261,6 +5314,7 @@ function buildGlobalSearchIndex(){
     p.stages.forEach(st=>add({title:st.title+' — '+p.title,meta:'Mini-Project upgrade • '+st.tier+' • '+st.outcome,href:miniUpgradeHref(p.project,st.id),icon:'✦',kind:'mini-project-upgrade',data:deepSearchText(st)}));
   });
   add({title:'Mini-Project Mayhem — Two-Week Game Jam',meta:'Build • Mini-Projects • 2–13 November 2026',href:'#/mini-projects/jam',icon:'★',kind:'mini-project-jam',data:deepSearchText(window.UE5_MINI_JAM_DATA||{})});
+  add({title:'Artist & Game Designer Track — Mini-Project Mayhem',meta:'Build • Mini-Projects • Six guided studio missions • Pairs or solo',href:'#/mini-projects/jam/designer',icon:'★',kind:'mini-project-jam',data:deepSearchText(window.UE5_MINI_JAM_DATA?.designerTrack||{})});
   (MINI.projects||[]).forEach(p=>{
     add({title:p.title,meta:'Build • Mini-Project • '+p.stages.length+' stages',href:miniHref(p.id),icon:p.icon||'◉',kind:'mini-project',data:deepSearchText(p)});
     (p.stages||[]).forEach(st=>add({title:p.title+' — '+st.title,meta:'Mini-Project • Stage • '+st.outcome,href:miniHref(p.id,st.id),icon:'◉',kind:'mini-stage',data:deepSearchText(st)}));

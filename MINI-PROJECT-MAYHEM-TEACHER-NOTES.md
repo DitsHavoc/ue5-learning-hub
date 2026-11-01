@@ -1,16 +1,18 @@
 # Mini-Project Mayhem — teacher launch notes
-**Second-year Games Development** · **Monday 2 to Friday 13 November 2026** · **Pairs: programmer + artist/designer**
+**Second-year Games Development** · **Monday 2 to Friday 13 November 2026** · **Pairs or solo: programmer + artist/designer roles**
 
 ## Purpose
 Turn one existing UE5 Mini-Project into a short, replayable original game (or a repeatable Clicker progression loop). The final showcase demo lasts 2–5 minutes. This is a low-pressure two-week studio challenge, not a large assessed production brief. Use the student-facing site route **Build → Mini-Projects → Mini-Project Mayhem** (`#/mini-projects/jam`).
 
 ## Launch session (around 100 minutes)
-- 0–10 min — explain challenge, four starting tutorials, rules, awards.
-- 10–20 min — form pairs and decide who will programme and who will lead art/design.
-- 20–30 min — pick a foundation and agree a one-sentence game idea.
-- 30–80 min — programmer begins the guided build; artist/designer sketches the visual direction and prepares the first asset/UI concept. At least one exported test asset should be transferred through Teams.
-- 80–95 min — pairs show one thing that works and state the gameplay extension they will attempt.
-- 95–100 min — back up the Unreal project and agree next-session tasks.
+- 0–10 min — explain the jam, four foundations, two roles and the optional solo route.
+- 10–20 min — form pairs or solo teams. Programmer leads the existing Unreal build; artist/designer opens **Build → Mini-Projects → Mini-Project Mayhem → Artist & Game Designer Track** on their own PC.
+- 20–45 min — programmer explores a starter tutorial; designer follows Mission 1 (play/observe, record feedback). No final game idea is required today.
+- 45–80 min — programmer follows the original tutorial; designer makes two fast readability mock-ups and tests them against what the existing game displays.
+- 80–95 min — share a three-minute partner handover: what was playable, what was confusing and one safe design experiment for next time. A short shortlist of starter games is fine.
+- 95–100 min — save evidence in Teams and back up the local Unreal project. The game concept can still be undecided.
+
+**Session 2:** the designer follows Mission 2 (two visual styles, one transparent PNG icon or simple FBX test asset, compare readability and export). The programmer continues the tutorial/first upgrade. Only **after** they have seen the working mechanic should the pair settle on a one-sentence concept in Mission 3. No student should spend the first two lessons inventing a giant story or polishing assets that may be thrown away.
 
 ## Teacher checkpoints
 - **Friday 6 November:** original mechanic functional; new gameplay idea demonstrated, possibly with placeholders; one custom art/design asset ready.
@@ -123,3 +125,22 @@ The four source Mini-Project tutorials and their images/steps/progress keys are 
 Restore all debug defaults, especially 60-second and 90-second clocks, before students use the project. These are *recommended real-editor tests*, not tests executed by website CI.
 
 All site checks validate route/rendered content consistency, not actual Unreal Engine 5.8 Blueprint compilation or the resulting physics.
+
+## Full parallel Artist & Game Designer Track (v3.66.7)
+Canonical student route: **Build → Mini-Projects → Mini-Project Mayhem → Artist & Game Designer Track** (`#/mini-projects/jam/designer`). Each of the 19 upgrade pages links directly to a project-specific focused route, such as `#/mini-projects/jam/designer/clicker`. It is a single track belonging to the jam, NOT a new top-level navigation category and not another copy of the source mini-projects.
+
+The designer has six studio missions. Sessions **1–2 do not require a chosen concept**: (1) observe and test starter mechanics, produce six observations and two quick UI/readability sketches; (2) build two contrasting looks, export one usable transparent PNG/FBX test asset and compare with classmates. In the third mission, once the programmer's original game/first upgrade is demonstrated, choose a feasible direction and limit the initial art list to three items. Then create/revise one integrated original asset; make readable HUD and visual-feedback work; own player testing, fixes and the final showcase explanation. Each mission names software/location, exact actions, a visible check, evidence, a short Teams handover and a lighter solo alternative.
+
+Every game also has a four-step **specific kit**:
+- **Clicker:** themed main-click object (PNG), shop/Granny graphics, readable costs and passive production. Do not duplicate `ClickerGameUI`.
+- **Balloon Popper:** distinct balloon symbol/texture, score/time/play-again layout, readability and optionally danger contrast. Protect target click traces.
+- **Bowling:** one original ball/bonus-pin material, readable Score/Pins/Throws and level contrast. Protect ball/pin physics.
+- **Loops:** readable target mesh/face, HUD with Wave/Targets/Time/Hits and safe visible target grid. Preserve `BP_ClickTarget` click collision.
+
+**Handover convention:** in Teams create `Designer Pack/01_Research`, `02_Concepts`, `03_Exports`, `04_Testing`. Export PNG/TGA and optional FBX; keep PSD/MAX originals. The programmer owns local Unreal, imports a COPY and tests, sending a screenshot or specific feedback. Designer revises one priority issue before creating optional decorative content. Do not let both students edit a synced `.uproject`.
+
+**Solo scaling:** the solo student does one observation/thumbnail, one original simple graphic/material, and one playtest fix; they still complete the programmer's minimum playable game. They are not expected to match the asset quantity of two people.
+
+**Teacher quality gates:** ask for an observation rather than a final concept at the end of Session 1; a test export + comparative feedback in Session 2; one chosen screen mock-up and first asset handover after the starter works; one integrated screenshot by Week 1/early Week 2; a fresh-player test and a before/after image before showcase. Artwork is credited and demonstrably student-created, and results are stored in Teams, not tracked by the site.
+
+Only the new jam/designer content, rendering, validation, browser tests, notes and version strings should change; the original source lessons and all existing 19 programmer upgrade stage contents/IDs and progress keys remain untouched.
