@@ -1,6 +1,6 @@
-/* Student-reviewed Balloon Popper upgrade; originals remain untouched. */
+/* Loops & Spawning student review — original mini-project lessons unchanged. */
 window.UE5_MINI_UPGRADE_DATA = {
-  "version": "3.66.4",
+  "version": "3.66.5",
   "title": "Mini-Project Upgrade Walkthroughs",
   "intro": "Finish one original guided Mini-Project, then follow these text-only expansions. Start with Essential stages; the Creative stage gives your pair room to make it yours. Save your Unreal project after every stage.",
   "projects": [
@@ -1330,33 +1330,33 @@ window.UE5_MINI_UPGRADE_DATA = {
     {
       "project": "loops",
       "title": "Loops & Spawning → Target Rush",
-      "intro": "Turn the original spawned cubes into a wave-based target challenge. Five targets are just the first wave: new waves appear automatically, target counts increase, the overall race is timed and every wave can use random visible positions.",
+      "intro": "Turn the original physics cube tower into a click-to-clear game, then add five progressively larger waves and a 90-second replayable challenge. Start with the original Content/Loops/LoopsLevel, BP_Box and BP_LoopsGameMode. Complete the Essential upgrades to the marked playable milestone; optional random target locations come afterwards.",
       "stages": [
         {
           "id": "targets",
           "title": "1. Turn the spawned cubes into clickable targets",
           "tier": "Essential",
-          "outcome": "Five targets appear; clicking each one removes it, increases the hit count, and clearing all five wins.",
+          "outcome": "Five new stationary targets appear; each click removes one and lowers TargetsLeft. The fifth click announces a win. The total Hits score comes in the Waves upgrade.",
           "designer": "Pick a recognisable target shape and design a clear visual distinction between clickable objects and scenery.",
           "steps": [
             {
               "title": "Create a game target actor",
-              "where": "Content Drawer → Loops level folder → Blueprint Class → Actor.",
-              "do": "Name the new Actor BP_ClickTarget. Add a Static Mesh component using the built-in Cube mesh and a visibly coloured material. On the Cube component set Collision Presets to BlockAll (or ensure Visibility is Block) and leave Simulate Physics unchecked so it does not fall. Compile.",
+              "where": "Content Drawer → Content → Loops → right-click → Blueprint Class → Actor.",
+              "do": "Name the new Actor BP_ClickTarget (NOT BP_Box). Add a Static Mesh component and choose the built-in Cube mesh. Give it a bright material, set Collision Presets=BlockAll (at least Visibility=Block) and make sure Simulate Physics is UNCHECKED. Compile and Save. Leave the physics-enabled original BP_Box alone.",
               "why": "A reusable actor gives every spawned item the same interaction.",
-              "check": "BP_ClickTarget has a visible cube, blocks Visibility clicks and stays still when spawned."
+              "check": "BP_ClickTarget remains still and blocks clicks. The original BP_Box has not changed."
             },
             {
               "title": "Spawn this target using the existing loop",
               "where": "Open the GameMode Blueprint used in your Loops tutorial.",
-              "do": "In the existing Spawn Actor From Class node, set Class to BP_ClickTarget. Keep the working Index × Spacing location calculation from the mini-project. Set the For Loop First Index to 0 and Last Index to 4 (five targets total).",
+              "do": "Open BP_LoopsGameMode → Event Graph (the actual Blueprint from the original lesson). Find the original For Loop → Spawn Actor From Class with Class=BP_Box. Change ONLY its Class to BP_ClickTarget. Set First Index=0, Last Index=4. Leave the original Index ×100 +50 → Make Vector.Z → Make Transform.Location wiring in place for this first test. Compile.",
               "why": "This reuses the original loop rather than manually placing five items.",
-              "check": "Press Play: exactly five cubes spawn in a line or grid."
+              "check": "Play: five stationary BP_ClickTarget cubes appear as a vertical line/tower, not a collapsing physics tower. The screen view is configured next."
             },
             {
               "title": "Make a controller that accepts clicks",
               "where": "Content Drawer → Loops folder → Blueprint Class → PlayerController.",
-              "do": "Name it BP_LoopsPlayerController. On Event BeginPlay add Set Show Mouse Cursor = true and Set Enable Click Events = true on Self. Compile.",
+              "do": "Inside Content/Loops create Blueprint Class → PlayerController named BP_LoopsPlayerController. In its Event Graph wire Event BeginPlay → Set Show Mouse Cursor(true) → Set Enable Click Events(true), both targeting Self. Compile.",
               "why": "Mouse click events are disabled by default in some PlayerController setups.",
               "check": "The controller shows the mouse and enables clickable actors."
             },
@@ -1370,63 +1370,70 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Place a fixed camera for the clicking game",
               "where": "LoopsLevel → Place Actors panel → search Camera Actor.",
-              "do": "Drag a Camera Actor into LoopsLevel and rename it Cam_TargetRush in the World Outliner. Set Location roughly X=-600, Y=0, Z=250 and Rotation X(Pitch)=0, Y(Yaw)=0, Z(Roll)=0 as a starting view towards the +X direction. Adjust the camera only if the spawned target tower is not visible. Save the level.",
+              "do": "Open LoopsLevel → Place Actors → Camera Actor. Place ONE Camera Actor, rename it Cam_TargetRush, and set Location approximately X=-600,Y=0,Z=250. For an Unreal Rotator use Pitch=0,Yaw=0,Roll=0 so the view faces +X. These are starting values: move the camera if the five cubes are not visible. Save LoopsLevel.",
               "why": "The original Loops exercise uses a roaming view; clickable targets need a stable view of their playfield.",
               "check": "In the Camera preview, you can see the positions where the five initial targets will appear."
             },
             {
               "title": "Make the Player Controller use that camera",
               "where": "BP_LoopsPlayerController → Event Graph → existing BeginPlay.",
-              "do": "Keep Set Show Mouse Cursor=true and Set Enable Click Events=true. After those, add Get Actor of Class (Actor Class=CameraActor). Connect its Return Value to New View Target on Set View Target with Blend (Target=Self) and wire white execution from BeginPlay setup into Set View Target with Blend. Compile. Only one Camera Actor should be present for this simple lookup.",
+              "do": "In BP_LoopsPlayerController Event Graph keep your original BeginPlay chain showing the cursor and enabling click events. After it add Get Actor of Class (Class=CameraActor) → Set View Target with Blend, with Target=Self and New View Target=Get Actor of Class Return Value. Wire the white execution to Set View Target with Blend, then Compile. Use only one Camera Actor for this simple classroom scene.",
               "why": "Click positions make sense only when the game displays the same fixed camera each run.",
               "check": "Press Play: you see a fixed view looking at the spawned targets, with a visible mouse cursor."
             },
             {
               "title": "Add the round state",
               "where": "Your Loops GameMode → Variables.",
-              "do": "Create TargetsLeft (Integer; default 5) and Finished (Boolean; default false), then Compile.",
+              "do": "In BP_LoopsGameMode add TargetsLeft (Integer, default=5) and Finished (Boolean, default=false). Compile. This first stage tracks REMAINING targets only; the total TargetsHit variable is introduced in Stage 2.",
               "why": "One score owner keeps track of all the spawned targets.",
               "check": "The values are visible and start at 5 and false."
             },
             {
-              "title": "Make the HitTarget function",
-              "where": "Loops GameMode → Functions → +.",
-              "do": "Create HitTarget. From its entry add a Branch for NOT Finished. On True, Set TargetsLeft = Max (Integer)(0, TargetsLeft - 1). Compile.",
-              "why": "Each valid click reduces the number of targets that remain.",
-              "check": "One call decreases TargetsLeft from 5 to 4."
+              "title": "Create the HitTarget function",
+              "where": "BP_LoopsGameMode → My Blueprint → Functions → +.",
+              "do": "Name the new function HitTarget. Drag Finished in as Get, apply NOT Boolean, then connect the function Entry execution to a Branch using NOT Finished. Compile.",
+              "why": "One GameMode owns the clicked-target rules; each spawned Actor only reports a hit.",
+              "check": "HitTarget has one Branch, with True available only while Finished=false."
+            },
+            {
+              "title": "Decrease the remaining target count",
+              "where": "BP_LoopsGameMode → HitTarget function → Branch True output.",
+              "do": "Set TargetsLeft = Max(Integer)(0, TargetsLeft - 1). Wire the Branch True white execution into Set TargetsLeft. Compile.",
+              "why": "The shared count cannot become negative.",
+              "check": "The first valid hit will reduce TargetsLeft from 5 to 4 after the target click is connected."
             },
             {
               "title": "End the first test when all five are gone",
               "where": "Still in HitTarget after Set TargetsLeft.",
-              "do": "Add Integer <= Integer checking TargetsLeft <= 0, connect it to a Branch. When True set Finished=true and Print String \"ALL TARGETS CLEARED!\". When False Print String with TargetsLeft.",
+              "do": "In BP_LoopsGameMode → HitTarget AFTER Set TargetsLeft, add Branch (Condition=TargetsLeft<=0). On True Set Finished=true then Print String \"ALL TARGETS CLEARED!\". On False Print String with TargetsLeft. Compile. This is a temporary first-stage win which you will REPLACE in Stage 2 (Waves).",
               "why": "This is a simple first win condition that the later Waves upgrade will replace.",
-              "check": "Five distinct target clicks announce the win exactly once."
+              "check": "After the fifth target is clicked, Finished=true and the win prints once; before that the remaining count falls 5→4→3→2→1."
             },
             {
               "title": "Make each target respond once",
               "where": "BP_ClickTarget → Event Graph → right-click → Event ActorOnClicked.",
-              "do": "From the click event add Get Game Mode → Cast To your Loops GameMode. Read Finished and Branch on NOT Finished. On True call HitTarget then Destroy Actor (Self). Compile.",
+              "do": "Open BP_ClickTarget → Event Graph → right-click Add Event → On Actor Clicked. From that event use Get Game Mode → Cast To BP_LoopsGameMode (Object=Get Game Mode) → Get Finished → NOT → Branch. From Branch True call HitTarget on the same GameMode cast result, then Destroy Actor(Self), wiring the white execution pins in order. Compile. Do NOT add this event to the original BP_Box.",
               "why": "Destroying the clicked target prevents it being scored a second time.",
               "check": "Click one cube: it disappears and the shared total decreases to four."
             },
             {
               "title": "Play the whole target challenge",
-              "where": "Open Loops level → Play.",
-              "do": "Open LoopsLevel → Play. Check the camera does not drift and the cursor is visible. Click each of five targets. They should disappear one by one, with \"ALL TARGETS CLEARED!\" after the final click. Restart and try a different order.",
+              "where": "Content → Loops → LoopsLevel → Play In Editor.",
+              "do": "Press Play. Check the cursor is visible and Cam_TargetRush shows the five motionless targets. Click them one at a time. Each should disappear on click and the debug count should decrease. The fifth click shows \"ALL TARGETS CLEARED!\". To replay this first stage, Stop and Play again (R restart is added in Stage 3).",
               "why": "This is now a complete win condition built from the Loops exercise.",
-              "check": "Five clickable targets remain in the fixed camera view; each click destroys one and the fifth announces success."
+              "check": "Exactly five BP_ClickTarget Actors appear; all can be clicked. After five different clicks the first-stage win appears once."
             }
           ],
           "check": "Five targets spawn, five separate clicks clear them, and the final click announces success.",
-          "fix": "Click does nothing? Confirm the cursor and Enable Click Events are set, target collision blocks the Visibility trace, and World Settings selects the intended GameMode. If the target tower is off-screen, move Cam_TargetRush and check BP_LoopsPlayerController BeginPlay calls Set View Target with Blend.",
+          "fix": "Click does nothing? Confirm the cursor and Enable Click Events are set, target collision blocks the Visibility trace, and World Settings selects the intended GameMode. If the target tower is off-screen, move Cam_TargetRush and check BP_LoopsPlayerController BeginPlay calls Set View Target with Blend. If the five cubes fall, Spawn Actor probably still uses physics BP_Box or BP_ClickTarget has Simulate Physics enabled. Do not look for an R restart yet: Stage 3 adds it.",
           "designerSteps": [
             "Plan: Pick a recognisable target shape and design a clear visual distinction between clickable objects and scenery. Draw a small mock-up of the nine-target 3×3 grid and timer.",
             "Create: make one original element for Turn the spawned cubes into clickable targets using targets, arena props or wave HUD graphics. Export as FBX or PNG to your shared Teams folder.",
             "Integrate and test: ask the programmer to import your asset; play together and confirm every target stays visible and clickable."
           ],
           "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
-          "beforeStart": "The original LoopsLevel and BP_LoopsGameMode spawn a tower of BP_Box actors. Your new BP_ClickTarget will replace BP_Box. The original lesson had a free camera; this game needs one fixed camera so mouse clicks are reliable.",
-          "commonMistake": "A clicked target needs a collision component that blocks Visibility; show the mouse cursor and enable click events on the assigned Player Controller.",
+          "beforeStart": "Open the original Content/Loops/LoopsLevel. The working BP_LoopsGameMode runs Event BeginPlay → For Loop and spawns a physical tower of BP_Box objects. The original BP_Box has Simulate Physics enabled: we will leave it untouched and create a NEW stationary clickable actor.",
+          "commonMistake": "BP_Box from the original mini-project simulates physics and may fall. Create BP_ClickTarget as a NEW Blueprint with Simulate Physics OFF, and change only Spawn Actor From Class. Keep the original BP_Box asset untouched.",
           "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         },
         {
@@ -1715,7 +1722,7 @@ window.UE5_MINI_UPGRADE_DATA = {
         }
       ],
       "minimumStage": "race",
-      "minimumOutcome": "A scored five-wave target game with an overall 90-second timer, visible wave progress and replay."
+      "minimumOutcome": "A five-wave click-to-clear game with a 90-second timer, a visible wave/targets/Hits display, win/timeout states and keyboard R replay."
     }
   ]
 };
