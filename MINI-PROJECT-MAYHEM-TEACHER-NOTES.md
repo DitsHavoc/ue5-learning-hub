@@ -59,3 +59,10 @@ The 16 original illustrated Mini-Project tutorials and their saved-progress IDs 
 Suggested classroom method: before each upgrade, students run the prior project, back it up, and check the prerequisite. Then they follow one Blueprint action and verify the stated check before continuing. For Balloon Popper, prove five spawns before removing old placed balloons. For Bowling, confirm pin scoring and Model root/aiming before introducing reset. For Clicker, disconnect the old +1 nodes to avoid doubled scores; test one Granny with Print String before designing its UI. For Loops, copy the working spawn graph, then replace BeginPlay only after the new StartWave function works.
 
 The website regression suite checks rendered pages, routes, original stage progress and expanded content. **UE5.8 Blueprint execution is still not tested in the actual editor.**
+
+## Final student walk-through corrections (v3.66.1)
+The **original Mini-Projects remain unchanged**. Critical alignment: the original ClickerGameUI main ClickerButton uses `Assign On Clicked` **inside `BP_ClickerGameMode`**, where its score event already calls `ClickerUI.SetScoreText`. The upgrades now retain that event, replace the old +1 with `AddClick`, and only then replace `SetScoreText` with the widget's `RefreshShop` function. Only NEW shop buttons use widget-local `OnClicked`. This avoids doubled click handlers.
+
+In Bowling, the source `Bowl` event uses `Add Force` on `Model`, with **X=200000 and Accel Change enabled**. The optional power upgrade now uses `Strength` as the X component of a `Make Vector` connected to `Add Force`. It keeps the original 200000 value until adjustable power is connected so a half-completed upgrade never disables the throw. In Loops, create `Cam_TargetRush` and use `Set View Target with Blend` from `BP_LoopsPlayerController`; this keeps clicking targets in a fixed, visible scene.
+
+Student instruction check: complete the original tutorial, verify the prerequisite on the upgrade page, change and test one connection at a time, and retain the last working project backup. Site tests do not compile the exercises in Unreal Engine 5.8.
