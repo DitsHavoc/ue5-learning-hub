@@ -200,6 +200,31 @@ function audit(root = path.resolve(__dirname, '..')) {
   if(!bowlPower.includes('Add Force')||!bowlPower.includes('200000')||!bowlPower.includes('Accel Change'))
     fail('Bowling power upgrade','must reuse original Bowl Add Force X 200000, Accel Change');
   const loopTargets=guideText('loops','targets');
+  const loopsTargetSteps=items(findUpgrade('loops','targets')?.steps);
+  const loopsWaveSteps=items(findUpgrade('loops','waves')?.steps);
+  const loopsRaceSteps=items(findUpgrade('loops','race')?.steps);
+  const loopsRandomSteps=items(findUpgrade('loops','random')?.steps);
+  const guideStep=(steps,title)=>steps.findIndex(x=>x.title===title);
+  if(guideStep(loopsTargetSteps,'Create a game target actor')<0 || 
+     !guideText('loops','targets').includes('Simulate Physics is UNCHECKED') ||
+     !guideText('loops','targets').includes('BP_Box'))
+    fail('Loops targets','must explicitly replace physical BP_Box with stationary BP_ClickTarget without editing original');
+  const previewAt=guideStep(loopsWaveSteps,'Frame the grid before increasing wave count');
+  if(previewAt<0 || !guideText('loops','waves').includes('RESTORE WaveNumber default=1') ||
+     !guideText('loops','waves').includes('ScheduleNextWave') ||
+     !guideText('loops','waves').includes('AdvanceWave') ||
+     !guideText('loops','waves').includes('Looping=false'))
+    fail('Loops waves','needs a safe nine-target preview and one non-looping delayed wave transition');
+  if(!guideText('loops','race').includes('Hits: {Value}') ||
+     !guideText('loops','race').includes('WAVES CLEARED!') ||
+     !guideText('loops','race').includes('IMC_TargetRush') ||
+     !guideText('loops','race').includes('restore') && !guideText('loops','race').includes('SAVE with SecondsLeft=90'))
+    fail('Loops race','needs four labelled HUD values, end-state feedback, restart mapping and restored 90s clock');
+  if(!guideText('loops','random').includes('Random Float in Range') ||
+     !guideText('loops','random').includes('Column ×180') ||
+     !guideText('loops','random').includes('separate'))
+    fail('Loops random','must preserve grid slots and use small independent safe position offsets');
+
   if(!loopTargets.includes('Cam_TargetRush')||!loopTargets.includes('Set View Target with Blend'))
     fail('Loops targets upgrade','requires a fixed gameplay camera before click tests');
 
