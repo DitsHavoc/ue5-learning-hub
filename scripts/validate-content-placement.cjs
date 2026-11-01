@@ -139,6 +139,22 @@ function audit(root = path.resolve(__dirname, '..')) {
     }
   }
   if(items(upgrade.projects).length!==items(mini.projects).length)fail('Mini-Project upgrades','each original Mini-Project needs one matching upgrade pathway');
+  // Guard the exact ownership and node names used by the original image-led
+  // Mini-Projects. Accidental rewrites here leave students stuck mid-upgrade.
+  const findUpgrade=(p,id)=>items(upgrade.projects).find(x=>x.project===p)?.stages?.find(x=>x.id===id);
+  const guideText=(p,id)=>items(findUpgrade(p,id)?.steps).map(x=>x.title+' '+x.where+' '+x.do+' '+x.check).join(' ');
+  const clickIntro=guideText('clicker','shop'),clickUI=guideText('clicker','display');
+  if(!clickIntro.includes('Assign On Clicked')||!clickIntro.includes('BP_ClickerGameMode')||!clickIntro.includes('SetScoreText'))
+    fail('Clicker upgrade','main button must retain the original GameMode Assign On Clicked/SetScoreText workflow');
+  if(!clickUI.includes('ClickerUI')||!clickUI.includes('RefreshShop'))
+    fail('Clicker display upgrade','original GameMode main click must call widget RefreshShop');
+  const bowlPower=guideText('bowling','power');
+  if(!bowlPower.includes('Add Force')||!bowlPower.includes('200000')||!bowlPower.includes('Accel Change'))
+    fail('Bowling power upgrade','must reuse original Bowl Add Force X 200000, Accel Change');
+  const loopTargets=guideText('loops','targets');
+  if(!loopTargets.includes('Cam_TargetRush')||!loopTargets.includes('Set View Target with Blend'))
+    fail('Loops targets upgrade','requires a fixed gameplay camera before click tests');
+
 
   for (const x of items(course.lessons)) {
     reference('Core lesson ' + x.id, x.path, subjectPaths);
