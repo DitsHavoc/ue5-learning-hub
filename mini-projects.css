@@ -139,3 +139,9 @@
 .mini-upgrade-designer{border-color:#476a7c;background:#142636}
 .mini-upgrade-designer p{margin:8px 0}
 @media(max-width:700px){.mini-upgrade-grid{grid-template-columns:1fr}.mini-upgrade-card{padding:18px}.mini-upgrade-instructions{padding:12px}.mini-upgrade-instructions p{grid-template-columns:1fr;gap:2px}.mini-upgrade-instructions strong{font-size:12px}.mini-upgrade-step .mini-section-title strong{font-size:14px}}
+
+/* v3.65.1: playable milestone and structured art tasks */
+.mini-upgrade-mvp{border-color:#5a8c84;background:#142f33}
+.mini-upgrade-mvp p{max-width:68ch}
+.mini-designer-tasks{padding-left:24px;margin:14px 0}
+.mini-designer-tasks li{margin:10px 0;line-height:1.65}
