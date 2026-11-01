@@ -1,4 +1,4 @@
-/* Final cross-project student review: simpler danger selection and complete replayable milestones. Originals unchanged. */
+/* Four-game final consistency review. Source Mini-Projects untouched. */
 window.UE5_MINI_UPGRADE_DATA = {
   "version": "3.66.6",
   "title": "Mini-Project Upgrade Walkthroughs",
@@ -379,7 +379,7 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Choose the class with one Select node",
               "where": "BP_BalloonSpawner → SpawnOneBalloon → existing Spawn Actor From Class → Class input.",
-              "do": "Drag a wire BACKWARDS from the purple Class input of the existing Spawn Actor node into empty space and search Select (the data-selection node). Connect the <= Boolean result to Select.Index. Set the False class option to BP_Balloon and the True class option to BP_DangerBalloon. If Unreal labels them Option 0 and Option 1, 0 is False/normal and 1 is True/danger. Use the Select output as Spawn Actor.Class; preserve the existing Random Point → Make Transform → Spawn Transform link. Do NOT create two Spawn Actor nodes or a SelectedBalloonClass variable.",
+              "do": "Drag a wire BACKWARDS from the purple Class input of the existing Spawn Actor node into empty space and search Select (the data-selection node). Connect the <= Boolean result to Select.Index. Set the False class option to BP_Balloon and the True class option to BP_DangerBalloon. If Unreal labels them Option 0 and Option 1, 0 is False/normal and 1 is True/danger. Use the Select output as Spawn Actor.Class; preserve the existing Random Point → Make Transform → Spawn Transform link. Do NOT create two Spawn Actor nodes or an extra class-selection variable.",
               "why": "Select chooses one class as data; the original single Spawn Actor execution stays valid and beginner-friendly.",
               "check": "The function still has exactly ONE Spawn Actor From Class. Its Class comes from Select(False=BP_Balloon, True=BP_DangerBalloon), and the original white function Entry drives the spawn."
             },
