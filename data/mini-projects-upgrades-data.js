@@ -1,13 +1,13 @@
-/* Bowling-only student walkthrough refinement for UE5.8; original tutorial lessons untouched. */
+/* Student-reviewed Balloon Popper upgrade, original mini-project preserved. */
 window.UE5_MINI_UPGRADE_DATA = {
-  "version": "3.66.3",
+  "version": "3.66.4",
   "title": "Mini-Project Upgrade Walkthroughs",
   "intro": "Finish one original guided Mini-Project, then follow these text-only expansions. Start with Essential stages; the Creative stage gives your pair room to make it yours. Save your Unreal project after every stage.",
   "projects": [
     {
       "project": "balloon-popper",
       "title": "Balloon Popper → Arcade Challenge",
-      "intro": "Build the minimum playable game first: score → random respawning → 60-second round. Then add a Play Again screen and, if there is time, dangerous balloons. You do not need to finish every stage to have a complete prototype.",
+      "intro": "Begin where the original Balloon Popper tutorial finishes: keep BP_Balloon growth/popping intact, then add scoring, random replacement, a timed round and replay. The original project uses the Content/Balloon Popper folder and Balloon Popper Level map. Optional danger targets come last.",
       "stages": [
         {
           "id": "score",
@@ -18,7 +18,7 @@ window.UE5_MINI_UPGRADE_DATA = {
           "steps": [
             {
               "title": "Create a score variable",
-              "where": "Content Drawer → BalloonPopper → BP_BalloonGameMode → My Blueprint → Variables.",
+              "where": "Content Drawer → Balloon Popper → BP_BalloonGameMode → My Blueprint → Variables.",
               "do": "Create an Integer named Score. Compile and set Default Value to 0.",
               "why": "One GameMode keeps the total; balloons do not each hold their own score.",
               "check": "Score appears as an Integer with value 0."
@@ -53,14 +53,14 @@ window.UE5_MINI_UPGRADE_DATA = {
             },
             {
               "title": "Call it when a balloon actually pops",
-              "where": "BP_Balloon → Event Graph → the existing Branch that checks PopScale.",
-              "do": "On the True execution path BEFORE Destroy Actor, add Get Game Mode → Cast To BP_BalloonGameMode → AwardPoints (Points = 1) → Destroy Actor (Self). Leave the False path unchanged. Compile and Save.",
+              "where": "BP_Balloon → Event Graph → the original Branch after Set Actor Scale 3D checking Actor Scale X against PopScale.",
+              "do": "Keep On Actor Clicked → Set Actor Scale 3D → Branch (Actor Scale X >= PopScale). From that Branch True white pin connect Get Game Mode → Cast To BP_BalloonGameMode (Object=Get Game Mode) → AwardPoints(Points=1) → Destroy Actor(Self). Keep the original False path, SizeIncreaseAmount and PopScale. Compile.",
               "why": "Awarding on the pop branch counts completed pops, not every click.",
-              "check": "Clicking to grow does not score; the final click that destroys a balloon adds exactly one point."
+              "check": "A click that only grows a balloon adds zero; the final pop adds exactly +1 and destroys that Actor."
             },
             {
               "title": "Check all balloons share one score",
-              "where": "Open BalloonPopperLevel → Play In Editor.",
+              "where": "Content → Balloon Popper → Balloon Popper Level → Play In Editor.",
               "do": "Pop two different balloons. Confirm printed totals show Score: 1 then Score: 2. Save the level.",
               "why": "You have proved the GameMode, cast and pop event are connected correctly.",
               "check": "The total increases across different balloon actors, not from 0 for each one."
@@ -74,8 +74,8 @@ window.UE5_MINI_UPGRADE_DATA = {
             "Integrate and test: ask the programmer to import your asset; play together and confirm targets are visible and their UI never blocks clicks."
           ],
           "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
-          "beforeStart": "Start after the original Balloon Popper tutorial: clicking a balloon grows it, and the final click destroys it. Have BP_Balloon, BP_BalloonGameMode and BalloonPopperLevel saved.",
-          "commonMistake": "If a Cast to BP_BalloonGameMode fails, inspect World Settings → GameMode Override first.",
+          "beforeStart": "Open Content → Balloon Popper → Balloon Popper Level. Several hand-placed BP_Balloon actors should grow on click and pop at PopScale (default 1.5). The level uses BP_BalloonGameMode and BP_BalloonPlayerController.",
+          "commonMistake": "Score belongs to BP_BalloonGameMode, not each BP_Balloon. AwardPoints runs only from the True PopScale branch, BEFORE Destroy Actor.",
           "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         },
         {
@@ -87,10 +87,10 @@ window.UE5_MINI_UPGRADE_DATA = {
           "steps": [
             {
               "title": "Create the reusable spawning actor",
-              "where": "Content Drawer → BalloonPopper folder → Add → Blueprint Class → Actor.",
-              "do": "Name it BP_BalloonSpawner. Open it and add a Box Collision component named SpawnArea. Select SpawnArea and give it an extent roughly X=50, Y=350, Z=220 as a starting point, then Compile.",
+              "where": "Content Drawer → Balloon Popper folder → Add → Blueprint Class → Actor.",
+              "do": "In Content → Balloon Popper, create Blueprint Class → Actor named BP_BalloonSpawner. Add a Box Collision component called SpawnArea. Under Shape, start with Box Extent X=50, Y=350, Z=220; keep Rotation=0,0,0, set Collision Presets=NoCollision, then Compile and Save.",
               "why": "A movable box defines where balloons may appear; it is easier to tune than hard-coded coordinates.",
-              "check": "BP_BalloonSpawner has a Box Collision visible in the Blueprint viewport."
+              "check": "BP_BalloonSpawner contains one SpawnArea Box Collision component with no collision and no rotation."
             },
             {
               "title": "Make the function and locate the Box",
@@ -104,35 +104,42 @@ window.UE5_MINI_UPGRADE_DATA = {
               "where": "BP_BalloonSpawner → SpawnOneBalloon function.",
               "do": "Right-click and add Random Point in Bounding Box. Plug Get World Location into Center and Get Scaled Box Extent into Half Size. In UE5.8 these are the exact pin names. Keep the Box rotation at 0,0,0.",
               "why": "This returns a different location inside the Box whenever the function runs.",
-              "check": "You have a green Vector Return Value ready to connect to Make Transform."
+              "check": "Random Point in Bounding Box uses SpawnArea Get World Location → Center and Get Scaled Box Extent → Half Size; its output depends on where the actor is placed in the level."
             },
             {
               "title": "Spawn at that random point",
               "where": "In SpawnOneBalloon, after the random point.",
-              "do": "Add Make Transform and connect the random Vector to Location; leave Rotation 0, Scale 1. Add Spawn Actor from Class, set Class to BP_Balloon, feed the Make Transform into Spawn Transform and set Collision Handling Override to Always Spawn, Ignore Collisions. Wire the function entry execution into Spawn Actor. Compile.",
+              "do": "Inside SpawnOneBalloon, add Make Transform (Location=Random Point in Bounding Box Return Value, Rotation=0, Scale=1,1,1). Add Spawn Actor From Class(Class=BP_Balloon, Spawn Transform=Make Transform, Spawn Collision Handling Override=Always Spawn, Ignore Collisions). Wire SpawnOneBalloon purple function Entry white pin to Spawn Actor white execution input. Compile.",
               "why": "The tutorial balloon is reused as a real spawned actor, not duplicated by hand.",
-              "check": "Calling SpawnOneBalloon creates one BP_Balloon inside the area."
+              "check": "SpawnOneBalloon compiles to spawn one balloon when called; it does not run yet until BeginPlay calls it in the next step."
             },
             {
               "title": "Populate the arena on BeginPlay",
               "where": "BP_BalloonSpawner → Event Graph → Event BeginPlay.",
-              "do": "Add a For Loop with First Index 0 and Last Index 4. Connect Loop Body to SpawnOneBalloon. Five iterations create five targets; the loop Completed output needs no further node. Compile.",
+              "do": "BP_BalloonSpawner → Event Graph: wire Event BeginPlay → For Loop(First Index=0, Last Index=4) → from Loop Body call SpawnOneBalloon. Leave Loop Completed unconnected. Compile and Save. Five calls occur: indexes 0,1,2,3,4.",
               "why": "The player starts with a small, predictable number of targets.",
-              "check": "Drag one BP_BalloonSpawner into BalloonPopperLevel and press Play: five NEW balloons should appear. Leave the manually placed ones until this works, then remove the old placed balloons in the next step."
+              "check": "BeginPlay loops from 0 through 4 and calls SpawnOneBalloon once per index. The spawner still needs to be placed in Balloon Popper Level."
+            },
+            {
+              "title": "Place the spawner and test its first five balloons",
+              "where": "Content → Balloon Popper → Balloon Popper Level → drag BP_BalloonSpawner from the Content Drawer.",
+              "do": "Put ONE BP_BalloonSpawner near the original balloons and move or resize its SpawnArea so the unrotated box is visible in the camera. Move the old manually placed balloons aside TEMPORARILY so you can identify newly spawned ones. Press Play and count five NEW balloons.",
+              "why": "The Blueprint spawner must be placed in the level; an asset only in the Content Drawer does not receive BeginPlay.",
+              "check": "Five new balloons appear inside the spawner volume. If none appear, check BP_BalloonSpawner is placed and its BeginPlay loop runs."
             },
             {
               "title": "Put the spawn box where the camera can see it",
-              "where": "Open BalloonPopperLevel.",
-              "do": "Only after the previous step successfully spawned five new balloons, delete the OLD manually placed BP_Balloon actors (keep the new BP_BalloonSpawner, camera, lighting and scenery). Move and resize SpawnArea to fit the camera. Set SpawnArea Collision Presets to NoCollision so the box cannot block click traces.",
+              "where": "Open Balloon Popper Level.",
+              "do": "ONLY after you have proved five new balloons spawn, delete the original hand-placed BP_Balloon actors (plus any loose balloon Static Mesh Actors obstructing the view). Keep BP_BalloonSpawner, camera view, lights and scenery. Save. With the placed BP_BalloonSpawner selected, adjust its SpawnArea to stay in camera view. Set the SpawnArea box Collision Presets=NoCollision.",
               "why": "Only the spawner should create the balloons now; otherwise you would have extras.",
-              "check": "Play shows five visible, clickable balloons inside the intended screen area."
+              "check": "Exactly five newly spawned balloons can be seen and clicked, with no manually placed duplicates remaining."
             },
             {
               "title": "Add a replacement event",
               "where": "BP_BalloonSpawner → Event Graph → Add Custom Event.",
               "do": "Call it RequestReplacement. Wire its white execution output to SpawnOneBalloon. Compile.",
               "why": "Every pop can ask the same spawner for one replacement.",
-              "check": "RequestReplacement has a clear route to SpawnOneBalloon."
+              "check": "RequestReplacement is wired to SpawnOneBalloon. The next two steps connect BP_Balloon to call it."
             },
             {
               "title": "Find the spawner when a balloon pops",
@@ -146,26 +153,26 @@ window.UE5_MINI_UPGRADE_DATA = {
               "where": "BP_Balloon → same True pop path.",
               "do": "Connect AwardPoints white execution output to the Cast white input. From Cast success, call RequestReplacement on the BP_BalloonSpawner reference, then connect that event white output to the existing Destroy Actor (Self). Connect Cast Failed directly to Destroy Actor as a fallback. Compile.",
               "why": "One old balloon disappears and one new balloon appears before it is destroyed.",
-              "check": "After 15 pops, five balloons remain visible and Score is 15."
+              "check": "On a real pop, the sequence AwardPoints → RequestReplacement → Destroy Actor keeps five active balloons."
             },
             {
               "title": "Check click collision and spawn position",
-              "where": "BalloonPopperLevel → Play In Editor.",
-              "do": "Try 15 pops. If a target cannot be clicked, make sure the balloon mesh collision blocks Visibility, the spawning Box uses NoCollision and the player controller still has Enable Click Events. Resize or move SpawnArea if some targets spawn behind the HUD.",
+              "where": "Balloon Popper Level → Play In Editor.",
+              "do": "Pop at least 15 balloons (not merely click 15 times). After each pop there should still be five. Ensure BalloonModel mesh collision blocks Visibility, SpawnArea uses NoCollision, and BP_BalloonPlayerController has Enable Click Events turned on. If targets overlap or disappear behind scenery, move or enlarge SpawnArea WITHIN the camera view; random positions are not guaranteed non-overlapping.",
               "why": "A game loop must be reliable, not only work once.",
-              "check": "No balloons disappear forever, none spawn outside the playable view, and there are still five after repeated pops."
+              "check": "The five-target loop remains populated through 15 successful pops and all targets can be reached by mouse."
             }
           ],
           "check": "Start with five visible balloons. After any number of pops, five replacements remain within the playfield and scoring still works.",
-          "fix": "Only four remain? Verify RequestReplacement runs before Destroy Actor. More than five? Delete the old placed balloons or check that BeginPlay fires only once. Invisible targets? Reposition the Box Collision volume in the camera view; avoid randomly moving the camera.",
+          "fix": "No targets? Check an instance of BP_BalloonSpawner exists in Balloon Popper Level and its BeginPlay For Loop calls SpawnOneBalloon. Four remain? RequestReplacement must happen before Destroy Actor. More than five? Remove the original manually placed actors. Hidden or overlapping? Adjust SpawnArea size and position while keeping it unrotated and non-colliding.",
           "designerSteps": [
             "Plan: Plan a readable playfield and test whether five balloons can be clicked without overlapping the UI. Draw a small mock-up of the 1280×720 play area, targets and HUD.",
             "Create: make one original element for Spawn replacement balloons at random positions using HUD backgrounds, balloon meshes or symbols. Export as FBX or PNG to your shared Teams folder.",
             "Integrate and test: ask the programmer to import your asset; play together and confirm targets are visible and their UI never blocks clicks."
           ],
           "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
-          "beforeStart": "You must have finished the Score upgrade and confirmed one destroyed balloon awards +1. Leave the existing placed balloons in the level until the spawner successfully creates five new ones.",
-          "commonMistake": "First test five spawns, then remove old manually placed balloons. If nothing appears, check the spawner is actually placed in the level.",
+          "beforeStart": "One popped balloon awards exactly +1. The original BP_Balloon actors remain placed in the level; do not delete them until a new BP_BalloonSpawner proves it can create five.",
+          "commonMistake": "The ORIGINAL project uses the folder \"Balloon Popper\" and map \"Balloon Popper Level\". BP_BalloonSpawner must be placed in that level; a Blueprint asset in Content Drawer does not start spawning.",
           "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         },
         {
@@ -212,7 +219,7 @@ window.UE5_MINI_UPGRADE_DATA = {
             },
             {
               "title": "Create the HUD widget",
-              "where": "Content Drawer → BalloonPopper → User Interface → Widget Blueprint → User Widget.",
+              "where": "Content Drawer → Balloon Popper → User Interface → Widget Blueprint → User Widget.",
               "do": "Name it WBP_BalloonHUD. In Designer add two Text widgets near the top: ScoreText and TimeText. Tick Is Variable for each. Give them placeholder text \"Score: 0\" and \"Time: 60\".",
               "why": "The player needs persistent feedback rather than Print String messages.",
               "check": "The Designer preview shows both labels in the game-safe area."
@@ -302,7 +309,7 @@ window.UE5_MINI_UPGRADE_DATA = {
             },
             {
               "title": "Test the end of a round",
-              "where": "BalloonPopperLevel → Play In Editor.",
+              "where": "Balloon Popper Level → Play In Editor.",
               "do": "For a quick test temporarily set SecondsLeft default to 5 in BP_BalloonGameMode, then restore it to 60. Score twice, wait until zero, attempt more clicks, and replay. Confirm the spawner does not add new balloons after the round ends.",
               "why": "The end state must prevent extra points, then offer a reliable restart.",
               "check": "The final score freezes, the results panel appears, and replay returns to a fresh round."
@@ -329,7 +336,7 @@ window.UE5_MINI_UPGRADE_DATA = {
           "steps": [
             {
               "title": "Make a clearly different material",
-              "where": "Content Drawer → BalloonPopper → Materials.",
+              "where": "Content Drawer → Balloon Popper → Materials.",
               "do": "Duplicate M_Balloon, rename it M_DangerBalloon, then open it and change Base Color to strong red. Save the material.",
               "why": "Players need to recognise risk at a glance.",
               "check": "You can tell the two target types apart in the viewport."
@@ -385,7 +392,7 @@ window.UE5_MINI_UPGRADE_DATA = {
             },
             {
               "title": "Check scoring and chance over several pops",
-              "where": "BalloonPopperLevel → Play In Editor.",
+              "where": "Balloon Popper Level → Play In Editor.",
               "do": "Pop at least 20 balloons. Safe targets should add 1; danger targets deduct 2 but cannot push Score below 0. The number of visible targets should remain five until Time Up.",
               "why": "Random types must be balanced and never strand the player.",
               "check": "Both types appear, the score changes correctly and the playfield remains populated."
