@@ -52,3 +52,10 @@ Best Gameplay · Best Visual Design · Most Original · Players’ Choice.
 
 ## Site placement / QA
 Canonical owner: **Build → Mini-Projects**, reusing its four source tutorials (no copied guided stages, no extra main navigation tab). Audience: second-year students who can follow a starter UE5 tutorial; next learning step: refine the chosen Mini-Project and test a complete gameplay loop. Search phrase: `Mini-Project Mayhem`. Browser QA: desktop and mobile routes, all four tutorial links and no horizontal overflow. No modifications to existing completion keys or stage IDs.
+
+## Student-usability pass (v3.66.0)
+The 16 original illustrated Mini-Project tutorials and their saved-progress IDs remain untouched. Each optional upgrade now opens with the exact state that should already work, and expands complex Blueprint operations into smaller steps with immediate checks. Common mistakes are visible in the final test troubleshooting section. Upgrades reuse the **original** names: Bowling `IA_Bowl` and `Bowl` custom event; Clicker `BP_ClickerGameMode`.
+
+Suggested classroom method: before each upgrade, students run the prior project, back it up, and check the prerequisite. Then they follow one Blueprint action and verify the stated check before continuing. For Balloon Popper, prove five spawns before removing old placed balloons. For Bowling, confirm pin scoring and Model root/aiming before introducing reset. For Clicker, disconnect the old +1 nodes to avoid doubled scores; test one Granny with Print String before designing its UI. For Loops, copy the working spawn graph, then replace BeginPlay only after the new StartWave function works.
+
+The website regression suite checks rendered pages, routes, original stage progress and expanded content. **UE5.8 Blueprint execution is still not tested in the actual editor.**

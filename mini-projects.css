@@ -145,3 +145,9 @@
 .mini-upgrade-mvp p{max-width:68ch}
 .mini-designer-tasks{padding-left:24px;margin:14px 0}
 .mini-designer-tasks li{margin:10px 0;line-height:1.65}
+
+/* Student-readability pass: prerequisites and checks, no extra menu chrome. */
+.mini-upgrade-ready{border-color:#51758a;background:#152939}
+.mini-upgrade-ready .mini-small-note{margin-bottom:0}
+.mini-upgrade-instructions p{line-height:1.7}
+.mini-upgrade-instructions p span{overflow-wrap:anywhere}

@@ -131,6 +131,7 @@ function audit(root = path.resolve(__dirname, '..')) {
         fail('Upgrade '+stage.id,'needs title, outcome, designer task, test, troubleshooting and guided steps');
       if(items(stage.steps).length<4)fail('Upgrade '+stage.id,'less than four guided actions');
       if(items(stage.designerSteps).length!==3||!stage.designerCheck)fail('Upgrade '+stage.id,'needs three artist steps and a final check');
+      if(!stage.beforeStart||!stage.commonMistake||!stage.studentPromise)fail('Upgrade '+stage.id,'needs a prior-state check and a common-mistake recovery');
       for(const [i,step] of items(stage.steps).entries()){
         if(!step.title||!step.where||!step.do||!step.why||!step.check)
           fail('Upgrade '+stage.id+' step '+(i+1),'missing where, do, why or check');

@@ -106,10 +106,12 @@ async function run(){
             hasDesigner:!!document.querySelector('#app .mini-upgrade-designer p'),
             designerSteps:document.querySelectorAll('#app .mini-designer-tasks li').length,
             hasProof:!!document.querySelector('#app .mini-proof details'),
+            hasPreflight:!!document.querySelector('#app .mini-upgrade-ready p'),
+            hasPitfall:(document.querySelector('#app .mini-proof details')?.textContent||'').includes('Common mistake:'),
             hasButton:!!document.querySelector('#app [data-action="mini-upgrade-complete"]'),
             overflow:document.documentElement.scrollWidth>window.innerWidth+2
           }));
-          if(!result.title||result.steps<4||result.details!==result.steps*4||!result.open||result.images||(!result.hasDesigner||result.designerSteps!==3)||!result.hasProof||!result.hasButton||result.overflow)
+          if(!result.title||result.steps<4||result.details!==result.steps*4||!result.open||result.images||(!result.hasDesigner||result.designerSteps!==3)||!result.hasPreflight||!result.hasPitfall||!result.hasProof||!result.hasButton||result.overflow)
             fail.push(device.name+' '+group.id+'/'+stageId+': incomplete upgrade page '+JSON.stringify(result));
         }
       }
