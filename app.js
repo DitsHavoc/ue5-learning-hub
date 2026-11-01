@@ -1949,7 +1949,43 @@ function miniCard(p){
 function miniProjectsPage(){
   return '<div class="mini-shell">'+miniTrail([{title:'Build',href:'#/build'},{title:'Mini-Projects'}])+
   '<header class="mini-header"><span class="eyebrow">BUILD • PROJECT-LED PRACTICE</span><h1>Unreal Engine Mini-Projects</h1><p>Four complete practical routes. Work through the guided stages, test what you have built, and mark each stage complete when it works. You can revisit every guide at any time.</p><div class="mini-chips"><span>'+MINI.projects.length+' mini-projects</span><span>'+MINI.projects.reduce((n,p)=>n+p.stages.length,0)+' stages</span><span>Unreal Engine 5.8 source notes</span></div></header>'+
+  '<div class="mini-jam-banner"><div><span class="eyebrow">2–13 NOVEMBER 2026 • TEAM GAME JAM</span><h2>Mini-Project Mayhem</h2><p>Start with a guided build, then turn it into an original game with your partner.</p></div><a class="button primary" href="#/mini-projects/jam">Open the game jam brief →</a></div>'+
   '<div class="mini-project-grid">'+MINI.projects.map(miniCard).join('')+'</div></div>';
+}
+function miniJamPage(){
+  const j=window.UE5_MINI_JAM_DATA;if(!j)return notFound();
+  return `<div class="mini-shell mini-jam">
+    ${miniTrail([{title:'Build',href:'#/build'},{title:'Mini-Projects',href:'#/mini-projects'},{title:j.title}])}
+    <header class="mini-header mini-jam-hero">
+      <span class="eyebrow">TWO-WEEK GAME JAM • 2–13 NOVEMBER 2026</span>
+      <h1>${esc(j.title)}</h1><p>${esc(j.subtitle)}</p>
+      <div class="mini-chips"><span>Pairs</span><span>One programmer + one artist/designer</span><span>Unreal Engine 5</span><span>Friday 13 November showcase</span></div>
+      <a class="button primary" href="#/mini-projects">Explore the four tutorials →</a>
+    </header>
+    <section class="mini-jam-intro mini-information">
+      <span class="eyebrow">THE CHALLENGE</span><h2>Build it. Change it. Make it yours.</h2>
+      <p><strong>Start with a tutorial, not a blank project.</strong> Get one of the four Mini-Projects working first. Then turn that mechanic into an original game using new decisions, a new look and at least one gameplay extension.</p>
+      <p><strong>Keep it small:</strong> one playable space, one main mechanic, a clear goal and around 2–5 minutes of gameplay. A finished small game beats an unfinished big idea.</p>
+    </section>
+    <section class="mini-jam-section"><span class="eyebrow">STEP 1 • PICK YOUR FOUNDATION</span><h2>Choose one starting project</h2>
+      <div class="mini-jam-starters">${j.starters.map(s=>`<a class="mini-jam-starter" href="${miniHref(s.project)}"><span class="mini-jam-starter-icon" aria-hidden="true">${esc(s.icon)}</span><h3>${esc(s.name)}</h3><p>${esc(s.foundation)}</p><small><strong>Make it yours:</strong> ${esc(s.ideas)}</small><b>Open guided project →</b></a>`).join('')}</div>
+    </section>
+    <section class="mini-jam-section"><span class="eyebrow">STEP 2 • WORK AS A TWO-PERSON STUDIO</span><h2>One team, two PCs</h2>
+      <div class="mini-jam-roles">
+        <div class="mini-information"><h3>Programmer</h3><p>Own the Unreal project. Complete the tutorial, build the gameplay extension, import assets, handle logic and help test the finished game.</p></div>
+        <div class="mini-information"><h3>Artist / designer</h3><p>Own the visual direction. Create 3D models, textures or UI; shape the level and player experience; test whether the game is understandable and fun.</p></div>
+      </div>
+      <div class="mini-information mini-jam-workflow"><h3>How you share work</h3><p>Use a shared Teams folder for exported <code>.fbx</code> models, <code>.png</code> textures and UI files, concepts and screenshots. The programmer imports finished assets into Unreal. <strong>Do not edit the same Unreal project on both PCs or run it from a Teams-synchronised folder.</strong> Save a project backup after each session.</p><p>Start each lesson with a quick conversation: What works? What is needed? What will each of you complete today?</p></div>
+    </section>
+    <section class="mini-jam-section"><span class="eyebrow">YOUR TWO-WEEK PLAN</span><h2>Milestones</h2>
+      <div class="mini-jam-timeline">${j.milestones.map((m,i)=>`<article class="mini-jam-milestone"><div class="mini-jam-when">${esc(m.when)}</div><div><h3>${esc(m.title)}</h3><p><strong>Programmer:</strong> ${esc(m.programmer)}</p><p><strong>Artist/designer:</strong> ${esc(m.designer)}</p><p class="mini-jam-check"><strong>Checkpoint:</strong> ${esc(m.check)}</p></div></article>`).join('')}</div>
+    </section>
+    <section class="mini-jam-section"><span class="eyebrow">THE NON-NEGOTIABLES</span><h2>Five rules</h2><ol class="mini-jam-rules">${j.rules.map(t=>`<li>${esc(t)}</li>`).join('')}</ol></section>
+    <section class="mini-jam-section"><span class="eyebrow">FRIDAY 13 NOVEMBER</span><h2>What to show at the showcase</h2><ul class="mini-jam-deliverables">${j.deliverables.map(t=>`<li>${esc(t)}</li>`).join('')}</ul>
+      <div class="mini-information mini-jam-awards"><h3>Game Jam Awards</h3><div class="mini-chips">${j.awards.map(a=>`<span>${esc(a)}</span>`).join('')}</div><p>Play each other’s games, give useful feedback and celebrate the best ideas.</p></div>
+    </section>
+    <nav class="mini-stage-bottom" aria-label="Continue learning"><a class="button ghost" href="#/mini-projects">← Back to Mini-Projects</a><a class="button primary" href="#/mini-projects">Choose your starting project →</a></nav>
+  </div>`;
 }
 function miniAssetCard(p){
   if(!['balloon-popper','bowling'].includes(p?.id))return '';
@@ -3861,6 +3897,7 @@ function route(options={}){
   else if(parts[0]==='paths'){app.innerHTML=pathsHubPage();activate('paths')}
   else if(parts[0]==='learn'){app.innerHTML=learnHubPage();activate('learn')}
   else if(parts[0]==='build'){app.innerHTML=buildHubPage();activate('build')}
+  else if(parts[0]==='mini-projects'&&parts[1]==='jam'&&!parts[2]){app.innerHTML=miniJamPage();activate('build')}
   else if(parts[0]==='mini-projects'&&parts[1]&&parts[2]){app.innerHTML=miniStagePage(parts[1],parts[2]);activate('build')}
   else if(parts[0]==='mini-projects'&&parts[1]){app.innerHTML=miniProjectPage(parts[1]);activate('build')}
   else if(parts[0]==='mini-projects'){app.innerHTML=miniProjectsPage();activate('build')}
@@ -5146,6 +5183,7 @@ function buildGlobalSearchIndex(){
     ['Study','Homework, revision quizzes, Building Blocks, Blueprint Checks, Cheat Sheet and glossary','#/study','↻','hub']
   ].forEach(([title,data,href,icon,kind])=>add({title,meta:'Student hub',href,icon,kind,data}));
 
+  add({title:'Mini-Project Mayhem — Two-Week Game Jam',meta:'Build • Mini-Projects • 2–13 November 2026',href:'#/mini-projects/jam',icon:'★',kind:'mini-project-jam',data:deepSearchText(window.UE5_MINI_JAM_DATA||{})});
   (MINI.projects||[]).forEach(p=>{
     add({title:p.title,meta:'Build • Mini-Project • '+p.stages.length+' stages',href:miniHref(p.id),icon:p.icon||'◉',kind:'mini-project',data:deepSearchText(p)});
     (p.stages||[]).forEach(st=>add({title:p.title+' — '+st.title,meta:'Mini-Project • Stage • '+st.outcome,href:miniHref(p.id,st.id),icon:'◉',kind:'mini-stage',data:deepSearchText(st)}));
