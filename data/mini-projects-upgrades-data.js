@@ -1,4 +1,4 @@
-/* Student-reviewed Balloon Popper upgrade, original mini-project preserved. */
+/* Balloon Popper upgrade reading pass, preserving original source Mini-Projects. */
 window.UE5_MINI_UPGRADE_DATA = {
   "version": "3.66.4",
   "title": "Mini-Project Upgrade Walkthroughs",
@@ -199,23 +199,23 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Start the timer from BeginPlay",
               "where": "BP_BalloonGameMode → Event Graph → Event BeginPlay.",
-              "do": "Add Set Timer by Event. Set Time=1.0 and Looping=true. Drag from the red Event delegate pin and select the TickClock custom event (or use Create Event and choose TickClock). Connect BeginPlay white execution to Set Timer by Event. Promote its Return Value to ClockHandle.",
+              "do": "In BP_BalloonGameMode Event Graph: connect Event BeginPlay → Set Timer by Event (Time=1.0, Looping checked). Drag from its red Event delegate pin → Create Event → select TickClock. Right-click Return Value → Promote to Variable and name it ClockHandle (Timer Handle). Leave your temporary Print String \"tick\" connected to TickClock for this test. Compile and Play.",
               "why": "The clock should start once when the level begins.",
-              "check": "In Play, \"tick\" prints about once each second; remove the temporary Print String before the next step."
+              "check": "One \"tick\" prints roughly every second, and ClockHandle is type Timer Handle. After confirming it works, remove the temporary Print String."
             },
             {
               "title": "Count down and stop on zero",
               "where": "BP_BalloonGameMode → TickClock.",
-              "do": "Add Branch with Condition = NOT RoundEnded. From True, set SecondsLeft to Max (Integer)(0, SecondsLeft - 1). Then add a Branch testing SecondsLeft <= 0. On True set RoundEnded = true, Print String \"TIME UP!\", and Clear and Invalidate Timer by Handle using ClockHandle.",
+              "do": "In BP_BalloonGameMode Event Graph → TickClock replace the temporary Print String with Branch(Condition=NOT RoundEnded). From True: Set SecondsLeft = Max(0, SecondsLeft - 1), then Branch(SecondsLeft <= 0). Only the second Branch True goes to Set RoundEnded=true → Print String \"TIME UP!\" → Clear and Invalidate Timer by Handle(ClockHandle). Compile. False paths need no action.",
               "why": "Clamping avoids negative seconds; clearing the handle stops extra calls.",
               "check": "Play for a few seconds: SecondsLeft falls by 1 every second and stops at 0."
             },
             {
               "title": "Prevent scores after time runs out",
               "where": "BP_BalloonGameMode → AwardPoints function.",
-              "do": "Insert a Branch BEFORE Set Score, with Condition = NOT RoundEnded. Only its True execution output may run the Score calculation and Set Score.",
+              "do": "In BP_BalloonGameMode → AwardPoints function, find the direct white execution wire from function Entry to Set Score. Disconnect it, insert a Branch with Condition=NOT RoundEnded, and connect ONLY Branch True to Set Score. Leave Score+Points → Max(0,..) as the green input to Set Score, and leave the existing Print String after Set Score. Do not create another AwardPoints function.",
               "why": "This blocks late scoring even when an actor was already clicked.",
-              "check": "With RoundEnded true in a debug test, AwardPoints no longer changes Score."
+              "check": "AwardPoints never changes Score when RoundEnded is true. You can temporarily set the GameMode SecondsLeft default to 5 to check the end quickly, then restore 60."
             },
             {
               "title": "Create the HUD widget",
@@ -229,46 +229,53 @@ window.UE5_MINI_UPGRADE_DATA = {
               "where": "WBP_BalloonHUD → Designer → select the root Canvas Panel, then the ScoreText and TimeText labels.",
               "do": "Set the root Canvas Panel Visibility to Not Hit-Testable (Self Only). Set ScoreText and TimeText to Not Hit-Testable (Self & All Children). Do not choose Self & All Children on the root: a later ResultsPanel contains a clickable ReplayButton.",
               "why": "A decorative HUD should not swallow mouse clicks intended for balloons in the 3D scene; later child buttons must remain clickable.",
-              "check": "Play and click balloons through empty HUD space. The score changes and the labels remain visible."
+              "check": "In Designer the root Canvas uses Not Hit-Testable (Self Only), with both decorative Text widgets Not Hit-Testable (Self & All Children). You will test real mouse clicks after the widget appears on screen."
             },
             {
-              "title": "Bind the two visible numbers",
-              "where": "Open WBP_BalloonHUD → Designer → select ScoreText → Details → Content → Text → Bind → Create Binding. Repeat for TimeText.",
-              "do": "In each generated binding function use Get Game Mode → Cast To BP_BalloonGameMode → Get Score or SecondsLeft. Convert the Integer to Text using ToText (Integer), then return it. Keep the static \"Score:\" and \"Time:\" prefixes as separate Text widgets or use Format Text. If the cast fails, return \"0\".",
-              "why": "The tiny widget reads the one authoritative GameMode value; no duplicate counters.",
-              "check": "Play mode shows changing values without opening the Blueprint debugger."
+              "title": "Bind ScoreText and keep its Score label",
+              "where": "WBP_BalloonHUD → Designer → ScoreText → Details → Content → Text → Bind → Create Binding.",
+              "do": "In the generated Text binding function use Get Game Mode → Cast To BP_BalloonGameMode (Object=Get Game Mode). From the cast read Score and connect it to Format Text with exact format \"Score: {Value}\". Connect Format Text output to Return Node Text and connect the white execution Entry → Cast Success → Return. Compile.",
+              "why": "Returning just an integer would replace the word \"Score\" with an unlabelled number.",
+              "check": "The binding returns a value like \"Score: 2\" for two balloon pops."
+            },
+            {
+              "title": "Bind TimeText and keep its Time label",
+              "where": "WBP_BalloonHUD → Designer → TimeText → Details → Content → Text → Bind → Create Binding.",
+              "do": "Repeat the GameMode cast and white execution chain in this separate binding. From Get SecondsLeft use Format Text \"Time: {Value}\" and connect to the Text Return Node. Compile. If the cast fails, use \"Time: 60\" as a fallback.",
+              "why": "Both labels display values from the same round state without duplicating variables in the widget.",
+              "check": "The binding returns \"Time: 57\" as the timer counts down, not merely \"57\"."
             },
             {
               "title": "Put the HUD on screen",
               "where": "BP_BalloonPlayerController → Event Graph → BeginPlay.",
-              "do": "After your existing Show Mouse Cursor setup, add Create Widget (Class = WBP_BalloonHUD, Owning Player = Self) → Add to Viewport. If BeginPlay already has several branches, use a Sequence node so both operations run. Compile and Save.",
+              "do": "In BP_BalloonPlayerController Event Graph → original BeginPlay and Set Show Mouse Cursor(true), keep that original node wired. After it, Create Widget(Class=WBP_BalloonHUD, Owning Player=Self) → Add to Viewport (Target=Create Widget Return Value), then Set Input Mode Game and UI with Player Controller=Self and Hide Cursor During Capture=false. Do not disconnect existing input work; use a Sequence if needed. Compile and Save.",
               "why": "The controller is already selected by the project GameMode and owns player display.",
-              "check": "Start the level: both HUD values appear and the time decreases."
+              "check": "Play Balloon Popper Level: Score: 0 and Time: 60 appear, time decreases, the cursor is visible and clicking through empty HUD space still grows balloons."
             },
             {
               "title": "Block clicks once the round ends",
               "where": "BP_Balloon → Event ActorOnClicked execution, before the growth nodes.",
-              "do": "Get Game Mode → Cast To BP_BalloonGameMode → Get RoundEnded → NOT → Branch. Wire only the True path into the existing click-to-grow chain. Keep the existing pop-scoring call later in the chain.",
+              "do": "In BP_Balloon → Event Graph find the ORIGINAL On Actor Clicked event feeding the grow/Set Actor Scale 3D chain. Disconnect its direct white execution connection, then add Get Game Mode → Cast To BP_BalloonGameMode → Branch(Condition=NOT RoundEnded). Wire Cast Success → Branch True into the ORIGINAL grow chain. Leave the original PopScale Branch and AwardPoints call unchanged. Compile.",
               "why": "The scene should stop changing when the round is finished.",
-              "check": "After 60 seconds, clicking no longer grows or pops balloons."
+              "check": "During a five-second test, balloons grow normally. After TIME UP, further clicks do not grow or pop them."
             },
             {
               "title": "Prevent the spawner working after the timer",
               "where": "BP_BalloonSpawner → RequestReplacement custom event.",
-              "do": "Before SpawnOneBalloon, add Get Game Mode → Cast To BP_BalloonGameMode → Get RoundEnded → NOT → Branch. Connect only the True output to SpawnOneBalloon. Compile.",
+              "do": "In BP_BalloonSpawner → Event Graph → RequestReplacement custom event, insert Get Game Mode → Cast To BP_BalloonGameMode → Branch(Condition=NOT RoundEnded) BEFORE SpawnOneBalloon. Connect only Branch True to SpawnOneBalloon; False does nothing. Do not add this gate to Event BeginPlay, which creates the original five targets.",
               "why": "The round must stop producing targets when the clock reaches zero.",
-              "check": "Set RoundEnded=true temporarily in a test; popping an existing balloon does not produce a replacement."
+              "check": "When RoundEnded is true no late replacement requests can create targets, while the original five-target BeginPlay loop still works."
             }
           ],
           "check": "The clock counts 60→0, the score changes only when a balloon pops, the HUD stays visible and no further targets spawn or score after the round ends.",
-          "fix": "HUD missing? Check the controller is assigned in BP_BalloonGameMode and Create Widget is connected. Time frozen? Confirm TickClock is connected to Set Timer by Event with Looping ticked. If the HUD appears but balloons cannot be clicked, check the root Canvas uses Not Hit-Testable (Self Only), not Visible.",
+          "fix": "HUD missing? Check the controller is assigned in BP_BalloonGameMode and Create Widget is connected. Time frozen? Confirm TickClock is connected to Set Timer by Event with Looping ticked. If the HUD appears but balloons cannot be clicked, check the root Canvas uses Not Hit-Testable (Self Only), not Visible. If the HUD numbers lose their labels, use Format Text \"Score: {Value}\" and \"Time: {Value}\" in the two bindings. If the result ReplayButton later does not receive clicks, check Set Input Mode Game and UI in the controller.",
           "designerSteps": [
             "Plan: Design WBP_BalloonHUD with clear score and remaining-time labels. Try a contrasting colour when time gets low. Draw a small mock-up of the 1280×720 play area, targets and HUD.",
             "Create: make one original element for Add a 60-second round and live score HUD using HUD backgrounds, balloon meshes or symbols. Export as FBX or PNG to your shared Teams folder.",
             "Integrate and test: ask the programmer to import your asset; play together and confirm targets are visible and their UI never blocks clicks."
           ],
           "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
-          "beforeStart": "Five balloons should already appear and be replaced when popped. This stage changes GameMode, controller, widget and spawner.",
+          "beforeStart": "One BP_BalloonSpawner instance is in Balloon Popper Level and maintains five clickable targets. BP_BalloonPlayerController already shows the cursor and has Enable Click Events checked in Details.",
           "commonMistake": "If your timer seems frozen, test TickClock using Print String before building the HUD.",
           "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         },
@@ -282,37 +289,44 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Create a results panel in the HUD",
               "where": "WBP_BalloonHUD → Designer.",
-              "do": "Add a Border or Vertical Box named ResultsPanel. Add a Text widget named FinalScoreText with placeholder \"Round over\" and a Button named ReplayButton with a child Text \"Play Again\". Tick Is Variable on ResultsPanel and FinalScoreText. Set ResultsPanel Visibility to Collapsed initially. Keep the HUD root Canvas as Not Hit-Testable (Self Only); set ResultsPanel to Visible when RoundEnded and leave ReplayButton as Visible so it can receive input.",
+              "do": "In WBP_BalloonHUD → Designer, place a Border or Vertical Box named ResultsPanel INSIDE the root Canvas Panel. Inside it put Text FinalScoreText and Button ReplayButton with a child Text \"Play Again\". Tick Is Variable on ResultsPanel, FinalScoreText and ReplayButton. Set ResultsPanel Visibility=Collapsed initially and ReplayButton Visibility=Visible. Keep the root Canvas Not Hit-Testable (Self Only), NOT Self & All Children.",
               "why": "Players need a persistent end screen; Print String is only a debugging aid.",
-              "check": "Nothing covers the game when it first starts."
+              "check": "The new result panel is initially Collapsed and does not block clicks during the round."
             },
             {
-              "title": "Refresh visibility from RoundEnded",
-              "where": "WBP_BalloonHUD → Graph → Event Construct.",
-              "do": "Add a repeating Set Timer by Event with Time 0.25 seconds; create a Custom Event named RefreshRoundScreen and connect it to the red Event pin. In RefreshRoundScreen use Get Game Mode → Cast To BP_BalloonGameMode → Get RoundEnded → Branch. On True set ResultsPanel Visibility = Visible; on False set it to Collapsed.",
-              "why": "Updating four times per second is sufficient for a small classroom HUD and avoids updating the panel every frame.",
-              "check": "Wait for the timer to end: the result panel becomes visible."
+              "title": "Create the end-screen refresh event",
+              "where": "WBP_BalloonHUD → Event Graph → empty space.",
+              "do": "Create a Custom Event called RefreshRoundScreen. Connect its white output to Get Game Mode → Cast To BP_BalloonGameMode → Branch(Condition=Get RoundEnded). On True Set Visibility(ResultsPanel,Visible); on False Set Visibility(ResultsPanel,Collapsed). Compile.",
+              "why": "The result is controlled by the actual GameMode end flag, not by an independent second timer counting down.",
+              "check": "Both Branch paths update the ResultsPanel, but the event has not been scheduled yet."
+            },
+            {
+              "title": "Call the result-refresh event using one timer",
+              "where": "WBP_BalloonHUD → Event Graph → Event Construct.",
+              "do": "From Event Construct start Set Timer by Event(Time=0.25, Looping checked). From the red Event delegate pin choose Create Event and select RefreshRoundScreen. Keep both existing Score and Time Text bindings. Do not create a second WBP_BalloonHUD instance. Compile.",
+              "why": "A quarter-second update is frequent enough for the result panel to appear promptly without Event Tick.",
+              "check": "Set SecondsLeft temporarily to 5 and Play: after time reaches zero, ResultsPanel appears."
             },
             {
               "title": "Show the final score",
               "where": "RefreshRoundScreen → True branch in WBP_BalloonHUD.",
-              "do": "From the same GameMode reference, get Score and use Format Text with a format such as \"Time up! Final score: {Points}\". Connect Score converted to Text to Points, then SetText on FinalScoreText.",
+              "do": "Inside WBP_BalloonHUD → RefreshRoundScreen, from the existing BP_BalloonGameMode cast read Score. In the RoundEnded Branch TRUE path, AFTER Set Visibility(ResultsPanel,Visible), call Set Text on FinalScoreText with Format Text \"Time up! Final score: {Points}\" (Points=Score). Connect the white execution Set Visibility → Set Text. Compile.",
               "why": "The end screen should show the actual score from the single GameMode variable.",
-              "check": "The displayed final score equals the last HUD score."
+              "check": "The result panel shows the same final Score as the live ScoreText, with readable text."
             },
             {
               "title": "Wire the replay button",
               "where": "WBP_BalloonHUD → Designer → ReplayButton → Events → OnClicked (+).",
-              "do": "In the new OnClicked event call Get Current Level Name with Remove Prefix String enabled, then Open Level (by Name) with its Level Name input connected to the returned name. Compile and Save.",
+              "do": "Select ReplayButton in WBP_BalloonHUD Designer, go to Details → Events → OnClicked (+). Connect the new OnClicked event to Open Level (by Name). Add Get Current Level Name with Remove Prefix String checked; connect that output to Open Level.Level Name. Compile and Save. This uses the ORIGINAL \"Balloon Popper Level\" level name without having to type it.",
               "why": "Reopening the level resets the timer, total, spawner and balloon types in one action.",
-              "check": "Play Again starts with score 0, 60 seconds and five visible targets."
+              "check": "After Time Up, clicking Play Again reloads Balloon Popper Level with Score: 0, Time: 60 and five new balloons."
             },
             {
               "title": "Test the end of a round",
               "where": "Balloon Popper Level → Play In Editor.",
-              "do": "For a quick test temporarily set SecondsLeft default to 5 in BP_BalloonGameMode, then restore it to 60. Score twice, wait until zero, attempt more clicks, and replay. Confirm the spawner does not add new balloons after the round ends.",
+              "do": "Temporarily set BP_BalloonGameMode.SecondsLeft default from 60 to 5 and Compile. Restart Play. Pop at least one balloon before zero; after zero confirm clicking no longer grows balloons and the results panel shows the final score. Click Play Again to verify scores and balloons reset. Finally restore the SecondsLeft default to 60, Compile and Save.",
               "why": "The end state must prevent extra points, then offer a reliable restart.",
-              "check": "The final score freezes, the results panel appears, and replay returns to a fresh round."
+              "check": "Time Up, frozen scoring, blocked clicks and replay all work. The last saved GameMode uses 60 seconds again, not the temporary five-second test."
             }
           ],
           "check": "At time zero the round freezes and the final score appears; Play Again starts with five targets and a clean 60-second score challenge. Confirm the ReplayButton receives clicks even though the decorative HUD lets mouse clicks pass to balloons during gameplay.",
@@ -323,8 +337,8 @@ window.UE5_MINI_UPGRADE_DATA = {
             "Integrate and test: ask the programmer to import your asset; play together and confirm targets are visible and their UI never blocks clicks."
           ],
           "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
-          "beforeStart": "The 60-second timer and on-screen score must work. Test with a short five-second round, then put it back to 60.",
-          "commonMistake": "The parent Canvas should remain Not Hit-Testable (Self Only), or the replay button may stop working.",
+          "beforeStart": "Balloon Popper Level now has a 60-second GameMode countdown, a score/time HUD and clicks stop after zero. The HUD root is Not Hit-Testable (Self Only) and BP_BalloonPlayerController uses Game and UI input.",
+          "commonMistake": "If the root Canvas is set to Not Hit-Testable (Self & All Children), ReplayButton will never receive clicks. Use Not Hit-Testable (Self Only) for the root and Visible for the button when the panel is shown.",
           "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         },
         {
