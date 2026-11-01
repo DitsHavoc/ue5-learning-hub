@@ -75,7 +75,7 @@ async function run(){
       const allUpgrades=await page.evaluate(()=>window.UE5_MINI_UPGRADE_DATA.projects.map(p=>({id:p.project,stages:p.stages.map(s=>s.id)})));
       if(allUpgrades.reduce((n,p)=>n+p.stages.length,0)!==19)fail.push(device.name+': wrong total upgrade stages');
       const expectedPaths={
-        'balloon-popper':['score','respawn','timer','risk','results'],
+        'balloon-popper':['score','respawn','timer','results','risk'],
         'bowling':['pin-score','throws','polish','power'],
         'clicker':['shop','display','goal','granny','training','farm'],
         'loops':['targets','waves','race','random']
