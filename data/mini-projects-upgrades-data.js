@@ -53,7 +53,13 @@ window.UE5_MINI_UPGRADE_DATA = {
             }
           ],
           "check": "Pop three balloons. The GameMode score must be 3, even when each balloon needed several clicks.",
-          "fix": "No score? Confirm BP_BalloonGameMode is the World Settings GameMode Override, check the cast Success pin is wired, and ensure AwardPoints is called before Destroy Actor."
+          "fix": "No score? Confirm BP_BalloonGameMode is the World Settings GameMode Override, check the cast Success pin is wired, and ensure AwardPoints is called before Destroy Actor.",
+          "designerSteps": [
+            "Plan: Design a score display: choose a readable font, colour, position and the wording players will understand. Draw a small mock-up of the 1280×720 play area, targets and HUD.",
+            "Create: make one original element for Give every pop a score using HUD backgrounds, balloon meshes or symbols. Export as FBX or PNG to your shared Teams folder.",
+            "Integrate and test: ask the programmer to import your asset; play together and confirm targets are visible and their UI never blocks clicks."
+          ],
+          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay."
         },
         {
           "id": "respawn",
@@ -120,7 +126,13 @@ window.UE5_MINI_UPGRADE_DATA = {
             }
           ],
           "check": "Start with five visible balloons. After any number of pops, five replacements remain within the playfield and scoring still works.",
-          "fix": "Only four remain? Verify RequestReplacement runs before Destroy Actor. More than five? Delete the old placed balloons or check that BeginPlay fires only once. Invisible targets? Reposition the Box Collision volume in the camera view; avoid randomly moving the camera."
+          "fix": "Only four remain? Verify RequestReplacement runs before Destroy Actor. More than five? Delete the old placed balloons or check that BeginPlay fires only once. Invisible targets? Reposition the Box Collision volume in the camera view; avoid randomly moving the camera.",
+          "designerSteps": [
+            "Plan: Plan a readable playfield and test whether five balloons can be clicked without overlapping the UI. Draw a small mock-up of the 1280×720 play area, targets and HUD.",
+            "Create: make one original element for Spawn replacement balloons at random positions using HUD backgrounds, balloon meshes or symbols. Export as FBX or PNG to your shared Teams folder.",
+            "Integrate and test: ask the programmer to import your asset; play together and confirm targets are visible and their UI never blocks clicks."
+          ],
+          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay."
         },
         {
           "id": "timer",
@@ -201,7 +213,13 @@ window.UE5_MINI_UPGRADE_DATA = {
             }
           ],
           "check": "The clock counts 60→0, the score changes only when a balloon pops, the HUD stays visible and no further targets spawn or score after the round ends.",
-          "fix": "HUD missing? Check the controller is assigned in BP_BalloonGameMode and Create Widget is connected. Time frozen? Confirm TickClock is connected to Set Timer by Event with Looping ticked. If the HUD appears but balloons cannot be clicked, check the root Canvas uses Not Hit-Testable (Self Only), not Visible."
+          "fix": "HUD missing? Check the controller is assigned in BP_BalloonGameMode and Create Widget is connected. Time frozen? Confirm TickClock is connected to Set Timer by Event with Looping ticked. If the HUD appears but balloons cannot be clicked, check the root Canvas uses Not Hit-Testable (Self Only), not Visible.",
+          "designerSteps": [
+            "Plan: Design WBP_BalloonHUD with clear score and remaining-time labels. Try a contrasting colour when time gets low. Draw a small mock-up of the 1280×720 play area, targets and HUD.",
+            "Create: make one original element for Add a 60-second round and live score HUD using HUD backgrounds, balloon meshes or symbols. Export as FBX or PNG to your shared Teams folder.",
+            "Integrate and test: ask the programmer to import your asset; play together and confirm targets are visible and their UI never blocks clicks."
+          ],
+          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay."
         },
         {
           "id": "results",
@@ -247,7 +265,13 @@ window.UE5_MINI_UPGRADE_DATA = {
             }
           ],
           "check": "At time zero the round freezes and the final score appears; Play Again starts with five targets and a clean 60-second score challenge. Confirm the ReplayButton receives clicks even though the decorative HUD lets mouse clicks pass to balloons during gameplay.",
-          "fix": "Results never appear? Check RefreshRoundScreen is bound to the widget timer, RoundEnded is in the correct GameMode, and ResultsPanel was marked Is Variable. Cannot replay? Connect the current level name to Open Level."
+          "fix": "Results never appear? Check RefreshRoundScreen is bound to the widget timer, RoundEnded is in the correct GameMode, and ResultsPanel was marked Is Variable. Cannot replay? Connect the current level name to Open Level.",
+          "designerSteps": [
+            "Plan: Design a simple results panel with a large final score and obvious replay button; test it at the actual game resolution. Draw a small mock-up of the 1280×720 play area, targets and HUD.",
+            "Create: make one original element for Add a visible game-over result and Play Again using HUD backgrounds, balloon meshes or symbols. Export as FBX or PNG to your shared Teams folder.",
+            "Integrate and test: ask the programmer to import your asset; play together and confirm targets are visible and their UI never blocks clicks."
+          ],
+          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay."
         },
         {
           "id": "risk",
@@ -314,7 +338,13 @@ window.UE5_MINI_UPGRADE_DATA = {
             }
           ],
           "check": "Both balloon classes spawn randomly; safe targets give +1, danger targets deduct 2 (not below zero), and either pop is replaced until the clock ends.",
-          "fix": "Only safe targets? Inspect SelectedBalloonClass values and ensure both Branch paths connect before the single Spawn Actor call. Too many balloons? Check only one spawn path executes. Danger balloons vanish permanently? Check their copied pop chain calls RequestReplacement."
+          "fix": "Only safe targets? Inspect SelectedBalloonClass values and ensure both Branch paths connect before the single Spawn Actor call. Too many balloons? Check only one spawn path executes. Danger balloons vanish permanently? Check their copied pop chain calls RequestReplacement.",
+          "designerSteps": [
+            "Plan: Create unmistakably different safe and danger targets. Use a symbol/shape as well as colour and check that both variants remain visible in the playfield. Draw a small mock-up of the 1280×720 play area, targets and HUD.",
+            "Create: make one original element for Mix safe and danger balloons into random spawns using HUD backgrounds, balloon meshes or symbols. Export as FBX or PNG to your shared Teams folder.",
+            "Integrate and test: ask the programmer to import your asset; play together and confirm targets are visible and their UI never blocks clicks."
+          ],
+          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay."
         }
       ],
       "minimumStage": "timer",
@@ -383,7 +413,13 @@ window.UE5_MINI_UPGRADE_DATA = {
             }
           ],
           "check": "Six placed pins with GoalPins=6 can earn six points, and the round finishes when all six are knocked down.",
-          "fix": "If no score appears, confirm pins are BP_BowlingPin actors, the pin mesh simulates physics, and the mesh up-axis is Z when upright. Adjust the 0.65 threshold only after watching the dot-product value while testing."
+          "fix": "If no score appears, confirm pins are BP_BowlingPin actors, the pin mesh simulates physics, and the mesh up-axis is Z when upright. Adjust the 0.65 threshold only after watching the dot-product value while testing.",
+          "designerSteps": [
+            "Plan: Design a scorecard and a clear way to show how many pins remain standing. Draw a small mock-up of the lane, throw marker and scoreboard.",
+            "Create: make one original element for Count knocked-down pins using scoreboard, lane markings or bonus-pin textures. Export as FBX or PNG to your shared Teams folder.",
+            "Integrate and test: ask the programmer to import your asset; play together and confirm three throws remain clear and pin score is legible."
+          ],
+          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay."
         },
         {
           "id": "throws",
@@ -471,7 +507,13 @@ window.UE5_MINI_UPGRADE_DATA = {
             }
           ],
           "check": "Make three throws without restarting: the ball comes back for shots two and three, fallen pins remain fallen, final score appears, and the fourth Space press does nothing.",
-          "fix": "Ball fails to reset? Confirm you stored the mesh (not actor) transform before physics moved it, and ResetBall uses the same mesh component. One press spends multiple throws? Check IA_Throw uses Started, not Triggered. Score missing after last shot? Ensure FinishRound is called after Delay 4 seconds. If arrows stop moving the ball after reset, check Model is the root mesh and the Move event still offsets Model. Do not add another physics mesh or reset a child component independently."
+          "fix": "Ball fails to reset? Confirm you stored the mesh (not actor) transform before physics moved it, and ResetBall uses the same mesh component. One press spends multiple throws? Check IA_Throw uses Started, not Triggered. Score missing after last shot? Ensure FinishRound is called after Delay 4 seconds. If arrows stop moving the ball after reset, check Model is the root mesh and the Move event still offsets Model. Do not add another physics mesh or reset a child component independently.",
+          "designerSteps": [
+            "Plan: Design a clear Throws Left indicator and short instructions: arrow keys aim, Space throws, R restarts the round. Draw a small mock-up of the lane, throw marker and scoreboard.",
+            "Create: make one original element for Reset the ball and allow three throws using scoreboard, lane markings or bonus-pin textures. Export as FBX or PNG to your shared Teams folder.",
+            "Integrate and test: ask the programmer to import your asset; play together and confirm three throws remain clear and pin score is legible."
+          ],
+          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay."
         },
         {
           "id": "polish",
@@ -538,7 +580,13 @@ window.UE5_MINI_UPGRADE_DATA = {
             }
           ],
           "check": "Score, Pins Down and Throws Left update correctly; the special pin awards 3 points; a final result appears; R resets the full round.",
-          "fix": "Scores differ? Ensure each pin has Counted true after first fall and passes PinValue into RecordPin. Result never shows? RefreshResult must run on a repeating timer and read RoundFinished from the assigned GameMode."
+          "fix": "Scores differ? Ensure each pin has Counted true after first fall and passes PinValue into RecordPin. Result never shows? RefreshResult must run on a repeating timer and read RoundFinished from the assigned GameMode.",
+          "designerSteps": [
+            "Plan: Create a scoreboard, one marked bonus target and on-screen controls. Playtest legibility and whether the bonus is visible before the shot. Draw a small mock-up of the lane, throw marker and scoreboard.",
+            "Create: make one original element for Add a throw counter, scoreboard and bonus pin using scoreboard, lane markings or bonus-pin textures. Export as FBX or PNG to your shared Teams folder.",
+            "Integrate and test: ask the programmer to import your asset; play together and confirm three throws remain clear and pin score is legible."
+          ],
+          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay."
         },
         {
           "id": "power",
@@ -591,7 +639,13 @@ window.UE5_MINI_UPGRADE_DATA = {
             }
           ],
           "check": "At least three power settings produce distinguishable throws while throw limits, score and restarts still work.",
-          "fix": "No power difference? Check the actual AddImpulse or AddForce magnitude uses the new Strength pin. If Throw always uses a constant, it will ignore the controller’s multiplier."
+          "fix": "No power difference? Check the actual AddImpulse or AddForce magnitude uses the new Strength pin. If Throw always uses a constant, it will ignore the controller’s multiplier.",
+          "designerSteps": [
+            "Plan: Make a simple power meter with low/high markings, and ask a playtester whether changes are noticeable and fair. Draw a small mock-up of the lane, throw marker and scoreboard.",
+            "Create: make one original element for Optional: give players a choice of shot power using scoreboard, lane markings or bonus-pin textures. Export as FBX or PNG to your shared Teams folder.",
+            "Integrate and test: ask the programmer to import your asset; play together and confirm three throws remain clear and pin score is legible."
+          ],
+          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay."
         }
       ],
       "minimumStage": "polish",
@@ -660,7 +714,13 @@ window.UE5_MINI_UPGRADE_DATA = {
             }
           ],
           "check": "At the first upgrade the game changes from 1 point per click to 2, costs 10 points and raises the next price to 20.",
-          "fix": "Purchase not working? Confirm BuyUpgradeButton is wired to its own OnClicked, the GameMode cast succeeds and the original score increment was removed."
+          "fix": "Purchase not working? Confirm BuyUpgradeButton is wired to its own OnClicked, the GameMode cast succeeds and the original score increment was removed.",
+          "designerSteps": [
+            "Plan: Create a theme for your shop and main click button. For the first purchase, design an icon or button state that clearly suggests increased points per click. Draw a small mock-up of the main button, shop costs and production per second.",
+            "Create: make one original element for Buy more powerful manual clicks using shop icons, themed producer artwork or button graphics. Export as FBX or PNG to your shared Teams folder.",
+            "Integrate and test: ask the programmer to import your asset; play together and confirm a player can see how each purchase changes output."
+          ],
+          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay."
         },
         {
           "id": "display",
@@ -713,7 +773,13 @@ window.UE5_MINI_UPGRADE_DATA = {
             }
           ],
           "check": "The score, points per click and upgrade cost always match the real GameMode variables, including immediately after load.",
-          "fix": "Text frozen? Make sure RefreshShop is called after BOTH button events and Event Construct. If labels are not accessible in Graph, enable Is Variable in the Designer."
+          "fix": "Text frozen? Make sure RefreshShop is called after BOTH button events and Event Construct. If labels are not accessible in Graph, enable Is Variable in the Designer.",
+          "designerSteps": [
+            "Plan: Create a tidy arrangement for three numbers and the two buttons. Try it at 1280×720 as well as full screen. Draw a small mock-up of the main button, shop costs and production per second.",
+            "Create: make one original element for Show your shop balance and costs using shop icons, themed producer artwork or button graphics. Export as FBX or PNG to your shared Teams folder.",
+            "Integrate and test: ask the programmer to import your asset; play together and confirm a player can see how each purchase changes output."
+          ],
+          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay."
         },
         {
           "id": "granny",
@@ -815,7 +881,13 @@ window.UE5_MINI_UPGRADE_DATA = {
             }
           ],
           "check": "The first Granny costs 15 and produces 1 point/sec; buying two produces 2/sec, with increasing costs and a live automatic score display. Spending points on a Granny never reduces TotalEarned.",
-          "fix": "No passive income? Check ProduceIncome is bound to the repeating GameMode timer, and GainPoints is called with a positive amount. Income changes internally but not on screen? Check the widget refresh timer and RefreshShop. Buying creates negative points? Branch must run BEFORE reducing Score."
+          "fix": "No passive income? Check ProduceIncome is bound to the repeating GameMode timer, and GainPoints is called with a positive amount. Income changes internally but not on screen? Check the widget refresh timer and RefreshShop. Buying creates negative points? Branch must run BEFORE reducing Score.",
+          "designerSteps": [
+            "Plan: Design a Granny producer card, icon and Buy Granny button. Make it clear that this earns points per second without clicking. Draw a small mock-up of the main button, shop costs and production per second.",
+            "Create: make one original element for Hire Grannies for automatic income using shop icons, themed producer artwork or button graphics. Export as FBX or PNG to your shared Teams folder.",
+            "Integrate and test: ask the programmer to import your asset; play together and confirm a player can see how each purchase changes output."
+          ],
+          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay."
         },
         {
           "id": "training",
@@ -868,7 +940,13 @@ window.UE5_MINI_UPGRADE_DATA = {
             }
           ],
           "check": "Each Granny can be upgraded: two Grannies produce 2/sec initially, then 4/sec, 8/sec and beyond as training is purchased.",
-          "fix": "Rate unchanged? Make sure GetProductionPerSecond multiplies GranniesOwned by GrannyRate and RefreshShop reads that function. If training buys at zero Grannies, add the GranniesOwned > 0 condition to the Branch."
+          "fix": "Rate unchanged? Make sure GetProductionPerSecond multiplies GranniesOwned by GrannyRate and RefreshShop reads that function. If training buys at zero Grannies, add the GranniesOwned > 0 condition to the Branch.",
+          "designerSteps": [
+            "Plan: Make an upgrade card showing the current Granny rate and the next training cost. Communicate the benefit clearly. Draw a small mock-up of the main button, shop costs and production per second.",
+            "Create: make one original element for Train Grannies to double their output using shop icons, themed producer artwork or button graphics. Export as FBX or PNG to your shared Teams folder.",
+            "Integrate and test: ask the programmer to import your asset; play together and confirm a player can see how each purchase changes output."
+          ],
+          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay."
         },
         {
           "id": "goal",
@@ -914,7 +992,13 @@ window.UE5_MINI_UPGRADE_DATA = {
             }
           ],
           "check": "After earning 500 total points, the achievement shows while spending, clicking and Granny production continue normally.",
-          "fix": "No milestone? Check GainPoints updates TotalEarned on both manual and passive income. If milestone disappears after shopping, read MilestoneReached, not Score."
+          "fix": "No milestone? Check GainPoints updates TotalEarned on both manual and passive income. If milestone disappears after shopping, read MilestoneReached, not Score.",
+          "designerSteps": [
+            "Plan: Design an achievement badge or celebratory panel that appears when lifetime earnings reach 500. Keep the shop legible underneath. Draw a small mock-up of the main button, shop costs and production per second.",
+            "Create: make one original element for Optional: add lifetime milestones using shop icons, themed producer artwork or button graphics. Export as FBX or PNG to your shared Teams folder.",
+            "Integrate and test: ask the programmer to import your asset; play together and confirm a player can see how each purchase changes output."
+          ],
+          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay."
         },
         {
           "id": "farm",
@@ -974,7 +1058,13 @@ window.UE5_MINI_UPGRADE_DATA = {
             }
           ],
           "check": "With Grannies and Farms running, combined income matches the single production timer and lifetime earnings rise along with the spendable balance.",
-          "fix": "Income wrong? Check GetProductionPerSecond includes both terms and ProduceIncome calls it once per second. If income doubles unexpectedly, look for a second timer or an old direct Set Score chain."
+          "fix": "Income wrong? Check GetProductionPerSecond includes both terms and ProduceIncome calls it once per second. If income doubles unexpectedly, look for a second timer or an old direct Set Score chain.",
+          "designerSteps": [
+            "Plan: Create an original second producer with distinctive artwork, price and theme. Rebrand Grannies and Farms if your game is about robots, potion shops or a spaceship. Draw a small mock-up of the main button, shop costs and production per second.",
+            "Create: make one original element for Optional: unlock a second producer using shop icons, themed producer artwork or button graphics. Export as FBX or PNG to your shared Teams folder.",
+            "Integrate and test: ask the programmer to import your asset; play together and confirm a player can see how each purchase changes output."
+          ],
+          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay."
         }
       ],
       "minimumStage": "granny",
@@ -1043,7 +1133,13 @@ window.UE5_MINI_UPGRADE_DATA = {
             }
           ],
           "check": "Five targets spawn, five separate clicks clear them, and the final click announces success.",
-          "fix": "Click does nothing? Confirm the cursor and Enable Click Events are set, target collision blocks the Visibility trace, and World Settings selects the intended GameMode."
+          "fix": "Click does nothing? Confirm the cursor and Enable Click Events are set, target collision blocks the Visibility trace, and World Settings selects the intended GameMode.",
+          "designerSteps": [
+            "Plan: Pick a recognisable target shape and design a clear visual distinction between clickable objects and scenery. Draw a small mock-up of the nine-target 3×3 grid and timer.",
+            "Create: make one original element for Turn the spawned cubes into clickable targets using targets, arena props or wave HUD graphics. Export as FBX or PNG to your shared Teams folder.",
+            "Integrate and test: ask the programmer to import your asset; play together and confirm every target stays visible and clickable."
+          ],
+          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay."
         },
         {
           "id": "waves",
@@ -1124,7 +1220,13 @@ window.UE5_MINI_UPGRADE_DATA = {
             }
           ],
           "check": "Clearing each wave produces the next (5→6→7→8→9 targets), and clearing wave 5 ends the run with 35 recorded hits.",
-          "fix": "Still ends after five clicks? The old Finished=true path is still in HitTarget. Extra waves spawn? Ensure the gate requires TargetsLeft>0 before decrement and Set Timer by Event is not looping. Wrong count? Last Index must be CurrentWaveCount-1."
+          "fix": "Still ends after five clicks? The old Finished=true path is still in HitTarget. Extra waves spawn? Ensure the gate requires TargetsLeft>0 before decrement and Set Timer by Event is not looping. Wrong count? Last Index must be CurrentWaveCount-1.",
+          "designerSteps": [
+            "Plan: Design a subtle new-wave announcement and keep enough screen space for later waves with 9 targets. Draw a small mock-up of the nine-target 3×3 grid and timer.",
+            "Create: make one original element for Automatically spawn harder waves using targets, arena props or wave HUD graphics. Export as FBX or PNG to your shared Teams folder.",
+            "Integrate and test: ask the programmer to import your asset; play together and confirm every target stays visible and clickable."
+          ],
+          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay."
         },
         {
           "id": "race",
@@ -1212,7 +1314,13 @@ window.UE5_MINI_UPGRADE_DATA = {
             }
           ],
           "check": "Waves and targets count correctly, the time drops 90→0, a win or loss result appears, and R starts a fresh five-wave run.",
-          "fix": "Timer or labels missing? Check you use the active Loops GameMode and Controller via World Settings. If the UI remains unchanged after a new wave, confirm each Text binding reads the GameMode variables; refresh end message on a widget timer. If click targets stop responding after adding the HUD, verify the root is Not Hit-Testable (Self & All Children)."
+          "fix": "Timer or labels missing? Check you use the active Loops GameMode and Controller via World Settings. If the UI remains unchanged after a new wave, confirm each Text binding reads the GameMode variables; refresh end message on a widget timer. If click targets stop responding after adding the HUD, verify the root is Not Hit-Testable (Self & All Children).",
+          "designerSteps": [
+            "Plan: Design an on-screen wave/timer/targets HUD and a result message for success or timeout. Draw a small mock-up of the nine-target 3×3 grid and timer.",
+            "Create: make one original element for Add a 90-second wave race and replay using targets, arena props or wave HUD graphics. Export as FBX or PNG to your shared Teams folder.",
+            "Integrate and test: ask the programmer to import your asset; play together and confirm every target stays visible and clickable."
+          ],
+          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay."
         },
         {
           "id": "random",
@@ -1265,7 +1373,13 @@ window.UE5_MINI_UPGRADE_DATA = {
             }
           ],
           "check": "Wave target counts remain 5→9, but each wave spawns targets at varied clickable positions inside a designer-controlled zone.",
-          "fix": "No targets? Confirm a BP_TargetSpawnArea is placed and the Get Actor of Class cast succeeds. Overlap hides targets? Expand SpawnBounds, scale down targets or keep fixed positions for the required version."
+          "fix": "No targets? Confirm a BP_TargetSpawnArea is placed and the Get Actor of Class cast succeeds. Overlap hides targets? Expand SpawnBounds, scale down targets or keep fixed positions for the required version.",
+          "designerSteps": [
+            "Plan: Design a level that is readable with targets appearing anywhere inside the playfield. Keep target shapes and colours easy to distinguish. Draw a small mock-up of the nine-target 3×3 grid and timer.",
+            "Create: make one original element for Optional: randomise target positions safely using targets, arena props or wave HUD graphics. Export as FBX or PNG to your shared Teams folder.",
+            "Integrate and test: ask the programmer to import your asset; play together and confirm every target stays visible and clickable."
+          ],
+          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay."
         }
       ],
       "minimumStage": "race",
