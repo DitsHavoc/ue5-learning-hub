@@ -1,6 +1,6 @@
-/* Final student-path clarity fixes for the original Unreal 5.8 Mini-Projects. */
+/* Clicker student-perspective UE5.8 walkthrough refinement; original illustrated projects untouched. */
 window.UE5_MINI_UPGRADE_DATA = {
-  "version": "3.66.1",
+  "version": "3.66.2",
   "title": "Mini-Project Upgrade Walkthroughs",
   "intro": "Finish one original guided Mini-Project, then follow these text-only expansions. Start with Essential stages; the Creative stage gives your pair room to make it yours. Save your Unreal project after every stage.",
   "projects": [
@@ -793,7 +793,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "where": "Open your original BP_ClickerGameMode → Functions → +.",
               "do": "Name the function AddClick. Drag Score as Get and ClickPower as Get, add them with Integer + Integer, and set Score to the result. Connect the AddClick function entry white execution to Set Score. Compile.",
               "why": "We are changing one existing score, not creating a second one.",
-              "check": "Calling AddClick once changes Score by ClickPower."
+              "check": "AddClick compiles. Its entry connects to Set Score, which uses Score + ClickPower; the next step will connect the real main button."
             },
             {
               "title": "Find the original click handler in GameMode",
@@ -814,7 +814,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "where": "BP_ClickerGameMode → Functions → + → name it BuyUpgrade.",
               "do": "Add Branch with condition Score >= UpgradeCost. From True set Score = Score - UpgradeCost, then ClickPower = ClickPower + 1, then UpgradeCost = UpgradeCost * 2. Connect the white execution wire through all three Set nodes in that order. False does nothing.",
               "why": "Buying requires enough points and raises the price for the next upgrade.",
-              "check": "At Score = 10, the first upgrade should leave Score = 0, ClickPower = 2 and UpgradeCost = 20."
+              "check": "BuyUpgrade compiles, with Score >= UpgradeCost checked BEFORE the three Set nodes. You will test an actual purchase after connecting the new button."
             },
             {
               "title": "Create a shop button",
@@ -826,20 +826,20 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Connect the purchase button",
               "where": "ClickerGameUI Widget → Designer → BuyUpgradeButton → Events → OnClicked (+).",
-              "do": "This new button is different from the ORIGINAL ClickerButton, whose event stays assigned in BP_ClickerGameMode. From BuyUpgradeButton OnClicked, Get Game Mode → Cast To BP_ClickerGameMode → call BuyUpgrade. Next read the GameMode Score and call SetScoreText on Self (the current ClickerGameUI widget) using that integer. Compile. In the next upgrade, this SetScoreText call will be replaced by RefreshShop.",
+              "do": "In ClickerGameUI, select the NEW BuyUpgradeButton and click + for OnClicked. Connect that event to Get Game Mode → Cast To BP_ClickerGameMode → BuyUpgrade. After BuyUpgrade, use the same cast result to Get Score and call SetScoreText on Self (your current widget) with that number. Keep the ORIGINAL ClickerButton assigned in BP_ClickerGameMode; do not add another OnClicked for it. Compile.",
               "why": "The purchase remains in GameMode, not as separate widget-only money.",
               "check": "You can click the original main button and buy an upgrade with the new button. Immediately after buying, ScoreText displays the reduced balance."
             },
             {
               "title": "Test the insufficient-funds case",
               "where": "Play the Clicker level.",
-              "do": "Press Buy Upgrade at Score = 0; nothing should change. Earn 10 points and buy: your points go to 0 and the price becomes 20. Press the main button once; Score should become 2.",
+              "do": "Play the level and confirm a fresh game starts with 0 points. Buy Upgrade must do nothing with insufficient funds. Click the main button 10 times, then buy once: Score returns to 0, ClickPower becomes 2, and UpgradeCost becomes 20. Click the main button once more: Score becomes 2. Restart Play for a clean test.",
               "why": "A shop needs to reject purchases a player cannot afford.",
               "check": "The game never produces negative points by buying."
             }
           ],
           "check": "The original main button earns +1 initially. After buying the 10-point upgrade, each main click earns 2. The shop purchase immediately updates the visible balance.",
-          "fix": "If the original click stops working, check the existing Assign On Clicked binding in BP_ClickerGameMode. If score doubles, delete the old Set Score +1 chain; it must call AddClick once. If the shop purchase succeeds but ScoreText does not update, call SetScoreText on the widget after BuyUpgrade.",
+          "fix": "If the original click stops working, check the existing Assign On Clicked binding in BP_ClickerGameMode. If score doubles, delete the old Set Score +1 chain; it must call AddClick once. If the shop purchase succeeds but ScoreText does not update, call SetScoreText on the widget after BuyUpgrade. A brand-new shop button cannot be tested before you have wired BuyUpgradeButton.OnClicked; build the function and button first.",
           "designerSteps": [
             "Plan: Create a theme for your shop and main click button. For the first purchase, design an icon or button state that clearly suggests increased points per click. Draw a small mock-up of the main button, shop costs and production per second.",
             "Create: make one original element for Buy more powerful manual clicks using shop icons, themed producer artwork or button graphics. Export as FBX or PNG to your shared Teams folder.",
@@ -860,16 +860,30 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Make three named labels",
               "where": "Clicker Widget → Designer.",
-              "do": "Keep and REUSE the original ScoreText widget: do not add another ScoreText. Add PowerText and CostText as two new Text widgets. Tick Is Variable for all three. Use placeholder text \"Points: 0\", \"Per click: 1\" and \"Next upgrade: 10\". If you choose to add fixed labels, keep those outside the dynamic text widgets.",
+              "do": "In your original ClickerGameUI Widget Designer, KEEP the original ScoreText. Do not add a second one. Add PowerText and CostText as new Text widgets and tick Is Variable on all three. Set placeholder values \"Points: 0\", \"Per click: 1\", \"Next upgrade: 10\". Leave ClickerButton and BuyUpgradeButton unchanged.",
               "why": "Players should know whether buying an upgrade is worth it.",
               "check": "You still have exactly one ScoreText widget, plus new PowerText and CostText labels."
             },
             {
-              "title": "Create a RefreshShop function",
-              "where": "Clicker Widget → Graph → Functions → +.",
-              "do": "Name the new function RefreshShop. Add Get Game Mode → Cast To BP_ClickerGameMode. Read Score, ClickPower and UpgradeCost. Convert each Integer with ToText (Integer) or Format Text, then call SetText on the corresponding Text widgets. Wire the white execution pins so all three SetText calls run.",
-              "why": "A single refresh function updates related UI together.",
-              "check": "RefreshShop compiles and references the three correct Text widgets."
+              "title": "Make one RefreshShop function",
+              "where": "ClickerGameUI Widget → Graph → My Blueprint → Functions → +.",
+              "do": "Create a function named RefreshShop. Add Get Game Mode, connect its Return Value to Cast To BP_ClickerGameMode, then connect the purple function Entry white execution pin to the Cast. Compile the widget.",
+              "why": "This one function can update the whole shop whenever the numbers change.",
+              "check": "RefreshShop has its entry connected to a successful BP_ClickerGameMode cast."
+            },
+            {
+              "title": "Update the existing ScoreText properly",
+              "where": "ClickerGameUI → RefreshShop function, after the successful cast.",
+              "do": "Get Score from the BP_ClickerGameMode cast result. Add Format Text, set Format to \"Points: {Number}\", and connect Score to the Number pin (allow integer-to-text conversion). Drag the ORIGINAL ScoreText widget into the graph as Get; from it add Set Text (Text). Connect Format Text to In Text and the Cast success white execution output to Set Text.",
+              "why": "Reusing ScoreText avoids making another score display; Format Text keeps the Points label.",
+              "check": "RefreshShop compiles. The first Set Text targets the original ScoreText and uses the current GameMode Score."
+            },
+            {
+              "title": "Display click power and the next price",
+              "where": "ClickerGameUI → RefreshShop, after ScoreText Set Text.",
+              "do": "Add a Format Text for PowerText with \"Per click: {Number}\" from Get ClickPower, and another for CostText with \"Next upgrade: {Number}\" from Get UpgradeCost. Call Set Text on each respective widget. Chain the white execution wire ScoreText Set Text → PowerText Set Text → CostText Set Text. Compile.",
+              "why": "The three values always represent the same GameMode state, rather than separate widget variables.",
+              "check": "With no upgrades, RefreshShop shows Points: 0, Per click: 1 and Next upgrade: 10 when it is called."
             },
             {
               "title": "Refresh after clicking",
@@ -890,7 +904,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "where": "Clicker Widget → Graph → Event Construct.",
               "do": "In ClickerGameUI Event Construct from the original tutorial, remove or disconnect the old hard-coded SetScoreText(0) call. Connect Event Construct → RefreshShop instead. Compile and Save. The displayed starting values are now read from BP_ClickerGameMode.",
               "why": "The UI should never depend on someone clicking before it becomes correct.",
-              "check": "Restart: the labels show 0, 1 and 10 before any input."
+              "check": "On a fresh Play, ScoreText reads Points: 0, PowerText Per click: 1 and CostText Next upgrade: 10 before any click; no stale hard-coded 0 chain remains."
             },
             {
               "title": "Test at a second viewport size",
@@ -909,7 +923,7 @@ window.UE5_MINI_UPGRADE_DATA = {
           ],
           "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
           "beforeStart": "The original GameMode click event calls AddClick and ClickerUI.SetScoreText, while the NEW BuyUpgradeButton event lives in the ClickerGameUI widget. Score changes by ClickPower and purchases cost points.",
-          "commonMistake": "If you already bound ScoreText to a Text Binding in the original tutorial, remove that binding before setting its text through RefreshShop.",
+          "commonMistake": "Do not make a second ScoreText or add a main-button OnClicked event to the widget. The original button stays bound in BP_ClickerGameMode; only its final UI call changes to ClickerUI.RefreshShop.",
           "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         },
         {
@@ -969,32 +983,18 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "When Score=15, one purchase changes Score to 0, GranniesOwned to 1 and the next GrannyCost to 19."
             },
             {
-              "title": "Calculate production per second in one place",
-              "where": "BP_ClickerGameMode → Functions → +.",
-              "do": "Create a PURE function GetProductionPerSecond with one Integer output Production. Get GranniesOwned and GrannyRate, multiply the integers, connect to the Return Node output and compile.",
-              "why": "All automated producers can share one game timer and one production calculation.",
-              "check": "One Granny returns 1; three Grannies return 3; no Grannies returns 0."
+              "title": "Create a Pure production function and output",
+              "where": "BP_ClickerGameMode → My Blueprint → Functions → +.",
+              "do": "Create a function GetProductionPerSecond. Select the function in My Blueprint (or its Entry node) and tick Pure in the Details panel. Under Outputs click +, name the new output Production and set its type to Integer; Compile.",
+              "why": "A Pure function only returns a value; it does not change the score or need white execution wires.",
+              "check": "GetProductionPerSecond has a green Integer output called Production and is marked Pure in Details."
             },
             {
-              "title": "Add the callback but keep the original widget",
-              "where": "BP_ClickerGameMode → Event Graph in empty space.",
-              "do": "Create a Custom Event called ProduceIncome. Leave your original BeginPlay → Create Widget → Add to Viewport chain untouched. Compile.",
-              "why": "The starting interface must still load even when we add passive production.",
-              "check": "A Custom Event ProduceIncome exists and the original UI still shows in Play."
-            },
-            {
-              "title": "Start exactly one repeating production timer",
-              "where": "BP_ClickerGameMode → Event BeginPlay.",
-              "do": "Use Sequence after BeginPlay if needed: Then 0 starts the original widget chain and Then 1 starts Set Timer by Event with Time=1.0 and Looping=true. On the red Event delegate pin select ProduceIncome (or connect a Create Event assigned to ProduceIncome).",
-              "why": "One GameMode timer will pay all Grannies; creating one timer per Granny would be harder to manage.",
-              "check": "The production timer starts once; do not add another timer to BuyGranny."
-            },
-            {
-              "title": "Pay the player every second",
-              "where": "BP_ClickerGameMode → ProduceIncome.",
-              "do": "Call GetProductionPerSecond and feed its Integer result to GainPoints(Amount). GainPoints already ignores zero amounts and updates Score and TotalEarned. Compile.",
-              "why": "This simulates automatic clicks using the same earning rules as manual clicks.",
-              "check": "Before building the Granny shop UI, temporarily use Print String after GainPoints to show Score. Confirm the number rises once each second with one Granny, then remove the debug print."
+              "title": "Calculate how fast Grannies earn",
+              "where": "BP_ClickerGameMode → GetProductionPerSecond function graph.",
+              "do": "Drag GranniesOwned and GrannyRate into the graph as Get, connect them to Multiply (Integer × Integer), and connect the result to Production on the Return Node. Compile. Do not add a Set Score node to this function.",
+              "why": "One calculation works for one Granny or one hundred, and later for Farms too.",
+              "check": "When GranniesOwned is 0, Production is 0; one Granny at GrannyRate 1 gives 1 per second."
             },
             {
               "title": "Add a Granny shop button and labels",
@@ -1006,42 +1006,70 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Connect Granny purchases",
               "where": "Clicker Widget → Graph → BuyGrannyButton → OnClicked.",
-              "do": "Use Get Game Mode → Cast To the BP_ClickerGameMode → BuyGranny, then call RefreshShop on the widget. Compile.",
+              "do": "In ClickerGameUI, add an OnClicked event for the NEW BuyGrannyButton. Get Game Mode → Cast To BP_ClickerGameMode → call BuyGranny → call RefreshShop on Self. Leave the original ClickerButton binding in BP_ClickerGameMode untouched. Compile.",
               "why": "The UI requests the purchase while GameMode owns the economy.",
-              "check": "The button buys one Granny only when you have enough points."
+              "check": "From a fresh game, manually earn 15, then press Buy Granny: GranniesOwned becomes 1, GrannyCost becomes 19 and spendable Score drops by 15. The automatic timer is added in the next part."
             },
             {
               "title": "Show the next price and automatic income",
               "where": "Clicker Widget → RefreshShop function.",
-              "do": "From the BP_ClickerGameMode cast, read GranniesOwned and GrannyCost. Format the labels into text such as \"Grannies: 2 | Next: 24\" using Format Text. Call GetProductionPerSecond and SetText on PassiveIncomeText using \"Auto: {Production} / sec\". Read TotalEarned from GameMode and update LifetimeText with Format Text (\"Lifetime: {Earned}\").",
+              "do": "Open ClickerGameUI → RefreshShop. Reuse the successful BP_ClickerGameMode cast already there. Read GranniesOwned and GrannyCost, then Set Text on GranniesText using Format Text \"Grannies: {Owned} | Next: {Cost}\". Read GetProductionPerSecond and Set Text on PassiveIncomeText using Format Text \"Auto: {Rate} / sec\". Read TotalEarned and Set Text on LifetimeText using \"Lifetime: {Earned}\". Connect all new Set Text nodes AFTER CostText in the same white execution chain; Compile.",
               "why": "Players can see that another Granny increases automatic earnings.",
-              "check": "After each purchase, the count, next cost and points/second are correct."
+              "check": "Before buying a Granny, the extra labels show Grannies: 0 | Next: 15, Auto: 0 / sec and Lifetime: your points earned."
+            },
+            {
+              "title": "Check that a Granny can actually be bought",
+              "where": "ClickerGameUI → Play In Editor after connecting BuyGrannyButton.",
+              "do": "Start Play, click to earn at least 15 points, then buy ONE Granny. Check the widget shows Grannies: 1, Next: 19 and Auto: 1 / sec. At this point the auto income label is a rate preview; points will not rise by themselves until you add the one-second timer below.",
+              "why": "You should confirm purchasing works before debugging timers.",
+              "check": "The purchase and shop labels work even though automatic points are not running yet."
+            },
+            {
+              "title": "Add the callback but keep the original widget",
+              "where": "BP_ClickerGameMode → Event Graph in empty space.",
+              "do": "Create a Custom Event called ProduceIncome. Leave your original BeginPlay → Create Widget → Add to Viewport chain untouched. Compile.",
+              "why": "The starting interface must still load even when we add passive production.",
+              "check": "A Custom Event ProduceIncome exists and the original UI still shows in Play."
+            },
+            {
+              "title": "Start exactly one repeating production timer",
+              "where": "BP_ClickerGameMode → Event BeginPlay.",
+              "do": "Keep your ORIGINAL BeginPlay → Create Widget → Add to Viewport → Set ClickerUI → Assign On Clicked chain intact. Add a Sequence immediately after BeginPlay: Then 0 continues to the original chain; Then 1 goes to Set Timer by Event (Time=1.0, Looping ticked). Drag from its red Event delegate pin and choose Create Event; select ProduceIncome in the new event chooser. Compile. The timer must only be started once here, not when buying each Granny.",
+              "why": "One GameMode timer will pay all Grannies; creating one timer per Granny would be harder to manage.",
+              "check": "On Play, the ClickerGameUI still appears and one looping timer is connected to ProduceIncome. Use a Print String in ProduceIncome temporarily to verify exactly one tick per second."
+            },
+            {
+              "title": "Pay the player every second",
+              "where": "BP_ClickerGameMode → ProduceIncome.",
+              "do": "Call GetProductionPerSecond and feed its Integer result to GainPoints(Amount). GainPoints already ignores zero amounts and updates Score and TotalEarned. Compile.",
+              "why": "This simulates automatic clicks using the same earning rules as manual clicks.",
+              "check": "After you have bought at least one Granny using the new button, start Play again, buy one, then stop clicking. With a temporary Print String after GainPoints you see Score rise by about 1 per second. Remove the debug print afterwards."
             },
             {
               "title": "Refresh the display while nobody clicks",
               "where": "Clicker Widget → Event Construct.",
-              "do": "Keep the existing first RefreshShop call. Add Set Timer by Event, Time=0.25, Looping=true, and connect a Custom Event RefreshAutoHUD to the timer red Event input; RefreshAutoHUD simply calls RefreshShop. Do not duplicate the timer in multiple widget event paths.",
+              "do": "In ClickerGameUI → Event Graph, leave the existing Event Construct → RefreshShop connection. Add Set Timer by Event AFTER the first RefreshShop, Time=0.25, Looping ticked. Add a Custom Event RefreshAutoHUD in empty space, connect it to RefreshShop, then from the timer red Event delegate pin choose Create Event assigned to RefreshAutoHUD. Do this only once in Construct; keep the existing GameMode production timer separate.",
               "why": "Passive income changes the score even when no button event triggers RefreshShop.",
-              "check": "Hands off the mouse: Score and Lifetime update on screen as the timer pays income."
+              "check": "With at least one Granny owned, stop clicking for five seconds. Points and Lifetime values on screen increase automatically, without any second manual input."
             },
             {
               "title": "Test increasing purchase costs",
               "where": "Play the game from a fresh level.",
-              "do": "Earn 15 points and buy one Granny: the next cost should be 19. Earn 19 and buy a second: the next cost should be 24. Let both run for three seconds and confirm approximately six points are generated.",
+              "do": "Start Play fresh. Earn 15 points by clicking and buy one Granny; the next cost must show 19. Continue earning from clicks and from the first Granny until Score is at least 19, buy a second; the next cost shows 24. After buying two, stop clicking for three seconds: production increases by around six points (two per second). Since automatic income continues during purchases, Score may rise immediately after paying; watch the price and GranniesOwned to verify the purchases.",
               "why": "The production logic and price curve should remain understandable.",
               "check": "With two Grannies, the passive rate displays 2 per second and continues without clicking."
             }
           ],
-          "check": "The first Granny costs 15 and produces 1 point/sec; buying two produces 2/sec, with increasing costs and a live automatic score display. Spending points on a Granny never reduces TotalEarned.",
-          "fix": "No passive income? Check ProduceIncome is bound to the repeating GameMode timer, and GainPoints is called with a positive amount. Income changes internally but not on screen? Check the widget refresh timer and RefreshShop. Buying creates negative points? Branch must run BEFORE reducing Score.",
+          "check": "The first Granny costs 15 and produces 1 point/sec; two Grannies produce 2/sec. Buying prices increase 15→19→24, the automatic HUD updates, and purchases never reduce TotalEarned.",
+          "fix": "Granny button missing? Build BuyGrannyButton and wire its new OnClicked before you try the timer. No income after buying? Check ProduceIncome runs once per second and calls GainPoints(GetProductionPerSecond). If Score rises internally but not in the widget, check the separate 0.25-second RefreshAutoHUD timer. If it rises twice as fast as expected, remove duplicate timers or the original +1 score chain.",
           "designerSteps": [
             "Plan: Design a Granny producer card, icon and Buy Granny button. Make it clear that this earns points per second without clicking. Draw a small mock-up of the main button, shop costs and production per second.",
             "Create: make one original element for Hire Grannies for automatic income using shop icons, themed producer artwork or button graphics. Export as FBX or PNG to your shared Teams folder.",
             "Integrate and test: ask the programmer to import your asset; play together and confirm a player can see how each purchase changes output."
           ],
           "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
-          "beforeStart": "The click button, purchase button and RefreshShop labels must already work. You will keep that shop and add passive income.",
-          "commonMistake": "If Score jumps by an extra point on every click, the old +1 chain is still active or you accidentally bound the original ClickerButton inside the widget as well as GameMode.",
+          "beforeStart": "The original ClickerButton is handled by BP_ClickerGameMode and the BuyUpgradeButton by ClickerGameUI. RefreshShop works from both events. You will build the Granny purchase and display BEFORE connecting a repeating timer.",
+          "commonMistake": "Do not try to test automatic income before you create and connect BuyGrannyButton: you need at least one owned Granny. Check the purchase and labels before starting the timer; keep just one GameMode production timer.",
           "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         },
         {
@@ -1063,7 +1091,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "where": "BP_ClickerGameMode → Functions → +.",
               "do": "Create TrainGrannies. Add Branch using (Score >= GrannyTrainingCost) AND (GranniesOwned > 0). From True: Set Score = Score - GrannyTrainingCost → Set GrannyRate = GrannyRate × 2 → Set GrannyTrainingCost = GrannyTrainingCost × 2. False does nothing. Compile.",
               "why": "The training has a price and only works when at least one Granny exists.",
-              "check": "With one Granny and 100 points, training leaves Score lower by 100, GrannyRate=2 and next cost=200."
+              "check": "TrainGrannies compiles. Its False path does nothing; after the button is connected, buying with one Granny and 100 Score doubles GrannyRate to 2 and sets next cost to 200."
             },
             {
               "title": "Add the upgrade button",
@@ -1089,7 +1117,7 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Check training never affects spending history",
               "where": "Play the game.",
-              "do": "Earn enough for 2 Grannies and one training. Buy training and watch Auto jump from 2 to 4/sec. Confirm Score decreases by the price but TotalEarned remains unchanged when buying.",
+              "do": "With two Grannies, earn at least 100 spendable points. Press Train once: the next upgrade costs 200 and Auto changes from 2/sec to 4/sec. Score drops by 100 at the moment of purchase but continues earning immediately from passive income; TotalEarned must never decrease.",
               "why": "Purchase and production must remain separate bookkeeping operations.",
               "check": "The income rate doubles while lifetime earnings only increase as new cookies are generated."
             }
@@ -1144,12 +1172,12 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Test earning and spending around the goal",
               "where": "Play the Clicker level.",
-              "do": "Earn points by clicking and by buying Grannies. Spend available Score on more producers. Confirm TotalEarned keeps rising and the milestone appears on reaching 500, even when Score is much less.",
+              "do": "For a quick test, temporarily set MilestoneTarget default to 20 in BP_ClickerGameMode, restart Play and earn 20 total points from clicks and Grannies. Verify the milestone appears once even if you spend Score. Restore the default MilestoneTarget to 500 afterwards. The milestone Text is a permanent achievement, not a game-over screen.",
               "why": "This catches the common error of checking spendable Score instead of lifetime progress.",
-              "check": "500 total earned triggers once, but purchases continue to work normally."
+              "check": "At test target 20, the achievement appears once and purchases remain possible; after restoring 500, a fresh game hides the banner until 500 lifetime points are earned."
             }
           ],
-          "check": "After earning 500 total points, the achievement shows while spending, clicking and Granny production continue normally.",
+          "check": "The lifetime milestone is triggered by TotalEarned (not spendable Score), appears once, and does not stop Granny production.",
           "fix": "No milestone? Check GainPoints updates TotalEarned on both manual and passive income. If milestone disappears after shopping, read MilestoneReached, not Score.",
           "designerSteps": [
             "Plan: Design an achievement badge or celebratory panel that appears when lifetime earnings reach 500. Keep the shop legible underneath. Draw a small mock-up of the main button, shop costs and production per second.",
@@ -1180,7 +1208,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "where": "BP_ClickerGameMode → Functions → +.",
               "do": "Create BuyFarm. Add Branch (Score >= FarmCost). From True: Set Score = Score - FarmCost → Set FarmsOwned = FarmsOwned + 1 → Set FarmCost = Ceiling(FarmCost × 1.30). Compile.",
               "why": "This uses the same proven purchase structure as BuyGranny, so students can expand independently.",
-              "check": "After buying the first Farm for 100, the next one costs 130."
+              "check": "BuyFarm compiles with a Score >= FarmCost check before its three Set nodes. After wiring BuyFarmButton, purchasing the first Farm for 100 raises FarmCost to 130."
             },
             {
               "title": "Extend the one income calculation",
@@ -1206,9 +1234,9 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Test combined income and lifetime earnings",
               "where": "Play the game.",
-              "do": "With 3 Grannies at 2/sec each and 2 Farms at 5/sec each, check Auto = (3×2)+(2×5)=16/sec. Let the game run five seconds and confirm around 80 points are generated while TotalEarned rises too. If you completed the optional milestone, confirm it still works.",
+              "do": "Test with 3 Grannies (trained once to GrannyRate 2) and 2 Farms (FarmRate 5). The expected production is (3×2)+(2×5)=16 points/sec. This setup may take a while to earn in normal play; for a quick development test, use the Blueprint debugger or temporarily give the GameMode a larger starting Score, then restore the Score default to 0. Watch production for around five seconds without clicks or purchases. TotalEarned should increase by roughly 80, and Score by the same amount.",
               "why": "Different systems must sum correctly without triggering separate duplicated timers.",
-              "check": "Automatic income and TotalEarned rise by roughly 16 each second; the milestone still works."
+              "check": "Three trained Grannies and two Farms give 16/sec using ONE timer; both Score and TotalEarned rise by roughly 80 over five seconds with no purchases."
             },
             {
               "title": "Plan your own next producer",
