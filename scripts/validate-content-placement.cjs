@@ -121,13 +121,13 @@ function audit(root = path.resolve(__dirname, '..')) {
   // Student-facing artist work starts without a selected game concept and
   // stays inside the existing Mini-Project Mayhem owning route.
   const jam=w.UE5_MINI_JAM_DATA||{};
-  const designer=jam.designerTrack||{},missions=items(designer.missions),kits=items(designer.kits);
-  if(missions.length!==6||kits.length!==4||!designer.sharedFolder||!designer.handoverRule||!designer.soloRule)
-    fail('Mayhem Designer Track','needs six practical missions, four specific kits, Teams handover and solo differentiation');
-  if(missions[0]?.id!=='observe'||missions[1]?.id!=='style-lab'||!missions[0]?.independent||!missions[1]?.independent)
+  const designerTrackSpec=jam.designerTrack||{},jamArtMissions=items(designerTrackSpec.jamArtMissions),jamArtKits=items(designerTrackSpec.jamArtKits);
+  if(jamArtMissions.length!==6||jamArtKits.length!==4||!designerTrackSpec.sharedFolder||!designerTrackSpec.handoverRule||!designerTrackSpec.soloRule)
+    fail('Mayhem Designer Track','needs six practical jamArtMissions, four specific jamArtKits, Teams handover and solo differentiation');
+  if(jamArtMissions[0]?.id!=='observe'||jamArtMissions[1]?.id!=='style-lab'||!jamArtMissions[0]?.independent||!jamArtMissions[1]?.independent)
     fail('Mayhem Designer Track','first two sessions must be independent of a final game concept');
   const missionIds=new Set();
-  for(const mission of missions){
+  for(const mission of jamArtMissions){
     if(missionIds.has(mission.id))fail('Mayhem Designer Track','duplicate mission id '+mission.id);
     missionIds.add(mission.id);
     if(!mission.id||!mission.title||!mission.when||!mission.goal||!mission.deliver||!mission.handover||!mission.solo||items(mission.steps).length<4)
@@ -135,10 +135,10 @@ function audit(root = path.resolve(__dirname, '..')) {
     for(const [i,step] of items(mission.steps).entries())
       if(!step.title||!step.where||!step.do||!step.check)fail('Designer mission '+mission.id,'action '+(i+1)+' missing where/do/check');
   }
-  const kitsByProject=new Set(kits.map(x=>x.project));
+  const kitsByProject=new Set(jamArtKits.map(x=>x.project));
   if(kitsByProject.size!==4||items(mini.projects).some(p=>!kitsByProject.has(p.id)))
     fail('Mayhem Designer Track','must give one unique kit to every source mini-project');
-  for(const kit of kits)
+  for(const kit of jamArtKits)
     if(!kit.title||!kit.minimum||!kit.firstAsset||!kit.handover||!kit.stretch||items(kit.tasks).length<4)
       fail('Designer kit '+kit.project,'needs minimum, safe first export, game-specific actions and integration note');
 
