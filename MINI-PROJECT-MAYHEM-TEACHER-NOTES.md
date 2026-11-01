@@ -13,7 +13,7 @@ Turn one existing UE5 Mini-Project into a short, replayable original game (or a 
 
 **Session 1 outcome:** a two-game comparison, essentials breakdown, labelled screen sketch and role handover. The programmer does not need to rush into Unreal before the plan is useful. A solo student researches one example and prepares smaller combined checklists.
 
-**Session 2:** the designer follows Mission 2 (two visual styles, one transparent PNG icon or simple FBX test asset, compare readability and export). The programmer continues the tutorial/first upgrade. Only **after** they have seen the working mechanic should the pair settle on a one-sentence concept in Mission 3. No student should spend the first two lessons inventing a giant story or polishing assets that may be thrown away.
+**Session 2:** the designer follows Mission 2 (two visual styles, one transparent PNG icon or simple FBX test asset, compare readability and export). The programmer begins the original Mini-Project tutorial and progresses towards the first Essential upgrade. Only **after** they have seen the working mechanic should the pair settle on a one-sentence concept in Mission 3. No student should spend the first two lessons inventing a giant story or polishing assets that may be thrown away.
 
 ## Teacher checkpoints
 - **Friday 6 November:** original mechanic functional; new gameplay idea demonstrated, possibly with placeholders; one custom art/design asset ready.
