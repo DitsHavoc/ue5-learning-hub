@@ -555,9 +555,9 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Check the original BowlingBall reference is valid",
               "where": "BP_BowlingPlayerController → Event Graph → Event BeginPlay.",
-              "do": "Find the existing Get Actor of Class (BP_BowlingBall) → Set BowlingBall nodes from the original mini-project, after Add Mapping Context (BowlingInputs). Verify one BP_BowlingBall is placed in BowlingLevel, and that Get Actor of Class Return Value is wired to Set BowlingBall. Temporarily add Is Valid to the reference and print \"Ball found\" on valid; run Play, then remove the debug print.",
+              "do": "In BP_BowlingPlayerController → Event Graph find the original BeginPlay path: Add Mapping Context(BowlingInputs) → Get Actor of Class(BP_BowlingBall) → Set BowlingBall. Select the existing Get Actor of Class node: its Return Value must connect to Set BowlingBall. Place exactly one BP_BowlingBall in BowlingLevel. Compile and Play once; confirm the original arrow keys still move it and Space still bowls. Do NOT add a second ball variable or duplicate this lookup.",
               "why": "ResetBall will use the SAME saved ball object already used by the Bowl and Move input actions.",
-              "check": "When Play begins, the single placed BP_BowlingBall is found successfully; no None reference appears."
+              "check": "The original input actions operate the one BP_BowlingBall found at BeginPlay, so ResetBall will target the same actor."
             },
             {
               "title": "Count throws in the Player Controller",
@@ -611,9 +611,9 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Play-test the first two throws before building the last-shot result",
               "where": "BowlingLevel → Play In Editor.",
-              "do": "Press Space once and count four seconds. Confirm the ball resets and the controller allows Left/Right aiming again. Press Space a second time; confirm ThrowsUsed is 2 and that any pins knocked down by the first shot stay down. Pressing Space while the ball rolls should do nothing.",
+              "do": "Press Space once, aiming to knock over only some pins (not all). Wait four seconds: the ball should reset and arrow keys should aim again. Press Space a second time, again leaving at least one pin standing. The ball resets a second time. Confirm the first throw’s fallen pins stay down and Score remains. If every pin falls early, RoundFinished correctly ends the game; restart Play to test the two-reset case.",
               "why": "This catches a bad physics reset before you spend time building UI or final scoring.",
-              "check": "Both throws work, Score and PinsDown persist, and no fourth or accidental throw is possible later."
+              "check": "On a round with pins still standing, ball resets after throw 1 and throw 2, and previous pin score is preserved. A complete strike ends the round early instead."
             },
             {
               "title": "End the round after the last shot",
@@ -660,23 +660,23 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Bind ScoreText to the live GameMode score",
               "where": "WBP_BowlingHUD → Designer → ScoreText → Details → Content → Text → Bind → Create Binding.",
-              "do": "In the generated binding function, add Get Game Mode → Cast To BP_BowlingGameMode. From Get Score make a Format Text node with the exact Format \"Score: {Value}\", and connect Score to Value (allow Integer-to-Text conversion). Connect the Format Text output to the binding Return Node (Text type). Compile.",
+              "do": "In WBP_BowlingHUD → Designer, select ScoreText → Details → Content → Text → Bind → Create Binding. In the generated binding Function, wire the purple Entry execution to Cast To BP_BowlingGameMode, with Get Game Mode → Cast Object. Wire Cast Success execution to Return Node execution. From the cast result Get Score, use Format Text \"Score: {Value}\" with Score connected to Value, then connect the text output to Return Value. Compile.",
               "why": "The scoreboard needs a label AND the live number; a bare integer would replace the text \"Score:\".",
               "check": "When one normal pin falls, the HUD binding returns \"Score: 1\"."
             },
             {
               "title": "Bind PinsText to the number knocked down",
               "where": "WBP_BowlingHUD → Designer → PinsText → Details → Content → Text → Bind → Create Binding.",
-              "do": "Use Get Game Mode → Cast To BP_BowlingGameMode → Get PinsDown. Format Text with \"Pins down: {Value}\" and connect to the Return Node. Compile.",
+              "do": "WBP_BowlingHUD → Designer → PinsText → Text → Bind → Create Binding. In the generated Function, connect Entry white execution → Cast To BP_BowlingGameMode (Object=Get Game Mode) → Return Node white execution. From the cast result Get PinsDown → Format Text \"Pins down: {Value}\" → Return Value. Compile. Do not drag the pin Actor counter into this widget; both values belong to the GameMode.",
               "why": "The GameMode keeps pins already knocked down across multiple throws.",
               "check": "After two different pins fall, this binding shows \"Pins down: 2\"."
             },
             {
               "title": "Read shots remaining",
               "where": "WBP_BowlingHUD → ThrowsText → Text → Bind → Create Binding.",
-              "do": "In WBP_BowlingHUD Designer, select ThrowsText → Details → Text → Bind → Create Binding. Get Owning Player → Cast To BP_BowlingPlayerController. From the controller Get MaxThrows and Get ThrowsUsed, calculate Max(0,MaxThrows-ThrowsUsed) with Integer nodes, Format Text \"Throws left: {Value}\", and return that Text. If the cast fails, return \"Throws left: 3\" as the harmless initial placeholder.",
+              "do": "WBP_BowlingHUD → Designer → ThrowsText → Text → Bind → Create Binding. In the generated Function, connect Entry white execution → Cast To BP_BowlingPlayerController (Object=Get Owning Player) → Return Node white execution. From cast result Get ThrowsUsed and MaxThrows, compute Max(0,MaxThrows-ThrowsUsed) with Integer math. Use Format Text \"Throws left: {Value}\" and connect its output to the Return Node Text value.",
               "why": "The HUD reads the same counter that gates the throw input.",
-              "check": "A fresh round reads \"Throws left: 3\". Immediately after the first valid Space press it reads \"Throws left: 2\" (even while the ball is travelling)."
+              "check": "With a successful Owning Player cast, ThrowsText returns \"Throws left: 3\" at start and \"Throws left: 2\" after pressing Space once; the integer is not displayed without its label."
             },
             {
               "title": "Show the widget",
@@ -709,9 +709,9 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Create the result-refresh event",
               "where": "WBP_BowlingHUD → Graph → Event Graph.",
-              "do": "Create a Custom Event named RefreshBowlingResult. From it Get Game Mode → Cast To BP_BowlingGameMode, read RoundFinished and connect to Branch. On True, use Format Text with \"ROUND OVER – SCORE: {Value}\" (Value=Get Score) → Set Text on ResultText → Set Visibility(Visible). On False set ResultText Visibility=Collapsed. Compile.",
+              "do": "In WBP_BowlingHUD → Event Graph, add Custom Event RefreshBowlingResult. From its white output connect Get Game Mode → Cast To BP_BowlingGameMode → Branch (Condition=Get RoundFinished). On True, use Get Score → Format Text \"ROUND OVER – SCORE: {Value}\" → Set Text(ResultText) → Set Visibility(ResultText,Visible), wiring white execution Set Text → Set Visibility. On False Set Visibility(ResultText,Collapsed). Compile.",
               "why": "A separate event updates the final panel without changing the normal live score bindings.",
-              "check": "RefreshBowlingResult contains both True (show score) and False (hide) paths."
+              "check": "Both the True and False Branch paths have visible execution wires into the correct ResultText widget; the result will be refreshed by the timer added next."
             },
             {
               "title": "Refresh that result without using Event Tick",
