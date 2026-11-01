@@ -1,4 +1,4 @@
-/* Individual Loops student review, original source mini-project unchanged. */
+/* Individual Loops student review, original illustrated tutorials untouched. */
 window.UE5_MINI_UPGRADE_DATA = {
   "version": "3.66.5",
   "title": "Mini-Project Upgrade Walkthroughs",
@@ -1585,91 +1585,140 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Set a realistic overall time",
               "where": "Loops GameMode → Variables.",
-              "do": "Create SecondsLeft (Integer; default 90). Keep Finished, WaveNumber, TargetsLeft and TargetsHit from the earlier upgrades. Compile.",
+              "do": "In BP_LoopsGameMode create SecondsLeft (Integer; default=90). Leave WaveNumber=1, FinalWave=5, TargetsLeft and TargetsHit from Stage 2, and Finished=false. Compile. This is ONE timer for the entire five-wave game, not a fresh 90 seconds per wave.",
               "why": "Five waves are too much for the earlier 30-second limit; 90 seconds is a better first test value.",
               "check": "SecondsLeft starts at 90."
             },
             {
-              "title": "Run a single countdown timer",
-              "where": "Loops GameMode → Event Graph → Event BeginPlay.",
-              "do": "Keep StartWave running on BeginPlay. Also run Set Timer by Event with Time=1.0, Looping=true and event TickRush (create a Custom Event in the Event Graph, then link via Create Event). Promote the Timer Handle to RushTimerHandle. Use a Sequence if necessary so wave spawning and the timer are both started once.",
-              "why": "The timer measures one whole run, not 30 seconds per wave.",
-              "check": "SecondsLeft drops by one each second during Play."
+              "title": "Add the one-second TickRush event",
+              "where": "BP_LoopsGameMode → Event Graph → empty space.",
+              "do": "Add Custom Event named TickRush. Connect a TEMPORARY Print String \"CLOCK TICK\" to it and Compile. Do not touch the existing AdvanceWave or ScheduleNextWave events.",
+              "why": "Test that the new timer fires separately from the wave-transition delay.",
+              "check": "TickRush exists as a Custom Event in Event Graph."
+            },
+            {
+              "title": "Start the round clock ONCE at BeginPlay",
+              "where": "BP_LoopsGameMode → Event Graph → Event BeginPlay.",
+              "do": "Keep the existing StartWave call from Stage 2. Immediately after that call, add Set Timer by Event(Time=1.0, Looping checked). On its red Event delegate use Create Event → select TickRush. Promote Return Value to a Timer Handle variable named RushTimerHandle. Compile and Play.",
+              "why": "The one-second timer must start once for the whole run, not when each wave spawns.",
+              "check": "The \"CLOCK TICK\" message appears about once each second. Remove the temporary Print String before continuing."
             },
             {
               "title": "Stop on time out",
               "where": "Loops GameMode → Custom Event TickRush.",
-              "do": "Branch on NOT Finished. On True set SecondsLeft = Max(0, SecondsLeft-1). If SecondsLeft <= 0, set Finished=true, Print String \"TIME UP!\" and Clear and Invalidate Timer by Handle with RushTimerHandle.",
+              "do": "In BP_LoopsGameMode → Event Graph → TickRush, replace the temporary Print String with Branch(Condition=NOT Finished). From Branch True Set SecondsLeft=Max(0,SecondsLeft-1). After that Set, add Branch(Condition=SecondsLeft<=0). Its True path sets Finished=true → Print String \"TIME UP!\" → Clear and Invalidate Timer by Handle(RushTimerHandle). Compile.",
               "why": "A definite timeout makes the challenge replayable.",
-              "check": "At 0 seconds the timer stops and no more targets can be scored."
+              "check": "The single countdown drops by one each second. On reaching zero, Finished becomes true, the timer stops and no further target clicks count."
             },
             {
               "title": "Stop the clock on victory",
               "where": "Loops GameMode → HitTarget → final-wave True path.",
-              "do": "After Set Finished=true, add Clear and Invalidate Timer by Handle with RushTimerHandle. Keep the \"ALL WAVES COMPLETE!\" message.",
+              "do": "Open BP_LoopsGameMode → HitTarget function. On the FinalWave Branch True output, find the Set Finished=true → Print String \"ALL WAVES COMPLETE!\" chain from Stage 2. After Set Finished add Clear and Invalidate Timer by Handle(RushTimerHandle), then Print String. Compile. Keep the Score/TargetsHit chain connected BEFORE the win test.",
               "why": "Winning early should preserve the remaining time.",
-              "check": "Finishing wave 5 stops SecondsLeft wherever it is."
+              "check": "When the last target of wave 5 is clicked, Finished=true and RushTimerHandle is cleared so SecondsLeft freezes at its current value."
             },
             {
               "title": "Do not spawn after timeout",
               "where": "Loops GameMode → AdvanceWave custom event.",
-              "do": "Before incrementing WaveNumber and calling StartWave, add Branch on NOT Finished. Only True may advance.",
+              "do": "Open BP_LoopsGameMode → Event Graph → AdvanceWave Custom Event from Stage 2. Insert a Branch(Condition=NOT Finished) before Set WaveNumber=WaveNumber+1 → StartWave. Only True continues. This protects the 0.75-second delayed wave event if it fires after TIME UP. Leave the ScheduleNextWave one-shot timer unchanged.",
               "why": "A pending 0.75-second wave timer might finish after the overall clock ends.",
-              "check": "At Time Up, no additional wave appears even if the previous wave just ended."
+              "check": "If TIME UP happens during the 0.75-second wait between waves, AdvanceWave does not create another wave."
             },
             {
               "title": "Build a simple HUD",
               "where": "Content Drawer → Loops folder → User Interface → Widget Blueprint → User Widget.",
-              "do": "Create WBP_TargetRushHUD and add three Text widgets WaveText, TargetsText and TimeText. Tick Is Variable. Set clear placeholder labels \"Wave: 1\", \"Targets: 5\", \"Time: 90\".",
+              "do": "In Content/Loops create WBP_TargetRushHUD (Widget Blueprint → User Widget). Add FOUR Text widgets: WaveText, TargetsText, TimeText, HitsText, tick Is Variable on all four. Use placeholders \"Wave: 1\", \"Targets: 5\", \"Time: 90\", \"Hits: 0\". Keep a compact row/column of labels away from the 3×3 playfield.",
               "why": "Players need to understand the escalating objective at a glance.",
-              "check": "The three labels are visible and legible in the chosen viewport."
+              "check": "Four readable labels appear in the Designer; none overlap the three-by-three target grid."
             },
             {
               "title": "Keep the HUD from blocking your targets",
               "where": "WBP_TargetRushHUD → Designer → select the root Canvas Panel.",
               "do": "Set Visibility on the root Canvas Panel to Not Hit-Testable (Self & All Children). The wave game uses keyboard R to restart, so this display has no interactive buttons. Leave the player controller mouse-click events enabled.",
               "why": "A decorative UMG overlay must not intercept clicks on the target Actors behind it.",
-              "check": "Click a target through empty HUD areas; its TargetsLeft counter still drops."
+              "check": "The root Canvas Panel is Not Hit-Testable (Self & All Children); clickability will be tested after Create Widget → Add to Viewport is connected."
             },
             {
-              "title": "Connect the HUD values",
-              "where": "WBP_TargetRushHUD → each text element → Details → Text → Bind → Create Binding.",
-              "do": "Read the assigned Loops GameMode using Get Game Mode → Cast. WaveText reads WaveNumber; TargetsText reads TargetsLeft; TimeText reads SecondsLeft. Convert to Text (Integer) or use Format Text with labels. Compile.",
-              "why": "The HUD reads the one GameMode state rather than maintaining duplicate values.",
-              "check": "When wave 2 appears, the display reads Wave 2 and Targets 6."
+              "title": "Bind Wave and Targets with labels",
+              "where": "WBP_TargetRushHUD → Designer → WaveText → Details → Text → Bind → Create Binding. Repeat for TargetsText.",
+              "do": "For EACH binding, use Get Game Mode → Cast To BP_LoopsGameMode; connect white execution from Function Entry → Cast Success → Return. For WaveText, Get WaveNumber → Format Text \"Wave: {Value}\" → Return Text. For TargetsText, Get TargetsLeft → Format Text \"Targets: {Value}\" → Return Text. Compile both.",
+              "why": "Raw integer bindings would replace the word Wave/Targets with just numbers.",
+              "check": "On wave 2 the HUD will display \"Wave: 2\" and \"Targets: 6\"."
             },
             {
-              "title": "Display a persistent end message",
+              "title": "Bind Time and Hits with labels",
+              "where": "WBP_TargetRushHUD → Designer → TimeText and HitsText → Text → Bind → Create Binding.",
+              "do": "For TimeText get GameMode.SecondsLeft and Format Text \"Time: {Value}\", then return the Text. For HitsText get GameMode.TargetsHit and Format Text \"Hits: {Value}\", then return the Text. In both binding functions wire Function Entry → Cast To BP_LoopsGameMode → Return white execution and Cast Object=Get Game Mode. Compile.",
+              "why": "Hits is a lifetime score for the five waves and should stay visible while TargetsLeft resets each wave.",
+              "check": "The HUD shows \"Time: 90\" at the start and \"Hits: 0\"; after wave 1 Hits shows 5 while TargetsLeft resets to 6."
+            },
+            {
+              "title": "Add a result label that starts hidden",
               "where": "WBP_TargetRushHUD → Designer.",
-              "do": "Add ResultText with \"GAME OVER\" initially Collapsed and tick Is Variable. Add a function RefreshResult: Get Game Mode → Cast to Loops GameMode → check Finished. When true, show ResultText and choose \"WAVES CLEARED!\" if WaveNumber >= FinalWave AND TargetsLeft == 0; otherwise show \"TIME UP!\". In Event Construct use repeating Set Timer by Event (0.25 sec) to run RefreshResult.",
-              "why": "The game should tell the player whether they won or ran out of time.",
-              "check": "After the run, a visible message stays until replay."
+              "do": "Add a Text widget named ResultText with placeholder \"GAME OVER\", tick Is Variable and set Visibility=Collapsed. Position it away from the ordinary Wave/Targets/Time/Hits labels. No replay button is required; the R key will restart the whole level. Compile.",
+              "why": "A result should appear only when Finished becomes true.",
+              "check": "The result does not cover the level at the start."
             },
             {
-              "title": "Create a replay input",
-              "where": "Content Drawer → Loops → Input folder and BP_LoopsPlayerController.",
-              "do": "Create IA_RestartRush (Boolean) and IMC_TargetRush with an R binding. On the controller BeginPlay add the mapping context via Enhanced Input Local Player Subsystem; use IA_RestartRush Started → Get Current Level Name (Remove Prefix String=true) → Open Level by Name. Compile.",
-              "why": "Reopening the current map returns wave, targets, scores and timer to their defaults.",
-              "check": "Press R at any point: five new targets and a 90-second clock appear."
+              "title": "Make a single result-refresh event",
+              "where": "WBP_TargetRushHUD → Event Graph → Add Custom Event.",
+              "do": "Create Custom Event named RefreshRushResult. Connect it to Get Game Mode → Cast To BP_LoopsGameMode → Branch(Condition=Get Finished). On False set ResultText Visibility=Collapsed. On True check (WaveNumber>=FinalWave) AND (TargetsLeft==0): if True Set Text(ResultText,\"WAVES CLEARED!\") then Set Visibility=Visible; otherwise Set Text(ResultText,\"TIME UP!\") then Set Visibility=Visible. Compile.",
+              "why": "The GameMode owns the win/loss decision and the widget only displays it.",
+              "check": "RefreshRushResult has clear Win, Time Up and not-finished execution paths."
+            },
+            {
+              "title": "Schedule the result refresh inside the widget",
+              "where": "WBP_TargetRushHUD → Event Graph → Event Construct.",
+              "do": "Connect Event Construct → Set Timer by Event(Time=0.25, Looping checked); from red Event delegate use Create Event to select RefreshRushResult. Do not put this timer in BP_LoopsGameMode: it belongs to the single HUD widget. Compile.",
+              "why": "The result stays visible instead of appearing only as a quick debug print.",
+              "check": "When a round ends, the correct Win/Time Up label appears and stays until R restart."
+            },
+            {
+              "title": "Create one R input action and mapping",
+              "where": "Content Drawer → Content → Loops → Input folder.",
+              "do": "Create an Input folder if you do not already have one. Create Input Action IA_RestartRush with Value Type=Digital (Boolean). Create Input Mapping Context IMC_TargetRush and add a mapping IA_RestartRush → Keyboard R. Save both. This is the only new mapping context for this project.",
+              "why": "The original Loops tutorial did not set up Enhanced Input. We now give the Player Controller one restart action.",
+              "check": "IMC_TargetRush contains exactly one keyboard R mapping to IA_RestartRush."
+            },
+            {
+              "title": "Enable restart input without breaking the fixed camera",
+              "where": "BP_LoopsPlayerController → Event Graph → existing Event BeginPlay.",
+              "do": "KEEP the cursor → click events → Get Actor of Class(CameraActor) → Set View Target with Blend sequence. AFTER it add Get Enhanced Input Local Player Subsystem (from Self) → Add Mapping Context with Mapping Context=IMC_TargetRush and Priority=0. Compile.",
+              "why": "The same controller must show the cursor, control the camera and activate the R mapping.",
+              "check": "Play still shows Cam_TargetRush, a visible mouse pointer and clickable targets."
+            },
+            {
+              "title": "Reload the current map when R is pressed",
+              "where": "BP_LoopsPlayerController → Event Graph → IA_RestartRush Input Action event.",
+              "do": "Connect its Started white execution → Open Level (by Name). Add Get Current Level Name (Remove Prefix String ticked) and connect to Open Level.Level Name. Compile and Save. Do not call StartWave manually on restart: Open Level starts everything fresh through BeginPlay.",
+              "why": "A level reload resets the GameMode counters, timers, spawned actors and HUD together.",
+              "check": "Press R after Time Up or winning: LoopsLevel restarts on Wave 1 with five targets and Time: 90."
             },
             {
               "title": "Put the HUD in the controller",
               "where": "BP_LoopsPlayerController → Event BeginPlay.",
-              "do": "After the existing Show Mouse Cursor / Enable Click Events setup, add Create Widget (WBP_TargetRushHUD, Owning Player=Self) → Add to Viewport. Use Sequence if needed so click events, input mapping and UI creation all run. Compile.",
+              "do": "In BP_LoopsPlayerController → Event BeginPlay keep the original Show Mouse Cursor → Set Enable Click Events → Set View Target with Blend chain and the NEW Add Mapping Context(IMC_TargetRush) from the previous steps. AFTER those nodes add Create Widget(Class=WBP_TargetRushHUD, Owning Player=Self) → Add to Viewport(Target=Create Widget Return Value). Compile. Do NOT create a second PlayerController or a second HUD instance.",
               "why": "The controller is already active in the original target game.",
-              "check": "Wave, targets and timer are visible immediately on starting Play."
+              "check": "Play: fixed camera, pointer and click events still work, four HUD labels are visible, and R reloads the level."
+            },
+            {
+              "title": "Test both endings without waiting for 90 seconds",
+              "where": "LoopsLevel → BP_LoopsGameMode Class Defaults and Play In Editor.",
+              "do": "First temporarily set SecondsLeft default from 90 to 5; Compile, start Play and wait without clearing wave 1. Verify \"TIME UP!\", clicks no longer count, no extra wave appears, and R restarts. Then set SecondsLeft back to 90 and test a full 5→6→7→8→9 wave victory, checking Hits=35 and the \"WAVES CLEARED!\" message. SAVE with SecondsLeft=90 afterwards.",
+              "why": "A short controlled failure test catches end-state bugs; a full run proves the game is completable.",
+              "check": "Both endings are shown correctly, R works, and the final saved timer is 90 seconds."
             }
           ],
-          "check": "Waves and targets count correctly, the time drops 90→0, a win or loss result appears, and R starts a fresh five-wave run.",
-          "fix": "Timer or labels missing? Check you use the active Loops GameMode and Controller via World Settings. If the UI remains unchanged after a new wave, confirm each Text binding reads the GameMode variables; refresh end message on a widget timer. If click targets stop responding after adding the HUD, verify the root is Not Hit-Testable (Self & All Children).",
+          "check": "Five waves run through counts 5→6→7→8→9. The HUD displays Wave/Targets/Time/Hits, the overall 90-second timer stops at win or timeout, and R starts a clean new run.",
+          "fix": "Clock frozen? Check one BP_LoopsGameMode TickRush timer starts from BeginPlay, not StartWave. Missing labels? Use Format Text with Wave/Targets/Time/Hits in each widget binding. Clicks stop after HUD? Set root Canvas Not Hit-Testable (Self & All Children). Restart missing? Ensure the single IMC_TargetRush is added to the original BP_LoopsPlayerController. New wave appears after TIME UP? Gate AdvanceWave on NOT Finished.",
           "designerSteps": [
             "Plan: Design an on-screen wave/timer/targets HUD and a result message for success or timeout. Draw a small mock-up of the nine-target 3×3 grid and timer.",
             "Create: make one original element for Add a 90-second wave race and replay using targets, arena props or wave HUD graphics. Export as FBX or PNG to your shared Teams folder.",
             "Integrate and test: ask the programmer to import your asset; play together and confirm every target stays visible and clickable."
           ],
           "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
-          "beforeStart": "All five waves should appear in order and finish on wave 5. The HUD and timer are being added to the existing GameMode.",
-          "commonMistake": "If the HUD appears but targets do not react, make the overlay Not Hit-Testable (Self & All Children).",
+          "beforeStart": "Stage 2 creates exactly five waves of 5,6,7,8,9 stationary targets via StartWave and ScheduleNextWave. Cam_TargetRush shows all nine positions. After 35 valid clicks, the debug win appears; there is not yet a countdown or HUD.",
+          "commonMistake": "The level has TWO separate types of timer: a one-shot 0.75-second next-wave timer in GameMode and a single 1-second round countdown, plus an unrelated 0.25-second widget display refresh. Do not put a new countdown into every StartWave call.",
           "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         },
         {
