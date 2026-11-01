@@ -21,9 +21,10 @@ const STUDY = window.UE5_STUDY_DATA;
 const BACKEND = window.UE5_BACKEND;
 const SKILL_MISSIONS = window.UE5_SKILL_MISSIONS || {missions:[]};
 const CPP_SKILL_MISSIONS = window.UE5_CPP_SKILL_MISSIONS || {missions:[],planned:[]};
-const HUB_VERSION = '3.63.3';
+const HUB_VERSION = '3.64.1';
 const MINI = window.UE5_MINI_PROJECT_DATA || {projects:[]};
 const MINI_NOTES = window.UE5_MINI_PROJECT_NOTES || {};
+const MINI_UPGRADES = window.UE5_MINI_UPGRADE_DATA || {projects:[]};
 
 const RETIRED_XP_CHROME = [
   '.side-progress','.version-badge',
@@ -1950,7 +1951,7 @@ function miniProjectsPage(){
   return '<div class="mini-shell">'+miniTrail([{title:'Build',href:'#/build'},{title:'Mini-Projects'}])+
   '<header class="mini-header"><span class="eyebrow">BUILD • PROJECT-LED PRACTICE</span><h1>Unreal Engine Mini-Projects</h1><p>Four complete practical routes. Work through the guided stages, test what you have built, and mark each stage complete when it works. You can revisit every guide at any time.</p><div class="mini-chips"><span>'+MINI.projects.length+' mini-projects</span><span>'+MINI.projects.reduce((n,p)=>n+p.stages.length,0)+' stages</span><span>Unreal Engine 5.8 source notes</span></div></header>'+
   '<div class="mini-jam-banner"><div><span class="eyebrow">2–13 NOVEMBER 2026 • TEAM GAME JAM</span><h2>Mini-Project Mayhem</h2><p>Start with a guided build, then turn it into an original game with your partner.</p></div><a class="button primary" href="#/mini-projects/jam">Open the game jam brief →</a></div>'+
-  '<div class="mini-project-grid">'+MINI.projects.map(miniCard).join('')+'</div></div>';
+  '<div class="mini-project-grid">'+MINI.projects.map(miniCard).join('')+'</div>'+ '<section class="mini-information mini-upgrade-promo"><h2>Finished the tutorial?</h2><p>Turn it into a real game with step-by-step scoring, timers, upgrades and playtesting. Written guides only, no new screenshots.</p><a class="button primary" href="#/mini-projects/upgrades">Explore game upgrades →</a></section></div>';
 }
 function miniJamPage(){
   const j=window.UE5_MINI_JAM_DATA;if(!j)return notFound();
@@ -1970,6 +1971,7 @@ function miniJamPage(){
     <section class="mini-jam-section"><span class="eyebrow">STEP 1 • PICK YOUR FOUNDATION</span><h2>Choose one starting project</h2>
       <div class="mini-jam-starters">${j.starters.map(s=>`<a class="mini-jam-starter" href="${miniHref(s.project)}"><span class="mini-jam-starter-icon" aria-hidden="true">${esc(s.icon)}</span><h3>${esc(s.name)}</h3><p>${esc(s.foundation)}</p><small><strong>Make it yours:</strong> ${esc(s.ideas)}</small><b>Open guided project →</b></a>`).join('')}</div>
     </section>
+    <section class="mini-information mini-upgrade-promo"><span class="eyebrow">GOT THE TUTORIAL WORKING?</span><h2>Follow the upgrade walkthroughs</h2><p>Each starting project has text-only Blueprint steps, individual tests and an artist/designer task. Start with the Essential upgrades before choosing your own changes.</p><a class="button primary" href="#/mini-projects/upgrades">Find your upgrade steps →</a></section>
     <section class="mini-jam-section"><span class="eyebrow">STEP 2 • WORK AS A TWO-PERSON STUDIO</span><h2>One team, two PCs</h2>
       <div class="mini-jam-roles">
         <div class="mini-information"><h3>Programmer</h3><p>Own the Unreal project. Complete the tutorial, build the gameplay extension, import assets, handle logic and help test the finished game.</p></div>
@@ -1987,6 +1989,59 @@ function miniJamPage(){
     <nav class="mini-stage-bottom" aria-label="Continue learning"><a class="button ghost" href="#/mini-projects">← Back to Mini-Projects</a><a class="button primary" href="#/mini-projects">Choose your starting project →</a></nav>
   </div>`;
 }
+
+/* Optional game-jam upgrade walkthroughs: one extension pathway per existing
+   Mini-Project, separate progress from original author-supplied stage checkmarks. */
+const MINI_UPGRADE_STORE='ue5hub:mini-upgrades:v1';
+function miniUpgradesCompleted(){
+  try{const list=JSON.parse(localStorage.getItem(MINI_UPGRADE_STORE)||'[]');
+    return Array.isArray(list)?list.filter(x=>typeof x==='string'):[];
+  }catch(e){return []}
+}
+function miniUpgradeProject(id){return (MINI_UPGRADES.projects||[]).find(p=>p.project===id)}
+function miniUpgradeHref(id,stage){return '#/mini-projects/upgrades/'+id+(stage?'/'+stage:'')}
+function miniUpgradeCards(p){
+  const completed=new Set(miniUpgradesCompleted());
+  return p.stages.map((stage,i)=>'<a class="mini-upgrade-card" href="'+miniUpgradeHref(p.project,stage.id)+'">'+
+    '<span class="eyebrow">'+(completed.has(stage.id)?'✓ COMPLETE':esc(stage.tier)+' • STAGE '+(i+1))+'</span>'+
+    '<h3>'+esc(stage.title)+'</h3><p>'+esc(stage.outcome)+'</p><strong>Open text walkthrough →</strong></a>').join('');
+}
+function miniUpgradeLanding(){
+  return '<div class="mini-shell mini-upgrades">'+miniTrail([{title:'Build',href:'#/build'},{title:'Mini-Projects',href:'#/mini-projects'},{title:'Game jam upgrades'}])+
+    '<header class="mini-header"><span class="eyebrow">MINI-PROJECT MAYHEM • NEXT STEP</span><h1>Upgrade your Mini-Project</h1><p>Finish one starter tutorial, then make it a game. Follow these text-only Blueprint instructions, test each upgrade and work with your artist/designer to give it an original identity.</p></header>'+
+    '<div class="mini-upgrade-grid">'+(MINI_UPGRADES.projects||[]).map(p=>'<a class="mini-upgrade-card" href="'+miniUpgradeHref(p.project)+'"><span class="eyebrow">'+p.stages.length+' GUIDED UPGRADES</span><h3>'+esc(p.title)+'</h3><p>'+esc(p.intro)+'</p><strong>Choose this game →</strong></a>').join('')+'</div></div>';
+}
+function miniUpgradeProjectPage(id){
+  const p=miniUpgradeProject(id),original=miniProject(id);
+  if(!p||!original)return notFound();
+  const completed=new Set(miniUpgradesCompleted());
+  return '<div class="mini-shell mini-upgrades">'+miniTrail([{title:'Build',href:'#/build'},{title:'Mini-Projects',href:'#/mini-projects'},{title:'Upgrades',href:'#/mini-projects/upgrades'},{title:original.title}])+
+    '<header class="mini-header"><span class="eyebrow">AFTER THE ORIGINAL TUTORIAL • '+p.stages.filter(x=>completed.has(x.id)).length+'/'+p.stages.length+' UPGRADES DONE</span><h1>'+esc(p.title)+'</h1><p>'+esc(p.intro)+'</p><div class="mini-chips"><span>Text-only, step by step</span><span>Programmer + artist/designer</span><span>Essential first • Creative later</span></div><a class="button ghost" href="'+miniHref(id)+'">← Open original '+esc(original.title)+' tutorial</a></header>'+
+    '<section class="mini-information"><h2>Before you start</h2><p>Complete and test the original <a href="'+miniHref(id)+'">'+esc(original.title)+'</a> first. Make a copy or backup of the working project. These upgrade steps use its existing Blueprints and map; if you renamed anything, use your own matching class name.</p><p>Follow the stages in order. Each stage has exact instructions, an artist/designer task, a final test and a fix if something goes wrong. Progress is saved only in this browser, separately from the original stages.</p></section>'+
+    '<div class="mini-upgrade-grid">'+miniUpgradeCards(p)+'</div>'+
+    '<nav class="mini-stage-bottom"><a class="button ghost" href="#/mini-projects/jam">← Game jam brief</a><a class="button primary" href="'+miniUpgradeHref(id,p.stages[0].id)+'">Start first upgrade →</a></nav></div>';
+}
+function miniUpgradeStagePage(id,stageId){
+  const p=miniUpgradeProject(id),original=miniProject(id),st=p?.stages?.find(x=>x.id===stageId);
+  if(!p||!original||!st)return notFound();
+  const idx=p.stages.findIndex(x=>x.id===stageId),done=miniUpgradesCompleted().includes(st.id);
+  const prev=p.stages[idx-1],next=p.stages[idx+1];
+  return '<div class="mini-shell mini-upgrades mini-upgrade-stage">'+miniTrail([{title:'Build',href:'#/build'},{title:'Mini-Projects',href:'#/mini-projects'},{title:original.title,href:miniHref(id)},{title:'Upgrades',href:miniUpgradeHref(id)},{title:st.title}])+
+    '<header class="mini-header"><span class="eyebrow">'+esc(original.title)+' • '+esc(st.tier.toUpperCase())+' • UPGRADE '+(idx+1)+' OF '+p.stages.length+'</span><h1>'+esc(st.title)+'</h1><p>'+esc(st.outcome)+'</p><div class="mini-chips"><span>'+(done?'✓ Completed':'Build → check → improve')+'</span><span>No images • exact Blueprint steps</span></div></header>'+
+    '<div class="mini-lesson-grid"><div class="mini-main-column">'+
+    '<section class="mini-information"><span class="eyebrow">START HERE</span><h2>Your build target</h2><p>'+esc(st.outcome)+'</p><p class="mini-small-note">Work in your existing project. Follow each task in order; compile and save before testing.</p></section>'+
+    '<section class="mini-information mini-upgrade-walkthrough"><span class="eyebrow">PROGRAMMER • GUIDED BUILD</span><h2>Follow these steps</h2><div class="mini-upgrade-steps">'+st.steps.map((step,i)=>
+      '<details class="mini-source-section mini-upgrade-step" '+(i===0?'open':'')+'><summary><span class="mini-section-title"><strong>'+(i+1)+'. '+esc(step.title)+'</strong><small>Where → Do → Why → Check</small></span><span class="mini-section-toggle" aria-hidden="true">⌄</span></summary><div class="mini-upgrade-instructions">'+
+      '<p><strong>Go to</strong><span>'+esc(step.where)+'</span></p><p><strong>Do this</strong><span>'+esc(step.do)+'</span></p><p><strong>Why</strong><span>'+esc(step.why)+'</span></p><p class="mini-upgrade-step-check"><strong>Check</strong><span>'+esc(step.check)+'</span></p></div></details>').join('')+'</div></section>'+
+    '<section class="mini-information mini-upgrade-designer"><span class="eyebrow">ARTIST / DESIGNER • PARALLEL TASK</span><h2>Make it look and feel better</h2><p>'+esc(st.designer)+'</p><p class="mini-small-note">Create on your own PC. Share FBX/PNG/TGA files through Teams and have the programmer import or reimport them into Unreal.</p></section>'+
+    '<section class="mini-information mini-proof"><span class="eyebrow">PROVE IT WORKS</span><h2>Final test</h2><p>'+esc(st.check)+'</p><details><summary>If something does not work</summary><p>'+esc(st.fix)+'</p></details></section>'+
+    '<section class="mini-complete-panel"><p>Mark complete only after running the game and passing the final test. Upgrade progress is local to this browser and does not change the original tutorial checkmarks.</p><button class="button '+(done?'success':'primary')+'" data-action="mini-upgrade-complete" data-stage="'+esc(st.id)+'">'+(done?'✓ Completed — click to undo':'Mark upgrade complete ✓')+'</button></section>'+
+    '<nav class="mini-stage-bottom" aria-label="Upgrade navigation">'+(prev?'<a class="button ghost" href="'+miniUpgradeHref(id,prev.id)+'">← Previous upgrade</a>':'<a class="button ghost" href="'+miniUpgradeHref(id)+'">← Upgrade overview</a>')+
+    (next?'<a class="button primary" href="'+miniUpgradeHref(id,next.id)+'">Next upgrade →</a>':'<a class="button primary" href="'+miniUpgradeHref(id)+'">All upgrades ✓</a>')+'</nav>'+
+    '</div><aside class="mini-side-column"><div class="mini-information mini-side-stages"><strong>Upgrade pathway</strong>'+p.stages.map((x,i)=>'<a class="'+(x.id===st.id?'current':'')+'" href="'+miniUpgradeHref(id,x.id)+'"><span>'+(miniUpgradesCompleted().includes(x.id)?'✓':i+1)+'</span>'+esc(x.title)+'</a>').join('')+'</div>'+
+    '<div class="mini-information"><strong>Need the starting build?</strong><a href="'+miniHref(id)+'">Return to '+esc(original.title)+' tutorial →</a></div></aside></div></div>';
+}
+
 function miniAssetCard(p){
   if(!['balloon-popper','bowling'].includes(p?.id))return '';
   const specific=p.id==='balloon-popper'?'BalloonModel.fbx (use FBX for UE5.6+).':'BowlingPin.fbx. Build the ball from Unreal Engine\'s standard Sphere mesh.';
@@ -2066,6 +2121,7 @@ function miniProjectPage(id){
   return '<div class="mini-shell">'+miniTrail([{title:'Build',href:'#/build'},{title:'Mini-Projects',href:'#/mini-projects'},{title:p.title}])+
   '<header class="mini-header"><span class="eyebrow">'+p.icon+' • '+esc(p.level)+' • '+z.done+'/'+z.total+' STAGES COMPLETE</span><h1>'+esc(p.title)+'</h1><p>'+esc(p.description)+'</p><div class="mini-chips">'+p.skills.map(x=>'<span>'+esc(x)+'</span>').join('')+'</div><a class="button primary" href="'+miniHref(p.id,first.id)+'">'+(z.done?'Continue the build':'Start at Stage 1')+' →</a></header>'+
   '<section class="mini-project-overview"><h2>Your project stages</h2><div class="mini-stage-list">'+p.stages.map((s,i)=>'<a class="mini-stage-link" href="'+miniHref(p.id,s.id)+'"><span class="mini-stage-number">'+(done.has(s.id)?'✓':String(i+1).padStart(2,'0'))+'</span><span><strong>'+esc(s.title)+'</strong><small>'+esc(s.outcome)+'</small></span><span class="mini-link-arrow">→</span></a>').join('')+'</div></section>'+
+  '<section class="mini-information mini-upgrade-promo"><span class="eyebrow">AFTER THE TUTORIAL</span><h2>Turn this into your own game</h2><p>Complete the original stages, then follow text-only upgrade guides with exact Blueprint instructions and checks.</p><a class="button primary" href="'+miniUpgradeHref(p.id)+'">Open '+esc(p.title)+' upgrades →</a></section>'+ 
   miniAssetCard(p)+'<section class="mini-information"><h2>Before you start</h2><p><strong>Course assets:</strong> '+esc(p.assets.join('; '))+'.</p><p>Helpful existing Core lessons: '+p.lessonIds.map(id=>{const l=lesson(id);return l?'<a href="#/lesson/'+esc(id)+'">'+esc(l.title)+'</a>':''}).filter(Boolean).join(' · ')+'</p><p>The stage notes are from the supplied 2026 course document. Refer to the page numbers where needed.</p></section></div>';
 }
 function miniStagePage(projectId,stageId){
@@ -3898,6 +3954,9 @@ function route(options={}){
   else if(parts[0]==='learn'){app.innerHTML=learnHubPage();activate('learn')}
   else if(parts[0]==='build'){app.innerHTML=buildHubPage();activate('build')}
   else if(parts[0]==='mini-projects'&&parts[1]==='jam'&&!parts[2]){app.innerHTML=miniJamPage();activate('build')}
+  else if(parts[0]==='mini-projects'&&parts[1]==='upgrades'&&parts[2]&&parts[3]){app.innerHTML=miniUpgradeStagePage(parts[2],parts[3]);activate('build')}
+  else if(parts[0]==='mini-projects'&&parts[1]==='upgrades'&&parts[2]){app.innerHTML=miniUpgradeProjectPage(parts[2]);activate('build')}
+  else if(parts[0]==='mini-projects'&&parts[1]==='upgrades'){app.innerHTML=miniUpgradeLanding();activate('build')}
   else if(parts[0]==='mini-projects'&&parts[1]&&parts[2]){app.innerHTML=miniStagePage(parts[1],parts[2]);activate('build')}
   else if(parts[0]==='mini-projects'&&parts[1]){app.innerHTML=miniProjectPage(parts[1]);activate('build')}
   else if(parts[0]==='mini-projects'){app.innerHTML=miniProjectsPage();activate('build')}
@@ -4457,7 +4516,17 @@ document.addEventListener('click',async e=>{
   const b=e.target.closest('[data-action]');if(!b)return;
   const r=b.getBoundingClientRect();completionBurstPoint={x:r.left+r.width/2,y:r.top+r.height/2};
   const a=b.dataset.action;
-  if(a==='mini-complete'){
+  if(a==='mini-upgrade-complete'){
+    const id=b.dataset.stage||'';
+    const all=(MINI_UPGRADES.projects||[]).flatMap(p=>p.stages).map(x=>x.id);
+    if(!all.includes(id))return;
+    const completed=new Set(miniUpgradesCompleted());
+    if(completed.has(id))completed.delete(id);else completed.add(id);
+    localStorage.setItem(MINI_UPGRADE_STORE,JSON.stringify([...completed]));
+    route({preserveScroll:true});
+    toast(completed.has(id)?'Upgrade marked complete.':'Upgrade marked incomplete.');
+  }
+  else if(a==='mini-complete'){
     const id=b.dataset.stage||'';
     const all=MINI.projects.flatMap(p=>p.stages).map(x=>x.id);
     if(!all.includes(id))return;
@@ -5183,6 +5252,11 @@ function buildGlobalSearchIndex(){
     ['Study','Homework, revision quizzes, Building Blocks, Blueprint Checks, Cheat Sheet and glossary','#/study','↻','hub']
   ].forEach(([title,data,href,icon,kind])=>add({title,meta:'Student hub',href,icon,kind,data}));
 
+  add({title:'Mini-Project upgrades — Text-only game jam walkthroughs',meta:'Build • Mini-Projects • Upgrade Guides',href:'#/mini-projects/upgrades',icon:'✦',kind:'mini-project-upgrades',data:deepSearchText(MINI_UPGRADES)});
+  (MINI_UPGRADES.projects||[]).forEach(p=>{
+    add({title:p.title,meta:'Build • Mini-Projects • Game upgrade pathway',href:miniUpgradeHref(p.project),icon:'✦',kind:'mini-project-upgrade-path',data:deepSearchText(p)});
+    p.stages.forEach(st=>add({title:st.title+' — '+p.title,meta:'Mini-Project upgrade • '+st.tier+' • '+st.outcome,href:miniUpgradeHref(p.project,st.id),icon:'✦',kind:'mini-project-upgrade',data:deepSearchText(st)}));
+  });
   add({title:'Mini-Project Mayhem — Two-Week Game Jam',meta:'Build • Mini-Projects • 2–13 November 2026',href:'#/mini-projects/jam',icon:'★',kind:'mini-project-jam',data:deepSearchText(window.UE5_MINI_JAM_DATA||{})});
   (MINI.projects||[]).forEach(p=>{
     add({title:p.title,meta:'Build • Mini-Project • '+p.stages.length+' stages',href:miniHref(p.id),icon:p.icon||'◉',kind:'mini-project',data:deepSearchText(p)});
@@ -5313,7 +5387,7 @@ $('#resetProgress').addEventListener('click',()=>{
   if(confirm('Reset all locally saved lesson progress and game-project status on this browser?')){
     state={completed:[],quiz:{},lastLesson:null,tutorialCompleted:[],chapterBuildCompleted:[],designBuildCompleted:[],designSourceCompleted:[],theoryCompleted:[],theoryScores:{},careerCompleted:[],careerScores:{},careerProfile:{version:1,updatedAt:null,roleInterests:{},signals:{},hardSkills:[],softSkills:[],vacancies:[],trafficLights:[],goals:{},industryBeliefs:{},industryDebate:{}},modelVideoCompleted:[],modelTheoryCompleted:[],modelTheoryScores:{},modelFoundationFinal:false,modelLessonCompleted:[],modelBuildCompleted:[],modelFixCompleted:[],sculptCompleted:[],blockCompleted:[],pathwayCheckpoints:[],studioStepCompleted:[]};
     projectState={project_title:'Signal Lost',theme:PROJECT.themes[0],pitch:'',mechanics:{}};
-    try{localStorage.removeItem(SKILL_MISSION_STORE);localStorage.removeItem(CPP_MISSION_STORE);localStorage.removeItem(MINI_STORE)}catch(e){}
+    try{localStorage.removeItem(SKILL_MISSION_STORE);localStorage.removeItem(CPP_MISSION_STORE);localStorage.removeItem(MINI_STORE);localStorage.removeItem(MINI_UPGRADE_STORE)}catch(e){}
     saveState();saveProjectState();route();toast('Local progress reset.');
   }
 });
