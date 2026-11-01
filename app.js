@@ -21,7 +21,7 @@ const STUDY = window.UE5_STUDY_DATA;
 const BACKEND = window.UE5_BACKEND;
 const SKILL_MISSIONS = window.UE5_SKILL_MISSIONS || {missions:[]};
 const CPP_SKILL_MISSIONS = window.UE5_CPP_SKILL_MISSIONS || {missions:[],planned:[]};
-const HUB_VERSION = '3.65.1';
+const HUB_VERSION = '3.66.0';
 const MINI = window.UE5_MINI_PROJECT_DATA || {projects:[]};
 const MINI_NOTES = window.UE5_MINI_PROJECT_NOTES || {};
 const MINI_UPGRADES = window.UE5_MINI_UPGRADE_DATA || {projects:[]};
@@ -2030,13 +2030,14 @@ function miniUpgradeStagePage(id,stageId){
   return '<div class="mini-shell mini-upgrades mini-upgrade-stage">'+miniTrail([{title:'Build',href:'#/build'},{title:'Mini-Projects',href:'#/mini-projects'},{title:original.title,href:miniHref(id)},{title:'Upgrades',href:miniUpgradeHref(id)},{title:st.title}])+
     '<header class="mini-header"><span class="eyebrow">'+esc(original.title)+' • '+esc(st.tier.toUpperCase())+' • UPGRADE '+(idx+1)+' OF '+p.stages.length+'</span><h1>'+esc(st.title)+'</h1><p>'+esc(st.outcome)+'</p><div class="mini-chips"><span>'+(done?'✓ Completed':'Build → check → improve')+'</span><span>No images • exact Blueprint steps</span></div></header>'+
     '<div class="mini-lesson-grid"><div class="mini-main-column">'+
-    '<section class="mini-information"><span class="eyebrow">START HERE</span><h2>Your build target</h2><p>'+esc(st.outcome)+'</p><p class="mini-small-note">Work in your existing project. Follow each task in order; compile and save before testing.</p></section>'+
+    '<section class="mini-information mini-upgrade-ready"><span class="eyebrow">BEFORE YOU TOUCH ANY NODES</span><h2>What should already work?</h2><p>'+esc(st.beforeStart||st.outcome)+'</p><p class="mini-small-note">Make a backup of the working Unreal project. '+esc(st.studentPromise||'Compile, save and test between steps.')+'</p></section>'+
+    '<section class="mini-information"><span class="eyebrow">THIS UPGRADE</span><h2>Your build target</h2><p>'+esc(st.outcome)+'</p></section>'+
     '<section class="mini-information mini-upgrade-walkthrough"><span class="eyebrow">PROGRAMMER • GUIDED BUILD</span><h2>Follow these steps</h2><div class="mini-upgrade-steps">'+st.steps.map((step,i)=>
       '<details class="mini-source-section mini-upgrade-step" '+(i===0?'open':'')+'><summary><span class="mini-section-title"><strong>'+(i+1)+'. '+esc(step.title)+'</strong><small>Where → Do → Why → Check</small></span><span class="mini-section-toggle" aria-hidden="true">⌄</span></summary><div class="mini-upgrade-instructions">'+
       '<p><strong>Go to</strong><span>'+esc(step.where)+'</span></p><p><strong>Do this</strong><span>'+esc(step.do)+'</span></p><p><strong>Why</strong><span>'+esc(step.why)+'</span></p><p class="mini-upgrade-step-check"><strong>Check</strong><span>'+esc(step.check)+'</span></p></div></details>').join('')+'</div></section>'+
     '<section class="mini-information mini-upgrade-designer"><span class="eyebrow">ARTIST / DESIGNER • PARALLEL TASK</span><h2>Your three steps</h2><ol class="mini-task-list mini-designer-tasks">'+(st.designerSteps||[]).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ol><p class="mini-small-note"><strong>Check:</strong> '+esc(st.designerCheck||st.designer)+'</p><p class="mini-small-note">Work on your own PC; share FBX/PNG/TGA files through Teams. The programmer imports them into the local Unreal project.</p></section>'+
     (st.id===p.minimumStage?'<section class="mini-information mini-upgrade-mvp"><span class="eyebrow">YOUR FIRST FINISH LINE</span><h2>Minimum Playable Game</h2><p>Pass the final test below and you have a playable prototype. You can stop to polish, or continue with extra features.</p></section>':'')+
-    '<section class="mini-information mini-proof"><span class="eyebrow">PROVE IT WORKS</span><h2>Final test</h2><p>'+esc(st.check)+'</p><details><summary>If something does not work</summary><p>'+esc(st.fix)+'</p></details></section>'+
+    '<section class="mini-information mini-proof"><span class="eyebrow">PROVE IT WORKS</span><h2>Final test</h2><p>'+esc(st.check)+'</p><details><summary>If something does not work</summary><p><strong>Common mistake:</strong> '+esc(st.commonMistake||'Check the last step you changed.')+'</p><p>'+esc(st.fix)+'</p></details></section>'+
     '<section class="mini-complete-panel"><p>Mark complete only after running the game and passing the final test. Upgrade progress is local to this browser and does not change the original tutorial checkmarks.</p><button class="button '+(done?'success':'primary')+'" data-action="mini-upgrade-complete" data-stage="'+esc(st.id)+'">'+(done?'✓ Completed — click to undo':'Mark upgrade complete ✓')+'</button></section>'+
     '<nav class="mini-stage-bottom" aria-label="Upgrade navigation">'+(prev?'<a class="button ghost" href="'+miniUpgradeHref(id,prev.id)+'">← Previous upgrade</a>':'<a class="button ghost" href="'+miniUpgradeHref(id)+'">← Upgrade overview</a>')+
     (next?'<a class="button primary" href="'+miniUpgradeHref(id,next.id)+'">Next upgrade →</a>':'<a class="button primary" href="'+miniUpgradeHref(id)+'">All upgrades ✓</a>')+'</nav>'+
