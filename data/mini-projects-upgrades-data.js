@@ -1,6 +1,6 @@
-/* UE5.8-specific text-only game jam extensions; original tutorial and completion IDs unchanged. */
+/* More student-friendly text-only upgrade walkthroughs; original 16 Mini-Project lessons unchanged. */
 window.UE5_MINI_UPGRADE_DATA = {
-  "version": "3.65.1",
+  "version": "3.66.0",
   "title": "Mini-Project Upgrade Walkthroughs",
   "intro": "Finish one original guided Mini-Project, then follow these text-only expansions. Start with Essential stages; the Creative stage gives your pair room to make it yours. Save your Unreal project after every stage.",
   "projects": [
@@ -24,11 +24,25 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "Score appears as an Integer with value 0."
             },
             {
-              "title": "Create a reusable points function",
-              "where": "Still in BP_BalloonGameMode → My Blueprint → Functions → +.",
-              "do": "Name the function AwardPoints. In Details → Inputs add Points (Integer). Drag Score into the graph as Get, connect it to Integer + Points, pass that result through Max (Integer) with the other input 0, then Set Score. Wire the white execution flow from the function entry to Set Score.",
-              "why": "An input lets safe and dangerous balloons change the same score later. Max prevents a negative total.",
-              "check": "Compile; AwardPoints has an integer Points input and sets Score."
+              "title": "Give AwardPoints an input",
+              "where": "BP_BalloonGameMode → My Blueprint → Functions → +.",
+              "do": "Name the new function AwardPoints. Select its purple Entry node. In Details → Inputs → +, create an Integer input called Points, then Compile.",
+              "why": "The same function will later award positive and negative points.",
+              "check": "The purple AwardPoints entry node has a green Points (Integer) output pin."
+            },
+            {
+              "title": "Add points to the shared score",
+              "where": "BP_BalloonGameMode → AwardPoints function graph.",
+              "do": "Drag Score from My Blueprint as Get. Drag a wire from its green output and choose Integer + Integer. Connect the second input to the purple entry node’s Points output.",
+              "why": "The calculation uses the existing shared score, not one score variable per balloon.",
+              "check": "The + node combines Score and Points; if Score is 0 and Points=1, it produces 1."
+            },
+            {
+              "title": "Store the new score safely",
+              "where": "Still in AwardPoints.",
+              "do": "From the + output add Max (Integer), with the other input set to 0. Drag Score in again as Set, connect Max to Set Score, and connect the purple function entry white execution pin to Set Score. Compile.",
+              "why": "Max prevents danger balloons from taking the total below zero later.",
+              "check": "The graph has one white execution connection to Set Score, and the calculation feeds its green Score input."
             },
             {
               "title": "Prove the function changes the total",
@@ -59,7 +73,10 @@ window.UE5_MINI_UPGRADE_DATA = {
             "Create: make one original element for Give every pop a score using HUD backgrounds, balloon meshes or symbols. Export as FBX or PNG to your shared Teams folder.",
             "Integrate and test: ask the programmer to import your asset; play together and confirm targets are visible and their UI never blocks clicks."
           ],
-          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay."
+          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
+          "beforeStart": "Start after the original Balloon Popper tutorial: clicking a balloon grows it, and the final click destroys it. Have BP_Balloon, BP_BalloonGameMode and BalloonPopperLevel saved.",
+          "commonMistake": "If a Cast to BP_BalloonGameMode fails, inspect World Settings → GameMode Override first.",
+          "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         },
         {
           "id": "respawn",
@@ -76,11 +93,18 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "BP_BalloonSpawner has a Box Collision visible in the Blueprint viewport."
             },
             {
-              "title": "Create a spawn function",
+              "title": "Make the function and locate the Box",
               "where": "BP_BalloonSpawner → My Blueprint → Functions → +.",
-              "do": "Create a function SpawnOneBalloon. Drag SpawnArea into the graph and call Get World Location and Get Scaled Box Extent from that component. Add Random Point in Bounding Box: connect Get World Location to Center and Get Scaled Box Extent to Half Size. Keep SpawnArea unrotated for this axis-aligned setup.",
-              "why": "In UE5.8 the random node labels are Center and Half Size. The box can be moved and resized by the designer.",
-              "check": "Random Point in Bounding Box receives Center and Half Size and produces a Vector inside the unrotated box."
+              "do": "Create SpawnOneBalloon. Drag SpawnArea from Components onto the graph as Get. Drag from the blue component pin and add Get World Location; add Get Scaled Box Extent from the same SpawnArea reference.",
+              "why": "The spawner’s Box component defines the centre and size of the play area.",
+              "check": "Both nodes show SpawnArea as their Target."
+            },
+            {
+              "title": "Choose a random visible location",
+              "where": "BP_BalloonSpawner → SpawnOneBalloon function.",
+              "do": "Right-click and add Random Point in Bounding Box. Plug Get World Location into Center and Get Scaled Box Extent into Half Size. In UE5.8 these are the exact pin names. Keep the Box rotation at 0,0,0.",
+              "why": "This returns a different location inside the Box whenever the function runs.",
+              "check": "You have a green Vector Return Value ready to connect to Make Transform."
             },
             {
               "title": "Spawn at that random point",
@@ -111,11 +135,18 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "RequestReplacement has a clear route to SpawnOneBalloon."
             },
             {
-              "title": "Ask for another balloon when one pops",
-              "where": "BP_Balloon → Event Graph → the True pop branch from the original tutorial.",
-              "do": "Keep AwardPoints first. After the score call but BEFORE Destroy Actor, add Get Actor of Class (Actor Class = BP_BalloonSpawner) → Cast To BP_BalloonSpawner → RequestReplacement. Connect the white execution pins so the order is AwardPoints → Cast success → RequestReplacement → Destroy Actor (Self). If the spawner reference might be missing, also connect Cast Failed to Destroy Actor.",
-              "why": "Popping replaces exactly one balloon, while the old actor is removed normally.",
-              "check": "Pop three balloons in a row: five remain on screen and the total score rises by three."
+              "title": "Find the spawner when a balloon pops",
+              "where": "BP_Balloon → Event Graph → True result of the PopScale Branch.",
+              "do": "Keep the existing AwardPoints call on the True path. Add Get Actor of Class, set Actor Class to BP_BalloonSpawner, then add Cast To BP_BalloonSpawner. Connect Get Actor of Class Return Value to the Cast Object input.",
+              "why": "The balloon needs a reference to the one spawner placed in its level.",
+              "check": "The Cast has a blue Object input connected to the spawner lookup."
+            },
+            {
+              "title": "Call the replacement event before destroying the balloon",
+              "where": "BP_Balloon → same True pop path.",
+              "do": "Connect AwardPoints white execution output to the Cast white input. From Cast success, call RequestReplacement on the BP_BalloonSpawner reference, then connect that event white output to the existing Destroy Actor (Self). Connect Cast Failed directly to Destroy Actor as a fallback. Compile.",
+              "why": "One old balloon disappears and one new balloon appears before it is destroyed.",
+              "check": "After 15 pops, five balloons remain visible and Score is 15."
             },
             {
               "title": "Check click collision and spawn position",
@@ -132,7 +163,10 @@ window.UE5_MINI_UPGRADE_DATA = {
             "Create: make one original element for Spawn replacement balloons at random positions using HUD backgrounds, balloon meshes or symbols. Export as FBX or PNG to your shared Teams folder.",
             "Integrate and test: ask the programmer to import your asset; play together and confirm targets are visible and their UI never blocks clicks."
           ],
-          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay."
+          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
+          "beforeStart": "You must have finished the Score upgrade and confirmed one destroyed balloon awards +1. Leave the existing placed balloons in the level until the spawner successfully creates five new ones.",
+          "commonMistake": "First test five spawns, then remove old manually placed balloons. If nothing appears, check the spawner is actually placed in the level.",
+          "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         },
         {
           "id": "timer",
@@ -149,11 +183,18 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "You can see both variables and their default values."
             },
             {
-              "title": "Create a one-second clock event",
-              "where": "BP_BalloonGameMode → Event Graph.",
-              "do": "From Event BeginPlay add Set Timer by Event, set Time = 1.0 and Looping = true. On its red Event pin create a matching Custom Event named TickClock. Promote the timer Return Value to a variable named ClockHandle.",
-              "why": "A timer updates once per second; Event Tick is unnecessary for a countdown.",
-              "check": "The white BeginPlay wire starts a repeating 1-second timer."
+              "title": "Create the countdown event",
+              "where": "BP_BalloonGameMode → Event Graph, in empty space.",
+              "do": "Right-click → Add Custom Event; call it TickClock. Connect a temporary Print String node with text \"tick\" to TickClock and Compile.",
+              "why": "We test the callback first so the countdown logic can be added safely.",
+              "check": "The Event Graph contains one Custom Event TickClock with a white output wire to Print String."
+            },
+            {
+              "title": "Start the timer from BeginPlay",
+              "where": "BP_BalloonGameMode → Event Graph → Event BeginPlay.",
+              "do": "Add Set Timer by Event. Set Time=1.0 and Looping=true. Drag from the red Event delegate pin and select the TickClock custom event (or use Create Event and choose TickClock). Connect BeginPlay white execution to Set Timer by Event. Promote its Return Value to ClockHandle.",
+              "why": "The clock should start once when the level begins.",
+              "check": "In Play, \"tick\" prints about once each second; remove the temporary Print String before the next step."
             },
             {
               "title": "Count down and stop on zero",
@@ -219,7 +260,10 @@ window.UE5_MINI_UPGRADE_DATA = {
             "Create: make one original element for Add a 60-second round and live score HUD using HUD backgrounds, balloon meshes or symbols. Export as FBX or PNG to your shared Teams folder.",
             "Integrate and test: ask the programmer to import your asset; play together and confirm targets are visible and their UI never blocks clicks."
           ],
-          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay."
+          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
+          "beforeStart": "Five balloons should already appear and be replaced when popped. This stage changes GameMode, controller, widget and spawner.",
+          "commonMistake": "If your timer seems frozen, test TickClock using Print String before building the HUD.",
+          "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         },
         {
           "id": "results",
@@ -271,7 +315,10 @@ window.UE5_MINI_UPGRADE_DATA = {
             "Create: make one original element for Add a visible game-over result and Play Again using HUD backgrounds, balloon meshes or symbols. Export as FBX or PNG to your shared Teams folder.",
             "Integrate and test: ask the programmer to import your asset; play together and confirm targets are visible and their UI never blocks clicks."
           ],
-          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay."
+          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
+          "beforeStart": "The 60-second timer and on-screen score must work. Test with a short five-second round, then put it back to 60.",
+          "commonMistake": "The parent Canvas should remain Not Hit-Testable (Self Only), or the replay button may stop working.",
+          "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         },
         {
           "id": "risk",
@@ -302,11 +349,25 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "The danger balloon awards -2; regular balloons still award +1."
             },
             {
-              "title": "Choose which class to spawn",
-              "where": "BP_BalloonSpawner → SpawnOneBalloon function, before Spawn Actor from Class.",
-              "do": "Create a variable SelectedBalloonClass of type Actor Class Reference in BP_BalloonSpawner. In SpawnOneBalloon, before the existing Spawn Actor From Class, use Random Float in Range (0.0, 1.0) → <= 0.2 → Branch. On True set SelectedBalloonClass = BP_DangerBalloon; on False set it = BP_Balloon. Both branch paths must lead to exactly one Spawn Actor From Class, whose Class input reads SelectedBalloonClass. Keep the existing random transform. Compile and test.",
-              "why": "Roughly one out of five balloons is risky, but the exact mix varies.",
-              "check": "Exactly one Spawn Actor executes per call; most replacements are normal and some are dangerous."
+              "title": "Prepare a class variable for the two balloon types",
+              "where": "BP_BalloonSpawner → My Blueprint → Variables → +.",
+              "do": "Create SelectedBalloonClass as an Actor Class Reference and Compile. In SpawnOneBalloon find the existing Spawn Actor From Class node; leave its random Spawn Transform connected.",
+              "why": "A class reference tells Spawn Actor which type of balloon it should make.",
+              "check": "The variable exists and has a purple Class reference pin."
+            },
+            {
+              "title": "Pick normal or danger with one random test",
+              "where": "BP_BalloonSpawner → SpawnOneBalloon before Spawn Actor.",
+              "do": "Add Random Float in Range (Min=0.0, Max=1.0), compare its output with <= 0.2, and connect to Branch. On True Set SelectedBalloonClass to BP_DangerBalloon; on False set it to BP_Balloon. Compile.",
+              "why": "Roughly 20% of balloons should be risky, without a fixed repeating order.",
+              "check": "Both Branch paths set SelectedBalloonClass to a valid Blueprint class."
+            },
+            {
+              "title": "Spawn exactly one chosen class",
+              "where": "BP_BalloonSpawner → same function.",
+              "do": "Connect both Set SelectedBalloonClass execution outputs to the existing Spawn Actor From Class (use two paths meeting at one node). Connect Get SelectedBalloonClass to its Class input; keep the existing random Spawn Transform. Compile.",
+              "why": "One call to SpawnOneBalloon should always create exactly one Actor.",
+              "check": "Both safe and danger balloons appear across multiple pops while the visible count remains five."
             },
             {
               "title": "Connect the new decision to the spawn function",
@@ -344,7 +405,10 @@ window.UE5_MINI_UPGRADE_DATA = {
             "Create: make one original element for Mix safe and danger balloons into random spawns using HUD backgrounds, balloon meshes or symbols. Export as FBX or PNG to your shared Teams folder.",
             "Integrate and test: ask the programmer to import your asset; play together and confirm targets are visible and their UI never blocks clicks."
           ],
-          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay."
+          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
+          "beforeStart": "Finish and back up the safe five-balloon game before you make the optional danger variant.",
+          "commonMistake": "Change the score only in BP_DangerBalloon; do not overwrite the working normal balloon.",
+          "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         }
       ],
       "minimumStage": "timer",
@@ -370,11 +434,25 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "Counters start at zero; GoalPins matches the number of placed pins."
             },
             {
-              "title": "Make a RecordPin function",
-              "where": "BP_BowlingGameMode → Functions → + → name it RecordPin.",
-              "do": "Add input PinValue (Integer). At the start use Branch with NOT RoundFinished. On True set PinsDown = PinsDown + 1, then Score = Score + PinValue. Print a message with the score using ToString (Integer) and Append.",
-              "why": "Keeping totals in GameMode avoids separate pin scores disagreeing.",
-              "check": "RecordPin takes one integer input and updates both totals only while the round is active."
+              "title": "Create the RecordPin input",
+              "where": "BP_BowlingGameMode → My Blueprint → Functions → +.",
+              "do": "Create a function called RecordPin. Select the entry node and use Details → Inputs → + to add PinValue (Integer). Compile.",
+              "why": "One shared function will count all pins and their different point values.",
+              "check": "The RecordPin entry has PinValue as an Integer input."
+            },
+            {
+              "title": "Only allow points while the round runs",
+              "where": "BP_BowlingGameMode → RecordPin function graph.",
+              "do": "Drag RoundFinished in as Get. Add NOT Boolean → Branch. Connect the entry white execution pin to the Branch white input and NOT RoundFinished to its Condition.",
+              "why": "Pins that continue falling after the round ends must not change the score.",
+              "check": "Only the Branch True path is available for valid knockdowns."
+            },
+            {
+              "title": "Record one knockdown and its points",
+              "where": "BP_BowlingGameMode → RecordPin → True output of the Branch.",
+              "do": "Set PinsDown = PinsDown + 1, then Set Score = Score + PinValue using green Integer arithmetic nodes. Wire both white execution pins in order; add Print String after Set Score using a string of your updated Score.",
+              "why": "Pin count measures physical pins; score measures their value.",
+              "check": "One call to RecordPin(1) increases both totals once."
             },
             {
               "title": "Detect when all pins are down",
@@ -391,11 +469,18 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "The event does nothing once Counted becomes true."
             },
             {
-              "title": "Measure whether the pin is leaning",
-              "where": "BP_BowlingPin → Event Graph, after the Counted check.",
-              "do": "Drag the pin Static Mesh component into the graph as Get, then Get Up Vector. Use Dot Product (Vector) with the other input set to X=0, Y=0, Z=1. Compare the result with < (Float), threshold 0.65. Add a Branch controlled by that comparison.",
-              "why": "An upright mesh has a world-up dot product near 1; a toppled pin is much lower.",
-              "check": "An upright pin does not pass the test; tipping it sideways does."
+              "title": "Read the pin mesh up direction",
+              "where": "BP_BowlingPin → Event Graph after NOT Counted Branch True output.",
+              "do": "Drag the pin Static Mesh component (Model) into the graph as Get. From it call Get Up Vector. Add Dot Product (Vector); connect Get Up Vector to A and set B to X=0, Y=0, Z=1.",
+              "why": "When the pin is upright its direction agrees with world up, giving a dot product near 1.",
+              "check": "A placed upright pin should have a dot value close to 1 in a Blueprint watch/Print String test."
+            },
+            {
+              "title": "Only count a pin that has tipped",
+              "where": "BP_BowlingPin → same graph.",
+              "do": "Add a Float < Float node to compare Dot Product < 0.65. Add a second Branch, wire the earlier NOT Counted True execution output into it, and wire the comparison into Condition.",
+              "why": "A pin counts only after it has tipped far enough, not for ordinary tiny wobbling.",
+              "check": "Upright pins do not pass; a pin lying sideways passes once."
             },
             {
               "title": "Award points only on the first fall",
@@ -419,7 +504,10 @@ window.UE5_MINI_UPGRADE_DATA = {
             "Create: make one original element for Count knocked-down pins using scoreboard, lane markings or bonus-pin textures. Export as FBX or PNG to your shared Teams folder.",
             "Integrate and test: ask the programmer to import your asset; play together and confirm three throws remain clear and pin score is legible."
           ],
-          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay."
+          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
+          "beforeStart": "You should have the original bowling ball aiming and colliding with physics-enabled BP_BowlingPin actors. Count the number of placed pin Blueprints.",
+          "commonMistake": "Test one pin fall with a debug print before trying to score every pin.",
+          "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         },
         {
           "id": "throws",
@@ -443,11 +531,18 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "StartingBallTransform stores the ball’s launch position when Play begins."
             },
             {
-              "title": "Add a ResetBall custom event",
-              "where": "BP_BowlingBall → Event Graph → Add Custom Event named ResetBall.",
-              "do": "From ResetBall, call Set Simulate Physics on Model with Simulate=false. Next call Set Actor Transform (New Transform=StartingBallTransform; Sweep=false; Teleport=true), then Set Simulate Physics on Model with Simulate=true. Finally call Set Physics Linear Velocity and Set Physics Angular Velocity in Degrees on Model, both with vector (0,0,0). Use white execution wires in exactly this order. Compile.",
-              "why": "The root mesh and Actor now reset together. Re-enable simulation before zeroing residual velocities so the ball stays at its launch mark.",
-              "check": "Calling ResetBall returns the mesh to its original position without leaving it moving or detached."
+              "title": "Switch off physics and restore the start position",
+              "where": "BP_BowlingBall → Event Graph → Add Custom Event ResetBall.",
+              "do": "Drag the Model (root Static Mesh) component onto the graph. Wire ResetBall → Set Simulate Physics (Model, false) → Set Actor Transform (New Transform=StartingBallTransform; Sweep=false; Teleport=true). Compile.",
+              "why": "Moving the ball with physics disabled avoids the simulation fighting the new transform.",
+              "check": "The node chain stops with the ball back at its original Actor transform."
+            },
+            {
+              "title": "Turn physics on and clear movement",
+              "where": "BP_BowlingBall → immediately after Set Actor Transform in ResetBall.",
+              "do": "Wire Set Simulate Physics (Model, true) → Set Physics Linear Velocity (0,0,0) → Set Physics Angular Velocity in Degrees (0,0,0), all targeting Model. Compile and save.",
+              "why": "Zeroing both velocity types makes sure the ball remains ready for the next shot.",
+              "check": "Calling ResetBall returns the ball to its launch mark and leaves it stationary."
             },
             {
               "title": "Count throws in the Player Controller",
@@ -464,11 +559,18 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "During a thrown ball’s four-second settling interval, arrow keys no longer change the ball’s direction; after reset they work again."
             },
             {
-              "title": "Prevent double throws",
-              "where": "BP_BowlingPlayerController → existing IA_Throw event (Started).",
-              "do": "Before the existing call to the ball’s throw event, Get Game Mode → Cast To BP_BowlingGameMode and test three conditions with Boolean AND: NOT RoundFinished, NOT IsBallInMotion, ThrowsUsed < MaxThrows. Put that in Branch; only the True path may throw.",
-              "why": "Repeated Space presses while the ball is travelling should not consume extra shots.",
-              "check": "Holding or tapping Space several times during a throw does not throw twice."
+              "title": "Check the round is still active",
+              "where": "BP_BowlingPlayerController → existing IA_Bowl or IA_Throw input (Started pin; use your original tutorial name).",
+              "do": "Use Get Game Mode → Cast To BP_BowlingGameMode → Get RoundFinished → NOT. Also Get IsBallInMotion and apply NOT.",
+              "why": "The controller must avoid another throw during a roll or after the game ends.",
+              "check": "You have two Boolean values, each true when another throw is allowed."
+            },
+            {
+              "title": "Check there is at least one throw left",
+              "where": "Same Player Controller → throw input.",
+              "do": "Compare ThrowsUsed < MaxThrows. Combine this with the two NOT values using AND (Boolean); connect to a Branch Condition. Wire only True into your existing BP_BowlingBall.Throw event.",
+              "why": "Every valid Space press must use one remaining throw, not start several balls at once.",
+              "check": "Only the first input while idle reaches the old Throw event."
             },
             {
               "title": "Track a successful throw",
@@ -513,7 +615,10 @@ window.UE5_MINI_UPGRADE_DATA = {
             "Create: make one original element for Reset the ball and allow three throws using scoreboard, lane markings or bonus-pin textures. Export as FBX or PNG to your shared Teams folder.",
             "Integrate and test: ask the programmer to import your asset; play together and confirm three throws remain clear and pin score is legible."
           ],
-          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay."
+          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
+          "beforeStart": "Pin scoring must work first. You need the placed ball reference already used by the Player Controller, and its original Move and Throw events.",
+          "commonMistake": "Avoid running the new reset while the ball is still moving. Put the ball mesh at the root and test sideways aiming before adding throw limits.",
+          "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         },
         {
           "id": "polish",
@@ -586,7 +691,10 @@ window.UE5_MINI_UPGRADE_DATA = {
             "Create: make one original element for Add a throw counter, scoreboard and bonus pin using scoreboard, lane markings or bonus-pin textures. Export as FBX or PNG to your shared Teams folder.",
             "Integrate and test: ask the programmer to import your asset; play together and confirm three throws remain clear and pin score is legible."
           ],
-          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay."
+          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
+          "beforeStart": "Three limited throws should now work, and the player must be able to press R for a fresh round.",
+          "commonMistake": "If the score is correct in the GameMode but the HUD is blank, check the active Player Controller and GameMode classes.",
+          "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         },
         {
           "id": "power",
@@ -645,7 +753,10 @@ window.UE5_MINI_UPGRADE_DATA = {
             "Create: make one original element for Optional: give players a choice of shot power using scoreboard, lane markings or bonus-pin textures. Export as FBX or PNG to your shared Teams folder.",
             "Integrate and test: ask the programmer to import your asset; play together and confirm three throws remain clear and pin score is legible."
           ],
-          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay."
+          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
+          "beforeStart": "Complete and back up the three-throw game before editing the working Throw event. Note the impulse/force value that previously reached the pins.",
+          "commonMistake": "Start with the original throw strength before testing half and double power.",
+          "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         }
       ],
       "minimumStage": "polish",
@@ -671,11 +782,11 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "The GameMode now contains Score, ClickPower and UpgradeCost."
             },
             {
-              "title": "Turn the existing click into a function",
-              "where": "Clicker GameMode → Functions → +.",
-              "do": "Create a function named AddClick. Set Score to Score + ClickPower. Compile.",
-              "why": "A single function avoids accidentally adding both the old +1 and the new click power.",
-              "check": "Calling AddClick once with ClickPower = 1 raises Score by 1."
+              "title": "Create AddClick in the existing GameMode",
+              "where": "Open your original Clicker GameMode → Functions → +.",
+              "do": "Name the function AddClick. Drag Score as Get and ClickPower as Get, add them with Integer + Integer, and set Score to the result. Connect the AddClick function entry white execution to Set Score. Compile.",
+              "why": "We are changing one existing score, not creating a second one.",
+              "check": "Calling AddClick once changes Score by ClickPower."
             },
             {
               "title": "Replace the old +1 event",
@@ -720,7 +831,10 @@ window.UE5_MINI_UPGRADE_DATA = {
             "Create: make one original element for Buy more powerful manual clicks using shop icons, themed producer artwork or button graphics. Export as FBX or PNG to your shared Teams folder.",
             "Integrate and test: ask the programmer to import your asset; play together and confirm a player can see how each purchase changes output."
           ],
-          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay."
+          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
+          "beforeStart": "Start with the original working Clicker: pressing the main button changes one GameMode score. Keep the existing widget and GameMode; do not create a second score.",
+          "commonMistake": "Disconnect the OLD +1 score chain when you add AddClick. Two active chains award points twice.",
+          "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         },
         {
           "id": "display",
@@ -746,9 +860,9 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Refresh after clicking",
               "where": "Clicker Widget → main click button OnClicked event.",
-              "do": "After the successful AddClick call, add a call to RefreshShop. Remove any old second method of displaying Score if it conflicts with the new label.",
+              "do": "In your Clicker Widget main button OnClicked event, keep Get Game Mode → Cast → AddClick, then call RefreshShop. In the Designer select the Score Text widget: if its Text property still has the original Binding, click the binding control and remove it before using RefreshShop → SetText. Do not have both a Text Binding and SetText updating the same label.",
               "why": "The player should see the updated balance immediately.",
-              "check": "A single main-button click changes Points and leaves the other two labels as they were."
+              "check": "Click once: Points rises by ClickPower and the display changes exactly once. There is no older bound text fighting RefreshShop."
             },
             {
               "title": "Refresh after shopping",
@@ -779,7 +893,10 @@ window.UE5_MINI_UPGRADE_DATA = {
             "Create: make one original element for Show your shop balance and costs using shop icons, themed producer artwork or button graphics. Export as FBX or PNG to your shared Teams folder.",
             "Integrate and test: ask the programmer to import your asset; play together and confirm a player can see how each purchase changes output."
           ],
-          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay."
+          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
+          "beforeStart": "The main button should earn points and the first shop purchase should work.",
+          "commonMistake": "If you already bound ScoreText to a Text Binding in the original tutorial, remove that binding before setting its text through RefreshShop.",
+          "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         },
         {
           "id": "granny",
@@ -803,11 +920,25 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "The GameMode has Score and TotalEarned, each initially zero."
             },
             {
-              "title": "Create one function for all income",
-              "where": "Clicker GameMode → Functions → +.",
-              "do": "Create GainPoints with one Integer input Amount. Add Branch with Amount > 0. From True, Set Score = Score + Amount, then Set TotalEarned = TotalEarned + Amount. Compile.",
-              "why": "A single function prevents manual clicking and automated income using different accounting rules.",
-              "check": "Calling GainPoints(5) increases both values by 5."
+              "title": "Make GainPoints take an amount",
+              "where": "Clicker GameMode → My Blueprint → Functions → +.",
+              "do": "Create GainPoints. Select its purple entry node, then Details → Inputs → +, add Amount (Integer). Compile.",
+              "why": "Both manual clicking and the timed Granny income should use the same function.",
+              "check": "GainPoints has a green Amount integer input."
+            },
+            {
+              "title": "Reject zero income",
+              "where": "GainPoints function graph.",
+              "do": "Add comparison Amount > 0 and connect it to a Branch. Wire the function entry white execution pin into the Branch.",
+              "why": "Zero Grannies must not create imaginary points before the first purchase.",
+              "check": "Only positive Amount values reach the True execution output."
+            },
+            {
+              "title": "Update balance and lifetime earnings together",
+              "where": "GainPoints function → Branch True output.",
+              "do": "Set Score = Score + Amount, then Set TotalEarned = TotalEarned + Amount. Wire the white Set nodes in this order and Compile. Do not alter TotalEarned in shop purchase functions.",
+              "why": "Score can be spent, while TotalEarned always tracks the points you generated.",
+              "check": "Calling GainPoints(5) increases both values by five."
             },
             {
               "title": "Send manual clicking through GainPoints",
@@ -831,11 +962,18 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "One Granny returns 1; three Grannies return 3; no Grannies returns 0."
             },
             {
-              "title": "Create the automatic one-second timer",
-              "where": "Clicker GameMode → Event Graph → Event BeginPlay.",
-              "do": "Keep the original Event BeginPlay logic that creates and displays the Clicker widget. After it (or from a Sequence attached to BeginPlay), add Set Timer by Event with Time=1.0 and Looping=true. Create a Custom Event named ProduceIncome, then connect a Create Event reference for that event to the timer red Event input. Only one production timer should be started per game session.",
-              "why": "The GameMode can automatically award points once per second without pressing the click button or using Event Tick.",
-              "check": "The original Clicker widget still appears, and ProduceIncome runs once each second after Play starts."
+              "title": "Add the callback but keep the original widget",
+              "where": "Clicker GameMode → Event Graph in empty space.",
+              "do": "Create a Custom Event called ProduceIncome. Leave your original BeginPlay → Create Widget → Add to Viewport chain untouched. Compile.",
+              "why": "The starting interface must still load even when we add passive production.",
+              "check": "A Custom Event ProduceIncome exists and the original UI still shows in Play."
+            },
+            {
+              "title": "Start exactly one repeating production timer",
+              "where": "Clicker GameMode → Event BeginPlay.",
+              "do": "Use Sequence after BeginPlay if needed: Then 0 starts the original widget chain and Then 1 starts Set Timer by Event with Time=1.0 and Looping=true. On the red Event delegate pin select ProduceIncome (or connect a Create Event assigned to ProduceIncome).",
+              "why": "One GameMode timer will pay all Grannies; creating one timer per Granny would be harder to manage.",
+              "check": "The production timer starts once; do not add another timer to BuyGranny."
             },
             {
               "title": "Pay the player every second",
@@ -887,7 +1025,10 @@ window.UE5_MINI_UPGRADE_DATA = {
             "Create: make one original element for Hire Grannies for automatic income using shop icons, themed producer artwork or button graphics. Export as FBX or PNG to your shared Teams folder.",
             "Integrate and test: ask the programmer to import your asset; play together and confirm a player can see how each purchase changes output."
           ],
-          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay."
+          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
+          "beforeStart": "The click button, purchase button and RefreshShop labels must already work. You will keep that shop and add passive income.",
+          "commonMistake": "Before you add the Granny button, confirm that the automatic timer earns points using a Print String; otherwise you will be debugging two things at once.",
+          "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         },
         {
           "id": "training",
@@ -946,7 +1087,10 @@ window.UE5_MINI_UPGRADE_DATA = {
             "Create: make one original element for Train Grannies to double their output using shop icons, themed producer artwork or button graphics. Export as FBX or PNG to your shared Teams folder.",
             "Integrate and test: ask the programmer to import your asset; play together and confirm a player can see how each purchase changes output."
           ],
-          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay."
+          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
+          "beforeStart": "Buy at least one Granny in the working game; the auto-income label must update every second.",
+          "commonMistake": "A training button should have no effect if GranniesOwned is zero or Score is below the price.",
+          "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         },
         {
           "id": "goal",
@@ -998,7 +1142,10 @@ window.UE5_MINI_UPGRADE_DATA = {
             "Create: make one original element for Optional: add lifetime milestones using shop icons, themed producer artwork or button graphics. Export as FBX or PNG to your shared Teams folder.",
             "Integrate and test: ask the programmer to import your asset; play together and confirm a player can see how each purchase changes output."
           ],
-          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay."
+          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
+          "beforeStart": "Granny auto-income already updates spendable Score and TotalEarned. This is an OPTIONAL badge, not a game-over condition.",
+          "commonMistake": "Milestones read TotalEarned, never Score after purchases.",
+          "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         },
         {
           "id": "farm",
@@ -1064,7 +1211,10 @@ window.UE5_MINI_UPGRADE_DATA = {
             "Create: make one original element for Optional: unlock a second producer using shop icons, themed producer artwork or button graphics. Export as FBX or PNG to your shared Teams folder.",
             "Integrate and test: ask the programmer to import your asset; play together and confirm a player can see how each purchase changes output."
           ],
-          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay."
+          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
+          "beforeStart": "Granny production and training are working. Farms are an optional second producer, not a second timer.",
+          "commonMistake": "A second Set Timer by Event can make the whole game earn twice as much as intended.",
+          "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         }
       ],
       "minimumStage": "granny",
@@ -1111,11 +1261,25 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "Press Play and confirm the cursor is visible."
             },
             {
-              "title": "Create one shared hit counter",
-              "where": "Loops GameMode → Variables.",
-              "do": "Create TargetsLeft (Integer; default 5) and Finished (Boolean; default false). Create a function HitTarget: Branch on NOT Finished → Set TargetsLeft = Max (Integer)(0, TargetsLeft - 1) → Branch TargetsLeft <= 0 → on True Set Finished = true and Print String \"ALL TARGETS CLEARED!\". Print TargetsLeft after a normal hit as well.",
-              "why": "One shared counter recognises the completed wave.",
-              "check": "HitTarget compiles and one call lowers TargetsLeft by one."
+              "title": "Add the round state",
+              "where": "Your Loops GameMode → Variables.",
+              "do": "Create TargetsLeft (Integer; default 5) and Finished (Boolean; default false), then Compile.",
+              "why": "One score owner keeps track of all the spawned targets.",
+              "check": "The values are visible and start at 5 and false."
+            },
+            {
+              "title": "Make the HitTarget function",
+              "where": "Loops GameMode → Functions → +.",
+              "do": "Create HitTarget. From its entry add a Branch for NOT Finished. On True, Set TargetsLeft = Max (Integer)(0, TargetsLeft - 1). Compile.",
+              "why": "Each valid click reduces the number of targets that remain.",
+              "check": "One call decreases TargetsLeft from 5 to 4."
+            },
+            {
+              "title": "End the first test when all five are gone",
+              "where": "Still in HitTarget after Set TargetsLeft.",
+              "do": "Add Integer <= Integer checking TargetsLeft <= 0, connect it to a Branch. When True set Finished=true and Print String \"ALL TARGETS CLEARED!\". When False Print String with TargetsLeft.",
+              "why": "This is a simple first win condition that the later Waves upgrade will replace.",
+              "check": "Five distinct target clicks announce the win exactly once."
             },
             {
               "title": "Make each target respond once",
@@ -1139,7 +1303,10 @@ window.UE5_MINI_UPGRADE_DATA = {
             "Create: make one original element for Turn the spawned cubes into clickable targets using targets, arena props or wave HUD graphics. Export as FBX or PNG to your shared Teams folder.",
             "Integrate and test: ask the programmer to import your asset; play together and confirm every target stays visible and clickable."
           ],
-          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay."
+          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
+          "beforeStart": "Finish the original Loops tutorial: GameMode spawns several visible cubes using one For Loop.",
+          "commonMistake": "A clicked target needs a collision component that blocks Visibility; show the mouse cursor and enable click events on the assigned Player Controller.",
+          "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         },
         {
           "id": "waves",
@@ -1156,11 +1323,25 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "WaveNumber starts at 1; FinalWave=5; TargetsHit=0."
             },
             {
-              "title": "Move the original spawn loop into a function",
-              "where": "Loops GameMode → Functions → +.",
-              "do": "Create a function StartWave. Cut the existing For Loop plus its Spawn Actor chain out of Event BeginPlay and paste them into StartWave. Connect the function entry to the For Loop. From BeginPlay call StartWave ONCE.",
-              "why": "A function lets each later wave reuse the same spawn logic without repeating nodes.",
-              "check": "Play still shows five targets in the first wave."
+              "title": "Copy your working spawn loop",
+              "where": "Loops GameMode → Event Graph.",
+              "do": "Select the existing For Loop and the connected Spawn Actor / Make Transform nodes. Press Ctrl+C to COPY them (do not cut or delete anything yet).",
+              "why": "Copying preserves the original working version until the new function is tested.",
+              "check": "The old BeginPlay spawning still works before you change it."
+            },
+            {
+              "title": "Paste it into StartWave",
+              "where": "Loops GameMode → My Blueprint → Functions → +.",
+              "do": "Create a function StartWave. Open it, press Ctrl+V to paste the For Loop and Spawn Actor nodes, then connect the purple StartWave entry white execution pin to the pasted For Loop. Compile.",
+              "why": "StartWave will be called once for each new wave.",
+              "check": "The function contains the old spawn chain and has no compile errors."
+            },
+            {
+              "title": "Replace the old spawn chain with one call",
+              "where": "Loops GameMode → Event Graph → BeginPlay.",
+              "do": "Disconnect the old For Loop from BeginPlay, then add a call to StartWave on BeginPlay instead. Compile and Play. Once five targets appear as before, remove the unused old chain.",
+              "why": "This replaces old logic only after the new version works.",
+              "check": "Exactly five targets appear, not zero and not ten."
             },
             {
               "title": "Calculate a new target count for each wave",
@@ -1170,11 +1351,25 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "Wave 1 spawns 5, wave 2 spawns 6 and wave 3 spawns 7."
             },
             {
-              "title": "Arrange up to nine targets in a 3-by-3 grid",
-              "where": "Loops GameMode → StartWave function → For Loop Index → existing Make Transform feeding Spawn Actor.",
-              "do": "Replace the old Index × Spacing single-line location with a grid calculation. Column = (Index % 3) - 1 (integer remainder). Row = Integer Divide(Index, 3). Make Vector with X=200, Y=Column × 180, Z=150 + Row × 130; connect it to Make Transform.Location. Keep First Index=0 and Last Index=CurrentWaveCount-1.",
-              "why": "The ninth target is no farther across the screen than the third: later waves fill more grid cells instead of stretching off-screen.",
-              "check": "Wave 1 shows five targets across two rows; wave 5 shows nine across three rows."
+              "title": "Calculate the column number",
+              "where": "Loops GameMode → StartWave function → For Loop Index.",
+              "do": "Drag off the Index integer pin and add % (Integer) with divisor 3. Subtract 1 from the remainder using Integer - Integer. This becomes Column.",
+              "why": "The three possible columns are -1, 0 and 1, giving left, middle and right positions.",
+              "check": "Indexes 0,1,2 create Column values -1,0,1."
+            },
+            {
+              "title": "Calculate the row number",
+              "where": "Same StartWave graph.",
+              "do": "Use Integer ÷ Integer from For Loop Index with divisor 3. This becomes Row.",
+              "why": "Integer division groups indexes 0–2 in row 0, 3–5 in row 1 and 6–8 in row 2.",
+              "check": "Index 6 produces Row=2, while Index 1 produces Row=0."
+            },
+            {
+              "title": "Connect grid position to spawning",
+              "where": "StartWave → Make Vector → Make Transform → Spawn Actor.",
+              "do": "Set Make Vector X=200, Y=Column × 180, Z=150 + (Row × 130). Connect its Vector output to Make Transform.Location. Keep For Loop First Index=0 and Last Index=CurrentWaveCount-1.",
+              "why": "The ninth spawned target fits a third row rather than extending beyond the camera horizontally.",
+              "check": "The first wave has five targets in two rows; wave five can have nine in three rows."
             },
             {
               "title": "Frame the grid before increasing wave count",
@@ -1198,11 +1393,18 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "The final-wave condition exists and is checked after the last target."
             },
             {
-              "title": "Schedule one new wave",
-              "where": "Loops GameMode → Event Graph.",
-              "do": "Create a Custom Event called AdvanceWave. Wire it to Set WaveNumber = WaveNumber + 1 → StartWave. In HitTarget when TargetsLeft reaches 0 and WaveNumber < FinalWave, use Set Timer by Event (Time=0.75, Looping=false) and connect a Create Event reference to AdvanceWave.",
-              "why": "A short pause gives players feedback before the next set appears and avoids spawning inside the existing target’s click event.",
-              "check": "Clear five targets: after a short pause the next wave appears with six."
+              "title": "Make a one-time wave advance event",
+              "where": "Loops GameMode → Event Graph, in empty space.",
+              "do": "Create a Custom Event AdvanceWave. Wire it to Set WaveNumber = WaveNumber + 1, followed by a call to StartWave. Compile.",
+              "why": "One named event controls what happens between waves.",
+              "check": "Calling AdvanceWave once increases WaveNumber and creates the correct new wave."
+            },
+            {
+              "title": "Trigger that event when a wave finishes",
+              "where": "Loops GameMode → HitTarget function → False path of WaveNumber >= FinalWave.",
+              "do": "Add Set Timer by Event, set Time=0.75 and Looping=false. On its red Event pin choose AdvanceWave (or create an Event delegate to it). Wire this timer after the final-target check only; do not connect it to ordinary hits.",
+              "why": "The pause helps players notice the new wave and a non-looping timer prevents repeated wave creation.",
+              "check": "After clearing wave 1, exactly one wave 2 spawns 0.75 seconds later."
             },
             {
               "title": "Prevent duplicate wave scheduling",
@@ -1226,7 +1428,10 @@ window.UE5_MINI_UPGRADE_DATA = {
             "Create: make one original element for Automatically spawn harder waves using targets, arena props or wave HUD graphics. Export as FBX or PNG to your shared Teams folder.",
             "Integrate and test: ask the programmer to import your asset; play together and confirm every target stays visible and clickable."
           ],
-          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay."
+          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
+          "beforeStart": "The first five targets must be clickable, disappear and reach TargetsLeft=0 exactly once.",
+          "commonMistake": "Copy the working spawn loop first and remove the old call only after StartWave works; otherwise you can lose working logic.",
+          "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         },
         {
           "id": "race",
@@ -1320,7 +1525,10 @@ window.UE5_MINI_UPGRADE_DATA = {
             "Create: make one original element for Add a 90-second wave race and replay using targets, arena props or wave HUD graphics. Export as FBX or PNG to your shared Teams folder.",
             "Integrate and test: ask the programmer to import your asset; play together and confirm every target stays visible and clickable."
           ],
-          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay."
+          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
+          "beforeStart": "All five waves should appear in order and finish on wave 5. The HUD and timer are being added to the existing GameMode.",
+          "commonMistake": "If the HUD appears but targets do not react, make the overlay Not Hit-Testable (Self & All Children).",
+          "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         },
         {
           "id": "random",
@@ -1379,7 +1587,10 @@ window.UE5_MINI_UPGRADE_DATA = {
             "Create: make one original element for Optional: randomise target positions safely using targets, arena props or wave HUD graphics. Export as FBX or PNG to your shared Teams folder.",
             "Integrate and test: ask the programmer to import your asset; play together and confirm every target stays visible and clickable."
           ],
-          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay."
+          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
+          "beforeStart": "The complete five-wave game works already. Random positions are optional and can replace the fixed grid.",
+          "commonMistake": "A random position can be hidden by another object. If this happens, return to the reliable 3x3 grid or enlarge the spawn box.",
+          "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         }
       ],
       "minimumStage": "race",
