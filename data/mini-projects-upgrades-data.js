@@ -1,4 +1,4 @@
-/* Balloon Popper upgrade reading pass, preserving original source Mini-Projects. */
+/* Student-reviewed Balloon Popper upgrade; originals remain untouched. */
 window.UE5_MINI_UPGRADE_DATA = {
   "version": "3.66.4",
   "title": "Mini-Project Upgrade Walkthroughs",
@@ -350,66 +350,66 @@ window.UE5_MINI_UPGRADE_DATA = {
           "steps": [
             {
               "title": "Make a clearly different material",
-              "where": "Content Drawer → Balloon Popper → Materials.",
-              "do": "Duplicate M_Balloon, rename it M_DangerBalloon, then open it and change Base Color to strong red. Save the material.",
+              "where": "Content → Balloon Popper → find the original M_Balloon material.",
+              "do": "Duplicate M_Balloon as M_DangerBalloon. The original M_Balloon is already red, so choose DARK PURPLE or ELECTRIC BLUE for danger (not another red). For accessibility, plan a warning symbol, stripes or clearly different model shape as well as colour. Save the material.",
               "why": "Players need to recognise risk at a glance.",
-              "check": "You can tell the two target types apart in the viewport."
+              "check": "The original is red; the new danger material is purple/blue and is clearly distinguishable at normal play size."
             },
             {
               "title": "Duplicate the working actor",
-              "where": "Content Drawer → BP_Balloon → right-click → Duplicate.",
-              "do": "Name the copy BP_DangerBalloon. Open it, select the Balloon mesh component and change its material to M_DangerBalloon. Compile.",
+              "where": "Content → Balloon Popper → BP_Balloon → right-click → Duplicate.",
+              "do": "Name the duplicate BP_DangerBalloon. Open it, select the original BalloonModel Static Mesh component (that is its exact name from the starter) and set its material to M_DangerBalloon. Keep all original grow/pop, RoundEnded guard and RequestReplacement connections. Compile and Save; do not change BP_Balloon.",
               "why": "Duplicating a working Blueprint preserves its click and growth behaviour.",
-              "check": "The danger actor grows and pops just like the normal balloon."
+              "check": "BP_DangerBalloon uses the new material; the original BP_Balloon still has M_Balloon. Both actors contain the original On Actor Clicked logic."
             },
             {
               "title": "Change only the points awarded",
               "where": "BP_DangerBalloon → Event Graph → True pop path.",
-              "do": "Find the AwardPoints call you copied from BP_Balloon. Change the Points input from 1 to -2. Leave the growth and Destroy Actor connections in place. Compile and Save.",
+              "do": "In BP_DangerBalloon Event Graph → PopScale Branch TRUE path, find the copied AwardPoints call. Change Points from 1 to -2, but keep all other nodes and the replacement call before Destroy Actor in the same order. Compile and Save.",
               "why": "A small change to the data creates a new gameplay decision.",
-              "check": "The danger balloon awards -2; regular balloons still award +1."
+              "check": "The copied AwardPoints call uses -2 and BP_Balloon still uses +1. You will test the negative score in Play AFTER the spawner selects danger balloons."
             },
             {
               "title": "Prepare a class variable for the two balloon types",
               "where": "BP_BalloonSpawner → My Blueprint → Variables → +.",
-              "do": "Create SelectedBalloonClass as an Actor Class Reference and Compile. In SpawnOneBalloon find the existing Spawn Actor From Class node; leave its random Spawn Transform connected.",
+              "do": "In BP_BalloonSpawner add SelectedBalloonClass under My Blueprint → Variables. Set Variable Type to Actor Class Reference, then Compile. Open SpawnOneBalloon and locate the existing Spawn Actor From Class node with Class fixed to BP_Balloon. Keep its RANDOM Make Transform connected; the new variable will replace the fixed Class.",
               "why": "A class reference tells Spawn Actor which type of balloon it should make.",
-              "check": "The variable exists and has a purple Class reference pin."
+              "check": "SelectedBalloonClass has a purple Actor Class Reference pin; the original random spawn transform is still connected."
             },
             {
               "title": "Pick normal or danger with one random test",
               "where": "BP_BalloonSpawner → SpawnOneBalloon before Spawn Actor.",
-              "do": "Add Random Float in Range (Min=0.0, Max=1.0), compare its output with <= 0.2, and connect to Branch. On True Set SelectedBalloonClass to BP_DangerBalloon; on False set it to BP_Balloon. Compile.",
+              "do": "In SpawnOneBalloon add Random Float in Range (0.0, 1.0) → Float <= Float (set B=0.2) → Branch. From Branch True set SelectedBalloonClass=BP_DangerBalloon; from False set SelectedBalloonClass=BP_Balloon. Wire the function entry white execution into Branch (random float and comparison are pure value nodes). Compile.",
               "why": "Roughly 20% of balloons should be risky, without a fixed repeating order.",
-              "check": "Both Branch paths set SelectedBalloonClass to a valid Blueprint class."
+              "check": "Each call chooses a class first. True chooses BP_DangerBalloon, False chooses BP_Balloon."
             },
             {
               "title": "Spawn exactly one chosen class",
               "where": "BP_BalloonSpawner → same function.",
-              "do": "Connect both Set SelectedBalloonClass execution outputs to the existing Spawn Actor From Class (use two paths meeting at one node). Connect Get SelectedBalloonClass to its Class input; keep the existing random Spawn Transform. Compile.",
+              "do": "Keep the existing ONE Spawn Actor From Class inside SpawnOneBalloon. Connect Get SelectedBalloonClass to its Class pin instead of the old fixed BP_Balloon. Both Set SelectedBalloonClass execution paths should continue to ONE spawn call, using the existing Random Point → Make Transform → Spawn Transform. Compile. If Unreal refuses to merge white exec paths, use one Select (class) node with the random Boolean as Index, BP_DangerBalloon on True and BP_Balloon on False, and send the selected class into one Spawn Actor; do not duplicate the spawner call.",
               "why": "One call to SpawnOneBalloon should always create exactly one Actor.",
-              "check": "Both safe and danger balloons appear across multiple pops while the visible count remains five."
+              "check": "The function compiles, each entry spawns exactly one Actor and the Actor Class changes randomly."
             },
             {
               "title": "Connect the new decision to the spawn function",
               "where": "Still in SpawnOneBalloon.",
-              "do": "Make sure the exec entry first chooses SelectedBalloonClass and THEN reaches Spawn Actor from Class once. Keep the existing Random Point in Bounding Box as the spawn position. Compile and save.",
+              "do": "Check the entire SpawnOneBalloon function execution: purple Entry → random comparison Branch → choose SelectedBalloonClass → Spawn Actor From Class ONE TIME. The existing Random Point in Bounding Box → Make Transform must still feed Spawn Transform. Compile and Save.",
               "why": "Selecting the class and spawning at one shared location prevents duplicate actors.",
-              "check": "The spawner still produces exactly five at the start and one replacement for each pop."
+              "check": "Initial BeginPlay still spawns five targets and each successful pop requests exactly one replacement."
             },
             {
               "title": "Verify the copied dangerous actor also requests a replacement",
               "where": "BP_DangerBalloon → Event Graph → True pop branch.",
-              "do": "Check the duplicated logic still follows AwardPoints (Points=-2) → RequestReplacement on BP_BalloonSpawner → Destroy Actor. If the copy predates the spawner change, add the same replacement chain as BP_Balloon.",
+              "do": "In BP_DangerBalloon → On Actor Clicked → original growth/PopScale True branch: verify the complete execution path calls AwardPoints(Points=-2), then Get Actor of Class(BP_BalloonSpawner) → Cast → RequestReplacement, then Destroy Actor(Self). The RoundEnded check before growth must also remain copied. Compile.",
               "why": "Both target types must take part in the same ongoing game loop.",
-              "check": "Popping either a safe or dangerous balloon produces one replacement."
+              "check": "Both balloon types award their own points, request one replacement and destroy themselves; neither can be popped after Time Up."
             },
             {
               "title": "Check scoring and chance over several pops",
               "where": "Balloon Popper Level → Play In Editor.",
-              "do": "Pop at least 20 balloons. Safe targets should add 1; danger targets deduct 2 but cannot push Score below 0. The number of visible targets should remain five until Time Up.",
+              "do": "Play Balloon Popper Level and pop at least 20 BALLOONS, not merely click 20 times. A red normal balloon awards +1; purple/blue danger subtracts 2 but AwardPoints uses Max(0,..), so Score cannot fall below zero. The danger chance is 20% per spawn, so you may need another round to see several. Watch that five balloons remain during play and none spawn after TIME UP.",
               "why": "Random types must be balanced and never strand the player.",
-              "check": "Both types appear, the score changes correctly and the playfield remains populated."
+              "check": "Normal and danger targets look distinct and affect one shared Score correctly. No score drops below zero and one new balloon replaces each pop until the round ends."
             },
             {
               "title": "Give the game a fresh look",
@@ -420,15 +420,15 @@ window.UE5_MINI_UPGRADE_DATA = {
             }
           ],
           "check": "Both balloon classes spawn randomly; safe targets give +1, danger targets deduct 2 (not below zero), and either pop is replaced until the clock ends.",
-          "fix": "Only safe targets? Inspect SelectedBalloonClass values and ensure both Branch paths connect before the single Spawn Actor call. Too many balloons? Check only one spawn path executes. Danger balloons vanish permanently? Check their copied pop chain calls RequestReplacement.",
+          "fix": "Only safe targets? Inspect SelectedBalloonClass values and ensure both Branch paths connect before the single Spawn Actor call. Too many balloons? Check only one spawn path executes. Danger balloons vanish permanently? Check their copied pop chain calls RequestReplacement. If both kinds are red, change M_DangerBalloon; the original M_Balloon is already red. If a copied danger balloon does not respawn, check its AwardPoints → RequestReplacement → Destroy path.",
           "designerSteps": [
             "Plan: Create unmistakably different safe and danger targets. Use a symbol/shape as well as colour and check that both variants remain visible in the playfield. Draw a small mock-up of the 1280×720 play area, targets and HUD.",
             "Create: make one original element for Mix safe and danger balloons into random spawns using HUD backgrounds, balloon meshes or symbols. Export as FBX or PNG to your shared Teams folder.",
             "Integrate and test: ask the programmer to import your asset; play together and confirm targets are visible and their UI never blocks clicks."
           ],
           "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
-          "beforeStart": "Finish and back up the safe five-balloon game before you make the optional danger variant.",
-          "commonMistake": "Change the score only in BP_DangerBalloon; do not overwrite the working normal balloon.",
+          "beforeStart": "The basic red-balloon game already works with a score, five randomly respawning balloons, 60-second rounds and Play Again. The original M_Balloon material is red: the danger type must be visibly different, not a second red balloon.",
+          "commonMistake": "The starter M_Balloon is already red and its Static Mesh component is called BalloonModel. Make the danger balloon purple/blue with a warning pattern, and edit only the duplicated BP_DangerBalloon.",
           "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         }
       ],
