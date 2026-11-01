@@ -1,13 +1,13 @@
-/* Bowling-only student walkthrough refinement for UE5.8; original tutorial lessons untouched. */
+/* Student-reviewed Balloon Popper upgrade; originals remain untouched. */
 window.UE5_MINI_UPGRADE_DATA = {
-  "version": "3.66.3",
+  "version": "3.66.4",
   "title": "Mini-Project Upgrade Walkthroughs",
   "intro": "Finish one original guided Mini-Project, then follow these text-only expansions. Start with Essential stages; the Creative stage gives your pair room to make it yours. Save your Unreal project after every stage.",
   "projects": [
     {
       "project": "balloon-popper",
       "title": "Balloon Popper → Arcade Challenge",
-      "intro": "Build the minimum playable game first: score → random respawning → 60-second round. Then add a Play Again screen and, if there is time, dangerous balloons. You do not need to finish every stage to have a complete prototype.",
+      "intro": "Begin where the original Balloon Popper tutorial finishes: keep BP_Balloon growth/popping intact, then add scoring, random replacement, a timed round and replay. The original project uses the Content/Balloon Popper folder and Balloon Popper Level map. Optional danger targets come last.",
       "stages": [
         {
           "id": "score",
@@ -18,7 +18,7 @@ window.UE5_MINI_UPGRADE_DATA = {
           "steps": [
             {
               "title": "Create a score variable",
-              "where": "Content Drawer → BalloonPopper → BP_BalloonGameMode → My Blueprint → Variables.",
+              "where": "Content Drawer → Balloon Popper → BP_BalloonGameMode → My Blueprint → Variables.",
               "do": "Create an Integer named Score. Compile and set Default Value to 0.",
               "why": "One GameMode keeps the total; balloons do not each hold their own score.",
               "check": "Score appears as an Integer with value 0."
@@ -53,14 +53,14 @@ window.UE5_MINI_UPGRADE_DATA = {
             },
             {
               "title": "Call it when a balloon actually pops",
-              "where": "BP_Balloon → Event Graph → the existing Branch that checks PopScale.",
-              "do": "On the True execution path BEFORE Destroy Actor, add Get Game Mode → Cast To BP_BalloonGameMode → AwardPoints (Points = 1) → Destroy Actor (Self). Leave the False path unchanged. Compile and Save.",
+              "where": "BP_Balloon → Event Graph → the original Branch after Set Actor Scale 3D checking Actor Scale X against PopScale.",
+              "do": "Keep On Actor Clicked → Set Actor Scale 3D → Branch (Actor Scale X >= PopScale). From that Branch True white pin connect Get Game Mode → Cast To BP_BalloonGameMode (Object=Get Game Mode) → AwardPoints(Points=1) → Destroy Actor(Self). Keep the original False path, SizeIncreaseAmount and PopScale. Compile.",
               "why": "Awarding on the pop branch counts completed pops, not every click.",
-              "check": "Clicking to grow does not score; the final click that destroys a balloon adds exactly one point."
+              "check": "A click that only grows a balloon adds zero; the final pop adds exactly +1 and destroys that Actor."
             },
             {
               "title": "Check all balloons share one score",
-              "where": "Open BalloonPopperLevel → Play In Editor.",
+              "where": "Content → Balloon Popper → Balloon Popper Level → Play In Editor.",
               "do": "Pop two different balloons. Confirm printed totals show Score: 1 then Score: 2. Save the level.",
               "why": "You have proved the GameMode, cast and pop event are connected correctly.",
               "check": "The total increases across different balloon actors, not from 0 for each one."
@@ -74,8 +74,8 @@ window.UE5_MINI_UPGRADE_DATA = {
             "Integrate and test: ask the programmer to import your asset; play together and confirm targets are visible and their UI never blocks clicks."
           ],
           "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
-          "beforeStart": "Start after the original Balloon Popper tutorial: clicking a balloon grows it, and the final click destroys it. Have BP_Balloon, BP_BalloonGameMode and BalloonPopperLevel saved.",
-          "commonMistake": "If a Cast to BP_BalloonGameMode fails, inspect World Settings → GameMode Override first.",
+          "beforeStart": "Open Content → Balloon Popper → Balloon Popper Level. Several hand-placed BP_Balloon actors should grow on click and pop at PopScale (default 1.5). The level uses BP_BalloonGameMode and BP_BalloonPlayerController.",
+          "commonMistake": "Score belongs to BP_BalloonGameMode, not each BP_Balloon. AwardPoints runs only from the True PopScale branch, BEFORE Destroy Actor.",
           "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         },
         {
@@ -87,10 +87,10 @@ window.UE5_MINI_UPGRADE_DATA = {
           "steps": [
             {
               "title": "Create the reusable spawning actor",
-              "where": "Content Drawer → BalloonPopper folder → Add → Blueprint Class → Actor.",
-              "do": "Name it BP_BalloonSpawner. Open it and add a Box Collision component named SpawnArea. Select SpawnArea and give it an extent roughly X=50, Y=350, Z=220 as a starting point, then Compile.",
+              "where": "Content Drawer → Balloon Popper folder → Add → Blueprint Class → Actor.",
+              "do": "In Content → Balloon Popper, create Blueprint Class → Actor named BP_BalloonSpawner. Add a Box Collision component called SpawnArea. Under Shape, start with Box Extent X=50, Y=350, Z=220; keep Rotation=0,0,0, set Collision Presets=NoCollision, then Compile and Save.",
               "why": "A movable box defines where balloons may appear; it is easier to tune than hard-coded coordinates.",
-              "check": "BP_BalloonSpawner has a Box Collision visible in the Blueprint viewport."
+              "check": "BP_BalloonSpawner contains one SpawnArea Box Collision component with no collision and no rotation."
             },
             {
               "title": "Make the function and locate the Box",
@@ -104,35 +104,42 @@ window.UE5_MINI_UPGRADE_DATA = {
               "where": "BP_BalloonSpawner → SpawnOneBalloon function.",
               "do": "Right-click and add Random Point in Bounding Box. Plug Get World Location into Center and Get Scaled Box Extent into Half Size. In UE5.8 these are the exact pin names. Keep the Box rotation at 0,0,0.",
               "why": "This returns a different location inside the Box whenever the function runs.",
-              "check": "You have a green Vector Return Value ready to connect to Make Transform."
+              "check": "Random Point in Bounding Box uses SpawnArea Get World Location → Center and Get Scaled Box Extent → Half Size; its output depends on where the actor is placed in the level."
             },
             {
               "title": "Spawn at that random point",
               "where": "In SpawnOneBalloon, after the random point.",
-              "do": "Add Make Transform and connect the random Vector to Location; leave Rotation 0, Scale 1. Add Spawn Actor from Class, set Class to BP_Balloon, feed the Make Transform into Spawn Transform and set Collision Handling Override to Always Spawn, Ignore Collisions. Wire the function entry execution into Spawn Actor. Compile.",
+              "do": "Inside SpawnOneBalloon, add Make Transform (Location=Random Point in Bounding Box Return Value, Rotation=0, Scale=1,1,1). Add Spawn Actor From Class(Class=BP_Balloon, Spawn Transform=Make Transform, Spawn Collision Handling Override=Always Spawn, Ignore Collisions). Wire SpawnOneBalloon purple function Entry white pin to Spawn Actor white execution input. Compile.",
               "why": "The tutorial balloon is reused as a real spawned actor, not duplicated by hand.",
-              "check": "Calling SpawnOneBalloon creates one BP_Balloon inside the area."
+              "check": "SpawnOneBalloon compiles to spawn one balloon when called; it does not run yet until BeginPlay calls it in the next step."
             },
             {
               "title": "Populate the arena on BeginPlay",
               "where": "BP_BalloonSpawner → Event Graph → Event BeginPlay.",
-              "do": "Add a For Loop with First Index 0 and Last Index 4. Connect Loop Body to SpawnOneBalloon. Five iterations create five targets; the loop Completed output needs no further node. Compile.",
+              "do": "BP_BalloonSpawner → Event Graph: wire Event BeginPlay → For Loop(First Index=0, Last Index=4) → from Loop Body call SpawnOneBalloon. Leave Loop Completed unconnected. Compile and Save. Five calls occur: indexes 0,1,2,3,4.",
               "why": "The player starts with a small, predictable number of targets.",
-              "check": "Drag one BP_BalloonSpawner into BalloonPopperLevel and press Play: five NEW balloons should appear. Leave the manually placed ones until this works, then remove the old placed balloons in the next step."
+              "check": "BeginPlay loops from 0 through 4 and calls SpawnOneBalloon once per index. The spawner still needs to be placed in Balloon Popper Level."
+            },
+            {
+              "title": "Place the spawner and test its first five balloons",
+              "where": "Content → Balloon Popper → Balloon Popper Level → drag BP_BalloonSpawner from the Content Drawer.",
+              "do": "Put ONE BP_BalloonSpawner near the original balloons and move or resize its SpawnArea so the unrotated box is visible in the camera. Move the old manually placed balloons aside TEMPORARILY so you can identify newly spawned ones. Press Play and count five NEW balloons.",
+              "why": "The Blueprint spawner must be placed in the level; an asset only in the Content Drawer does not receive BeginPlay.",
+              "check": "Five new balloons appear inside the spawner volume. If none appear, check BP_BalloonSpawner is placed and its BeginPlay loop runs."
             },
             {
               "title": "Put the spawn box where the camera can see it",
-              "where": "Open BalloonPopperLevel.",
-              "do": "Only after the previous step successfully spawned five new balloons, delete the OLD manually placed BP_Balloon actors (keep the new BP_BalloonSpawner, camera, lighting and scenery). Move and resize SpawnArea to fit the camera. Set SpawnArea Collision Presets to NoCollision so the box cannot block click traces.",
+              "where": "Open Balloon Popper Level.",
+              "do": "ONLY after you have proved five new balloons spawn, delete the original hand-placed BP_Balloon actors (plus any loose balloon Static Mesh Actors obstructing the view). Keep BP_BalloonSpawner, camera view, lights and scenery. Save. With the placed BP_BalloonSpawner selected, adjust its SpawnArea to stay in camera view. Set the SpawnArea box Collision Presets=NoCollision.",
               "why": "Only the spawner should create the balloons now; otherwise you would have extras.",
-              "check": "Play shows five visible, clickable balloons inside the intended screen area."
+              "check": "Exactly five newly spawned balloons can be seen and clicked, with no manually placed duplicates remaining."
             },
             {
               "title": "Add a replacement event",
               "where": "BP_BalloonSpawner → Event Graph → Add Custom Event.",
               "do": "Call it RequestReplacement. Wire its white execution output to SpawnOneBalloon. Compile.",
               "why": "Every pop can ask the same spawner for one replacement.",
-              "check": "RequestReplacement has a clear route to SpawnOneBalloon."
+              "check": "RequestReplacement is wired to SpawnOneBalloon. The next two steps connect BP_Balloon to call it."
             },
             {
               "title": "Find the spawner when a balloon pops",
@@ -146,26 +153,26 @@ window.UE5_MINI_UPGRADE_DATA = {
               "where": "BP_Balloon → same True pop path.",
               "do": "Connect AwardPoints white execution output to the Cast white input. From Cast success, call RequestReplacement on the BP_BalloonSpawner reference, then connect that event white output to the existing Destroy Actor (Self). Connect Cast Failed directly to Destroy Actor as a fallback. Compile.",
               "why": "One old balloon disappears and one new balloon appears before it is destroyed.",
-              "check": "After 15 pops, five balloons remain visible and Score is 15."
+              "check": "On a real pop, the sequence AwardPoints → RequestReplacement → Destroy Actor keeps five active balloons."
             },
             {
               "title": "Check click collision and spawn position",
-              "where": "BalloonPopperLevel → Play In Editor.",
-              "do": "Try 15 pops. If a target cannot be clicked, make sure the balloon mesh collision blocks Visibility, the spawning Box uses NoCollision and the player controller still has Enable Click Events. Resize or move SpawnArea if some targets spawn behind the HUD.",
+              "where": "Balloon Popper Level → Play In Editor.",
+              "do": "Pop at least 15 balloons (not merely click 15 times). After each pop there should still be five. Ensure BalloonModel mesh collision blocks Visibility, SpawnArea uses NoCollision, and BP_BalloonPlayerController has Enable Click Events turned on. If targets overlap or disappear behind scenery, move or enlarge SpawnArea WITHIN the camera view; random positions are not guaranteed non-overlapping.",
               "why": "A game loop must be reliable, not only work once.",
-              "check": "No balloons disappear forever, none spawn outside the playable view, and there are still five after repeated pops."
+              "check": "The five-target loop remains populated through 15 successful pops and all targets can be reached by mouse."
             }
           ],
           "check": "Start with five visible balloons. After any number of pops, five replacements remain within the playfield and scoring still works.",
-          "fix": "Only four remain? Verify RequestReplacement runs before Destroy Actor. More than five? Delete the old placed balloons or check that BeginPlay fires only once. Invisible targets? Reposition the Box Collision volume in the camera view; avoid randomly moving the camera.",
+          "fix": "No targets? Check an instance of BP_BalloonSpawner exists in Balloon Popper Level and its BeginPlay For Loop calls SpawnOneBalloon. Four remain? RequestReplacement must happen before Destroy Actor. More than five? Remove the original manually placed actors. Hidden or overlapping? Adjust SpawnArea size and position while keeping it unrotated and non-colliding.",
           "designerSteps": [
             "Plan: Plan a readable playfield and test whether five balloons can be clicked without overlapping the UI. Draw a small mock-up of the 1280×720 play area, targets and HUD.",
             "Create: make one original element for Spawn replacement balloons at random positions using HUD backgrounds, balloon meshes or symbols. Export as FBX or PNG to your shared Teams folder.",
             "Integrate and test: ask the programmer to import your asset; play together and confirm targets are visible and their UI never blocks clicks."
           ],
           "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
-          "beforeStart": "You must have finished the Score upgrade and confirmed one destroyed balloon awards +1. Leave the existing placed balloons in the level until the spawner successfully creates five new ones.",
-          "commonMistake": "First test five spawns, then remove old manually placed balloons. If nothing appears, check the spawner is actually placed in the level.",
+          "beforeStart": "One popped balloon awards exactly +1. The original BP_Balloon actors remain placed in the level; do not delete them until a new BP_BalloonSpawner proves it can create five.",
+          "commonMistake": "The ORIGINAL project uses the folder \"Balloon Popper\" and map \"Balloon Popper Level\". BP_BalloonSpawner must be placed in that level; a Blueprint asset in Content Drawer does not start spawning.",
           "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         },
         {
@@ -192,27 +199,27 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Start the timer from BeginPlay",
               "where": "BP_BalloonGameMode → Event Graph → Event BeginPlay.",
-              "do": "Add Set Timer by Event. Set Time=1.0 and Looping=true. Drag from the red Event delegate pin and select the TickClock custom event (or use Create Event and choose TickClock). Connect BeginPlay white execution to Set Timer by Event. Promote its Return Value to ClockHandle.",
+              "do": "In BP_BalloonGameMode Event Graph: connect Event BeginPlay → Set Timer by Event (Time=1.0, Looping checked). Drag from its red Event delegate pin → Create Event → select TickClock. Right-click Return Value → Promote to Variable and name it ClockHandle (Timer Handle). Leave your temporary Print String \"tick\" connected to TickClock for this test. Compile and Play.",
               "why": "The clock should start once when the level begins.",
-              "check": "In Play, \"tick\" prints about once each second; remove the temporary Print String before the next step."
+              "check": "One \"tick\" prints roughly every second, and ClockHandle is type Timer Handle. After confirming it works, remove the temporary Print String."
             },
             {
               "title": "Count down and stop on zero",
               "where": "BP_BalloonGameMode → TickClock.",
-              "do": "Add Branch with Condition = NOT RoundEnded. From True, set SecondsLeft to Max (Integer)(0, SecondsLeft - 1). Then add a Branch testing SecondsLeft <= 0. On True set RoundEnded = true, Print String \"TIME UP!\", and Clear and Invalidate Timer by Handle using ClockHandle.",
+              "do": "In BP_BalloonGameMode Event Graph → TickClock replace the temporary Print String with Branch(Condition=NOT RoundEnded). From True: Set SecondsLeft = Max(0, SecondsLeft - 1), then Branch(SecondsLeft <= 0). Only the second Branch True goes to Set RoundEnded=true → Print String \"TIME UP!\" → Clear and Invalidate Timer by Handle(ClockHandle). Compile. False paths need no action.",
               "why": "Clamping avoids negative seconds; clearing the handle stops extra calls.",
               "check": "Play for a few seconds: SecondsLeft falls by 1 every second and stops at 0."
             },
             {
               "title": "Prevent scores after time runs out",
               "where": "BP_BalloonGameMode → AwardPoints function.",
-              "do": "Insert a Branch BEFORE Set Score, with Condition = NOT RoundEnded. Only its True execution output may run the Score calculation and Set Score.",
+              "do": "In BP_BalloonGameMode → AwardPoints function, find the direct white execution wire from function Entry to Set Score. Disconnect it, insert a Branch with Condition=NOT RoundEnded, and connect ONLY Branch True to Set Score. Leave Score+Points → Max(0,..) as the green input to Set Score, and leave the existing Print String after Set Score. Do not create another AwardPoints function.",
               "why": "This blocks late scoring even when an actor was already clicked.",
-              "check": "With RoundEnded true in a debug test, AwardPoints no longer changes Score."
+              "check": "AwardPoints never changes Score when RoundEnded is true. You can temporarily set the GameMode SecondsLeft default to 5 to check the end quickly, then restore 60."
             },
             {
               "title": "Create the HUD widget",
-              "where": "Content Drawer → BalloonPopper → User Interface → Widget Blueprint → User Widget.",
+              "where": "Content Drawer → Balloon Popper → User Interface → Widget Blueprint → User Widget.",
               "do": "Name it WBP_BalloonHUD. In Designer add two Text widgets near the top: ScoreText and TimeText. Tick Is Variable for each. Give them placeholder text \"Score: 0\" and \"Time: 60\".",
               "why": "The player needs persistent feedback rather than Print String messages.",
               "check": "The Designer preview shows both labels in the game-safe area."
@@ -222,46 +229,53 @@ window.UE5_MINI_UPGRADE_DATA = {
               "where": "WBP_BalloonHUD → Designer → select the root Canvas Panel, then the ScoreText and TimeText labels.",
               "do": "Set the root Canvas Panel Visibility to Not Hit-Testable (Self Only). Set ScoreText and TimeText to Not Hit-Testable (Self & All Children). Do not choose Self & All Children on the root: a later ResultsPanel contains a clickable ReplayButton.",
               "why": "A decorative HUD should not swallow mouse clicks intended for balloons in the 3D scene; later child buttons must remain clickable.",
-              "check": "Play and click balloons through empty HUD space. The score changes and the labels remain visible."
+              "check": "In Designer the root Canvas uses Not Hit-Testable (Self Only), with both decorative Text widgets Not Hit-Testable (Self & All Children). You will test real mouse clicks after the widget appears on screen."
             },
             {
-              "title": "Bind the two visible numbers",
-              "where": "Open WBP_BalloonHUD → Designer → select ScoreText → Details → Content → Text → Bind → Create Binding. Repeat for TimeText.",
-              "do": "In each generated binding function use Get Game Mode → Cast To BP_BalloonGameMode → Get Score or SecondsLeft. Convert the Integer to Text using ToText (Integer), then return it. Keep the static \"Score:\" and \"Time:\" prefixes as separate Text widgets or use Format Text. If the cast fails, return \"0\".",
-              "why": "The tiny widget reads the one authoritative GameMode value; no duplicate counters.",
-              "check": "Play mode shows changing values without opening the Blueprint debugger."
+              "title": "Bind ScoreText and keep its Score label",
+              "where": "WBP_BalloonHUD → Designer → ScoreText → Details → Content → Text → Bind → Create Binding.",
+              "do": "In the generated Text binding function use Get Game Mode → Cast To BP_BalloonGameMode (Object=Get Game Mode). From the cast read Score and connect it to Format Text with exact format \"Score: {Value}\". Connect Format Text output to Return Node Text and connect the white execution Entry → Cast Success → Return. Compile.",
+              "why": "Returning just an integer would replace the word \"Score\" with an unlabelled number.",
+              "check": "The binding returns a value like \"Score: 2\" for two balloon pops."
+            },
+            {
+              "title": "Bind TimeText and keep its Time label",
+              "where": "WBP_BalloonHUD → Designer → TimeText → Details → Content → Text → Bind → Create Binding.",
+              "do": "Repeat the GameMode cast and white execution chain in this separate binding. From Get SecondsLeft use Format Text \"Time: {Value}\" and connect to the Text Return Node. Compile. If the cast fails, use \"Time: 60\" as a fallback.",
+              "why": "Both labels display values from the same round state without duplicating variables in the widget.",
+              "check": "The binding returns \"Time: 57\" as the timer counts down, not merely \"57\"."
             },
             {
               "title": "Put the HUD on screen",
               "where": "BP_BalloonPlayerController → Event Graph → BeginPlay.",
-              "do": "After your existing Show Mouse Cursor setup, add Create Widget (Class = WBP_BalloonHUD, Owning Player = Self) → Add to Viewport. If BeginPlay already has several branches, use a Sequence node so both operations run. Compile and Save.",
+              "do": "In BP_BalloonPlayerController Event Graph → original BeginPlay and Set Show Mouse Cursor(true), keep that original node wired. After it, Create Widget(Class=WBP_BalloonHUD, Owning Player=Self) → Add to Viewport (Target=Create Widget Return Value), then Set Input Mode Game and UI with Player Controller=Self and Hide Cursor During Capture=false. Do not disconnect existing input work; use a Sequence if needed. Compile and Save.",
               "why": "The controller is already selected by the project GameMode and owns player display.",
-              "check": "Start the level: both HUD values appear and the time decreases."
+              "check": "Play Balloon Popper Level: Score: 0 and Time: 60 appear, time decreases, the cursor is visible and clicking through empty HUD space still grows balloons."
             },
             {
               "title": "Block clicks once the round ends",
               "where": "BP_Balloon → Event ActorOnClicked execution, before the growth nodes.",
-              "do": "Get Game Mode → Cast To BP_BalloonGameMode → Get RoundEnded → NOT → Branch. Wire only the True path into the existing click-to-grow chain. Keep the existing pop-scoring call later in the chain.",
+              "do": "In BP_Balloon → Event Graph find the ORIGINAL On Actor Clicked event feeding the grow/Set Actor Scale 3D chain. Disconnect its direct white execution connection, then add Get Game Mode → Cast To BP_BalloonGameMode → Branch(Condition=NOT RoundEnded). Wire Cast Success → Branch True into the ORIGINAL grow chain. Leave the original PopScale Branch and AwardPoints call unchanged. Compile.",
               "why": "The scene should stop changing when the round is finished.",
-              "check": "After 60 seconds, clicking no longer grows or pops balloons."
+              "check": "During a five-second test, balloons grow normally. After TIME UP, further clicks do not grow or pop them."
             },
             {
               "title": "Prevent the spawner working after the timer",
               "where": "BP_BalloonSpawner → RequestReplacement custom event.",
-              "do": "Before SpawnOneBalloon, add Get Game Mode → Cast To BP_BalloonGameMode → Get RoundEnded → NOT → Branch. Connect only the True output to SpawnOneBalloon. Compile.",
+              "do": "In BP_BalloonSpawner → Event Graph → RequestReplacement custom event, insert Get Game Mode → Cast To BP_BalloonGameMode → Branch(Condition=NOT RoundEnded) BEFORE SpawnOneBalloon. Connect only Branch True to SpawnOneBalloon; False does nothing. Do not add this gate to Event BeginPlay, which creates the original five targets.",
               "why": "The round must stop producing targets when the clock reaches zero.",
-              "check": "Set RoundEnded=true temporarily in a test; popping an existing balloon does not produce a replacement."
+              "check": "When RoundEnded is true no late replacement requests can create targets, while the original five-target BeginPlay loop still works."
             }
           ],
           "check": "The clock counts 60→0, the score changes only when a balloon pops, the HUD stays visible and no further targets spawn or score after the round ends.",
-          "fix": "HUD missing? Check the controller is assigned in BP_BalloonGameMode and Create Widget is connected. Time frozen? Confirm TickClock is connected to Set Timer by Event with Looping ticked. If the HUD appears but balloons cannot be clicked, check the root Canvas uses Not Hit-Testable (Self Only), not Visible.",
+          "fix": "HUD missing? Check the controller is assigned in BP_BalloonGameMode and Create Widget is connected. Time frozen? Confirm TickClock is connected to Set Timer by Event with Looping ticked. If the HUD appears but balloons cannot be clicked, check the root Canvas uses Not Hit-Testable (Self Only), not Visible. If the HUD numbers lose their labels, use Format Text \"Score: {Value}\" and \"Time: {Value}\" in the two bindings. If the result ReplayButton later does not receive clicks, check Set Input Mode Game and UI in the controller.",
           "designerSteps": [
             "Plan: Design WBP_BalloonHUD with clear score and remaining-time labels. Try a contrasting colour when time gets low. Draw a small mock-up of the 1280×720 play area, targets and HUD.",
             "Create: make one original element for Add a 60-second round and live score HUD using HUD backgrounds, balloon meshes or symbols. Export as FBX or PNG to your shared Teams folder.",
             "Integrate and test: ask the programmer to import your asset; play together and confirm targets are visible and their UI never blocks clicks."
           ],
           "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
-          "beforeStart": "Five balloons should already appear and be replaced when popped. This stage changes GameMode, controller, widget and spawner.",
+          "beforeStart": "One BP_BalloonSpawner instance is in Balloon Popper Level and maintains five clickable targets. BP_BalloonPlayerController already shows the cursor and has Enable Click Events checked in Details.",
           "commonMistake": "If your timer seems frozen, test TickClock using Print String before building the HUD.",
           "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         },
@@ -275,37 +289,44 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Create a results panel in the HUD",
               "where": "WBP_BalloonHUD → Designer.",
-              "do": "Add a Border or Vertical Box named ResultsPanel. Add a Text widget named FinalScoreText with placeholder \"Round over\" and a Button named ReplayButton with a child Text \"Play Again\". Tick Is Variable on ResultsPanel and FinalScoreText. Set ResultsPanel Visibility to Collapsed initially. Keep the HUD root Canvas as Not Hit-Testable (Self Only); set ResultsPanel to Visible when RoundEnded and leave ReplayButton as Visible so it can receive input.",
+              "do": "In WBP_BalloonHUD → Designer, place a Border or Vertical Box named ResultsPanel INSIDE the root Canvas Panel. Inside it put Text FinalScoreText and Button ReplayButton with a child Text \"Play Again\". Tick Is Variable on ResultsPanel, FinalScoreText and ReplayButton. Set ResultsPanel Visibility=Collapsed initially and ReplayButton Visibility=Visible. Keep the root Canvas Not Hit-Testable (Self Only), NOT Self & All Children.",
               "why": "Players need a persistent end screen; Print String is only a debugging aid.",
-              "check": "Nothing covers the game when it first starts."
+              "check": "The new result panel is initially Collapsed and does not block clicks during the round."
             },
             {
-              "title": "Refresh visibility from RoundEnded",
-              "where": "WBP_BalloonHUD → Graph → Event Construct.",
-              "do": "Add a repeating Set Timer by Event with Time 0.25 seconds; create a Custom Event named RefreshRoundScreen and connect it to the red Event pin. In RefreshRoundScreen use Get Game Mode → Cast To BP_BalloonGameMode → Get RoundEnded → Branch. On True set ResultsPanel Visibility = Visible; on False set it to Collapsed.",
-              "why": "Updating four times per second is sufficient for a small classroom HUD and avoids updating the panel every frame.",
-              "check": "Wait for the timer to end: the result panel becomes visible."
+              "title": "Create the end-screen refresh event",
+              "where": "WBP_BalloonHUD → Event Graph → empty space.",
+              "do": "Create a Custom Event called RefreshRoundScreen. Connect its white output to Get Game Mode → Cast To BP_BalloonGameMode → Branch(Condition=Get RoundEnded). On True Set Visibility(ResultsPanel,Visible); on False Set Visibility(ResultsPanel,Collapsed). Compile.",
+              "why": "The result is controlled by the actual GameMode end flag, not by an independent second timer counting down.",
+              "check": "Both Branch paths update the ResultsPanel, but the event has not been scheduled yet."
+            },
+            {
+              "title": "Call the result-refresh event using one timer",
+              "where": "WBP_BalloonHUD → Event Graph → Event Construct.",
+              "do": "From Event Construct start Set Timer by Event(Time=0.25, Looping checked). From the red Event delegate pin choose Create Event and select RefreshRoundScreen. Keep both existing Score and Time Text bindings. Do not create a second WBP_BalloonHUD instance. Compile.",
+              "why": "A quarter-second update is frequent enough for the result panel to appear promptly without Event Tick.",
+              "check": "Set SecondsLeft temporarily to 5 and Play: after time reaches zero, ResultsPanel appears."
             },
             {
               "title": "Show the final score",
               "where": "RefreshRoundScreen → True branch in WBP_BalloonHUD.",
-              "do": "From the same GameMode reference, get Score and use Format Text with a format such as \"Time up! Final score: {Points}\". Connect Score converted to Text to Points, then SetText on FinalScoreText.",
+              "do": "Inside WBP_BalloonHUD → RefreshRoundScreen, from the existing BP_BalloonGameMode cast read Score. In the RoundEnded Branch TRUE path, AFTER Set Visibility(ResultsPanel,Visible), call Set Text on FinalScoreText with Format Text \"Time up! Final score: {Points}\" (Points=Score). Connect the white execution Set Visibility → Set Text. Compile.",
               "why": "The end screen should show the actual score from the single GameMode variable.",
-              "check": "The displayed final score equals the last HUD score."
+              "check": "The result panel shows the same final Score as the live ScoreText, with readable text."
             },
             {
               "title": "Wire the replay button",
               "where": "WBP_BalloonHUD → Designer → ReplayButton → Events → OnClicked (+).",
-              "do": "In the new OnClicked event call Get Current Level Name with Remove Prefix String enabled, then Open Level (by Name) with its Level Name input connected to the returned name. Compile and Save.",
+              "do": "Select ReplayButton in WBP_BalloonHUD Designer, go to Details → Events → OnClicked (+). Connect the new OnClicked event to Open Level (by Name). Add Get Current Level Name with Remove Prefix String checked; connect that output to Open Level.Level Name. Compile and Save. This uses the ORIGINAL \"Balloon Popper Level\" level name without having to type it.",
               "why": "Reopening the level resets the timer, total, spawner and balloon types in one action.",
-              "check": "Play Again starts with score 0, 60 seconds and five visible targets."
+              "check": "After Time Up, clicking Play Again reloads Balloon Popper Level with Score: 0, Time: 60 and five new balloons."
             },
             {
               "title": "Test the end of a round",
-              "where": "BalloonPopperLevel → Play In Editor.",
-              "do": "For a quick test temporarily set SecondsLeft default to 5 in BP_BalloonGameMode, then restore it to 60. Score twice, wait until zero, attempt more clicks, and replay. Confirm the spawner does not add new balloons after the round ends.",
+              "where": "Balloon Popper Level → Play In Editor.",
+              "do": "Temporarily set BP_BalloonGameMode.SecondsLeft default from 60 to 5 and Compile. Restart Play. Pop at least one balloon before zero; after zero confirm clicking no longer grows balloons and the results panel shows the final score. Click Play Again to verify scores and balloons reset. Finally restore the SecondsLeft default to 60, Compile and Save.",
               "why": "The end state must prevent extra points, then offer a reliable restart.",
-              "check": "The final score freezes, the results panel appears, and replay returns to a fresh round."
+              "check": "Time Up, frozen scoring, blocked clicks and replay all work. The last saved GameMode uses 60 seconds again, not the temporary five-second test."
             }
           ],
           "check": "At time zero the round freezes and the final score appears; Play Again starts with five targets and a clean 60-second score challenge. Confirm the ReplayButton receives clicks even though the decorative HUD lets mouse clicks pass to balloons during gameplay.",
@@ -316,8 +337,8 @@ window.UE5_MINI_UPGRADE_DATA = {
             "Integrate and test: ask the programmer to import your asset; play together and confirm targets are visible and their UI never blocks clicks."
           ],
           "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
-          "beforeStart": "The 60-second timer and on-screen score must work. Test with a short five-second round, then put it back to 60.",
-          "commonMistake": "The parent Canvas should remain Not Hit-Testable (Self Only), or the replay button may stop working.",
+          "beforeStart": "Balloon Popper Level now has a 60-second GameMode countdown, a score/time HUD and clicks stop after zero. The HUD root is Not Hit-Testable (Self Only) and BP_BalloonPlayerController uses Game and UI input.",
+          "commonMistake": "If the root Canvas is set to Not Hit-Testable (Self & All Children), ReplayButton will never receive clicks. Use Not Hit-Testable (Self Only) for the root and Visible for the button when the panel is shown.",
           "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         },
         {
@@ -329,66 +350,66 @@ window.UE5_MINI_UPGRADE_DATA = {
           "steps": [
             {
               "title": "Make a clearly different material",
-              "where": "Content Drawer → BalloonPopper → Materials.",
-              "do": "Duplicate M_Balloon, rename it M_DangerBalloon, then open it and change Base Color to strong red. Save the material.",
+              "where": "Content → Balloon Popper → find the original M_Balloon material.",
+              "do": "Duplicate M_Balloon as M_DangerBalloon. The original M_Balloon is already red, so choose DARK PURPLE or ELECTRIC BLUE for danger (not another red). For accessibility, plan a warning symbol, stripes or clearly different model shape as well as colour. Save the material.",
               "why": "Players need to recognise risk at a glance.",
-              "check": "You can tell the two target types apart in the viewport."
+              "check": "The original is red; the new danger material is purple/blue and is clearly distinguishable at normal play size."
             },
             {
               "title": "Duplicate the working actor",
-              "where": "Content Drawer → BP_Balloon → right-click → Duplicate.",
-              "do": "Name the copy BP_DangerBalloon. Open it, select the Balloon mesh component and change its material to M_DangerBalloon. Compile.",
+              "where": "Content → Balloon Popper → BP_Balloon → right-click → Duplicate.",
+              "do": "Name the duplicate BP_DangerBalloon. Open it, select the original BalloonModel Static Mesh component (that is its exact name from the starter) and set its material to M_DangerBalloon. Keep all original grow/pop, RoundEnded guard and RequestReplacement connections. Compile and Save; do not change BP_Balloon.",
               "why": "Duplicating a working Blueprint preserves its click and growth behaviour.",
-              "check": "The danger actor grows and pops just like the normal balloon."
+              "check": "BP_DangerBalloon uses the new material; the original BP_Balloon still has M_Balloon. Both actors contain the original On Actor Clicked logic."
             },
             {
               "title": "Change only the points awarded",
               "where": "BP_DangerBalloon → Event Graph → True pop path.",
-              "do": "Find the AwardPoints call you copied from BP_Balloon. Change the Points input from 1 to -2. Leave the growth and Destroy Actor connections in place. Compile and Save.",
+              "do": "In BP_DangerBalloon Event Graph → PopScale Branch TRUE path, find the copied AwardPoints call. Change Points from 1 to -2, but keep all other nodes and the replacement call before Destroy Actor in the same order. Compile and Save.",
               "why": "A small change to the data creates a new gameplay decision.",
-              "check": "The danger balloon awards -2; regular balloons still award +1."
+              "check": "The copied AwardPoints call uses -2 and BP_Balloon still uses +1. You will test the negative score in Play AFTER the spawner selects danger balloons."
             },
             {
               "title": "Prepare a class variable for the two balloon types",
               "where": "BP_BalloonSpawner → My Blueprint → Variables → +.",
-              "do": "Create SelectedBalloonClass as an Actor Class Reference and Compile. In SpawnOneBalloon find the existing Spawn Actor From Class node; leave its random Spawn Transform connected.",
+              "do": "In BP_BalloonSpawner add SelectedBalloonClass under My Blueprint → Variables. Set Variable Type to Actor Class Reference, then Compile. Open SpawnOneBalloon and locate the existing Spawn Actor From Class node with Class fixed to BP_Balloon. Keep its RANDOM Make Transform connected; the new variable will replace the fixed Class.",
               "why": "A class reference tells Spawn Actor which type of balloon it should make.",
-              "check": "The variable exists and has a purple Class reference pin."
+              "check": "SelectedBalloonClass has a purple Actor Class Reference pin; the original random spawn transform is still connected."
             },
             {
               "title": "Pick normal or danger with one random test",
               "where": "BP_BalloonSpawner → SpawnOneBalloon before Spawn Actor.",
-              "do": "Add Random Float in Range (Min=0.0, Max=1.0), compare its output with <= 0.2, and connect to Branch. On True Set SelectedBalloonClass to BP_DangerBalloon; on False set it to BP_Balloon. Compile.",
+              "do": "In SpawnOneBalloon add Random Float in Range (0.0, 1.0) → Float <= Float (set B=0.2) → Branch. From Branch True set SelectedBalloonClass=BP_DangerBalloon; from False set SelectedBalloonClass=BP_Balloon. Wire the function entry white execution into Branch (random float and comparison are pure value nodes). Compile.",
               "why": "Roughly 20% of balloons should be risky, without a fixed repeating order.",
-              "check": "Both Branch paths set SelectedBalloonClass to a valid Blueprint class."
+              "check": "Each call chooses a class first. True chooses BP_DangerBalloon, False chooses BP_Balloon."
             },
             {
               "title": "Spawn exactly one chosen class",
               "where": "BP_BalloonSpawner → same function.",
-              "do": "Connect both Set SelectedBalloonClass execution outputs to the existing Spawn Actor From Class (use two paths meeting at one node). Connect Get SelectedBalloonClass to its Class input; keep the existing random Spawn Transform. Compile.",
+              "do": "Keep the existing ONE Spawn Actor From Class inside SpawnOneBalloon. Connect Get SelectedBalloonClass to its Class pin instead of the old fixed BP_Balloon. Both Set SelectedBalloonClass execution paths should continue to ONE spawn call, using the existing Random Point → Make Transform → Spawn Transform. Compile. If Unreal refuses to merge white exec paths, use one Select (class) node with the random Boolean as Index, BP_DangerBalloon on True and BP_Balloon on False, and send the selected class into one Spawn Actor; do not duplicate the spawner call.",
               "why": "One call to SpawnOneBalloon should always create exactly one Actor.",
-              "check": "Both safe and danger balloons appear across multiple pops while the visible count remains five."
+              "check": "The function compiles, each entry spawns exactly one Actor and the Actor Class changes randomly."
             },
             {
               "title": "Connect the new decision to the spawn function",
               "where": "Still in SpawnOneBalloon.",
-              "do": "Make sure the exec entry first chooses SelectedBalloonClass and THEN reaches Spawn Actor from Class once. Keep the existing Random Point in Bounding Box as the spawn position. Compile and save.",
+              "do": "Check the entire SpawnOneBalloon function execution: purple Entry → random comparison Branch → choose SelectedBalloonClass → Spawn Actor From Class ONE TIME. The existing Random Point in Bounding Box → Make Transform must still feed Spawn Transform. Compile and Save.",
               "why": "Selecting the class and spawning at one shared location prevents duplicate actors.",
-              "check": "The spawner still produces exactly five at the start and one replacement for each pop."
+              "check": "Initial BeginPlay still spawns five targets and each successful pop requests exactly one replacement."
             },
             {
               "title": "Verify the copied dangerous actor also requests a replacement",
               "where": "BP_DangerBalloon → Event Graph → True pop branch.",
-              "do": "Check the duplicated logic still follows AwardPoints (Points=-2) → RequestReplacement on BP_BalloonSpawner → Destroy Actor. If the copy predates the spawner change, add the same replacement chain as BP_Balloon.",
+              "do": "In BP_DangerBalloon → On Actor Clicked → original growth/PopScale True branch: verify the complete execution path calls AwardPoints(Points=-2), then Get Actor of Class(BP_BalloonSpawner) → Cast → RequestReplacement, then Destroy Actor(Self). The RoundEnded check before growth must also remain copied. Compile.",
               "why": "Both target types must take part in the same ongoing game loop.",
-              "check": "Popping either a safe or dangerous balloon produces one replacement."
+              "check": "Both balloon types award their own points, request one replacement and destroy themselves; neither can be popped after Time Up."
             },
             {
               "title": "Check scoring and chance over several pops",
-              "where": "BalloonPopperLevel → Play In Editor.",
-              "do": "Pop at least 20 balloons. Safe targets should add 1; danger targets deduct 2 but cannot push Score below 0. The number of visible targets should remain five until Time Up.",
+              "where": "Balloon Popper Level → Play In Editor.",
+              "do": "Play Balloon Popper Level and pop at least 20 BALLOONS, not merely click 20 times. A red normal balloon awards +1; purple/blue danger subtracts 2 but AwardPoints uses Max(0,..), so Score cannot fall below zero. The danger chance is 20% per spawn, so you may need another round to see several. Watch that five balloons remain during play and none spawn after TIME UP.",
               "why": "Random types must be balanced and never strand the player.",
-              "check": "Both types appear, the score changes correctly and the playfield remains populated."
+              "check": "Normal and danger targets look distinct and affect one shared Score correctly. No score drops below zero and one new balloon replaces each pop until the round ends."
             },
             {
               "title": "Give the game a fresh look",
@@ -399,15 +420,15 @@ window.UE5_MINI_UPGRADE_DATA = {
             }
           ],
           "check": "Both balloon classes spawn randomly; safe targets give +1, danger targets deduct 2 (not below zero), and either pop is replaced until the clock ends.",
-          "fix": "Only safe targets? Inspect SelectedBalloonClass values and ensure both Branch paths connect before the single Spawn Actor call. Too many balloons? Check only one spawn path executes. Danger balloons vanish permanently? Check their copied pop chain calls RequestReplacement.",
+          "fix": "Only safe targets? Inspect SelectedBalloonClass values and ensure both Branch paths connect before the single Spawn Actor call. Too many balloons? Check only one spawn path executes. Danger balloons vanish permanently? Check their copied pop chain calls RequestReplacement. If both kinds are red, change M_DangerBalloon; the original M_Balloon is already red. If a copied danger balloon does not respawn, check its AwardPoints → RequestReplacement → Destroy path.",
           "designerSteps": [
             "Plan: Create unmistakably different safe and danger targets. Use a symbol/shape as well as colour and check that both variants remain visible in the playfield. Draw a small mock-up of the 1280×720 play area, targets and HUD.",
             "Create: make one original element for Mix safe and danger balloons into random spawns using HUD backgrounds, balloon meshes or symbols. Export as FBX or PNG to your shared Teams folder.",
             "Integrate and test: ask the programmer to import your asset; play together and confirm targets are visible and their UI never blocks clicks."
           ],
           "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
-          "beforeStart": "Finish and back up the safe five-balloon game before you make the optional danger variant.",
-          "commonMistake": "Change the score only in BP_DangerBalloon; do not overwrite the working normal balloon.",
+          "beforeStart": "The basic red-balloon game already works with a score, five randomly respawning balloons, 60-second rounds and Play Again. The original M_Balloon material is red: the danger type must be visibly different, not a second red balloon.",
+          "commonMistake": "The starter M_Balloon is already red and its Static Mesh component is called BalloonModel. Make the danger balloon purple/blue with a warning pattern, and edit only the duplicated BP_DangerBalloon.",
           "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         }
       ],
