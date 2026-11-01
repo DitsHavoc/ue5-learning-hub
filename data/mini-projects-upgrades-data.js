@@ -197,8 +197,54 @@ window.UE5_MINI_UPGRADE_DATA = {
           "fix": "HUD missing? Check the controller is assigned in BP_BalloonGameMode and Create Widget is connected. Time frozen? Confirm TickClock is connected to Set Timer by Event with Looping ticked."
         },
         {
+          "id": "results",
+          "title": "4. Add a visible game-over result and Play Again",
+          "tier": "Essential",
+          "outcome": "Time Up leaves a final score on screen and a Play Again button starts a fresh round.",
+          "designer": "Design a simple results panel with a large final score and obvious replay button; test it at the actual game resolution.",
+          "steps": [
+            {
+              "title": "Create a results panel in the HUD",
+              "where": "WBP_BalloonHUD → Designer.",
+              "do": "Add a Border or Vertical Box named ResultsPanel. Add a Text widget named FinalScoreText with placeholder \"Round over\" and a Button named ReplayButton with a child Text \"Play Again\". Tick Is Variable on ResultsPanel and FinalScoreText. Set ResultsPanel Visibility to Collapsed initially.",
+              "why": "Players need a persistent end screen; Print String is only a debugging aid.",
+              "check": "Nothing covers the game when it first starts."
+            },
+            {
+              "title": "Refresh visibility from RoundEnded",
+              "where": "WBP_BalloonHUD → Graph → Event Construct.",
+              "do": "Add a repeating Set Timer by Event with Time 0.25 seconds; create a Custom Event named RefreshRoundScreen and connect it to the red Event pin. In RefreshRoundScreen use Get Game Mode → Cast To BP_BalloonGameMode → Get RoundEnded → Branch. On True set ResultsPanel Visibility = Visible; on False set it to Collapsed.",
+              "why": "Updating four times per second is sufficient for a small classroom HUD and avoids updating the panel every frame.",
+              "check": "Wait for the timer to end: the result panel becomes visible."
+            },
+            {
+              "title": "Show the final score",
+              "where": "RefreshRoundScreen → True branch in WBP_BalloonHUD.",
+              "do": "From the same GameMode reference, get Score and use Format Text with a format such as \"Time up! Final score: {Points}\". Connect Score converted to Text to Points, then SetText on FinalScoreText.",
+              "why": "The end screen should show the actual score from the single GameMode variable.",
+              "check": "The displayed final score equals the last HUD score."
+            },
+            {
+              "title": "Wire the replay button",
+              "where": "WBP_BalloonHUD → Designer → ReplayButton → Events → OnClicked (+).",
+              "do": "In the new OnClicked event call Get Current Level Name with Remove Prefix String enabled, then Open Level (by Name) with its Level Name input connected to the returned name. Compile and Save.",
+              "why": "Reopening the level resets the timer, total, spawner and balloon types in one action.",
+              "check": "Play Again starts with score 0, 60 seconds and five visible targets."
+            },
+            {
+              "title": "Test the end of a round",
+              "where": "BalloonPopperLevel → Play In Editor.",
+              "do": "For a quick test temporarily set SecondsLeft default to 5 in BP_BalloonGameMode, then restore it to 60. Score twice, wait until zero, attempt more clicks, and replay. Confirm the spawner does not add new balloons after the round ends.",
+              "why": "The end state must prevent extra points, then offer a reliable restart.",
+              "check": "The final score freezes, the results panel appears, and replay returns to a fresh round."
+            }
+          ],
+          "check": "At time zero the round freezes and the final score appears; Play Again starts with five targets and a clean 60-second score challenge.",
+          "fix": "Results never appear? Check RefreshRoundScreen is bound to the widget timer, RoundEnded is in the correct GameMode, and ResultsPanel was marked Is Variable. Cannot replay? Connect the current level name to Open Level."
+        },
+        {
           "id": "risk",
-          "title": "4. Mix safe and danger balloons into random spawns",
+          "title": "5. Mix safe and danger balloons into random spawns",
           "tier": "Creative",
           "outcome": "The spawner randomly creates safe (+1) and danger (-2) balloons, with a clear visual distinction, while keeping five visible targets.",
           "designer": "Create unmistakably different safe and danger targets. Use a symbol/shape as well as colour and check that both variants remain visible in the playfield.",
@@ -262,52 +308,6 @@ window.UE5_MINI_UPGRADE_DATA = {
           ],
           "check": "Both balloon classes spawn randomly; safe targets give +1, danger targets deduct 2 (not below zero), and either pop is replaced until the clock ends.",
           "fix": "Only safe targets? Inspect SelectedBalloonClass values and ensure both Branch paths connect before the single Spawn Actor call. Too many balloons? Check only one spawn path executes. Danger balloons vanish permanently? Check their copied pop chain calls RequestReplacement."
-        },
-        {
-          "id": "results",
-          "title": "5. Add a visible game-over result and Play Again",
-          "tier": "Essential",
-          "outcome": "Time Up leaves a final score on screen and a Play Again button starts a fresh round.",
-          "designer": "Design a simple results panel with a large final score and obvious replay button; test it at the actual game resolution.",
-          "steps": [
-            {
-              "title": "Create a results panel in the HUD",
-              "where": "WBP_BalloonHUD → Designer.",
-              "do": "Add a Border or Vertical Box named ResultsPanel. Add a Text widget named FinalScoreText with placeholder \"Round over\" and a Button named ReplayButton with a child Text \"Play Again\". Tick Is Variable on ResultsPanel and FinalScoreText. Set ResultsPanel Visibility to Collapsed initially.",
-              "why": "Players need a persistent end screen; Print String is only a debugging aid.",
-              "check": "Nothing covers the game when it first starts."
-            },
-            {
-              "title": "Refresh visibility from RoundEnded",
-              "where": "WBP_BalloonHUD → Graph → Event Construct.",
-              "do": "Add a repeating Set Timer by Event with Time 0.25 seconds; create a Custom Event named RefreshRoundScreen and connect it to the red Event pin. In RefreshRoundScreen use Get Game Mode → Cast To BP_BalloonGameMode → Get RoundEnded → Branch. On True set ResultsPanel Visibility = Visible; on False set it to Collapsed.",
-              "why": "Updating four times per second is sufficient for a small classroom HUD and avoids updating the panel every frame.",
-              "check": "Wait for the timer to end: the result panel becomes visible."
-            },
-            {
-              "title": "Show the final score",
-              "where": "RefreshRoundScreen → True branch in WBP_BalloonHUD.",
-              "do": "From the same GameMode reference, get Score and use Format Text with a format such as \"Time up! Final score: {Points}\". Connect Score converted to Text to Points, then SetText on FinalScoreText.",
-              "why": "The end screen should show the actual score from the single GameMode variable.",
-              "check": "The displayed final score equals the last HUD score."
-            },
-            {
-              "title": "Wire the replay button",
-              "where": "WBP_BalloonHUD → Designer → ReplayButton → Events → OnClicked (+).",
-              "do": "In the new OnClicked event call Get Current Level Name with Remove Prefix String enabled, then Open Level (by Name) with its Level Name input connected to the returned name. Compile and Save.",
-              "why": "Reopening the level resets the timer, total, spawner and balloon types in one action.",
-              "check": "Play Again starts with score 0, 60 seconds and five visible targets."
-            },
-            {
-              "title": "Test the end of a round",
-              "where": "BalloonPopperLevel → Play In Editor.",
-              "do": "For a quick test temporarily set SecondsLeft default to 5 in BP_BalloonGameMode, then restore it to 60. Score twice, wait until zero, attempt more clicks, and replay. Confirm the spawner does not add new balloons after the round ends.",
-              "why": "The end state must prevent extra points, then offer a reliable restart.",
-              "check": "The final score freezes, the results panel appears, and replay returns to a fresh round."
-            }
-          ],
-          "check": "At time zero the round freezes and the final score appears; Play Again starts with five targets and a clean 60-second score challenge.",
-          "fix": "Results never appear? Check RefreshRoundScreen is bound to the widget timer, RoundEnded is in the correct GameMode, and ResultsPanel was marked Is Variable. Cannot replay? Connect the current level name to Open Level."
         }
       ]
     },
@@ -788,9 +788,9 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Create the automatic one-second timer",
               "where": "Clicker GameMode → Event Graph → Event BeginPlay.",
-              "do": "Connect Event BeginPlay to Set Timer by Event, Time=1.0, Looping=true. Create a Custom Event named ProduceIncome and connect a Create Event reference for it to the timer red Event input. Save the returned Timer Handle if you want to stop it in a later mode.",
+              "do": "Keep the original Event BeginPlay logic that creates and displays the Clicker widget. After it (or from a Sequence attached to BeginPlay), add Set Timer by Event with Time=1.0 and Looping=true. Create a Custom Event named ProduceIncome, then connect a Create Event reference for that event to the timer red Event input. Only one production timer should be started per game session.",
               "why": "The GameMode can automatically award points once per second without pressing the click button or using Event Tick.",
-              "check": "ProduceIncome runs once each second when Play starts."
+              "check": "The original Clicker widget still appears, and ProduceIncome runs once each second after Play starts."
             },
             {
               "title": "Pay the player every second",
