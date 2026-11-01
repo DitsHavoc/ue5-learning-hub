@@ -1,4 +1,4 @@
-/* Student-tested reading flow and exact starter names; original source Mini-Projects unchanged. */
+/* Student-friendly text-only upgrades using original UE5.8 tutorial names. */
 window.UE5_MINI_UPGRADE_DATA = {
   "version": "3.66.0",
   "title": "Mini-Project Upgrade Walkthroughs",
@@ -575,7 +575,7 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Track a successful throw",
               "where": "BP_BowlingPlayerController → True branch of the new throw gate.",
-              "do": "Immediately before the existing ball throw call, set ThrowsUsed = ThrowsUsed + 1 and IsBallInMotion = true. Then call the original Bowl event exactly once. Compile.",
+              "do": "Immediately before the existing ball Bowl call, set ThrowsUsed = ThrowsUsed + 1 and IsBallInMotion = true. Then call the original Bowl event exactly once. Compile.",
               "why": "Each valid throw consumes one attempt, regardless of whether it hits any pins.",
               "check": "After the first Space press, ThrowsUsed is 1 and IsBallInMotion is true."
             },
@@ -708,7 +708,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "where": "BP_BowlingBall → Event Graph → existing custom Bowl event.",
               "do": "On the custom Bowl event, add a Float input named Strength. Replace the current fixed strength or impulse-magnitude value with the Strength input, retaining the original direction calculation. Note the value that used to work before making the change.",
               "why": "Power belongs to the Bowl event rather than multiple duplicated throw Blueprints.",
-              "check": "Throw compiles and expects a Float Strength input."
+              "check": "Bowl compiles and expects a Float Strength input."
             },
             {
               "title": "Store the player’s chosen power",
@@ -732,7 +732,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "Q and E move the value in 0.25 steps between 0.5 and 2.0."
             },
             {
-              "title": "Pass the chosen strength into Throw",
+              "title": "Pass the chosen strength into Bowl",
               "where": "BP_BowlingPlayerController → existing gated IA_Bowl chain from Upgrade 2.",
               "do": "Multiply BaseThrowPower × PowerMultiplier and connect the result to the new Strength pin on the existing BP_BowlingBall Bowl call. Do not create a second Bowl call. Compile.",
               "why": "The power setting must use the same limited-throws counter.",
