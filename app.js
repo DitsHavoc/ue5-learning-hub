@@ -21,7 +21,7 @@ const STUDY = window.UE5_STUDY_DATA;
 const BACKEND = window.UE5_BACKEND;
 const SKILL_MISSIONS = window.UE5_SKILL_MISSIONS || {missions:[]};
 const CPP_SKILL_MISSIONS = window.UE5_CPP_SKILL_MISSIONS || {missions:[],planned:[]};
-const HUB_VERSION = '3.64.1';
+const HUB_VERSION = '3.65.0';
 const MINI = window.UE5_MINI_PROJECT_DATA || {projects:[]};
 const MINI_NOTES = window.UE5_MINI_PROJECT_NOTES || {};
 const MINI_UPGRADES = window.UE5_MINI_UPGRADE_DATA || {projects:[]};
@@ -1951,7 +1951,7 @@ function miniProjectsPage(){
   return '<div class="mini-shell">'+miniTrail([{title:'Build',href:'#/build'},{title:'Mini-Projects'}])+
   '<header class="mini-header"><span class="eyebrow">BUILD • PROJECT-LED PRACTICE</span><h1>Unreal Engine Mini-Projects</h1><p>Four complete practical routes. Work through the guided stages, test what you have built, and mark each stage complete when it works. You can revisit every guide at any time.</p><div class="mini-chips"><span>'+MINI.projects.length+' mini-projects</span><span>'+MINI.projects.reduce((n,p)=>n+p.stages.length,0)+' stages</span><span>Unreal Engine 5.8 source notes</span></div></header>'+
   '<div class="mini-jam-banner"><div><span class="eyebrow">2–13 NOVEMBER 2026 • TEAM GAME JAM</span><h2>Mini-Project Mayhem</h2><p>Start with a guided build, then turn it into an original game with your partner.</p></div><a class="button primary" href="#/mini-projects/jam">Open the game jam brief →</a></div>'+
-  '<div class="mini-project-grid">'+MINI.projects.map(miniCard).join('')+'</div>'+ '<section class="mini-information mini-upgrade-promo"><h2>Finished the tutorial?</h2><p>Turn it into a real game with step-by-step scoring, timers, upgrades and playtesting. Written guides only, no new screenshots.</p><a class="button primary" href="#/mini-projects/upgrades">Explore game upgrades →</a></section></div>';
+  '<div class="mini-project-grid">'+MINI.projects.map(miniCard).join('')+'</div>'+ '<section class="mini-information mini-upgrade-promo"><h2>Finished the tutorial?</h2><p>Turn it into a replayable game: respawning targets, multi-throw bowling, automatic producers or escalating waves. Follow text-only Blueprint instructions and test every change.</p><a class="button primary" href="#/mini-projects/upgrades">Explore game upgrades →</a></section></div>';
 }
 function miniJamPage(){
   const j=window.UE5_MINI_JAM_DATA;if(!j)return notFound();
@@ -1971,7 +1971,7 @@ function miniJamPage(){
     <section class="mini-jam-section"><span class="eyebrow">STEP 1 • PICK YOUR FOUNDATION</span><h2>Choose one starting project</h2>
       <div class="mini-jam-starters">${j.starters.map(s=>`<a class="mini-jam-starter" href="${miniHref(s.project)}"><span class="mini-jam-starter-icon" aria-hidden="true">${esc(s.icon)}</span><h3>${esc(s.name)}</h3><p>${esc(s.foundation)}</p><small><strong>Make it yours:</strong> ${esc(s.ideas)}</small><b>Open guided project →</b></a>`).join('')}</div>
     </section>
-    <section class="mini-information mini-upgrade-promo"><span class="eyebrow">GOT THE TUTORIAL WORKING?</span><h2>Follow the upgrade walkthroughs</h2><p>Each starting project has text-only Blueprint steps, individual tests and an artist/designer task. Start with the Essential upgrades before choosing your own changes.</p><a class="button primary" href="#/mini-projects/upgrades">Find your upgrade steps →</a></section>
+    <section class="mini-information mini-upgrade-promo"><span class="eyebrow">GOT THE TUTORIAL WORKING?</span><h2>Follow the upgrade walkthroughs</h2><p>Build the missing game loop first: respawning balloons, repeatable bowling throws, automatic Granny income or escalating target waves. Each text-only guide provides exact Blueprint steps, checks and an artist/designer task.</p><a class="button primary" href="#/mini-projects/upgrades">Find your upgrade steps →</a></section>
     <section class="mini-jam-section"><span class="eyebrow">STEP 2 • WORK AS A TWO-PERSON STUDIO</span><h2>One team, two PCs</h2>
       <div class="mini-jam-roles">
         <div class="mini-information"><h3>Programmer</h3><p>Own the Unreal project. Complete the tutorial, build the gameplay extension, import assets, handle logic and help test the finished game.</p></div>
@@ -2008,7 +2008,7 @@ function miniUpgradeCards(p){
 }
 function miniUpgradeLanding(){
   return '<div class="mini-shell mini-upgrades">'+miniTrail([{title:'Build',href:'#/build'},{title:'Mini-Projects',href:'#/mini-projects'},{title:'Game jam upgrades'}])+
-    '<header class="mini-header"><span class="eyebrow">MINI-PROJECT MAYHEM • NEXT STEP</span><h1>Upgrade your Mini-Project</h1><p>Finish one starter tutorial, then make it a game. Follow these text-only Blueprint instructions, test each upgrade and work with your artist/designer to give it an original identity.</p></header>'+
+    '<header class="mini-header"><span class="eyebrow">MINI-PROJECT MAYHEM • NEXT STEP</span><h1>Upgrade your Mini-Project</h1><p>Finish one starter tutorial, then make it a game. Work through the Essential stages first to build a complete playable loop. Creative stages are optional ways to go further. Each text-only step tells you where to go, what to connect and how to check it works.</p></header>'+
     '<div class="mini-upgrade-grid">'+(MINI_UPGRADES.projects||[]).map(p=>'<a class="mini-upgrade-card" href="'+miniUpgradeHref(p.project)+'"><span class="eyebrow">'+p.stages.length+' GUIDED UPGRADES</span><h3>'+esc(p.title)+'</h3><p>'+esc(p.intro)+'</p><strong>Choose this game →</strong></a>').join('')+'</div></div>';
 }
 function miniUpgradeProjectPage(id){
@@ -2017,7 +2017,7 @@ function miniUpgradeProjectPage(id){
   const completed=new Set(miniUpgradesCompleted());
   return '<div class="mini-shell mini-upgrades">'+miniTrail([{title:'Build',href:'#/build'},{title:'Mini-Projects',href:'#/mini-projects'},{title:'Upgrades',href:'#/mini-projects/upgrades'},{title:original.title}])+
     '<header class="mini-header"><span class="eyebrow">AFTER THE ORIGINAL TUTORIAL • '+p.stages.filter(x=>completed.has(x.id)).length+'/'+p.stages.length+' UPGRADES DONE</span><h1>'+esc(p.title)+'</h1><p>'+esc(p.intro)+'</p><div class="mini-chips"><span>Text-only, step by step</span><span>Programmer + artist/designer</span><span>Essential first • Creative later</span></div><a class="button ghost" href="'+miniHref(id)+'">← Open original '+esc(original.title)+' tutorial</a></header>'+
-    '<section class="mini-information"><h2>Before you start</h2><p>Complete and test the original <a href="'+miniHref(id)+'">'+esc(original.title)+'</a> first. Make a copy or backup of the working project. These upgrade steps use its existing Blueprints and map; if you renamed anything, use your own matching class name.</p><p>Follow the stages in order. Each stage has exact instructions, an artist/designer task, a final test and a fix if something goes wrong. Progress is saved only in this browser, separately from the original stages.</p></section>'+
+    '<section class="mini-information"><h2>Before you start</h2><p>Complete and test the original <a href="'+miniHref(id)+'">'+esc(original.title)+'</a> first. Make a copy or backup of the working project. These upgrade steps use its existing Blueprints and map; if you renamed anything, use your own matching class name.</p><p>Work through the Essential stages in order. Creative stages are stretch work if your game is already playable. Each guide includes Blueprint steps, artist/designer work, tests and troubleshooting. Progress is saved in this browser, separately from original stages.</p></section>'+
     '<div class="mini-upgrade-grid">'+miniUpgradeCards(p)+'</div>'+
     '<nav class="mini-stage-bottom"><a class="button ghost" href="#/mini-projects/jam">← Game jam brief</a><a class="button primary" href="'+miniUpgradeHref(id,p.stages[0].id)+'">Start first upgrade →</a></nav></div>';
 }

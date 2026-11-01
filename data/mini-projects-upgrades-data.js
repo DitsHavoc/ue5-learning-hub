@@ -1,13 +1,13 @@
-/* Text-only, original Mini-Project extension guides. No course images or duplicated source walkthroughs. */
+/* Expanded text-only game-jam build routes. Original course content and progress remain untouched. */
 window.UE5_MINI_UPGRADE_DATA = {
-  "version": "3.64.1",
+  "version": "3.65.0",
   "title": "Mini-Project Upgrade Walkthroughs",
   "intro": "Finish one original guided Mini-Project, then follow these text-only expansions. Start with Essential stages; the Creative stage gives your pair room to make it yours. Save your Unreal project after every stage.",
   "projects": [
     {
       "project": "balloon-popper",
       "title": "Balloon Popper → Arcade Challenge",
-      "intro": "Turn the click-to-pop prototype into a scored, timed arcade game. Complete Score first; the timer and danger balloons build on it.",
+      "intro": "Build a loop that lasts: score a pop, create replacement balloons, play a timed round, mix in danger balloons and finish with a results/replay screen. Complete the Essential upgrades before optional creative variations.",
       "stages": [
         {
           "id": "score",
@@ -56,8 +56,75 @@ window.UE5_MINI_UPGRADE_DATA = {
           "fix": "No score? Confirm BP_BalloonGameMode is the World Settings GameMode Override, check the cast Success pin is wired, and ensure AwardPoints is called before Destroy Actor."
         },
         {
+          "id": "respawn",
+          "title": "2. Spawn replacement balloons at random positions",
+          "tier": "Essential",
+          "outcome": "Five balloons appear inside a visible spawn area. Popping one creates another at a random position without growing the number on screen.",
+          "designer": "Plan a readable playfield and test whether five balloons can be clicked without overlapping the UI.",
+          "steps": [
+            {
+              "title": "Create the reusable spawning actor",
+              "where": "Content Drawer → BalloonPopper folder → Add → Blueprint Class → Actor.",
+              "do": "Name it BP_BalloonSpawner. Open it and add a Box Collision component named SpawnArea. Select SpawnArea and give it an extent roughly X=50, Y=350, Z=220 as a starting point, then Compile.",
+              "why": "A movable box defines where balloons may appear; it is easier to tune than hard-coded coordinates.",
+              "check": "BP_BalloonSpawner has a Box Collision visible in the Blueprint viewport."
+            },
+            {
+              "title": "Create a spawn function",
+              "where": "BP_BalloonSpawner → My Blueprint → Functions → +.",
+              "do": "Create a function SpawnOneBalloon. Drag SpawnArea into the graph and call Get World Location and Get Scaled Box Extent from that component. Connect those values to Random Point in Bounding Box (Origin and Box Extent).",
+              "why": "The random point will be inside the box at the spawner’s actual level position.",
+              "check": "Random Point in Bounding Box produces a Vector output."
+            },
+            {
+              "title": "Spawn at that random point",
+              "where": "In SpawnOneBalloon, after the random point.",
+              "do": "Add Make Transform and connect the random Vector to Location; leave Rotation 0, Scale 1. Add Spawn Actor from Class, set Class to BP_Balloon, feed the Make Transform into Spawn Transform and set Collision Handling Override to Always Spawn, Ignore Collisions. Wire the function entry execution into Spawn Actor. Compile.",
+              "why": "The tutorial balloon is reused as a real spawned actor, not duplicated by hand.",
+              "check": "Calling SpawnOneBalloon creates one BP_Balloon inside the area."
+            },
+            {
+              "title": "Populate the arena on BeginPlay",
+              "where": "BP_BalloonSpawner → Event Graph → Event BeginPlay.",
+              "do": "Add a For Loop with First Index 0 and Last Index 4. Connect Loop Body to SpawnOneBalloon. Five iterations create five targets; the loop Completed output needs no further node. Compile.",
+              "why": "The player starts with a small, predictable number of targets.",
+              "check": "One press of Play shows five newly created balloons."
+            },
+            {
+              "title": "Put the spawn box where the camera can see it",
+              "where": "Open BalloonPopperLevel.",
+              "do": "Delete the old manually placed BP_Balloon target actors (leave the camera, lighting and other scenery). Place one BP_BalloonSpawner in the level, move it into the camera view and scale its SpawnArea box to suit your framing. Set SpawnArea Collision Presets to NoCollision so the box never blocks click traces.",
+              "why": "Only the spawner should create the balloons now; otherwise you would have extras.",
+              "check": "Play shows five visible, clickable balloons inside the intended screen area."
+            },
+            {
+              "title": "Add a replacement event",
+              "where": "BP_BalloonSpawner → Event Graph → Add Custom Event.",
+              "do": "Call it RequestReplacement. Wire its white execution output to SpawnOneBalloon. Compile.",
+              "why": "Every pop can ask the same spawner for one replacement.",
+              "check": "RequestReplacement has a clear route to SpawnOneBalloon."
+            },
+            {
+              "title": "Ask for another balloon when one pops",
+              "where": "BP_Balloon → Event Graph → the True pop branch from the original tutorial.",
+              "do": "Keep AwardPoints first. After the score call but BEFORE Destroy Actor, add Get Actor of Class (Actor Class = BP_BalloonSpawner) → Cast To BP_BalloonSpawner → RequestReplacement. Connect the white execution pins so the order is AwardPoints → Cast success → RequestReplacement → Destroy Actor (Self). If the spawner reference might be missing, also connect Cast Failed to Destroy Actor.",
+              "why": "Popping replaces exactly one balloon, while the old actor is removed normally.",
+              "check": "Pop three balloons in a row: five remain on screen and the total score rises by three."
+            },
+            {
+              "title": "Check click collision and spawn position",
+              "where": "BalloonPopperLevel → Play In Editor.",
+              "do": "Try 15 pops. If a target cannot be clicked, make sure the balloon mesh collision blocks Visibility, the spawning Box uses NoCollision and the player controller still has Enable Click Events. Resize or move SpawnArea if some targets spawn behind the HUD.",
+              "why": "A game loop must be reliable, not only work once.",
+              "check": "No balloons disappear forever, none spawn outside the playable view, and there are still five after repeated pops."
+            }
+          ],
+          "check": "Start with five visible balloons. After any number of pops, five replacements remain within the playfield and scoring still works.",
+          "fix": "Only four remain? Verify RequestReplacement runs before Destroy Actor. More than five? Delete the old placed balloons or check that BeginPlay fires only once. Invisible targets? Reposition the Box Collision volume in the camera view; avoid randomly moving the camera."
+        },
+        {
           "id": "timer",
-          "title": "2. Add a 60-second round and score HUD",
+          "title": "3. Add a 60-second round and live score HUD",
           "tier": "Essential",
           "outcome": "A visible score and clock count down; once time reaches zero, balloons cannot score any more.",
           "designer": "Design WBP_BalloonHUD with clear score and remaining-time labels. Try a contrasting colour when time gets low.",
@@ -117,17 +184,70 @@ window.UE5_MINI_UPGRADE_DATA = {
               "do": "Get Game Mode → Cast To BP_BalloonGameMode → Get RoundEnded → NOT → Branch. Wire only the True path into the existing click-to-grow chain. Keep the existing pop-scoring call later in the chain.",
               "why": "The scene should stop changing when the round is finished.",
               "check": "After 60 seconds, clicking no longer grows or pops balloons."
+            },
+            {
+              "title": "Prevent the spawner working after the timer",
+              "where": "BP_BalloonSpawner → RequestReplacement custom event.",
+              "do": "Before SpawnOneBalloon, add Get Game Mode → Cast To BP_BalloonGameMode → Get RoundEnded → NOT → Branch. Connect only the True output to SpawnOneBalloon. Compile.",
+              "why": "The round must stop producing targets when the clock reaches zero.",
+              "check": "Set RoundEnded=true temporarily in a test; popping an existing balloon does not produce a replacement."
             }
           ],
-          "check": "Score increases on a pop. Time counts down 60→0. No score or growth is possible after zero.",
+          "check": "The clock counts 60→0, the score changes only when a balloon pops, the HUD stays visible and no further targets spawn or score after the round ends.",
           "fix": "HUD missing? Check the controller is assigned in BP_BalloonGameMode and Create Widget is connected. Time frozen? Confirm TickClock is connected to Set Timer by Event with Looping ticked."
         },
         {
+          "id": "results",
+          "title": "4. Add a visible game-over result and Play Again",
+          "tier": "Essential",
+          "outcome": "Time Up leaves a final score on screen and a Play Again button starts a fresh round.",
+          "designer": "Design a simple results panel with a large final score and obvious replay button; test it at the actual game resolution.",
+          "steps": [
+            {
+              "title": "Create a results panel in the HUD",
+              "where": "WBP_BalloonHUD → Designer.",
+              "do": "Add a Border or Vertical Box named ResultsPanel. Add a Text widget named FinalScoreText with placeholder \"Round over\" and a Button named ReplayButton with a child Text \"Play Again\". Tick Is Variable on ResultsPanel and FinalScoreText. Set ResultsPanel Visibility to Collapsed initially.",
+              "why": "Players need a persistent end screen; Print String is only a debugging aid.",
+              "check": "Nothing covers the game when it first starts."
+            },
+            {
+              "title": "Refresh visibility from RoundEnded",
+              "where": "WBP_BalloonHUD → Graph → Event Construct.",
+              "do": "Add a repeating Set Timer by Event with Time 0.25 seconds; create a Custom Event named RefreshRoundScreen and connect it to the red Event pin. In RefreshRoundScreen use Get Game Mode → Cast To BP_BalloonGameMode → Get RoundEnded → Branch. On True set ResultsPanel Visibility = Visible; on False set it to Collapsed.",
+              "why": "Updating four times per second is sufficient for a small classroom HUD and avoids updating the panel every frame.",
+              "check": "Wait for the timer to end: the result panel becomes visible."
+            },
+            {
+              "title": "Show the final score",
+              "where": "RefreshRoundScreen → True branch in WBP_BalloonHUD.",
+              "do": "From the same GameMode reference, get Score and use Format Text with a format such as \"Time up! Final score: {Points}\". Connect Score converted to Text to Points, then SetText on FinalScoreText.",
+              "why": "The end screen should show the actual score from the single GameMode variable.",
+              "check": "The displayed final score equals the last HUD score."
+            },
+            {
+              "title": "Wire the replay button",
+              "where": "WBP_BalloonHUD → Designer → ReplayButton → Events → OnClicked (+).",
+              "do": "In the new OnClicked event call Get Current Level Name with Remove Prefix String enabled, then Open Level (by Name) with its Level Name input connected to the returned name. Compile and Save.",
+              "why": "Reopening the level resets the timer, total, spawner and balloon types in one action.",
+              "check": "Play Again starts with score 0, 60 seconds and five visible targets."
+            },
+            {
+              "title": "Test the end of a round",
+              "where": "BalloonPopperLevel → Play In Editor.",
+              "do": "For a quick test temporarily set SecondsLeft default to 5 in BP_BalloonGameMode, then restore it to 60. Score twice, wait until zero, attempt more clicks, and replay. Confirm the spawner does not add new balloons after the round ends.",
+              "why": "The end state must prevent extra points, then offer a reliable restart.",
+              "check": "The final score freezes, the results panel appears, and replay returns to a fresh round."
+            }
+          ],
+          "check": "At time zero the round freezes and the final score appears; Play Again starts with five targets and a clean 60-second score challenge.",
+          "fix": "Results never appear? Check RefreshRoundScreen is bound to the widget timer, RoundEnded is in the correct GameMode, and ResultsPanel was marked Is Variable. Cannot replay? Connect the current level name to Open Level."
+        },
+        {
           "id": "risk",
-          "title": "3. Add risky balloons and your own style",
+          "title": "5. Mix safe and danger balloons into random spawns",
           "tier": "Creative",
-          "outcome": "Red danger balloons subtract two points, while normal ones add one. The designer gives both a readable visual identity.",
-          "designer": "Make red targets unmistakable with a different silhouette or symbol, not colour alone; create an original target model, backdrop or UI look.",
+          "outcome": "The spawner randomly creates safe (+1) and danger (-2) balloons, with a clear visual distinction, while keeping five visible targets.",
+          "designer": "Create unmistakably different safe and danger targets. Use a symbol/shape as well as colour and check that both variants remain visible in the playfield.",
           "steps": [
             {
               "title": "Make a clearly different material",
@@ -151,18 +271,32 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "The danger balloon awards -2; regular balloons still award +1."
             },
             {
-              "title": "Set up a fair test arena",
-              "where": "Open BalloonPopperLevel.",
-              "do": "Replace a few normal balloons with BP_DangerBalloon actors. Start with 5 safe balloons and 2 danger balloons, grouped where players can see both types.",
-              "why": "A risk/reward decision only works when players can identify the difference.",
-              "check": "Both types can be clicked and are visible from the starting camera."
+              "title": "Choose which class to spawn",
+              "where": "BP_BalloonSpawner → SpawnOneBalloon function, before Spawn Actor from Class.",
+              "do": "Create a local variable SelectedBalloonClass with variable type Actor Class Reference; compile. Add Random Float in Range (0.0, 1.0) → <= 0.2 → Branch. On True set SelectedBalloonClass to BP_DangerBalloon; on False set it to BP_Balloon. Wire both paths to a common SpawnActor from Class (you can use two separate Spawn Actor nodes if easier). Replace the Spawn Actor fixed Class input with Get SelectedBalloonClass.",
+              "why": "Roughly one out of five balloons is risky, but the exact mix varies.",
+              "check": "A test run spawns a mixture of both classes; the majority are normal."
             },
             {
-              "title": "Test positive, negative and zero scores",
-              "where": "Play In Editor.",
-              "do": "Pop three safe balloons, then one danger balloon: the score should go 0→3→1. Pop danger balloons at zero; the Max calculation from Upgrade 1 must keep the score at 0.",
-              "why": "Testing both extremes catches incorrect negative-point wiring.",
-              "check": "Points match every target type and never drop below zero."
+              "title": "Connect the new decision to the spawn function",
+              "where": "Still in SpawnOneBalloon.",
+              "do": "Make sure the exec entry first chooses SelectedBalloonClass and THEN reaches Spawn Actor from Class once. Keep the existing Random Point in Bounding Box as the spawn position. Compile and save.",
+              "why": "Selecting the class and spawning at one shared location prevents duplicate actors.",
+              "check": "The spawner still produces exactly five at the start and one replacement for each pop."
+            },
+            {
+              "title": "Verify the copied dangerous actor also requests a replacement",
+              "where": "BP_DangerBalloon → Event Graph → True pop branch.",
+              "do": "Check the duplicated logic still follows AwardPoints (Points=-2) → RequestReplacement on BP_BalloonSpawner → Destroy Actor. If the copy predates the spawner change, add the same replacement chain as BP_Balloon.",
+              "why": "Both target types must take part in the same ongoing game loop.",
+              "check": "Popping either a safe or dangerous balloon produces one replacement."
+            },
+            {
+              "title": "Check scoring and chance over several pops",
+              "where": "BalloonPopperLevel → Play In Editor.",
+              "do": "Pop at least 20 balloons. Safe targets should add 1; danger targets deduct 2 but cannot push Score below 0. The number of visible targets should remain five until Time Up.",
+              "why": "Random types must be balanced and never strand the player.",
+              "check": "Both types appear, the score changes correctly and the playfield remains populated."
             },
             {
               "title": "Give the game a fresh look",
@@ -172,15 +306,15 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "Both partners can point to a change they made that improves play."
             }
           ],
-          "check": "The player can choose between safe +1 targets and dangerous -2 targets in a complete timed challenge.",
-          "fix": "Wrong points? Check the normal actor still sends 1 and the danger copy sends -2 to AwardPoints; ensure neither actor has a second, duplicate scoring call."
+          "check": "Both balloon classes spawn randomly; safe targets give +1, danger targets deduct 2 (not below zero), and either pop is replaced until the clock ends.",
+          "fix": "Only safe targets? Inspect SelectedBalloonClass values and ensure both Branch paths connect before the single Spawn Actor call. Too many balloons? Check only one spawn path executes. Danger balloons vanish permanently? Check their copied pop chain calls RequestReplacement."
         }
       ]
     },
     {
       "project": "bowling",
       "title": "Bowling → Arcade Bowling",
-      "intro": "Turn the one-throw physics demonstration into a target-scoring round with a clock, a replay key and meaningful pin values.",
+      "intro": "Make a bowling game with several throws, points that survive between shots, a results screen and a bonus target. Complete Essential upgrades first; optional shot-power controls give more advanced teams a challenge.",
       "stages": [
         {
           "id": "pin-score",
@@ -243,131 +377,212 @@ window.UE5_MINI_UPGRADE_DATA = {
           "fix": "If no score appears, confirm pins are BP_BowlingPin actors, the pin mesh simulates physics, and the mesh up-axis is Z when upright. Adjust the 0.65 threshold only after watching the dot-product value while testing."
         },
         {
-          "id": "round",
-          "title": "2. Add a 45-second round and restart",
+          "id": "throws",
+          "title": "2. Reset the ball and allow three throws",
           "tier": "Essential",
-          "outcome": "The player has 45 seconds to knock the pins over and can press R to replay a clean round.",
-          "designer": "Plan a simple start-of-round message and how the player will learn that R restarts.",
+          "outcome": "The player has up to three throws. The ball resets between them, fallen pins and score remain, and the round finishes after the final throw settles.",
+          "designer": "Design a clear Throws Left indicator and short instructions: arrow keys aim, Space throws, R restarts the round.",
           "steps": [
             {
-              "title": "Add remaining time",
-              "where": "BP_BowlingGameMode → Variables.",
-              "do": "Create SecondsLeft (Integer; 45). Keep RoundFinished from Upgrade 1. Compile.",
-              "why": "The existing round-end flag can now represent a win or timeout.",
-              "check": "SecondsLeft starts at 45 in the Details panel."
+              "title": "Save the starting ball transform",
+              "where": "BP_BowlingBall → My Blueprint → Variables → +.",
+              "do": "Create StartingMeshTransform (Transform). In Event BeginPlay drag the ball Static Mesh component into the graph → Get World Transform → Set StartingMeshTransform. Compile.",
+              "why": "Physics may move the mesh separately from the actor, so save the mesh world transform itself.",
+              "check": "Before throwing, StartingMeshTransform matches the resting ball mesh position."
             },
             {
-              "title": "Start a one-second repeating timer",
-              "where": "BP_BowlingGameMode → Event Graph → Event BeginPlay.",
-              "do": "Add Set Timer by Event with Time = 1.0, Looping = true. Create a Custom Event named TickRound and connect it to the red Event pin. Promote Return Value to RoundTimerHandle.",
-              "why": "Timers are predictable and cheaper than calculating countdowns each frame.",
-              "check": "Timer starts once as the level loads."
+              "title": "Add a ResetBall custom event",
+              "where": "BP_BowlingBall → Event Graph → Add Custom Event → ResetBall.",
+              "do": "Drag the ball Static Mesh component in as Get. Wire ResetBall → Set Simulate Physics(false) → Set World Transform (New Transform = StartingMeshTransform, Teleport=true, Sweep=false) → Set Simulate Physics(true) → Set Physics Linear Velocity (0,0,0) → Set Physics Angular Velocity in Degrees (0,0,0). Compile.",
+              "why": "The mesh returns to its launch mark without reloading the whole map or resetting pins.",
+              "check": "Call ResetBall manually in the Blueprint debugger after a throw: the mesh returns and stays still."
             },
             {
-              "title": "Stop the round when time runs out",
-              "where": "BP_BowlingGameMode → TickRound.",
-              "do": "Branch on NOT RoundFinished. On True set SecondsLeft = Max (Integer)(0, SecondsLeft - 1). Branch on SecondsLeft <= 0; on True set RoundFinished = true, Print String \"TIME UP!\" and Clear and Invalidate Timer by Handle using RoundTimerHandle.",
-              "why": "When the clock reaches zero, the score should be final.",
-              "check": "The timer stops at zero and no later fallen pin can add points."
+              "title": "Count throws in the Player Controller",
+              "where": "BP_BowlingPlayerController → Variables.",
+              "do": "Create ThrowsUsed (Integer; default 0), MaxThrows (Integer; default 3) and IsBallInMotion (Boolean; default false). Compile.",
+              "why": "The controller owns the player input and knows when another throw is allowed.",
+              "check": "All three variables start with 0, 3 and false."
             },
             {
-              "title": "Stop the clock on a win",
-              "where": "BP_BowlingGameMode → RecordPin function → the True branch that sets RoundFinished.",
-              "do": "After Set RoundFinished = true, add Clear and Invalidate Timer by Handle using RoundTimerHandle. Leave the success message in place.",
-              "why": "Winning ends the round immediately rather than leaving the timer running.",
-              "check": "Knock every pin down and the clock stops before zero."
+              "title": "Prevent double throws",
+              "where": "BP_BowlingPlayerController → existing IA_Throw event (Started).",
+              "do": "Before the existing call to the ball’s throw event, Get Game Mode → Cast To BP_BowlingGameMode and test three conditions with Boolean AND: NOT RoundFinished, NOT IsBallInMotion, ThrowsUsed < MaxThrows. Put that in Branch; only the True path may throw.",
+              "why": "Repeated Space presses while the ball is travelling should not consume extra shots.",
+              "check": "Holding or tapping Space several times during a throw does not throw twice."
             },
             {
-              "title": "Add a restart input action",
-              "where": "Content Drawer → Bowling → Input.",
-              "do": "Create Input Action IA_Restart with Value Type Boolean. Open the Input Mapping Context already used by the Bowling project, add IA_Restart and map it to keyboard R. Save.",
-              "why": "Using the existing Enhanced Input setup keeps controls together.",
-              "check": "The Mapping Context lists IA_Restart → R."
+              "title": "Track a successful throw",
+              "where": "BP_BowlingPlayerController → True branch of the new throw gate.",
+              "do": "Immediately before the existing ball throw call, set ThrowsUsed = ThrowsUsed + 1 and IsBallInMotion = true. Then call the original throw event exactly once. Compile.",
+              "why": "Each valid throw consumes one attempt, regardless of whether it hits any pins.",
+              "check": "After the first Space press, ThrowsUsed is 1 and IsBallInMotion is true."
             },
             {
-              "title": "Restart a clean level on R",
-              "where": "BP_BowlingPlayerController → Event Graph.",
-              "do": "Add the IA_Restart input event and use its Started execution pin → Get Current Level Name → Open Level (by Name), wiring the level name output to Level Name. Set Remove Prefix String true on Get Current Level Name. Compile.",
-              "why": "Reopening the current map resets the ball, pins, score and timer in one simple action.",
-              "check": "Press R after a throw: the ball and pins return to their original positions and the timer resets to 45."
+              "title": "Allow time for physics to settle",
+              "where": "BP_BowlingPlayerController → after the successful throw event.",
+              "do": "Add Delay (Duration 4.0) → call a new Custom Event FinishThrow in the same controller. On FinishThrow set IsBallInMotion=false. Use Delay from the controller Event Graph, not inside a Blueprint Function.",
+              "why": "Pin collisions should be allowed to settle before the ball is reset or the round is scored.",
+              "check": "Four seconds after throwing, the controller becomes ready for the next decision."
             },
             {
-              "title": "Prevent late throws",
-              "where": "BP_BowlingPlayerController → existing IA_Throw input event.",
-              "do": "Before the existing throw call, add Get Game Mode → Cast To BP_BowlingGameMode → Get RoundFinished → NOT → Branch. Only the True execution pin calls the original throw logic.",
-              "why": "The end of a round needs to stop new gameplay input.",
-              "check": "Throw works normally during the round but not after time runs out."
+              "title": "Reset for another shot when available",
+              "where": "BP_BowlingPlayerController → FinishThrow, after IsBallInMotion=false.",
+              "do": "Get Game Mode → Cast To BP_BowlingGameMode → Branch (NOT RoundFinished AND ThrowsUsed < MaxThrows). On True call ResetBall on the same saved BP_BowlingBall reference used for the existing Throw action. Do NOT reset any pin actors.",
+              "why": "You keep the first throw’s successful knockdowns and try to finish the remaining pins.",
+              "check": "After the first two throws, the ball returns to the start and fallen pins stay down."
+            },
+            {
+              "title": "End the round after the last shot",
+              "where": "BP_BowlingGameMode → Functions → add FinishRound.",
+              "do": "Create FinishRound with no inputs. Put Branch (NOT RoundFinished) → on True Set RoundFinished=true → Print String with Score and PinsDown (use Format Text or Append after converting integers). Then back in BP_BowlingPlayerController → FinishThrow, on the branch where ThrowsUsed >= MaxThrows and RoundFinished is still false, call GameMode.FinishRound.",
+              "why": "A final score should be reported after physics settles; finishing early is also possible if all pins are down.",
+              "check": "The third valid throw is followed by a final score; Space no longer throws."
+            },
+            {
+              "title": "Add R to replay the whole round",
+              "where": "Bowling Input Mapping Context and BP_BowlingPlayerController.",
+              "do": "Create IA_Restart (Boolean) and map to keyboard R in the already active Input Mapping Context. In the Player Controller, IA_Restart Started → Get Current Level Name (Remove Prefix String=true) → Open Level by Name. Compile.",
+              "why": "Restarting the level resets the pins, ball, throw counter and score together.",
+              "check": "R gives a clean three-throw round from any state."
             }
           ],
-          "check": "At zero seconds the round ends; pressing R resets every pin, the ball, the score and the clock.",
-          "fix": "R not working? Check IA_Restart was added to the SAME Input Mapping Context registered on BeginPlay, and that you used Started rather than Triggered."
+          "check": "Make three throws without restarting: the ball comes back for shots two and three, fallen pins remain fallen, final score appears, and the fourth Space press does nothing.",
+          "fix": "Ball fails to reset? Confirm you stored the mesh (not actor) transform before physics moved it, and ResetBall uses the same mesh component. One press spends multiple throws? Check IA_Throw uses Started, not Triggered. Score missing after last shot? Ensure FinishRound is called after Delay 4 seconds."
         },
         {
           "id": "polish",
-          "title": "3. Add a score HUD and special pins",
-          "tier": "Creative",
-          "outcome": "A readable scoreboard shows pin count and time, and one clearly marked bonus pin is worth more points.",
-          "designer": "Create the HUD appearance and a unique special pin material/mesh. Test whether players can identify the bonus target.",
+          "title": "3. Add a throw counter, scoreboard and bonus pin",
+          "tier": "Essential",
+          "outcome": "A live HUD shows Score, Pins Down and Throws Left. A visibly different bonus pin is worth three points rather than one.",
+          "designer": "Create a scoreboard, one marked bonus target and on-screen controls. Playtest legibility and whether the bonus is visible before the shot.",
           "steps": [
             {
-              "title": "Create a scoreboard widget",
+              "title": "Make the HUD widget",
               "where": "Content Drawer → Bowling → User Interface → Widget Blueprint → User Widget.",
-              "do": "Name it WBP_BowlingHUD. In Designer place three Text widgets: ScoreText, PinsText and TimeText. Tick Is Variable for each. Set placeholder labels \"Score: 0\", \"Pins: 0\", \"Time: 45\".",
-              "why": "Players should see progress constantly, not only via debug text.",
-              "check": "The labels stay readable at the game viewport size."
+              "do": "Create WBP_BowlingHUD. In Designer add three Text widgets ScoreText, PinsText and ThrowsText, and mark Is Variable on each. Start with “Score: 0”, “Pins: 0” and “Throws left: 3”.",
+              "why": "The player needs to see progress without watching Print String debug output.",
+              "check": "All labels fit the game viewport without covering the lane."
             },
             {
-              "title": "Connect labels to the GameMode",
-              "where": "WBP_BowlingHUD → select each Text widget → Details → Text → Bind → Create Binding.",
-              "do": "In each generated binding function use Get Game Mode → Cast To BP_BowlingGameMode. Read the matching Score, PinsDown or SecondsLeft Integer, then use ToText (Integer) or Format Text to return a readable label. Provide 0 as a safe fallback if the cast fails.",
-              "why": "Binding a tiny HUD to existing game state avoids making another set of counter variables.",
-              "check": "The score, pin count and clock on screen match the values in the GameMode."
+              "title": "Read the score and remaining pins",
+              "where": "WBP_BowlingHUD → Designer → ScoreText then PinsText → Text → Bind → Create Binding.",
+              "do": "In ScoreText binding, Get Game Mode → Cast To BP_BowlingGameMode → Get Score → ToText (Integer) → Return. Do the same for PinsText using PinsDown. Use Format Text or separate fixed labels so players know what the numbers mean.",
+              "why": "The single GameMode record remains the authoritative score.",
+              "check": "After knocking down pins, both values update and match the printed debug numbers."
             },
             {
-              "title": "Display the widget at the start",
-              "where": "BP_BowlingPlayerController → Event Graph → BeginPlay.",
-              "do": "After the existing Add Mapping Context setup, add Create Widget (Class = WBP_BowlingHUD; Owning Player = Self) → Add to Viewport. Use Sequence if multiple independent actions must run on BeginPlay. Compile.",
-              "why": "The controller already manages input and the player’s view.",
-              "check": "Press Play and see the scoreboard without manually opening any widget."
+              "title": "Read shots remaining",
+              "where": "WBP_BowlingHUD → ThrowsText → Text → Bind → Create Binding.",
+              "do": "Get Owning Player → Cast To BP_BowlingPlayerController → Get ThrowsUsed and MaxThrows. Subtract ThrowsUsed from MaxThrows, clamp with Max (Integer) against 0, convert to Text and return.",
+              "why": "The HUD reads the same counter that gates the throw input.",
+              "check": "Before playing, Throws left displays 3; after the first shot it shows 2."
             },
             {
-              "title": "Make pin values editable",
-              "where": "BP_BowlingPin → Variables → +.",
-              "do": "Create PinValue (Integer; default 1). Tick Instance Editable. In the earlier RecordPin call replace the hard-coded 1 with Get PinValue. Compile.",
-              "why": "The same physics Blueprint can represent different rewards without duplicates.",
-              "check": "Selecting a placed BP_BowlingPin actor shows PinValue in its Details panel."
+              "title": "Show the widget",
+              "where": "BP_BowlingPlayerController → Event BeginPlay.",
+              "do": "After the original Add Mapping Context setup, add Create Widget (WBP_BowlingHUD; Owning Player=Self) → Add to Viewport. Use Sequence if the existing BeginPlay already has multiple independent chains. Compile.",
+              "why": "Each level start shows the HUD automatically.",
+              "check": "The scoreboard is present as soon as Play starts."
             },
             {
-              "title": "Create one bonus pin",
-              "where": "In the Bowling level → select one placed BP_BowlingPin.",
-              "do": "Set its PinValue to 3 in Details. Give that instance a visibly different material through its mesh component. Keep all other pins at 1.",
-              "why": "A special pin introduces aiming decisions without a new gameplay system.",
-              "check": "Knocking down the marked pin changes Score by 3 but PinsDown by only 1."
+              "title": "Make pin points editable",
+              "where": "BP_BowlingPin → Variables.",
+              "do": "Create PinValue (Integer; default 1) and enable Instance Editable. In the existing RecordPin call use Get PinValue as the input rather than the fixed value 1. Compile.",
+              "why": "Each pin can have a different value without duplicating the whole physics system.",
+              "check": "The selected pin in a level exposes PinValue in the Details panel."
             },
             {
-              "title": "Playtest and tune the lane",
-              "where": "Play the level with another pair.",
-              "do": "Ask them to explain the rules, play once and point out confusing UI or unfair physics. Adjust the special pin position, lane decoration, colours and on-screen hints.",
-              "why": "Good visuals communicate the rules, not merely decorate them.",
-              "check": "A player can explain the bonus pin and restart controls without teacher help."
+              "title": "Place one bonus pin",
+              "where": "Bowling level → select one BP_BowlingPin actor.",
+              "do": "Set PinValue = 3 on that instance and give its Static Mesh component a visibly distinct material. Leave other pins set to 1.",
+              "why": "Players can decide where to aim for the best score.",
+              "check": "Knocking over the special pin adds 3 to Score but just 1 to PinsDown."
+            },
+            {
+              "title": "Make the result obvious",
+              "where": "WBP_BowlingHUD → Designer and Graph.",
+              "do": "Add a Text named ResultText, set Is Variable and default Visibility=Collapsed. Create a function RefreshResult reading BP_BowlingGameMode.RoundFinished. When true, use SetText with a message such as “ROUND OVER – SCORE: {Score}” and make ResultText Visible. In Event Construct start Set Timer by Event (0.25 sec, Looping=true) that calls RefreshResult.",
+              "why": "A persistent result is better than a momentary debug message.",
+              "check": "At the end of the third throw or after every pin is knocked over, the result remains visible until R is pressed."
+            },
+            {
+              "title": "Test two very different rounds",
+              "where": "Play the level twice.",
+              "do": "Try a first game with some misses, then press R and try another. Confirm ThrowsUsed, fallen-pin state, Scores and ResultText all reset. Ask another pair whether the score and controls make sense.",
+              "why": "The complete loop matters more than a single successful throw.",
+              "check": "The second round starts with three throws and no leftover score."
             }
           ],
-          "check": "The HUD shows correct live totals; a bonus pin awards 3 points but still counts as just one fallen pin.",
-          "fix": "If a bonus pin still scores 1, check the RecordPin input is connected to Get PinValue in BP_BowlingPin and that the selected placed actor instance has value 3."
+          "check": "Score, Pins Down and Throws Left update correctly; the special pin awards 3 points; a final result appears; R resets the full round.",
+          "fix": "Scores differ? Ensure each pin has Counted true after first fall and passes PinValue into RecordPin. Result never shows? RefreshResult must run on a repeating timer and read RoundFinished from the assigned GameMode."
+        },
+        {
+          "id": "power",
+          "title": "4. Optional: give players a choice of shot power",
+          "tier": "Creative",
+          "outcome": "Q and E decrease/increase shot strength without changing the sideways aiming controls; the HUD can show the selected power.",
+          "designer": "Make a simple power meter with low/high markings, and ask a playtester whether changes are noticeable and fair.",
+          "steps": [
+            {
+              "title": "Make the working throw strength configurable",
+              "where": "BP_BowlingBall → Event Graph → existing custom Throw event.",
+              "do": "On the custom Throw event, add a Float input named Strength. Replace the current fixed strength or impulse-magnitude value with the Strength input, retaining the original direction calculation. Note the value that used to work before making the change.",
+              "why": "Power belongs to the throw event rather than multiple duplicated throw Blueprints.",
+              "check": "Throw compiles and expects a Float Strength input."
+            },
+            {
+              "title": "Store the player’s chosen power",
+              "where": "BP_BowlingPlayerController → Variables.",
+              "do": "Create BaseThrowPower (Float, set to the working value from the original tutorial) and PowerMultiplier (Float; default 1.0). Compile.",
+              "why": "A multiplier means this guide works with whichever base impulse fits your bowling ball’s mass.",
+              "check": "Both values are visible in the controller details."
+            },
+            {
+              "title": "Add Q and E input actions",
+              "where": "Content Drawer → Bowling → Input folder.",
+              "do": "Create two Boolean Input Actions IA_PowerDown and IA_PowerUp. Add them to the existing Bowling Input Mapping Context: Q = IA_PowerDown; E = IA_PowerUp. Save.",
+              "why": "Separate one-shot key events are easier to debug than an unconfigured input axis.",
+              "check": "The mapping context lists Q and E next to the new actions."
+            },
+            {
+              "title": "Change power in safe increments",
+              "where": "BP_BowlingPlayerController → Event Graph.",
+              "do": "From IA_PowerDown Started, Set PowerMultiplier = Clamp (Float)(PowerMultiplier-0.25, 0.5, 2.0). From IA_PowerUp Started, Set PowerMultiplier = Clamp (Float)(PowerMultiplier+0.25, 0.5, 2.0). Print PowerMultiplier for testing.",
+              "why": "Players get useful choices without extreme impulses breaking the lane.",
+              "check": "Q and E move the value in 0.25 steps between 0.5 and 2.0."
+            },
+            {
+              "title": "Pass the chosen strength into Throw",
+              "where": "BP_BowlingPlayerController → existing gated IA_Throw chain from Upgrade 2.",
+              "do": "Multiply BaseThrowPower × PowerMultiplier and connect the result to the new Strength pin on the existing BP_BowlingBall Throw call. Do not create a second Throw call. Compile.",
+              "why": "The power setting must use the same limited-throws counter.",
+              "check": "Low power and high power produce visibly different travel distances."
+            },
+            {
+              "title": "Test three useful strengths",
+              "where": "Play In Editor.",
+              "do": "Try PowerMultiplier 0.5, 1.0 and 2.0. Reset with R each time. Tune BaseThrowPower if the ball never reaches pins or always passes through them. Save the working settings.",
+              "why": "Tuning is a design decision, not just a functioning input.",
+              "check": "A peer can deliberately choose a soft or powerful shot."
+            }
+          ],
+          "check": "At least three power settings produce distinguishable throws while throw limits, score and restarts still work.",
+          "fix": "No power difference? Check the actual AddImpulse or AddForce magnitude uses the new Strength pin. If Throw always uses a constant, it will ignore the controller’s multiplier."
         }
       ]
     },
     {
       "project": "clicker",
       "title": "Clicker → Upgrade Shop",
-      "intro": "Turn the one-point-per-click tutorial into a small progression game. Players buy upgrades, watch their earnings grow and race to a target.",
+      "intro": "Start with the original click and shop, then build an incremental economy: points to spend, lifetime earnings, Grannies producing one point per second, Granny training and larger producer types. The automation keeps running while you play. This is an original student game, not a copy of Cookie Clicker artwork.",
       "stages": [
         {
           "id": "shop",
-          "title": "1. Buy more powerful clicks",
+          "title": "1. Buy more powerful manual clicks",
           "tier": "Essential",
           "outcome": "Points can buy an upgrade; each purchase increases the points earned per click and doubles the next price.",
-          "designer": "Sketch a shop button and a layout that makes the cost and benefit obvious.",
+          "designer": "Create a theme for your shop and main click button. For the first purchase, design an icon or button state that clearly suggests increased points per click.",
           "steps": [
             {
               "title": "Add two shop variables",
@@ -424,7 +639,7 @@ window.UE5_MINI_UPGRADE_DATA = {
         },
         {
           "id": "display",
-          "title": "2. Make the shop information visible",
+          "title": "2. Show your shop balance and costs",
           "tier": "Essential",
           "outcome": "The interface shows live score, points per click and next upgrade cost.",
           "designer": "Create a tidy arrangement for three numbers and the two buttons. Try it at 1280×720 as well as full screen.",
@@ -477,63 +692,271 @@ window.UE5_MINI_UPGRADE_DATA = {
         },
         {
           "id": "goal",
-          "title": "3. Add a win target and replay button",
-          "tier": "Creative",
-          "outcome": "Reach 100 points to win; clicking stops and the player can restart for another run.",
-          "designer": "Design a clear success message and a Restart button. Use original typography, iconography or animation.",
+          "title": "3. Track lifetime earnings and show a milestone",
+          "tier": "Essential",
+          "outcome": "The game tracks spendable Score separately from TotalEarned. Spending never reduces TotalEarned, and the first 500 earned points trigger a milestone message without stopping the game.",
+          "designer": "Design a small “500 earned” achievement banner and decide how the player can see their total production over time.",
           "steps": [
             {
-              "title": "Add a win target",
-              "where": "Clicker GameMode → Variables.",
-              "do": "Create TargetScore (Integer; default 100) and GameWon (Boolean; default false). Compile.",
-              "why": "The player now has a meaningful goal rather than an endless counter.",
-              "check": "Both variables appear with correct defaults."
+              "title": "Keep two separate point values",
+              "where": "Clicker GameMode → My Blueprint → Variables.",
+              "do": "Keep the existing Score integer as the balance the player spends. Create TotalEarned (Integer; 0), MilestoneTarget (Integer; 500) and MilestoneReached (Boolean; false). Compile.",
+              "why": "TotalEarned should measure progress even if the player buys many upgrades.",
+              "check": "Score and TotalEarned both begin at zero; MilestoneTarget reads 500."
             },
             {
-              "title": "Finish the round on the winning click",
-              "where": "Clicker GameMode → AddClick function.",
-              "do": "Add Branch on NOT GameWon at the start. Only True continues to the existing Score + ClickPower logic. After Set Score add a comparison Score >= TargetScore → Branch. When True set GameWon = true.",
-              "why": "The win happens at a predictable score and repeated clicks cannot inflate it afterwards.",
-              "check": "When Score reaches or passes 100, GameWon becomes true."
+              "title": "Make a reusable earning function",
+              "where": "Clicker GameMode → Functions → +.",
+              "do": "Create GainPoints with an Integer input Amount. In the function add Branch (Amount > 0). On True set Score = Score + Amount and then set TotalEarned = TotalEarned + Amount. Wire both Set nodes in sequence.",
+              "why": "Manual clicks and later automated Grannies should award points through one shared function.",
+              "check": "A single GainPoints(10) increases both values by 10."
             },
             {
-              "title": "Display a permanent result",
-              "where": "Clicker Widget → Designer.",
-              "do": "Add a Text widget named ResultText, set text \"TARGET REACHED!\", tick Is Variable and set its initial Visibility to Collapsed.",
-              "why": "A persistent message tells the player they have finished.",
-              "check": "The result text does not appear at the start of play."
+              "title": "Check the milestone from earned points",
+              "where": "Clicker GameMode → GainPoints, immediately after Set TotalEarned.",
+              "do": "Add Branch with condition (NOT MilestoneReached) AND (TotalEarned >= MilestoneTarget). On True set MilestoneReached=true; Print String \"500 lifetime points earned!\". Do not reset Score or disable any buttons.",
+              "why": "A milestone celebrates progress without ending a game that can continue growing.",
+              "check": "The banner condition only becomes true once when lifetime earnings reach 500."
             },
             {
-              "title": "Update the win state in the UI",
-              "where": "Clicker Widget → RefreshShop function, after the score/power/cost updates.",
-              "do": "From the GameMode cast, read GameWon and use Branch. When True set ResultText Visibility = Visible and Set Is Enabled = false on the main click button. When False set ResultText Visibility = Collapsed and keep the main click button enabled.",
-              "why": "Players can see the finish state, and the button matches it.",
-              "check": "The result appears as soon as the target is achieved and the main button is disabled."
+              "title": "Replace only the manual earning calculation",
+              "where": "Clicker GameMode → AddClick function from Upgrade 1.",
+              "do": "Remove the old Set Score = Score + ClickPower chain. Instead call GainPoints and feed the existing ClickPower integer into Amount. Keep the original widget button calling AddClick once. Compile.",
+              "why": "The manual click should update both counters but still earn the same amount as before.",
+              "check": "A new game gives Score=1 and TotalEarned=1 after one click."
             },
             {
-              "title": "Create a restart button",
-              "where": "Clicker Widget → Designer and Graph.",
-              "do": "Add a Button named RestartButton with text \"Play Again\". Create its OnClicked event → Get Current Level Name (Remove Prefix String = true) → Open Level (by Name). Wire the returned current level name to Level Name.",
-              "why": "Reloading the current level resets the small tutorial GameMode and widget in one step.",
-              "check": "Click Play Again and see Score = 0, ClickPower = 1, UpgradeCost = 10, GameWon = false."
+              "title": "Keep purchasing connected only to balance",
+              "where": "Clicker GameMode → BuyUpgrade function.",
+              "do": "Confirm the purchase checks Score >= UpgradeCost and reduces Score on success. Do NOT subtract anything from TotalEarned. Leave the existing ClickPower increase and rising UpgradeCost as they are.",
+              "why": "Buying an upgrade should never erase lifetime progress.",
+              "check": "Earn 10, purchase for 10: Score=0 but TotalEarned=10."
             },
             {
-              "title": "Replace the default appearance",
-              "where": "Artist/designer PC → Photoshop or 3ds Max; share exported PNG/FBX via Teams.",
-              "do": "Make an original theme, e.g. bakery, salvage yard or robot factory. Import PNG UI assets, apply them to buttons, and retest readability with the designer.",
-              "why": "A distinctive theme helps a simple clicker become recognisably your game.",
-              "check": "The final widget uses at least one team-made visual asset."
+              "title": "Show lifetime progress and the milestone",
+              "where": "Existing Clicker Widget → Designer.",
+              "do": "Add two Text widgets LifetimeText and MilestoneText and mark both Is Variable. LifetimeText starts \"Lifetime: 0\". MilestoneText starts with \"500 EARNED!\" and Visibility=Collapsed.",
+              "why": "The player should see progress towards the next goal.",
+              "check": "The initial UI has a lifetime label but no achievement banner."
+            },
+            {
+              "title": "Refresh these new HUD values",
+              "where": "Clicker Widget → existing RefreshShop function.",
+              "do": "Read TotalEarned and MilestoneReached from the same GameMode cast used for score/power/cost. Use SetText on LifetimeText after integer-to-text conversion. Branch on MilestoneReached: Visible for MilestoneText when true, Collapsed otherwise. Compile.",
+              "why": "Using RefreshShop keeps the new labels consistent with the current economy.",
+              "check": "After a purchase, Score goes down but Lifetime remains unchanged, and the milestone appears at 500."
+            },
+            {
+              "title": "Prove lifetime earnings are correct",
+              "where": "Play the Clicker game.",
+              "do": "Click ten times, buy the first upgrade, then click five times more. Expected: TotalEarned=20 (10 + five clicks worth two each), and Score=10 after the purchase. Later verify the milestone still appears after 500 total points.",
+              "why": "A numerical test catches double counting and accidental spending of lifetime progress.",
+              "check": "The values match the expected totals and buttons remain clickable after the first milestone."
             }
           ],
-          "check": "From a fresh launch, earning 100 points displays a win state, disables clicking and supports a clean restart.",
-          "fix": "No win message? Check the Score comparison occurs AFTER Set Score, RefreshShop is called after AddClick and ResultText is set to Visible when GameWon is true."
+          "check": "Buying an upgrade reduces spendable Score but never TotalEarned. Reaching 500 earned points shows an achievement without stopping play.",
+          "fix": "Lifetime never changes? Ensure AddClick calls GainPoints, not the original Set Score. A purchase changes TotalEarned? Remove any TotalEarned Set nodes from BuyUpgrade. If the milestone never appears, check RefreshShop reads the Boolean from the correct GameMode."
+        },
+        {
+          "id": "granny",
+          "title": "4. Hire Grannies for automatic income",
+          "tier": "Essential",
+          "outcome": "Buying a Granny costs 15 points; each owned Granny adds one point per second automatically. The next Granny costs more, and the number owned is visible.",
+          "designer": "Design a Granny producer card, icon and Buy Granny button. Make it clear that this earns points per second without clicking.",
+          "steps": [
+            {
+              "title": "Create the Granny economy variables",
+              "where": "Clicker GameMode → My Blueprint → Variables.",
+              "do": "Create GranniesOwned (Integer; default 0), GrannyRate (Integer; default 1) and GrannyCost (Integer; default 15). Compile.",
+              "why": "These three values describe how many producers you own, their production, and the next price.",
+              "check": "Starting values are 0 Grannies, 1 point/second each, and a price of 15."
+            },
+            {
+              "title": "Make the purchase function",
+              "where": "Clicker GameMode → Functions → +.",
+              "do": "Create BuyGranny. Add Branch with condition Score >= GrannyCost. On True, wire Set Score = Score - GrannyCost → Set GranniesOwned = GranniesOwned + 1 → Set GrannyCost = Ceiling(GrannyCost × 1.25). Ceiling converts the float price calculation back to an integer. False does nothing.",
+              "why": "Buying more producers becomes progressively expensive, but can never spend negative points.",
+              "check": "When Score=15, one purchase changes Score to 0, GranniesOwned to 1 and the next GrannyCost to 19."
+            },
+            {
+              "title": "Calculate production per second in one place",
+              "where": "Clicker GameMode → Functions → +.",
+              "do": "Create a PURE function GetProductionPerSecond with one Integer output Production. Get GranniesOwned and GrannyRate, multiply the integers, connect to the Return Node output and compile.",
+              "why": "All automated producers can share one game timer and one production calculation.",
+              "check": "One Granny returns 1; three Grannies return 3; no Grannies returns 0."
+            },
+            {
+              "title": "Create the automatic one-second timer",
+              "where": "Clicker GameMode → Event Graph → Event BeginPlay.",
+              "do": "Keep the original Event BeginPlay logic that creates and displays the Clicker widget. After it (or from a Sequence attached to BeginPlay), add Set Timer by Event with Time=1.0 and Looping=true. Create a Custom Event named ProduceIncome, then connect a Create Event reference for that event to the timer red Event input. Only one production timer should be started per game session.",
+              "why": "The GameMode can automatically award points once per second without pressing the click button or using Event Tick.",
+              "check": "The original Clicker widget still appears, and ProduceIncome runs once each second after Play starts."
+            },
+            {
+              "title": "Pay the player every second",
+              "where": "Clicker GameMode → ProduceIncome.",
+              "do": "Call GetProductionPerSecond and feed its Integer result to GainPoints(Amount). GainPoints already ignores zero amounts and updates Score and TotalEarned. Compile.",
+              "why": "This simulates automatic clicks using the same earning rules as manual clicks.",
+              "check": "Buy one Granny, leave the mouse alone for five seconds: both counters rise by about five. Buy a second Granny: they rise by about two each second."
+            },
+            {
+              "title": "Add a Granny shop button and labels",
+              "where": "Clicker Widget → Designer.",
+              "do": "Add a Button named BuyGrannyButton with text \"Buy Granny\". Add Text widgets GranniesText and PassiveIncomeText; tick Is Variable. Placeholder text: \"Grannies: 0\" and \"Auto: 0 / sec\".",
+              "why": "The player must understand what the new upgrade does and how many producers they own.",
+              "check": "A visible button and both labels fit the shop."
+            },
+            {
+              "title": "Connect Granny purchases",
+              "where": "Clicker Widget → Graph → BuyGrannyButton → OnClicked.",
+              "do": "Use Get Game Mode → Cast To the Clicker GameMode → BuyGranny, then call RefreshShop on the widget. Compile.",
+              "why": "The UI requests the purchase while GameMode owns the economy.",
+              "check": "The button buys one Granny only when you have enough points."
+            },
+            {
+              "title": "Show the next price and automatic income",
+              "where": "Clicker Widget → RefreshShop function.",
+              "do": "From the Clicker GameMode cast, read GranniesOwned and GrannyCost. Format the labels into text such as \"Grannies: 2 | Next: 24\" using Format Text. Call GetProductionPerSecond and SetText on PassiveIncomeText using \"Auto: {Production} / sec\".",
+              "why": "Players can see that another Granny increases automatic earnings.",
+              "check": "After each purchase, the count, next cost and points/second are correct."
+            },
+            {
+              "title": "Refresh the display while nobody clicks",
+              "where": "Clicker Widget → Event Construct.",
+              "do": "Keep the existing first RefreshShop call. Add Set Timer by Event, Time=0.25, Looping=true, and connect a Custom Event RefreshAutoHUD to the timer red Event input; RefreshAutoHUD simply calls RefreshShop. Do not duplicate the timer in multiple widget event paths.",
+              "why": "Passive income changes the score even when no button event triggers RefreshShop.",
+              "check": "Hands off the mouse: Score and Lifetime update on screen as the timer pays income."
+            },
+            {
+              "title": "Test increasing purchase costs",
+              "where": "Play the game from a fresh level.",
+              "do": "Earn 15 points and buy one Granny: the next cost should be 19. Earn 19 and buy a second: the next cost should be 24. Let both run for three seconds and confirm approximately six points are generated.",
+              "why": "The production logic and price curve should remain understandable.",
+              "check": "With two Grannies, the passive rate displays 2 per second and continues without clicking."
+            }
+          ],
+          "check": "The first Granny costs 15 and produces 1 point/sec; buying two produces 2/sec, with increasing costs and a live automatic score display.",
+          "fix": "No passive income? Check ProduceIncome is bound to the repeating GameMode timer, and GainPoints is called with a positive amount. Income changes internally but not on screen? Check the widget refresh timer and RefreshShop. Buying creates negative points? Branch must run BEFORE reducing Score."
+        },
+        {
+          "id": "training",
+          "title": "5. Train Grannies to double their output",
+          "tier": "Essential",
+          "outcome": "A 100-point training upgrade doubles production from every owned Granny. Repeated training increases the rate 1→2→4→8 points per second per Granny.",
+          "designer": "Make an upgrade card showing the current Granny rate and the next training cost. Communicate the benefit clearly.",
+          "steps": [
+            {
+              "title": "Add the upgrade price",
+              "where": "Clicker GameMode → Variables.",
+              "do": "Create GrannyTrainingCost (Integer; default 100). Keep existing GrannyRate (Integer; default 1). Compile.",
+              "why": "A single price governs the next training purchase.",
+              "check": "The default rate is 1 and the training price is 100."
+            },
+            {
+              "title": "Make the training purchase function",
+              "where": "Clicker GameMode → Functions → +.",
+              "do": "Create TrainGrannies. Add Branch using (Score >= GrannyTrainingCost) AND (GranniesOwned > 0). From True: Set Score = Score - GrannyTrainingCost → Set GrannyRate = GrannyRate × 2 → Set GrannyTrainingCost = GrannyTrainingCost × 2. False does nothing. Compile.",
+              "why": "The training has a price and only works when at least one Granny exists.",
+              "check": "With one Granny and 100 points, training leaves Score lower by 100, GrannyRate=2 and next cost=200."
+            },
+            {
+              "title": "Add the upgrade button",
+              "where": "Clicker Widget → Designer.",
+              "do": "Add Button TrainGranniesButton with child Text \"Train Grannies\" and a Text widget TrainingInfoText marked Is Variable. Position them next to the Granny purchase controls.",
+              "why": "The player can choose between hiring more producers and making existing ones stronger.",
+              "check": "Both shop options are readable and do not overlap."
+            },
+            {
+              "title": "Connect the upgrade click",
+              "where": "Clicker Widget → TrainGranniesButton → OnClicked.",
+              "do": "Use Get Game Mode → Cast To Clicker GameMode → TrainGrannies → RefreshShop. Compile.",
+              "why": "The button invokes the shared economy rules rather than changing widget-only numbers.",
+              "check": "At enough balance, a press changes GrannyRate and the next training cost exactly once."
+            },
+            {
+              "title": "Make the effect visible",
+              "where": "Clicker Widget → RefreshShop.",
+              "do": "Read GrannyRate and GrannyTrainingCost and use Format Text to show \"Each Granny: {Rate}/sec | Train: {Cost}\". Keep PassiveIncomeText reading GetProductionPerSecond so the total updates automatically.",
+              "why": "Players should immediately see the benefit of the upgrade.",
+              "check": "With 2 Grannies trained once, Auto shows 4/sec; trained twice it shows 8/sec."
+            },
+            {
+              "title": "Check training never affects spending history",
+              "where": "Play the game.",
+              "do": "Earn enough for 2 Grannies and one training. Buy training and watch Auto jump from 2 to 4/sec. Confirm Score decreases by the price but TotalEarned remains unchanged when buying.",
+              "why": "Purchase and production must remain separate bookkeeping operations.",
+              "check": "The income rate doubles while lifetime earnings only increase as new cookies are generated."
+            }
+          ],
+          "check": "Each Granny can be upgraded: two Grannies produce 2/sec initially, then 4/sec, 8/sec and beyond as training is purchased.",
+          "fix": "Rate unchanged? Make sure GetProductionPerSecond multiplies GranniesOwned by GrannyRate and RefreshShop reads that function. If training buys at zero Grannies, add the GranniesOwned > 0 condition to the Branch."
+        },
+        {
+          "id": "farm",
+          "title": "6. Optional: add a second producer type",
+          "tier": "Creative",
+          "outcome": "Players can buy Farms producing 5 points per second each. Granny and Farm income accumulate through the same single production timer.",
+          "designer": "Create an original second producer with distinctive artwork, price and theme. Rebrand Grannies and Farms if your game is about robots, potion shops or a spaceship.",
+          "steps": [
+            {
+              "title": "Add Farm variables",
+              "where": "Clicker GameMode → Variables.",
+              "do": "Create FarmsOwned (Integer; default 0), FarmRate (Integer; default 5) and FarmCost (Integer; default 100). Compile.",
+              "why": "Every producer can be represented by owned, rate and cost; the pattern can be repeated for new ideas.",
+              "check": "The three starting values are 0, 5 and 100."
+            },
+            {
+              "title": "Build the Farm purchase function",
+              "where": "Clicker GameMode → Functions → +.",
+              "do": "Create BuyFarm. Add Branch (Score >= FarmCost). From True: Set Score = Score - FarmCost → Set FarmsOwned = FarmsOwned + 1 → Set FarmCost = Ceiling(FarmCost × 1.30). Compile.",
+              "why": "This uses the same proven purchase structure as BuyGranny, so students can expand independently.",
+              "check": "After buying the first Farm for 100, the next one costs 130."
+            },
+            {
+              "title": "Extend the one income calculation",
+              "where": "Clicker GameMode → GetProductionPerSecond function.",
+              "do": "Keep the original GranniesOwned × GrannyRate calculation. Add FarmsOwned × FarmRate, then add both integer products and connect the sum to the Return Node Production output.",
+              "why": "One timer should award the combined income; do not create a second Set Timer by Event.",
+              "check": "With two normal Grannies and one Farm, the function returns 7 per second."
+            },
+            {
+              "title": "Add Farm to the shop",
+              "where": "Clicker Widget → Designer.",
+              "do": "Add a Farm button named BuyFarmButton and a Text widget FarmInfoText, tick Is Variable. Set the placeholder to \"Farms: 0 | Next: 100\".",
+              "why": "Each producer needs a clear cost and a recognisable visual identity.",
+              "check": "The shop displays both producer types without hiding either."
+            },
+            {
+              "title": "Connect Farm purchases and their UI",
+              "where": "Clicker Widget → Graph.",
+              "do": "BuyFarmButton OnClicked → GameMode BuyFarm → RefreshShop. Extend RefreshShop to read FarmsOwned and FarmCost and SetText on FarmInfoText using Format Text. Leave the existing automatic UI refresh timer untouched.",
+              "why": "The new producer uses the same GameMode and UI update pattern as the first.",
+              "check": "One Farm appears in the shop and 5 extra points/second are added immediately."
+            },
+            {
+              "title": "Test combined income and milestone",
+              "where": "Play the game.",
+              "do": "With 3 Grannies at 2/sec each and 2 Farms at 5/sec each, check Auto is (3×2)+(2×5)=16/sec. Leave the mouse still for five seconds, and confirm the score rises by about 80 (unless you spend).",
+              "why": "Different systems must sum correctly without triggering separate duplicated timers.",
+              "check": "Automatic income and TotalEarned rise by roughly 16 each second; the milestone still works."
+            },
+            {
+              "title": "Plan your own next producer",
+              "where": "With your partner, sketch a third producer in the shared Teams folder.",
+              "do": "Choose a name, starting cost, income rate and artwork. Describe which variables and single GameMode functions you would reuse; only build it if the game is already playable.",
+              "why": "This is the independent creative step: apply a familiar pattern to a new producer.",
+              "check": "You can explain how your third producer would feed into GetProductionPerSecond without a new timer."
+            }
+          ],
+          "check": "Grannies and Farms stack their earnings (for example, 3×2 + 2×5 = 16/sec), prices rise after purchases, and the game still uses one automatic income timer.",
+          "fix": "Income wrong? Check GetProductionPerSecond includes both terms and ProduceIncome calls it once per second. If income doubles unexpectedly, look for a second timer or an old direct Set Score chain."
         }
       ]
     },
     {
       "project": "loops",
       "title": "Loops & Spawning → Target Rush",
-      "intro": "The original tutorial only creates patterns of actors. These upgrades turn the spawned shapes into a game: click every target before time runs out.",
+      "intro": "Turn the original spawned cubes into a wave-based target challenge. Five targets are just the first wave: new waves appear automatically, target counts increase, the overall race is timed and every wave can use random visible positions.",
       "stages": [
         {
           "id": "targets",
@@ -596,64 +1019,205 @@ window.UE5_MINI_UPGRADE_DATA = {
           "fix": "Click does nothing? Confirm the cursor and Enable Click Events are set, target collision blocks the Visibility trace, and World Settings selects the intended GameMode."
         },
         {
-          "id": "race",
-          "title": "2. Add a 30-second challenge and replay",
+          "id": "waves",
+          "title": "2. Automatically spawn harder waves",
           "tier": "Essential",
-          "outcome": "The target-clearing game becomes a 30-second race with a restart key.",
-          "designer": "Design a simple instruction panel with the target count, deadline and R to restart.",
+          "outcome": "Clearing every target creates a fresh wave, growing from 5 to 6 to 7 targets and finishing after five waves.",
+          "designer": "Design a subtle new-wave announcement and keep enough screen space for later waves with 9 targets.",
           "steps": [
             {
-              "title": "Add a countdown value",
-              "where": "Your Loops GameMode → Variables.",
-              "do": "Create SecondsLeft (Integer; default 30). Keep Finished from Upgrade 1. Compile.",
-              "why": "The timer gives the targets a reason to be clicked quickly.",
-              "check": "SecondsLeft begins at 30."
+              "title": "Create the wave state",
+              "where": "Your existing Loops GameMode → Variables.",
+              "do": "Create WaveNumber (Integer; default 1), FinalWave (Integer; default 5), and TargetsHit (Integer; default 0). Keep TargetsLeft and Finished from Upgrade 1. Compile.",
+              "why": "Waves increase difficulty, while TargetsHit tracks the player’s achievements across all of them.",
+              "check": "WaveNumber starts at 1; FinalWave=5; TargetsHit=0."
             },
             {
-              "title": "Start a once-per-second event",
-              "where": "Loops GameMode → Event Graph → Event BeginPlay.",
-              "do": "After the existing spawn loop has been started, add Set Timer by Event, Time = 1.0, Looping = true. Attach a Custom Event TickRush to its red Event pin and promote the returned Timer Handle to RushTimerHandle. Use a Sequence after BeginPlay if needed to start the loop and timer separately.",
-              "why": "A stable one-second callback is easier to understand than Event Tick.",
-              "check": "The event fires once per second during play."
+              "title": "Move the original spawn loop into a function",
+              "where": "Loops GameMode → Functions → +.",
+              "do": "Create a function StartWave. Cut the existing For Loop plus its Spawn Actor chain out of Event BeginPlay and paste them into StartWave. Connect the function entry to the For Loop. From BeginPlay call StartWave ONCE.",
+              "why": "A function lets each later wave reuse the same spawn logic without repeating nodes.",
+              "check": "Play still shows five targets in the first wave."
             },
             {
-              "title": "Time out cleanly",
-              "where": "Loops GameMode → TickRush.",
-              "do": "Branch on NOT Finished. From True set SecondsLeft = Max (Integer)(0, SecondsLeft - 1). If SecondsLeft <= 0, set Finished = true, Print String \"TIME UP!\" and Clear and Invalidate Timer by Handle using RushTimerHandle.",
-              "why": "The countdown must have a definite ending and must not go negative.",
-              "check": "After 30 seconds the number is 0 and target clicks stop working."
+              "title": "Calculate a new target count for each wave",
+              "where": "StartWave function, before the For Loop.",
+              "do": "Create a local Integer CurrentWaveCount and set it to 4 + WaveNumber. Set TargetsLeft = CurrentWaveCount. Then set the For Loop First Index = 0 and Last Index = CurrentWaveCount - 1. Connect execution in this order: Set count → Set TargetsLeft → For Loop.",
+              "why": "A loop from 0 to N-1 spawns exactly N targets; the counter must agree with the number spawned.",
+              "check": "Wave 1 spawns 5, wave 2 spawns 6 and wave 3 spawns 7."
             },
             {
-              "title": "Stop the clock when all targets are cleared",
-              "where": "Loops GameMode → HitTarget function → final True branch.",
-              "do": "After Set Finished = true on the five-target win, add Clear and Invalidate Timer by Handle using RushTimerHandle.",
-              "why": "The time is frozen at the moment the player wins.",
-              "check": "Clearing all five targets before the deadline stops the countdown."
+              "title": "Record every hit",
+              "where": "Loops GameMode → HitTarget function from Upgrade 1.",
+              "do": "After the existing Set TargetsLeft = Max(0, TargetsLeft-1), add Set TargetsHit = TargetsHit + 1. Preserve the original ClickTarget code that destroys an actor only once.",
+              "why": "TargetsHit is a useful score across several waves.",
+              "check": "Click three targets: TargetsLeft falls by 3 and TargetsHit increases by 3."
             },
             {
-              "title": "Add a replay key",
-              "where": "Content Drawer → Loops folder → Input → Input Action.",
-              "do": "Create IA_RestartRush (Boolean) and IMC_TargetRush (Input Mapping Context) mapping the action to R. In BP_LoopsPlayerController BeginPlay, add IMC_TargetRush via Enhanced Input Local Player Subsystem → Add Mapping Context.",
-              "why": "An action asset makes the replay key consistent with the other Unreal projects.",
-              "check": "The context is added on BeginPlay."
+              "title": "Replace the old immediate win",
+              "where": "HitTarget function → final Branch TargetsLeft <= 0.",
+              "do": "Remove the old immediate Set Finished = true and \"ALL TARGETS CLEARED\" path. Instead compare WaveNumber >= FinalWave. If True: Set Finished=true and Print String \"ALL WAVES COMPLETE!\". If False: schedule the next wave in the following steps.",
+              "why": "Reaching zero targets should mean the next wave, not the end of the game, until the final wave.",
+              "check": "The final-wave condition exists and is checked after the last target."
             },
             {
-              "title": "Restart the current level",
-              "where": "BP_LoopsPlayerController → Event Graph.",
-              "do": "Add IA_RestartRush event → Started → Get Current Level Name (Remove Prefix String true) → Open Level (by Name). Compile.",
-              "why": "Reloading the current map respawns targets and resets its GameMode values.",
-              "check": "Press R: five targets and a fresh 30-second clock are ready."
+              "title": "Schedule one new wave",
+              "where": "Loops GameMode → Event Graph.",
+              "do": "Create a Custom Event called AdvanceWave. Wire it to Set WaveNumber = WaveNumber + 1 → StartWave. In HitTarget when TargetsLeft reaches 0 and WaveNumber < FinalWave, use Set Timer by Event (Time=0.75, Looping=false) and connect a Create Event reference to AdvanceWave.",
+              "why": "A short pause gives players feedback before the next set appears and avoids spawning inside the existing target’s click event.",
+              "check": "Clear five targets: after a short pause the next wave appears with six."
             },
             {
-              "title": "Make the target rush yours",
-              "where": "Artist/designer PC → Photoshop, 3ds Max or Substance Painter.",
-              "do": "Make one original target mesh/material or backdrop. Share FBX/PNG through Teams, import it into BP_ClickTarget, and adjust spacing so everything fits the camera. Give the game a title and short on-screen control instructions.",
-              "why": "The prototype now has a visual identity and a fair, readable challenge.",
-              "check": "A partner can understand how to play without explanation."
+              "title": "Prevent duplicate wave scheduling",
+              "where": "In HitTarget function, before the existing decrement.",
+              "do": "Add a Branch with condition (NOT Finished) AND (TargetsLeft > 0). Only the True path may decrement TargetsLeft and test for the wave end. Keep BP_ClickTarget.Destroy Actor after calling HitTarget.",
+              "why": "Extra events should not start more than one replacement wave.",
+              "check": "The final hit schedules only one new wave."
+            },
+            {
+              "title": "Complete a full five-wave test",
+              "where": "Play the Loops level.",
+              "do": "Clear each wave without changing any Blueprint during play. Record the target counts: 5, 6, 7, 8, 9. At the final target in wave 5, the game should set Finished=true and print the win message.",
+              "why": "Testing progression across all waves catches off-by-one loop errors.",
+              "check": "There are 35 targets total across five waves, each counted once, and the final wave finishes the game."
             }
           ],
-          "check": "Players must click all five targets within 30 seconds; R resets the entire challenge.",
-          "fix": "If R does nothing, confirm the Enhanced Input Mapping Context was added to the active controller and the action uses Started. If the clock does not run, confirm the timer is connected after BeginPlay."
+          "check": "Clearing each wave produces the next (5→6→7→8→9 targets), and clearing wave 5 ends the run with 35 recorded hits.",
+          "fix": "Still ends after five clicks? The old Finished=true path is still in HitTarget. Extra waves spawn? Ensure the gate requires TargetsLeft>0 before decrement and Set Timer by Event is not looping. Wrong count? Last Index must be CurrentWaveCount-1."
+        },
+        {
+          "id": "race",
+          "title": "3. Add a 90-second wave race and replay",
+          "tier": "Essential",
+          "outcome": "A 90-second clock, wave number and target counter are visible. The player either clears all five waves or reaches Time Up, then can replay.",
+          "designer": "Design an on-screen wave/timer/targets HUD and a result message for success or timeout.",
+          "steps": [
+            {
+              "title": "Set a realistic overall time",
+              "where": "Loops GameMode → Variables.",
+              "do": "Create SecondsLeft (Integer; default 90). Keep Finished, WaveNumber, TargetsLeft and TargetsHit from the earlier upgrades. Compile.",
+              "why": "Five waves are too much for the earlier 30-second limit; 90 seconds is a better first test value.",
+              "check": "SecondsLeft starts at 90."
+            },
+            {
+              "title": "Run a single countdown timer",
+              "where": "Loops GameMode → Event Graph → Event BeginPlay.",
+              "do": "Keep StartWave running on BeginPlay. Also run Set Timer by Event with Time=1.0, Looping=true and event TickRush (create a Custom Event in the Event Graph, then link via Create Event). Promote the Timer Handle to RushTimerHandle. Use a Sequence if necessary so wave spawning and the timer are both started once.",
+              "why": "The timer measures one whole run, not 30 seconds per wave.",
+              "check": "SecondsLeft drops by one each second during Play."
+            },
+            {
+              "title": "Stop on time out",
+              "where": "Loops GameMode → Custom Event TickRush.",
+              "do": "Branch on NOT Finished. On True set SecondsLeft = Max(0, SecondsLeft-1). If SecondsLeft <= 0, set Finished=true, Print String \"TIME UP!\" and Clear and Invalidate Timer by Handle with RushTimerHandle.",
+              "why": "A definite timeout makes the challenge replayable.",
+              "check": "At 0 seconds the timer stops and no more targets can be scored."
+            },
+            {
+              "title": "Stop the clock on victory",
+              "where": "Loops GameMode → HitTarget → final-wave True path.",
+              "do": "After Set Finished=true, add Clear and Invalidate Timer by Handle with RushTimerHandle. Keep the \"ALL WAVES COMPLETE!\" message.",
+              "why": "Winning early should preserve the remaining time.",
+              "check": "Finishing wave 5 stops SecondsLeft wherever it is."
+            },
+            {
+              "title": "Do not spawn after timeout",
+              "where": "Loops GameMode → AdvanceWave custom event.",
+              "do": "Before incrementing WaveNumber and calling StartWave, add Branch on NOT Finished. Only True may advance.",
+              "why": "A pending 0.75-second wave timer might finish after the overall clock ends.",
+              "check": "At Time Up, no additional wave appears even if the previous wave just ended."
+            },
+            {
+              "title": "Build a simple HUD",
+              "where": "Content Drawer → Loops folder → User Interface → Widget Blueprint → User Widget.",
+              "do": "Create WBP_TargetRushHUD and add three Text widgets WaveText, TargetsText and TimeText. Tick Is Variable. Set clear placeholder labels \"Wave: 1\", \"Targets: 5\", \"Time: 90\".",
+              "why": "Players need to understand the escalating objective at a glance.",
+              "check": "The three labels are visible and legible in the chosen viewport."
+            },
+            {
+              "title": "Connect the HUD values",
+              "where": "WBP_TargetRushHUD → each text element → Details → Text → Bind → Create Binding.",
+              "do": "Read the assigned Loops GameMode using Get Game Mode → Cast. WaveText reads WaveNumber; TargetsText reads TargetsLeft; TimeText reads SecondsLeft. Convert to Text (Integer) or use Format Text with labels. Compile.",
+              "why": "The HUD reads the one GameMode state rather than maintaining duplicate values.",
+              "check": "When wave 2 appears, the display reads Wave 2 and Targets 6."
+            },
+            {
+              "title": "Display a persistent end message",
+              "where": "WBP_TargetRushHUD → Designer.",
+              "do": "Add ResultText with \"GAME OVER\" initially Collapsed and tick Is Variable. Add a function RefreshResult: Get Game Mode → Cast to Loops GameMode → check Finished. When true, show ResultText and choose \"WAVES CLEARED!\" if WaveNumber >= FinalWave AND TargetsLeft == 0; otherwise show \"TIME UP!\". In Event Construct use repeating Set Timer by Event (0.25 sec) to run RefreshResult.",
+              "why": "The game should tell the player whether they won or ran out of time.",
+              "check": "After the run, a visible message stays until replay."
+            },
+            {
+              "title": "Create a replay input",
+              "where": "Content Drawer → Loops → Input folder and BP_LoopsPlayerController.",
+              "do": "Create IA_RestartRush (Boolean) and IMC_TargetRush with an R binding. On the controller BeginPlay add the mapping context via Enhanced Input Local Player Subsystem; use IA_RestartRush Started → Get Current Level Name (Remove Prefix String=true) → Open Level by Name. Compile.",
+              "why": "Reopening the current map returns wave, targets, scores and timer to their defaults.",
+              "check": "Press R at any point: five new targets and a 90-second clock appear."
+            },
+            {
+              "title": "Put the HUD in the controller",
+              "where": "BP_LoopsPlayerController → Event BeginPlay.",
+              "do": "After the existing Show Mouse Cursor / Enable Click Events setup, add Create Widget (WBP_TargetRushHUD, Owning Player=Self) → Add to Viewport. Use Sequence if needed so click events, input mapping and UI creation all run. Compile.",
+              "why": "The controller is already active in the original target game.",
+              "check": "Wave, targets and timer are visible immediately on starting Play."
+            }
+          ],
+          "check": "Waves and targets count correctly, the time drops 90→0, a win or loss result appears, and R starts a fresh five-wave run.",
+          "fix": "Timer or labels missing? Check you use the active Loops GameMode and Controller via World Settings. If the UI remains unchanged after a new wave, confirm each Text binding reads the GameMode variables; refresh end message on a widget timer."
+        },
+        {
+          "id": "random",
+          "title": "4. Optional: randomise target positions safely",
+          "tier": "Creative",
+          "outcome": "Every new wave spawns within a marked, visible area rather than lining targets up at fixed coordinates.",
+          "designer": "Design a level that is readable with targets appearing anywhere inside the playfield. Keep target shapes and colours easy to distinguish.",
+          "steps": [
+            {
+              "title": "Create a visible spawn area actor",
+              "where": "Content Drawer → Loops → Blueprint Class → Actor.",
+              "do": "Name it BP_TargetSpawnArea. Add a Box Collision component named SpawnBounds. Set Collision Presets to NoCollision and initially use box extents X=50, Y=380, Z=220. Compile.",
+              "why": "A level designer can move and resize one box to control random spawn positions.",
+              "check": "The Box Collision component exists and does not block mouse traces."
+            },
+            {
+              "title": "Place the area in the player view",
+              "where": "Open the Loops level.",
+              "do": "Drag one BP_TargetSpawnArea actor into the map. Move and resize the SpawnBounds box so its whole volume sits in the camera view, above the floor and away from the HUD. Save the level.",
+              "why": "Random positions are only useful when targets remain visible and clickable.",
+              "check": "The box fits the available playfield."
+            },
+            {
+              "title": "Get a random point in the area",
+              "where": "Loops GameMode → StartWave function.",
+              "do": "Before the existing Spawn Actor node, use Get Actor of Class (BP_TargetSpawnArea) → Cast To BP_TargetSpawnArea → Get SpawnBounds component. Call Get World Location and Get Scaled Box Extent on SpawnBounds, then feed those values into Random Point in Bounding Box (Origin / Box Extent).",
+              "why": "The box controls location even if the level designer moves it later.",
+              "check": "A random Vector is produced inside the placed box."
+            },
+            {
+              "title": "Use the random location for every target",
+              "where": "Loops GameMode → Spawn Actor From Class inside the existing For Loop.",
+              "do": "Replace the old Loop Index × Spacing vector feeding Make Transform.Location with the Random Point in Bounding Box result. Keep the For Loop number of iterations unchanged. Set Spawn Collision Handling Override to Always Spawn, Ignore Collisions for the controlled test arena.",
+              "why": "The loop still controls quantity; only the placement strategy changes.",
+              "check": "Wave 1 still makes five targets, but they appear in different places on each restart."
+            },
+            {
+              "title": "Check clickability and overlapping",
+              "where": "Play In Editor.",
+              "do": "Restart with R at least three times. Confirm that every target is visible and clickable. If targets overlap too often, increase box dimensions or reduce target scale. Keep SpawnBounds non-colliding.",
+              "why": "Randomness needs quality checks or it can create unfair layouts.",
+              "check": "No target is hidden behind the HUD or unreachable."
+            },
+            {
+              "title": "Use the system for your own game idea",
+              "where": "Artist/designer PC and shared Teams folder.",
+              "do": "Replace the cube with your own target asset or design a new themed playfield. Adjust the area and target size together so difficulty remains fair.",
+              "why": "A reusable wave and random-spawn system can support whack-a-mole, defence, shooting galleries or collection games.",
+              "check": "Your pair can demonstrate a recognisably original game built from the same core mechanic."
+            }
+          ],
+          "check": "Wave target counts remain 5→9, but each wave spawns targets at varied clickable positions inside a designer-controlled zone.",
+          "fix": "No targets? Confirm a BP_TargetSpawnArea is placed and the Get Actor of Class cast succeeds. Overlap hides targets? Expand SpawnBounds, scale down targets or keep fixed positions for the required version."
         }
       ]
     }

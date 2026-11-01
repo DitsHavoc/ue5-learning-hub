@@ -73,7 +73,17 @@ async function run(){
       await page.waitForSelector('.mini-upgrade-card',{timeout:10000});
       if(await page.locator('.mini-upgrade-card').count()!==4)fail.push(device.name+': expected four upgrade pathways');
       const allUpgrades=await page.evaluate(()=>window.UE5_MINI_UPGRADE_DATA.projects.map(p=>({id:p.project,stages:p.stages.map(s=>s.id)})));
-      if(allUpgrades.reduce((n,p)=>n+p.stages.length,0)!==11)fail.push(device.name+': wrong total upgrade stages');
+      if(allUpgrades.reduce((n,p)=>n+p.stages.length,0)!==19)fail.push(device.name+': wrong total upgrade stages');
+      const expectedPaths={
+        'balloon-popper':['score','respawn','timer','results','risk'],
+        'bowling':['pin-score','throws','polish','power'],
+        'clicker':['shop','display','goal','granny','training','farm'],
+        'loops':['targets','waves','race','random']
+      };
+      for(const group of allUpgrades){
+        if(JSON.stringify(group.stages)!==JSON.stringify(expectedPaths[group.id]))
+          fail.push(device.name+': incorrect '+group.id+' upgrade sequence '+JSON.stringify(group.stages));
+      }
       for(const group of allUpgrades){
         await page.goto(base+'/#/mini-projects/'+group.id,{waitUntil:'load'});
         if(await page.locator('.mini-upgrade-promo a[href="#/mini-projects/upgrades/'+group.id+'"]').count()!==1)fail.push(device.name+': '+group.id+' overview upgrade link missing');
@@ -81,6 +91,7 @@ async function run(){
         await page.waitForURL(url=>url.hash==='#/mini-projects/upgrades/'+group.id,{timeout:10000});
         await page.waitForSelector('.mini-upgrade-card',{timeout:10000});
         if(await page.locator('.mini-upgrade-card').count()!==group.stages.length)fail.push(device.name+': '+group.id+' upgrade cards missing');
+        if(await page.locator('.mini-upgrade-card .eyebrow').count()!==group.stages.length)fail.push(device.name+': '+group.id+' stage tier labels missing');
         for(const stageId of group.stages){
           await page.goto(base+'/#/mini-projects/upgrades/'+group.id+'/'+stageId,{waitUntil:'load'});
           await page.waitForSelector('.mini-upgrade-step',{timeout:10000});

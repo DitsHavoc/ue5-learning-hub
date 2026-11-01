@@ -1,4 +1,4 @@
-/* Mini-Project Mayhem — November 2026. One jam brief, linked from the four canonical Mini-Projects. */
+/* Mini-Project Mayhem — November 2026, revised upgrade pathways. */
 window.UE5_MINI_JAM_DATA = {
   "title": "Mini-Project Mayhem",
   "dates": "2–13 November 2026",
@@ -9,34 +9,34 @@ window.UE5_MINI_JAM_DATA = {
       "name": "Balloon Popper",
       "icon": "◉",
       "foundation": "Mouse interaction, popping and variables",
-      "ideas": "Add a timer, scoring streak, moving targets or risky balloons."
+      "ideas": "Create endless balloons: score pops, respawn targets in a visible area, then add a timer and risky targets."
     },
     {
       "project": "loops",
       "name": "Loops & Spawning",
       "icon": "↻",
       "foundation": "Loops, spawning and repeating gameplay",
-      "ideas": "Build escalating waves, hazards, a survival timer or a pattern challenge."
+      "ideas": "Turn spawned cubes into five escalating waves, add a countdown and optionally randomise their positions."
     },
     {
       "project": "bowling",
       "name": "Bowling",
       "icon": "●",
       "foundation": "Physics, collisions and scoring",
-      "ideas": "Add a points system, rounds, obstacles or moving pins."
+      "ideas": "Count pins, reset the ball for three throws, add scoring and a bonus pin."
     },
     {
       "project": "clicker",
       "name": "Clicker",
       "icon": "✦",
       "foundation": "Clicking, numbers and progression",
-      "ideas": "Add upgrades, a target score, limited time or a small shop."
+      "ideas": "Buy Grannies that earn 1 point/sec, train them for more output and unlock other producers."
     }
   ],
   "rules": [
     "Start by completing one of the four existing Mini-Projects. Both partners must understand the original game.",
     "Keep it to one small level or playable space and one main gameplay mechanic.",
-    "Add at least one meaningful gameplay change. A visual reskin alone does not count.",
+    "Add at least one meaningful gameplay change, using the guided Essential upgrades. A visual reskin alone does not count.",
     "Aim for a complete 2–5 minute game with a clear objective and an ending or repeatable score.",
     "Make the look your own. Credit anything you did not create."
   ],
@@ -51,15 +51,15 @@ window.UE5_MINI_JAM_DATA = {
     {
       "when": "Week 1",
       "title": "Build a working prototype",
-      "programmer": "Finish the tutorial, then add one change that affects how the game plays.",
+      "programmer": "Complete the chosen tutorial and start the Essential upgrades: a score plus the first piece of the repeatable game loop.",
       "designer": "Build/import the first original asset, plan the layout and UI, and test the prototype.",
       "check": "By Fri 6 Nov: a playable prototype, even if it uses placeholders."
     },
     {
       "when": "Week 2",
       "title": "Finish the experience",
-      "programmer": "Integrate assets, feedback, win/lose or scoring, and fix issues found during tests.",
-      "designer": "Complete the look, support level/UI decisions, and organise playtests with another pair.",
+      "programmer": "Finish the repeatable game loop and playable end state. Add more Essential upgrades if time permits, then polish and fix bugs.",
+      "designer": "Integrate custom artwork, improve player feedback, test the game and help prioritise essential fixes over optional features.",
       "check": "By Thu 12 Nov: playable from start to finish."
     },
     {
