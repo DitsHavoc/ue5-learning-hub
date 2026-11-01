@@ -4,15 +4,16 @@
 ## Purpose
 Turn one existing UE5 Mini-Project into a short, replayable original game (or a repeatable Clicker progression loop). The final showcase demo lasts 2–5 minutes. This is a low-pressure two-week studio challenge, not a large assessed production brief. Use the student-facing site route **Build → Mini-Projects → Mini-Project Mayhem** (`#/mini-projects/jam`).
 
-## Launch session (around 100 minutes)
-- 0–10 min — explain the jam, four foundations, two roles and the optional solo route.
-- 10–20 min — form pairs or solo teams. Programmer leads the existing Unreal build; artist/designer opens **Build → Mini-Projects → Mini-Project Mayhem → Artist & Game Designer Track** on their own PC.
-- 20–45 min — programmer explores a starter tutorial; designer follows Mission 1 (play/observe, record feedback). No final game idea is required today.
-- 45–80 min — programmer follows the original tutorial; designer makes two fast readability mock-ups and tests them against what the existing game displays.
-- 80–95 min — share a three-minute partner handover: what was playable, what was confusing and one safe design experiment for next time. A short shortlist of starter games is fine.
-- 95–100 min — save evidence in Teams and back up the local Unreal project. The game concept can still be undecided.
+## Launch session (100 minutes) — research BEFORE making
+- 0–10 min — explain the jam, four Mini-Project starters, pair/solo roles and the two-week scope. Both students open **Build → Mini-Projects → Mini-Project Mayhem → Artist & Game Designer Track**.
+- 10–30 min — **together**, research two similar games by playing or watching examples. Note the controls, repeatable loop, progress, feedback and relevant visual choices. Save names/links.
+- 30–55 min — **together**, break the game into systems, UI and assets. Mark Essential versus Optional. Show the worked Clicker example: click → points → shop → automatic income; distinguish programmer logic from designer graphics.
+- 55–75 min — agree a provisional starter (or shortlist two), one manageable gameplay improvement, Must Have/Could Add/Not Now features and ONE labelled screen sketch. No polished art or backstory.
+- 75–100 min — split into programmer (first three build actions) and designer (up to three visuals/UI items) checklists. Rejoin for a five-minute handover and save the plan in Teams. The game theme can remain undecided.
 
-**Session 2:** the designer follows Mission 2 (two visual styles, one transparent PNG icon or simple FBX test asset, compare readability and export). The programmer continues the tutorial/first upgrade. Only **after** they have seen the working mechanic should the pair settle on a one-sentence concept in Mission 3. No student should spend the first two lessons inventing a giant story or polishing assets that may be thrown away.
+**Session 1 outcome:** a two-game comparison, essentials breakdown, labelled screen sketch and role handover. The programmer does not need to rush into Unreal before the plan is useful. A solo student researches one example and prepares smaller combined checklists.
+
+**Session 2:** the designer follows Mission 2 (two visual styles, one transparent PNG icon or simple FBX test asset, compare readability and export). The programmer begins the original Mini-Project tutorial and progresses towards the first Essential upgrade. Only **after** they have seen the working mechanic should the pair settle on a one-sentence concept in Mission 3. No student should spend the first two lessons inventing a giant story or polishing assets that may be thrown away.
 
 ## Teacher checkpoints
 - **Friday 6 November:** original mechanic functional; new gameplay idea demonstrated, possibly with placeholders; one custom art/design asset ready.
@@ -129,7 +130,7 @@ All site checks validate route/rendered content consistency, not actual Unreal E
 ## Full parallel Artist & Game Designer Track (v3.66.7)
 Canonical student route: **Build → Mini-Projects → Mini-Project Mayhem → Artist & Game Designer Track** (`#/mini-projects/jam/designer`). Each of the 19 upgrade pages links directly to a project-specific focused route, such as `#/mini-projects/jam/designer/clicker`. It is a single track belonging to the jam, NOT a new top-level navigation category and not another copy of the source mini-projects.
 
-The designer has six studio missions. Sessions **1–2 do not require a chosen concept**: (1) observe and test starter mechanics, produce six observations and two quick UI/readability sketches; (2) build two contrasting looks, export one usable transparent PNG/FBX test asset and compare with classmates. In the third mission, once the programmer's original game/first upgrade is demonstrated, choose a feasible direction and limit the initial art list to three items. Then create/revise one integrated original asset; make readable HUD and visual-feedback work; own player testing, fixes and the final showcase explanation. Each mission names software/location, exact actions, a visible check, evidence, a short Teams handover and a lighter solo alternative.
+The designer has six studio missions. Sessions **1–2 do not require a chosen concept**: (1) both roles research two similar games, break down essential systems/assets, sketch one labelled game screen and make next-step checklists; (2) the designer builds two contrasting looks, exports one usable transparent PNG/FBX test asset and compares with classmates. In the third mission, once the programmer's original game/first upgrade is demonstrated, choose a feasible direction and limit the initial art list to three items. Then create/revise one integrated original asset; make readable HUD and visual-feedback work; own player testing, fixes and the final showcase explanation. Each mission names software/location, exact actions, a visible check, evidence, a short Teams handover and a lighter solo alternative.
 
 Every game also has a four-step **specific kit**:
 - **Clicker:** themed main-click object (PNG), shop/Granny graphics, readable costs and passive production. Do not duplicate `ClickerGameUI`.
@@ -141,6 +142,9 @@ Every game also has a four-step **specific kit**:
 
 **Solo scaling:** the solo student does one observation/thumbnail, one original simple graphic/material, and one playtest fix; they still complete the programmer's minimum playable game. They are not expected to match the asset quantity of two people.
 
-**Teacher quality gates:** ask for an observation rather than a final concept at the end of Session 1; a test export + comparative feedback in Session 2; one chosen screen mock-up and first asset handover after the starter works; one integrated screenshot by Week 1/early Week 2; a fresh-player test and a before/after image before showcase. Artwork is credited and demonstrably student-created, and results are stored in Teams, not tracked by the site.
+**Teacher quality gates:** ask for two real game examples, an Essential/Optional breakdown, a labelled screen sketch and shared role handover at the end of Session 1, rather than a final theme; a test export + comparative feedback in Session 2; one chosen screen mock-up and first asset handover after the starter works; one integrated screenshot by Week 1/early Week 2; a fresh-player test and a before/after image before showcase. Artwork is credited and demonstrably student-created, and results are stored in Teams, not tracked by the site.
 
 Only the new jam/designer content, rendering, validation, browser tests, notes and version strings should change; the original source lessons and all existing 19 programmer upgrade stage contents/IDs and progress keys remain untouched.
+
+## Session 1 shared research revision (1 November 2026)
+Both programmer and designer now research and break down similar games before starting their specialist work. This changes only the first designer mission and the jam launch guidance; missions 2–6, all four designer kits, the 19 upgrade stages and the 16 original Mini-Project tutorials remain unchanged. A final theme is still not required in the first two sessions.

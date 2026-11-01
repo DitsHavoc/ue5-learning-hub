@@ -43,10 +43,10 @@ window.UE5_MINI_JAM_DATA = {
   "milestones": [
     {
       "when": "Mon 2 Nov",
-      "title": "Start and explore",
-      "programmer": "Choose a Mini-Project. Follow its guided stages and get the original mechanic working.",
-      "designer": "Follow Designer Track Session 1: test the four starter mechanics, record what players see, and explore possibilities. No final theme or finished model needed yet.",
-      "check": "Pick a starter or shortlist two. Save a short playtest note and agree what each person does next; the game concept can remain provisional."
+      "title": "Research and scope",
+      "programmer": "Research similar games with your designer, break down the essential mechanics, and write the first three build tasks. Start the original tutorial in Session 2.",
+      "designer": "Follow Designer Track Session 1 with your programmer: research two similar games, list systems and assets, sketch a screen, and agree role checklists. The final theme can wait.",
+      "check": "Save two game examples, an Essential/Optional feature breakdown, a labelled screen sketch and role checklists. The starter and theme can remain provisional."
     },
     {
       "when": "Week 1",
@@ -75,7 +75,7 @@ window.UE5_MINI_JAM_DATA = {
     "An original visual identity with at least one student-created game asset or piece of UI.",
     "Evidence of the original tutorial and your gameplay extension (a short before/after demo or screenshots).",
     "A very short team handover: who made what, what changed, and one thing you would improve.",
-    "Designer evidence: early mechanics review, two provisional visual ideas, a tested asset/UI, and a short playtest/fix note (lighter version for solo students)."
+    "Designer evidence: early research into similar games, an essential systems/asset breakdown and first screen sketch, then style experiments, a tested asset/UI and a short playtest/fix note (lighter version for solo students)."
   ],
   "awards": [
     "Best Gameplay",
@@ -85,46 +85,46 @@ window.UE5_MINI_JAM_DATA = {
   ],
   "designerTrack": {
     "title": "Artist & Game Designer Track",
-    "intro": "A full parallel pathway, not a few optional pictures. Begin immediately on your own PC even when your programmer is still learning the starter tutorial. Your first two sessions deliberately work WITHOUT a final game concept.",
+    "intro": "A full parallel pathway, not a few optional pictures. In Session 1, work with your programmer to research similar games and plan the essentials BEFORE building. You can carry out the research and breakdown on your own if your partner is not ready. Session 2 is independent visual experimentation. Neither session requires a final game theme.",
     "sharedFolder": "Create a Teams folder called Designer Pack with subfolders 01_Research, 02_Concepts, 03_Exports, and 04_Testing. Use meaningful filenames such as target_variant_A.png; never overwrite your partner’s Unreal project.",
     "handoverRule": "Only the programmer edits the live Unreal project. The designer hands over PNG/FBX/TGA exports plus a one-sentence use and placement note. The programmer imports and tests a COPY; both decide if the asset improves gameplay.",
-    "soloRule": "Solo students can follow these missions in shorter bursts: complete one early test and one simple visual experiment, then make ONE polished original asset/UI element and run one short playtest. They do not need to match a two-person studio’s asset quantity.",
+    "soloRule": "Solo students can follow these missions in shorter bursts: research one similar game, identify a tiny playable core, make one simple screen sketch and visual experiment, then ONE polished original asset/UI element and one short playtest. They do not need to match a two-person studio’s workload.",
     "missions": [
       {
         "id": "observe",
-        "when": "Session 1 — before the idea is decided",
-        "title": "Play, observe and find the opportunities",
+        "when": "Session 1 — research together before the idea is decided",
+        "title": "Research similar games and plan what you need",
         "independent": true,
-        "goal": "Discover what the starting game actually does and what a player might need. Produce useful evidence without choosing a story, genre or final style.",
+        "goal": "Work with your programmer to investigate similar games, break down what they need, and plan a small achievable game before starting the build. No final theme or polished artwork is required.",
         "steps": [
           {
-            "title": "Create a small test sheet",
-            "where": "Teams → Designer Pack → 01_Research; Word/OneNote or a simple text file.",
-            "do": "Make a four-column table: What I did / What the game showed / What confused me / One possible improvement. Leave room for six short observations.",
-            "check": "The sheet is ready to fill in, with no final game theme or elaborate design document required."
+            "title": "Research two similar games (20 minutes)",
+            "where": "Browser, gameplay video or playable examples → Teams → Designer Pack → 01_Research; work with your programmer.",
+            "do": "Choose one likely Mini-Project starter (or shortlist two). Find TWO real games using a similar main mechanic, then play or watch a short gameplay example of each. In a simple table record the game name/link, what the player does, how progress or scoring works, what feedback appears on screen, and ONE feature worth learning from. Example: for Clicker, compare how two incremental games show points, upgrades and passive income. Do not copy another game's name or art.",
+            "check": "Two named examples with links and short factual notes. You can explain the core gameplay loop in your own words, even if your team has not chosen a final theme."
           },
           {
-            "title": "Try the starter and watch another player",
-            "where": "Open whichever original Mini-Project your pair is considering; or watch the programmer demo the working part.",
-            "do": "Spend 15–20 minutes trying the main input and deliberately making mistakes. Ask someone else to try it without hints. Write at least three observed facts (e.g. no clear score, hard-to-see target, no indication that a purchase worked). If no playable build exists, inspect screenshots/tutorial pages and predict two problems to test later.",
-            "check": "Three observations describe things seen or tested, not invented criticism."
+            "title": "Break down the systems and assets (25 minutes)",
+            "where": "Same research sheet in Teams; create a small table headed Feature / What it must do / Programmer / Designer / Essential or optional.",
+            "do": "From the examples, list the pieces your own simple game would require: player action and controls, score or progress, repeatable loop, end/restart or ongoing progression, on-screen information, visible objects, feedback and optional sound. Mark each Essential or Optional. WORKED EXAMPLE — Clicker: click object → add points → show balance → buy upgrade → earn points automatically. Programmer needs click event, score variable, shop purchase logic and income timer; designer needs a readable click target, score/shop layout, costs, feedback and a background. Other starters might need targets and a timer (Balloon Popper), ball/pins and throws (Bowling), or targets/waves and a countdown (Loops).",
+            "check": "Your list separates gameplay systems from artwork/UI and makes it clear what MUST exist before optional extras."
           },
           {
-            "title": "Sketch two ways to improve readability",
-            "where": "Photoshop, pencil or OneNote → Designer Pack → 01_Research.",
-            "do": "Make two QUICK thumbnails of the same game screen. One should show clearer player feedback (score, timer, cost or turns); the other a stronger visual focus (target, path, shop button or pins). Use basic rectangles and labels; no polished art yet.",
-            "check": "Both thumbnails can be understood in under 10 seconds, even if the final game concept changes."
+            "title": "Plan a realistic first version (20 minutes)",
+            "where": "OneNote, Word, Photoshop or pencil → Designer Pack → 01_Research.",
+            "do": "Pick a provisional starter or keep a shortlist of two. Write one sentence describing what players repeatedly DO and one meaningful gameplay improvement beyond the original tutorial. Sort ideas into MUST HAVE (the playable core), COULD ADD (if there is time) and NOT NOW (too large for two weeks). Draw ONE rough labelled game screen showing the main interactive area and useful information such as score, time, throws, wave or shop. Rectangles and notes are fine; do not spend the lesson making finished art or a backstory.",
+            "check": "Your first version can be built around one original Mini-Project, one main gameplay loop and one manageable improvement. A classmate can point to the important gameplay area and information on the sketch."
           },
           {
-            "title": "Run a five-minute partner review",
-            "where": "With the programmer at the end of the lesson or via a Teams message.",
-            "do": "Show the observations and thumbnails; ask which gameplay information will actually exist in the first playable upgrade. Agree on ONE low-risk design experiment to try in the next session. Keep both visual possibilities open.",
-            "check": "Your partner can name one usability problem and one possible visual fix."
+            "title": "Split the work and agree next steps (25 minutes)",
+            "where": "Sit with your programmer, then save both short checklists in Designer Pack → 01_Research.",
+            "do": "Compare the breakdown together. PROGRAMMER: list the first three systems in build order (original starter tutorial first, then the first Essential upgrade); identify which variables/UI values will eventually be needed. DESIGNER: list up to three visuals/UI items that support those systems; label the first simple asset or mock-up for Session 2. Agree who will do what next and finish with a five-minute handover. For solo work, make both lists much shorter. You may change the theme later without losing this plan.",
+            "check": "Both roles have a clear next action, agree on the same essential game loop and have not promised features that cannot fit the jam."
           }
         ],
-        "deliver": "A six-row observation sheet, two rough screen thumbnails, and one short partner handover.",
-        "handover": "“I saw ___. My first safe design experiment will be ___, and it does not depend on the final theme.”",
-        "solo": "Observe your own play and test the controls with a classmate if possible; two observations and one annotated thumbnail are enough."
+        "deliver": "A short comparison of two games, an Essential/Optional systems-and-assets breakdown, one annotated screen sketch and short programmer/designer next-step checklists.",
+        "handover": "“Our starter is ___ (or our shortlist is ___). The player will ___. Our essential systems are ___. Programmer next: ___. Designer next: ___. The theme can wait.”",
+        "solo": "Research ONE similar game, make a short essentials list, draw one labelled sketch and name one programming and one design task. Keep the game smaller than a two-person team."
       },
       {
         "id": "style-lab",
