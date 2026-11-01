@@ -83,3 +83,36 @@
 .mini-illustration a:hover{background:#1a3448}
 .mini-source-page[open] .mini-page-text{min-width:0}
 @media(max-width:700px){.mini-illustration{margin:12px 0 18px}.mini-illustration a{padding:8px}.mini-illustration img{max-height:310px}.mini-illustration figcaption{font-size:11px}}
+
+/* Mini-Project Mayhem: a challenge within Build → Mini-Projects. */
+.mini-jam-banner{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:22px 24px;margin:0 0 18px;border:1px solid #4b7d8d;background:#123246;border-radius:16px}
+.mini-jam-banner h2{margin:8px 0;font-size:24px}
+.mini-jam-banner p{margin:0;line-height:1.6;color:#d3e4f0}
+.mini-jam-banner .button{flex-shrink:0}
+.mini-jam-hero{border-color:#538d9a;background:linear-gradient(125deg,#17475d,#14283b 65%,#121725)}
+.mini-jam h2{font-size:clamp(21px,2.5vw,26px);margin:8px 0 17px}
+.mini-jam h3{font-size:18px;margin:0 0 9px}
+.mini-jam-section{margin:28px 0}
+.mini-jam-section>.eyebrow{display:block;margin-bottom:8px}
+.mini-jam-section>h2{margin-top:0}
+.mini-jam-starters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.mini-jam-starter{display:flex;flex-direction:column;gap:8px;min-width:0;padding:21px;border:1px solid #385d75;background:#132435;border-radius:15px;color:inherit;text-decoration:none}
+.mini-jam-starter:hover,.mini-jam-starter:focus-visible{border-color:#74d2ff;background:#1b3347}
+.mini-jam-starter-icon{font-size:26px;color:#82dcff}
+.mini-jam-starter h3,.mini-jam-starter p{margin:0}
+.mini-jam-starter p{color:#d0e0eb;line-height:1.6}
+.mini-jam-starter small{line-height:1.65;color:#c1d7e8;flex:1}
+.mini-jam-starter b{font-size:13px;color:#9de5ff}
+.mini-jam-roles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.mini-jam-roles .mini-information{margin:0}
+.mini-jam-workflow code{overflow-wrap:anywhere}
+.mini-jam-milestone{display:grid;grid-template-columns:112px minmax(0,1fr);gap:22px;padding:18px 20px;margin-bottom:11px;border:1px solid #344f64;background:#142434;border-radius:14px}
+.mini-jam-when{font-weight:800;color:#99defb}
+.mini-jam-milestone p{line-height:1.65;color:#cbdde9;margin:7px 0}
+.mini-jam-milestone .mini-jam-check{color:#a6e3cb}
+.mini-jam-rules,.mini-jam-deliverables{padding-left:25px;margin:0}
+.mini-jam-rules li,.mini-jam-deliverables li{padding-left:6px;margin:12px 0;line-height:1.7;color:#d7e5ef}
+.mini-jam-rules li::marker{color:#90defb;font-weight:700}
+.mini-jam-awards{margin-top:22px}
+.mini-jam-awards .mini-chips span{color:#d4f5ef;border-color:#527d77}
+@media(max-width:700px){.mini-jam-banner{display:block;padding:18px}.mini-jam-banner .button{display:block;text-align:center;margin-top:18px}.mini-jam-starters,.mini-jam-roles{grid-template-columns:1fr}.mini-jam-milestone{grid-template-columns:1fr;gap:5px;padding:16px}.mini-jam-when{font-size:13px}}
