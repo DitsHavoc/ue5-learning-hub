@@ -1,4 +1,4 @@
-/* Individual Loops student review, original illustrated tutorials untouched. */
+/* Loops student review, original three source Mini-Projects unchanged. */
 window.UE5_MINI_UPGRADE_DATA = {
   "version": "3.66.5",
   "title": "Mini-Project Upgrade Walkthroughs",
@@ -1723,64 +1723,64 @@ window.UE5_MINI_UPGRADE_DATA = {
         },
         {
           "id": "random",
-          "title": "4. Optional: randomise target positions safely",
+          "title": "4. Optional: vary target positions without overlaps",
           "tier": "Creative",
-          "outcome": "Every new wave spawns within a marked, visible area rather than lining targets up at fixed coordinates.",
-          "designer": "Design a level that is readable with targets appearing anywhere inside the playfield. Keep target shapes and colours easy to distinguish.",
+          "outcome": "Targets appear in slightly different places on each wave, while staying in their nine separate grid cells so they remain visible and clickable.",
+          "designer": "Adjust the arena background and target artwork around the nine-slot layout. Leave space between targets so randomised positions stay fair.",
           "steps": [
             {
-              "title": "Create a visible spawn area actor",
-              "where": "Content Drawer → Loops → Blueprint Class → Actor.",
-              "do": "Name it BP_TargetSpawnArea. Add a Box Collision component named SpawnBounds. Set Collision Presets to NoCollision and initially use box extents X=50, Y=380, Z=220. Compile.",
-              "why": "A level designer can move and resize one box to control random spawn positions.",
-              "check": "The Box Collision component exists and does not block mouse traces."
+              "title": "Keep the nine-cell grid as your safety net",
+              "where": "BP_LoopsGameMode → StartWave FUNCTION → existing Make Vector and Make Transform.",
+              "do": "Locate the grid maths from Stage 2: Column ×180 feeds Y and 150 + Row ×130 feeds Z. Do not remove the existing For Loop, Columns, Rows, target counts or Make Transform. You will add a small offset to each grid cell, not replace the whole grid with unbounded random points.",
+              "why": "Each index still owns one separate position, which prevents the most common problem of nine randomly overlapping cubes.",
+              "check": "The old target grid still compiles and displays all waves before any randomness is added."
             },
             {
-              "title": "Place the area in the player view",
-              "where": "Open the Loops level.",
-              "do": "Drag one BP_TargetSpawnArea actor into the map. Move and resize the SpawnBounds box so its whole volume sits in the camera view, above the floor and away from the HUD. Save the level.",
-              "why": "Random positions are only useful when targets remain visible and clickable.",
-              "check": "The box fits the available playfield."
+              "title": "Randomise the left/right position a little",
+              "where": "StartWave → original Make Vector Y value (Column ×180).",
+              "do": "Add Random Float in Range with Min=-20 and Max=20. Add the random output to the existing Column ×180 value using Float + Float (automatic integer-to-float conversion is fine). Feed that SUM into Make Vector.Y. Keep Make Vector.X=200.",
+              "why": "The centre of each column can vary by 20cm, but neighbouring targets stay well apart.",
+              "check": "Press Play twice: the left/centre/right columns are recognisable but individual targets have slightly different horizontal positions."
             },
             {
-              "title": "Get a random point in the area",
-              "where": "Loops GameMode → StartWave function.",
-              "do": "Find the placed BP_TargetSpawnArea with Get Actor of Class → Cast To BP_TargetSpawnArea, then get its SpawnBounds component. Connect Get World Location to the Center pin of Random Point in Bounding Box, and Get Scaled Box Extent to its Half Size pin (UE5.8). Keep SpawnBounds unrotated.",
-              "why": "The box controls location even if the level designer moves it later.",
-              "check": "A random Vector is produced inside the placed box."
+              "title": "Randomise the up/down position a little",
+              "where": "StartWave → original Make Vector Z value (150 + Row ×130).",
+              "do": "Add a SECOND Random Float in Range with Min=-10 and Max=10. Add its Return Value to the existing 150 + Row ×130 using Float + Float. Connect the SUM into Make Vector.Z. Keep the same Spawn Actor From Class node and the original target count controlled by CurrentWaveCount.",
+              "why": "With 130cm row spacing, a small ±10cm variation allows movement without pushing 100cm cubes into the next row.",
+              "check": "A wave still contains exactly 5–9 targets, with vertical variation but no obvious overlap."
             },
             {
-              "title": "Use the random location for every target",
-              "where": "Loops GameMode → Spawn Actor From Class inside the existing For Loop.",
-              "do": "In StartWave, replace the grid Make Transform.Location created in Upgrade 2 with the Random Point in Bounding Box Return Value. Keep the same CurrentWaveCount-controlled For Loop iterations (5 to 9). For the simple axis-aligned version, do not rotate SpawnBounds. Set Spawn Collision Handling Override to Always Spawn, Ignore Collisions only for this controlled target arena.",
-              "why": "The loop still controls quantity; only the placement strategy changes.",
-              "check": "Wave 1 still makes five targets, but they appear in different places on each restart."
+              "title": "Keep independent random values per spawn",
+              "where": "BP_LoopsGameMode → StartWave → Loop Body → Spawn Actor From Class.",
+              "do": "Ensure the Random Float in Range nodes feed the Make Vector inside the ONE Spawn Actor call that is executed for every Loop Body iteration. Do not cache one shared random offset before the loop or all targets in a wave will shift together. Compile.",
+              "why": "A new random value is used for each Actor as the loop spawns it.",
+              "check": "The targets within a wave have slightly different positions, not one perfectly rigid row translated together."
             },
             {
-              "title": "Check clickability and overlapping",
-              "where": "Play In Editor.",
-              "do": "Restart with R at least three times. Confirm that every target is visible and clickable. If targets overlap too often, increase box dimensions or reduce target scale. Keep SpawnBounds non-colliding.",
-              "why": "Randomness needs quality checks or it can create unfair layouts.",
-              "check": "No target is hidden behind the HUD or unreachable."
+              "title": "Test repeatability and accessibility",
+              "where": "Content/Loops/LoopsLevel → Play In Editor; press R between attempts.",
+              "do": "Try three new games and clear at least one late wave with nine targets. Make sure Cam_TargetRush frames all nine cubes and that none is partly hidden behind the HUD or another cube. If a new art asset is larger than the starter Cube, reduce the random ranges or expand grid spacing and reframe the camera.",
+              "why": "Safe positioning matters more than maximum randomness for a beginner project.",
+              "check": "All nine remain visible, separated and clickable across repeated waves and restarts."
             },
             {
-              "title": "Use the system for your own game idea",
-              "where": "Artist/designer PC and shared Teams folder.",
-              "do": "Replace the cube with your own target asset or design a new themed playfield. Adjust the area and target size together so difficulty remains fair.",
-              "why": "A reusable wave and random-spawn system can support whack-a-mole, defence, shooting galleries or collection games.",
-              "check": "Your pair can demonstrate a recognisably original game built from the same core mechanic."
+              "title": "Give the game its own identity",
+              "where": "Artist/designer workstation → 3ds Max/Photoshop and shared Teams files.",
+              "do": "Create a new target mesh/texture or themed arena backdrop. Share FBX/PNG files through Teams so the programmer can import them. Check the new target size against the grid spacing and tune the small offsets together.",
+              "why": "Students can apply the same system to targets, pickups or shooting galleries without making their layouts unfair.",
+              "check": "The team has an original game asset and can explain how each new wave stays playable despite position changes."
             }
           ],
-          "check": "Wave target counts remain 5→9, but each wave spawns targets at varied clickable positions inside a designer-controlled zone.",
-          "fix": "No targets? Confirm a BP_TargetSpawnArea is placed and the Get Actor of Class cast succeeds. Overlap hides targets? Expand SpawnBounds, scale down targets or keep fixed positions for the required version.",
+          "check": "Five waves still spawn 5→6→7→8→9 targets. Each target moves slightly within its own cell on each wave; all remain visible, separated and clickable, with no extra Actor or spawning timer.",
+          "fix": "No variation? Check the two Random Float in Range nodes feed the sums for Make Vector Y and Z INSIDE StartWave. All targets shifted together? Do not generate one shared offset before the For Loop. Overlapping after new meshes? Reduce random ranges or increase column/row spacing and reframe Cam_TargetRush. For a reliable fallback, disconnect the random sums and restore the original Stage 2 grid maths.",
           "designerSteps": [
-            "Plan: Design a level that is readable with targets appearing anywhere inside the playfield. Keep target shapes and colours easy to distinguish. Draw a small mock-up of the nine-target 3×3 grid and timer.",
-            "Create: make one original element for Optional: randomise target positions safely using targets, arena props or wave HUD graphics. Export as FBX or PNG to your shared Teams folder.",
-            "Integrate and test: ask the programmer to import your asset; play together and confirm every target stays visible and clickable."
+            "Plan: sketch a nine-target playfield with enough space for readable target art and a fixed four-label HUD.",
+            "Create: make one themed target mesh or material and a simple backdrop. Export FBX/PNG files through Teams; avoid enlarging targets until the grid is tested.",
+            "Integrate and test: ask the programmer to import the assets, then clear wave 5 three times to verify the small random offsets never hide a target."
           ],
-          "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
-          "beforeStart": "The complete five-wave game works already. Random positions are optional and can replace the fixed grid.",
-          "commonMistake": "A random position can be hidden by another object. If this happens, return to the reliable 3x3 grid or enlarge the spawn box.",
+          "designerCheck": "Nine independent target positions vary slightly while remaining clickable with the team-designed art; a brief playtest note or screenshot records the result.",
+          "beforeStart": "The complete five-wave Target Rush game works with the reliable 3×3 grid, HUD, 90-second timer and R replay. Back up that working version before changing placement. You do NOT need to create a new spawner Actor for this safe variation.",
+          "commonMistake": "Using one unrestricted random spawn Box can place two or more large cubes in the same location, preventing a player clearing a wave. Add small independent jitter to each existing grid slot instead.",
           "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         }
       ],
