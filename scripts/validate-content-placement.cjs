@@ -148,6 +148,21 @@ function audit(root = path.resolve(__dirname, '..')) {
     fail('Clicker upgrade','main button must retain the original GameMode Assign On Clicked/SetScoreText workflow');
   if(!clickUI.includes('ClickerUI')||!clickUI.includes('RefreshShop'))
     fail('Clicker display upgrade','original GameMode main click must call widget RefreshShop');
+  const grannySteps=items(findUpgrade('clicker','granny')?.steps);
+  const at=(title)=>grannySteps.findIndex(x=>x.title===title);
+  if(!(at('Connect Granny purchases')>=0 && at('Check that a Granny can actually be bought')>at('Connect Granny purchases') && at('Start exactly one repeating production timer')>at('Check that a Granny can actually be bought')))
+    fail('Clicker Granny upgrade','must make the Granny button purchasable and test it before teaching the timer');
+  const grannyGuide=guideText('clicker','granny');
+  if(!grannyGuide.includes('Pure')||!grannyGuide.includes('Production')||!grannyGuide.includes('GetProductionPerSecond'))
+    fail('Clicker Granny upgrade','must explain the Pure function output in UE5.8');
+  if(!grannyGuide.includes('RefreshAutoHUD')||!grannyGuide.includes('ClickerUI'))
+    fail('Clicker Granny upgrade','must refresh passive UI and preserve the original ClickerUI');
+  const displayGuide=guideText('clicker','display');
+  if(!displayGuide.includes('Points: {Number}')||!displayGuide.includes('Per click: {Number}')||!displayGuide.includes('Next upgrade: {Number}'))
+    fail('Clicker display upgrade','must give concrete dynamic text examples');
+  const milestone=guideText('clicker','goal');
+  if(!milestone.includes('restore MilestoneTarget=500')||!milestone.includes('MilestoneText'))
+    fail('Clicker milestone','temporary proof test must restore target and displayed text');
   const bowlPower=guideText('bowling','power');
   if(!bowlPower.includes('Add Force')||!bowlPower.includes('200000')||!bowlPower.includes('Accel Change'))
     fail('Bowling power upgrade','must reuse original Bowl Add Force X 200000, Accel Change');
