@@ -20,7 +20,7 @@ Turn one existing UE5 Mini-Project into a complete 2–5 minute original game. T
 ## Revised game loops (v3.65.0)
 The original Mini-Projects are foundations, not finished games. Do **not** require every pair to complete all four tutorials or every optional upgrade. After completing one tutorial, follow the **Essential** steps in its own upgrade route before attempting Creative tasks.
 
-- **Balloon Popper:** score → random five-target respawning → 60-second timer/HUD → random danger targets → final score and Play Again.
+- **Balloon Popper:** score → random five-target respawning → 60-second timer/HUD → final score and Play Again → optional random danger targets.
 - **Bowling:** pin-scoring → ball reset between three throws, preserving fallen pins and score → live HUD/bonus pin → optional Q/E power control. The earlier 45-second limit has been removed from the main bowling route.
 - **Clicker:** manual shop → visible balance → lifetime earnings and 500-point milestone → Grannies generating 1/second each at increasing prices → Granny training that doubles each Granny's rate → optional 5/second Farms. Use **one** GameMode production timer and keep spendable balance separate from lifetime earnings.
 - **Loops & Spawning:** five clickable targets → waves of 5, 6, 7, 8, 9 targets → overall 90-second race/HUD/replay → optional random spawn volume.
