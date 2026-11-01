@@ -1172,9 +1172,9 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Test earning and spending around the goal",
               "where": "Play the Clicker level.",
-              "do": "For a quick test, temporarily set MilestoneTarget default to 20 in BP_ClickerGameMode, restart Play and earn 20 total points from clicks and Grannies. Verify the milestone appears once even if you spend Score. Restore the default MilestoneTarget to 500 afterwards. The milestone Text is a permanent achievement, not a game-over screen.",
+              "do": "For a quick test, temporarily set MilestoneTarget default to 20 in BP_ClickerGameMode AND change the MilestoneText placeholder in ClickerGameUI to \"TEST: 20 LIFETIME POINTS!\". Restart Play, earn 20 lifetime points from clicks or Grannies, then spend some Score. Verify the achievement appears once and does not interrupt the shop. Afterwards restore MilestoneTarget=500 and MilestoneText=\"500 LIFETIME POINTS!\", then restart Play again.",
               "why": "This catches the common error of checking spendable Score instead of lifetime progress.",
-              "check": "At test target 20, the achievement appears once and purchases remain possible; after restoring 500, a fresh game hides the banner until 500 lifetime points are earned."
+              "check": "The test banner appears at 20 earned points without blocking purchases. Both the target and on-screen wording are restored to 500 for the real game."
             }
           ],
           "check": "The lifetime milestone is triggered by TotalEarned (not spendable Score), appears once, and does not stop Granny production.",
