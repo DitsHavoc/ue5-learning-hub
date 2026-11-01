@@ -37,7 +37,7 @@ window.UE5_MINI_JAM_DATA = {
     "Start by completing one of the four existing Mini-Projects. Both partners must understand the original game.",
     "Keep it to one small level or playable space and one main gameplay mechanic.",
     "Add at least one meaningful gameplay change, using the guided Essential upgrades. A visual reskin alone does not count.",
-    "Aim for a complete 2–5 minute game with a clear objective and an ending or repeatable score.",
+    "Aim for a short, complete round (roughly 1–5 minutes) or a repeatable progression game such as Clicker. The player should understand the goal or see clear progress.",
     "Make the look your own. Credit anything you did not create."
   ],
   "milestones": [

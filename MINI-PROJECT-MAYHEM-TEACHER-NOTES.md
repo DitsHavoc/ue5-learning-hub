@@ -2,7 +2,7 @@
 **Second-year Games Development** · **Monday 2 to Friday 13 November 2026** · **Pairs: programmer + artist/designer**
 
 ## Purpose
-Turn one existing UE5 Mini-Project into a complete 2–5 minute original game. This is a low-pressure two-week studio challenge, not a large assessed production brief. Use the student-facing site route **Build → Mini-Projects → Mini-Project Mayhem** (`#/mini-projects/jam`).
+Turn one existing UE5 Mini-Project into a short, replayable original game (or a repeatable Clicker progression loop). The final showcase demo lasts 2–5 minutes. This is a low-pressure two-week studio challenge, not a large assessed production brief. Use the student-facing site route **Build → Mini-Projects → Mini-Project Mayhem** (`#/mini-projects/jam`).
 
 ## Launch session (around 100 minutes)
 - 0–10 min — explain challenge, four starting tutorials, rules, awards.
@@ -28,7 +28,7 @@ The original Mini-Projects are foundations, not finished games. Do **not** requi
 Each new upgrade stage contains precise Blueprint nodes/actions, a designer task, a concrete test and troubleshooting. The text guides do **not** replace or edit the original illustrated source tutorials.
 
 ### Practical scope
-Aim for a working original tutorial and **two or three Essential upgrades** before final polish. Fast students can progress further; a small complete game is better than every optional system half-built. Students use separate PCs, share exported art through Teams, and the programmer owns the live Unreal project.
+Aim for a working original tutorial and **two or three Essential upgrades by the prototype checkpoint**, then finish the clearly marked **Minimum Playable Game** milestone during Week 2 (all three essentials for Bowling, Clicker and Loops; the four essentials through Play Again for Balloon Popper). Fast students can progress further; a small complete game is better than optional systems half-built. Students use separate PCs, share exported art through Teams, and the programmer owns the live Unreal project.
 
 **Testing note:** GitHub browser/content checks validate the website and route structure, **not** the actual UE5 Blueprint logic. Exercise the tutorials in the college engine before treating their code paths as instructor-verified.
 
@@ -103,3 +103,23 @@ This final individual walkthrough changes only the upgrade routes. The original 
 - **Stage 4 (optional):** New players no longer need to invent a second unrestricted spawn-area Actor. Keep one target per existing grid cell; use small independent `Random Float in Range` offsets in Y (±20) and Z (±10). That adds replay variety without overlapping 100cm default cubes. If art targets grow larger, retune spacing and reframe the camera.
 
 The three original Loops tutorials and images were NOT edited. Website CI verifies content, routes and interaction, not Unreal Editor Blueprint graph compilation or gameplay physics.
+
+## Final across-all-four learning flow review (v3.66.6)
+The four source Mini-Project tutorials and their images/steps/progress keys are unchanged. All four upgrade paths were reviewed individually and then together against the two-week jam brief. The intended deliverable is a complete short round or repeatable progression loop, not necessarily a 2–5-minute fixed-length game; **2–5 minutes is the planned showcase demo time**, and a 60/90-second round is valid.
+
+**Minimum playable milestones**
+- **Clicker:** after Granny stage — original click, shop, visible balance, buy Grannies, 1/sec automation.
+- **Bowling:** after HUD/polish — score counted pins, three throws with ball-only reset, final result and R restart.
+- **Balloon Popper:** after Results stage (not only Timer) — +1 scoring, five replacement balloons, 60-second HUD, frozen result and clickable Play Again. Treat the earlier Timer stage as the *working timed prototype*, not a finished replayable game.
+- **Loops:** after Race stage — five waves (5+6+7+8+9=35), timer, visible counters, win/timeout and R restart.
+
+**Danger balloon simplification:** In `SpawnOneBalloon`, a pure `Random Float in Range (0..1) <= 0.2` Boolean drives **Select** with False=`BP_Balloon`, True=`BP_DangerBalloon`, and its Class output feeds the original SINGLE `Spawn Actor From Class`. No `SelectedBalloonClass` variable, merged branch exec pins, or duplicate Spawn Actor nodes. Quick deterministic test: threshold 1.0 (all danger), -1.0 (all normal), then restore 0.2. The original red material is not itself a danger identifier.
+
+**Five-minute teacher smoke-check at the start of the practical**
+1. Clicker: main button still scores once; the 10-point manual upgrade increases click power; buy one 15-point Granny and verify +1/sec with no extra clicks.
+2. Bowling: upright pin does not score; a knocked pin adds one point only once; first ball resets without resetting the pins; R reloads the level.
+3. Balloon Popper: pop one target, score adds one, exactly five remain; let a short 5-second test expire; final score and Play Again work.
+4. Loops: five stationary clickable targets spawn; clearing wave 1 starts one wave of six; a 5-second test ends with no new wave; R reloads.
+Restore all debug defaults, especially 60-second and 90-second clocks, before students use the project. These are *recommended real-editor tests*, not tests executed by website CI.
+
+All site checks validate route/rendered content consistency, not actual Unreal Engine 5.8 Blueprint compilation or the resulting physics.
