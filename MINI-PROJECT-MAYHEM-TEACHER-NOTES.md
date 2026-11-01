@@ -71,3 +71,15 @@ Student instruction check: complete the original tutorial, verify the prerequisi
 This is an extension-only edit. The original three Clicker Mini-Project stages, notes, assets and completion history are unchanged. Stage 1 retains the original main-button event in `BP_ClickerGameMode`, Stage 2 replaces the old UI update with one `RefreshShop` function and explicit `Format Text` labels, and Stage 3 teaches the new Granny purchase and labels before the passive-income timer. This removes an impossible test (checking passive Granny income before any Granny could be purchased).
 
 UE5.8 guidance: `GetProductionPerSecond` must have the **Pure** option ticked and an Integer output named `Production`; `GainPoints` increases both spendable `Score` and `TotalEarned`. Test with one Granny and a temporary `Print String`; it should rise 1/sec. Use one production timer in GameMode and a separate 0.25-second HUD refresh in the Widget. Do not create a timer per Granny. Testing optional lifetime milestones at a low value must restore both the 500-point target and the banner text. All upgrade stages retain the minimum-playable milestone after Granny automation.
+
+## Individual Bowling learner review (v3.66.3)
+Only the follow-on Bowling upgrade guide has changed. The original five illustrated Bowling stages, screenshots, files and completion progress remain untouched.
+
+- Verify the ACTUAL number of BP_BowlingPin actors in BowlingLevel before assigning GoalPins. Test Model Get Up Vector · world Z ≈ 1 while a pin is upright; make sure Counted prevents Event Tick awarding repeated points.
+- Use the original BowlingInputs / IA_Bowl and BP_BowlingPlayerController.BowlingBall object reference, not new duplicate input or Actor objects.
+- The bowling ball Model must be the Actor root for the demonstrated UE5.8 Set Simulate Physics → Set Actor Transform → Set Simulate Physics reset chain. The ResetBall event itself is not yet testable until FinishThrow calls it.
+- After IA_Bowl Started, the controller uses a guard for RoundFinished, IsBallInMotion and ThrowsUsed<MaxThrows. Delay(4.0) after the Bowl call triggers a CALL to FinishThrow. Check two resets with at least one pin remaining. If ALL pins tip early, it correctly ends immediately, so restart to test repeated throws.
+- UMG HUD Text binding functions must wire white execution Entry → Cast → Return; Format Text retains "Score:", "Pins down:" and "Throws left:" labels. The result display uses one Custom Event RefreshBowlingResult bound to a 0.25-second UMG timer, and keyboard R reloads the level.
+- The optional shot-power upgrade still uses the ORIGINAL Bowl Add Force(X=200000) on Model with Accel Change ticked, and uses Q/E inside BowlingInputs.
+
+Browser and content validation verify the website routes and instruction structure. They do not physically compile or playtest the Blueprint instructions in UE5.8.
