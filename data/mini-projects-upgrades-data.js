@@ -1,6 +1,6 @@
-/* Loops student review, original three source Mini-Projects unchanged. */
+/* Final cross-project student review: simpler danger selection and complete replayable milestones. Originals unchanged. */
 window.UE5_MINI_UPGRADE_DATA = {
-  "version": "3.66.5",
+  "version": "3.66.6",
   "title": "Mini-Project Upgrade Walkthroughs",
   "intro": "Finish one original guided Mini-Project, then follow these text-only expansions. Start with Essential stages; the Creative stage gives your pair room to make it yours. Save your Unreal project after every stage.",
   "projects": [
@@ -370,32 +370,25 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "The copied AwardPoints call uses -2 and BP_Balloon still uses +1. You will test the negative score in Play AFTER the spawner selects danger balloons."
             },
             {
-              "title": "Prepare a class variable for the two balloon types",
-              "where": "BP_BalloonSpawner → My Blueprint → Variables → +.",
-              "do": "In BP_BalloonSpawner add SelectedBalloonClass under My Blueprint → Variables. Set Variable Type to Actor Class Reference, then Compile. Open SpawnOneBalloon and locate the existing Spawn Actor From Class node with Class fixed to BP_Balloon. Keep its RANDOM Make Transform connected; the new variable will replace the fixed Class.",
-              "why": "A class reference tells Spawn Actor which type of balloon it should make.",
-              "check": "SelectedBalloonClass has a purple Actor Class Reference pin; the original random spawn transform is still connected."
+              "title": "Make one random test for danger balloons",
+              "where": "BP_BalloonSpawner → SpawnOneBalloon function, beside the existing Spawn Actor From Class.",
+              "do": "Add Random Float in Range (Min=0.0, Max=1.0). Connect its Return Value to a Float <= Float node, with the other float set to 0.2. Leave the existing purple function Entry → Spawn Actor From Class white execution wire alone.",
+              "why": "This comparison is true about one time in five; it picks the balloon class without branching the execution.",
+              "check": "The <= node produces one red Boolean result (true=potential danger, false=normal)."
             },
             {
-              "title": "Pick normal or danger with one random test",
-              "where": "BP_BalloonSpawner → SpawnOneBalloon before Spawn Actor.",
-              "do": "In SpawnOneBalloon add Random Float in Range (0.0, 1.0) → Float <= Float (set B=0.2) → Branch. From Branch True set SelectedBalloonClass=BP_DangerBalloon; from False set SelectedBalloonClass=BP_Balloon. Wire the function entry white execution into Branch (random float and comparison are pure value nodes). Compile.",
-              "why": "Roughly 20% of balloons should be risky, without a fixed repeating order.",
-              "check": "Each call chooses a class first. True chooses BP_DangerBalloon, False chooses BP_Balloon."
+              "title": "Choose the class with one Select node",
+              "where": "BP_BalloonSpawner → SpawnOneBalloon → existing Spawn Actor From Class → Class input.",
+              "do": "Drag a wire BACKWARDS from the purple Class input of the existing Spawn Actor node into empty space and search Select (the data-selection node). Connect the <= Boolean result to Select.Index. Set the False class option to BP_Balloon and the True class option to BP_DangerBalloon. If Unreal labels them Option 0 and Option 1, 0 is False/normal and 1 is True/danger. Use the Select output as Spawn Actor.Class; preserve the existing Random Point → Make Transform → Spawn Transform link. Do NOT create two Spawn Actor nodes or a SelectedBalloonClass variable.",
+              "why": "Select chooses one class as data; the original single Spawn Actor execution stays valid and beginner-friendly.",
+              "check": "The function still has exactly ONE Spawn Actor From Class. Its Class comes from Select(False=BP_Balloon, True=BP_DangerBalloon), and the original white function Entry drives the spawn."
             },
             {
-              "title": "Spawn exactly one chosen class",
-              "where": "BP_BalloonSpawner → same function.",
-              "do": "Keep the existing ONE Spawn Actor From Class inside SpawnOneBalloon. Connect Get SelectedBalloonClass to its Class pin instead of the old fixed BP_Balloon. Both Set SelectedBalloonClass execution paths should continue to ONE spawn call, using the existing Random Point → Make Transform → Spawn Transform. Compile. If Unreal refuses to merge white exec paths, use one Select (class) node with the random Boolean as Index, BP_DangerBalloon on True and BP_Balloon on False, and send the selected class into one Spawn Actor; do not duplicate the spawner call.",
-              "why": "One call to SpawnOneBalloon should always create exactly one Actor.",
-              "check": "The function compiles, each entry spawns exactly one Actor and the Actor Class changes randomly."
-            },
-            {
-              "title": "Connect the new decision to the spawn function",
-              "where": "Still in SpawnOneBalloon.",
-              "do": "Check the entire SpawnOneBalloon function execution: purple Entry → random comparison Branch → choose SelectedBalloonClass → Spawn Actor From Class ONE TIME. The existing Random Point in Bounding Box → Make Transform must still feed Spawn Transform. Compile and Save.",
-              "why": "Selecting the class and spawning at one shared location prevents duplicate actors.",
-              "check": "Initial BeginPlay still spawns five targets and each successful pop requests exactly one replacement."
+              "title": "Prove both classes can spawn, then restore 20%",
+              "where": "BP_BalloonSpawner → SpawnOneBalloon → Float <= Float comparison, then Play In Editor.",
+              "do": "Temporarily set the comparison threshold from 0.2 to 1.0, Compile and Play: all spawned balloons should be the purple/blue danger type. Then set it to -1.0 and restart Play: all should be normal red balloons. Finally RESTORE the threshold to 0.2, Compile and Save. Do not change the original loop or replacement event.",
+              "why": "A deterministic test is quicker than waiting for luck to produce the rare class and proves each side of Select works.",
+              "check": "Both forced cases produced five balloons and normal replacement behaviour; the final saved comparison is <=0.2 for a 20% danger chance."
             },
             {
               "title": "Verify the copied dangerous actor also requests a replacement",
@@ -420,20 +413,20 @@ window.UE5_MINI_UPGRADE_DATA = {
             }
           ],
           "check": "Both balloon classes spawn randomly; safe targets give +1, danger targets deduct 2 (not below zero), and either pop is replaced until the clock ends.",
-          "fix": "Only safe targets? Inspect SelectedBalloonClass values and ensure both Branch paths connect before the single Spawn Actor call. Too many balloons? Check only one spawn path executes. Danger balloons vanish permanently? Check their copied pop chain calls RequestReplacement. If both kinds are red, change M_DangerBalloon; the original M_Balloon is already red. If a copied danger balloon does not respawn, check its AwardPoints → RequestReplacement → Destroy path.",
+          "fix": "Only normal balloons? Check Select False=BP_Balloon, True=BP_DangerBalloon and that the Float <= Float comparison feeds Select.Index. You can temporarily set threshold 1.0 to test all danger, then restore 0.2. Too many spawns? Leave only ONE Spawn Actor From Class in SpawnOneBalloon. Danger pops not replacing? Check the copied BP_DangerBalloon still calls RequestReplacement before Destroy Actor. Both types red? The original M_Balloon is red: use a distinct purple/blue danger material.",
           "designerSteps": [
             "Plan: Create unmistakably different safe and danger targets. Use a symbol/shape as well as colour and check that both variants remain visible in the playfield. Draw a small mock-up of the 1280×720 play area, targets and HUD.",
             "Create: make one original element for Mix safe and danger balloons into random spawns using HUD backgrounds, balloon meshes or symbols. Export as FBX or PNG to your shared Teams folder.",
             "Integrate and test: ask the programmer to import your asset; play together and confirm targets are visible and their UI never blocks clicks."
           ],
           "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
-          "beforeStart": "The basic red-balloon game already works with a score, five randomly respawning balloons, 60-second rounds and Play Again. The original M_Balloon material is red: the danger type must be visibly different, not a second red balloon.",
-          "commonMistake": "The starter M_Balloon is already red and its Static Mesh component is called BalloonModel. Make the danger balloon purple/blue with a warning pattern, and edit only the duplicated BP_DangerBalloon.",
+          "beforeStart": "The original red-balloon game is fully replayable after the results upgrade. You have a working five-balloon spawn function, 60-second rounds, a final score and Play Again. Danger is optional and should use the same single spawn call.",
+          "commonMistake": "Do not try to join two Branch execution paths or create a separate Spawn Actor for danger. One pure Select(Boolean Index) picks BP_Balloon versus BP_DangerBalloon and feeds the original single Spawn Actor.",
           "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         }
       ],
-      "minimumStage": "timer",
-      "minimumOutcome": "A 60-second scored game with five replacement balloons and a visible clock."
+      "minimumStage": "results",
+      "minimumOutcome": "A complete 60-second scored round with five replacement balloons, a final score and a working Play Again button."
     },
     {
       "project": "bowling",
