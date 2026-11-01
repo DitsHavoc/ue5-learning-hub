@@ -5314,6 +5314,7 @@ function buildGlobalSearchIndex(){
     p.stages.forEach(st=>add({title:st.title+' — '+p.title,meta:'Mini-Project upgrade • '+st.tier+' • '+st.outcome,href:miniUpgradeHref(p.project,st.id),icon:'✦',kind:'mini-project-upgrade',data:deepSearchText(st)}));
   });
   add({title:'Mini-Project Mayhem — Two-Week Game Jam',meta:'Build • Mini-Projects • 2–13 November 2026',href:'#/mini-projects/jam',icon:'★',kind:'mini-project-jam',data:deepSearchText(window.UE5_MINI_JAM_DATA||{})});
+  add({title:'Artist & Game Designer Track — Mini-Project Mayhem',meta:'Build • Mini-Projects • Six guided studio missions • Pairs or solo',href:'#/mini-projects/jam/designer',icon:'★',kind:'mini-project-jam',data:deepSearchText(window.UE5_MINI_JAM_DATA?.designerTrack||{})});
   (MINI.projects||[]).forEach(p=>{
     add({title:p.title,meta:'Build • Mini-Project • '+p.stages.length+' stages',href:miniHref(p.id),icon:p.icon||'◉',kind:'mini-project',data:deepSearchText(p)});
     (p.stages||[]).forEach(st=>add({title:p.title+' — '+st.title,meta:'Mini-Project • Stage • '+st.outcome,href:miniHref(p.id,st.id),icon:'◉',kind:'mini-stage',data:deepSearchText(st)}));
