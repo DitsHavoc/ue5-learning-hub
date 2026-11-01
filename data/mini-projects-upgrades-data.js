@@ -1,13 +1,13 @@
-/* Text-only, original Mini-Project extension guides. No course images or duplicated source walkthroughs. */
+/* Expanded text-only game-jam build routes. Original course content and progress remain untouched. */
 window.UE5_MINI_UPGRADE_DATA = {
-  "version": "3.64.1",
+  "version": "3.65.0",
   "title": "Mini-Project Upgrade Walkthroughs",
   "intro": "Finish one original guided Mini-Project, then follow these text-only expansions. Start with Essential stages; the Creative stage gives your pair room to make it yours. Save your Unreal project after every stage.",
   "projects": [
     {
       "project": "balloon-popper",
       "title": "Balloon Popper → Arcade Challenge",
-      "intro": "Turn the click-to-pop prototype into a scored, timed arcade game. Complete Score first; the timer and danger balloons build on it.",
+      "intro": "Build a loop that lasts: score a pop, create replacement balloons, play a timed round, mix in danger balloons and finish with a results/replay screen. Complete the Essential upgrades before optional creative variations.",
       "stages": [
         {
           "id": "score",
@@ -56,8 +56,75 @@ window.UE5_MINI_UPGRADE_DATA = {
           "fix": "No score? Confirm BP_BalloonGameMode is the World Settings GameMode Override, check the cast Success pin is wired, and ensure AwardPoints is called before Destroy Actor."
         },
         {
+          "id": "respawn",
+          "title": "2. Spawn replacement balloons at random positions",
+          "tier": "Essential",
+          "outcome": "Five balloons appear inside a visible spawn area. Popping one creates another at a random position without growing the number on screen.",
+          "designer": "Plan a readable playfield and test whether five balloons can be clicked without overlapping the UI.",
+          "steps": [
+            {
+              "title": "Create the reusable spawning actor",
+              "where": "Content Drawer → BalloonPopper folder → Add → Blueprint Class → Actor.",
+              "do": "Name it BP_BalloonSpawner. Open it and add a Box Collision component named SpawnArea. Select SpawnArea and give it an extent roughly X=50, Y=350, Z=220 as a starting point, then Compile.",
+              "why": "A movable box defines where balloons may appear; it is easier to tune than hard-coded coordinates.",
+              "check": "BP_BalloonSpawner has a Box Collision visible in the Blueprint viewport."
+            },
+            {
+              "title": "Create a spawn function",
+              "where": "BP_BalloonSpawner → My Blueprint → Functions → +.",
+              "do": "Create a function SpawnOneBalloon. Drag SpawnArea into the graph and call Get World Location and Get Scaled Box Extent from that component. Connect those values to Random Point in Bounding Box (Origin and Box Extent).",
+              "why": "The random point will be inside the box at the spawner’s actual level position.",
+              "check": "Random Point in Bounding Box produces a Vector output."
+            },
+            {
+              "title": "Spawn at that random point",
+              "where": "In SpawnOneBalloon, after the random point.",
+              "do": "Add Make Transform and connect the random Vector to Location; leave Rotation 0, Scale 1. Add Spawn Actor from Class, set Class to BP_Balloon, feed the Make Transform into Spawn Transform and set Collision Handling Override to Always Spawn, Ignore Collisions. Wire the function entry execution into Spawn Actor. Compile.",
+              "why": "The tutorial balloon is reused as a real spawned actor, not duplicated by hand.",
+              "check": "Calling SpawnOneBalloon creates one BP_Balloon inside the area."
+            },
+            {
+              "title": "Populate the arena on BeginPlay",
+              "where": "BP_BalloonSpawner → Event Graph → Event BeginPlay.",
+              "do": "Add a For Loop with First Index 0 and Last Index 4. Connect Loop Body to SpawnOneBalloon. Five iterations create five targets; the loop Completed output needs no further node. Compile.",
+              "why": "The player starts with a small, predictable number of targets.",
+              "check": "One press of Play shows five newly created balloons."
+            },
+            {
+              "title": "Put the spawn box where the camera can see it",
+              "where": "Open BalloonPopperLevel.",
+              "do": "Delete the old manually placed BP_Balloon target actors (leave the camera, lighting and other scenery). Place one BP_BalloonSpawner in the level, move it into the camera view and scale its SpawnArea box to suit your framing. Set SpawnArea Collision Presets to NoCollision so the box never blocks click traces.",
+              "why": "Only the spawner should create the balloons now; otherwise you would have extras.",
+              "check": "Play shows five visible, clickable balloons inside the intended screen area."
+            },
+            {
+              "title": "Add a replacement event",
+              "where": "BP_BalloonSpawner → Event Graph → Add Custom Event.",
+              "do": "Call it RequestReplacement. Wire its white execution output to SpawnOneBalloon. Compile.",
+              "why": "Every pop can ask the same spawner for one replacement.",
+              "check": "RequestReplacement has a clear route to SpawnOneBalloon."
+            },
+            {
+              "title": "Ask for another balloon when one pops",
+              "where": "BP_Balloon → Event Graph → the True pop branch from the original tutorial.",
+              "do": "Keep AwardPoints first. After the score call but BEFORE Destroy Actor, add Get Actor of Class (Actor Class = BP_BalloonSpawner) → Cast To BP_BalloonSpawner → RequestReplacement. Connect the white execution pins so the order is AwardPoints → Cast success → RequestReplacement → Destroy Actor (Self). If the spawner reference might be missing, also connect Cast Failed to Destroy Actor.",
+              "why": "Popping replaces exactly one balloon, while the old actor is removed normally.",
+              "check": "Pop three balloons in a row: five remain on screen and the total score rises by three."
+            },
+            {
+              "title": "Check click collision and spawn position",
+              "where": "BalloonPopperLevel → Play In Editor.",
+              "do": "Try 15 pops. If a target cannot be clicked, make sure the balloon mesh collision blocks Visibility, the spawning Box uses NoCollision and the player controller still has Enable Click Events. Resize or move SpawnArea if some targets spawn behind the HUD.",
+              "why": "A game loop must be reliable, not only work once.",
+              "check": "No balloons disappear forever, none spawn outside the playable view, and there are still five after repeated pops."
+            }
+          ],
+          "check": "Start with five visible balloons. After any number of pops, five replacements remain within the playfield and scoring still works.",
+          "fix": "Only four remain? Verify RequestReplacement runs before Destroy Actor. More than five? Delete the old placed balloons or check that BeginPlay fires only once. Invisible targets? Reposition the Box Collision volume in the camera view; avoid randomly moving the camera."
+        },
+        {
           "id": "timer",
-          "title": "2. Add a 60-second round and score HUD",
+          "title": "3. Add a 60-second round and live score HUD",
           "tier": "Essential",
           "outcome": "A visible score and clock count down; once time reaches zero, balloons cannot score any more.",
           "designer": "Design WBP_BalloonHUD with clear score and remaining-time labels. Try a contrasting colour when time gets low.",
@@ -117,17 +184,24 @@ window.UE5_MINI_UPGRADE_DATA = {
               "do": "Get Game Mode → Cast To BP_BalloonGameMode → Get RoundEnded → NOT → Branch. Wire only the True path into the existing click-to-grow chain. Keep the existing pop-scoring call later in the chain.",
               "why": "The scene should stop changing when the round is finished.",
               "check": "After 60 seconds, clicking no longer grows or pops balloons."
+            },
+            {
+              "title": "Prevent the spawner working after the timer",
+              "where": "BP_BalloonSpawner → RequestReplacement custom event.",
+              "do": "Before SpawnOneBalloon, add Get Game Mode → Cast To BP_BalloonGameMode → Get RoundEnded → NOT → Branch. Connect only the True output to SpawnOneBalloon. Compile.",
+              "why": "The round must stop producing targets when the clock reaches zero.",
+              "check": "Set RoundEnded=true temporarily in a test; popping an existing balloon does not produce a replacement."
             }
           ],
-          "check": "Score increases on a pop. Time counts down 60→0. No score or growth is possible after zero.",
+          "check": "The clock counts 60→0, the score changes only when a balloon pops, the HUD stays visible and no further targets spawn or score after the round ends.",
           "fix": "HUD missing? Check the controller is assigned in BP_BalloonGameMode and Create Widget is connected. Time frozen? Confirm TickClock is connected to Set Timer by Event with Looping ticked."
         },
         {
           "id": "risk",
-          "title": "3. Add risky balloons and your own style",
+          "title": "4. Mix safe and danger balloons into random spawns",
           "tier": "Creative",
-          "outcome": "Red danger balloons subtract two points, while normal ones add one. The designer gives both a readable visual identity.",
-          "designer": "Make red targets unmistakable with a different silhouette or symbol, not colour alone; create an original target model, backdrop or UI look.",
+          "outcome": "The spawner randomly creates safe (+1) and danger (-2) balloons, with a clear visual distinction, while keeping five visible targets.",
+          "designer": "Create unmistakably different safe and danger targets. Use a symbol/shape as well as colour and check that both variants remain visible in the playfield.",
           "steps": [
             {
               "title": "Make a clearly different material",
@@ -151,18 +225,32 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "The danger balloon awards -2; regular balloons still award +1."
             },
             {
-              "title": "Set up a fair test arena",
-              "where": "Open BalloonPopperLevel.",
-              "do": "Replace a few normal balloons with BP_DangerBalloon actors. Start with 5 safe balloons and 2 danger balloons, grouped where players can see both types.",
-              "why": "A risk/reward decision only works when players can identify the difference.",
-              "check": "Both types can be clicked and are visible from the starting camera."
+              "title": "Choose which class to spawn",
+              "where": "BP_BalloonSpawner → SpawnOneBalloon function, before Spawn Actor from Class.",
+              "do": "Create a local variable SelectedBalloonClass with variable type Actor Class Reference; compile. Add Random Float in Range (0.0, 1.0) → <= 0.2 → Branch. On True set SelectedBalloonClass to BP_DangerBalloon; on False set it to BP_Balloon. Wire both paths to a common SpawnActor from Class (you can use two separate Spawn Actor nodes if easier). Replace the Spawn Actor fixed Class input with Get SelectedBalloonClass.",
+              "why": "Roughly one out of five balloons is risky, but the exact mix varies.",
+              "check": "A test run spawns a mixture of both classes; the majority are normal."
             },
             {
-              "title": "Test positive, negative and zero scores",
-              "where": "Play In Editor.",
-              "do": "Pop three safe balloons, then one danger balloon: the score should go 0→3→1. Pop danger balloons at zero; the Max calculation from Upgrade 1 must keep the score at 0.",
-              "why": "Testing both extremes catches incorrect negative-point wiring.",
-              "check": "Points match every target type and never drop below zero."
+              "title": "Connect the new decision to the spawn function",
+              "where": "Still in SpawnOneBalloon.",
+              "do": "Make sure the exec entry first chooses SelectedBalloonClass and THEN reaches Spawn Actor from Class once. Keep the existing Random Point in Bounding Box as the spawn position. Compile and save.",
+              "why": "Selecting the class and spawning at one shared location prevents duplicate actors.",
+              "check": "The spawner still produces exactly five at the start and one replacement for each pop."
+            },
+            {
+              "title": "Verify the copied dangerous actor also requests a replacement",
+              "where": "BP_DangerBalloon → Event Graph → True pop branch.",
+              "do": "Check the duplicated logic still follows AwardPoints (Points=-2) → RequestReplacement on BP_BalloonSpawner → Destroy Actor. If the copy predates the spawner change, add the same replacement chain as BP_Balloon.",
+              "why": "Both target types must take part in the same ongoing game loop.",
+              "check": "Popping either a safe or dangerous balloon produces one replacement."
+            },
+            {
+              "title": "Check scoring and chance over several pops",
+              "where": "BalloonPopperLevel → Play In Editor.",
+              "do": "Pop at least 20 balloons. Safe targets should add 1; danger targets deduct 2 but cannot push Score below 0. The number of visible targets should remain five until Time Up.",
+              "why": "Random types must be balanced and never strand the player.",
+              "check": "Both types appear, the score changes correctly and the playfield remains populated."
             },
             {
               "title": "Give the game a fresh look",
@@ -172,15 +260,61 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "Both partners can point to a change they made that improves play."
             }
           ],
-          "check": "The player can choose between safe +1 targets and dangerous -2 targets in a complete timed challenge.",
-          "fix": "Wrong points? Check the normal actor still sends 1 and the danger copy sends -2 to AwardPoints; ensure neither actor has a second, duplicate scoring call."
+          "check": "Both balloon classes spawn randomly; safe targets give +1, danger targets deduct 2 (not below zero), and either pop is replaced until the clock ends.",
+          "fix": "Only safe targets? Inspect SelectedBalloonClass values and ensure both Branch paths connect before the single Spawn Actor call. Too many balloons? Check only one spawn path executes. Danger balloons vanish permanently? Check their copied pop chain calls RequestReplacement."
+        },
+        {
+          "id": "results",
+          "title": "5. Add a visible game-over result and Play Again",
+          "tier": "Essential",
+          "outcome": "Time Up leaves a final score on screen and a Play Again button starts a fresh round.",
+          "designer": "Design a simple results panel with a large final score and obvious replay button; test it at the actual game resolution.",
+          "steps": [
+            {
+              "title": "Create a results panel in the HUD",
+              "where": "WBP_BalloonHUD → Designer.",
+              "do": "Add a Border or Vertical Box named ResultsPanel. Add a Text widget named FinalScoreText with placeholder \"Round over\" and a Button named ReplayButton with a child Text \"Play Again\". Tick Is Variable on ResultsPanel and FinalScoreText. Set ResultsPanel Visibility to Collapsed initially.",
+              "why": "Players need a persistent end screen; Print String is only a debugging aid.",
+              "check": "Nothing covers the game when it first starts."
+            },
+            {
+              "title": "Refresh visibility from RoundEnded",
+              "where": "WBP_BalloonHUD → Graph → Event Construct.",
+              "do": "Add a repeating Set Timer by Event with Time 0.25 seconds; create a Custom Event named RefreshRoundScreen and connect it to the red Event pin. In RefreshRoundScreen use Get Game Mode → Cast To BP_BalloonGameMode → Get RoundEnded → Branch. On True set ResultsPanel Visibility = Visible; on False set it to Collapsed.",
+              "why": "Updating four times per second is sufficient for a small classroom HUD and avoids updating the panel every frame.",
+              "check": "Wait for the timer to end: the result panel becomes visible."
+            },
+            {
+              "title": "Show the final score",
+              "where": "RefreshRoundScreen → True branch in WBP_BalloonHUD.",
+              "do": "From the same GameMode reference, get Score and use Format Text with a format such as \"Time up! Final score: {Points}\". Connect Score converted to Text to Points, then SetText on FinalScoreText.",
+              "why": "The end screen should show the actual score from the single GameMode variable.",
+              "check": "The displayed final score equals the last HUD score."
+            },
+            {
+              "title": "Wire the replay button",
+              "where": "WBP_BalloonHUD → Designer → ReplayButton → Events → OnClicked (+).",
+              "do": "In the new OnClicked event call Get Current Level Name with Remove Prefix String enabled, then Open Level (by Name) with its Level Name input connected to the returned name. Compile and Save.",
+              "why": "Reopening the level resets the timer, total, spawner and balloon types in one action.",
+              "check": "Play Again starts with score 0, 60 seconds and five visible targets."
+            },
+            {
+              "title": "Test the end of a round",
+              "where": "BalloonPopperLevel → Play In Editor.",
+              "do": "For a quick test temporarily set SecondsLeft default to 5 in BP_BalloonGameMode, then restore it to 60. Score twice, wait until zero, attempt more clicks, and replay. Confirm the spawner does not add new balloons after the round ends.",
+              "why": "The end state must prevent extra points, then offer a reliable restart.",
+              "check": "The final score freezes, the results panel appears, and replay returns to a fresh round."
+            }
+          ],
+          "check": "At time zero the round freezes and the final score appears; Play Again starts with five targets and a clean 60-second score challenge.",
+          "fix": "Results never appear? Check RefreshRoundScreen is bound to the widget timer, RoundEnded is in the correct GameMode, and ResultsPanel was marked Is Variable. Cannot replay? Connect the current level name to Open Level."
         }
       ]
     },
     {
       "project": "bowling",
       "title": "Bowling → Arcade Bowling",
-      "intro": "Turn the one-throw physics demonstration into a target-scoring round with a clock, a replay key and meaningful pin values.",
+      "intro": "Make a bowling game with several throws, points that survive between shots, a results screen and a bonus target. Complete Essential upgrades first; optional shot-power controls give more advanced teams a challenge.",
       "stages": [
         {
           "id": "pin-score",
@@ -243,117 +377,198 @@ window.UE5_MINI_UPGRADE_DATA = {
           "fix": "If no score appears, confirm pins are BP_BowlingPin actors, the pin mesh simulates physics, and the mesh up-axis is Z when upright. Adjust the 0.65 threshold only after watching the dot-product value while testing."
         },
         {
-          "id": "round",
-          "title": "2. Add a 45-second round and restart",
+          "id": "throws",
+          "title": "2. Reset the ball and allow three throws",
           "tier": "Essential",
-          "outcome": "The player has 45 seconds to knock the pins over and can press R to replay a clean round.",
-          "designer": "Plan a simple start-of-round message and how the player will learn that R restarts.",
+          "outcome": "The player has up to three throws. The ball resets between them, fallen pins and score remain, and the round finishes after the final throw settles.",
+          "designer": "Design a clear Throws Left indicator and short instructions: arrow keys aim, Space throws, R restarts the round.",
           "steps": [
             {
-              "title": "Add remaining time",
-              "where": "BP_BowlingGameMode → Variables.",
-              "do": "Create SecondsLeft (Integer; 45). Keep RoundFinished from Upgrade 1. Compile.",
-              "why": "The existing round-end flag can now represent a win or timeout.",
-              "check": "SecondsLeft starts at 45 in the Details panel."
+              "title": "Save the starting ball transform",
+              "where": "BP_BowlingBall → My Blueprint → Variables → +.",
+              "do": "Create StartingMeshTransform (Transform). In Event BeginPlay drag the ball Static Mesh component into the graph → Get World Transform → Set StartingMeshTransform. Compile.",
+              "why": "Physics may move the mesh separately from the actor, so save the mesh world transform itself.",
+              "check": "Before throwing, StartingMeshTransform matches the resting ball mesh position."
             },
             {
-              "title": "Start a one-second repeating timer",
-              "where": "BP_BowlingGameMode → Event Graph → Event BeginPlay.",
-              "do": "Add Set Timer by Event with Time = 1.0, Looping = true. Create a Custom Event named TickRound and connect it to the red Event pin. Promote Return Value to RoundTimerHandle.",
-              "why": "Timers are predictable and cheaper than calculating countdowns each frame.",
-              "check": "Timer starts once as the level loads."
+              "title": "Add a ResetBall custom event",
+              "where": "BP_BowlingBall → Event Graph → Add Custom Event → ResetBall.",
+              "do": "Drag the ball Static Mesh component in as Get. Wire ResetBall → Set Simulate Physics(false) → Set World Transform (New Transform = StartingMeshTransform, Teleport=true, Sweep=false) → Set Simulate Physics(true) → Set Physics Linear Velocity (0,0,0) → Set Physics Angular Velocity in Degrees (0,0,0). Compile.",
+              "why": "The mesh returns to its launch mark without reloading the whole map or resetting pins.",
+              "check": "Call ResetBall manually in the Blueprint debugger after a throw: the mesh returns and stays still."
             },
             {
-              "title": "Stop the round when time runs out",
-              "where": "BP_BowlingGameMode → TickRound.",
-              "do": "Branch on NOT RoundFinished. On True set SecondsLeft = Max (Integer)(0, SecondsLeft - 1). Branch on SecondsLeft <= 0; on True set RoundFinished = true, Print String \"TIME UP!\" and Clear and Invalidate Timer by Handle using RoundTimerHandle.",
-              "why": "When the clock reaches zero, the score should be final.",
-              "check": "The timer stops at zero and no later fallen pin can add points."
+              "title": "Count throws in the Player Controller",
+              "where": "BP_BowlingPlayerController → Variables.",
+              "do": "Create ThrowsUsed (Integer; default 0), MaxThrows (Integer; default 3) and IsBallInMotion (Boolean; default false). Compile.",
+              "why": "The controller owns the player input and knows when another throw is allowed.",
+              "check": "All three variables start with 0, 3 and false."
             },
             {
-              "title": "Stop the clock on a win",
-              "where": "BP_BowlingGameMode → RecordPin function → the True branch that sets RoundFinished.",
-              "do": "After Set RoundFinished = true, add Clear and Invalidate Timer by Handle using RoundTimerHandle. Leave the success message in place.",
-              "why": "Winning ends the round immediately rather than leaving the timer running.",
-              "check": "Knock every pin down and the clock stops before zero."
+              "title": "Prevent double throws",
+              "where": "BP_BowlingPlayerController → existing IA_Throw event (Started).",
+              "do": "Before the existing call to the ball’s throw event, Get Game Mode → Cast To BP_BowlingGameMode and test three conditions with Boolean AND: NOT RoundFinished, NOT IsBallInMotion, ThrowsUsed < MaxThrows. Put that in Branch; only the True path may throw.",
+              "why": "Repeated Space presses while the ball is travelling should not consume extra shots.",
+              "check": "Holding or tapping Space several times during a throw does not throw twice."
             },
             {
-              "title": "Add a restart input action",
-              "where": "Content Drawer → Bowling → Input.",
-              "do": "Create Input Action IA_Restart with Value Type Boolean. Open the Input Mapping Context already used by the Bowling project, add IA_Restart and map it to keyboard R. Save.",
-              "why": "Using the existing Enhanced Input setup keeps controls together.",
-              "check": "The Mapping Context lists IA_Restart → R."
+              "title": "Track a successful throw",
+              "where": "BP_BowlingPlayerController → True branch of the new throw gate.",
+              "do": "Immediately before the existing ball throw call, set ThrowsUsed = ThrowsUsed + 1 and IsBallInMotion = true. Then call the original throw event exactly once. Compile.",
+              "why": "Each valid throw consumes one attempt, regardless of whether it hits any pins.",
+              "check": "After the first Space press, ThrowsUsed is 1 and IsBallInMotion is true."
             },
             {
-              "title": "Restart a clean level on R",
-              "where": "BP_BowlingPlayerController → Event Graph.",
-              "do": "Add the IA_Restart input event and use its Started execution pin → Get Current Level Name → Open Level (by Name), wiring the level name output to Level Name. Set Remove Prefix String true on Get Current Level Name. Compile.",
-              "why": "Reopening the current map resets the ball, pins, score and timer in one simple action.",
-              "check": "Press R after a throw: the ball and pins return to their original positions and the timer resets to 45."
+              "title": "Allow time for physics to settle",
+              "where": "BP_BowlingPlayerController → after the successful throw event.",
+              "do": "Add Delay (Duration 4.0) → call a new Custom Event FinishThrow in the same controller. On FinishThrow set IsBallInMotion=false. Use Delay from the controller Event Graph, not inside a Blueprint Function.",
+              "why": "Pin collisions should be allowed to settle before the ball is reset or the round is scored.",
+              "check": "Four seconds after throwing, the controller becomes ready for the next decision."
             },
             {
-              "title": "Prevent late throws",
-              "where": "BP_BowlingPlayerController → existing IA_Throw input event.",
-              "do": "Before the existing throw call, add Get Game Mode → Cast To BP_BowlingGameMode → Get RoundFinished → NOT → Branch. Only the True execution pin calls the original throw logic.",
-              "why": "The end of a round needs to stop new gameplay input.",
-              "check": "Throw works normally during the round but not after time runs out."
+              "title": "Reset for another shot when available",
+              "where": "BP_BowlingPlayerController → FinishThrow, after IsBallInMotion=false.",
+              "do": "Get Game Mode → Cast To BP_BowlingGameMode → Branch (NOT RoundFinished AND ThrowsUsed < MaxThrows). On True call ResetBall on the same saved BP_BowlingBall reference used for the existing Throw action. Do NOT reset any pin actors.",
+              "why": "You keep the first throw’s successful knockdowns and try to finish the remaining pins.",
+              "check": "After the first two throws, the ball returns to the start and fallen pins stay down."
+            },
+            {
+              "title": "End the round after the last shot",
+              "where": "BP_BowlingGameMode → Functions → add FinishRound.",
+              "do": "Create FinishRound with no inputs. Put Branch (NOT RoundFinished) → on True Set RoundFinished=true → Print String with Score and PinsDown (use Format Text or Append after converting integers). Then back in BP_BowlingPlayerController → FinishThrow, on the branch where ThrowsUsed >= MaxThrows and RoundFinished is still false, call GameMode.FinishRound.",
+              "why": "A final score should be reported after physics settles; finishing early is also possible if all pins are down.",
+              "check": "The third valid throw is followed by a final score; Space no longer throws."
+            },
+            {
+              "title": "Add R to replay the whole round",
+              "where": "Bowling Input Mapping Context and BP_BowlingPlayerController.",
+              "do": "Create IA_Restart (Boolean) and map to keyboard R in the already active Input Mapping Context. In the Player Controller, IA_Restart Started → Get Current Level Name (Remove Prefix String=true) → Open Level by Name. Compile.",
+              "why": "Restarting the level resets the pins, ball, throw counter and score together.",
+              "check": "R gives a clean three-throw round from any state."
             }
           ],
-          "check": "At zero seconds the round ends; pressing R resets every pin, the ball, the score and the clock.",
-          "fix": "R not working? Check IA_Restart was added to the SAME Input Mapping Context registered on BeginPlay, and that you used Started rather than Triggered."
+          "check": "Make three throws without restarting: the ball comes back for shots two and three, fallen pins remain fallen, final score appears, and the fourth Space press does nothing.",
+          "fix": "Ball fails to reset? Confirm you stored the mesh (not actor) transform before physics moved it, and ResetBall uses the same mesh component. One press spends multiple throws? Check IA_Throw uses Started, not Triggered. Score missing after last shot? Ensure FinishRound is called after Delay 4 seconds."
         },
         {
           "id": "polish",
-          "title": "3. Add a score HUD and special pins",
-          "tier": "Creative",
-          "outcome": "A readable scoreboard shows pin count and time, and one clearly marked bonus pin is worth more points.",
-          "designer": "Create the HUD appearance and a unique special pin material/mesh. Test whether players can identify the bonus target.",
+          "title": "3. Add a throw counter, scoreboard and bonus pin",
+          "tier": "Essential",
+          "outcome": "A live HUD shows Score, Pins Down and Throws Left. A visibly different bonus pin is worth three points rather than one.",
+          "designer": "Create a scoreboard, one marked bonus target and on-screen controls. Playtest legibility and whether the bonus is visible before the shot.",
           "steps": [
             {
-              "title": "Create a scoreboard widget",
+              "title": "Make the HUD widget",
               "where": "Content Drawer → Bowling → User Interface → Widget Blueprint → User Widget.",
-              "do": "Name it WBP_BowlingHUD. In Designer place three Text widgets: ScoreText, PinsText and TimeText. Tick Is Variable for each. Set placeholder labels \"Score: 0\", \"Pins: 0\", \"Time: 45\".",
-              "why": "Players should see progress constantly, not only via debug text.",
-              "check": "The labels stay readable at the game viewport size."
+              "do": "Create WBP_BowlingHUD. In Designer add three Text widgets ScoreText, PinsText and ThrowsText, and mark Is Variable on each. Start with “Score: 0”, “Pins: 0” and “Throws left: 3”.",
+              "why": "The player needs to see progress without watching Print String debug output.",
+              "check": "All labels fit the game viewport without covering the lane."
             },
             {
-              "title": "Connect labels to the GameMode",
-              "where": "WBP_BowlingHUD → select each Text widget → Details → Text → Bind → Create Binding.",
-              "do": "In each generated binding function use Get Game Mode → Cast To BP_BowlingGameMode. Read the matching Score, PinsDown or SecondsLeft Integer, then use ToText (Integer) or Format Text to return a readable label. Provide 0 as a safe fallback if the cast fails.",
-              "why": "Binding a tiny HUD to existing game state avoids making another set of counter variables.",
-              "check": "The score, pin count and clock on screen match the values in the GameMode."
+              "title": "Read the score and remaining pins",
+              "where": "WBP_BowlingHUD → Designer → ScoreText then PinsText → Text → Bind → Create Binding.",
+              "do": "In ScoreText binding, Get Game Mode → Cast To BP_BowlingGameMode → Get Score → ToText (Integer) → Return. Do the same for PinsText using PinsDown. Use Format Text or separate fixed labels so players know what the numbers mean.",
+              "why": "The single GameMode record remains the authoritative score.",
+              "check": "After knocking down pins, both values update and match the printed debug numbers."
             },
             {
-              "title": "Display the widget at the start",
-              "where": "BP_BowlingPlayerController → Event Graph → BeginPlay.",
-              "do": "After the existing Add Mapping Context setup, add Create Widget (Class = WBP_BowlingHUD; Owning Player = Self) → Add to Viewport. Use Sequence if multiple independent actions must run on BeginPlay. Compile.",
-              "why": "The controller already manages input and the player’s view.",
-              "check": "Press Play and see the scoreboard without manually opening any widget."
+              "title": "Read shots remaining",
+              "where": "WBP_BowlingHUD → ThrowsText → Text → Bind → Create Binding.",
+              "do": "Get Owning Player → Cast To BP_BowlingPlayerController → Get ThrowsUsed and MaxThrows. Subtract ThrowsUsed from MaxThrows, clamp with Max (Integer) against 0, convert to Text and return.",
+              "why": "The HUD reads the same counter that gates the throw input.",
+              "check": "Before playing, Throws left displays 3; after the first shot it shows 2."
             },
             {
-              "title": "Make pin values editable",
-              "where": "BP_BowlingPin → Variables → +.",
-              "do": "Create PinValue (Integer; default 1). Tick Instance Editable. In the earlier RecordPin call replace the hard-coded 1 with Get PinValue. Compile.",
-              "why": "The same physics Blueprint can represent different rewards without duplicates.",
-              "check": "Selecting a placed BP_BowlingPin actor shows PinValue in its Details panel."
+              "title": "Show the widget",
+              "where": "BP_BowlingPlayerController → Event BeginPlay.",
+              "do": "After the original Add Mapping Context setup, add Create Widget (WBP_BowlingHUD; Owning Player=Self) → Add to Viewport. Use Sequence if the existing BeginPlay already has multiple independent chains. Compile.",
+              "why": "Each level start shows the HUD automatically.",
+              "check": "The scoreboard is present as soon as Play starts."
             },
             {
-              "title": "Create one bonus pin",
-              "where": "In the Bowling level → select one placed BP_BowlingPin.",
-              "do": "Set its PinValue to 3 in Details. Give that instance a visibly different material through its mesh component. Keep all other pins at 1.",
-              "why": "A special pin introduces aiming decisions without a new gameplay system.",
-              "check": "Knocking down the marked pin changes Score by 3 but PinsDown by only 1."
+              "title": "Make pin points editable",
+              "where": "BP_BowlingPin → Variables.",
+              "do": "Create PinValue (Integer; default 1) and enable Instance Editable. In the existing RecordPin call use Get PinValue as the input rather than the fixed value 1. Compile.",
+              "why": "Each pin can have a different value without duplicating the whole physics system.",
+              "check": "The selected pin in a level exposes PinValue in the Details panel."
             },
             {
-              "title": "Playtest and tune the lane",
-              "where": "Play the level with another pair.",
-              "do": "Ask them to explain the rules, play once and point out confusing UI or unfair physics. Adjust the special pin position, lane decoration, colours and on-screen hints.",
-              "why": "Good visuals communicate the rules, not merely decorate them.",
-              "check": "A player can explain the bonus pin and restart controls without teacher help."
+              "title": "Place one bonus pin",
+              "where": "Bowling level → select one BP_BowlingPin actor.",
+              "do": "Set PinValue = 3 on that instance and give its Static Mesh component a visibly distinct material. Leave other pins set to 1.",
+              "why": "Players can decide where to aim for the best score.",
+              "check": "Knocking over the special pin adds 3 to Score but just 1 to PinsDown."
+            },
+            {
+              "title": "Make the result obvious",
+              "where": "WBP_BowlingHUD → Designer and Graph.",
+              "do": "Add a Text named ResultText, set Is Variable and default Visibility=Collapsed. Create a function RefreshResult reading BP_BowlingGameMode.RoundFinished. When true, use SetText with a message such as “ROUND OVER – SCORE: {Score}” and make ResultText Visible. In Event Construct start Set Timer by Event (0.25 sec, Looping=true) that calls RefreshResult.",
+              "why": "A persistent result is better than a momentary debug message.",
+              "check": "At the end of the third throw or after every pin is knocked over, the result remains visible until R is pressed."
+            },
+            {
+              "title": "Test two very different rounds",
+              "where": "Play the level twice.",
+              "do": "Try a first game with some misses, then press R and try another. Confirm ThrowsUsed, fallen-pin state, Scores and ResultText all reset. Ask another pair whether the score and controls make sense.",
+              "why": "The complete loop matters more than a single successful throw.",
+              "check": "The second round starts with three throws and no leftover score."
             }
           ],
-          "check": "The HUD shows correct live totals; a bonus pin awards 3 points but still counts as just one fallen pin.",
-          "fix": "If a bonus pin still scores 1, check the RecordPin input is connected to Get PinValue in BP_BowlingPin and that the selected placed actor instance has value 3."
+          "check": "Score, Pins Down and Throws Left update correctly; the special pin awards 3 points; a final result appears; R resets the full round.",
+          "fix": "Scores differ? Ensure each pin has Counted true after first fall and passes PinValue into RecordPin. Result never shows? RefreshResult must run on a repeating timer and read RoundFinished from the assigned GameMode."
+        },
+        {
+          "id": "power",
+          "title": "4. Optional: give players a choice of shot power",
+          "tier": "Creative",
+          "outcome": "Q and E decrease/increase shot strength without changing the sideways aiming controls; the HUD can show the selected power.",
+          "designer": "Make a simple power meter with low/high markings, and ask a playtester whether changes are noticeable and fair.",
+          "steps": [
+            {
+              "title": "Make the working throw strength configurable",
+              "where": "BP_BowlingBall → Event Graph → existing custom Throw event.",
+              "do": "On the custom Throw event, add a Float input named Strength. Replace the current fixed strength or impulse-magnitude value with the Strength input, retaining the original direction calculation. Note the value that used to work before making the change.",
+              "why": "Power belongs to the throw event rather than multiple duplicated throw Blueprints.",
+              "check": "Throw compiles and expects a Float Strength input."
+            },
+            {
+              "title": "Store the player’s chosen power",
+              "where": "BP_BowlingPlayerController → Variables.",
+              "do": "Create BaseThrowPower (Float, set to the working value from the original tutorial) and PowerMultiplier (Float; default 1.0). Compile.",
+              "why": "A multiplier means this guide works with whichever base impulse fits your bowling ball’s mass.",
+              "check": "Both values are visible in the controller details."
+            },
+            {
+              "title": "Add Q and E input actions",
+              "where": "Content Drawer → Bowling → Input folder.",
+              "do": "Create two Boolean Input Actions IA_PowerDown and IA_PowerUp. Add them to the existing Bowling Input Mapping Context: Q = IA_PowerDown; E = IA_PowerUp. Save.",
+              "why": "Separate one-shot key events are easier to debug than an unconfigured input axis.",
+              "check": "The mapping context lists Q and E next to the new actions."
+            },
+            {
+              "title": "Change power in safe increments",
+              "where": "BP_BowlingPlayerController → Event Graph.",
+              "do": "From IA_PowerDown Started, Set PowerMultiplier = Clamp (Float)(PowerMultiplier-0.25, 0.5, 2.0). From IA_PowerUp Started, Set PowerMultiplier = Clamp (Float)(PowerMultiplier+0.25, 0.5, 2.0). Print PowerMultiplier for testing.",
+              "why": "Players get useful choices without extreme impulses breaking the lane.",
+              "check": "Q and E move the value in 0.25 steps between 0.5 and 2.0."
+            },
+            {
+              "title": "Pass the chosen strength into Throw",
+              "where": "BP_BowlingPlayerController → existing gated IA_Throw chain from Upgrade 2.",
+              "do": "Multiply BaseThrowPower × PowerMultiplier and connect the result to the new Strength pin on the existing BP_BowlingBall Throw call. Do not create a second Throw call. Compile.",
+              "why": "The power setting must use the same limited-throws counter.",
+              "check": "Low power and high power produce visibly different travel distances."
+            },
+            {
+              "title": "Test three useful strengths",
+              "where": "Play In Editor.",
+              "do": "Try PowerMultiplier 0.5, 1.0 and 2.0. Reset with R each time. Tune BaseThrowPower if the ball never reaches pins or always passes through them. Save the working settings.",
+              "why": "Tuning is a design decision, not just a functioning input.",
+              "check": "A peer can deliberately choose a soft or powerful shot."
+            }
+          ],
+          "check": "At least three power settings produce distinguishable throws while throw limits, score and restarts still work.",
+          "fix": "No power difference? Check the actual AddImpulse or AddForce magnitude uses the new Strength pin. If Throw always uses a constant, it will ignore the controller’s multiplier."
         }
       ]
     },
