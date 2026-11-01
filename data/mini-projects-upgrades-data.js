@@ -1,4 +1,4 @@
-/* Loops & Spawning student review — original mini-project lessons unchanged. */
+/* Individual Loops student review, original source mini-project unchanged. */
 window.UE5_MINI_UPGRADE_DATA = {
   "version": "3.66.5",
   "title": "Mini-Project Upgrade Walkthroughs",
@@ -1440,7 +1440,7 @@ window.UE5_MINI_UPGRADE_DATA = {
           "id": "waves",
           "title": "2. Automatically spawn harder waves",
           "tier": "Essential",
-          "outcome": "Clearing every target creates a fresh wave, growing from 5 to 6 to 7 targets and finishing after five waves.",
+          "outcome": "Clear five target waves: 5, 6, 7, 8 then 9. Every last hit triggers exactly one new wave; 35 hits completes the game.",
           "designer": "Design a subtle new-wave announcement and keep enough screen space for later waves with 9 targets.",
           "steps": [
             {
@@ -1453,112 +1453,126 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Copy your working spawn loop",
               "where": "Loops GameMode → Event Graph.",
-              "do": "Select the existing For Loop and the connected Spawn Actor / Make Transform nodes. Press Ctrl+C to COPY them (do not cut or delete anything yet). If you select only the For Loop without its Spawn Actor / transform nodes, the paste will be incomplete; box-select all connected nodes before Ctrl+C.",
+              "do": "In BP_LoopsGameMode Event Graph, find the ORIGINAL BeginPlay → For Loop → Make Vector → Make Transform → Spawn Actor From Class(BP_ClickTarget) chain. Select the For Loop plus ALL connected spawn/transform/maths nodes and Ctrl+C to COPY (not Cut). Do not delete the original working BeginPlay chain yet.",
               "why": "Copying preserves the original working version until the new function is tested.",
               "check": "The old BeginPlay spawning still works before you change it."
             },
             {
               "title": "Paste it into StartWave",
               "where": "Loops GameMode → My Blueprint → Functions → +.",
-              "do": "Create a function StartWave. Open it, press Ctrl+V to paste the For Loop and Spawn Actor nodes, then connect the purple StartWave entry white execution pin to the pasted For Loop. Compile.",
+              "do": "Under My Blueprint → Functions → +, create StartWave. Open that Function and paste the copied For Loop + Spawn Actor and Make Transform nodes. Wire its purple Function Entry white output to the pasted For Loop input. If pasting lost a connected pin, copy or rebuild that missing connection before compiling.",
               "why": "StartWave will be called once for each new wave.",
               "check": "The function contains the old spawn chain and has no compile errors."
             },
             {
               "title": "Replace the old spawn chain with one call",
               "where": "Loops GameMode → Event Graph → BeginPlay.",
-              "do": "Disconnect the old For Loop from BeginPlay, then add a call to StartWave on BeginPlay instead. Compile and Play. Once five targets appear as before, remove the unused old chain.",
+              "do": "In BP_LoopsGameMode Event Graph, disconnect the OLD For Loop white execution input from Event BeginPlay. Connect BeginPlay to a call of StartWave instead (not to both old and new loops). Compile and Play; five stationary click targets should still spawn. Only after confirming they appear, delete the orphaned old For Loop and spawn chain.",
               "why": "This replaces old logic only after the new version works.",
               "check": "Exactly five targets appear, not zero and not ten."
             },
             {
               "title": "Calculate a new target count for each wave",
               "where": "StartWave function, before the For Loop.",
-              "do": "Create a local Integer CurrentWaveCount and set it to 4 + WaveNumber. Set TargetsLeft = CurrentWaveCount. Then set the For Loop First Index = 0 and Last Index = CurrentWaveCount - 1. Connect execution in this order: Set count → Set TargetsLeft → For Loop.",
+              "do": "Inside the StartWave FUNCTION create a LOCAL Integer CurrentWaveCount (in My Blueprint → Local Variables, with this function selected). From the purple Entry node set CurrentWaveCount = 4 + WaveNumber (use Get WaveNumber). Then Set TargetsLeft=CurrentWaveCount. Wire its execution into the existing For Loop: First Index=0, Last Index=CurrentWaveCount - 1. Compile. At WaveNumber=1, that produces 5 actors.",
               "why": "A loop from 0 to N-1 spawns exactly N targets; the counter must agree with the number spawned.",
-              "check": "Wave 1 spawns 5, wave 2 spawns 6 and wave 3 spawns 7."
+              "check": "The white chain is StartWave Entry → Set CurrentWaveCount → Set TargetsLeft → For Loop; its Last Index is CurrentWaveCount-1, not CurrentWaveCount."
             },
             {
               "title": "Calculate the column number",
               "where": "Loops GameMode → StartWave function → For Loop Index.",
-              "do": "Drag off the Index integer pin and add % (Integer) with divisor 3. Subtract 1 from the remainder using Integer - Integer. This becomes Column.",
+              "do": "In StartWave, drag from For Loop Index → add Integer % Integer and set divisor 3. From its result add Integer - Integer with B=1. This becomes the Column value (-1,0,1). Do NOT set a separate permanent Column variable; the arithmetic nodes may feed the next Make Vector.",
               "why": "The three possible columns are -1, 0 and 1, giving left, middle and right positions.",
               "check": "Indexes 0,1,2 create Column values -1,0,1."
             },
             {
               "title": "Calculate the row number",
               "where": "Same StartWave graph.",
-              "do": "Use Integer ÷ Integer from For Loop Index with divisor 3. This becomes Row.",
+              "do": "Drag from the SAME For Loop Index, add Divide(Integer) with divisor 3 (integer division, not Float). This produces Row: indexes 0-2→0; 3-5→1; 6-8→2. Leave the Column maths in place.",
               "why": "Integer division groups indexes 0–2 in row 0, 3–5 in row 1 and 6–8 in row 2.",
               "check": "Index 6 produces Row=2, while Index 1 produces Row=0."
             },
             {
               "title": "Connect grid position to spawning",
               "where": "StartWave → Make Vector → Make Transform → Spawn Actor.",
-              "do": "Set Make Vector X=200, Y=Column × 180, Z=150 + (Row × 130). Connect its Vector output to Make Transform.Location. Keep For Loop First Index=0 and Last Index=CurrentWaveCount-1.",
+              "do": "In StartWave replace the old tower spacing on Make Transform.Location. Create Make Vector: set X=200; connect the Column integer ×180 to Y; connect 150 + (Row ×130) to Z. Connect Make Vector to Make Transform.Location and keep Make Transform connected to Spawn Actor From Class. Use the SAME For Loop and one Spawn Actor, not nine copies.",
               "why": "The ninth spawned target fits a third row rather than extending beyond the camera horizontally.",
-              "check": "The first wave has five targets in two rows; wave five can have nine in three rows."
+              "check": "Compiles with a maximum three-column and three-row layout. At WaveNumber=1 exactly five targets fill the first five grid positions."
             },
             {
               "title": "Frame the grid before increasing wave count",
-              "where": "LoopsLevel → World Outliner → Cam_TargetRush Camera Actor, then Play In Editor.",
-              "do": "Use the Camera preview from Cam_TargetRush to frame the full nine-target positions. With the example grid, targets spawn around X=200, Y=-180..180, Z=150..410, so a camera near X=-600, Y=0, Z=250 looking along +X is a starting point. Move or rotate the Camera Actor if any target is off-screen. Save the level.",
+              "where": "BP_LoopsGameMode → Variables → WaveNumber and LoopsLevel → Cam_TargetRush Camera Actor.",
+              "do": "The full wave logic is not finished yet, so test framing TEMPORARILY: set WaveNumber default from 1 to 5, Compile, then Play. StartWave will create nine targets immediately using your new grid; make sure the fixed Cam_TargetRush shows all nine without overlap (example target positions X=200,Y=-180..180,Z=150..410). Adjust the camera if needed. Stop Play and RESTORE WaveNumber default=1, Compile and Save before continuing.",
               "why": "A camera-dependent layout must be tested before wave progression; fixed example coordinates are only a starting point.",
-              "check": "Play a final nine-target test wave: all nine appear within the fixed camera, separate enough to click and clear of any HUD."
+              "check": "Nine targets fit the screen in the temporary preview. WaveNumber is back to 1 for normal play; no permanent shortcut to wave 5 remains."
             },
             {
               "title": "Record every hit",
               "where": "Loops GameMode → HitTarget function from Upgrade 1.",
-              "do": "After the existing Set TargetsLeft = Max(0, TargetsLeft-1), add Set TargetsHit = TargetsHit + 1. Preserve the original ClickTarget code that destroys an actor only once.",
+              "do": "In BP_LoopsGameMode → HitTarget, find the existing Set TargetsLeft = Max(0,TargetsLeft-1) followed by Branch(TargetsLeft<=0). Disconnect the white execution wire between them. Insert Set TargetsHit = TargetsHit + 1 between those nodes, then reconnect white execution Set TargetsLeft → Set TargetsHit → Branch(TargetsLeft<=0). Do not add a second decrement.",
               "why": "TargetsHit is a useful score across several waves.",
-              "check": "Click three targets: TargetsLeft falls by 3 and TargetsHit increases by 3."
+              "check": "With WaveNumber=1, click three targets: TargetsLeft is 2 and TargetsHit is 3. The original first-stage win still works until the next change."
             },
             {
               "title": "Replace the old immediate win",
               "where": "HitTarget function → final Branch TargetsLeft <= 0.",
-              "do": "Remove the old immediate Set Finished = true and \"ALL TARGETS CLEARED\" path. Instead compare WaveNumber >= FinalWave. If True: Set Finished=true and Print String \"ALL WAVES COMPLETE!\". If False: schedule the next wave in the following steps.",
+              "do": "In HitTarget, keep the existing Branch(TargetsLeft<=0) that runs AFTER Set TargetsHit. On its True output remove the OLD Set Finished=true and \"ALL TARGETS CLEARED!\" nodes. Add Branch(Condition=WaveNumber>=FinalWave). On this new Branch True set Finished=true, then Print String \"ALL WAVES COMPLETE!\". Leave the False output ready for scheduling the next wave. Compile.",
               "why": "Reaching zero targets should mean the next wave, not the end of the game, until the final wave.",
-              "check": "The final-wave condition exists and is checked after the last target."
+              "check": "Clearing wave 1 no longer sets Finished. Only wave 5 (or higher) with zero remaining targets finishes the whole game."
             },
             {
-              "title": "Make a one-time wave advance event",
-              "where": "Loops GameMode → Event Graph, in empty space.",
-              "do": "Create a Custom Event AdvanceWave. Wire it to Set WaveNumber = WaveNumber + 1, followed by a call to StartWave. Compile.",
-              "why": "One named event controls what happens between waves.",
-              "check": "Calling AdvanceWave once increases WaveNumber and creates the correct new wave."
+              "title": "Create an event to start the next wave",
+              "where": "BP_LoopsGameMode → Event Graph (not inside a Function).",
+              "do": "Add Custom Event named AdvanceWave. Connect its white output to Set WaveNumber = WaveNumber + 1, then to the existing StartWave FUNCTION call. Compile. Do not create another spawn loop here.",
+              "why": "A single named event controls wave advancement, separate from HitTarget.",
+              "check": "AdvanceWave calls StartWave once and does not contain another For Loop."
             },
             {
-              "title": "Trigger that event when a wave finishes",
-              "where": "Loops GameMode → HitTarget function → False path of WaveNumber >= FinalWave.",
-              "do": "Add Set Timer by Event, set Time=0.75 and Looping=false. On its red Event pin choose AdvanceWave (or create an Event delegate to it). Wire this timer after the final-target check only; do not connect it to ordinary hits.",
-              "why": "The pause helps players notice the new wave and a non-looping timer prevents repeated wave creation.",
-              "check": "After clearing wave 1, exactly one wave 2 spawns 0.75 seconds later."
+              "title": "Create one short-delay event for wave transitions",
+              "where": "BP_LoopsGameMode → Event Graph → empty space.",
+              "do": "Add a separate Custom Event called ScheduleNextWave. Connect it to Set Timer by Event with Time=0.75, Looping=false. From its red Event delegate pin use Create Event and choose AdvanceWave. Compile. The one-shot timer belongs here in the Event Graph.",
+              "why": "HitTarget can request one delayed wave without juggling a Custom Event delegate inside its Function.",
+              "check": "ScheduleNextWave calls AdvanceWave once after three-quarters of a second; Looping is unchecked."
             },
             {
-              "title": "Prevent duplicate wave scheduling",
-              "where": "In HitTarget function, before the existing decrement.",
-              "do": "Add a Branch with condition (NOT Finished) AND (TargetsLeft > 0). Only the True path may decrement TargetsLeft and test for the wave end. Keep BP_ClickTarget.Destroy Actor after calling HitTarget.",
-              "why": "Extra events should not start more than one replacement wave.",
-              "check": "The final hit schedules only one new wave."
+              "title": "Request the next wave on the last hit only",
+              "where": "BP_LoopsGameMode → HitTarget function → False output of Branch(WaveNumber>=FinalWave).",
+              "do": "Call ScheduleNextWave (the Custom Event from the Event Graph) from that False white execution output. Keep it behind the existing TargetsLeft<=0 Branch, so normal hits do not request waves. Compile.",
+              "why": "A wave transition happens only after its final target disappears.",
+              "check": "Clear all five targets on Wave 1: one ScheduleNextWave call is made and six fresh targets appear after 0.75 seconds."
+            },
+            {
+              "title": "Reuse one guard rather than stacking two Branches",
+              "where": "BP_LoopsGameMode → HitTarget function, at its FIRST Branch just after Function Entry.",
+              "do": "The first-stage function already has Branch(NOT Finished). Replace its Condition with (NOT Finished) AND (TargetsLeft > 0). Keep its True path feeding Set TargetsLeft → Set TargetsHit → the existing end-of-wave checks. Leave False unconnected. Do NOT add a second decrement Branch.",
+              "why": "TargetsLeft reaches zero on only one valid last hit; late events cannot schedule additional waves or make counts negative.",
+              "check": "Each target click counts once; one completed wave creates one next wave."
+            },
+            {
+              "title": "Verify AdvanceWave does not run repeatedly",
+              "where": "BP_LoopsGameMode → Event Graph → ScheduleNextWave and AdvanceWave.",
+              "do": "Check Set Timer by Event has Time=0.75 and Looping=false and that AdvanceWave calls StartWave just once. Add a temporary Print String after Set WaveNumber with the new wave number if you need proof, then remove it.",
+              "why": "The first game should not accidentally create two copies of each wave.",
+              "check": "WaveNumber rises 1→2→3→4→5, never jumping 1→3 or producing 12 targets in Wave 2."
             },
             {
               "title": "Complete a full five-wave test",
               "where": "Play the Loops level.",
-              "do": "Clear each wave without changing any Blueprint during play. Record the target counts: 5, 6, 7, 8, 9. At the final target in wave 5, the game should set Finished=true and print the win message.",
+              "do": "Play LoopsLevel with WaveNumber default 1. Clear the first five targets, then wait 0.75 seconds for six new targets. Continue until waves 1..5 have 5,6,7,8,9 targets. At the last target of wave 5, \"ALL WAVES COMPLETE!\" prints, Finished becomes true and no wave 6 appears. Test from a new Play to check the first wave always starts with five.",
               "why": "Testing progression across all waves catches off-by-one loop errors.",
-              "check": "There are 35 targets total across five waves, each counted once, and the final wave finishes the game."
+              "check": "After a full run WaveNumber=5, TargetsHit=35, TargetsLeft=0 and Finished=true. No duplicated wave or extra target remains."
             }
           ],
           "check": "Clearing each wave produces the next (5→6→7→8→9 targets), and clearing wave 5 ends the run with 35 recorded hits.",
-          "fix": "Still ends after five clicks? The old Finished=true path is still in HitTarget. Extra waves spawn? Ensure the gate requires TargetsLeft>0 before decrement and Set Timer by Event is not looping. Wrong count? Last Index must be CurrentWaveCount-1.",
+          "fix": "Still wins after five? Remove the temporary Stage 1 Set Finished=true and use the FinalWave test only. Two Wave 2 batches? Check StartWave is called only from BeginPlay and AdvanceWave, and Set Timer by Event in ScheduleNextWave has Looping=false. Wrong number? For Loop Last Index must be CurrentWaveCount-1. Lost targets after moving code? Reconnect the original Make Transform and Spawn Actor inside StartWave. Nine not visible? Use the temporary WaveNumber=5 camera test and restore 1.",
           "designerSteps": [
             "Plan: Design a subtle new-wave announcement and keep enough screen space for later waves with 9 targets. Draw a small mock-up of the nine-target 3×3 grid and timer.",
             "Create: make one original element for Automatically spawn harder waves using targets, arena props or wave HUD graphics. Export as FBX or PNG to your shared Teams folder.",
             "Integrate and test: ask the programmer to import your asset; play together and confirm every target stays visible and clickable."
           ],
           "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
-          "beforeStart": "The first five targets must be clickable, disappear and reach TargetsLeft=0 exactly once.",
-          "commonMistake": "Copy the working spawn loop first and remove the old call only after StartWave works; otherwise you can lose working logic.",
+          "beforeStart": "Stage 1 works: BP_LoopsGameMode spawns five stationary BP_ClickTarget Actors into the fixed Cam_TargetRush view. Their click events call HitTarget and destroy the Actor; after five clicks the temporary ALL TARGETS CLEARED message appears.",
+          "commonMistake": "The original For Loop is copied into StartWave and removed from BeginPlay only after the replacement works. At the end of wave 1, the first-stage \"ALL TARGETS CLEARED!\" win path MUST be replaced; otherwise waves cannot progress.",
           "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         },
         {
