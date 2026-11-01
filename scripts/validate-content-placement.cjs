@@ -121,7 +121,7 @@ function audit(root = path.resolve(__dirname, '..')) {
   // Student-facing artist work starts without a selected game concept and
   // stays inside the existing Mini-Project Mayhem owning route.
   const jam=w.UE5_MINI_JAM_DATA||{};
-  const designerTrackSpec=jam.designerTrack||{},jamArtMissions=items(designerTrackSpec.jamArtMissions),jamArtKits=items(designerTrackSpec.jamArtKits);
+  const designerTrackSpec=jam.designerTrack||{},jamArtMissions=items(designerTrackSpec.missions),jamArtKits=items(designerTrackSpec.kits);
   if(jamArtMissions.length!==6||jamArtKits.length!==4||!designerTrackSpec.sharedFolder||!designerTrackSpec.handoverRule||!designerTrackSpec.soloRule)
     fail('Mayhem Designer Track','needs six practical jamArtMissions, four specific jamArtKits, Teams handover and solo differentiation');
   if(jamArtMissions[0]?.id!=='observe'||jamArtMissions[1]?.id!=='style-lab'||!jamArtMissions[0]?.independent||!jamArtMissions[1]?.independent)
