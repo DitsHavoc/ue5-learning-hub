@@ -21,7 +21,7 @@ const STUDY = window.UE5_STUDY_DATA;
 const BACKEND = window.UE5_BACKEND;
 const SKILL_MISSIONS = window.UE5_SKILL_MISSIONS || {missions:[]};
 const CPP_SKILL_MISSIONS = window.UE5_CPP_SKILL_MISSIONS || {missions:[],planned:[]};
-const HUB_VERSION = '3.65.0';
+const HUB_VERSION = '3.65.1';
 const MINI = window.UE5_MINI_PROJECT_DATA || {projects:[]};
 const MINI_NOTES = window.UE5_MINI_PROJECT_NOTES || {};
 const MINI_UPGRADES = window.UE5_MINI_UPGRADE_DATA || {projects:[]};
@@ -2003,12 +2003,12 @@ function miniUpgradeHref(id,stage){return '#/mini-projects/upgrades/'+id+(stage?
 function miniUpgradeCards(p){
   const completed=new Set(miniUpgradesCompleted());
   return p.stages.map((stage,i)=>'<a class="mini-upgrade-card" href="'+miniUpgradeHref(p.project,stage.id)+'">'+
-    '<span class="eyebrow">'+(completed.has(stage.id)?'✓ COMPLETE':esc(stage.tier)+' • STAGE '+(i+1))+'</span>'+
+    '<span class="eyebrow">'+(completed.has(stage.id)?'✓ COMPLETE':esc(stage.tier)+' • STAGE '+(i+1))+(stage.id===p.minimumStage?' • MINIMUM PLAYABLE GAME':'')+'</span>'+
     '<h3>'+esc(stage.title)+'</h3><p>'+esc(stage.outcome)+'</p><strong>Open text walkthrough →</strong></a>').join('');
 }
 function miniUpgradeLanding(){
   return '<div class="mini-shell mini-upgrades">'+miniTrail([{title:'Build',href:'#/build'},{title:'Mini-Projects',href:'#/mini-projects'},{title:'Game jam upgrades'}])+
-    '<header class="mini-header"><span class="eyebrow">MINI-PROJECT MAYHEM • NEXT STEP</span><h1>Upgrade your Mini-Project</h1><p>Finish one starter tutorial, then make it a game. Work through the Essential stages first to build a complete playable loop. Creative stages are optional ways to go further. Each text-only step tells you where to go, what to connect and how to check it works.</p></header>'+
+    '<header class="mini-header"><span class="eyebrow">MINI-PROJECT MAYHEM • NEXT STEP</span><h1>Upgrade your Mini-Project</h1><p>Finish one original tutorial and follow the Essential stages to the marked Minimum Playable Game. Then choose whether to polish or tackle Creative extensions. Every text-only step gives an exact action and a test.</p></header>'+
     '<div class="mini-upgrade-grid">'+(MINI_UPGRADES.projects||[]).map(p=>'<a class="mini-upgrade-card" href="'+miniUpgradeHref(p.project)+'"><span class="eyebrow">'+p.stages.length+' GUIDED UPGRADES</span><h3>'+esc(p.title)+'</h3><p>'+esc(p.intro)+'</p><strong>Choose this game →</strong></a>').join('')+'</div></div>';
 }
 function miniUpgradeProjectPage(id){
@@ -2018,6 +2018,7 @@ function miniUpgradeProjectPage(id){
   return '<div class="mini-shell mini-upgrades">'+miniTrail([{title:'Build',href:'#/build'},{title:'Mini-Projects',href:'#/mini-projects'},{title:'Upgrades',href:'#/mini-projects/upgrades'},{title:original.title}])+
     '<header class="mini-header"><span class="eyebrow">AFTER THE ORIGINAL TUTORIAL • '+p.stages.filter(x=>completed.has(x.id)).length+'/'+p.stages.length+' UPGRADES DONE</span><h1>'+esc(p.title)+'</h1><p>'+esc(p.intro)+'</p><div class="mini-chips"><span>Text-only, step by step</span><span>Programmer + artist/designer</span><span>Essential first • Creative later</span></div><a class="button ghost" href="'+miniHref(id)+'">← Open original '+esc(original.title)+' tutorial</a></header>'+
     '<section class="mini-information"><h2>Before you start</h2><p>Complete and test the original <a href="'+miniHref(id)+'">'+esc(original.title)+'</a> first. Make a copy or backup of the working project. These upgrade steps use its existing Blueprints and map; if you renamed anything, use your own matching class name.</p><p>Work through the Essential stages in order. Creative stages are stretch work if your game is already playable. Each guide includes Blueprint steps, artist/designer work, tests and troubleshooting. Progress is saved in this browser, separately from original stages.</p></section>'+
+    '<section class="mini-information mini-upgrade-mvp"><span class="eyebrow">YOUR FIRST FINISH LINE</span><h2>Minimum Playable Game</h2><p>'+esc(p.minimumOutcome)+'</p><p>Follow the stages through <strong>'+esc(p.stages.find(x=>x.id===p.minimumStage)?.title||'your core game')+'</strong>. After that, your pair can playtest, polish or add optional features. Completing every page is not required.</p></section>'+
     '<div class="mini-upgrade-grid">'+miniUpgradeCards(p)+'</div>'+
     '<nav class="mini-stage-bottom"><a class="button ghost" href="#/mini-projects/jam">← Game jam brief</a><a class="button primary" href="'+miniUpgradeHref(id,p.stages[0].id)+'">Start first upgrade →</a></nav></div>';
 }
@@ -2033,7 +2034,8 @@ function miniUpgradeStagePage(id,stageId){
     '<section class="mini-information mini-upgrade-walkthrough"><span class="eyebrow">PROGRAMMER • GUIDED BUILD</span><h2>Follow these steps</h2><div class="mini-upgrade-steps">'+st.steps.map((step,i)=>
       '<details class="mini-source-section mini-upgrade-step" '+(i===0?'open':'')+'><summary><span class="mini-section-title"><strong>'+(i+1)+'. '+esc(step.title)+'</strong><small>Where → Do → Why → Check</small></span><span class="mini-section-toggle" aria-hidden="true">⌄</span></summary><div class="mini-upgrade-instructions">'+
       '<p><strong>Go to</strong><span>'+esc(step.where)+'</span></p><p><strong>Do this</strong><span>'+esc(step.do)+'</span></p><p><strong>Why</strong><span>'+esc(step.why)+'</span></p><p class="mini-upgrade-step-check"><strong>Check</strong><span>'+esc(step.check)+'</span></p></div></details>').join('')+'</div></section>'+
-    '<section class="mini-information mini-upgrade-designer"><span class="eyebrow">ARTIST / DESIGNER • PARALLEL TASK</span><h2>Make it look and feel better</h2><p>'+esc(st.designer)+'</p><p class="mini-small-note">Create on your own PC. Share FBX/PNG/TGA files through Teams and have the programmer import or reimport them into Unreal.</p></section>'+
+    '<section class="mini-information mini-upgrade-designer"><span class="eyebrow">ARTIST / DESIGNER • PARALLEL TASK</span><h2>Your three steps</h2><ol class="mini-task-list mini-designer-tasks">'+(st.designerSteps||[]).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ol><p class="mini-small-note"><strong>Check:</strong> '+esc(st.designerCheck||st.designer)+'</p><p class="mini-small-note">Work on your own PC; share FBX/PNG/TGA files through Teams. The programmer imports them into the local Unreal project.</p></section>'+
+    (st.id===p.minimumStage?'<section class="mini-information mini-upgrade-mvp"><span class="eyebrow">YOUR FIRST FINISH LINE</span><h2>Minimum Playable Game</h2><p>Pass the final test below and you have a playable prototype. You can stop to polish, or continue with extra features.</p></section>':'')+
     '<section class="mini-information mini-proof"><span class="eyebrow">PROVE IT WORKS</span><h2>Final test</h2><p>'+esc(st.check)+'</p><details><summary>If something does not work</summary><p>'+esc(st.fix)+'</p></details></section>'+
     '<section class="mini-complete-panel"><p>Mark complete only after running the game and passing the final test. Upgrade progress is local to this browser and does not change the original tutorial checkmarks.</p><button class="button '+(done?'success':'primary')+'" data-action="mini-upgrade-complete" data-stage="'+esc(st.id)+'">'+(done?'✓ Completed — click to undo':'Mark upgrade complete ✓')+'</button></section>'+
     '<nav class="mini-stage-bottom" aria-label="Upgrade navigation">'+(prev?'<a class="button ghost" href="'+miniUpgradeHref(id,prev.id)+'">← Previous upgrade</a>':'<a class="button ghost" href="'+miniUpgradeHref(id)+'">← Upgrade overview</a>')+

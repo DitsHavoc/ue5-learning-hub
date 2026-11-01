@@ -77,7 +77,7 @@ async function run(){
       const expectedPaths={
         'balloon-popper':['score','respawn','timer','results','risk'],
         'bowling':['pin-score','throws','polish','power'],
-        'clicker':['shop','display','goal','granny','training','farm'],
+        'clicker':['shop','display','granny','training','goal','farm'],
         'loops':['targets','waves','race','random']
       };
       for(const group of allUpgrades){
@@ -92,6 +92,8 @@ async function run(){
         await page.waitForSelector('.mini-upgrade-card',{timeout:10000});
         if(await page.locator('.mini-upgrade-card').count()!==group.stages.length)fail.push(device.name+': '+group.id+' upgrade cards missing');
         if(await page.locator('.mini-upgrade-card .eyebrow').count()!==group.stages.length)fail.push(device.name+': '+group.id+' stage tier labels missing');
+        const minimum=await page.evaluate(id=>window.UE5_MINI_UPGRADE_DATA.projects.find(p=>p.project===id)?.minimumStage,group.id);
+        if(!group.stages.includes(minimum)||await page.locator('.mini-upgrade-mvp').count()!==1)fail.push(device.name+': '+group.id+' missing minimum-game marker');
         for(const stageId of group.stages){
           await page.goto(base+'/#/mini-projects/upgrades/'+group.id+'/'+stageId,{waitUntil:'load'});
           await page.waitForSelector('.mini-upgrade-step',{timeout:10000});
@@ -102,11 +104,12 @@ async function run(){
             open:document.querySelector('#app .mini-upgrade-step')?.open,
             images:document.querySelectorAll('#app .mini-upgrade-stage img').length,
             hasDesigner:!!document.querySelector('#app .mini-upgrade-designer p'),
+            designerSteps:document.querySelectorAll('#app .mini-designer-tasks li').length,
             hasProof:!!document.querySelector('#app .mini-proof details'),
             hasButton:!!document.querySelector('#app [data-action="mini-upgrade-complete"]'),
             overflow:document.documentElement.scrollWidth>window.innerWidth+2
           }));
-          if(!result.title||result.steps<4||result.details!==result.steps*4||!result.open||result.images||!result.hasDesigner||!result.hasProof||!result.hasButton||result.overflow)
+          if(!result.title||result.steps<4||result.details!==result.steps*4||!result.open||result.images||(!result.hasDesigner||result.designerSteps!==3)||!result.hasProof||!result.hasButton||result.overflow)
             fail.push(device.name+' '+group.id+'/'+stageId+': incomplete upgrade page '+JSON.stringify(result));
         }
       }

@@ -17,12 +17,12 @@ Turn one existing UE5 Mini-Project into a complete 2–5 minute original game. T
 - **Thursday 12 November:** end-to-end playable loop, clear objective, assets integrated; test another pair's project and prioritise bug fixes.
 - **Friday 13 November:** 2–5 minute demo, before/after comparison, peer voting and informal awards.
 
-## Revised game loops (v3.65.0)
+## Revised game loops (v3.65.1 — Unreal Engine 5.8)
 The original Mini-Projects are foundations, not finished games. Do **not** require every pair to complete all four tutorials or every optional upgrade. After completing one tutorial, follow the **Essential** steps in its own upgrade route before attempting Creative tasks.
 
 - **Balloon Popper:** score → random five-target respawning → 60-second timer/HUD → final score and Play Again → optional random danger targets.
-- **Bowling:** pin-scoring → ball reset between three throws, preserving fallen pins and score → live HUD/bonus pin → optional Q/E power control. The earlier 45-second limit has been removed from the main bowling route.
-- **Clicker:** manual shop → visible balance → lifetime earnings and 500-point milestone → Grannies generating 1/second each at increasing prices → Granny training that doubles each Granny's rate → optional 5/second Farms. Use **one** GameMode production timer and keep spendable balance separate from lifetime earnings.
+- **Bowling:** pin-scoring → root mesh and ball reset between three throws, preserving fallen pins and score → live HUD/bonus pin → optional Q/E power control. The earlier 45-second limit has been removed from the main bowling route.
+- **Clicker:** manual shop → live balance → Granny automation → Granny training → optional lifetime milestone and Farms. Use **one** GameMode production timer and keep spendable balance separate from lifetime earnings.
 - **Loops & Spawning:** five clickable targets → waves of 5, 6, 7, 8, 9 targets → overall 90-second race/HUD/replay → optional random spawn volume.
 
 Each new upgrade stage contains precise Blueprint nodes/actions, a designer task, a concrete test and troubleshooting. The text guides do **not** replace or edit the original illustrated source tutorials.

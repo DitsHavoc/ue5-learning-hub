@@ -123,10 +123,14 @@ function audit(root = path.resolve(__dirname, '..')) {
   for(const p of items(upgrade.projects)){
     reference('Mini-Project upgrade pathway '+p.project,p.project,ids(mini.projects));
     if(!items(p.stages).length)fail('Mini-Project upgrades '+p.project,'no upgrade stages');
+    const minimum=items(p.stages).find(st=>st.id===p.minimumStage);
+    if(!minimum||minimum.tier!=='Essential'||!p.minimumOutcome)fail('Mini-Project upgrades '+p.project,'needs an Essential minimum playable stage and outcome');
+    if(items(p.stages).findIndex(st=>st.id===p.minimumStage)>3)fail('Mini-Project upgrades '+p.project,'minimum playable game comes too late');
     for(const stage of items(p.stages)){
       if(!stage.title||!stage.outcome||!stage.designer||!stage.check||!stage.fix||!items(stage.steps).length)
         fail('Upgrade '+stage.id,'needs title, outcome, designer task, test, troubleshooting and guided steps');
       if(items(stage.steps).length<4)fail('Upgrade '+stage.id,'less than four guided actions');
+      if(items(stage.designerSteps).length!==3||!stage.designerCheck)fail('Upgrade '+stage.id,'needs three artist steps and a final check');
       for(const [i,step] of items(stage.steps).entries()){
         if(!step.title||!step.where||!step.do||!step.why||!step.check)
           fail('Upgrade '+stage.id+' step '+(i+1),'missing where, do, why or check');
