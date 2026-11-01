@@ -78,6 +78,8 @@ async function run(){
         await page.goto(base+'/#/mini-projects/'+group.id,{waitUntil:'load'});
         if(await page.locator('.mini-upgrade-promo a[href="#/mini-projects/upgrades/'+group.id+'"]').count()!==1)fail.push(device.name+': '+group.id+' overview upgrade link missing');
         await page.locator('.mini-upgrade-promo a').click();
+        await page.waitForURL(url=>url.hash==='#/mini-projects/upgrades/'+group.id,{timeout:10000});
+        await page.waitForSelector('.mini-upgrade-card',{timeout:10000});
         if(await page.locator('.mini-upgrade-card').count()!==group.stages.length)fail.push(device.name+': '+group.id+' upgrade cards missing');
         for(const stageId of group.stages){
           await page.goto(base+'/#/mini-projects/upgrades/'+group.id+'/'+stageId,{waitUntil:'load'});
