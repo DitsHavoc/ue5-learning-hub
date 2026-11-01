@@ -52,6 +52,22 @@ async function run(){
         fail.push(device.name+': removed course source block still visible');
       if(await page.locator('.mini-header').count()!==1)
         fail.push(device.name+': Mini-Projects header missing after intro removal');
+      // Mayhem is a challenge landing within Mini-Projects, not a fifth tutorial.
+      if(await page.locator('.mini-jam-banner a[href="#/mini-projects/jam"]').count()!==1)fail.push(device.name+': jam entry missing');
+      await page.locator('.mini-jam-banner a').click();
+      await page.waitForSelector('.mini-jam-starter');
+      const jam=await page.evaluate(()=>({
+        hash:location.hash,title:document.querySelector('#app h1')?.textContent,
+        starters:document.querySelectorAll('.mini-jam-starter').length,
+        roles:document.querySelectorAll('.mini-jam-roles > div').length,
+        overflow:document.documentElement.scrollWidth>window.innerWidth+2,
+        text:document.querySelector('#app')?.textContent||''
+      }));
+      if(jam.hash!=='#/mini-projects/jam'||jam.title!=='Mini-Project Mayhem'||jam.starters!==4||jam.roles!==2||jam.overflow||!jam.text.includes('Friday 13 November'))fail.push(device.name+': jam page incorrect '+JSON.stringify(jam));
+      await page.locator('.mini-jam-starter[href="#/mini-projects/balloon-popper"]').click();
+      if(!page.url().endsWith('#/mini-projects/balloon-popper'))fail.push(device.name+': starter project link broken');
+      await page.goto(base+'/#/mini-projects',{waitUntil:'load'});
+      await page.waitForSelector('.mini-project-card');
       const definitions=await page.evaluate(()=>window.UE5_MINI_PROJECT_DATA.projects.map(p=>({id:p.id,stages:p.stages.map(s=>s.id)})));
       if(definitions.reduce((n,p)=>n+p.stages.length,0)!==16)fail.push(device.name+': expected 16 stages');
       for(const p of definitions){
