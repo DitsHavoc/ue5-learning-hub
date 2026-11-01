@@ -1,6 +1,6 @@
-/* Student-friendly text-only upgrades using original UE5.8 tutorial names. */
+/* Student walkthrough fixes aligned to the original illustrated Unreal 5.8 Mini-Projects. */
 window.UE5_MINI_UPGRADE_DATA = {
-  "version": "3.66.0",
+  "version": "3.66.1",
   "title": "Mini-Project Upgrade Walkthroughs",
   "intro": "Finish one original guided Mini-Project, then follow these text-only expansions. Start with Essential stages; the Creative stage gives your pair room to make it yours. Save your Unreal project after every stage.",
   "projects": [
@@ -457,9 +457,9 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Detect when all pins are down",
               "where": "At the end of RecordPin in BP_BowlingGameMode.",
-              "do": "After incrementing PinsDown, compare it with GoalPins using >= (Integer). Feed that to Branch. On True set RoundFinished = true and Print String \"ALL PINS DOWN!\".",
+              "do": "After Set Score in RecordPin (not directly from Set PinsDown), add >= (Integer) to compare Get PinsDown against GoalPins. Plug that into a Branch and wire its white execution input after Set Score. On True: Set RoundFinished = true, then Print String \"ALL PINS DOWN!\". On False: do nothing. Do not replace the earlier Branch that checks NOT RoundFinished.",
               "why": "A simple target count gives the game a clear win condition.",
-              "check": "The win message appears only after the last different pin is counted."
+              "check": "Each pin updates Score before the final-pin test. The final distinct pin sets RoundFinished=true."
             },
             {
               "title": "Protect each pin against repeat counting",
@@ -609,7 +609,7 @@ window.UE5_MINI_UPGRADE_DATA = {
             }
           ],
           "check": "Make three throws without restarting: the ball comes back for shots two and three, fallen pins remain fallen, final score appears, and the fourth Space press does nothing.",
-          "fix": "Ball fails to reset? Confirm you stored the mesh (not actor) transform before physics moved it, and ResetBall uses the same mesh component. One press spends multiple throws? Check IA_Throw uses Started, not Triggered. Score missing after last shot? Ensure FinishRound is called after Delay 4 seconds. If arrows stop moving the ball after reset, check Model is the root mesh and the Move event still offsets Model. Do not add another physics mesh or reset a child component independently.",
+          "fix": "Ball fails to reset? Confirm Model is the Actor root and you stored StartingBallTransform from Get Actor Transform before physics moved it, and ResetBall uses the same mesh component. One press spends multiple throws? Check IA_Bowl uses Started, not Triggered. Score missing after last shot? Ensure FinishRound is called after Delay 4 seconds. If arrows stop moving the ball after reset, check Model is the root mesh and the Move event still offsets Model. Do not add another physics mesh or reset a child component independently.",
           "designerSteps": [
             "Plan: Design a clear Throws Left indicator and short instructions: arrow keys aim, Space throws, R restarts the round. Draw a small mock-up of the lane, throw marker and scoreboard.",
             "Create: make one original element for Reset the ball and allow three throws using scoreboard, lane markings or bonus-pin textures. Export as FBX or PNG to your shared Teams folder.",
@@ -705,15 +705,15 @@ window.UE5_MINI_UPGRADE_DATA = {
           "steps": [
             {
               "title": "Make the working throw strength configurable",
-              "where": "BP_BowlingBall → Event Graph → existing custom Bowl event.",
-              "do": "On the custom Bowl event, add a Float input named Strength. Replace the current fixed strength or impulse-magnitude value with the Strength input, retaining the original direction calculation. Note the value that used to work before making the change.",
-              "why": "Power belongs to the Bowl event rather than multiple duplicated throw Blueprints.",
-              "check": "Bowl compiles and expects a Float Strength input."
+              "where": "BP_BowlingBall → Event Graph → original Bowl Custom Event from Mini-Project Stage 4.",
+              "do": "Select the red Bowl custom event and add a Float input called Strength in Details → Inputs (+). Find the ORIGINAL Add Force node targeting Model. It has Force set to X=200000, Y=0, Z=0 and Accel Change ticked. Replace that constant Force vector with Make Vector: X=Strength, Y=0, Z=0; connect it to Add Force → Force. Keep Accel Change ticked. Compile.",
+              "why": "The original source tutorial uses Add Force with a Vector, not a separate impulse-magnitude input. Strength changes only the forward X force.",
+              "check": "The Bowl event has a Float Strength input and Add Force receives Make Vector(X=Strength,Y=0,Z=0)."
             },
             {
               "title": "Store the player’s chosen power",
               "where": "BP_BowlingPlayerController → Variables.",
-              "do": "Create BaseThrowPower (Float, set to the working value from the original tutorial) and PowerMultiplier (Float; default 1.0). Compile.",
+              "do": "In BP_BowlingPlayerController create BaseThrowPower (Float; default 200000) and PowerMultiplier (Float; default 1.0). Use the original known-working X force (200000) as the starting value. Compile.",
               "why": "A multiplier means this guide works with whichever base impulse fits your bowling ball’s mass.",
               "check": "Both values are visible in the controller details."
             },
@@ -747,15 +747,15 @@ window.UE5_MINI_UPGRADE_DATA = {
             }
           ],
           "check": "At least three power settings produce distinguishable throws while throw limits, score and restarts still work.",
-          "fix": "No power difference? Check the actual AddImpulse or AddForce magnitude uses the new Strength pin. If Throw always uses a constant, it will ignore the controller’s multiplier.",
+          "fix": "No power difference? Check Bowl.Strength feeds Make Vector.X, which connects to Add Force → Force, and Accel Change remains checked. Make sure IA_Bowl still calls Bowl exactly once.",
           "designerSteps": [
             "Plan: Make a simple power meter with low/high markings, and ask a playtester whether changes are noticeable and fair. Draw a small mock-up of the lane, throw marker and scoreboard.",
             "Create: make one original element for Optional: give players a choice of shot power using scoreboard, lane markings or bonus-pin textures. Export as FBX or PNG to your shared Teams folder.",
             "Integrate and test: ask the programmer to import your asset; play together and confirm three throws remain clear and pin score is legible."
           ],
           "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
-          "beforeStart": "Complete and back up the three-throw game before editing the working Throw event. Note the impulse/force value that previously reached the pins.",
-          "commonMistake": "Start with the original throw strength before testing half and double power.",
+          "beforeStart": "The original IA_Bowl triggers the Bowl custom event and Add Force on the Model mesh, using X=200000 with Accel Change enabled. Your three-throw system and R restart work.",
+          "commonMistake": "Do not replace the original Add Force node with Add Impulse. Leave Accel Change enabled; only replace its X force value with the new Strength input.",
           "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         }
       ],
@@ -789,11 +789,18 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "Calling AddClick once changes Score by ClickPower."
             },
             {
-              "title": "Replace the old +1 event",
-              "where": "Open your existing Clicker Widget Blueprint → the main button OnClicked event.",
-              "do": "Find the original chain that increments the GameMode Score by 1. Replace that increment with Get Game Mode → Cast To BP_ClickerGameMode → AddClick. Remove or disconnect the old +1 chain.",
-              "why": "The new function must be the ONLY place a click changes the score.",
-              "check": "Ten clicks give exactly 10 points before buying upgrades, not 20."
+              "title": "Find the original click handler in GameMode",
+              "where": "BP_ClickerGameMode → Event Graph → the button event wired from Assign On Clicked.",
+              "do": "Locate the original chain: BeginPlay creates ClickerGameUI, stores ClickerUI, then Assign On Clicked binds the main ClickerButton. Follow its red delegate to the separate event that currently adds 1 to Score and calls ClickerUI → SetScoreText. Keep that binding. Do NOT create another OnClicked event for the main button in the widget.",
+              "why": "The original tutorial handles its main button click inside GameMode, not inside the widget.",
+              "check": "One original assigned click event exists in BP_ClickerGameMode and still responds to the big button."
+            },
+            {
+              "title": "Use AddClick without counting twice",
+              "where": "BP_ClickerGameMode → Event Graph → existing assigned ClickerButton event.",
+              "do": "Disconnect or delete only the original Set Score = Score + 1 calculation. From the SAME click event, call your new AddClick function once. After it, keep the existing Get ClickerUI → SetScoreText call and connect the updated Score integer to its Score input. Compile.",
+              "why": "Replacing the original increment avoids awarding both the old +1 and the new ClickPower value.",
+              "check": "From a fresh run, 3 clicks show Score 1, 2, 3. The original ClickerButton still works."
             },
             {
               "title": "Create a BuyUpgrade function",
@@ -811,10 +818,10 @@ window.UE5_MINI_UPGRADE_DATA = {
             },
             {
               "title": "Connect the purchase button",
-              "where": "Clicker Widget → Graph.",
-              "do": "Select BuyUpgradeButton in the Designer, then in Details → Events click + beside OnClicked. Connect the new event to Get Game Mode → Cast To BP_ClickerGameMode → BuyUpgrade. Compile.",
+              "where": "ClickerGameUI Widget → Designer → BuyUpgradeButton → Events → OnClicked (+).",
+              "do": "This new button is different from the ORIGINAL ClickerButton, whose event stays assigned in BP_ClickerGameMode. From BuyUpgradeButton OnClicked, Get Game Mode → Cast To BP_ClickerGameMode → call BuyUpgrade. Next read the GameMode Score and call SetScoreText on Self (the current ClickerGameUI widget) using that integer. Compile. In the next upgrade, this SetScoreText call will be replaced by RefreshShop.",
               "why": "The purchase remains in GameMode, not as separate widget-only money.",
-              "check": "Earn 10, buy once, and the next click awards 2."
+              "check": "You can click the original main button and buy an upgrade with the new button. Immediately after buying, ScoreText displays the reduced balance."
             },
             {
               "title": "Test the insufficient-funds case",
@@ -824,16 +831,16 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "The game never produces negative points by buying."
             }
           ],
-          "check": "At the first upgrade the game changes from 1 point per click to 2, costs 10 points and raises the next price to 20.",
-          "fix": "Purchase not working? Confirm BuyUpgradeButton is wired to its own OnClicked, the GameMode cast succeeds and the original score increment was removed.",
+          "check": "The original main button earns +1 initially. After buying the 10-point upgrade, each main click earns 2. The shop purchase immediately updates the visible balance.",
+          "fix": "If the original click stops working, check the existing Assign On Clicked binding in BP_ClickerGameMode. If score doubles, delete the old Set Score +1 chain; it must call AddClick once. If the shop purchase succeeds but ScoreText does not update, call SetScoreText on the widget after BuyUpgrade.",
           "designerSteps": [
             "Plan: Create a theme for your shop and main click button. For the first purchase, design an icon or button state that clearly suggests increased points per click. Draw a small mock-up of the main button, shop costs and production per second.",
             "Create: make one original element for Buy more powerful manual clicks using shop icons, themed producer artwork or button graphics. Export as FBX or PNG to your shared Teams folder.",
             "Integrate and test: ask the programmer to import your asset; play together and confirm a player can see how each purchase changes output."
           ],
           "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
-          "beforeStart": "Start with the original working Clicker: pressing the main button changes one GameMode score. Keep the existing widget and GameMode; do not create a second score.",
-          "commonMistake": "Disconnect the OLD +1 score chain when you add AddClick. Two active chains award points twice.",
+          "beforeStart": "The original ClickerGameUI widget is shown by BP_ClickerGameMode. Its original ClickerButton is connected using Assign On Clicked in the GameMode, and the widget custom event SetScoreText displays Score.",
+          "commonMistake": "The original main-button OnClicked event is inside BP_ClickerGameMode, not inside ClickerGameUI. Do not add a second click handler in the widget.",
           "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         },
         {
@@ -846,9 +853,9 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Make three named labels",
               "where": "Clicker Widget → Designer.",
-              "do": "Add or rename Text widgets as ScoreText, PowerText and CostText. Tick Is Variable for each. Set placeholders \"Points: 0\", \"Per click: 1\", \"Next upgrade: 10\".",
+              "do": "Keep and REUSE the original ScoreText widget: do not add another ScoreText. Add PowerText and CostText as two new Text widgets. Tick Is Variable for all three. Use placeholder text \"Points: 0\", \"Per click: 1\" and \"Next upgrade: 10\". If you choose to add fixed labels, keep those outside the dynamic text widgets.",
               "why": "Players should know whether buying an upgrade is worth it.",
-              "check": "All three labels are readable and do not overlap the buttons."
+              "check": "You still have exactly one ScoreText widget, plus new PowerText and CostText labels."
             },
             {
               "title": "Create a RefreshShop function",
@@ -859,22 +866,22 @@ window.UE5_MINI_UPGRADE_DATA = {
             },
             {
               "title": "Refresh after clicking",
-              "where": "Clicker Widget → main click button OnClicked event.",
-              "do": "In your Clicker Widget main button OnClicked event, keep Get Game Mode → Cast → AddClick, then call RefreshShop. In the Designer select the Score Text widget: if its Text property still has the original Binding, click the binding control and remove it before using RefreshShop → SetText. Do not have both a Text Binding and SetText updating the same label.",
-              "why": "The player should see the updated balance immediately.",
-              "check": "Click once: Points rises by ClickPower and the display changes exactly once. There is no older bound text fighting RefreshShop."
+              "where": "BP_ClickerGameMode → Event Graph → original event from Assign On Clicked for ClickerButton.",
+              "do": "Keep the existing event → AddClick function. Find the old call Get ClickerUI → SetScoreText(Score) that you kept in Upgrade 1. Replace that call with Get ClickerUI → RefreshShop. Compile the widget first so BP_ClickerGameMode can find RefreshShop. Do NOT add OnClicked to ClickerButton in the widget.",
+              "why": "GameMode still owns the original click event; the widget only refreshes its visible numbers.",
+              "check": "One main-button click runs AddClick exactly once and RefreshShop updates Score, ClickPower and UpgradeCost."
             },
             {
               "title": "Refresh after shopping",
               "where": "Clicker Widget → BuyUpgradeButton OnClicked event.",
-              "do": "After BuyUpgrade, call RefreshShop on the widget. This should run whether the purchase succeeds or fails.",
+              "do": "Inside the existing BuyUpgradeButton OnClicked event in ClickerGameUI, after BuyUpgrade replace the older call to SetScoreText with RefreshShop (on Self). RefreshShop must run whether the purchase is accepted or rejected. Compile.",
               "why": "A rejected purchase should leave clear, unchanged costs on screen.",
               "check": "After a successful purchase, Per click and Next upgrade change immediately."
             },
             {
               "title": "Show correct values on load",
               "where": "Clicker Widget → Graph → Event Construct.",
-              "do": "Add RefreshShop after Event Construct so the first displayed numbers come from the GameMode. Compile and Save.",
+              "do": "In ClickerGameUI Event Construct from the original tutorial, remove or disconnect the old hard-coded SetScoreText(0) call. Connect Event Construct → RefreshShop instead. Compile and Save. The displayed starting values are now read from BP_ClickerGameMode.",
               "why": "The UI should never depend on someone clicking before it becomes correct.",
               "check": "Restart: the labels show 0, 1 and 10 before any input."
             },
@@ -887,14 +894,14 @@ window.UE5_MINI_UPGRADE_DATA = {
             }
           ],
           "check": "The score, points per click and upgrade cost always match the real GameMode variables, including immediately after load.",
-          "fix": "Text frozen? Make sure RefreshShop is called after BOTH button events and Event Construct. If labels are not accessible in Graph, enable Is Variable in the Designer.",
+          "fix": "If ScoreText remains unchanged, check the BP_ClickerGameMode original Assign On Clicked handler calls ClickerUI.RefreshShop after AddClick. If it updates twice, do not create an extra ClickerButton OnClicked in the widget. RefreshShop should replace, not run alongside, SetScoreText.",
           "designerSteps": [
             "Plan: Create a tidy arrangement for three numbers and the two buttons. Try it at 1280×720 as well as full screen. Draw a small mock-up of the main button, shop costs and production per second.",
             "Create: make one original element for Show your shop balance and costs using shop icons, themed producer artwork or button graphics. Export as FBX or PNG to your shared Teams folder.",
             "Integrate and test: ask the programmer to import your asset; play together and confirm a player can see how each purchase changes output."
           ],
           "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
-          "beforeStart": "The main button should earn points and the first shop purchase should work.",
+          "beforeStart": "The original GameMode click event calls AddClick and ClickerUI.SetScoreText, while the NEW BuyUpgradeButton event lives in the ClickerGameUI widget. Score changes by ClickPower and purchases cost points.",
           "commonMistake": "If you already bound ScoreText to a Text Binding in the original tutorial, remove that binding before setting its text through RefreshShop.",
           "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         },
@@ -943,7 +950,7 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Send manual clicking through GainPoints",
               "where": "BP_ClickerGameMode → existing AddClick function from Upgrade 1.",
-              "do": "Remove or disconnect Set Score = Score + ClickPower. Instead call GainPoints(Amount=ClickPower). Keep the widget main button calling AddClick once, and keep BuyUpgrade spending Score only.",
+              "do": "Inside the BP_ClickerGameMode AddClick function, disconnect the old Set Score = Score + ClickPower calculation. Instead call GainPoints with Amount connected to ClickPower. Leave the existing GameMode assigned ClickerButton event calling AddClick once, followed by Get ClickerUI → RefreshShop. Do not add a widget-side main-button handler.",
               "why": "Every manually earned point now increases lifetime earnings without duplicating clicks.",
               "check": "One click at ClickPower=2 changes both Score and TotalEarned by exactly 2."
             },
@@ -1027,7 +1034,7 @@ window.UE5_MINI_UPGRADE_DATA = {
           ],
           "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
           "beforeStart": "The click button, purchase button and RefreshShop labels must already work. You will keep that shop and add passive income.",
-          "commonMistake": "Before you add the Granny button, confirm that the automatic timer earns points using a Print String; otherwise you will be debugging two things at once.",
+          "commonMistake": "If Score jumps by an extra point on every click, the old +1 chain is still active or you accidentally bound the original ClickerButton inside the widget as well as GameMode.",
           "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         },
         {
@@ -1235,9 +1242,9 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Create a game target actor",
               "where": "Content Drawer → Loops level folder → Blueprint Class → Actor.",
-              "do": "Name it BP_ClickTarget. Add a Static Mesh component using the Cube mesh and give it a clearly coloured material. Compile.",
+              "do": "Name the new Actor BP_ClickTarget. Add a Static Mesh component using the built-in Cube mesh and a visibly coloured material. On the Cube component set Collision Presets to BlockAll (or ensure Visibility is Block) and leave Simulate Physics unchecked so it does not fall. Compile.",
               "why": "A reusable actor gives every spawned item the same interaction.",
-              "check": "BP_ClickTarget can be placed in the scene and shows a cube."
+              "check": "BP_ClickTarget has a visible cube, blocks Visibility clicks and stays still when spawned."
             },
             {
               "title": "Spawn this target using the existing loop",
@@ -1259,6 +1266,20 @@ window.UE5_MINI_UPGRADE_DATA = {
               "do": "In Class Defaults set Player Controller Class to BP_LoopsPlayerController. Check World Settings → GameMode Override points to this GameMode. Save the level.",
               "why": "Otherwise Unreal may run a different controller and clicks will not fire.",
               "check": "Press Play and confirm the cursor is visible."
+            },
+            {
+              "title": "Place a fixed camera for the clicking game",
+              "where": "LoopsLevel → Place Actors panel → search Camera Actor.",
+              "do": "Drag a Camera Actor into LoopsLevel and rename it Cam_TargetRush in the World Outliner. Set Location roughly X=-600, Y=0, Z=250 and Rotation X(Pitch)=0, Y(Yaw)=0, Z(Roll)=0 as a starting view towards the +X direction. Adjust the camera only if the spawned target tower is not visible. Save the level.",
+              "why": "The original Loops exercise uses a roaming view; clickable targets need a stable view of their playfield.",
+              "check": "In the Camera preview, you can see the positions where the five initial targets will appear."
+            },
+            {
+              "title": "Make the Player Controller use that camera",
+              "where": "BP_LoopsPlayerController → Event Graph → existing BeginPlay.",
+              "do": "Keep Set Show Mouse Cursor=true and Set Enable Click Events=true. After those, add Get Actor of Class (Actor Class=CameraActor). Connect its Return Value to New View Target on Set View Target with Blend (Target=Self) and wire white execution from BeginPlay setup into Set View Target with Blend. Compile. Only one Camera Actor should be present for this simple lookup.",
+              "why": "Click positions make sense only when the game displays the same fixed camera each run.",
+              "check": "Press Play: you see a fixed view looking at the spawned targets, with a visible mouse cursor."
             },
             {
               "title": "Add the round state",
@@ -1291,20 +1312,20 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Play the whole target challenge",
               "where": "Open Loops level → Play.",
-              "do": "Click each of the five targets. Confirm they disappear one by one and the final click prints ALL TARGETS CLEARED. Restart and try them in another order.",
+              "do": "Open LoopsLevel → Play. Check the camera does not drift and the cursor is visible. Click each of five targets. They should disappear one by one, with \"ALL TARGETS CLEARED!\" after the final click. Restart and try a different order.",
               "why": "This is now a complete win condition built from the Loops exercise.",
-              "check": "Five successful clicks end the challenge, with no duplicate scoring."
+              "check": "Five clickable targets remain in the fixed camera view; each click destroys one and the fifth announces success."
             }
           ],
           "check": "Five targets spawn, five separate clicks clear them, and the final click announces success.",
-          "fix": "Click does nothing? Confirm the cursor and Enable Click Events are set, target collision blocks the Visibility trace, and World Settings selects the intended GameMode.",
+          "fix": "Click does nothing? Confirm the cursor and Enable Click Events are set, target collision blocks the Visibility trace, and World Settings selects the intended GameMode. If the target tower is off-screen, move Cam_TargetRush and check BP_LoopsPlayerController BeginPlay calls Set View Target with Blend.",
           "designerSteps": [
             "Plan: Pick a recognisable target shape and design a clear visual distinction between clickable objects and scenery. Draw a small mock-up of the nine-target 3×3 grid and timer.",
             "Create: make one original element for Turn the spawned cubes into clickable targets using targets, arena props or wave HUD graphics. Export as FBX or PNG to your shared Teams folder.",
             "Integrate and test: ask the programmer to import your asset; play together and confirm every target stays visible and clickable."
           ],
           "designerCheck": "The team has one shared original asset or mock-up and a screenshot or short note proving the visual change helps gameplay.",
-          "beforeStart": "Finish the original Loops tutorial: GameMode spawns several visible cubes using one For Loop.",
+          "beforeStart": "The original LoopsLevel and BP_LoopsGameMode spawn a tower of BP_Box actors. Your new BP_ClickTarget will replace BP_Box. The original lesson had a free camera; this game needs one fixed camera so mouse clicks are reliable.",
           "commonMistake": "A clicked target needs a collision component that blocks Visibility; show the mouse cursor and enable click events on the assigned Player Controller.",
           "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         },
@@ -1373,10 +1394,10 @@ window.UE5_MINI_UPGRADE_DATA = {
             },
             {
               "title": "Frame the grid before increasing wave count",
-              "where": "Loops level → main Camera Actor or active player view → World Settings.",
-              "do": "Play-test the complete nine-target grid. If the level camera is not facing the positive-X plane, move the camera or adapt the X/Y axes in Make Vector until all nine positions fit on screen. Keep every target separated, visible and clear of the HUD.",
+              "where": "LoopsLevel → World Outliner → Cam_TargetRush Camera Actor, then Play In Editor.",
+              "do": "Use the Camera preview from Cam_TargetRush to frame the full nine-target positions. With the example grid, targets spawn around X=200, Y=-180..180, Z=150..410, so a camera near X=-600, Y=0, Z=250 looking along +X is a starting point. Move or rotate the Camera Actor if any target is off-screen. Save the level.",
               "why": "A camera-dependent layout must be tested before wave progression; fixed example coordinates are only a starting point.",
-              "check": "In Play at the final wave, none of the nine targets is off-screen or behind a UI panel."
+              "check": "Play a final nine-target test wave: all nine appear within the fixed camera, separate enough to click and clear of any HUD."
             },
             {
               "title": "Record every hit",
