@@ -16,7 +16,7 @@ window.UE5_MINI_JAM_DATA = {
       "name": "Loops & Spawning",
       "icon": "↻",
       "foundation": "Loops, spawning and repeating gameplay",
-      "ideas": "Turn spawned cubes into five escalating waves, add a countdown and optionally randomise their positions."
+      "ideas": "Shoot random rising blocks with a line-trace blaster; survive 60 seconds without any touching the red height limit."
     },
     {
       "project": "bowling",
