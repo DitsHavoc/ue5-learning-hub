@@ -1266,7 +1266,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "where": "BP_LoopsPlayerController → Event Graph → Event BeginPlay.",
               "do": "Connect the WHITE exec chain: BeginPlay → Set Show Mouse Cursor(true, Self) → Set Input Mode Game And UI(Player Controller=Self; no focused widget; mouse lock=Do Not Lock) → Set View Target with Blend(Target=Self, New View Target=Get Actor of Class(Class=CameraActor)). Only one camera actor should be in this test level. Compile.",
               "why": "Players aim with the mouse; Game+UI mode and the assigned view allow world-position deprojection.",
-              "check": "Press Play: the correct fixed camera shows the cubes, and the mouse stays visible."
+              "check": "Press Play: the correct fixed camera shows the cubes, and the mouse stays visible. In PlayerController Class Defaults, set Default Mouse Cursor to Crosshairs for an arcade-blaster aiming reticle."
             },
             {
               "title": "Create an explicit Fire action",
@@ -1527,7 +1527,7 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Change speed and appearance when fast",
               "where": "BP_RisingBlock → Event BeginPlay BEFORE UpdateBlockVisual.",
-              "do": "Use Branch(FastThreat): True → Set GrowthSpeed=60 → BlockMesh.Set Material(Element Index=0, Material=red warning material). False does nothing and keeps GrowthSpeed=35 and the default blue/bright material. Both paths should then call the existing UpdateBlockVisual once (simplest: set the flag-dependent values in a small InitialiseAppearance function, then BeginPlay → InitialiseAppearance → UpdateBlockVisual).",
+              "do": "Avoid merging two Branch execution paths. Instead, in Event BeginPlay use one straight WHITE execution chain: Set GrowthSpeed → BlockMesh.Set Material(Element Index=0) → UpdateBlockVisual. Feed Set GrowthSpeed with a Select Float node controlled by FastThreat (False=35, True=60). Feed Set Material with a Select Material node controlled by FastThreat (False=normal material, True=red warning material). Compile; do not change the Event Tick growth maths.",
               "why": "Players get a readable reason to prioritise certain columns.",
               "check": "Fast red threats visibly stretch faster than normal ones, and all blocks start on the floor."
             },
