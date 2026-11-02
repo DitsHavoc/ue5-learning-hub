@@ -1229,7 +1229,7 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Create a game target actor",
               "where": "Content Drawer → Content → Loops → right-click → Blueprint Class → Actor.",
-              "do": "Create a NEW Blueprint Class → Actor named BP_ClickTarget (NOT the original BP_Box). Add a Static Mesh component; choose the built-in Cube. On the Static Mesh set Collision Enabled=Query Only (No Physics Collision), Collision Presets=Custom with Visibility=Block (BlockAll also works), and Simulate Physics UNCHECKED. Give it a visible material, Compile and Save. Leave BP_Box alone.",
+              "do": "Create a NEW Blueprint Class → Actor named BP_ClickTarget (NOT the original BP_Box). Add a Static Mesh component; choose the built-in Cube. On the Static Mesh set Collision Enabled=Query Only (No Physics Collision), Collision Presets=Custom with Visibility=Block (BlockAll also works), and Simulate Physics is UNCHECKED. Give it a visible material, Compile and Save. Leave BP_Box alone.",
               "why": "A reusable actor gives every spawned item the same interaction.",
               "check": "BP_ClickTarget has a visible cube, Visibility tracing is blocked, physics is off, and original BP_Box is unchanged."
             },
