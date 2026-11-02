@@ -26,7 +26,7 @@ The original Mini-Projects are foundations, not finished games. Do **not** requi
 - **Balloon Popper:** score → random five-target respawning → 60-second timer/HUD → final score and Play Again → optional random danger targets.
 - **Bowling:** pin-scoring → root mesh and ball reset between three throws, preserving fallen pins and score → live HUD/bonus pin → optional Q/E power control. The earlier 45-second limit has been removed from the main bowling route.
 - **Clicker:** manual shop → live balance → Granny automation → Granny training → optional lifetime milestone and Farms. Use **one** GameMode production timer and keep spendable balance separate from lifetime earnings.
-- **Loops & Spawning / Target Rush:** verify ActorOnClicked with a temporary `TARGET CLICK` Print String **before** GameMode logic → five clickable targets → five waves (5, 6, 7, 8, 9) → one 90-second race/HUD/replay → optional combo-score challenge → optional safe random offsets in each grid cell. If all students clear 35 targets too easily, test 45–60 seconds after the full base loop is proven.
+- **Loops & Spawning → Rising Defence:** fixed-camera mouse blaster uses Convert Mouse Location To World Space → Line Trace By Channel → BP_RisingBlock. Random free-lane spawns every 1.5s; blocks grow upwards and lose if any reaches the visible 450cm red line. Survive 60 seconds with Hits HUD and R restart. Optional fast red threats and visual polish.
 
 Each new upgrade stage contains precise Blueprint nodes/actions, a designer task, a concrete test and troubleshooting. The text guides do **not** replace or edit the original illustrated source tutorials.
 
@@ -37,7 +37,7 @@ Aim for a working original tutorial and **two or three Essential upgrades by the
 
 ## Suggested project extensions
 - Balloon Popper → timer, combo/streak, hazards or moving balloons.
-- Loops & Spawning → the finished base game is a 35-target 90-second race; its optional combo score makes it replayable. Good themes: sci-fi target range, hacking terminal, alien signal purge or robot calibration. Stretch: accuracy/ordered targets or safer spawn variation. The original source cube tower stays untouched.
+- Loops & Spawning → Rising Defence: random growing threats, gun raycast, danger-height fail state and 60-second victory; optional fast red threats or themed sci-fi turret/anti-virus defence.
 - Bowling → rounds, scoring, obstacles or moving targets.
 - Clicker → upgrades, limited-time goals, score targets or a small shop.
 
@@ -59,14 +59,14 @@ Canonical owner: **Build → Mini-Projects**, reusing its four source tutorials 
 ## Student-usability pass (v3.66.0)
 The 16 original illustrated Mini-Project tutorials and their saved-progress IDs remain untouched. Each optional upgrade now opens with the exact state that should already work, and expands complex Blueprint operations into smaller steps with immediate checks. Common mistakes are visible in the final test troubleshooting section. Upgrades reuse the **original** names: Bowling `IA_Bowl` and `Bowl` custom event; Clicker `BP_ClickerGameMode`.
 
-Suggested classroom method: before each upgrade, students run the prior project, back it up, and check the prerequisite. Then they follow one Blueprint action and verify the stated check before continuing. For Balloon Popper, prove five spawns before removing old placed balloons. For Bowling, confirm pin scoring and Model root/aiming before introducing reset. For Clicker, disconnect the old +1 nodes to avoid doubled scores; test one Granny with Print String before designing its UI. For Loops, copy the working spawn graph, then replace BeginPlay only after the new StartWave function works.
+Suggested classroom method: before each upgrade, students run the prior project, back it up, and check the prerequisite. Then they follow one Blueprint action and verify the stated check before continuing. For Balloon Popper, prove five spawns before removing old placed balloons. For Bowling, confirm pin scoring and Model root/aiming before introducing reset. For Clicker, disconnect the old +1 nodes to avoid doubled scores; test one Granny with Print String before designing its UI. For Loops, verify IA_RisingFire → Line Trace By Channel hits and removes a cube BEFORE introducing random rising targets; replace the old For Loop exec only when SpawnOneBlock is ready.
 
 The website regression suite checks rendered pages, routes, original stage progress and expanded content. **UE5.8 Blueprint execution is still not tested in the actual editor.**
 
 ## Final student walk-through corrections (v3.66.1)
 The **original Mini-Projects remain unchanged**. Critical alignment: the original ClickerGameUI main ClickerButton uses `Assign On Clicked` **inside `BP_ClickerGameMode`**, where its score event already calls `ClickerUI.SetScoreText`. The upgrades now retain that event, replace the old +1 with `AddClick`, and only then replace `SetScoreText` with the widget's `RefreshShop` function. Only NEW shop buttons use widget-local `OnClicked`. This avoids doubled click handlers.
 
-In Bowling, the source `Bowl` event uses `Add Force` on `Model`, with **X=200000 and Accel Change enabled**. The optional power upgrade now uses `Strength` as the X component of a `Make Vector` connected to `Add Force`. It keeps the original 200000 value until adjustable power is connected so a half-completed upgrade never disables the throw. In Loops, create `Cam_TargetRush` and use `Set View Target with Blend` from `BP_LoopsPlayerController`; this keeps clicking targets in a fixed, visible scene.
+In Bowling, the source `Bowl` event uses `Add Force` on `Model`, with **X=200000 and Accel Change enabled**. The optional power upgrade now uses `Strength` as the X component of a `Make Vector` connected to `Add Force`. It keeps the original 200000 value until adjustable power is connected so a half-completed upgrade never disables the throw. In Loops, create `Cam_RisingDefence` and use `Set View Target with Blend` from `BP_LoopsPlayerController`; line-trace shooting uses the same fixed view and mouse position.
 
 Student instruction check: complete the original tutorial, verify the prerequisite on the upgrade page, change and test one connection at a time, and retain the last working project backup. Site tests do not compile the exercises in Unreal Engine 5.8.
 
@@ -97,16 +97,6 @@ Only the Balloon Popper **upgrade** guide changed. Original five illustrated Bal
 - The original M_Balloon is already **red**, so the optional M_DangerBalloon must be a distinct **purple/blue** (prefer a warning symbol/texture too); its mesh is named **BalloonModel**. Danger AwardPoints(-2) uses the same clamp and single replacement path as normal balloons.
 - Browser/content checks validate instructional structure and routes, **not** physical Blueprint compilation in UE5.8.
 
-## Individual Loops & Spawning student review (v3.66.5)
-This final individual walkthrough changes only the upgrade routes. The original three illustrated Loops tutorials, `BP_Box` source, screenshots, and progress IDs remain untouched.
-
-- **Stage 1:** The original `BP_Box` tower is physics-enabled. Keep it unchanged, make a separate stationary `BP_ClickTarget` with Simulate Physics **unchecked**, use the existing `BP_LoopsGameMode` `For Loop` but swap Spawn Actor Class, then add mouse events, `BP_LoopsPlayerController`, and a placed `Cam_TargetRush`. In this first step `TargetsLeft` is the remaining-target counter; `TargetsHit` comes next.
-- **Stage 2:** Copy the original working spawn graph into `StartWave` before disconnecting old BeginPlay. Use local `CurrentWaveCount=4+WaveNumber`; `For Loop` lasts `CurrentWaveCount-1`, so waves have 5/6/7/8/9 targets. Grid maths: Column=(Index%3)-1, Row=Integer Divide(Index,3), X=200, Y=Column*180, Z=150+Row*130. For a temporary nine-target camera check, set `WaveNumber=5` then **restore 1**. Replace the stage-1 immediate-win path with `FinalWave` decision. The `HitTarget` function calls `ScheduleNextWave`, a Custom Event in GameMode Event Graph which uses one `Set Timer by Event` Time 0.75, Looping **false**, bound to `AdvanceWave`.
-- **Stage 3:** One full-run `TickRush` countdown timer (90 seconds), not one timer per wave. `AdvanceWave` must guard `NOT Finished` to avoid spawning after timeout. `WBP_TargetRushHUD` displays four formatted, labelled values: Wave, Targets, Time and Hits, without intercepting 3D clicks; one widget result-refresh event distinguishes win and timeout. In the same original Player Controller, enable `IMC_TargetRush`, map R to reload the current level, and preserve the fixed camera. Briefly test a 5-second failure, then **restore 90** and clear all 35 targets to prove a successful run.
-- **Stage 4 (optional):** New players no longer need to invent a second unrestricted spawn-area Actor. Keep one target per existing grid cell; use small independent `Random Float in Range` offsets in Y (±20) and Z (±10). That adds replay variety without overlapping 100cm default cubes. If art targets grow larger, retune spacing and reframe the camera.
-
-The three original Loops tutorials and images were NOT edited. Website CI verifies content, routes and interaction, not Unreal Editor Blueprint graph compilation or gameplay physics.
-
 ## Final across-all-four learning flow review (v3.66.6)
 The four source Mini-Project tutorials and their images/steps/progress keys are unchanged. All four upgrade paths were reviewed individually and then together against the two-week jam brief. The intended deliverable is a complete short round or repeatable progression loop, not necessarily a 2–5-minute fixed-length game; **2–5 minutes is the planned showcase demo time**, and a 60/90-second round is valid.
 
@@ -114,7 +104,7 @@ The four source Mini-Project tutorials and their images/steps/progress keys are 
 - **Clicker:** after Granny stage — original click, shop, visible balance, buy Grannies, 1/sec automation.
 - **Bowling:** after HUD/polish — score counted pins, three throws with ball-only reset, final result and R restart.
 - **Balloon Popper:** after Results stage (not only Timer) — +1 scoring, five replacement balloons, 60-second HUD, frozen result and clickable Play Again. Treat the earlier Timer stage as the *working timed prototype*, not a finished replayable game.
-- **Loops:** after Race stage — five waves (5+6+7+8+9=35), timer, visible counters, win/timeout and R restart.
+- **Loops:** after Rising Defence Survival stage — random rising blocks, line-trace blaster, 60-second win, breach-height loss, HUD and R restart.
 
 **Danger balloon simplification:** In `SpawnOneBalloon`, a pure `Random Float in Range (0..1) <= 0.2` Boolean drives **Select** with False=`BP_Balloon`, True=`BP_DangerBalloon`, and its Class output feeds the original SINGLE `Spawn Actor From Class`. No `SelectedBalloonClass` variable, merged branch exec pins, or duplicate Spawn Actor nodes. Quick deterministic test: threshold 1.0 (all danger), -1.0 (all normal), then restore 0.2. The original red material is not itself a danger identifier.
 
@@ -122,7 +112,7 @@ The four source Mini-Project tutorials and their images/steps/progress keys are 
 1. Clicker: main button still scores once; the 10-point manual upgrade increases click power; buy one 15-point Granny and verify +1/sec with no extra clicks.
 2. Bowling: upright pin does not score; a knocked pin adds one point only once; first ball resets without resetting the pins; R reloads the level.
 3. Balloon Popper: pop one target, score adds one, exactly five remain; let a short 5-second test expire; final score and Play Again work.
-4. Loops: five stationary clickable targets spawn; clearing wave 1 starts one wave of six; a 5-second test ends with no new wave; R reloads.
+4. Loops: five blocks can be hit by the line-trace blaster, then random rising targets can be shot; one reaches the red bar to lose; a 5-second survival test wins; R reloads.
 Restore all debug defaults, especially 60-second and 90-second clocks, before students use the project. These are *recommended real-editor tests*, not tests executed by website CI.
 
 All site checks validate route/rendered content consistency, not actual Unreal Engine 5.8 Blueprint compilation or the resulting physics.
@@ -132,7 +122,10 @@ The separate Artist & Game Designer Track, its six missions, four art kits, and 
 
 Session 1 remains joint research and planning (similar games, mechanics/assets, a small screen sketch and role split). From Session 2, set manageable design work that is useful for the actual working game, such as one game asset, an understandable HUD and quick peer testing. Pairs share exports through Teams; the programmer alone edits the live Unreal project. Solo students do fewer assets and prioritise a working gameplay loop.
 
-## Monday 2 November — Loops click-event and replayability QA
-Student reports: some groups could not remove targets by clicking. The upgrade now pauses at an isolated Event ActorOnClicked → Print String("TARGET CLICK") test before any Cast, GameMode score or Destroy Actor is introduced. If the message is absent, inspect PlayerController assignment, Play-vs-Simulate, input mode, world/game viewport focus and Static Mesh Visibility collision. If it prints but the target remains, inspect Cast success, Finished, HitTarget and the white execution wiring; if targets vanish but do not score, inspect the active GameMode and shared counter. For a predictable first test Spawn Actor uses Always Spawn, Ignore Collisions.
 
-**Is it a full game?** After the Essential stages, yes in the basic sense: five waves, 35 targets, 90 seconds, results, HUD and R replay. It is intentionally a light arcade prototype, not a deep game. Stage 4 (Creative) adds a practical high-score combo loop (timely hits reward more points and reset after 1.5 seconds) to create competition/replay motivation without changing the base 35-hit completion logic. Stage 5 keeps the previous random-positions stretch. Encourage each pair to choose one identity and change mechanics/balance only after a working run. Browser/content tests verify instructions and routes; they cannot confirm that the Blueprints compile or play correctly in UE5.8.
+## 2 November 2026 — Rising Defence supersedes earlier Target Rush upgrades
+The older 5-wave, ActorOnClicked Target Rush extension is replaced by a different **Rising Defence** progression. This is not a harmless cosmetic edit: students already using the old upgrade guide should BACK UP their UE5 project and deliberately start the new path from the beginning; the new progress IDs avoid accidentally showing old stages as complete. The original three Loops illustrated tutorials, source screenshot references and original BP_Box remain unchanged. The programmer's new work has three Essential stages (line-trace gun → random five-lane anchored growth + height failure → 60-second victory, HUD and restart) plus two optional stages (fast red blocks and feedback/polish). Other three Mini-Projects unchanged.
+
+**First help-desk check:** IA_RisingFire Started must print PEW before debugging the shot. Then confirm Convert Mouse Location To World Space returns true and Line Trace By Channel hits BP_RisingBlock's Visibility-blocking BlockMesh. Stage 2 uses a FreeLanes Integer Array with Remove Index on spawn and Add Unique when shot, so targets never grow inside one another. Each block's mesh Scale Z=CurrentHeight/100 and relative Location Z=CurrentHeight/2, keeping it rooted at Z=0. Stage 3's single 60-second timer and one repeating spawn timer live in GameMode; one UI refresh timer lives in the HUD. Lose when any CurrentHeight reaches 450; win by surviving 60 seconds. The red line has NoCollision so it cannot intercept the shot.
+
+**Scope:** for a two-week jam, the three Essential stages are the finished game. Artwork and fast-threat variants are not prerequisites. Site CI can only validate instruction structure and webpage UI, not actual Blueprint execution in Unreal Engine 5.8; an in-editor classroom smoke test remains necessary.
