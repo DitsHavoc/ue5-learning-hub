@@ -214,44 +214,26 @@ function audit(root = path.resolve(__dirname, '..')) {
   const bowlPower=guideText('bowling','power');
   if(!bowlPower.includes('Add Force')||!bowlPower.includes('200000')||!bowlPower.includes('Accel Change'))
     fail('Bowling power upgrade','must reuse original Bowl Add Force X 200000, Accel Change');
-  const loopTargets=guideText('loops','targets');
-  const loopsTargetSteps=items(findUpgrade('loops','targets')?.steps);
-  const loopsWaveSteps=items(findUpgrade('loops','waves')?.steps);
-  const loopsRaceSteps=items(findUpgrade('loops','race')?.steps);
-  const loopsRandomSteps=items(findUpgrade('loops','random')?.steps);
-  const guideStep=(steps,title)=>steps.findIndex(x=>x.title===title);
-  if(guideStep(loopsTargetSteps,'Create a game target actor')<0 || 
-     !guideText('loops','targets').includes('Simulate Physics is UNCHECKED') ||
-     !guideText('loops','targets').includes('BP_Box'))
-    fail('Loops targets','must explicitly replace physical BP_Box with stationary BP_ClickTarget without editing original');
-  const previewAt=guideStep(loopsWaveSteps,'Frame the grid before increasing wave count');
-  if(previewAt<0 || !guideText('loops','waves').includes('RESTORE WaveNumber default=1') ||
-     !guideText('loops','waves').includes('ScheduleNextWave') ||
-     !guideText('loops','waves').includes('AdvanceWave') ||
-     !guideText('loops','waves').includes('Looping=false'))
-    fail('Loops waves','needs a safe nine-target preview and one non-looping delayed wave transition');
-  if(!guideText('loops','race').includes('Hits: {Value}') ||
-     !guideText('loops','race').includes('WAVES CLEARED!') ||
-     !guideText('loops','race').includes('IMC_TargetRush') ||
-     !guideText('loops','race').includes('restore') && !guideText('loops','race').includes('SAVE with SecondsLeft=90'))
-    fail('Loops race','needs four labelled HUD values, end-state feedback, restart mapping and restored 90s clock');
-  if(!guideText('loops','random').includes('Random Float in Range') ||
-     !guideText('loops','random').includes('Column ×180') ||
-     !guideText('loops','random').includes('separate'))
-    fail('Loops random','must preserve grid slots and use small independent safe position offsets');
-
-  if(!loopTargets.includes('TARGET CLICK') ||
-     !loopTargets.includes('Set Input Mode Game And UI') ||
-     !loopTargets.includes('Visibility=Block'))
-    fail('Loops click input','needs a standalone target click print, reliable input mode and correct collision setup');
-  const comboSteps=items(findUpgrade('loops','combo')?.steps);
-  if(comboSteps.length<6 || !guideText('loops','combo').includes('ComboScore') ||
-     !guideText('loops','combo').includes('LastHitTime') ||
-     !guideText('loops','combo').includes('1.5'))
-    fail('Loops combo','needs replayable combo scoring and a timed reset without changing the base loop');
-
-  if(!loopTargets.includes('Cam_TargetRush')||!loopTargets.includes('Set View Target with Blend'))
-    fail('Loops targets upgrade','requires a fixed gameplay camera before click tests');
+  // Rising Defence extension: the original Loops source tutorial is unchanged.
+  const shooting=guideText('loops','rising-shot');
+  const growth=guideText('loops','rising-growth');
+  const survival=guideText('loops','rising-survival');
+  const danger=guideText('loops','rising-danger');
+  const polished=guideText('loops','rising-polish');
+  const loopsRoute=items(upgrade.projects).find(x=>x.project==='loops');
+  if(loopsRoute?.minimumStage!=='rising-survival'||items(loopsRoute.stages).length!==5)
+    fail('Rising Defence','needs three essential stages and two optional stages');
+  if(!shooting.includes('Line Trace By Channel')||!shooting.includes('Convert Mouse Location To World Space')||
+     !shooting.includes('IA_RisingFire')||!shooting.includes('BP_RisingBlock')||!shooting.includes('BP_Box'))
+    fail('Rising Defence gun','must teach real raycast aim, input mapping and keep original BP_Box safe');
+  if(!growth.includes('FreeLanes')||!growth.includes('Random Integer in Range')||
+     !growth.includes('CurrentHeight/2')||!growth.includes('450')||!growth.includes('LoseRound')||!growth.includes('Add Unique'))
+    fail('Rising Defence growth','needs non-overlapping random lanes, anchored scale and height fail');
+  if(!survival.includes('SecondsLeft')||!survival.includes('60')||
+     !survival.includes('Not Hit-Testable')||!survival.includes('IA_RisingRestart')||!survival.includes('Won'))
+    fail('Rising Defence win/lose','needs timed survival, readable HUD and reliable restart');
+  if(!danger.includes('FastThreat')||!polished.includes('Playtest'))
+    fail('Rising Defence creative','requires safe variety and a useful polish pathway');
 
 
   for (const x of items(course.lessons)) {

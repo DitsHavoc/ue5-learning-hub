@@ -1217,497 +1217,392 @@ window.UE5_MINI_UPGRADE_DATA = {
     },
     {
       "project": "loops",
-      "title": "Loops & Spawning → Target Rush (full game + score attack)",
-      "intro": "Finish the original physics-cube tower, then create Target Rush: five clickable waves, a time limit, readable HUD, victory/timeout and R replay. Stage 1 proves input with a simple TARGET CLICK message before adding GameMode scoring. The ESSENTIAL build through Stage 3 is already a complete playable game; optional Stage 4 adds combo points so speed matters, and Stage 5 adds safe target variation. Ideas for a unique presentation: arcade target range, hacking terminal, alien signal purge or robot calibration.",
+      "title": "Loops & Spawning → Rising Defence (line-trace survival game)",
+      "intro": "Turn the original Loops physics tower into Rising Defence. Five lanes spawn rising blocks at random. Use an actual mouse-aimed Line Trace By Channel blaster to destroy them before they touch the red 450cm height line; survive 60 seconds, earn Hits and press R to replay. Essential Stages 1–3 make the full playable game. Creative stages add faster red threats and feedback. This NEW extension is not the older Target Rush waves: back up any work on that guide before switching. The three original illustrated Loops tutorials and BP_Box are NOT edited.",
       "stages": [
         {
-          "id": "targets",
-          "title": "1. Turn the spawned cubes into clickable targets",
+          "id": "rising-shot",
+          "title": "1. Turn the Loops cubes into a line-trace blaster",
           "tier": "Essential",
-          "outcome": "Five new stationary targets appear; each click removes one and lowers TargetsLeft. The fifth click announces a win. The total Hits score comes in the Waves upgrade.",
+          "outcome": "Five stationary blocks are visible. The player aims with the mouse and uses a real Line Trace By Channel on left click to destroy exactly the block under the pointer, not Event ActorOnClicked.",
           "steps": [
             {
-              "title": "Create a game target actor",
-              "where": "Content Drawer → Content → Loops → right-click → Blueprint Class → Actor.",
-              "do": "Create a NEW Blueprint Class → Actor named BP_ClickTarget (NOT the original BP_Box). Add a Static Mesh component; choose the built-in Cube. On the Static Mesh set Collision Enabled=Query Only (No Physics Collision), Collision Presets=Custom with Visibility=Block (BlockAll also works), and Simulate Physics is UNCHECKED. Give it a visible material, Compile and Save. Leave BP_Box alone.",
-              "why": "A reusable actor gives every spawned item the same interaction.",
-              "check": "BP_ClickTarget has a visible cube, Visibility tracing is blocked, physics is off, and original BP_Box is unchanged."
+              "title": "Keep your original Loops work safe",
+              "where": "Content/Loops → LoopsLevel and BP_LoopsGameMode.",
+              "do": "Finish the three original Loops tutorials and make a copy of the working project. Keep original physics BP_Box untouched. If you already made BP_ClickTarget, do not delete your old work: this is a NEW Rising Defence extension, not the old Target Rush waves.",
+              "why": "The supplied tutorial and any partial work remain recoverable.",
+              "check": "The original BP_Box loop still works in the backup; you are editing your own copy."
             },
             {
-              "title": "Spawn this target using the existing loop",
-              "where": "Open the GameMode Blueprint used in your Loops tutorial.",
-              "do": "Open BP_LoopsGameMode → Event Graph. Find the original For Loop → Spawn Actor From Class (Class=BP_Box). Change its Class to BP_ClickTarget. Set First Index=0 and Last Index=4. On Spawn Actor From Class expand Collision Handling Override and choose Always Spawn, Ignore Collisions for this controlled test. KEEP the original Index × 100 + 50 → Make Vector.Z → Make Transform.Location links. Compile and Play; count the five stationary cubes before continuing.",
-              "why": "This reuses the original loop rather than manually placing five items.",
-              "check": "Five BP_ClickTarget cubes are visible and stationary, not the original collapsing BP_Box physics tower. If there are zero, check World Settings GameMode Override, spawn Class and Spawn Transform."
+              "title": "Make the rising block actor",
+              "where": "Content/Loops → Blueprint Class → Actor.",
+              "do": "Create BP_RisingBlock. Add Static Mesh component named BlockMesh using the built-in Cube. On BlockMesh set Simulate Physics=false, Collision Enabled=Query Only, and ensure Visibility trace response=Block (Custom collision preset or BlockAll). Set relative Location Z=50 to put a 100cm cube above the floor. Compile and Save.",
+              "why": "A separate, non-physics target can be scaled later; it must block a Visibility trace.",
+              "check": "BlockMesh is visible, stationary and blocks Visibility."
             },
             {
-              "title": "Make a controller that accepts clicks",
-              "where": "Content Drawer → Loops folder → Blueprint Class → PlayerController.",
-              "do": "Create Blueprint Class → PlayerController named BP_LoopsPlayerController in Content/Loops. In its Event Graph connect white execution: Event BeginPlay → Set Show Mouse Cursor (true; Target Self) → Set Enable Click Events (true; Target Self) → Set Input Mode Game And UI (Player Controller Self, In Widget to Focus empty, Hide Cursor During Capture unchecked, In Mouse Lock Mode=Do Not Lock). Compile. Do not use Event Tick or add a separate left-mouse Input Action: ActorOnClicked will handle it.",
-              "why": "Mouse click events are disabled by default in some PlayerController setups.",
-              "check": "BeginPlay has one uninterrupted white execution chain, cursor and click events are both true, and input mode accepts world clicks."
+              "title": "Reuse your For Loop for a first shooting test",
+              "where": "BP_LoopsGameMode → Event Graph → original BeginPlay For Loop.",
+              "do": "Change the original Spawn Actor From Class Class from BP_Box to BP_RisingBlock, First Index=0, Last Index=4. Replace the tower's height maths with Make Vector: X=200, Y=(Loop Index - 2) * 150, Z=0 → Make Transform.Location → Spawn Actor. Use Collision Handling Override=Always Spawn, Ignore Collisions. Compile and Play.",
+              "why": "The same Loop knowledge now places five different targets across a shooting gallery.",
+              "check": "Five still cubes appear in a horizontal line, separated by 150cm."
             },
             {
-              "title": "Assign the controller in GameMode",
-              "where": "Open your existing Loops GameMode Blueprint.",
-              "do": "Open BP_LoopsGameMode → Class Defaults: set Player Controller Class=BP_LoopsPlayerController. In LoopsLevel → Settings → World Settings set GameMode Override=BP_LoopsGameMode. In the Play dropdown choose Selected Viewport or New Editor Window and PLAY (not Simulate). Save the level. If you use Selected Viewport, click inside the running game to give it focus.",
-              "why": "Otherwise Unreal may run a different controller and clicks will not fire.",
-              "check": "Play uses BP_LoopsPlayerController and the cursor is visible in the game viewport."
+              "title": "Create a fixed shooting-gallery camera",
+              "where": "LoopsLevel → Place Actors → Camera Actor.",
+              "do": "Place ONE Camera Actor named Cam_RisingDefence at approximately X=-950,Y=0,Z=260, with Rotator Pitch=0,Yaw=0,Roll=0 (faces +X). Frame all five cubes; fine-tune camera/FOV if necessary. Save the level.",
+              "why": "A stable view makes a simple mouse-aimed blaster achievable without building a full FPS character.",
+              "check": "The camera preview contains all five blocks and plenty of space above them."
             },
             {
-              "title": "Place a fixed camera for the clicking game",
-              "where": "LoopsLevel → Place Actors panel → search Camera Actor.",
-              "do": "Open LoopsLevel → Place Actors → Camera Actor. Place ONE Camera Actor, rename it Cam_TargetRush, and set Location approximately X=-600,Y=0,Z=250. For an Unreal Rotator use Pitch=0,Yaw=0,Roll=0 so the view faces +X. These are starting values: move the camera if the five cubes are not visible. Save LoopsLevel.",
-              "why": "The original Loops exercise uses a roaming view; clickable targets need a stable view of their playfield.",
-              "check": "In the Camera preview, you can see the positions where the five initial targets will appear."
+              "title": "Set up the controller and make the map actually use it",
+              "where": "Content/Loops → BP_LoopsPlayerController; BP_LoopsGameMode Class Defaults; LoopsLevel World Settings.",
+              "do": "Create a PlayerController named BP_LoopsPlayerController if you do not already have it; otherwise reuse it. In BP_LoopsGameMode Class Defaults assign Player Controller Class=BP_LoopsPlayerController; LoopsLevel → World Settings → GameMode Override=BP_LoopsGameMode. Press Play (NOT Simulate).",
+              "why": "An unassigned controller is the most common reason input nodes seem correct but do nothing.",
+              "check": "The game actually uses BP_LoopsPlayerController and a visible cursor."
             },
             {
-              "title": "Make the Player Controller use that camera",
-              "where": "BP_LoopsPlayerController → Event Graph → existing BeginPlay.",
-              "do": "In BP_LoopsPlayerController Event Graph, keep the full BeginPlay → Show Mouse Cursor → Enable Click Events → Set Input Mode Game And UI chain. AFTER it, use Get Actor of Class(Class=CameraActor) → Set View Target with Blend (Target=Self, New View Target=Get Actor of Class Return Value), and connect the white execution to Set View Target with Blend. Compile. Keep only Cam_TargetRush as a Camera Actor in this simple level.",
-              "why": "Click positions make sense only when the game displays the same fixed camera each run.",
-              "check": "Press Play: the view stays on the targets and the mouse remains visible. If the view jumps, recheck the New View Target connection and assigned PlayerController."
+              "title": "Show the pointer and activate the fixed camera",
+              "where": "BP_LoopsPlayerController → Event Graph → Event BeginPlay.",
+              "do": "Connect the WHITE exec chain: BeginPlay → Set Show Mouse Cursor(true, Self) → Set Input Mode Game And UI(Player Controller=Self; no focused widget; mouse lock=Do Not Lock) → Set View Target with Blend(Target=Self, New View Target=Get Actor of Class(Class=CameraActor)). Only one camera actor should be in this test level. Compile.",
+              "why": "Players aim with the mouse; Game+UI mode and the assigned view allow world-position deprojection.",
+              "check": "Press Play: the correct fixed camera shows the cubes, and the mouse stays visible. In PlayerController Class Defaults, set Default Mouse Cursor to Crosshairs for an arcade-blaster aiming reticle."
             },
             {
-              "title": "Prove the click reaches the cube BEFORE making score logic",
-              "where": "BP_ClickTarget → Event Graph (NOT BP_Box) → Play in LoopsLevel.",
-              "do": "Right-click empty space → Add Event → Mouse Input → Event ActorOnClicked (called Event ActorOnClicked or On Actor Clicked). Connect its WHITE execution pin directly to Print String with In String='TARGET CLICK'. Compile and Save. Press Play (not Simulate) and click the FACE of a spawned cube inside the game viewport. Look for TARGET CLICK in the on-screen debug text. Do not add Destroy Actor or a GameMode cast yet. If you do not see the message, stop here and use the diagnosis below; more score nodes cannot fix a click-event problem.",
-              "why": "This isolates mouse input and target collision from GameMode counters: students can prove a click reaches the cube before adding complex nodes.",
-          "check": "Exactly one TARGET CLICK message appears for each click on a cube. The cube does NOT disappear yet: that is correct for this isolated test."
+              "title": "Create an explicit Fire action",
+              "where": "Content/Loops → Input assets.",
+              "do": "Create Input Action IA_RisingFire (Value Type=Digital/Boolean). Create Input Mapping Context IMC_RisingDefence. Map IA_RisingFire to Left Mouse Button. If an old IMC_TargetRush is used from earlier work, do not add it as well; this game uses one IMC_RisingDefence. Save both assets.",
+              "why": "Enhanced Input must have an actual mapping, not just an unconnected mouse event.",
+              "check": "IA_RisingFire appears under IMC_RisingDefence with Left Mouse Button."
             },
             {
-              "title": "Add the round state",
-              "where": "Your Loops GameMode → Variables.",
-              "do": "In BP_LoopsGameMode add TargetsLeft (Integer, default=5) and Finished (Boolean, default=false). Compile. This first stage tracks REMAINING targets only; the total TargetsHit variable is introduced in Stage 2.",
-              "why": "One score owner keeps track of all the spawned targets.",
-              "check": "The values are visible and start at 5 and false."
+              "title": "Install the mapping and prove the button is firing",
+              "where": "BP_LoopsPlayerController → BeginPlay and IA_RisingFire event.",
+              "do": "AFTER Set View Target with Blend on the same BeginPlay exec chain, call Get Enhanced Input Local Player Subsystem → Add Mapping Context(IMC_RisingDefence, Priority=0). Add IA_RisingFire event on the controller graph: its Started WHITE pin → Print String('PEW'). Play inside the game viewport and click once.",
+              "why": "A PEW message isolates input from all aiming/collision systems.",
+              "check": "Every left-click prints PEW once. If not, verify the active controller, mapping, Play versus Simulate and game window focus."
             },
             {
-              "title": "Create the HitTarget function",
-              "where": "BP_LoopsGameMode → My Blueprint → Functions → +.",
-              "do": "Name the new function HitTarget. Drag Finished in as Get, apply NOT Boolean, then connect the function Entry execution to a Branch using NOT Finished. Compile.",
-              "why": "One GameMode owns the clicked-target rules; each spawned Actor only reports a hit.",
-              "check": "HitTarget has one Branch, with True available only while Finished=false."
+              "title": "Convert the mouse into a 3D shot",
+              "where": "BP_LoopsPlayerController → IA_RisingFire Started path.",
+              "do": "After the temporary PEW print, call Convert Mouse Location To World Space (also searchable as Deproject Mouse Position to World). Branch on its Return Value: only True continues. Keep World Location and World Direction. Multiply World Direction by 5000. Add World Location to that product; this becomes the shot End, and World Location is the Start.",
+              "why": "Deprojection turns the pointer into a ray through the camera rather than treating a 2D mouse position as a world coordinate.",
+              "check": "The two Vector values are wired: Start=World Location and End=World Location+(World Direction*5000)."
             },
             {
-              "title": "Decrease the remaining target count",
-              "where": "BP_LoopsGameMode → HitTarget function → Branch True output.",
-              "do": "Set TargetsLeft = Max(Integer)(0, TargetsLeft - 1). Wire the Branch True white execution into Set TargetsLeft. Compile.",
-              "why": "The shared count cannot become negative.",
-              "check": "The first valid hit will reduce TargetsLeft from 5 to 4 after the target click is connected."
+              "title": "Run a REAL line trace, not ActorOnClicked",
+              "where": "BP_LoopsPlayerController → after deprojection Branch True.",
+              "do": "Add Line Trace By Channel: Start/End from above, Trace Channel=Visibility, Draw Debug Type=For Duration for testing, Ignore Self=true. Wire the Branch True WHITE exec to Line Trace By Channel. Add Branch using Line Trace Return Value; on True, Break Hit Result from Out Hit and Print String of the Hit Actor display name. Compile and Play.",
+              "why": "A shot now checks the FIRST physical target on the Visibility ray; clicks are no longer bound to Event ActorOnClicked.",
+              "check": "A debug line aims towards your cursor; hitting a cube prints BP_RisingBlock, and clicking empty space does not claim a target."
             },
             {
-              "title": "End the first test when all five are gone",
-              "where": "Still in HitTarget after Set TargetsLeft.",
-              "do": "In BP_LoopsGameMode → HitTarget AFTER Set TargetsLeft, add Branch (Condition=TargetsLeft<=0). On True Set Finished=true then Print String \"ALL TARGETS CLEARED!\". On False Print String with TargetsLeft. Compile. This is a temporary first-stage win which you will REPLACE in Stage 2 (Waves).",
-              "why": "This is a simple first win condition that the later Waves upgrade will replace.",
-              "check": "After the fifth target is clicked, Finished=true and the win prints once; before that the remaining count falls 5→4→3→2→1."
+              "title": "Make the block disappear on a confirmed hit",
+              "where": "BP_RisingBlock and BP_LoopsPlayerController.",
+              "do": "In BP_RisingBlock create Custom Event BreakBlock → Destroy Actor(Target Self). In PlayerController, from the trace's hit-TRUE Branch, use Break Hit Result.Hit Actor → Cast To BP_RisingBlock. On Cast Success WHITE exec, call BreakBlock on 'As BP_RisingBlock'. Remove the temporary Hit Actor Print String only once it works. Do not wire Destroy Actor to every shot or to Cast Failed.",
+              "why": "Only a successful trace against the right actor removes a block.",
+              "check": "Aimed left-click removes ONE cube. Missed clicks and non-target hits remove none."
             },
             {
-              "title": "Make each target respond once",
-              "where": "BP_ClickTarget → Event Graph → right-click → Event ActorOnClicked.",
-              "do": "KEEP the working Event ActorOnClicked → Print String 'TARGET CLICK' from the earlier test. After Print String, connect the WHITE execution output to Cast To BP_LoopsGameMode. Wire Get Game Mode's blue output to Cast Object. From 'As BP_LoopsGameMode' pull Get Finished → NOT Boolean → Branch Condition. Wire Cast Success WHITE execution → Branch input. From Branch True (WHITE execution), drag from that SAME 'As BP_LoopsGameMode' reference and call HitTarget. Wire HitTarget's WHITE output to Destroy Actor(Target Self). Do not connect Destroy Actor to Cast Failed or Branch False. Compile and Save. You may remove the temporary Print String only AFTER the cube disappears and the count updates correctly.",
-              "why": "Destroying the clicked target prevents it being scored a second time.",
-              "check": "On a cube click TARGET CLICK prints, the Cube disappears and TargetsLeft drops 5→4; on the fifth valid click you see ALL TARGETS CLEARED. If the debug prints but the cube stays, the problem is AFTER the event (cast, Finished Branch or execution wiring)."
-            },
-            {
-              "title": "Play the whole target challenge",
-              "where": "Content → Loops → LoopsLevel → Play In Editor.",
-              "do": "Play LoopsLevel (not Simulate) with five visible stationary targets. Click each one. If a cube does not respond, use this three-point diagnosis: (1) NO 'TARGET CLICK': wrong Blueprint, wrong active PlayerController, mouse focus/input mode or Static Mesh not blocking Visibility; (2) 'TARGET CLICK' but NO destruction: inspect Cast success, Finished=false, Branch True, HitTarget → Destroy Actor white pins; (3) cube disappears but no counting: inspect the correct BP_LoopsGameMode, the HitTarget Branch and TargetsLeft Set. Print TargetsLeft after its Set while testing. Fifth click should show the first-stage win; restart with Stop → Play.",
-              "why": "This is now a complete win condition built from the Loops exercise.",
-              "check": "Exactly five BP_ClickTarget Actors appear; all can be clicked. After five different clicks the first-stage win appears once."
+              "title": "Debug before proceeding",
+              "where": "LoopsLevel → Play in Editor.",
+              "do": "Use this order: (1) no PEW → controller/mapping/focus; (2) PEW but no debug ray → deprojection false or wrong WHITE exec; (3) ray hits other objects → target Visibility collision or obstruction; (4) ray hits BP_RisingBlock but remains → Cast Success or BreakBlock wiring. Delete or disable any old BP_ClickTarget ActorOnClicked scoring path so one shot never counts twice. Save the working shot system.",
+              "why": "You need a reliable blaster before introducing moving or growing targets.",
+              "check": "Five cubes can each be shot once; the original BP_Box asset has not changed."
             }
           ],
-          "check": "Five stationary BP_ClickTarget cubes spawn. An isolated ActorOnClicked test first prints TARGET CLICK. After connecting HitTarget, five separate clicks destroy five cubes, TargetsLeft falls 5→0 and the final click announces success.",
-          "fix": "If clicks do nothing, STOP adding nodes and first disconnect the scoring branch: ActorOnClicked → Print String('TARGET CLICK') must work by itself. Check the active BP_LoopsPlayerController, Set Enable Click Events=true, Set Input Mode Game And UI, mouse focus in the PLAY viewport (not Simulate), and Static Mesh → Query collision → Visibility=Block. If TARGET CLICK prints but nothing disappears, check Cast To BP_LoopsGameMode success, Finished=false, the white execution chain to HitTarget and Destroy Actor(Self). If cubes disappear but TargetsLeft stays at 5, check the game-level GameMode Override and the HitTarget function. If fewer than five cubes appear, set Spawn Actor Collision Handling Override=Always Spawn, Ignore Collisions and confirm Class=BP_ClickTarget.",
-          "beforeStart": "Complete the original Loops mini-project first: Event BeginPlay in BP_LoopsGameMode spawns the physics BP_Box tower through a For Loop. Do not change the supplied original BP_Box or source tutorials. The upgrade creates a new non-physics BP_ClickTarget and an input-enabled PlayerController.",
-          "commonMistake": "The original BP_Box simulates physics and is NOT the clickable Actor. Test the NEW BP_ClickTarget with ActorOnClicked → Print String before adding a cast or score. World Settings must use BP_LoopsGameMode and its PlayerController must use BP_LoopsPlayerController; mouse clicks need the target Static Mesh to block Visibility traces.",
-          "studentPromise": "First prove five targets SPAWN, then prove TARGET CLICK prints, then connect score/destruction. Compile → Save → Play after each small change; do not continue until the previous check works."
+          "check": "Five fixed targets shoot correctly via a debug Line Trace By Channel; no ActorOnClicked is required.",
+          "fix": "PEW absent: wrong PlayerController, missing IMC_RisingDefence, not Playing, window unfocused. PEW with no line: Convert Mouse Location To World Space/exec chain. Line missing block: Visibility=Block on BlockMesh, no foreground obstacle, check cast. Line hits block without removal: BreakBlock call execution/Target. Keep HUD non-hit-testable when added.",
+          "beforeStart": "The original Loops mini-project produces a physics BP_Box tower using BeginPlay → For Loop → Spawn Actor. Back it up and keep BP_Box untouched.",
+          "commonMistake": "Do not accidentally keep the OLD ActorOnClicked path from Target Rush; this extension uses an IA_RisingFire-initiated raycast.",
+          "studentPromise": "Compile → Save → Play after each small change. Do not move on until that step's check passes."
         },
         {
-          "id": "waves",
-          "title": "2. Automatically spawn harder waves",
+          "id": "rising-growth",
+          "title": "2. Randomly spawn blocks that grow towards a danger line",
           "tier": "Essential",
-          "outcome": "Clear five target waves: 5, 6, 7, 8 then 9. Every last hit triggers exactly one new wave; 35 hits completes the game.",
+          "outcome": "One random block appears in an available lane every 1.5 seconds. Blocks stretch upwards from the floor; shooting frees a lane. If any reaches the 450cm red danger line, the game ends in defeat.",
           "steps": [
             {
-              "title": "Create the wave state",
-              "where": "Your existing Loops GameMode → Variables.",
-              "do": "Create WaveNumber (Integer; default 1), FinalWave (Integer; default 5), and TargetsHit (Integer; default 0). Keep TargetsLeft and Finished from Upgrade 1. Compile.",
-              "why": "Waves increase difficulty, while TargetsHit tracks the player’s achievements across all of them.",
-              "check": "WaveNumber starts at 1; FinalWave=5; TargetsHit=0."
+              "title": "Give each block a lane and growth values",
+              "where": "BP_RisingBlock → Variables.",
+              "do": "Create LaneIndex (Integer, default 0, Instance Editable and Expose on Spawn), CurrentHeight (Float, default 60), GrowthSpeed (Float, default 35) and MaxHeight (Float, default 450). Compile so LaneIndex appears as a Spawn Actor input pin. Keep the same cube with physics disabled.",
+              "why": "The actor knows its lane and how tall it may become.",
+              "check": "LaneIndex is exposed on Spawn Actor and values 60,35,450 are present."
             },
             {
-              "title": "Copy your working spawn loop",
-              "where": "Loops GameMode → Event Graph.",
-              "do": "In BP_LoopsGameMode Event Graph, find the ORIGINAL BeginPlay → For Loop → Make Vector → Make Transform → Spawn Actor From Class(BP_ClickTarget) chain. Select the For Loop plus ALL connected spawn/transform/maths nodes and Ctrl+C to COPY (not Cut). Do not delete the original working BeginPlay chain yet.",
-              "why": "Copying preserves the original working version until the new function is tested.",
-              "check": "The old BeginPlay spawning still works before you change it."
+              "title": "Build UpdateBlockVisual to grow upward FROM THE FLOOR",
+              "where": "BP_RisingBlock → Function UpdateBlockVisual.",
+              "do": "Create UpdateBlockVisual (no inputs). On BlockMesh call Set Relative Scale 3D with Make Vector (X=1,Y=1,Z=CurrentHeight/100), then Set Relative Location with Make Vector(X=0,Y=0,Z=CurrentHeight/2); wire execution in that order. The standard Cube mesh is 100cm tall; the Actor stays at spawn Z=0.",
+              "why": "Changing the mesh height AND centre together anchors its base at the ground instead of growing in both directions.",
+              "check": "At CurrentHeight=60 the mesh extends from Z=0 to Z=60; at 300 it extends from 0 to 300."
             },
             {
-              "title": "Paste it into StartWave",
-              "where": "Loops GameMode → My Blueprint → Functions → +.",
-              "do": "Under My Blueprint → Functions → +, create StartWave. Open that Function and paste the copied For Loop + Spawn Actor and Make Transform nodes. Wire its purple Function Entry white output to the pasted For Loop input. If pasting lost a connected pin, copy or rebuild that missing connection before compiling. Keep the Spawn Actor From Class Collision Handling Override set to Always Spawn, Ignore Collisions as in Stage 1, so the test remains predictable.",
-              "why": "StartWave will be called once for each new wave.",
-              "check": "The function contains the old spawn chain and has no compile errors."
+              "title": "Make growth frame-rate-independent",
+              "where": "BP_RisingBlock → Event BeginPlay and Event Tick.",
+              "do": "On Event BeginPlay call UpdateBlockVisual once. On Event Tick use Get Game Mode → Cast To BP_LoopsGameMode → Get Finished → NOT → Branch. On True set CurrentHeight = Min(MaxHeight, CurrentHeight + (Tick Delta Seconds * GrowthSpeed)), then call UpdateBlockVisual. Compile. If BP_LoopsGameMode does not yet have Finished, add Boolean Finished default false now.",
+              "why": "Delta Seconds means the height rises at the same speed on fast and slow machines.",
+              "check": "Press Play: one block steadily extends upwards without falling or moving sideways."
             },
             {
-              "title": "Replace the old spawn chain with one call",
-              "where": "Loops GameMode → Event Graph → BeginPlay.",
-              "do": "In BP_LoopsGameMode Event Graph, disconnect the OLD For Loop white execution input from Event BeginPlay. Connect BeginPlay to a call of StartWave instead (not to both old and new loops). Compile and Play; five stationary click targets should still spawn. Only after confirming they appear, delete the orphaned old For Loop and spawn chain.",
-              "why": "This replaces old logic only after the new version works.",
-              "check": "Exactly five targets appear, not zero and not ten."
+              "title": "Mark the fail height visibly",
+              "where": "LoopsLevel → Place Actors → Cube mesh (or other simple bar).",
+              "do": "Place a thin horizontal red bar named DangerLine across the lane area at Z=450: e.g. Cube scale X=0.1,Y=8,Z=0.05 and location X=200,Y=0,Z=450. Give it a bright red material. Set its collision to NoCollision so it NEVER blocks the gun's Visibility trace. Save.",
+              "why": "Players can see why they are losing, while the gun still reaches the blocks.",
+              "check": "The red line appears above the growing blocks and bullets pass through it."
             },
             {
-              "title": "Calculate a new target count for each wave",
-              "where": "StartWave function, before the For Loop.",
-              "do": "Inside the StartWave FUNCTION create a LOCAL Integer CurrentWaveCount (in My Blueprint → Local Variables, with this function selected). From the purple Entry node set CurrentWaveCount = 4 + WaveNumber (use Get WaveNumber). Then Set TargetsLeft=CurrentWaveCount. Wire its execution into the existing For Loop: First Index=0, Last Index=CurrentWaveCount - 1. Compile. At WaveNumber=1, that produces 5 actors.",
-              "why": "A loop from 0 to N-1 spawns exactly N targets; the counter must agree with the number spawned.",
-              "check": "The white chain is StartWave Entry → Set CurrentWaveCount → Set TargetsLeft → For Loop; its Last Index is CurrentWaveCount-1, not CurrentWaveCount."
+              "title": "Create the available-lane array",
+              "where": "BP_LoopsGameMode → Variables and Event BeginPlay.",
+              "do": "Create FreeLanes as an Integer Array and SpawnTimerHandle as a TimerHandle. In BeginPlay REPLACE the old five-cube For Loop exec input, but keep the old nodes unconnected until you test the new system. Set FreeLanes using Make Array(0,1,2,3,4). Make the new BeginPlay chain reach this Set first. The original physics BP_Box remains a separate asset.",
+              "why": "An available-lane list ensures no two growing blocks occupy the same lane.",
+              "check": "On a fresh Play FreeLanes contains five distinct integers."
             },
             {
-              "title": "Calculate the column number",
-              "where": "Loops GameMode → StartWave function → For Loop Index.",
-              "do": "In StartWave, drag from For Loop Index → add Integer % Integer and set divisor 3. From its result add Integer - Integer with B=1. This becomes the Column value (-1,0,1). Do NOT set a separate permanent Column variable; the arithmetic nodes may feed the next Make Vector.",
-              "why": "The three possible columns are -1, 0 and 1, giving left, middle and right positions.",
-              "check": "Indexes 0,1,2 create Column values -1,0,1."
+              "title": "Make a safe SpawnOneBlock function",
+              "where": "BP_LoopsGameMode → Functions → SpawnOneBlock.",
+              "do": "Create Function SpawnOneBlock. First Branch: NOT Finished AND Length(FreeLanes)>0. On True choose a local Integer PickIndex = Random Integer in Range(0, Length(FreeLanes)-1); then local PickLane = FreeLanes[PickIndex] (Array Get) BEFORE removing it. After those Set nodes, Remove Index from FreeLanes using PickIndex. Do not use a random Y coordinate without reserving its lane.",
+              "why": "Choosing only from unused lanes stops growing blocks overlapping and becoming unshootable.",
+              "check": "A call removes exactly one valid lane and cannot select an already occupied lane."
             },
             {
-              "title": "Calculate the row number",
-              "where": "Same StartWave graph.",
-              "do": "Drag from the SAME For Loop Index, add Divide(Integer) with divisor 3 (integer division, not Float). This produces Row: indexes 0-2→0; 3-5→1; 6-8→2. Leave the Column maths in place.",
-              "why": "Integer division groups indexes 0–2 in row 0, 3–5 in row 1 and 6–8 in row 2.",
-              "check": "Index 6 produces Row=2, while Index 1 produces Row=0."
+              "title": "Spawn the cube in its chosen lane",
+              "where": "BP_LoopsGameMode → SpawnOneBlock after Remove Index.",
+              "do": "Continue white exec to Spawn Actor From Class(Class=BP_RisingBlock, Collision Handling Override=Always Spawn, Ignore Collisions). Set Make Transform.Location = Make Vector(X=200,Y=(PickLane-2)*150,Z=0). Feed PickLane into the exposed LaneIndex pin. Leave rotation 0 and scale 1. Compile.",
+              "why": "This preserves the five-column layout but randomises WHICH column gets the next threat.",
+              "check": "A new block appears in one of five fixed horizontal positions; no blocks overlap."
             },
             {
-              "title": "Connect grid position to spawning",
-              "where": "StartWave → Make Vector → Make Transform → Spawn Actor.",
-              "do": "In StartWave replace the old tower spacing on Make Transform.Location. Create Make Vector: set X=200; connect the Column integer ×180 to Y; connect 150 + (Row ×130) to Z. Connect Make Vector to Make Transform.Location and keep Make Transform connected to Spawn Actor From Class. Use the SAME For Loop and one Spawn Actor, not nine copies.",
-              "why": "The ninth spawned target fits a third row rather than extending beyond the camera horizontally.",
-              "check": "Compiles with a maximum three-column and three-row layout. At WaveNumber=1 exactly five targets fill the first five grid positions."
+              "title": "Start ONE repeating spawn timer",
+              "where": "BP_LoopsGameMode → Event Graph → BeginPlay.",
+              "do": "Make Custom Event SpawnTick → call SpawnOneBlock. After BeginPlay sets FreeLanes, call SpawnOneBlock once (one initial threat), then Set Timer by Event(Time=1.5, Looping=true; Event delegate uses Create Event → SpawnTick). Promote its Return Value to SpawnTimerHandle. There must be only one repeating spawn timer, NOT a timer in each block.",
+              "why": "Repeated spawns create escalating pressure without replacing the old tutorial's core idea of automated spawning.",
+              "check": "Play: blocks appear in random free lanes around every 1.5 seconds; when all five are occupied, spawning safely skips until one is cleared."
             },
             {
-              "title": "Frame the grid before increasing wave count",
-              "where": "BP_LoopsGameMode → Variables → WaveNumber and LoopsLevel → Cam_TargetRush Camera Actor.",
-              "do": "The full wave logic is not finished yet, so test framing TEMPORARILY: set WaveNumber default from 1 to 5, Compile, then Play. StartWave will create nine targets immediately using your new grid; make sure the fixed Cam_TargetRush shows all nine without overlap (example target positions X=200,Y=-180..180,Z=150..410). Adjust the camera if needed. Stop Play and RESTORE WaveNumber default=1, Compile and Save before continuing.",
-              "why": "A camera-dependent layout must be tested before wave progression; fixed example coordinates are only a starting point.",
-              "check": "Nine targets fit the screen in the temporary preview. WaveNumber is back to 1 for normal play; no permanent shortcut to wave 5 remains."
+              "title": "Count a good shot and return the freed lane",
+              "where": "BP_LoopsGameMode → Variables and Function RegisterHit.",
+              "do": "Add Hits (Integer, default 0). Create Function RegisterHit with an Integer input HitLane. First Branch on NOT Finished; on True run Add Unique(Target Array=FreeLanes, New Item=HitLane) → Set Hits=Hits+1. Optionally Print String 'HIT +1' after it. Compile. Do NOT put this function on each block's Event Tick.",
+              "why": "One authoritative counter owns points and gives the lane back to the spawner exactly once.",
+              "check": "The returned lane is available again, and Hits increases by one per block."
             },
             {
-              "title": "Record every hit",
-              "where": "Loops GameMode → HitTarget function from Upgrade 1.",
-              "do": "In BP_LoopsGameMode → HitTarget, find the existing Set TargetsLeft = Max(0,TargetsLeft-1) followed by Branch(TargetsLeft<=0). Disconnect the white execution wire between them. Insert Set TargetsHit = TargetsHit + 1 between those nodes, then reconnect white execution Set TargetsLeft → Set TargetsHit → Branch(TargetsLeft<=0). Do not add a second decrement.",
-              "why": "TargetsHit is a useful score across several waves.",
-              "check": "With WaveNumber=1, click three targets: TargetsLeft is 2 and TargetsHit is 3. The original first-stage win still works until the next change."
+              "title": "Connect BreakBlock to the GameMode",
+              "where": "BP_RisingBlock → existing Custom Event BreakBlock from Stage 1.",
+              "do": "Replace the direct BreakBlock → Destroy Actor connection. Use Get Game Mode → Cast To BP_LoopsGameMode → Branch Condition=NOT Finished; from True call RegisterHit(HitLane=Self.LaneIndex) on that SAME GameMode reference, then Destroy Actor(Self). Wire the WHITE exec pins through Cast Success, Branch True, RegisterHit and Destroy Actor in order. Never free a lane on a miss.",
+              "why": "A block disappears only after the GameMode registers a valid hit.",
+              "check": "Shoot two blocks: Hits=2, both blocks vanish, and those lanes can spawn again."
             },
             {
-              "title": "Replace the old immediate win",
-              "where": "HitTarget function → final Branch TargetsLeft <= 0.",
-              "do": "In HitTarget, keep the existing Branch(TargetsLeft<=0) that runs AFTER Set TargetsHit. On its True output remove the OLD Set Finished=true and \"ALL TARGETS CLEARED!\" nodes. Add Branch(Condition=WaveNumber>=FinalWave). On this new Branch True set Finished=true, then Print String \"ALL WAVES COMPLETE!\". Leave the False output ready for scheduling the next wave. Compile.",
-              "why": "Reaching zero targets should mean the next wave, not the end of the game, until the final wave.",
-              "check": "Clearing wave 1 no longer sets Finished. Only wave 5 (or higher) with zero remaining targets finishes the whole game."
+              "title": "Create a single LoseRound event",
+              "where": "BP_LoopsGameMode → Event Graph.",
+              "do": "Create Custom Event LoseRound. Branch on NOT Finished; True → Set Finished=true → Clear and Invalidate Timer by Handle(SpawnTimerHandle) → Print String('DEFENCE FAILED!'). Leave False unconnected. The round's other timer comes in Stage 3.",
+              "why": "A single end event prevents repeated loss messages and stops future spawns.",
+              "check": "Calling LoseRound once stops the spawner and sets Finished."
             },
             {
-              "title": "Create an event to start the next wave",
-              "where": "BP_LoopsGameMode → Event Graph (not inside a Function).",
-              "do": "Add Custom Event named AdvanceWave. Connect its white output to Set WaveNumber = WaveNumber + 1, then to the existing StartWave FUNCTION call. Compile. Do not create another spawn loop here.",
-              "why": "A single named event controls wave advancement, separate from HitTarget.",
-              "check": "AdvanceWave calls StartWave once and does not contain another For Loop."
+              "title": "Lose when ANY block touches the danger line",
+              "where": "BP_RisingBlock → Event Tick, immediately after UpdateBlockVisual.",
+              "do": "After updating the height, Branch(CurrentHeight >= MaxHeight). On True call Get Game Mode → Cast To BP_LoopsGameMode → LoseRound. This must happen AFTER Set CurrentHeight and UpdateBlockVisual, only on the NOT Finished tick path. Do not Destroy Actor when the block hits the line; leave it showing the reason for defeat.",
+              "why": "One unchecked block can end the round, creating an urgent target-priority decision.",
+              "check": "Do not shoot: a block reaches the red line after roughly 11 seconds, 'DEFENCE FAILED!' prints once and growth/spawning stop."
             },
             {
-              "title": "Create one short-delay event for wave transitions",
-              "where": "BP_LoopsGameMode → Event Graph → empty space.",
-              "do": "Add a separate Custom Event called ScheduleNextWave. Connect it to Set Timer by Event with Time=0.75, Looping=false. From its red Event delegate pin use Create Event and choose AdvanceWave. Compile. The one-shot timer belongs here in the Event Graph.",
-              "why": "HitTarget can request one delayed wave without juggling a Custom Event delegate inside its Function.",
-              "check": "ScheduleNextWave calls AdvanceWave once after three-quarters of a second; Looping is unchecked."
-            },
-            {
-              "title": "Request the next wave on the last hit only",
-              "where": "BP_LoopsGameMode → HitTarget function → False output of Branch(WaveNumber>=FinalWave).",
-              "do": "Call ScheduleNextWave (the Custom Event from the Event Graph) from that False white execution output. Keep it behind the existing TargetsLeft<=0 Branch, so normal hits do not request waves. Compile.",
-              "why": "A wave transition happens only after its final target disappears.",
-              "check": "Clear all five targets on Wave 1: one ScheduleNextWave call is made and six fresh targets appear after 0.75 seconds."
-            },
-            {
-              "title": "Reuse one guard rather than stacking two Branches",
-              "where": "BP_LoopsGameMode → HitTarget function, at its FIRST Branch just after Function Entry.",
-              "do": "The first-stage function already has Branch(NOT Finished). Replace its Condition with (NOT Finished) AND (TargetsLeft > 0). Keep its True path feeding Set TargetsLeft → Set TargetsHit → the existing end-of-wave checks. Leave False unconnected. Do NOT add a second decrement Branch.",
-              "why": "TargetsLeft reaches zero on only one valid last hit; late events cannot schedule additional waves or make counts negative.",
-              "check": "Each target click counts once; one completed wave creates one next wave."
-            },
-            {
-              "title": "Verify AdvanceWave does not run repeatedly",
-              "where": "BP_LoopsGameMode → Event Graph → ScheduleNextWave and AdvanceWave.",
-              "do": "Check Set Timer by Event has Time=0.75 and Looping=false and that AdvanceWave calls StartWave just once. Add a temporary Print String after Set WaveNumber with the new wave number if you need proof, then remove it.",
-              "why": "The first game should not accidentally create two copies of each wave.",
-              "check": "WaveNumber rises 1→2→3→4→5, never jumping 1→3 or producing 12 targets in Wave 2."
-            },
-            {
-              "title": "Complete a full five-wave test",
-              "where": "Play the Loops level.",
-              "do": "Play LoopsLevel with WaveNumber default 1. Clear the first five targets, then wait 0.75 seconds for six new targets. Continue until waves 1..5 have 5,6,7,8,9 targets. At the last target of wave 5, \"ALL WAVES COMPLETE!\" prints, Finished becomes true and no wave 6 appears. Test from a new Play to check the first wave always starts with five.",
-              "why": "Testing progression across all waves catches off-by-one loop errors.",
-              "check": "After a full run WaveNumber=5, TargetsHit=35, TargetsLeft=0 and Finished=true. No duplicated wave or extra target remains."
+              "title": "Test spawning, scoring and the fail state separately",
+              "where": "LoopsLevel → Play in Editor.",
+              "do": "Test A: watch one block grow, shoot it, confirm its lane is freed and a future spawn can reuse it. Test B: let all five lanes fill: no overlaps and no sixth lane. Test C: do not shoot until one reaches Z=450: Finished=true and no new blocks. If cubes still spawn as a tower, disconnect the old BeginPlay loop. If blocks grow below ground, Set Relative Location.Z must be CurrentHeight/2, not 0.",
+              "why": "Testing each rule catches errors before UI and survival logic conceal them.",
+              "check": "One reliable random-spawn rising-block defence game works; it can lose, but does not yet have a timed victory."
             }
           ],
-          "check": "Clearing each wave produces the next (5→6→7→8→9 targets), and clearing wave 5 ends the run with 35 recorded hits.",
-          "fix": "Still wins after five? Remove the temporary Stage 1 Set Finished=true and use the FinalWave test only. Two Wave 2 batches? Check StartWave is called only from BeginPlay and AdvanceWave, and Set Timer by Event in ScheduleNextWave has Looping=false. Wrong number? For Loop Last Index must be CurrentWaveCount-1. Lost targets after moving code? Reconnect the original Make Transform and Spawn Actor inside StartWave. Nine not visible? Use the temporary WaveNumber=5 camera test and restore 1.",
-          "beforeStart": "Stage 1 works: BP_LoopsGameMode spawns five stationary BP_ClickTarget Actors into the fixed Cam_TargetRush view. Their click events call HitTarget and destroy the Actor; after five clicks the temporary ALL TARGETS CLEARED message appears.",
-          "commonMistake": "The original For Loop is copied into StartWave and removed from BeginPlay only after the replacement works. At the end of wave 1, the first-stage \"ALL TARGETS CLEARED!\" win path MUST be replaced; otherwise waves cannot progress.",
-          "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
+          "check": "Blocks use five safe random lanes, grow visibly from the floor, can be shot to free their lane and lose the round if any reaches the red 450cm line.",
+          "fix": "No new blocks: test FreeLanes MakeArray, SpawnTick timer and Finished flag. Duplicates: BeginPlay must not run both old For Loop and SpawnOneBlock. Overlap: always pick from FreeLanes and remove the selected INDEX. Hits don't rise: RegisterHit wiring and LaneIndex on Spawn Actor. Blocks grow from middle: RelativeLocation.Z must equal CurrentHeight/2. Failure not triggering: CurrentHeight comparison and GameMode LoseRound.",
+          "beforeStart": "Stage 1's five fixed cubes shoot reliably through Line Trace By Channel; a new BP_RisingBlock and controller already exist.",
+          "commonMistake": "Randomising World Y without tracking occupied lanes causes two blocks to overlap. Reserve one of five fixed lanes instead.",
+          "studentPromise": "Compile → Save → Play after each small change. Do not move on until that step's check passes."
         },
         {
-          "id": "race",
-          "title": "3. Add a 90-second wave race and replay",
+          "id": "rising-survival",
+          "title": "3. Finish Rising Defence: survive 60 seconds, HUD and restart",
           "tier": "Essential",
-          "outcome": "A 90-second clock, wave number and target counter are visible. The player either clears all five waves or reaches Time Up, then can replay.",
+          "outcome": "Survive a complete 60-second round without any block touching the red line. Hits and remaining time display live. Winning, losing and restarting are fully playable.",
           "steps": [
             {
-              "title": "Set a realistic overall time",
-              "where": "Loops GameMode → Variables.",
-              "do": "In BP_LoopsGameMode create SecondsLeft (Integer; default=90). Leave WaveNumber=1, FinalWave=5, TargetsLeft and TargetsHit from Stage 2, and Finished=false. Compile. This is ONE timer for the entire five-wave game, not a fresh 90 seconds per wave.",
-              "why": "Five waves are too much for the earlier 30-second limit; 90 seconds is a better first test value.",
-              "check": "SecondsLeft starts at 90."
+              "title": "Add round time and victory state",
+              "where": "BP_LoopsGameMode → Variables.",
+              "do": "Create SecondsLeft (Integer default 60), Won (Boolean default false) and RoundTimerHandle (TimerHandle). Keep Finished, Hits, FreeLanes and SpawnTimerHandle from Stage 2. Compile.",
+              "why": "The game now has explicit win and loss state, rather than indefinite survival.",
+              "check": "On fresh Play SecondsLeft=60, Won=false and Finished=false."
             },
             {
-              "title": "Add the one-second TickRush event",
-              "where": "BP_LoopsGameMode → Event Graph → empty space.",
-              "do": "Add Custom Event named TickRush. Connect a TEMPORARY Print String \"CLOCK TICK\" to it and Compile. Do not touch the existing AdvanceWave or ScheduleNextWave events.",
-              "why": "Test that the new timer fires separately from the wave-transition delay.",
-              "check": "TickRush exists as a Custom Event in Event Graph."
+              "title": "Start just one round timer",
+              "where": "BP_LoopsGameMode → Event Graph → BeginPlay after SpawnTimerHandle is created.",
+              "do": "Create Custom Event CountdownTick. In existing BeginPlay, AFTER the FreeLanes → initial SpawnOneBlock → SpawnTimerHandle chain, add Set Timer by Event(Time=1.0,Looping=true; delegate Create Event → CountdownTick). Promote Return Value to RoundTimerHandle. Do NOT add this timer to SpawnTick or BP_RisingBlock.",
+              "why": "One countdown belongs to the whole round, not to every threat.",
+              "check": "SecondsLeft remains 60 until CountdownTick is wired; no duplicate timers exist."
             },
             {
-              "title": "Start the round clock ONCE at BeginPlay",
-              "where": "BP_LoopsGameMode → Event Graph → Event BeginPlay.",
-              "do": "Keep the existing StartWave call from Stage 2. Immediately after that call, add Set Timer by Event(Time=1.0, Looping checked). On its red Event delegate use Create Event → select TickRush. Promote Return Value to a Timer Handle variable named RushTimerHandle. Compile and Play.",
-              "why": "The one-second timer must start once for the whole run, not when each wave spawns.",
-              "check": "The \"CLOCK TICK\" message appears about once each second. Remove the temporary Print String before continuing."
+              "title": "Count down safely and detect victory",
+              "where": "BP_LoopsGameMode → CountdownTick Custom Event.",
+              "do": "Wire CountdownTick → Branch(NOT Finished). On True set SecondsLeft = Max(0, SecondsLeft-1). Then Branch(SecondsLeft<=0). On True set Finished=true and Won=true, then Clear and Invalidate Timer by Handle(SpawnTimerHandle), then Clear and Invalidate Timer by Handle(RoundTimerHandle), then Print String('YOU HELD THE LINE!'). A win happens ONLY if the danger height was never reached.",
+              "why": "Surviving long enough becomes a concrete and understandable goal.",
+              "check": "With SecondsLeft temporarily set to 5, defending for five seconds wins once and no further blocks grow."
             },
             {
-              "title": "Stop on time out",
-              "where": "Loops GameMode → Custom Event TickRush.",
-              "do": "In BP_LoopsGameMode → Event Graph → TickRush, replace the temporary Print String with Branch(Condition=NOT Finished). From Branch True Set SecondsLeft=Max(0,SecondsLeft-1). After that Set, add Branch(Condition=SecondsLeft<=0). Its True path sets Finished=true → Print String \"TIME UP!\" → Clear and Invalidate Timer by Handle(RushTimerHandle). Compile.",
-              "why": "A definite timeout makes the challenge replayable.",
-              "check": "The single countdown drops by one each second. On reaching zero, Finished becomes true, the timer stops and no further target clicks count."
+              "title": "Stop the countdown when a block reaches the line",
+              "where": "BP_LoopsGameMode → LoseRound event from Stage 2.",
+              "do": "Keep LoseRound's Branch(NOT Finished) → Set Finished=true → Clear SpawnTimerHandle. After that, add Set Won=false and Clear and Invalidate Timer by Handle(RoundTimerHandle), then Print String('DEFENCE FAILED!'). All existing blocks now stop growing because their Tick checks Finished.",
+              "why": "One clean ending stops both timers; pressing the mouse after defeat cannot increase Hits.",
+              "check": "A block reaching the red line ends the round, the timer freezes, and Won stays false."
             },
             {
-              "title": "Stop the clock on victory",
-              "where": "Loops GameMode → HitTarget → final-wave True path.",
-              "do": "Open BP_LoopsGameMode → HitTarget function. On the FinalWave Branch True output, find the Set Finished=true → Print String \"ALL WAVES COMPLETE!\" chain from Stage 2. After Set Finished add Clear and Invalidate Timer by Handle(RushTimerHandle), then Print String. Compile. Keep the Score/TargetsHit chain connected BEFORE the win test.",
-              "why": "Winning early should preserve the remaining time.",
-              "check": "When the last target of wave 5 is clicked, Finished=true and RushTimerHandle is cleared so SecondsLeft freezes at its current value."
+              "title": "Create a clean and non-blocking HUD",
+              "where": "Content/Loops → User Interface → Widget Blueprint → User Widget.",
+              "do": "Create WBP_RisingDefenceHUD. Add Text widgets named TimeText, HitsText and StatusText; tick Is Variable on each. Add a small instruction 'Left-click: shoot  •  R: restart'. Set the ROOT Canvas Panel Visibility to Not Hit-Testable (Self & All Children). Position the HUD away from the playable columns. Set StatusText default 'KEEP BLOCKS BELOW THE RED LINE'. Compile.",
+              "why": "The HUD must not intercept the gun's Visibility ray or the Enhanced Input firing action.",
+              "check": "The game view stays unobstructed; widgets are readable and cannot catch the mouse."
             },
             {
-              "title": "Do not spawn after timeout",
-              "where": "Loops GameMode → AdvanceWave custom event.",
-              "do": "Open BP_LoopsGameMode → Event Graph → AdvanceWave Custom Event from Stage 2. Insert a Branch(Condition=NOT Finished) before Set WaveNumber=WaveNumber+1 → StartWave. Only True continues. This protects the 0.75-second delayed wave event if it fires after TIME UP. Leave the ScheduleNextWave one-shot timer unchanged.",
-              "why": "A pending 0.75-second wave timer might finish after the overall clock ends.",
-              "check": "If TIME UP happens during the 0.75-second wait between waves, AdvanceWave does not create another wave."
+              "title": "Refresh the HUD without making four separate timers",
+              "where": "WBP_RisingDefenceHUD → Graph.",
+              "do": "Create Custom Event RefreshHUD. Use Get Game Mode → Cast To BP_LoopsGameMode. On Cast Success use Get SecondsLeft → Format Text('Time: {Value}') → Set Text(TimeText), then Get Hits → Format Text('Hits: {Value}') → Set Text(HitsText), wiring white execution sequentially. Then Branch(Get Finished). On False set StatusText='KEEP BLOCKS BELOW THE RED LINE'. On True use a Branch(Get Won) to set StatusText='YOU HELD THE LINE!  Press R' or 'DEFENCE FAILED!  Press R'. Compile.",
+              "why": "A single UI refresh displays consistent countdown and score from the existing authoritative GameMode.",
+              "check": "RefreshHUD updates Time, Hits and correct win/loss text."
             },
             {
-              "title": "Build a simple HUD",
-              "where": "Content Drawer → Loops folder → User Interface → Widget Blueprint → User Widget.",
-              "do": "In Content/Loops create WBP_TargetRushHUD (Widget Blueprint → User Widget). Add FOUR Text widgets: WaveText, TargetsText, TimeText, HitsText, tick Is Variable on all four. Use placeholders \"Wave: 1\", \"Targets: 5\", \"Time: 90\", \"Hits: 0\". Keep a compact row/column of labels away from the 3×3 playfield.",
-              "why": "Players need to understand the escalating objective at a glance.",
-              "check": "Four readable labels appear in the Designer; none overlap the three-by-three target grid."
+              "title": "Run one lightweight HUD refresh timer",
+              "where": "WBP_RisingDefenceHUD → Event Construct.",
+              "do": "Event Construct → call RefreshHUD once, then Set Timer by Event(Time=0.25, Looping=true; delegate Create Event → RefreshHUD). This timer is UI-only and belongs to the Widget. It must NOT call SpawnOneBlock or change the GameMode's countdown.",
+              "why": "Separating UI repaint from game rules prevents strange repeated spawns and time jumps.",
+              "check": "The HUD reflects game state while the round continues."
             },
             {
-              "title": "Keep the HUD from blocking your targets",
-              "where": "WBP_TargetRushHUD → Designer → select the root Canvas Panel.",
-              "do": "Set Visibility on the root Canvas Panel to Not Hit-Testable (Self & All Children). The wave game uses keyboard R to restart, so this display has no interactive buttons. Leave the player controller mouse-click events enabled.",
-              "why": "A decorative UMG overlay must not intercept clicks on the target Actors behind it.",
-              "check": "The root Canvas Panel is Not Hit-Testable (Self & All Children); clickability will be tested after Create Widget → Add to Viewport is connected."
-            },
-            {
-              "title": "Bind Wave and Targets with labels",
-              "where": "WBP_TargetRushHUD → Designer → WaveText → Details → Text → Bind → Create Binding. Repeat for TargetsText.",
-              "do": "For EACH binding, use Get Game Mode → Cast To BP_LoopsGameMode; connect white execution from Function Entry → Cast Success → Return. For WaveText, Get WaveNumber → Format Text \"Wave: {Value}\" → Return Text. For TargetsText, Get TargetsLeft → Format Text \"Targets: {Value}\" → Return Text. Compile both.",
-              "why": "Raw integer bindings would replace the word Wave/Targets with just numbers.",
-              "check": "On wave 2 the HUD will display \"Wave: 2\" and \"Targets: 6\"."
-            },
-            {
-              "title": "Bind Time and Hits with labels",
-              "where": "WBP_TargetRushHUD → Designer → TimeText and HitsText → Text → Bind → Create Binding.",
-              "do": "For TimeText get GameMode.SecondsLeft and Format Text \"Time: {Value}\", then return the Text. For HitsText get GameMode.TargetsHit and Format Text \"Hits: {Value}\", then return the Text. In both binding functions wire Function Entry → Cast To BP_LoopsGameMode → Return white execution and Cast Object=Get Game Mode. Compile.",
-              "why": "Hits is a lifetime score for the five waves and should stay visible while TargetsLeft resets each wave.",
-              "check": "The HUD shows \"Time: 90\" at the start and \"Hits: 0\"; after wave 1 Hits shows 5 while TargetsLeft resets to 6."
-            },
-            {
-              "title": "Add a result label that starts hidden",
-              "where": "WBP_TargetRushHUD → Designer.",
-              "do": "Add a Text widget named ResultText with placeholder \"GAME OVER\", tick Is Variable and set Visibility=Collapsed. Position it away from the ordinary Wave/Targets/Time/Hits labels. No replay button is required; the R key will restart the whole level. Compile.",
-              "why": "A result should appear only when Finished becomes true.",
-              "check": "The result does not cover the level at the start."
-            },
-            {
-              "title": "Make a single result-refresh event",
-              "where": "WBP_TargetRushHUD → Event Graph → Add Custom Event.",
-              "do": "Create Custom Event named RefreshRushResult. Connect it to Get Game Mode → Cast To BP_LoopsGameMode → Branch(Condition=Get Finished). On False set ResultText Visibility=Collapsed. On True check (WaveNumber>=FinalWave) AND (TargetsLeft==0): if True Set Text(ResultText,\"WAVES CLEARED!\") then Set Visibility=Visible; otherwise Set Text(ResultText,\"TIME UP!\") then Set Visibility=Visible. Compile.",
-              "why": "The GameMode owns the win/loss decision and the widget only displays it.",
-              "check": "RefreshRushResult has clear Win, Time Up and not-finished execution paths."
-            },
-            {
-              "title": "Schedule the result refresh inside the widget",
-              "where": "WBP_TargetRushHUD → Event Graph → Event Construct.",
-              "do": "Connect Event Construct → Set Timer by Event(Time=0.25, Looping checked); from red Event delegate use Create Event to select RefreshRushResult. Do not put this timer in BP_LoopsGameMode: it belongs to the single HUD widget. Compile.",
-              "why": "The result stays visible instead of appearing only as a quick debug print.",
-              "check": "When a round ends, the correct Win/Time Up label appears and stays until R restart."
-            },
-            {
-              "title": "Create one R input action and mapping",
-              "where": "Content Drawer → Content → Loops → Input folder.",
-              "do": "Create an Input folder if you do not already have one. Create Input Action IA_RestartRush with Value Type=Digital (Boolean). Create Input Mapping Context IMC_TargetRush and add a mapping IA_RestartRush → Keyboard R. Save both. This is the only new mapping context for this project.",
-              "why": "The original Loops tutorial did not set up Enhanced Input. We now give the Player Controller one restart action.",
-              "check": "IMC_TargetRush contains exactly one keyboard R mapping to IA_RestartRush."
-            },
-            {
-              "title": "Enable restart input without breaking the fixed camera",
-              "where": "BP_LoopsPlayerController → Event Graph → existing Event BeginPlay.",
-              "do": "In BP_LoopsPlayerController keep the existing BeginPlay WHITE chain: Show Mouse Cursor → Enable Click Events → Set Input Mode Game And UI → Get Actor of Class(CameraActor) → Set View Target with Blend. AFTER Set View Target with Blend, add Get Enhanced Input Local Player Subsystem (from Self) → Add Mapping Context, Context=IMC_TargetRush, Priority=0. Feed the Add Mapping Context exec from the existing BeginPlay chain, not Event Tick.",
-              "why": "The same controller must show the cursor, control the camera and activate the R mapping.",
-              "check": "Play still shows Cam_TargetRush, a visible mouse pointer and clickable targets."
-            },
-            {
-              "title": "Reload the current map when R is pressed",
-              "where": "BP_LoopsPlayerController → Event Graph → IA_RestartRush Input Action event.",
-              "do": "Connect its Started white execution → Open Level (by Name). Add Get Current Level Name (Remove Prefix String ticked) and connect to Open Level.Level Name. Compile and Save. Do not call StartWave manually on restart: Open Level starts everything fresh through BeginPlay.",
-              "why": "A level reload resets the GameMode counters, timers, spawned actors and HUD together.",
-              "check": "Press R after Time Up or winning: LoopsLevel restarts on Wave 1 with five targets and Time: 90."
-            },
-            {
-              "title": "Put the HUD in the controller",
+              "title": "Put the HUD onto the existing controller",
               "where": "BP_LoopsPlayerController → Event BeginPlay.",
-              "do": "In BP_LoopsPlayerController → Event BeginPlay keep the same ONE Show Mouse Cursor → Set Enable Click Events → Set Input Mode Game And UI → Set View Target with Blend → Add Mapping Context(IMC_TargetRush) chain. AFTER those nodes add Create Widget(Class=WBP_TargetRushHUD, Owning Player=Self) → Add to Viewport(Target=Create Widget Return Value). Compile. HUD root Canvas stays Not Hit-Testable (Self & All Children). Do not create a second controller or HUD.",
-              "why": "The controller is already active in the original target game.",
-              "check": "Play: fixed camera, pointer and click events still work, four HUD labels are visible, and R reloads the level."
+              "do": "Keep the ONE BeginPlay chain from Stage 1: Show Mouse Cursor → Set Input Mode Game And UI → Set View Target with Blend → Add Mapping Context(IMC_RisingDefence). AFTER Add Mapping Context, add Create Widget(Class=WBP_RisingDefenceHUD, Owning Player=Self) → Add to Viewport. Do not create another controller or multiple HUD widgets.",
+              "why": "A single PlayerController continues to own firing, camera and UI.",
+              "check": "Time and Hits appear, and line-trace gun still hits the growing blocks."
             },
             {
-              "title": "Test both endings without waiting for 90 seconds",
-              "where": "LoopsLevel → BP_LoopsGameMode Class Defaults and Play In Editor.",
-              "do": "First temporarily set SecondsLeft default from 90 to 5; Compile, start Play and wait without clearing wave 1. Verify \"TIME UP!\", clicks no longer count, no extra wave appears, and R restarts. Then set SecondsLeft back to 90 and test a full 5→6→7→8→9 wave victory, checking Hits=35 and the \"WAVES CLEARED!\" message. SAVE with SecondsLeft=90 afterwards.",
-              "why": "A short controlled failure test catches end-state bugs; a full run proves the game is completable.",
-              "check": "Both endings are shown correctly, R works, and the final saved timer is 90 seconds."
+              "title": "Add R to restart cleanly",
+              "where": "Content/Loops → Input assets and BP_LoopsPlayerController.",
+              "do": "Create Input Action IA_RisingRestart (Digital). In the EXISTING IMC_RisingDefence map IA_RisingRestart to Keyboard R. In BP_LoopsPlayerController add IA_RisingRestart Started → Open Level(by Name), using Get Current Level Name (Remove Prefix String=true) into Level Name. Do NOT call SpawnOneBlock or reset arrays by hand; reloading the map resets everything.",
+              "why": "Restarting the level is safer than attempting to manually reset all active Actors and timers.",
+              "check": "Pressing R after win or loss restarts with 60 seconds, Hits=0, one growing block and an empty success/fail result."
+            },
+            {
+              "title": "Test both endings using a five-second test",
+              "where": "LoopsLevel → BP_LoopsGameMode Class Defaults → Play.",
+              "do": "Temporarily set SecondsLeft default=5 and test a WIN by shooting until the timer reaches zero. Then keep SecondsLeft=5, temporarily set BP_RisingBlock MaxHeight default=90 and test a LOSS when the block grows to that height. Restore SecondsLeft=60 and MaxHeight=450, Compile and Save BOTH Blueprints. Test R after both endings.",
+              "why": "Short controlled tests prove all end-state paths without waiting for full survival rounds.",
+              "check": "Both endings occur exactly once, R resets correctly, and final saved values are 60 seconds and 450cm."
+            },
+            {
+              "title": "Run a complete 60-second survival attempt",
+              "where": "LoopsLevel → Play in Editor.",
+              "do": "Play a full run with normal values. Watch that fresh threats appear in random lanes, shooting releases them, Hits rises and the limit line is visible. Win only after 60 seconds without a breach. Intentionally let one reach the line in a second run and confirm you lose. The score is the number of blocks shot, so friends can replay to beat each other's score.",
+              "why": "This is the minimum finished game for the jam; no optional stage is required.",
+              "check": "Random rise → line-trace fire → score → danger-height fail → 60-second win → R replay all work together."
             }
           ],
-          "check": "Five waves run through counts 5→6→7→8→9. The HUD displays Wave/Targets/Time/Hits, the overall 90-second timer stops at win or timeout, and R starts a clean new run.",
-          "fix": "Clock frozen? Check one BP_LoopsGameMode TickRush timer starts from BeginPlay, not StartWave. Missing labels? Use Format Text with Wave/Targets/Time/Hits in each widget binding. Clicks stop after HUD? Set root Canvas Not Hit-Testable (Self & All Children). Restart missing? Ensure the single IMC_TargetRush is added to the original BP_LoopsPlayerController. New wave appears after TIME UP? Gate AdvanceWave on NOT Finished. If clicking worked in Stage 1 but stopped now, re-test ActorOnClicked → Print String and check the root Canvas is Not Hit-Testable (Self & All Children); the controller must retain Set Input Mode Game And UI.",
-          "beforeStart": "Stage 2 creates exactly five waves of 5,6,7,8,9 stationary targets via StartWave and ScheduleNextWave. Cam_TargetRush shows all nine positions. After 35 valid clicks, the debug win appears; there is not yet a countdown or HUD.",
-          "commonMistake": "The level has TWO separate types of timer: a one-shot 0.75-second next-wave timer in GameMode and a single 1-second round countdown, plus an unrelated 0.25-second widget display refresh. Do not put a new countdown into every StartWave call.",
-          "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
+          "check": "The game has a 60-second survival victory, a single-height breach loss, live score/time, an unobtrusive HUD, one spawn timer and R restart.",
+          "fix": "Firing stops after HUD: Canvas root must be Not Hit-Testable (Self & All Children), and controller retains IMC_RisingDefence. Timer doubles: only ONE RoundTimerHandle from BeginPlay. Blocks keep growing after defeat: BP_RisingBlock Tick checks NOT Finished. R fails: check IA_RisingRestart mapping and Open Level.Get Current Level Name. Reset temporary 5s/90cm values.",
+          "beforeStart": "Stage 2's random rising blocks, lane recycling and red-line fail state all work.",
+          "commonMistake": "Do not put the countdown in SpawnOneBlock. Spawn, growth, countdown and HUD each have ONE owner.",
+          "studentPromise": "Compile → Save → Play after each small change. Do not move on until that step's check passes."
         },
         {
-          "id": "combo",
-          "title": "4. Creative: build a high-score combo challenge",
+          "id": "rising-danger",
+          "title": "4. Creative: fast red blocks add target priority",
           "tier": "Creative",
-          "outcome": "Reward quick accurate clicking: consecutive hits within 1.5 seconds build a combo, add increasing points and encourage players to beat their score on replay.",
+          "outcome": "Some spawned blocks are red and grow much faster, forcing players to prioritise urgent targets without changing the working survival rules.",
           "steps": [
             {
-              "title": "Choose the scoring rule",
-              "where": "Your finished five-wave Target Rush level → BP_LoopsGameMode.",
-              "do": "Keep the original five waves, 90-second timer, TargetsLeft and TargetsHit. Add three NEW variables in BP_LoopsGameMode: ComboCount (Integer, default 0), ComboScore (Integer, default 0) and LastHitTime (Float, default -100). A fast click within 1.5 seconds of the previous valid click continues the combo; a slower click starts a new combo at 1.",
-              "why": "The race already works. These separate variables create a replayable score challenge without risking the core hit counter.",
-              "check": "All three variables exist, with ComboScore and ComboCount starting at 0. The original TargetsHit remains unchanged."
+              "title": "Create a danger-block flag",
+              "where": "BP_RisingBlock → Variables.",
+              "do": "Add FastThreat Boolean default false; tick Instance Editable and Expose on Spawn. Add a red Material for BlockMesh. Compile so FastThreat becomes a Spawn Actor input pin.",
+              "why": "One actor Blueprint supports normal and urgent threats.",
+              "check": "Spawn Actor BP_RisingBlock shows the FastThreat Boolean input."
             },
             {
-              "title": "Read the time of each valid hit",
-              "where": "BP_LoopsGameMode → HitTarget function → first Branch (NOT Finished AND TargetsLeft > 0).",
-              "do": "Find the TRUE white execution output of the existing guard that leads into Set TargetsLeft. Disconnect that white wire only. Create Get Game Time in Seconds (pure float node) and a Float - Float node: Now - LastHitTime. Put a Float <= Float comparison against 1.5. Do not use SecondsLeft here: this measures the time between clicks, not the round clock.",
-              "why": "Actual game time lets a combo expire automatically if the player pauses.",
-              "check": "The comparison is TRUE only when the latest successful click was within 1.5 seconds of the previous successful click."
+              "title": "Change speed and appearance when fast",
+              "where": "BP_RisingBlock → Event BeginPlay BEFORE UpdateBlockVisual.",
+              "do": "Avoid merging two Branch execution paths. Instead, in Event BeginPlay use one straight WHITE execution chain: Set GrowthSpeed → BlockMesh.Set Material(Element Index=0) → UpdateBlockVisual. Feed Set GrowthSpeed with a Select Float node controlled by FastThreat (False=35, True=60). Feed Set Material with a Select Material node controlled by FastThreat (False=normal material, True=red warning material). Compile; do not change the Event Tick growth maths.",
+              "why": "Players get a readable reason to prioritise certain columns.",
+              "check": "Fast red threats visibly stretch faster than normal ones, and all blocks start on the floor."
             },
             {
-              "title": "Update the combo through one clean execution chain",
-              "where": "Same HitTarget function.",
-              "do": "Add a Select (Integer) with a Boolean Index from (Now-LastHitTime <=1.5): False value=1; True value=ComboCount+1. From the original guard's TRUE white pin, connect to Set ComboCount, using the Select output as its value. From Set ComboCount connect white exec to Set LastHitTime (Value=Get Game Time in Seconds), then to Set ComboScore (Value=ComboScore+ComboCount). AFTER Set ComboScore reconnect white execution to the ORIGINAL Set TargetsLeft → Set TargetsHit → end-of-wave Branch. Only one path changes counters; do not add a second HitTarget or target destruction.",
-              "why": "One Select avoids difficult white-wire merging and keeps all of the existing wave logic intact.",
-              "check": "First hit earns ComboScore=1. A rapid second hit earns 2 more (score=3). Third rapid hit earns 3 more (score=6). After a 1.5-second pause, the next hit earns only 1."
+              "title": "Choose a minority of fast blocks",
+              "where": "BP_LoopsGameMode → SpawnOneBlock → Spawn Actor Class=BP_RisingBlock.",
+              "do": "Before Spawn Actor, use Random Integer in Range(1,4) == 1 and connect the Boolean to FastThreat on the SAME Spawn Actor node. Leave the five FreeLanes array, spawn timing, LaneIndex pin and coordinates untouched.",
+              "why": "Only about one in four threats is dangerous, creating variation without more actors or timers.",
+              "check": "A few blocks spawn red; most stay normal; no lane overlaps."
             },
             {
-              "title": "Show the player's score and combo",
-              "where": "WBP_TargetRushHUD → Designer.",
-              "do": "Add two Text widgets ScoreText and ComboText, both Is Variable. Create Text bindings in the same style as the existing four labels: Get Game Mode → Cast To BP_LoopsGameMode, then use ComboScore → Format Text 'Score: {Value}' and ComboCount → Format Text 'Combo: x{Value}'. Keep the HUD root Canvas Not Hit-Testable (Self & All Children) so new text never intercepts world clicks. Compile.",
-              "why": "A score is only motivating when the player can read their improvement while playing.",
-              "check": "The HUD displays Score and Combo alongside Wave, Targets, Time and Hits; all cubes still receive clicks."
-            },
-            {
-              "title": "Tune difficulty with players",
-              "where": "Play In Editor, one practice run and two score runs.",
-              "do": "Run the full five-wave game. First use the original 90-second limit; note completion time and ComboScore. If nearly everyone wins easily, try SecondsLeft=45 or 60 for a more exciting score attack. If most students time out, restore 90. You MUST compile/save after adjusting it, and update any on-screen starting-time example to match. Ask a tester whether they understand why a faster set of hits gets more points.",
-              "why": "The timer should put pressure on players, not simply wait while they click 35 identical blocks.",
-              "check": "Players can finish and restart the game, the score rewards faster chains and the difficulty chosen is fair for the class."
-            },
-            {
-              "title": "Give the challenge an identity",
-              "where": "Art/UI work in Photoshop or 3ds Max, imported into the same Unreal level.",
-              "do": "Choose ONE presentation: sci-fi target gallery, hacking terminal, training simulator or alien signal purge. Make readable target art and a game title/start instruction. Add one hit sound or visual flash only if time allows. Do not alter the collision size or fixed camera without re-testing all nine targets.",
-              "why": "The same logic can support different games while keeping the working two-week scope.",
-              "check": "A new player understands the controls, can read score and combo, complete or fail the run and press R to retry."
+              "title": "Retest the full game",
+              "where": "LoopsLevel → Play.",
+              "do": "Defend for 60 seconds against normal and red blocks. Let a red one reach the line on another attempt and check LoseRound still runs. If the game is too hard, change FastThreat GrowthSpeed from 60 to 45; if easy, 65. Do not change the maximum 450cm unless the camera/red line are adjusted together.",
+              "why": "A working game matters more than maximal difficulty.",
+              "check": "Red blocks are shootable, can lose the round, and never break the score or restart."
             }
           ],
-          "check": "The standard five waves and win/timeout/restart still work. Fast successive hits increase ComboCount and ComboScore, a pause resets ComboCount on the next hit, and new HUD text does not block clicking.",
-          "fix": "Score stuck at 0? Check Set ComboCount → Set LastHitTime → Set ComboScore is connected BEFORE the existing Set TargetsLeft, inside the first guard's True output. No combo reset? The comparison must use Game Time - LastHitTime and default LastHitTime=-100. Missed clicks after new HUD? Keep root Canvas Not Hit-Testable (Self & All Children). Do not modify the original TargetsHit logic or destroy a target a second time.",
-          "beforeStart": "The ESSENTIAL Target Rush build is already working: five waves, 35 hits, a visible HUD, a 90-second timer, win/lose and R restart. Back it up first. This is a Creative upgrade, not required to finish the jam.",
-          "commonMistake": "Do not substitute ComboScore for TargetsHit: TargetsHit must still count one per valid clicked cube and determine the 35-hit final wave. Only ComboScore uses the increasing ComboCount.",
-          "studentPromise": "One safe addition at a time; test a three-click combo and a paused reset before adding new UI or making the timer harder."
+          "check": "Normal and faster red rising threats share the same five-lane spawn, trace-hit and danger-line logic.",
+          "fix": "All red: check Random Integer range=1..4 and equality to 1. Red but slow: initialise GrowthSpeed before calling UpdateBlockVisual. Cannot shoot red: keep BlockMesh Visibility collision Block, and the red material visual-only.",
+          "beforeStart": "The complete base 60-second game works. Back it up first.",
+          "commonMistake": "Do not create BP_RedBlock as a second class with duplicated shooting/growth logic; one BP_RisingBlock and FastThreat flag are simpler.",
+          "studentPromise": "Compile → Save → Play after each small change. Do not move on until that step's check passes."
         },
         {
-          "id": "random",
-          "title": "5. Creative: vary target positions without overlaps",
+          "id": "rising-polish",
+          "title": "5. Creative: make the blaster feel like a game",
           "tier": "Creative",
-          "outcome": "Targets appear in slightly different places on each wave, while staying in their nine separate grid cells so they remain visible and clickable.",
+          "outcome": "Improve feedback, readability and replay motivation while retaining the tested line-trace gun and survival balance.",
           "steps": [
             {
-              "title": "Keep the nine-cell grid as your safety net",
-              "where": "BP_LoopsGameMode → StartWave FUNCTION → existing Make Vector and Make Transform.",
-              "do": "Locate the grid maths from Stage 2: Column ×180 feeds Y and 150 + Row ×130 feeds Z. Do not remove the existing For Loop, Columns, Rows, target counts or Make Transform. You will add a small offset to each grid cell, not replace the whole grid with unbounded random points.",
-              "why": "Each index still owns one separate position, which prevents the most common problem of nine randomly overlapping cubes.",
-              "check": "The old target grid still compiles and displays all waves before any randomness is added."
+              "title": "Give the game a theme",
+              "where": "Artist/designer workstation → Photoshop, 3ds Max or material editor.",
+              "do": "Choose ONE achievable theme: defensive laser turret, anti-virus defence, robot factory overload or alien crystal containment. Make a distinctive block material and a readable red danger line; export PNG or FBX as needed. Programmer imports copies into local Unreal.",
+              "why": "The same gameplay loop becomes an original student-designed game.",
+              "check": "Player can tell at a glance which blocks are threats and what line matters."
             },
             {
-              "title": "Randomise the left/right position a little",
-              "where": "StartWave → original Make Vector Y value (Column ×180).",
-              "do": "Add Random Float in Range with Min=-20 and Max=20. Add the random output to the existing Column ×180 value using Float + Float (automatic integer-to-float conversion is fine). Feed that SUM into Make Vector.Y. Keep Make Vector.X=200.",
-              "why": "The centre of each column can vary by 20cm, but neighbouring targets stay well apart.",
-              "check": "Press Play twice: the left/centre/right columns are recognisable but individual targets have slightly different horizontal positions."
+              "title": "Give firing instant feedback",
+              "where": "BP_LoopsPlayerController → existing IA_RisingFire path.",
+              "do": "After the Line Trace By Channel on hit-TRUE, add a short Play Sound 2D or Spawn Emitter at Location (Hit Result Impact Point) if available. You may print '+1' for successful hits during testing. Leave the trace endpoint, hit cast and BreakBlock calls untouched. Do not play score feedback when Line Trace returns false.",
+              "why": "Without sensory confirmation, a line-trace gun can feel like ordinary cursor clicking.",
+              "check": "Successful hits produce immediate feedback; misses do not award Hits."
             },
             {
-              "title": "Randomise the up/down position a little",
-              "where": "StartWave → original Make Vector Z value (150 + Row ×130).",
-              "do": "Add a SECOND Random Float in Range with Min=-10 and Max=10. Add its Return Value to the existing 150 + Row ×130 using Float + Float. Connect the SUM into Make Vector.Z. Keep the same Spawn Actor From Class node and the original target count controlled by CurrentWaveCount.",
-              "why": "With 130cm row spacing, a small ±10cm variation allows movement without pushing 100cm cubes into the next row.",
-              "check": "A wave still contains exactly 5–9 targets, with vertical variation but no obvious overlap."
+              "title": "Show urgency without stealing mouse input",
+              "where": "WBP_RisingDefenceHUD and LoopsLevel.",
+              "do": "Add a clear 'DANGER HEIGHT' label near the red line and make it visible from the fixed camera. Keep the HUD Canvas non-hit-testable. Test all five lanes with the tallest blocks: none should be hidden by Score, Time or instruction labels.",
+              "why": "The player must understand when the round is about to end.",
+              "check": "The win/loss rule is readable even to someone who has never seen the tutorial."
             },
             {
-              "title": "Keep independent random values per spawn",
-              "where": "BP_LoopsGameMode → StartWave → Loop Body → Spawn Actor From Class.",
-              "do": "Ensure the Random Float in Range nodes feed the Make Vector inside the ONE Spawn Actor call that is executed for every Loop Body iteration. Do not cache one shared random offset before the loop or all targets in a wave will shift together. Compile.",
-              "why": "A new random value is used for each Actor as the loop spawns it.",
-              "check": "The targets within a wave have slightly different positions, not one perfectly rigid row translated together."
+              "title": "Balance replay and difficulty",
+              "where": "BP_LoopsGameMode Class Defaults and BP_RisingBlock defaults.",
+              "do": "Playtest with another pair. Starter settings: Spawn interval=1.5s, GrowthSpeed=35cm/s, MaxHeight=450cm, round=60s. For easier play change GrowthSpeed to 25; for harder play try 45 or Spawn interval=1.1. Change ONE number at a time and run a full test; keep FreeLanes protection.",
+              "why": "Tuning is a real design task and makes the game replayable without complex new systems.",
+              "check": "Another student can survive at least one fair run, lose predictably, and explain how their score improved."
             },
             {
-              "title": "Test repeatability and accessibility",
-              "where": "Content/Loops/LoopsLevel → Play In Editor; press R between attempts.",
-              "do": "Try three new games and clear at least one late wave with nine targets. Make sure Cam_TargetRush frames all nine cubes and that none is partly hidden behind the HUD or another cube. If a new art asset is larger than the starter Cube, reduce the random ranges or expand grid spacing and reframe the camera.",
-              "why": "Safe positioning matters more than maximum randomness for a beginner project.",
-              "check": "All nine remain visible, separated and clickable across repeated waves and restarts."
-            },
-            {
-              "title": "Give the game its own identity",
-              "where": "Artist/designer workstation → 3ds Max/Photoshop and shared Teams files.",
-              "do": "Create a new target mesh/texture or themed arena backdrop. Share FBX/PNG files through Teams so the programmer can import them. Check the new target size against the grid spacing and tune the small offsets together.",
-              "why": "Students can apply the same system to targets, pickups or shooting galleries without making their layouts unfair.",
-              "check": "The team has an original game asset and can explain how each new wave stays playable despite position changes."
+              "title": "Prepare the showcase build",
+              "where": "LoopsLevel → Play in Editor/Package Project.",
+              "do": "Prepare a 2–5 minute demo or packaged Windows build. Explain how the original Loops tutorial created repeated objects, how your timer randomly selects FreeLanes, how a Line Trace By Channel shoots targets, and why you tuned the height limit. Demonstrate win, loss and R restart.",
+              "why": "Showing the transformation from a spawn loop to a finished survival game provides genuine games-development evidence.",
+              "check": "The project runs reliably end-to-end, with original assets credited and before/after screenshots."
             }
           ],
-          "check": "Five waves still spawn 5→6→7→8→9 targets. Each target moves slightly within its own cell on each wave; all remain visible, separated and clickable, with no extra Actor or spawning timer.",
-          "fix": "No variation? Check the two Random Float in Range nodes feed the sums for Make Vector Y and Z INSIDE StartWave. All targets shifted together? Do not generate one shared offset before the For Loop. Overlapping after new meshes? Reduce random ranges or increase column/row spacing and reframe Cam_TargetRush. For a reliable fallback, disconnect the random sums and restore the original Stage 2 grid maths.",
-          "beforeStart": "The complete five-wave Target Rush game works with the reliable 3×3 grid, HUD, 90-second timer and R replay. Back up that working version before changing placement. You do NOT need to create a new spawner Actor for this safe variation.",
-          "commonMistake": "Using one unrestricted random spawn Box can place two or more large cubes in the same location, preventing a player clearing a wave. Add small independent jitter to each existing grid slot instead.",
-          "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
+          "check": "Rising Defence feels visually clear and responsive, has an understandable objective and is reliable for the game-jam showcase.",
+          "fix": "Hiding targets: keep HUD canvas non-hit-testable and recenter the camera. No shot impact: use the trace Out Hit. Difficulty swings: change only one variable, restore a saved build if unsure.",
+          "beforeStart": "The three Essential Rising Defence stages already form a full game.",
+          "commonMistake": "Visual polish comes AFTER working spawn, gun, losing height rule and 60-second victory.",
+          "studentPromise": "Compile → Save → Play after each small change. Do not move on until that step's check passes."
         }
       ],
-      "minimumStage": "race",
-      "minimumOutcome": "A five-wave click-to-clear game with a 90-second timer, a visible wave/targets/Hits display, win/timeout states and keyboard R replay."
+      "minimumStage": "rising-survival",
+      "minimumOutcome": "A complete 60-second shooting-gallery survival game: five random spawn lanes, rising targets, a real line-trace blaster, a red 450cm lose-height limit, live Hits/Time HUD, win and loss states and R restart."
     }
   ]
 };

@@ -86,16 +86,18 @@ async function run(){
         'balloon-popper':['score','respawn','timer','results','risk'],
         'bowling':['pin-score','throws','polish','power'],
         'clicker':['shop','display','granny','training','goal','farm'],
-        'loops':['targets','waves','race','combo','random']
+        'loops':['rising-shot','rising-growth','rising-survival','rising-danger','rising-polish']
       };
       for(const group of allUpgrades){
         if(JSON.stringify(group.stages)!==JSON.stringify(expectedPaths[group.id]))
           fail.push(device.name+': incorrect '+group.id+' upgrade sequence '+JSON.stringify(group.stages));
       }
       const loopsData=await page.evaluate(()=>window.UE5_MINI_UPGRADE_DATA.projects.find(p=>p.project==='loops'));
-      if(!loopsData?.stages?.find(s=>s.id==='targets')?.steps?.some(s=>s.do.includes('TARGET CLICK')) ||
-         !loopsData?.stages?.find(s=>s.id==='combo')?.steps?.some(s=>s.do.includes('ComboScore')))
-        fail.push(device.name+': Loops must include independent click diagnosis and full-game combo scoring');
+      if(loopsData?.minimumStage!=='rising-survival' ||
+         !loopsData?.stages?.find(s=>s.id==='rising-shot')?.steps?.some(s=>s.do.includes('Line Trace By Channel')) ||
+         !loopsData?.stages?.find(s=>s.id==='rising-growth')?.steps?.some(s=>s.do.includes('FreeLanes')) ||
+         !loopsData?.stages?.find(s=>s.id==='rising-survival')?.steps?.some(s=>s.do.includes('SecondsLeft')))
+        fail.push(device.name+': Loops Rising Defence must have gun, random growth and survival game');
       for(const group of allUpgrades){
         await page.goto(base+'/#/mini-projects/'+group.id,{waitUntil:'load'});
         if(await page.locator('.mini-upgrade-promo a[href="#/mini-projects/upgrades/'+group.id+'"]').count()!==1)fail.push(device.name+': '+group.id+' overview upgrade link missing');
