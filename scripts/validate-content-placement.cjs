@@ -240,6 +240,16 @@ function audit(root = path.resolve(__dirname, '..')) {
      !guideText('loops','random').includes('separate'))
     fail('Loops random','must preserve grid slots and use small independent safe position offsets');
 
+  if(!loopTargets.includes('TARGET CLICK') ||
+     !loopTargets.includes('Set Input Mode Game And UI') ||
+     !loopTargets.includes('Visibility=Block'))
+    fail('Loops click input','needs a standalone target click print, reliable input mode and correct collision setup');
+  const comboSteps=items(findUpgrade('loops','combo')?.steps);
+  if(comboSteps.length<6 || !guideText('loops','combo').includes('ComboScore') ||
+     !guideText('loops','combo').includes('LastHitTime') ||
+     !guideText('loops','combo').includes('1.5'))
+    fail('Loops combo','needs replayable combo scoring and a timed reset without changing the base loop');
+
   if(!loopTargets.includes('Cam_TargetRush')||!loopTargets.includes('Set View Target with Blend'))
     fail('Loops targets upgrade','requires a fixed gameplay camera before click tests');
 

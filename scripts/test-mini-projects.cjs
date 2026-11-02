@@ -81,17 +81,21 @@ async function run(){
       await page.waitForSelector('.mini-upgrade-card',{timeout:10000});
       if(await page.locator('.mini-upgrade-card').count()!==4)fail.push(device.name+': expected four upgrade pathways');
       const allUpgrades=await page.evaluate(()=>window.UE5_MINI_UPGRADE_DATA.projects.map(p=>({id:p.project,stages:p.stages.map(s=>s.id)})));
-      if(allUpgrades.reduce((n,p)=>n+p.stages.length,0)!==19)fail.push(device.name+': wrong total upgrade stages');
+      if(allUpgrades.reduce((n,p)=>n+p.stages.length,0)!==20)fail.push(device.name+': wrong total upgrade stages');
       const expectedPaths={
         'balloon-popper':['score','respawn','timer','results','risk'],
         'bowling':['pin-score','throws','polish','power'],
         'clicker':['shop','display','granny','training','goal','farm'],
-        'loops':['targets','waves','race','random']
+        'loops':['targets','waves','race','combo','random']
       };
       for(const group of allUpgrades){
         if(JSON.stringify(group.stages)!==JSON.stringify(expectedPaths[group.id]))
           fail.push(device.name+': incorrect '+group.id+' upgrade sequence '+JSON.stringify(group.stages));
       }
+      const loopsData=await page.evaluate(()=>window.UE5_MINI_UPGRADE_DATA.projects.find(p=>p.project==='loops'));
+      if(!loopsData?.stages?.find(s=>s.id==='targets')?.steps?.some(s=>s.do.includes('TARGET CLICK')) ||
+         !loopsData?.stages?.find(s=>s.id==='combo')?.steps?.some(s=>s.do.includes('ComboScore')))
+        fail.push(device.name+': Loops must include independent click diagnosis and full-game combo scoring');
       for(const group of allUpgrades){
         await page.goto(base+'/#/mini-projects/'+group.id,{waitUntil:'load'});
         if(await page.locator('.mini-upgrade-promo a[href="#/mini-projects/upgrades/'+group.id+'"]').count()!==1)fail.push(device.name+': '+group.id+' overview upgrade link missing');
