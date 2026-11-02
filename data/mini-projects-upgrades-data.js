@@ -1217,8 +1217,8 @@ window.UE5_MINI_UPGRADE_DATA = {
     },
     {
       "project": "loops",
-      "title": "Loops & Spawning → Target Rush",
-      "intro": "Turn the original physics cube tower into a click-to-clear game, then add five progressively larger waves and a 90-second replayable challenge. Start with the original Content/Loops/LoopsLevel, BP_Box and BP_LoopsGameMode. Complete the Essential upgrades to the marked playable milestone; optional random target locations come afterwards.",
+      "title": "Loops & Spawning → Target Rush (full game + score attack)",
+      "intro": "Finish the original physics-cube tower, then create Target Rush: five clickable waves, a time limit, readable HUD, victory/timeout and R replay. Stage 1 proves input with a simple TARGET CLICK message before adding GameMode scoring. The ESSENTIAL build through Stage 3 is already a complete playable game; optional Stage 4 adds combo points so speed matters, and Stage 5 adds safe target variation. Ideas for a unique presentation: arcade target range, hacking terminal, alien signal purge or robot calibration.",
       "stages": [
         {
           "id": "targets",
@@ -1229,30 +1229,30 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Create a game target actor",
               "where": "Content Drawer → Content → Loops → right-click → Blueprint Class → Actor.",
-              "do": "Name the new Actor BP_ClickTarget (NOT BP_Box). Add a Static Mesh component and choose the built-in Cube mesh. Give it a bright material, set Collision Presets=BlockAll (at least Visibility=Block) and make sure Simulate Physics is UNCHECKED. Compile and Save. Leave the physics-enabled original BP_Box alone.",
+              "do": "Create a NEW Blueprint Class → Actor named BP_ClickTarget (NOT the original BP_Box). Add a Static Mesh component; choose the built-in Cube. On the Static Mesh set Collision Enabled=Query Only (No Physics Collision), Collision Presets=Custom with Visibility=Block (BlockAll also works), and Simulate Physics UNCHECKED. Give it a visible material, Compile and Save. Leave BP_Box alone.",
               "why": "A reusable actor gives every spawned item the same interaction.",
-              "check": "BP_ClickTarget remains still and blocks clicks. The original BP_Box has not changed."
+              "check": "BP_ClickTarget has a visible cube, Visibility tracing is blocked, physics is off, and original BP_Box is unchanged."
             },
             {
               "title": "Spawn this target using the existing loop",
               "where": "Open the GameMode Blueprint used in your Loops tutorial.",
-              "do": "Open BP_LoopsGameMode → Event Graph (the actual Blueprint from the original lesson). Find the original For Loop → Spawn Actor From Class with Class=BP_Box. Change ONLY its Class to BP_ClickTarget. Set First Index=0, Last Index=4. Leave the original Index ×100 +50 → Make Vector.Z → Make Transform.Location wiring in place for this first test. Compile.",
+              "do": "Open BP_LoopsGameMode → Event Graph. Find the original For Loop → Spawn Actor From Class (Class=BP_Box). Change its Class to BP_ClickTarget. Set First Index=0 and Last Index=4. On Spawn Actor From Class expand Collision Handling Override and choose Always Spawn, Ignore Collisions for this controlled test. KEEP the original Index × 100 + 50 → Make Vector.Z → Make Transform.Location links. Compile and Play; count the five stationary cubes before continuing.",
               "why": "This reuses the original loop rather than manually placing five items.",
-              "check": "Play: five stationary BP_ClickTarget cubes appear as a vertical line/tower, not a collapsing physics tower. The screen view is configured next."
+              "check": "Five BP_ClickTarget cubes are visible and stationary, not the original collapsing BP_Box physics tower. If there are zero, check World Settings GameMode Override, spawn Class and Spawn Transform."
             },
             {
               "title": "Make a controller that accepts clicks",
               "where": "Content Drawer → Loops folder → Blueprint Class → PlayerController.",
-              "do": "Inside Content/Loops create Blueprint Class → PlayerController named BP_LoopsPlayerController. In its Event Graph wire Event BeginPlay → Set Show Mouse Cursor(true) → Set Enable Click Events(true), both targeting Self. Compile.",
+              "do": "Create Blueprint Class → PlayerController named BP_LoopsPlayerController in Content/Loops. In its Event Graph connect white execution: Event BeginPlay → Set Show Mouse Cursor (true; Target Self) → Set Enable Click Events (true; Target Self) → Set Input Mode Game And UI (Player Controller Self, In Widget to Focus empty, Hide Cursor During Capture unchecked, In Mouse Lock Mode=Do Not Lock). Compile. Do not use Event Tick or add a separate left-mouse Input Action: ActorOnClicked will handle it.",
               "why": "Mouse click events are disabled by default in some PlayerController setups.",
-              "check": "The controller shows the mouse and enables clickable actors."
+              "check": "BeginPlay has one uninterrupted white execution chain, cursor and click events are both true, and input mode accepts world clicks."
             },
             {
               "title": "Assign the controller in GameMode",
               "where": "Open your existing Loops GameMode Blueprint.",
-              "do": "In Class Defaults set Player Controller Class to BP_LoopsPlayerController. Check World Settings → GameMode Override points to this GameMode. Save the level.",
+              "do": "Open BP_LoopsGameMode → Class Defaults: set Player Controller Class=BP_LoopsPlayerController. In LoopsLevel → Settings → World Settings set GameMode Override=BP_LoopsGameMode. In the Play dropdown choose Selected Viewport or New Editor Window and PLAY (not Simulate). Save the level. If you use Selected Viewport, click inside the running game to give it focus.",
               "why": "Otherwise Unreal may run a different controller and clicks will not fire.",
-              "check": "Press Play and confirm the cursor is visible."
+              "check": "Play uses BP_LoopsPlayerController and the cursor is visible in the game viewport."
             },
             {
               "title": "Place a fixed camera for the clicking game",
@@ -1264,9 +1264,15 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Make the Player Controller use that camera",
               "where": "BP_LoopsPlayerController → Event Graph → existing BeginPlay.",
-              "do": "In BP_LoopsPlayerController Event Graph keep your original BeginPlay chain showing the cursor and enabling click events. After it add Get Actor of Class (Class=CameraActor) → Set View Target with Blend, with Target=Self and New View Target=Get Actor of Class Return Value. Wire the white execution to Set View Target with Blend, then Compile. Use only one Camera Actor for this simple classroom scene.",
+              "do": "In BP_LoopsPlayerController Event Graph, keep the full BeginPlay → Show Mouse Cursor → Enable Click Events → Set Input Mode Game And UI chain. AFTER it, use Get Actor of Class(Class=CameraActor) → Set View Target with Blend (Target=Self, New View Target=Get Actor of Class Return Value), and connect the white execution to Set View Target with Blend. Compile. Keep only Cam_TargetRush as a Camera Actor in this simple level.",
               "why": "Click positions make sense only when the game displays the same fixed camera each run.",
-              "check": "Press Play: you see a fixed view looking at the spawned targets, with a visible mouse cursor."
+              "check": "Press Play: the view stays on the targets and the mouse remains visible. If the view jumps, recheck the New View Target connection and assigned PlayerController."
+            },
+            {
+              "title": "Prove the click reaches the cube BEFORE making score logic",
+              "where": "BP_ClickTarget → Event Graph (NOT BP_Box) → Play in LoopsLevel.",
+              "do": "Right-click empty space → Add Event → Mouse Input → Event ActorOnClicked (called Event ActorOnClicked or On Actor Clicked). Connect its WHITE execution pin directly to Print String with In String='TARGET CLICK'. Compile and Save. Press Play (not Simulate) and click the FACE of a spawned cube inside the game viewport. Look for TARGET CLICK in the on-screen debug text. Do not add Destroy Actor or a GameMode cast yet. If you do not see the message, stop here and use the diagnosis below; more score nodes cannot fix a click-event problem.",
+              "check": "Exactly one TARGET CLICK message appears for each click on a cube. The cube does NOT disappear yet: that is correct for this isolated test."
             },
             {
               "title": "Add the round state",
@@ -1299,23 +1305,23 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Make each target respond once",
               "where": "BP_ClickTarget → Event Graph → right-click → Event ActorOnClicked.",
-              "do": "Open BP_ClickTarget → Event Graph → right-click Add Event → On Actor Clicked. From that event use Get Game Mode → Cast To BP_LoopsGameMode (Object=Get Game Mode) → Get Finished → NOT → Branch. From Branch True call HitTarget on the same GameMode cast result, then Destroy Actor(Self), wiring the white execution pins in order. Compile. Do NOT add this event to the original BP_Box.",
+              "do": "KEEP the working Event ActorOnClicked → Print String 'TARGET CLICK' from the earlier test. After Print String, connect the WHITE execution output to Cast To BP_LoopsGameMode. Wire Get Game Mode's blue output to Cast Object. From 'As BP_LoopsGameMode' pull Get Finished → NOT Boolean → Branch Condition. Wire Cast Success WHITE execution → Branch input. From Branch True (WHITE execution), drag from that SAME 'As BP_LoopsGameMode' reference and call HitTarget. Wire HitTarget's WHITE output to Destroy Actor(Target Self). Do not connect Destroy Actor to Cast Failed or Branch False. Compile and Save. You may remove the temporary Print String only AFTER the cube disappears and the count updates correctly.",
               "why": "Destroying the clicked target prevents it being scored a second time.",
-              "check": "Click one cube: it disappears and the shared total decreases to four."
+              "check": "On a cube click TARGET CLICK prints, the Cube disappears and TargetsLeft drops 5→4; on the fifth valid click you see ALL TARGETS CLEARED. If the debug prints but the cube stays, the problem is AFTER the event (cast, Finished Branch or execution wiring)."
             },
             {
               "title": "Play the whole target challenge",
               "where": "Content → Loops → LoopsLevel → Play In Editor.",
-              "do": "Press Play. Check the cursor is visible and Cam_TargetRush shows the five motionless targets. Click them one at a time. Each should disappear on click and the debug count should decrease. The fifth click shows \"ALL TARGETS CLEARED!\". To replay this first stage, Stop and Play again (R restart is added in Stage 3).",
+              "do": "Play LoopsLevel (not Simulate) with five visible stationary targets. Click each one. If a cube does not respond, use this three-point diagnosis: (1) NO 'TARGET CLICK': wrong Blueprint, wrong active PlayerController, mouse focus/input mode or Static Mesh not blocking Visibility; (2) 'TARGET CLICK' but NO destruction: inspect Cast success, Finished=false, Branch True, HitTarget → Destroy Actor white pins; (3) cube disappears but no counting: inspect the correct BP_LoopsGameMode, the HitTarget Branch and TargetsLeft Set. Print TargetsLeft after its Set while testing. Fifth click should show the first-stage win; restart with Stop → Play.",
               "why": "This is now a complete win condition built from the Loops exercise.",
               "check": "Exactly five BP_ClickTarget Actors appear; all can be clicked. After five different clicks the first-stage win appears once."
             }
           ],
-          "check": "Five targets spawn, five separate clicks clear them, and the final click announces success.",
-          "fix": "Click does nothing? Confirm the cursor and Enable Click Events are set, target collision blocks the Visibility trace, and World Settings selects the intended GameMode. If the target tower is off-screen, move Cam_TargetRush and check BP_LoopsPlayerController BeginPlay calls Set View Target with Blend. If the five cubes fall, Spawn Actor probably still uses physics BP_Box or BP_ClickTarget has Simulate Physics enabled. Do not look for an R restart yet: Stage 3 adds it.",
-          "beforeStart": "Open the original Content/Loops/LoopsLevel. The working BP_LoopsGameMode runs Event BeginPlay → For Loop and spawns a physical tower of BP_Box objects. The original BP_Box has Simulate Physics enabled: we will leave it untouched and create a NEW stationary clickable actor.",
-          "commonMistake": "BP_Box from the original mini-project simulates physics and may fall. Create BP_ClickTarget as a NEW Blueprint with Simulate Physics OFF, and change only Spawn Actor From Class. Keep the original BP_Box asset untouched.",
-          "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
+          "check": "Five stationary BP_ClickTarget cubes spawn. An isolated ActorOnClicked test first prints TARGET CLICK. After connecting HitTarget, five separate clicks destroy five cubes, TargetsLeft falls 5→0 and the final click announces success.",
+          "fix": "If clicks do nothing, STOP adding nodes and first disconnect the scoring branch: ActorOnClicked → Print String('TARGET CLICK') must work by itself. Check the active BP_LoopsPlayerController, Set Enable Click Events=true, Set Input Mode Game And UI, mouse focus in the PLAY viewport (not Simulate), and Static Mesh → Query collision → Visibility=Block. If TARGET CLICK prints but nothing disappears, check Cast To BP_LoopsGameMode success, Finished=false, the white execution chain to HitTarget and Destroy Actor(Self). If cubes disappear but TargetsLeft stays at 5, check the game-level GameMode Override and the HitTarget function. If fewer than five cubes appear, set Spawn Actor Collision Handling Override=Always Spawn, Ignore Collisions and confirm Class=BP_ClickTarget.",
+          "beforeStart": "Complete the original Loops mini-project first: Event BeginPlay in BP_LoopsGameMode spawns the physics BP_Box tower through a For Loop. Do not change the supplied original BP_Box or source tutorials. The upgrade creates a new non-physics BP_ClickTarget and an input-enabled PlayerController.",
+          "commonMistake": "The original BP_Box simulates physics and is NOT the clickable Actor. Test the NEW BP_ClickTarget with ActorOnClicked → Print String before adding a cast or score. World Settings must use BP_LoopsGameMode and its PlayerController must use BP_LoopsPlayerController; mouse clicks need the target Static Mesh to block Visibility traces.",
+          "studentPromise": "First prove five targets SPAWN, then prove TARGET CLICK prints, then connect score/destruction. Compile → Save → Play after each small change; do not continue until the previous check works."
         },
         {
           "id": "waves",
@@ -1340,7 +1346,7 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Paste it into StartWave",
               "where": "Loops GameMode → My Blueprint → Functions → +.",
-              "do": "Under My Blueprint → Functions → +, create StartWave. Open that Function and paste the copied For Loop + Spawn Actor and Make Transform nodes. Wire its purple Function Entry white output to the pasted For Loop input. If pasting lost a connected pin, copy or rebuild that missing connection before compiling.",
+              "do": "Under My Blueprint → Functions → +, create StartWave. Open that Function and paste the copied For Loop + Spawn Actor and Make Transform nodes. Wire its purple Function Entry white output to the pasted For Loop input. If pasting lost a connected pin, copy or rebuild that missing connection before compiling. Keep the Spawn Actor From Class Collision Handling Override set to Always Spawn, Ignore Collisions as in Stage 1, so the test remains predictable.",
               "why": "StartWave will be called once for each new wave.",
               "check": "The function contains the old spawn chain and has no compile errors."
             },
@@ -1556,7 +1562,7 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Enable restart input without breaking the fixed camera",
               "where": "BP_LoopsPlayerController → Event Graph → existing Event BeginPlay.",
-              "do": "KEEP the cursor → click events → Get Actor of Class(CameraActor) → Set View Target with Blend sequence. AFTER it add Get Enhanced Input Local Player Subsystem (from Self) → Add Mapping Context with Mapping Context=IMC_TargetRush and Priority=0. Compile.",
+              "do": "In BP_LoopsPlayerController keep the existing BeginPlay WHITE chain: Show Mouse Cursor → Enable Click Events → Set Input Mode Game And UI → Get Actor of Class(CameraActor) → Set View Target with Blend. AFTER Set View Target with Blend, add Get Enhanced Input Local Player Subsystem (from Self) → Add Mapping Context, Context=IMC_TargetRush, Priority=0. Feed the Add Mapping Context exec from the existing BeginPlay chain, not Event Tick.",
               "why": "The same controller must show the cursor, control the camera and activate the R mapping.",
               "check": "Play still shows Cam_TargetRush, a visible mouse pointer and clickable targets."
             },
@@ -1570,7 +1576,7 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Put the HUD in the controller",
               "where": "BP_LoopsPlayerController → Event BeginPlay.",
-              "do": "In BP_LoopsPlayerController → Event BeginPlay keep the original Show Mouse Cursor → Set Enable Click Events → Set View Target with Blend chain and the NEW Add Mapping Context(IMC_TargetRush) from the previous steps. AFTER those nodes add Create Widget(Class=WBP_TargetRushHUD, Owning Player=Self) → Add to Viewport(Target=Create Widget Return Value). Compile. Do NOT create a second PlayerController or a second HUD instance.",
+              "do": "In BP_LoopsPlayerController → Event BeginPlay keep the same ONE Show Mouse Cursor → Set Enable Click Events → Set Input Mode Game And UI → Set View Target with Blend → Add Mapping Context(IMC_TargetRush) chain. AFTER those nodes add Create Widget(Class=WBP_TargetRushHUD, Owning Player=Self) → Add to Viewport(Target=Create Widget Return Value). Compile. HUD root Canvas stays Not Hit-Testable (Self & All Children). Do not create a second controller or HUD.",
               "why": "The controller is already active in the original target game.",
               "check": "Play: fixed camera, pointer and click events still work, four HUD labels are visible, and R reloads the level."
             },
@@ -1583,14 +1589,69 @@ window.UE5_MINI_UPGRADE_DATA = {
             }
           ],
           "check": "Five waves run through counts 5→6→7→8→9. The HUD displays Wave/Targets/Time/Hits, the overall 90-second timer stops at win or timeout, and R starts a clean new run.",
-          "fix": "Clock frozen? Check one BP_LoopsGameMode TickRush timer starts from BeginPlay, not StartWave. Missing labels? Use Format Text with Wave/Targets/Time/Hits in each widget binding. Clicks stop after HUD? Set root Canvas Not Hit-Testable (Self & All Children). Restart missing? Ensure the single IMC_TargetRush is added to the original BP_LoopsPlayerController. New wave appears after TIME UP? Gate AdvanceWave on NOT Finished.",
+          "fix": "Clock frozen? Check one BP_LoopsGameMode TickRush timer starts from BeginPlay, not StartWave. Missing labels? Use Format Text with Wave/Targets/Time/Hits in each widget binding. Clicks stop after HUD? Set root Canvas Not Hit-Testable (Self & All Children). Restart missing? Ensure the single IMC_TargetRush is added to the original BP_LoopsPlayerController. New wave appears after TIME UP? Gate AdvanceWave on NOT Finished. If clicking worked in Stage 1 but stopped now, re-test ActorOnClicked → Print String and check the root Canvas is Not Hit-Testable (Self & All Children); the controller must retain Set Input Mode Game And UI.",
           "beforeStart": "Stage 2 creates exactly five waves of 5,6,7,8,9 stationary targets via StartWave and ScheduleNextWave. Cam_TargetRush shows all nine positions. After 35 valid clicks, the debug win appears; there is not yet a countdown or HUD.",
           "commonMistake": "The level has TWO separate types of timer: a one-shot 0.75-second next-wave timer in GameMode and a single 1-second round countdown, plus an unrelated 0.25-second widget display refresh. Do not put a new countdown into every StartWave call.",
           "studentPromise": "One small change, then Compile → Save → Play. If a check fails, fix that step before starting the next one."
         },
         {
+          "id": "combo",
+          "title": "4. Creative: build a high-score combo challenge",
+          "tier": "Creative",
+          "outcome": "Reward quick accurate clicking: consecutive hits within 1.5 seconds build a combo, add increasing points and encourage players to beat their score on replay.",
+          "steps": [
+            {
+              "title": "Choose the scoring rule",
+              "where": "Your finished five-wave Target Rush level → BP_LoopsGameMode.",
+              "do": "Keep the original five waves, 90-second timer, TargetsLeft and TargetsHit. Add three NEW variables in BP_LoopsGameMode: ComboCount (Integer, default 0), ComboScore (Integer, default 0) and LastHitTime (Float, default -100). A fast click within 1.5 seconds of the previous valid click continues the combo; a slower click starts a new combo at 1.",
+              "why": "The race already works. These separate variables create a replayable score challenge without risking the core hit counter.",
+              "check": "All three variables exist, with ComboScore and ComboCount starting at 0. The original TargetsHit remains unchanged."
+            },
+            {
+              "title": "Read the time of each valid hit",
+              "where": "BP_LoopsGameMode → HitTarget function → first Branch (NOT Finished AND TargetsLeft > 0).",
+              "do": "Find the TRUE white execution output of the existing guard that leads into Set TargetsLeft. Disconnect that white wire only. Create Get Game Time in Seconds (pure float node) and a Float - Float node: Now - LastHitTime. Put a Float <= Float comparison against 1.5. Do not use SecondsLeft here: this measures the time between clicks, not the round clock.",
+              "why": "Actual game time lets a combo expire automatically if the player pauses.",
+              "check": "The comparison is TRUE only when the latest successful click was within 1.5 seconds of the previous successful click."
+            },
+            {
+              "title": "Update the combo through one clean execution chain",
+              "where": "Same HitTarget function.",
+              "do": "Add a Select (Integer) with a Boolean Index from (Now-LastHitTime <=1.5): False value=1; True value=ComboCount+1. From the original guard's TRUE white pin, connect to Set ComboCount, using the Select output as its value. From Set ComboCount connect white exec to Set LastHitTime (Value=Get Game Time in Seconds), then to Set ComboScore (Value=ComboScore+ComboCount). AFTER Set ComboScore reconnect white execution to the ORIGINAL Set TargetsLeft → Set TargetsHit → end-of-wave Branch. Only one path changes counters; do not add a second HitTarget or target destruction.",
+              "why": "One Select avoids difficult white-wire merging and keeps all of the existing wave logic intact.",
+              "check": "First hit earns ComboScore=1. A rapid second hit earns 2 more (score=3). Third rapid hit earns 3 more (score=6). After a 1.5-second pause, the next hit earns only 1."
+            },
+            {
+              "title": "Show the player's score and combo",
+              "where": "WBP_TargetRushHUD → Designer.",
+              "do": "Add two Text widgets ScoreText and ComboText, both Is Variable. Create Text bindings in the same style as the existing four labels: Get Game Mode → Cast To BP_LoopsGameMode, then use ComboScore → Format Text 'Score: {Value}' and ComboCount → Format Text 'Combo: x{Value}'. Keep the HUD root Canvas Not Hit-Testable (Self & All Children) so new text never intercepts world clicks. Compile.",
+              "why": "A score is only motivating when the player can read their improvement while playing.",
+              "check": "The HUD displays Score and Combo alongside Wave, Targets, Time and Hits; all cubes still receive clicks."
+            },
+            {
+              "title": "Tune difficulty with players",
+              "where": "Play In Editor, one practice run and two score runs.",
+              "do": "Run the full five-wave game. First use the original 90-second limit; note completion time and ComboScore. If nearly everyone wins easily, try SecondsLeft=45 or 60 for a more exciting score attack. If most students time out, restore 90. You MUST compile/save after adjusting it, and update any on-screen starting-time example to match. Ask a tester whether they understand why a faster set of hits gets more points.",
+              "why": "The timer should put pressure on players, not simply wait while they click 35 identical blocks.",
+              "check": "Players can finish and restart the game, the score rewards faster chains and the difficulty chosen is fair for the class."
+            },
+            {
+              "title": "Give the challenge an identity",
+              "where": "Art/UI work in Photoshop or 3ds Max, imported into the same Unreal level.",
+              "do": "Choose ONE presentation: sci-fi target gallery, hacking terminal, training simulator or alien signal purge. Make readable target art and a game title/start instruction. Add one hit sound or visual flash only if time allows. Do not alter the collision size or fixed camera without re-testing all nine targets.",
+              "why": "The same logic can support different games while keeping the working two-week scope.",
+              "check": "A new player understands the controls, can read score and combo, complete or fail the run and press R to retry."
+            }
+          ],
+          "check": "The standard five waves and win/timeout/restart still work. Fast successive hits increase ComboCount and ComboScore, a pause resets ComboCount on the next hit, and new HUD text does not block clicking.",
+          "fix": "Score stuck at 0? Check Set ComboCount → Set LastHitTime → Set ComboScore is connected BEFORE the existing Set TargetsLeft, inside the first guard's True output. No combo reset? The comparison must use Game Time - LastHitTime and default LastHitTime=-100. Missed clicks after new HUD? Keep root Canvas Not Hit-Testable (Self & All Children). Do not modify the original TargetsHit logic or destroy a target a second time.",
+          "beforeStart": "The ESSENTIAL Target Rush build is already working: five waves, 35 hits, a visible HUD, a 90-second timer, win/lose and R restart. Back it up first. This is a Creative upgrade, not required to finish the jam.",
+          "commonMistake": "Do not substitute ComboScore for TargetsHit: TargetsHit must still count one per valid clicked cube and determine the 35-hit final wave. Only ComboScore uses the increasing ComboCount.",
+          "studentPromise": "One safe addition at a time; test a three-click combo and a paused reset before adding new UI or making the timer harder."
+        },
+        {
           "id": "random",
-          "title": "4. Optional: vary target positions without overlaps",
+          "title": "5. Creative: vary target positions without overlaps",
           "tier": "Creative",
           "outcome": "Targets appear in slightly different places on each wave, while staying in their nine separate grid cells so they remain visible and clickable.",
           "steps": [
