@@ -1272,7 +1272,8 @@ window.UE5_MINI_UPGRADE_DATA = {
               "title": "Prove the click reaches the cube BEFORE making score logic",
               "where": "BP_ClickTarget → Event Graph (NOT BP_Box) → Play in LoopsLevel.",
               "do": "Right-click empty space → Add Event → Mouse Input → Event ActorOnClicked (called Event ActorOnClicked or On Actor Clicked). Connect its WHITE execution pin directly to Print String with In String='TARGET CLICK'. Compile and Save. Press Play (not Simulate) and click the FACE of a spawned cube inside the game viewport. Look for TARGET CLICK in the on-screen debug text. Do not add Destroy Actor or a GameMode cast yet. If you do not see the message, stop here and use the diagnosis below; more score nodes cannot fix a click-event problem.",
-              "check": "Exactly one TARGET CLICK message appears for each click on a cube. The cube does NOT disappear yet: that is correct for this isolated test."
+              "why": "This isolates mouse input and target collision from GameMode counters: students can prove a click reaches the cube before adding complex nodes.",
+          "check": "Exactly one TARGET CLICK message appears for each click on a cube. The cube does NOT disappear yet: that is correct for this isolated test."
             },
             {
               "title": "Add the round state",
