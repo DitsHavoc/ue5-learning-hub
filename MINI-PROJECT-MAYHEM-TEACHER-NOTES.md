@@ -26,7 +26,7 @@ The original Mini-Projects are foundations, not finished games. Do **not** requi
 - **Balloon Popper:** score → random five-target respawning → 60-second timer/HUD → final score and Play Again → optional random danger targets.
 - **Bowling:** pin-scoring → root mesh and ball reset between three throws, preserving fallen pins and score → live HUD/bonus pin → optional Q/E power control. The earlier 45-second limit has been removed from the main bowling route.
 - **Clicker:** manual shop → live balance → Granny automation → Granny training → optional lifetime milestone and Farms. Use **one** GameMode production timer and keep spendable balance separate from lifetime earnings.
-- **Loops & Spawning:** five clickable targets → waves of 5, 6, 7, 8, 9 targets → overall 90-second race/HUD/replay → optional safe random offsets in each grid cell.
+- **Loops & Spawning / Target Rush:** verify ActorOnClicked with a temporary `TARGET CLICK` Print String **before** GameMode logic → five clickable targets → five waves (5, 6, 7, 8, 9) → one 90-second race/HUD/replay → optional combo-score challenge → optional safe random offsets in each grid cell. If all students clear 35 targets too easily, test 45–60 seconds after the full base loop is proven.
 
 Each new upgrade stage contains precise Blueprint nodes/actions, a designer task, a concrete test and troubleshooting. The text guides do **not** replace or edit the original illustrated source tutorials.
 
@@ -37,7 +37,7 @@ Aim for a working original tutorial and **two or three Essential upgrades by the
 
 ## Suggested project extensions
 - Balloon Popper → timer, combo/streak, hazards or moving balloons.
-- Loops & Spawning → waves, survival pressure, patterned hazards or spawn variations.
+- Loops & Spawning → the finished base game is a 35-target 90-second race; its optional combo score makes it replayable. Good themes: sci-fi target range, hacking terminal, alien signal purge or robot calibration. Stretch: accuracy/ordered targets or safer spawn variation. The original source cube tower stays untouched.
 - Bowling → rounds, scoring, obstacles or moving targets.
 - Clicker → upgrades, limited-time goals, score targets or a small shop.
 
@@ -131,3 +131,8 @@ All site checks validate route/rendered content consistency, not actual Unreal E
 The separate Artist & Game Designer Track, its six missions, four art kits, and the per-upgrade parallel designer checklists have been removed from the student Learning Hub. Give designers instructions directly in class; keep the programmer's 19 guided upgrades and the original 16 tutorials intact.
 
 Session 1 remains joint research and planning (similar games, mechanics/assets, a small screen sketch and role split). From Session 2, set manageable design work that is useful for the actual working game, such as one game asset, an understandable HUD and quick peer testing. Pairs share exports through Teams; the programmer alone edits the live Unreal project. Solo students do fewer assets and prioritise a working gameplay loop.
+
+## Monday 2 November — Loops click-event and replayability QA
+Student reports: some groups could not remove targets by clicking. The upgrade now pauses at an isolated Event ActorOnClicked → Print String("TARGET CLICK") test before any Cast, GameMode score or Destroy Actor is introduced. If the message is absent, inspect PlayerController assignment, Play-vs-Simulate, input mode, world/game viewport focus and Static Mesh Visibility collision. If it prints but the target remains, inspect Cast success, Finished, HitTarget and the white execution wiring; if targets vanish but do not score, inspect the active GameMode and shared counter. For a predictable first test Spawn Actor uses Always Spawn, Ignore Collisions.
+
+**Is it a full game?** After the Essential stages, yes in the basic sense: five waves, 35 targets, 90 seconds, results, HUD and R replay. It is intentionally a light arcade prototype, not a deep game. Stage 4 (Creative) adds a practical high-score combo loop (timely hits reward more points and reset after 1.5 seconds) to create competition/replay motivation without changing the base 35-hit completion logic. Stage 5 keeps the previous random-positions stretch. Encourage each pair to choose one identity and change mechanics/balance only after a working run. Browser/content tests verify instructions and routes; they cannot confirm that the Blueprints compile or play correctly in UE5.8.
