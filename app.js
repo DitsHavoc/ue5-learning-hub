@@ -2028,7 +2028,7 @@ function miniUpgradeNameGuide(st){const names=st.names||[];if(!names.length)retu
 function miniUpgradeStepExtra(step,st,number){const making=(st.names||[]).filter(x=>x.at===number);const newNames=making.length?'<div class="mini-upgrade-step-names"><strong>Names you make in THIS step (not all variables):</strong><div class="mini-upgrade-names-grid">'+making.map(miniUpgradeNamedItem).join('')+'</div></div>':'';const topics=(step.helpTopics||[]).map(key=>window.UE5_MINI_UPGRADE_HELP?.[key]).filter(Boolean);const help=topics.length?'<details class="mini-upgrade-howto"><summary>Stuck? Show the Unreal clicks for this step</summary>'+topics.map(h=>'<div class="mini-upgrade-howto-topic"><strong>'+esc(h.title)+'</strong><p>'+esc(h.body)+'</p></div>').join('')+'</details>':'';return newNames+help;}
 /* Split long English instructions into bite-sized operations without altering their meaning. */
 function miniUpgradeDoActions(s){
-  const pieces=String(s||'').split(/(?<=\\.)\\s+(?=[A-Z])/).map(x=>x.trim()).filter(Boolean);
+  const pieces=String(s||'').split(/(?<=\.)\s+(?=[A-Z])/).map(x=>x.trim()).filter(Boolean);
   if(pieces.length<2)return esc(s);
   return '<span class="mini-upgrade-do-actions">'+pieces.map((x,i)=>'<span class="mini-upgrade-do-action"><b>'+(i+1)+'.</b> '+esc(x)+'</span>').join('')+'</span>';
 }
