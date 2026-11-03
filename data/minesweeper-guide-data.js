@@ -419,9 +419,9 @@ window.UE5_MINESWEEPER_GUIDE = {
         {
           "title": "Prepare mines only for the very first LEFT reveal",
           "where": "WBP_MineBoard → CellPressed Event Graph",
-          "do": "Remove the old index debug Print String. Entry → Branch(NOT Finished); on True Branch(WantsFlag). Leave WantsFlag=True for stage 6. On WantsFlag=False add Branch(NOT Started). True → CALL PlaceMines(SafeIndex=PressedIndex) → Set Started=true → Print String 'FIRST CLICK PREPARED'. False → Print String 'SAME MINES'. Later we replace both prints with reveal logic.",
+          "do": "Remove the old index debug Print String. Entry → Branch(NOT Finished). On True Branch(WantsFlag); leave WantsFlag=True for Stage 6. On WantsFlag=False: Get Cells[PressedIndex] and Branch(NOT IsFlagged AND NOT IsOpen). FALSE does nothing: clicking a flagged/open tile is NOT a first reveal. TRUE → Branch(NOT Started). When NOT Started is True, CALL PlaceMines(SafeIndex=PressedIndex) → Set Started=true → Print String 'FIRST CLICK PREPARED'. When NOT Started is False, Print String 'SAME MINES'. The next stage replaces these two prints with a TryReveal call. Keep the new guard so a flag cannot start the game.",
           "why": "Build one part, test it now, then add the next part. WHITE pins run actions; coloured pins carry values.",
-          "check": "Left click once creates six mines; later left clicks reuse those mines. Right click never creates mines.",
+          "check": "A left-click on an unopened UNFLAGGED tile places mines once. Left-clicking a flagged tile does nothing and cannot start the game; right-click never places mines.",
           "helpTopics": [
             "branch",
             "exec"
@@ -806,7 +806,7 @@ window.UE5_MINESWEEPER_GUIDE = {
         {
           "title": "Route every left reveal through one TryReveal event",
           "where": "WBP_MineBoard → Event Graph and existing CellPressed",
-          "do": "Add Custom Event TryReveal with Integer Input RevealIndex. Inside: Get Cells[RevealIndex] → Branch(IsOpen OR IsFlagged), TRUE do nothing; FALSE → Branch(IsMine). Mine TRUE: Set cell.IsOpen=true → UpdateCellLook → CALL EndGame(DidWin=false). Mine FALSE: CALL OpenOneSafe(OpenIndex=RevealIndex). In CellPressed, replace the first-click and later debug Prints with CALL TryReveal(PressedIndex) on both paths, after any first-click PlaceMines → CalculateAllClues → Started=true. Leave WantsFlag TRUE unused until Stage 6.",
+          "do": "Add Custom Event TryReveal with Integer Input RevealIndex. Inside: Get Cells[RevealIndex] → Branch(IsOpen OR IsFlagged), TRUE do nothing; FALSE → Branch(IsMine). Mine TRUE: Set cell.IsOpen=true → UpdateCellLook → CALL EndGame(DidWin=false). Mine FALSE: CALL OpenOneSafe(OpenIndex=RevealIndex). In CellPressed KEEP the existing NOT IsFlagged AND NOT IsOpen pre-check. Replace the first-click and later debug Prints with CALL TryReveal(PressedIndex) on both paths, after any first-click PlaceMines → CalculateAllClues → Started=true. Leave WantsFlag TRUE unused until Stage 6.",
           "why": "Build one part, test it now, then add the next part. WHITE pins run actions; coloured pins carry values.",
           "check": "First click cannot explode; later click on a mine ends the round; safe clicked tiles reveal numbers.",
           "helpTopics": [
@@ -1198,7 +1198,7 @@ window.UE5_MINESWEEPER_GUIDE = {
         {
           "title": "Start the clock on FIRST reveal, not on flagging",
           "where": "CellPressed → first-click branch",
-          "do": "Find PlaceMines → CalculateAllClues → Set Started=true. AFTER Set Started, add Set Timer by Event with Time=1.0, Looping=true, Delegate Create Event bound to TickClock. Set ClockHandle from Timer Return Value. Then call TryReveal. The later-click branch calls TryReveal directly and does not start another timer.",
+          "do": "Find PlaceMines → CalculateAllClues → Set Started=true. AFTER Set Started, add Set Timer by Event with Time=1.0, Looping=true, Delegate Create Event bound to TickClock. Set ClockHandle from Timer Return Value. Then call TryReveal. The later-click branch calls TryReveal directly. The NOT IsFlagged AND NOT IsOpen pre-check before mine placement must remain: clicking a flag must never start the clock and does not start another timer.",
           "why": "Build one part, test it now, then add the next part. WHITE pins run actions; coloured pins carry values.",
           "check": "Time stays 0 until first LEFT reveal; it then rises by one per second. One timer only.",
           "helpTopics": [
@@ -1293,7 +1293,7 @@ window.UE5_MINESWEEPER_GUIDE = {
         }
       ],
       "check": "A full Minesweeper game starts, plays, wins, loses, flags and restarts without errors or duplicate timers.",
-      "fix": "Timer doubles? NewGame must Clear and Invalidate Timer by Handle and only the first reveal starts another. First-click mine? SafeIndex excluded. Restart gets 72 cells? Clear Children(MineGrid) and Clear Cells both run before For Loop. Win never fires? Check SafeOpened 36-MineCount AFTER FloodOpen.",
+      "fix": "Timer doubles? NewGame must Clear and Invalidate Timer by Handle and only the first reveal starts another. First-click mine? SafeIndex excluded. Restart gets 72 cells? Clear Children(MineGrid) and Clear Cells both run before For Loop. Win never fires? Check SafeOpened 36-MineCount AFTER FloodOpen. If the timer starts when clicking a flagged tile, preserve the CellPressed guard NOT IsFlagged AND NOT IsOpen BEFORE the NOT Started check.",
       "commonMistake": "The name of a Function, Widget, Custom Event or input pin is not automatically a Variable. Open the owning Blueprint; use the named-item labels in the current step.",
       "studentPromise": "One step → Compile → Save → Play → confirm Check. Do not continue if the test fails.",
       "optional": false
