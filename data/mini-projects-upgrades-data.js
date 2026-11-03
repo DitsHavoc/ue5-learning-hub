@@ -1320,7 +1320,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "why": "The original source tutorial uses Add Force with a Vector, not a separate impulse-magnitude input. Strength changes only the forward X force.",
               "check": "The original Bowl event now passes Strength into Make Vector.X and Add Force; Accel Change is still enabled. The next step sets the existing caller to 200000 so the ball moves.",
               "helpTopics": [
-                "function-input",
+                "event-input",
                 "custom-event"
               ]
             },
@@ -1396,7 +1396,7 @@ window.UE5_MINI_UPGRADE_DATA = {
           "names": [
             {
               "name": "Strength",
-              "kind": "Function input",
+              "kind": "Custom Event input",
               "owner": "Bowl Custom Event in BP_BowlingBall",
               "at": 1,
               "type": "Float • default 200000"
