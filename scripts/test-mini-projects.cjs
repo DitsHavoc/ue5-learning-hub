@@ -52,6 +52,47 @@ async function run(){
         fail.push(device.name+': removed course source block still visible');
       if(await page.locator('.mini-header').count()!==1)
         fail.push(device.name+': Mini-Projects header missing after intro removal');
+      // Standalone Minesweeper is a COMPLETE game, not a fifth source mini-project.
+      if(await page.locator('.mini-mines-promo a[href="#/mini-projects/complete/minesweeper"]').count()!==1)
+        fail.push(device.name+': Minesweeper complete-game entry missing');
+      await page.goto(base+'/#/mini-projects/complete/minesweeper',{waitUntil:'load'});
+      await page.waitForSelector('.mini-upgrade-card',{timeout:10000});
+      const minesData=await page.evaluate(()=>window.UE5_MINESWEEPER_GUIDE);
+      if(minesData?.stages?.length!==9||minesData.stages.reduce((n,s)=>n+s.steps.length,0)!==73)fail.push(device.name+': Minesweeper needs nine complete stages and 73 steps');
+      if(await page.locator('#app .mini-upgrade-card').count()!==9)
+        fail.push(device.name+': Minesweeper overview needs nine stage cards');
+      for(const st of minesData.stages){
+        await page.goto(base+'/#/mini-projects/complete/minesweeper/'+st.id,{waitUntil:'load'});
+        await page.waitForSelector('.mini-upgrade-step',{timeout:10000});
+        const info=await page.evaluate(()=>({
+          title:document.querySelector('#app h1')?.textContent,
+          steps:document.querySelectorAll('#app .mini-upgrade-step').length,
+          guides:document.querySelectorAll('#app .mini-upgrade-howto').length,
+          nameGuide:!!document.querySelector('#app .mini-upgrade-name-guide'),
+          fourRows:document.querySelectorAll('#app .mini-upgrade-step .mini-upgrade-instructions > p').length,
+          firstOpen:!!document.querySelector('#app .mini-upgrade-step')?.open,
+          hasFinal:!!document.querySelector('#app .mini-proof details'),
+          hasComplete:!!document.querySelector('#app [data-action="minesweeper-complete"]'),
+          overflow:document.documentElement.scrollWidth>window.innerWidth+2
+        }));
+        if(!info.title||info.steps!==st.steps.length||info.guides!==info.steps||!info.nameGuide||
+          info.fourRows!==info.steps*4||!info.firstOpen||!info.hasFinal||!info.hasComplete||info.overflow)
+          fail.push(device.name+' minesweeper/'+st.id+': tutorial broken '+JSON.stringify(info));
+      }
+      await page.goto(base+'/#/mini-projects/complete/minesweeper/setup',{waitUntil:'load'});
+      await page.locator('[data-action="minesweeper-complete"]').click();
+      if(!(await page.evaluate(()=>JSON.parse(localStorage.getItem('ue5hub:minesweeper:v1')||'[]').includes('setup'))))
+        fail.push(device.name+': Minesweeper progress did not save');
+      if((await page.evaluate(()=>JSON.parse(localStorage.getItem('ue5hub:mini-projects:v1')||'[]'))).length)
+        fail.push(device.name+': Minesweeper changed the source tutorial progress');
+      await page.reload({waitUntil:'load'});
+      if(!(await page.locator('[data-action="minesweeper-complete"]').innerText()).includes('Completed'))
+        fail.push(device.name+': Minesweeper completion did not survive reload');
+      await page.locator('[data-action="minesweeper-complete"]').click();
+      if(await page.evaluate(()=>JSON.parse(localStorage.getItem('ue5hub:minesweeper:v1')||'[]').includes('setup')))
+        fail.push(device.name+': Minesweeper completion cannot be undone');
+      await page.goto(base+'/#/mini-projects',{waitUntil:'load'});
+      await page.waitForSelector('.mini-project-card');
       // Mayhem is a challenge landing within Mini-Projects, not a fifth tutorial.
       if(await page.locator('.mini-jam-banner a[href="#/mini-projects/jam"]').count()!==1)fail.push(device.name+': jam entry missing');
       await page.locator('.mini-jam-banner a').click();
