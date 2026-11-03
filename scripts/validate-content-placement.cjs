@@ -127,6 +127,12 @@ function audit(root = path.resolve(__dirname, '..')) {
   const upgrade=w.UE5_MINI_UPGRADE_DATA || {projects:[]};
   unique('Mini-Project upgrade pathways',items(upgrade.projects).map(x=>({...x,id:x.project,title:x.title})));
   unique('Mini-Project upgrade stages',items(upgrade.projects).flatMap(x=>items(x.stages)));
+  const upgradeHelp=w.UE5_MINI_UPGRADE_HELP||{};
+  if(Object.keys(upgradeHelp).length<18)
+    fail('Mini-Project beginner help','missing reusable step-by-step UE5 guides');
+  for(const [key,tip] of Object.entries(upgradeHelp))
+    if(!tip.title||!tip.body||String(tip.body).length<60)
+      fail('Mini-Project help '+key,'needs a clear actionable UI sequence');
   for(const p of items(upgrade.projects)){
     reference('Mini-Project upgrade pathway '+p.project,p.project,ids(mini.projects));
     if(!items(p.stages).length)fail('Mini-Project upgrades '+p.project,'no upgrade stages');
@@ -135,12 +141,25 @@ function audit(root = path.resolve(__dirname, '..')) {
     if(items(p.stages).findIndex(st=>st.id===p.minimumStage)>3)fail('Mini-Project upgrades '+p.project,'minimum playable game comes too late');
     for(const stage of items(p.stages)){
       if(!stage.title||!stage.outcome||!stage.check||!stage.fix||!items(stage.steps).length)
-        fail('Upgrade '+stage.id,'needs title, outcome, designer task, test, troubleshooting and guided steps');
+        fail('Upgrade '+stage.id,'needs title, outcome, test, troubleshooting and guided steps');
       if(items(stage.steps).length<4)fail('Upgrade '+stage.id,'less than four guided actions');
+      const named=items(stage.names);
+      if(!named.length)fail('Upgrade '+stage.id,'needs a novice name/type reference');
+      const seenNames=new Set();
+      for(const item of named){
+        if(!item.name||!item.kind||!item.owner||!Number.isInteger(item.at)||item.at<0||item.at>items(stage.steps).length)
+          fail('Upgrade '+stage.id,'named item needs name, type, owner and introduction step');
+        if(seenNames.has(item.name))fail('Upgrade '+stage.id,'repeated named item '+item.name);
+        seenNames.add(item.name);
+      }
       if(!stage.beforeStart||!stage.commonMistake||!stage.studentPromise)fail('Upgrade '+stage.id,'needs a prior-state check and a common-mistake recovery');
       for(const [i,step] of items(stage.steps).entries()){
         if(!step.title||!step.where||!step.do||!step.why||!step.check)
           fail('Upgrade '+stage.id+' step '+(i+1),'missing where, do, why or check');
+        if(!items(step.helpTopics).length||items(step.helpTopics).length>2)
+          fail('Upgrade '+stage.id+' step '+(i+1),'requires one or two focused beginner help topics');
+        for(const key of items(step.helpTopics))
+          if(!upgradeHelp[key])fail('Upgrade '+stage.id+' step '+(i+1),'unknown help topic '+key);
       }
     }
   }

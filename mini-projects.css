@@ -147,3 +147,30 @@
 .mini-upgrade-ready .mini-small-note{margin-bottom:0}
 .mini-upgrade-instructions p{line-height:1.7}
 .mini-upgrade-instructions p span{overflow-wrap:anywhere}
+
+/* Optional upgrade guides: detailed help stays closed until students need it. */
+.mini-upgrade-new{border-color:#506b88;background:#152739}
+.mini-upgrade-new p{line-height:1.6;margin:9px 0}
+.mini-upgrade-name-guide{padding:15px 20px}
+.mini-upgrade-name-guide summary,.mini-upgrade-howto>summary{cursor:pointer;line-height:1.5;font-weight:700;color:#a9e1fa}
+.mini-upgrade-name-guide details>p{font-size:13px;line-height:1.7;margin:12px 0}
+.mini-upgrade-names-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:11px}
+.mini-upgrade-named-item{display:flex;flex-direction:column;gap:3px;border:1px solid #3a5369;background:#122336;padding:10px 12px;border-radius:8px;min-width:0;overflow-wrap:anywhere}
+.mini-upgrade-named-item>strong{font-size:13px;color:#e9f6ff}
+.mini-upgrade-named-item>span{font-size:12px;line-height:1.5;color:#aad5f0}
+.mini-upgrade-named-item>small{font-size:11px;line-height:1.5;color:#bbcbd8}
+.mini-upgrade-step-names{margin:11px 0 4px;padding:12px 13px;border-left:3px solid #71c4d2;background:#162c37;border-radius:5px}
+.mini-upgrade-step-names>strong{font-size:12px;color:#c2ebf5}
+.mini-upgrade-step-names .mini-upgrade-names-grid{grid-template-columns:repeat(auto-fit,minmax(170px,1fr));margin-top:9px}
+.mini-upgrade-howto{margin:12px 0 1px;padding:12px 14px;border:1px solid #436175;background:#101f30;border-radius:9px}
+.mini-upgrade-howto[open]{border-color:#6597ad}
+.mini-upgrade-howto-topic{padding:11px 0 3px}
+.mini-upgrade-howto-topic+.mini-upgrade-howto-topic{border-top:1px solid #31485b}
+.mini-upgrade-howto-topic>strong{font-size:13px;color:#bfe8ff}
+.mini-upgrade-instructions .mini-upgrade-howto-topic p{display:block;margin:6px 0 8px;padding:0;border:0;font-size:13px;line-height:1.7;color:#d8e5ef}
+@media(max-width:700px){.mini-upgrade-names-grid{grid-template-columns:1fr}.mini-upgrade-step-names{padding:10px}.mini-upgrade-step-names .mini-upgrade-names-grid{grid-template-columns:1fr}.mini-upgrade-howto{padding:10px 11px}.mini-upgrade-name-guide{padding:14px}}
+
+/* The Do this paragraph is broken into small numbered actions rather than a wall of Blueprint instructions. */
+.mini-upgrade-do-actions{display:grid;gap:9px}
+.mini-upgrade-do-action{display:flex;gap:9px;align-items:flex-start;line-height:1.65}
+.mini-upgrade-do-action>b{min-width:15px;color:#93d9fd;font-size:12px}
