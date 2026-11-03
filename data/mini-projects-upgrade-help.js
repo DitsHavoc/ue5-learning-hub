@@ -1,4 +1,4 @@
-/* Beginner-focused hints used only by the 20 Mini-Project upgrade pages. */
+/* Novice UE5.8 help for Mini-Project upgrades, loaded before app.js. */
 window.UE5_MINI_UPGRADE_HELP = {
   "variable": {
     "title": "Create a Blueprint variable",
@@ -91,5 +91,33 @@ window.UE5_MINI_UPGRADE_HELP = {
   "replay": {
     "title": "Restart the map without resetting every variable",
     "body": "In the PlayerController or Widget's button/key event add Get Current Level Name (tick Remove Prefix String) and Open Level (by Name). Connect the returned level name into Open Level → Level Name, and connect WHITE execution from the pressed event into Open Level. Save the level before testing. Reloading the map creates fresh GameMode variables and actors."
+  },
+  "playtest": {
+    "title": "Test one change at a time",
+    "body": "Compile the Blueprint, Save, then click Play (not Simulate). Perform exactly the test named in Check. If it fails, Stop and return to the last node you changed; add Print String to prove the white execution reaches that point. Do not build the next upgrade yet. If you temporarily altered a default for testing, restore the stated final value and Save before leaving."
+  },
+  "level": {
+    "title": "Place and adjust a level Actor",
+    "body": "Open the named level from Content Drawer. In the Place Actors panel drag the Actor/Camera into the viewport, then select it in World Outliner. Press W for Move, E for Rotate or R for Scale; for exact positions select Details → Transform and type X, Y, Z. To inspect a Camera Actor, select it and check its camera preview, or right-click → Pilot. Save the LEVEL (Ctrl+S), not just the Blueprint."
+  },
+  "ui-pass": {
+    "title": "Stop a HUD blocking world clicks",
+    "body": "Open the Widget Blueprint → Designer, select the ROOT Canvas Panel in Hierarchy, then Details → Behavior → Visibility. For display-only HUD choose Not Hit-Testable (Self & All Children), so nothing inside captures mouse clicks. If a Replay Button must be clicked, instead use Not Hit-Testable (Self Only) on the root and set only the non-button decorative elements to Not Hit-Testable (Self & All Children). Compile and test the actual click in Play."
+  },
+  "physics": {
+    "title": "Find the mesh physics settings",
+    "body": "Open the Actor Blueprint → Viewport; select the existing Static Mesh component in Components (often named Model). In Details search Simulate Physics, Collision Enabled and Physics → Linear/Angular Velocity. A reset uses a WHITE execution chain of Set Simulate Physics(false) → Set Actor Transform → Set Simulate Physics(true) → clear velocities. Do not create a second mesh when the tutorial already has a Model component."
+  },
+  "art": {
+    "title": "Make and import one simple original asset",
+    "body": "Choose ONE useful improvement first: a UI icon, simple mesh, texture or material. Save the editable source file (PSD/MAX) separately. Export PNG with transparency for UI, or FBX for a simple mesh. In Unreal Content Drawer open the game's folder → Import, select the exported file, and Compile/Save the referencing Blueprint. Check it in Play before adding more decoration. This is an ASSET, not a Blueprint Variable."
+  },
+  "backup": {
+    "title": "Make a safe working backup",
+    "body": "Stop Play and close Unreal Editor before copying the project folder. Keep the working original safe, then reopen the copy in Unreal and confirm its main level still plays. Avoid editing the same .uproject on two computers or directly inside a Teams-sync folder. Only change the copied project while following upgrades."
+  },
+  "refresh": {
+    "title": "Update the EXISTING UI after a game change",
+    "body": "Open the existing Widget Blueprint, and find the ONE RefreshShop / RefreshHUD function already created earlier. To call it after another action, connect the action's WHITE execution output to Call RefreshShop on the saved widget reference (or Self when inside the Widget). Do not duplicate the ClickerButton OnClicked handler or create a second UI widget. Check the display immediately after buying/clicking, and again after restarting the level."
   }
 };
