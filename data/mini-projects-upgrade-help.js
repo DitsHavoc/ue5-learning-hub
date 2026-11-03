@@ -119,5 +119,9 @@ window.UE5_MINI_UPGRADE_HELP = {
   "refresh": {
     "title": "Update the EXISTING UI after a game change",
     "body": "Open the existing Widget Blueprint, and find the ONE RefreshShop / RefreshHUD function already created earlier. To call it after another action, connect the action's WHITE execution output to Call RefreshShop on the saved widget reference (or Self when inside the Widget). Do not duplicate the ClickerButton OnClicked handler or create a second UI widget. Check the display immediately after buying/clicking, and again after restarting the level."
+  },
+  "event-input": {
+    "title": "Add an input to a Custom Event (not a variable)",
+    "body": "Open the Actor Blueprint and select the RED Custom Event node (e.g. Bowl), not a Function. In the Details panel find Inputs → +, enter the exact input name and type (Strength, Float), then Compile. The event's caller will now have a coloured Strength value pin. This is an Event INPUT, not a saved Blueprint variable; do NOT create a separate Strength under My Blueprint → Variables."
   }
 };
