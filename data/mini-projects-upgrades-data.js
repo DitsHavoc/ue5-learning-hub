@@ -187,7 +187,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "why": "The Blueprint spawner must be placed in the level; an asset only in the Content Drawer does not receive BeginPlay.",
               "check": "Five new balloons appear inside the spawner volume. If none appear, check BP_BalloonSpawner is placed and its BeginPlay loop runs.",
               "helpTopics": [
-                "exec"
+                "level"
               ]
             },
             {
@@ -197,7 +197,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "why": "Only the spawner should create the balloons now; otherwise you would have extras.",
               "check": "Exactly five newly spawned balloons can be seen and clicked, with no manually placed duplicates remaining.",
               "helpTopics": [
-                "exec"
+                "level"
               ]
             },
             {
@@ -240,7 +240,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "why": "A game loop must be reliable, not only work once.",
               "check": "The five-target loop remains populated through 15 successful pops and all targets can be reached by mouse.",
               "helpTopics": [
-                "exec"
+                "playtest"
               ]
             }
           ],
@@ -354,7 +354,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "why": "A decorative HUD should not swallow mouse clicks intended for balloons in the 3D scene; later child buttons must remain clickable.",
               "check": "In Designer the root Canvas uses Not Hit-Testable (Self Only), with both decorative Text widgets Not Hit-Testable (Self & All Children). You will test real mouse clicks after the widget appears on screen.",
               "helpTopics": [
-                "exec"
+                "ui-pass"
               ]
             },
             {
@@ -532,7 +532,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "why": "The end state must prevent extra points, then offer a reliable restart.",
               "check": "Time Up, frozen scoring, blocked clicks and replay all work. The last saved GameMode uses 60 seconds again, not the temporary five-second test.",
               "helpTopics": [
-                "exec"
+                "playtest"
               ]
             }
           ],
@@ -656,7 +656,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "why": "Random types must be balanced and never strand the player.",
               "check": "Normal and danger targets look distinct and affect one shared Score correctly. No score drops below zero and one new balloon replaces each pop until the round ends.",
               "helpTopics": [
-                "exec"
+                "playtest"
               ]
             },
             {
@@ -666,7 +666,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "why": "The final project should look different from the tutorial, not just have new code.",
               "check": "Both partners can point to a change they made that improves play.",
               "helpTopics": [
-                "exec"
+                "art"
               ]
             }
           ],
@@ -900,7 +900,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "why": "In UE5.8 a simulated single-body mesh detaches from a parent; making the ball mesh the root keeps its position and the Actor transform together.",
               "check": "Model is the root in Components; the original Move and Bowl events work after this change.",
               "helpTopics": [
-                "exec"
+                "physics"
               ]
             },
             {
@@ -931,7 +931,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "why": "Zeroing both velocity types makes sure the ball remains ready for the next shot.",
               "check": "The full ResetBall chain compiles. It is not yet callable through the player controls; you will run the first real reset after connecting FinishThrow.",
               "helpTopics": [
-                "exec"
+                "physics"
               ]
             },
             {
@@ -1029,7 +1029,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "why": "This catches a bad physics reset before you spend time building UI or final scoring.",
               "check": "On a round with pins still standing, ball resets after throw 1 and throw 2, and previous pin score is preserved. A complete strike ends the round early instead.",
               "helpTopics": [
-                "exec"
+                "playtest"
               ]
             },
             {
@@ -1252,7 +1252,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "why": "The complete loop matters more than a single successful throw.",
               "check": "The second round starts with three throws and no leftover score.",
               "helpTopics": [
-                "exec"
+                "playtest"
               ]
             }
           ],
@@ -1384,7 +1384,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "why": "Tuning is a design decision, not just a functioning input.",
               "check": "A peer can deliberately choose a soft or powerful shot.",
               "helpTopics": [
-                "exec"
+                "playtest"
               ]
             }
           ],
@@ -1526,7 +1526,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "why": "A shop needs to reject purchases a player cannot afford.",
               "check": "The game never produces negative points by buying.",
               "helpTopics": [
-                "exec"
+                "playtest"
               ]
             }
           ],
@@ -1643,7 +1643,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "why": "GameMode still owns the original click event; the widget only refreshes its visible numbers.",
               "check": "One main-button click runs AddClick exactly once and RefreshShop updates Score, ClickPower and UpgradeCost.",
               "helpTopics": [
-                "exec"
+                "refresh"
               ]
             },
             {
@@ -1653,7 +1653,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "why": "A rejected purchase should leave clear, unchanged costs on screen.",
               "check": "After a successful purchase, Per click and Next upgrade change immediately.",
               "helpTopics": [
-                "exec"
+                "refresh"
               ]
             },
             {
@@ -1663,7 +1663,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "why": "The UI should never depend on someone clicking before it becomes correct.",
               "check": "On a fresh Play, ScoreText reads Points: 0, PowerText Per click: 1 and CostText Next upgrade: 10 before any click; no stale hard-coded 0 chain remains.",
               "helpTopics": [
-                "exec"
+                "refresh"
               ]
             },
             {
@@ -1673,7 +1673,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "why": "The original starter already taught anchors; now you apply them independently.",
               "check": "No label or button is cut off.",
               "helpTopics": [
-                "exec"
+                "playtest"
               ]
             }
           ],
@@ -1853,7 +1853,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "why": "You should confirm purchasing works before debugging timers.",
               "check": "The purchase and shop labels work even though automatic points are not running yet.",
               "helpTopics": [
-                "exec"
+                "playtest"
               ]
             },
             {
@@ -1885,7 +1885,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "why": "This simulates automatic clicks using the same earning rules as manual clicks.",
               "check": "After you have bought at least one Granny using the new button, start Play again, buy one, then stop clicking. With a temporary Print String after GainPoints you see Score rise by about 1 per second. Remove the debug print afterwards.",
               "helpTopics": [
-                "exec"
+                "refresh"
               ]
             },
             {
@@ -1906,7 +1906,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "why": "The production logic and price curve should remain understandable.",
               "check": "With two Grannies, the passive rate displays 2 per second and continues without clicking.",
               "helpTopics": [
-                "exec"
+                "playtest"
               ]
             }
           ],
@@ -2079,7 +2079,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "why": "Purchase and production must remain separate bookkeeping operations.",
               "check": "The income rate doubles while lifetime earnings only increase as new cookies are generated.",
               "helpTopics": [
-                "exec"
+                "playtest"
               ]
             }
           ],
@@ -2160,7 +2160,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "why": "An existing refresh is more reliable than starting a new UI update loop.",
               "check": "The milestone appears while Granny automatic income continues.",
               "helpTopics": [
-                "exec"
+                "refresh"
               ]
             },
             {
@@ -2170,7 +2170,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "why": "This catches the common error of checking spendable Score instead of lifetime progress.",
               "check": "The test banner appears at 20 earned points without blocking purchases. Both the target and on-screen wording are restored to 500 for the real game.",
               "helpTopics": [
-                "exec"
+                "playtest"
               ]
             }
           ],
@@ -2278,7 +2278,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "why": "This is the independent creative step: apply a familiar pattern to a new producer.",
               "check": "You can explain how your third producer would feed into GetProductionPerSecond without a new timer.",
               "helpTopics": [
-                "exec"
+                "art"
               ]
             }
           ],
@@ -2351,7 +2351,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "why": "The supplied tutorial and any partial work remain recoverable.",
               "check": "The original BP_Box loop still works in the backup; you are editing your own copy.",
               "helpTopics": [
-                "exec"
+                "backup"
               ]
             },
             {
@@ -2383,7 +2383,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "why": "A stable view makes a simple mouse-aimed blaster achievable without building a full FPS character.",
               "check": "The camera preview contains all five blocks and plenty of space above them.",
               "helpTopics": [
-                "exec"
+                "level"
               ]
             },
             {
@@ -2393,7 +2393,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "why": "An unassigned controller is the most common reason input nodes seem correct but do nothing.",
               "check": "The game actually uses BP_LoopsPlayerController and a visible cursor.",
               "helpTopics": [
-                "exec"
+                "level"
               ]
             },
             {
@@ -2667,7 +2667,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "why": "Testing each rule catches errors before UI and survival logic conceal them.",
               "check": "One reliable random-spawn rising-block defence game works; it can lose, but does not yet have a timed victory.",
               "helpTopics": [
-                "exec"
+                "playtest"
               ]
             }
           ],
@@ -2914,7 +2914,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "why": "This is the minimum finished game for the jam; no optional stage is required.",
               "check": "Random rise → line-trace fire → score → danger-height fail → 60-second win → R replay all work together.",
               "helpTopics": [
-                "exec"
+                "playtest"
               ]
             }
           ],
@@ -3035,7 +3035,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "why": "A working game matters more than maximal difficulty.",
               "check": "Red blocks are shootable, can lose the round, and never break the score or restart.",
               "helpTopics": [
-                "exec"
+                "playtest"
               ]
             }
           ],
@@ -3094,7 +3094,7 @@ window.UE5_MINI_UPGRADE_DATA = {
               "why": "The player must understand when the round is about to end.",
               "check": "The win/loss rule is readable even to someone who has never seen the tutorial.",
               "helpTopics": [
-                "exec"
+                "ui-pass"
               ]
             },
             {
