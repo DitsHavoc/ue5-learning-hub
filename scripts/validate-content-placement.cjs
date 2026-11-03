@@ -124,6 +124,42 @@ function audit(root = path.resolve(__dirname, '..')) {
   if(items(jam.starters).length!==4||items(jam.milestones).length!==4)
     fail('Mini-Project Mayhem','the four source games and jam milestones must remain');
 
+  // Independent Minesweeper does not alter the original 4 Mini-Projects/16 stages.
+  const mines=w.UE5_MINESWEEPER_GUIDE||{};
+  if(mines.id!=='minesweeper'||mines.independent!==true||items(mines.stages).length!==9)
+    fail('Minesweeper','must be a standalone nine-stage complete game');
+  const totalMinesSteps=items(mines.stages).reduce((n,s)=>n+items(s.steps).length,0);
+  if(totalMinesSteps!==73)fail('Minesweeper','expected 73 guided steps, got '+totalMinesSteps);
+  const fullGameIds=['setup','grid','mines','clues','reveal','flags','flood','finish','polish'];
+  if(items(mines.stages).map(s=>s.id).join(',')!==fullGameIds.join(','))
+    fail('Minesweeper','stages must build in the verified beginner sequence');
+  const help=w.UE5_MINI_UPGRADE_HELP||{};
+  for(const st of items(mines.stages)){
+    if(!st.title||!st.outcome||!st.beforeStart||!st.check||!st.fix||!items(st.steps).length||!items(st.names).length)
+      fail('Minesweeper '+st.id,'needs a stage target, prerequisites, names, actions and checks');
+    const seen=new Set();
+    for(const name of items(st.names)){
+      if(!name.name||!name.kind||!name.owner||!Number.isInteger(name.at)||name.at<0||name.at>items(st.steps).length)
+        fail('Minesweeper '+st.id,'a name needs type, owner and first-step index');
+      if(seen.has(name.name))fail('Minesweeper '+st.id,'duplicate name '+name.name);
+      seen.add(name.name);
+    }
+    for(const [i,s] of items(st.steps).entries()){
+      if(!s.title||!s.where||!s.do||!s.why||!s.check||!items(s.helpTopics).length)
+        fail('Minesweeper '+st.id+' step '+(i+1),'needs complete beginner guidance');
+      for(const key of items(s.helpTopics))if(!help[key])
+        fail('Minesweeper '+st.id+' step '+(i+1),'unknown help topic '+key);
+    }
+  }
+  const minesAll=JSON.stringify(mines);
+  for(const essential of ['First','SafeIndex','Shuffle','CountAdjacentMines','IsMineAt','OnMouseButtonDown','Right Mouse Button','FlagMode','FloodOpen','PendingIndexes','While Loop','EndGame','SecondsElapsed','ClockHandle','NewGame','36-MineCount'])
+    if(!minesAll.toLowerCase().includes(essential.toLowerCase()))
+      fail('Minesweeper','missing essential complete-game concept '+essential);
+  if(!loadedScripts.has('data/minesweeper-guide-data.js'))
+    fail('Minesweeper','guide data script not loaded by index.html');
+  stats['Minesweeper complete-game stages']=items(mines.stages).length;
+  stats['Minesweeper guided steps']=totalMinesSteps;
+
   const upgrade=w.UE5_MINI_UPGRADE_DATA || {projects:[]};
   unique('Mini-Project upgrade pathways',items(upgrade.projects).map(x=>({...x,id:x.project,title:x.title})));
   unique('Mini-Project upgrade stages',items(upgrade.projects).flatMap(x=>items(x.stages)));
