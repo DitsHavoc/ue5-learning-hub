@@ -3631,10 +3631,12 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "backup"
               ],
               "actions": [
-                "Open Content/Loops → LoopsLevel and BP_LoopsGameMode.",
-                "Finish the three original Loops tutorials and make a copy of the working project.",
-                "Keep original physics BP_Box untouched.",
-                "If you already made BP_ClickTarget, do not delete your old work: this is a NEW Rising Defence extension, not the old Target Rush waves."
+                "Open the Content Drawer → Content/Loops and open LoopsLevel.",
+                "Make sure the three ORIGINAL Loops mini-project tutorials are already complete.",
+                "Close Unreal Editor before copying your entire Unreal project folder to make a safe backup.",
+                "Reopen your working copy of the project.",
+                "KEEP the original physics Actor Blueprint BP_Box unchanged.",
+                "If you already started an old BP_ClickTarget game, keep that work in the backup."
               ]
             },
             {
@@ -3652,11 +3654,11 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "Right-click empty space → Blueprint Class → Actor.",
                 "Name the new ACTOR BLUEPRINT BP_RisingBlock and open it.",
                 "In Components click + Add → Static Mesh. Rename this COMPONENT BlockMesh.",
-                "With BlockMesh selected, set Static Mesh to the built-in Cube.",
-                "In Details set Simulate Physics=false and Collision Enabled=Query Only.",
-                "Under Collision responses make Visibility=Block.",
-                "In Transform set Relative Location Z=50.",
-                "Click Compile, then Save."
+                "Select BlockMesh. In Details choose the built-in Cube for Static Mesh.",
+                "Set Simulate Physics=false and Collision Enabled=Query Only.",
+                "Set Collision Presets=Custom and Visibility response=Block.",
+                "Under Transform set Relative Location X=0,Y=0,Z=50.",
+                "Compile and Save."
               ]
             },
             {
@@ -3670,11 +3672,16 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "math"
               ],
               "actions": [
-                "Open BP_LoopsGameMode → Event Graph → original BeginPlay For Loop.",
-                "Change the original Spawn Actor From Class Class from BP_Box to BP_RisingBlock, First Index=0, Last Index=4.",
-                "Replace the tower's height maths with Make Vector: X=200, Y=(Loop Index - 2) * 150, Z=0 → Make Transform.Location → Spawn Actor.",
-                "Use Collision Handling Override=Always Spawn, Ignore Collisions.",
-                "Compile and Play."
+                "Open BP_LoopsGameMode → Event Graph.",
+                "Find ORIGINAL BeginPlay → For Loop → Spawn Actor From Class.",
+                "On Spawn Actor set Class=BP_RisingBlock, not BP_Box.",
+                "On For Loop set First Index=0 and Last Index=4.",
+                "From Loop Index use Integer - Integer (subtract 2), then Integer * Integer (multiply by 150).",
+                "Create Make Vector: X=200, Y=the calculation, Z=0.",
+                "Connect Make Vector → Make Transform → Location.",
+                "Connect Make Transform → Spawn Actor → Spawn Transform.",
+                "Set Spawn Collision Handling Override=Always Spawn, Ignore Collisions.",
+                "Keep Loop Body WHITE → Spawn Actor WHITE. Compile, Save and Play: five separate cubes should appear."
               ]
             },
             {
@@ -3687,10 +3694,14 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "level"
               ],
               "actions": [
-                "Open LoopsLevel → Place Actors → Camera Actor.",
-                "Place ONE Camera Actor named Cam_RisingDefence at approximately X=-950,Y=0,Z=260, with Rotator Pitch=0,Yaw=0,Roll=0 (faces +X).",
-                "Frame all five cubes; fine-tune camera/FOV if necessary.",
-                "Save the level."
+                "Open LoopsLevel.",
+                "From Place Actors add a Camera Actor to the level.",
+                "In World Outliner rename the PLACED Camera Actor Cam_RisingDefence.",
+                "Select it; in Details → Transform set Location X=-950,Y=0,Z=260.",
+                "Set Rotation Pitch=0,Yaw=0,Roll=0 so it looks towards +X.",
+                "Select the camera in World Outliner and check its preview.",
+                "Adjust position or Field of View if needed so all five cubes fit and there is space ABOVE them.",
+                "Keep only ONE Camera Actor in this test level. Save LoopsLevel."
               ]
             },
             {
@@ -3703,13 +3714,14 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "level"
               ],
               "actions": [
-                "In Content/Loops, check if BP_LoopsPlayerController already exists. Reuse it if it does.",
-                "If it does not exist: right-click → Blueprint Class → PlayerController, name BP_LoopsPlayerController.",
+                "Open Content Drawer → Content/Loops.",
+                "Look for existing BP_LoopsPlayerController. If present, reuse it.",
+                "Otherwise right-click → Blueprint Class → PlayerController and name the new ASSET BP_LoopsPlayerController.",
                 "Open BP_LoopsGameMode → Class Defaults.",
-                "Set Player Controller Class to BP_LoopsPlayerController.",
+                "Set Player Controller Class=BP_LoopsPlayerController and Compile.",
                 "Open LoopsLevel → Settings → World Settings.",
-                "Set GameMode Override to BP_LoopsGameMode.",
-                "Click Save Level. Press PLAY, not Simulate."
+                "Set GameMode Override=BP_LoopsGameMode.",
+                "Save the LEVEL, then press Play (not Simulate)."
               ]
             },
             {
@@ -3724,14 +3736,15 @@ window.UE5_MINI_UPGRADE_DATA = {
               ],
               "actions": [
                 "Open BP_LoopsPlayerController → Event Graph.",
-                "Find the existing Event BeginPlay (or add Event BeginPlay if none).",
-                "From its WHITE pin add Set Show Mouse Cursor, Target=Self, true.",
-                "From its WHITE output add Set Input Mode Game and UI, Player Controller=Self.",
-                "On Set Input Mode Game and UI leave In Widget to Focus empty and set In Mouse Lock Mode=Do Not Lock.",
-                "From its WHITE output add Set View Target with Blend, Target=Self.",
-                "Add Get Actor of Class and set Class=CameraActor.",
-                "Connect Get Actor of Class → Return Value to Set View Target with Blend → New View Target.",
-                "Keep ONLY one Camera Actor in this test level. Click Compile and Save."
+                "Find or add Event BeginPlay.",
+                "From BeginPlay WHITE add Set Show Mouse Cursor; Target=Self, value=true.",
+                "From its WHITE output add Set Input Mode Game and UI; Player Controller=Self.",
+                "Leave In Widget to Focus empty; choose Do Not Lock for mouse lock.",
+                "From that WHITE output add Set View Target with Blend; Target=Self.",
+                "Add Get Actor of Class; set Actor Class=CameraActor.",
+                "Connect Get Actor of Class BLUE Return Value → Set View Target with Blend → New View Target.",
+                "In BP_LoopsPlayerController Class Defaults set Default Mouse Cursor=Crosshairs.",
+                "Compile, Save and Play. You should see the cubes and a mouse cursor."
               ]
             },
             {
@@ -3745,12 +3758,13 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "input"
               ],
               "actions": [
-                "Open Content/Loops → Input assets.",
-                "Create Input Action IA_RisingFire (Value Type=Digital/Boolean).",
-                "Create Input Mapping Context IMC_RisingDefence.",
-                "Map IA_RisingFire to Left Mouse Button.",
-                "If an old IMC_TargetRush is used from earlier work, do not add it as well; this game uses one IMC_RisingDefence.",
-                "Save both assets."
+                "Open Content Drawer → Content/Loops.",
+                "Right-click → Input → Input Action. Name ASSET IA_RisingFire.",
+                "Open IA_RisingFire and set Value Type=Digital (Boolean). Save.",
+                "Right-click → Input → Input Mapping Context. Name ASSET IMC_RisingDefence.",
+                "Open IMC_RisingDefence. Click + Mapping and choose IA_RisingFire.",
+                "Choose Left Mouse Button as its key. Save.",
+                "Do not activate old IMC_TargetRush as well."
               ]
             },
             {
@@ -3764,10 +3778,14 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "debug"
               ],
               "actions": [
-                "Open BP_LoopsPlayerController → BeginPlay and IA_RisingFire event.",
-                "AFTER Set View Target with Blend on the same BeginPlay exec chain, call Get Enhanced Input Local Player Subsystem → Add Mapping Context(IMC_RisingDefence, Priority=0).",
-                "Add IA_RisingFire event on the controller graph: its Started WHITE pin → Print String('PEW').",
-                "Play inside the game viewport and click once."
+                "Open BP_LoopsPlayerController → Event Graph → BeginPlay.",
+                "Find the Set View Target with Blend node from the earlier task.",
+                "From its WHITE output add Get Enhanced Input Local Player Subsystem → Add Mapping Context.",
+                "Choose IMC_RisingDefence and Priority=0.",
+                "Connect WHITE execution from Set View Target with Blend → Add Mapping Context.",
+                "Right-click empty Event Graph → search IA_RisingFire (Enhanced Input Action event).",
+                "From IA_RisingFire Started WHITE pin add Print String with text PEW.",
+                "Compile, Save and Play. One left-click should print PEW exactly once."
               ]
             },
             {
@@ -3781,12 +3799,16 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "trace"
               ],
               "actions": [
-                "Open BP_LoopsPlayerController → IA_RisingFire Started path.",
-                "After the temporary PEW print, call Convert Mouse Location To World Space (also searchable as Deproject Mouse Position to World).",
-                "Branch on its Return Value: only True continues.",
-                "Keep World Location and World Direction.",
-                "Multiply World Direction by 5000.",
-                "Add World Location to that product; this becomes the shot End, and World Location is the Start."
+                "Open BP_LoopsPlayerController → Event Graph → IA_RisingFire Started.",
+                "Keep the temporary PEW Print String connected.",
+                "After Print String WHITE add Convert Mouse Location To World Space (may appear as Deproject Mouse Position to World).",
+                "Add a Branch. Connect Convert Mouse Location To World Space Return Value (Boolean) → Branch Condition.",
+                "Connect Print String WHITE → Branch WHITE input (or the Deproject exec output first if present in your UE5.8 node).",
+                "Get the World Location VECTOR and World Direction VECTOR from the mouse-location node.",
+                "Multiply World Direction by 5000 using Vector * Float.",
+                "Add World Location and that scaled Direction with Vector + Vector.",
+                "Remember these values: shot Start=World Location; shot End=World Location + (World Direction × 5000).",
+                "Compile."
               ]
             },
             {
@@ -3800,11 +3822,16 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "branch"
               ],
               "actions": [
-                "Open BP_LoopsPlayerController → after deprojection Branch True.",
-                "Add Line Trace By Channel: Start/End from above, Trace Channel=Visibility, Draw Debug Type=For Duration for testing, Ignore Self=true.",
-                "Wire the Branch True WHITE exec to Line Trace By Channel.",
-                "Add Branch using Line Trace Return Value; on True, Break Hit Result from Out Hit and Print String of the Hit Actor display name.",
-                "Compile and Play."
+                "Open BP_LoopsPlayerController → IA_RisingFire raycast chain.",
+                "Right-click blank graph → Line Trace By Channel.",
+                "Connect its Start VECTOR to World Location from your mouse-deprojection node.",
+                "Connect its End VECTOR to the calculated World Location + World Direction × 5000.",
+                "Set Trace Channel=Visibility, Draw Debug Type=For Duration, Ignore Self=true.",
+                "Connect the successful mouse-location Branch TRUE WHITE → Line Trace WHITE input.",
+                "Add a second Branch. Connect Line Trace WHITE output to Branch WHITE, Line Trace Return Value → Condition.",
+                "From the Line Trace Out Hit create Break Hit Result.",
+                "On second Branch TRUE add Print String using Get Display Name of Break Hit Result → Hit Actor.",
+                "Compile and Play. Clicking a cube should print BP_RisingBlock."
               ]
             },
             {
@@ -3818,12 +3845,17 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "trace"
               ],
               "actions": [
-                "Open BP_RisingBlock and BP_LoopsPlayerController.",
-                "In BP_RisingBlock create Custom Event BreakBlock → Destroy Actor(Target Self).",
-                "In PlayerController, from the trace's hit-TRUE Branch, use Break Hit Result.Hit Actor → Cast To BP_RisingBlock.",
-                "On Cast Success WHITE exec, call BreakBlock on 'As BP_RisingBlock'.",
-                "Remove the temporary Hit Actor Print String only once it works.",
-                "Do not wire Destroy Actor to every shot or to Cast Failed."
+                "Open BP_RisingBlock → Event Graph.",
+                "Right-click → Add Custom Event. Name the RED EVENT BreakBlock.",
+                "From BreakBlock WHITE output add Destroy Actor (Target=Self).",
+                "Compile and Save BP_RisingBlock.",
+                "Open BP_LoopsPlayerController → line trace → second Branch TRUE output.",
+                "Drag from Break Hit Result → Hit Actor BLUE pin → Cast To BP_RisingBlock.",
+                "Connect Branch TRUE WHITE → Cast WHITE input; Hit Actor BLUE → Cast Object.",
+                "From As BP_RisingBlock BLUE pin call BreakBlock.",
+                "Connect Cast Success WHITE → Call BreakBlock WHITE.",
+                "Leave Cast Failed disconnected. Remove the old Hit Actor Print String AFTER this works.",
+                "Compile and Save both Blueprints. One shot should destroy one cube."
               ]
             },
             {
@@ -3837,13 +3869,13 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "debug"
               ],
               "actions": [
-                "Open BP_LoopsPlayerController. Press Play, NOT Simulate.",
-                "Click a cube and check whether PEW appears.",
-                "If PEW does not print: check your active PlayerController and IMC_RisingDefence Input Mapping Context.",
-                "If PEW prints but there is NO debug line: check Convert Mouse Location To World Space and the WHITE execution wiring.",
-                "If the line goes through cubes: check BlockMesh Visibility=Block and any object blocking the trace.",
-                "If a debug ray hits BP_RisingBlock but it does not disappear: check Cast Success → BreakBlock.",
-                "Only continue once one left-click removes exactly one cube."
+                "Open LoopsLevel and press Play, not Simulate.",
+                "Click once: do you see PEW? If not, check BP_LoopsPlayerController and IMC_RisingDefence.",
+                "If PEW appears but no debug line, check the mouse deprojection and WHITE execution wires.",
+                "If the debug line passes through cubes, open BP_RisingBlock and check BlockMesh Visibility=Block.",
+                "If the line hits a cube but it stays, check Cast To BP_RisingBlock → BreakBlock WHITE wiring.",
+                "Check your level uses BP_LoopsGameMode and only one active camera.",
+                "Shoot all five cubes. Each shot should remove exactly one cube. Stop and Save."
               ]
             }
           ],
