@@ -1749,11 +1749,13 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "widget"
               ],
               "actions": [
-                "Open the Content Drawer → Bowling → User Interface → Widget Blueprint → User Widget.",
-                "Create WBP_BowlingHUD (User Widget).",
-                "In Designer add ScoreText, PinsText and ThrowsText as Text widgets (tick Is Variable), with placeholder labels \"Score: 0\", \"Pins down: 0\" and \"Throws left: 3\".",
-                "Keep the HUD compact in a corner so the lane is visible.",
-                "No buttons are needed because the player restarts with R."
+                "Open Content Drawer → Bowling folder.",
+                "Right-click → User Interface → Widget Blueprint → User Widget. Name the WIDGET ASSET WBP_BowlingHUD.",
+                "Open WBP_BowlingHUD → Designer.",
+                "Add Text widget. In Hierarchy rename it ScoreText. Tick Is Variable in Details. Set placeholder Score: 0.",
+                "Add a second Text named PinsText. Tick Is Variable. Set placeholder Pins down: 0.",
+                "Add a third Text named ThrowsText. Tick Is Variable. Set placeholder Throws left: 3.",
+                "Arrange the three texts together in a corner, away from the bowling lane. Compile and Save."
               ]
             },
             {
@@ -1767,12 +1769,15 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "binding"
               ],
               "actions": [
-                "Open WBP_BowlingHUD → Designer → ScoreText → Details → Content → Text → Bind → Create Binding.",
-                "In WBP_BowlingHUD → Designer, select ScoreText → Details → Content → Text → Bind → Create Binding.",
-                "In the generated binding Function, wire the purple Entry execution to Cast To BP_BowlingGameMode, with Get Game Mode → Cast Object.",
-                "Wire Cast Success execution to Return Node execution.",
-                "From the cast result Get Score, use Format Text \"Score: {Value}\" with Score connected to Value, then connect the text output to Return Value.",
-                "Compile."
+                "Open WBP_BowlingHUD → Designer.",
+                "Select ScoreText → Details → Content → Text → Bind → Create Binding.",
+                "In the new Function graph, add Get Game Mode and Cast To BP_BowlingGameMode.",
+                "Connect Get Game Mode BLUE Return Value → Cast Object.",
+                "Connect the purple Function Entry WHITE → Cast WHITE input.",
+                "From As BP_BowlingGameMode BLUE pin drag and select Get Score.",
+                "Add Format Text. Set format Score: {Value}. Connect Get Score to Value.",
+                "Connect Format Text output to Return Node's Return Value text input.",
+                "Connect Cast Success WHITE → Return Node WHITE. Compile and Save."
               ]
             },
             {
@@ -1786,12 +1791,15 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "binding"
               ],
               "actions": [
-                "Open WBP_BowlingHUD → Designer → PinsText → Details → Content → Text → Bind → Create Binding.",
-                "WBP_BowlingHUD → Designer → PinsText → Text → Bind → Create Binding.",
-                "In the generated Function, connect Entry white execution → Cast To BP_BowlingGameMode (Object=Get Game Mode) → Return Node white execution.",
-                "From the cast result Get PinsDown → Format Text \"Pins down: {Value}\" → Return Value.",
-                "Compile.",
-                "Do not drag the pin Actor counter into this widget; both values belong to the GameMode."
+                "Open WBP_BowlingHUD → Designer and select PinsText.",
+                "Choose Details → Content → Text → Bind → Create Binding.",
+                "In this NEW binding Function, add Get Game Mode → Cast To BP_BowlingGameMode.",
+                "Connect BLUE Get Game Mode Return Value → Cast Object.",
+                "Connect purple Function Entry WHITE → Cast WHITE input.",
+                "From the cast BLUE output, Get PinsDown.",
+                "Add Format Text with Pins down: {Value} and connect PinsDown to Value.",
+                "Connect formatted Text → Return Value. Connect Cast Success WHITE → Return Node WHITE.",
+                "Compile and Save."
               ]
             },
             {
@@ -1805,11 +1813,16 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "binding"
               ],
               "actions": [
-                "Open WBP_BowlingHUD → ThrowsText → Text → Bind → Create Binding.",
-                "WBP_BowlingHUD → Designer → ThrowsText → Text → Bind → Create Binding.",
-                "In the generated Function, connect Entry white execution → Cast To BP_BowlingPlayerController (Object=Get Owning Player) → Return Node white execution.",
-                "From cast result Get ThrowsUsed and MaxThrows, compute Max(0,MaxThrows-ThrowsUsed) with Integer math.",
-                "Use Format Text \"Throws left: {Value}\" and connect its output to the Return Node Text value."
+                "Open WBP_BowlingHUD → Designer → ThrowsText.",
+                "Choose Details → Content → Text → Bind → Create Binding.",
+                "In the binding Function add Get Owning Player and Cast To BP_BowlingPlayerController.",
+                "Connect Get Owning Player BLUE output → Cast Object and purple Entry WHITE → Cast WHITE input.",
+                "From the cast BLUE reference, Get MaxThrows and Get ThrowsUsed.",
+                "Subtract using Integer - Integer: MaxThrows minus ThrowsUsed.",
+                "Add Max (Integer) with the other input 0 to stop negative values.",
+                "Add Format Text with Throws left: {Value}. Connect Max result → Value.",
+                "Connect Format Text → Return Node Text output and Cast Success WHITE → Return Node WHITE.",
+                "Compile and Save."
               ]
             },
             {
@@ -1823,11 +1836,14 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "widget"
               ],
               "actions": [
-                "Open BP_BowlingPlayerController → Event BeginPlay.",
-                "BP_BowlingPlayerController → Event BeginPlay: keep the original chain Add Mapping Context(BowlingInputs) → Get Actor of Class(BP_BowlingBall) → Set BowlingBall.",
-                "AFTER Set BowlingBall, create WBP_BowlingHUD using Create Widget (Owning Player=Self) and then Add to Viewport (connect Create Widget Return Value to the Add to Viewport Target).",
-                "Compile.",
-                "Avoid disconnecting the old input mapping or ball reference."
+                "Open BP_BowlingPlayerController → Event Graph → existing Event BeginPlay.",
+                "Find the chain that already adds BowlingInputs, gets BP_BowlingBall and Sets BowlingBall.",
+                "From Set BowlingBall's WHITE output add Create Widget.",
+                "Set Class=WBP_BowlingHUD and Owning Player=Self.",
+                "From Create Widget WHITE output add Add to Viewport.",
+                "Connect the Create Widget BLUE Return Value → Add to Viewport Target.",
+                "Do NOT delete the original input mapping or saved ball reference.",
+                "Compile and Play BowlingLevel. The three labels should be visible."
               ]
             },
             {
@@ -1841,13 +1857,13 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "custom-event"
               ],
               "actions": [
-                "Open BP_BowlingPin → Variables.",
-                "Open BP_BowlingPin → Variables → + and create PinValue (Integer, default=1).",
-                "Tick Instance Editable (eye icon) in Details, then Compile.",
-                "Find the old BP_BowlingPin Event Graph where Cast To BP_BowlingGameMode → RecordPin currently has fixed PinValue=1.",
-                "Replace that fixed pin with Get PinValue from this BP_BowlingPin instance.",
-                "Compile.",
-                "Do NOT change GoalPins or Counted."
+                "Open BP_BowlingPin → My Blueprint → Variables → +.",
+                "Create INTEGER VARIABLE PinValue. Compile; set Default Value=1.",
+                "Tick Instance Editable in the variable Details (eye icon in My Blueprint). Compile and Save.",
+                "Open BP_BowlingPin → Event Graph → existing RecordPin call.",
+                "Drag PinValue from Variables as Get.",
+                "Connect Get PinValue green output to RecordPin → PinValue input, replacing the fixed 1.",
+                "Keep Counted and the round checks exactly as before. Compile and Save."
               ]
             },
             {
@@ -1860,9 +1876,13 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "get-set"
               ],
               "actions": [
-                "Open the Bowling level → select one BP_BowlingPin actor.",
-                "Set PinValue = 3 on that instance and give its Static Mesh component a visibly distinct material.",
-                "Leave other pins set to 1."
+                "Open BowlingLevel → World Outliner.",
+                "Select ONE placed BP_BowlingPin ACTOR.",
+                "In its Details find the Instance Editable variable PinValue; set it to 3.",
+                "Select that pin's Model Static Mesh component.",
+                "Change its Material in Details so it looks different to the others.",
+                "Leave every other pin PinValue=1.",
+                "Press Play. This bonus pin should give 3 Score but only 1 PinsDown. Save the level."
               ]
             },
             {
@@ -1877,9 +1897,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               ],
               "actions": [
                 "Open WBP_BowlingHUD → Designer.",
-                "Add a Text widget named ResultText, tick Is Variable, set initial text to \"ROUND OVER\" and set Visibility=Collapsed.",
-                "Make sure it is readable but does not hide the main Score, Pins or Throws display.",
-                "Compile."
+                "Add a Text widget and name it ResultText.",
+                "Tick Is Variable for ResultText.",
+                "Set its placeholder Text to ROUND OVER.",
+                "In Details → Behavior → Visibility choose Collapsed.",
+                "Place it where it can be read without covering the normal score labels.",
+                "Compile and Save."
               ]
             },
             {
@@ -1893,12 +1916,17 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "binding"
               ],
               "actions": [
-                "Open WBP_BowlingHUD → Graph → Event Graph.",
-                "In WBP_BowlingHUD → Event Graph, add Custom Event RefreshBowlingResult.",
-                "From its white output connect Get Game Mode → Cast To BP_BowlingGameMode → Branch (Condition=Get RoundFinished).",
-                "On True, use Get Score → Format Text \"ROUND OVER – SCORE: {Value}\" → Set Text(ResultText) → Set Visibility(ResultText,Visible), wiring white execution Set Text → Set Visibility.",
-                "On False Set Visibility(ResultText,Collapsed).",
-                "Compile."
+                "Open WBP_BowlingHUD → Event Graph.",
+                "Right-click → Add Custom Event. Name it RefreshBowlingResult.",
+                "From its WHITE pin add Get Game Mode → Cast To BP_BowlingGameMode.",
+                "Connect Get Game Mode BLUE Return Value → Cast Object.",
+                "Connect Cast Success WHITE → Branch WHITE input.",
+                "From the BLUE cast result Get RoundFinished → Branch Condition.",
+                "On Branch TRUE get Score from the same cast result → Format Text: ROUND OVER - SCORE: {Value}.",
+                "Add Set Text(Target=ResultText) and connect the formatted text.",
+                "Connect TRUE WHITE → Set Text WHITE → Set Visibility(Target=ResultText, Visible) WHITE.",
+                "On Branch FALSE add Set Visibility(Target=ResultText, Collapsed).",
+                "Compile and Save."
               ]
             },
             {
@@ -1912,11 +1940,14 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "timer"
               ],
               "actions": [
-                "Open WBP_BowlingHUD → Graph → Event Construct.",
-                "From Event Construct call Set Timer by Event, Time=0.25, Looping=true.",
-                "Drag from the red Event delegate pin and select Create Event; bind it to RefreshBowlingResult.",
-                "Only add ONE timer to this HUD instance.",
-                "Compile."
+                "Open WBP_BowlingHUD → Event Graph.",
+                "Find Event Construct. Add Set Timer by Event.",
+                "Set Time=0.25 and tick Looping.",
+                "From the Timer red Event delegate pin drag a wire → Create Event.",
+                "Select your existing Custom Event RefreshBowlingResult.",
+                "Connect Event Construct WHITE → Set Timer by Event WHITE input.",
+                "Do NOT add Event Tick or a second HUD Widget.",
+                "Compile and Play. The result label should only appear after the round ends."
               ]
             },
             {
@@ -1929,13 +1960,14 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "playtest"
               ],
               "actions": [
-                "Open the level twice and press Play.",
-                "Play two full test rounds.",
-                "First, deliberately miss at least one shot and verify Score, Pins down and Throws left are visible while the ball resets twice.",
-                "After the third shot, wait four seconds and check ROUND OVER displays the final Score.",
-                "Press R.",
-                "In the second round, knock over the coloured bonus pin: Score increases by 3 but Pins down by only 1.",
-                "Test R again."
+                "Open BowlingLevel and press Play.",
+                "Aim and throw once; check Throws left shows 2.",
+                "Wait four seconds; confirm the ball resets and pin scores remain.",
+                "Throw the next two times and wait four seconds after the third.",
+                "Check ResultText displays ROUND OVER with the final Score.",
+                "Press R and check Score=0, Pins down=0 and Throws left=3.",
+                "Play again and knock over the bonus pin; Score should jump by 3.",
+                "Save WBP_BowlingHUD and BowlingLevel."
               ]
             }
           ],
@@ -2007,12 +2039,14 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "custom-event"
               ],
               "actions": [
-                "Open BP_BowlingBall → Event Graph → original Bowl Custom Event from Mini-Project Stage 4.",
-                "Select the red Bowl Custom Event and add a Float input named Strength (default 200000) in Details → Inputs.",
-                "Find the original Add Force node targeting Model, originally Force X=200000, Y=0, Z=0 with Accel Change enabled.",
-                "Replace its fixed Force vector with Make Vector: X=Strength, Y=0, Z=0.",
-                "Keep Accel Change ticked.",
-                "Compile."
+                "Open BP_BowlingBall → Event Graph and find the existing RED Bowl Custom Event.",
+                "Select Bowl. In Details → Inputs click +.",
+                "Name the new INPUT PIN Strength, choose Float, set default value 200000.",
+                "Find the EXISTING Add Force node targeting Model.",
+                "Create Make Vector and connect its output to Add Force → Force.",
+                "Connect Bowl's green Strength output to Make Vector X.",
+                "Set Make Vector Y=0 and Z=0. Keep Add Force's Accel Change ticked.",
+                "Compile and Save. Do NOT create another Bowl event."
               ]
             },
             {
@@ -2025,11 +2059,12 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "input"
               ],
               "actions": [
-                "Open BP_BowlingPlayerController → Event Graph → original IA_Bowl Started → Bowl call.",
-                "The Bowl call now has a new Strength input pin.",
-                "Set its pin default to 200000 (the original tutorial value) for now, then Compile and Play once.",
-                "Do not leave the new Strength input at 0.",
-                "You will replace this fixed value with the adjustable one later."
+                "Open BP_BowlingPlayerController → Event Graph → existing IA_Bowl Started path.",
+                "Find the EXISTING Call Bowl node with the BLUE BowlingBall target.",
+                "Locate its new green Strength input pin.",
+                "Type 200000 into that pin for now.",
+                "Compile and Play BowlingLevel. Press Space once.",
+                "The ball should move just like before. Stop Play before adding power controls."
               ]
             },
             {
@@ -2042,10 +2077,12 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "variable"
               ],
               "actions": [
-                "Open BP_BowlingPlayerController → Variables.",
-                "In BP_BowlingPlayerController create BaseThrowPower (Float; default 200000) and PowerMultiplier (Float; default 1.0).",
-                "Use the original known-working X force (200000) as the starting value.",
-                "Compile."
+                "Open BP_BowlingPlayerController → My Blueprint → Variables → +.",
+                "Create FLOAT VARIABLE BaseThrowPower.",
+                "Click Compile, then set Default Value=200000.",
+                "Create FLOAT VARIABLE PowerMultiplier.",
+                "Click Compile, then set Default Value=1.0.",
+                "Save BP_BowlingPlayerController. No new BP_BowlingBall variable is needed."
               ]
             },
             {
@@ -2059,11 +2096,14 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "input"
               ],
               "actions": [
-                "Open the Content Drawer → Bowling → Input folder.",
-                "In Content/Bowling/Inputs, create IA_PowerDown and IA_PowerUp as Input Action assets with Value Type=Digital (Boolean).",
-                "Open BowlingInputs (the original Input Mapping Context already active in the controller) and add mappings IA_PowerDown=Q and IA_PowerUp=E.",
-                "Save.",
-                "Do not create a new Mapping Context."
+                "Open Content Drawer → Bowling → Inputs.",
+                "Right-click → Input → Input Action. Name the ASSET IA_PowerDown.",
+                "Open IA_PowerDown and set Value Type=Digital (Boolean); Save.",
+                "Create another Input Action named IA_PowerUp. Set Digital (Boolean); Save.",
+                "Open the EXISTING Input Mapping Context asset BowlingInputs.",
+                "Add mapping for IA_PowerDown and choose Keyboard Q.",
+                "Add mapping for IA_PowerUp and choose Keyboard E.",
+                "Save BowlingInputs. Do NOT create a second Mapping Context."
               ]
             },
             {
@@ -2078,9 +2118,16 @@ window.UE5_MINI_UPGRADE_DATA = {
               ],
               "actions": [
                 "Open BP_BowlingPlayerController → Event Graph.",
-                "From IA_PowerDown Started, Set PowerMultiplier = Clamp (Float)(PowerMultiplier-0.25, 0.5, 2.0).",
-                "From IA_PowerUp Started, Set PowerMultiplier = Clamp (Float)(PowerMultiplier+0.25, 0.5, 2.0).",
-                "Print PowerMultiplier for testing."
+                "Right-click and add IA_PowerDown Input Action Event.",
+                "From its Started WHITE output add Set PowerMultiplier.",
+                "Drag PowerMultiplier as Get → Float - Float with second input 0.25.",
+                "Add Clamp (Float), Min=0.5 and Max=2.0.",
+                "Connect subtraction to Clamp Value, Clamp output to Set PowerMultiplier value.",
+                "Connect IA_PowerDown Started WHITE → Set PowerMultiplier WHITE.",
+                "Add IA_PowerUp Input Action Event → Started WHITE → a SECOND Set PowerMultiplier.",
+                "Feed that Set with Get PowerMultiplier + 0.25 → Clamp Float(0.5,2.0).",
+                "For each Set, add Print String with To String(Float) from PowerMultiplier after the Set.",
+                "Compile and Play. Q should lower power; E should raise it."
               ]
             },
             {
@@ -2094,12 +2141,13 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "math"
               ],
               "actions": [
-                "Open BP_BowlingPlayerController → existing gated IA_Bowl chain from Upgrade 2.",
-                "BP_BowlingPlayerController → existing IA_Bowl Started chain → original Bowl call.",
-                "Keep the three-throw gate and counters.",
-                "Multiply BaseThrowPower × PowerMultiplier (Float × Float) and connect that value to the SAME existing Bowl call Strength pin, replacing the temporary 200000 constant.",
-                "Compile.",
-                "Do not add another Bowl call or Add Force node."
+                "Open BP_BowlingPlayerController → existing IA_Bowl Started chain.",
+                "Find the ORIGINAL Bowl call (do not create a new one).",
+                "Drag BaseThrowPower and PowerMultiplier into the graph as Get.",
+                "Create Float * Float and connect the two green variables.",
+                "Connect Multiply output to Bowl → Strength input, REPLACING its temporary 200000 constant.",
+                "Keep the Branch checking throws left, RoundFinished and IsBallInMotion.",
+                "Keep the original BLUE BowlingBall target on Bowl. Compile and Save."
               ]
             },
             {
@@ -2112,11 +2160,12 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "playtest"
               ],
               "actions": [
-                "Open In Editor and press Play.",
-                "Try PowerMultiplier 0.5, 1.0 and 2.0.",
-                "Reset with R each time.",
-                "Tune BaseThrowPower if the ball never reaches pins or always passes through them.",
-                "Save the working settings."
+                "Open BowlingLevel and press Play.",
+                "Press Q until printed PowerMultiplier is 0.5. Press Space and observe the throw.",
+                "Press R to restart. Leave multiplier at 1.0, then press Space and observe.",
+                "Press R again. Press E until PowerMultiplier is 2.0; bowl once.",
+                "If all throws are too weak/strong, change BaseThrowPower default in BP_BowlingPlayerController.",
+                "Compile, Save and retest. Keep a setting that clearly changes travel distance."
               ]
             }
           ],
