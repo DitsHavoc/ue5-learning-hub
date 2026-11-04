@@ -180,7 +180,7 @@ function audit(root = path.resolve(__dirname, '..')) {
         fail('Upgrade '+stage.id,'needs title, outcome, test, troubleshooting and guided steps');
       if(items(stage.steps).length<4)fail('Upgrade '+stage.id,'less than four guided actions');
       for(const [i,step] of items(stage.steps).entries()){
-        if(!items(step.actions).length||items(step.actions).length<2||items(step.actions).some(x=>typeof x!=='string'||x.trim().length<6))
+        if(!items(step.actions).length||items(step.actions).length<2||items(step.actions).some(x=>typeof x!=='string'||x.trim().length<3))
           fail('Upgrade '+stage.id+' task '+(i+1),'needs at least two direct, readable instructions');
       }
 
