@@ -184,6 +184,11 @@ function audit(root = path.resolve(__dirname, '..')) {
           fail('Upgrade '+stage.id+' task '+(i+1),'needs at least two direct, readable instructions');
       }
 
+      // Every student-facing task must be a genuine sequence of actions; names must be introduced where created.
+      for(const [taskIndex,step] of items(stage.steps).entries()){
+        if(items(step.actions).length<4)
+          fail('Upgrade '+stage.id+' task '+(taskIndex+1),'needs at least four direct Unreal actions, not a high-level instruction');
+      }
       const named=items(stage.names);
       if(!named.length)fail('Upgrade '+stage.id,'needs a novice name/type reference');
       const seenNames=new Set();
@@ -192,6 +197,8 @@ function audit(root = path.resolve(__dirname, '..')) {
           fail('Upgrade '+stage.id,'named item needs name, type, owner and introduction step');
         if(seenNames.has(item.name))fail('Upgrade '+stage.id,'repeated named item '+item.name);
         seenNames.add(item.name);
+        if(item.at>0&&!(items(stage.steps)[item.at-1]?.actions||[]).join(' ').toLowerCase().includes(item.name.toLowerCase()))
+          fail('Upgrade '+stage.id+' '+item.name,'new name must appear explicitly in the SAME task that creates it');
       }
       if(!stage.beforeStart||!stage.commonMistake||!stage.studentPromise)fail('Upgrade '+stage.id,'needs a prior-state check and a common-mistake recovery');
       for(const [i,step] of items(stage.steps).entries()){
