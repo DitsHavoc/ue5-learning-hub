@@ -342,9 +342,9 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Call the replacement event before destroying the balloon",
               "where": "BP_Balloon → same True pop path.",
-              "do": "Connect AwardPoints white execution output to the Cast white input. From Cast success, call RequestReplacement on the BP_BalloonSpawner reference, then connect that event white output to the existing Destroy Actor (Self). Connect Cast Failed directly to Destroy Actor as a fallback. Compile.",
+              "do": "Connect AwardPoints white execution output to the Cast white input. From Cast success, call RequestReplacement on the BP_BalloonSpawner reference, then connect that event white output to the existing Destroy Actor (Self). Leave Cast Failed unconnected; if the Cast fails, check that BP_BalloonSpawner has been placed in the level. Compile.",
               "why": "One old balloon disappears and one new balloon appears before it is destroyed.",
-              "check": "On a real pop, the sequence AwardPoints → RequestReplacement → Destroy Actor keeps five active balloons.",
+              "check": "When BP_BalloonSpawner exists, the Cast succeeds: AwardPoints → RequestReplacement → Destroy Actor keeps five active balloons.",
               "helpTopics": [
                 "cast",
                 "exec"
@@ -354,7 +354,7 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "Drag from As BP_BalloonSpawner's BLUE pin and search RequestReplacement (CALL).",
                 "Connect Cast Success WHITE output to RequestReplacement WHITE input.",
                 "Connect RequestReplacement WHITE output to the EXISTING Destroy Actor (Self).",
-                "Connect Cast Failed WHITE output to the SAME Destroy Actor as a fallback.",
+                "Leave Cast Failed unconnected. The spawner must exist in the level for this replacement to work.",
                 "Compile and Save."
               ]
             },
