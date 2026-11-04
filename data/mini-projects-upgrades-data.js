@@ -1129,7 +1129,7 @@ window.UE5_MINI_UPGRADE_DATA = {
             {
               "title": "Detect when all pins are down",
               "where": "At the end of RecordPin in BP_BowlingGameMode.",
-              "do": "After Set Score in RecordPin (not directly from Set PinsDown), add >= (Integer) to compare Get PinsDown against GoalPins. Plug that into a Branch and wire its white execution input after Set Score. On True: Set RoundFinished = true, then Print String \"ALL PINS DOWN!\". On False: do nothing. Do not replace the earlier Branch that checks NOT RoundFinished.",
+              "do": "After Set Score → Print String(current Score), add a Branch that checks Get PinsDown >= Get GoalPins. On TRUE Set RoundFinished=true → Print String ALL PINS DOWN!. On FALSE do nothing. Keep the initial NOT RoundFinished Branch.",
               "why": "A simple target count gives the game a clear win condition.",
               "check": "Each pin updates Score before the final-pin test. The final distinct pin sets RoundFinished=true.",
               "helpTopics": [
@@ -1137,14 +1137,14 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "get-set"
               ],
               "actions": [
-                "Stay in RecordPin, after Set Score and before Print String.",
-                "Add a Branch. Connect Set Score's WHITE output to this Branch's WHITE input.",
-                "Drag PinsDown as Get and GoalPins as Get; add Integer >= Integer with those values.",
-                "Connect >= Boolean output to Branch → Condition.",
-                "From Branch TRUE WHITE output add Set RoundFinished; tick the new value true.",
-                "After Set RoundFinished add Print String with text ALL PINS DOWN!.",
-                "Leave Branch FALSE unconnected. Keep your Score Print String on the earlier Set Score path if desired, but do not break the Branch check.",
-                "Compile and Save."
+                "Open BP_BowlingGameMode → RecordPin Function.",
+                "Find the Score Print String connected after Set Score in the PREVIOUS task.",
+                "From that Print String's WHITE output add a Branch.",
+                "Drag PinsDown and GoalPins into the graph as Get; compare them with Integer >= Integer.",
+                "Connect the >= result to the Branch red Condition input.",
+                "Connect the Print String WHITE output to Branch WHITE input.",
+                "Branch TRUE → Set RoundFinished(true) → Print String ALL PINS DOWN!.",
+                "Leave Branch FALSE empty. Compile and Save. Both regular scores and the final message now have a valid WHITE execution path."
               ]
             },
             {
