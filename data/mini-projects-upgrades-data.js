@@ -1058,11 +1058,14 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "variable"
               ],
               "actions": [
-                "Content Drawer → Bowling → BP_BowlingGameMode → Variables.",
-                "Open BowlingLevel first and count the placed BP_BowlingPin actors in World Outliner (not the imported pin mesh asset).",
-                "Write down this number: it will be GoalPins.",
-                "Then in BP_BowlingGameMode create PinsDown (Integer=0), Score (Integer=0), GoalPins (Integer=that actual number) and RoundFinished (Boolean=false).",
-                "Compile and Save."
+                "Open BowlingLevel. In World Outliner count the BP_BowlingPin ACTORS in your level. Write down that number.",
+                "Open Content Drawer → Bowling → BP_BowlingGameMode.",
+                "Under My Blueprint → Variables click +. Name the new VARIABLE PinsDown.",
+                "Set its type to Integer. Compile, set Default Value=0.",
+                "Click + Variable again. Name it Score. Type=Integer, Default Value=0.",
+                "Create VARIABLE GoalPins. Type=Integer, Default Value=the number of placed pins you counted.",
+                "Create VARIABLE RoundFinished. Type=Boolean, Default Value=false (unchecked).",
+                "Compile and Save BP_BowlingGameMode."
               ]
             },
             {
@@ -2115,10 +2118,12 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "debug"
               ],
               "actions": [
-                "Open the Clicker project → BP_ClickerGameMode Blueprint → Variables.",
-                "Create ClickPower (Integer; default 1) and UpgradeCost (Integer; default 10).",
-                "Keep the existing Score variable from the tutorial.",
-                "Compile."
+                "Open your existing BP_ClickerGameMode Blueprint.",
+                "In My Blueprint → Variables, click +.",
+                "Name the new VARIABLE ClickPower. Choose Integer, Compile, set Default Value=1.",
+                "Click + Variable again. Name it UpgradeCost. Choose Integer, Compile, set Default Value=10.",
+                "Keep the existing Score VARIABLE from the starter tutorial. Do NOT create another Score.",
+                "Compile and Save."
               ]
             },
             {
@@ -3367,12 +3372,15 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "component"
               ],
               "actions": [
-                "Open Content/Loops → Blueprint Class → Actor.",
-                "Create BP_RisingBlock.",
-                "Add Static Mesh component named BlockMesh using the built-in Cube.",
-                "On BlockMesh set Simulate Physics=false, Collision Enabled=Query Only, and ensure Visibility trace response=Block (Custom collision preset or BlockAll).",
-                "Set relative Location Z=50 to put a 100cm cube above the floor.",
-                "Compile and Save."
+                "Open Content Drawer → Content/Loops.",
+                "Right-click empty space → Blueprint Class → Actor.",
+                "Name the new ACTOR BLUEPRINT BP_RisingBlock and open it.",
+                "In Components click + Add → Static Mesh. Rename this COMPONENT BlockMesh.",
+                "With BlockMesh selected, set Static Mesh to the built-in Cube.",
+                "In Details set Simulate Physics=false and Collision Enabled=Query Only.",
+                "Under Collision responses make Visibility=Block.",
+                "In Transform set Relative Location Z=50.",
+                "Click Compile, then Save."
               ]
             },
             {
@@ -3419,10 +3427,13 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "level"
               ],
               "actions": [
-                "Open Content/Loops → BP_LoopsPlayerController; BP_LoopsGameMode Class Defaults; LoopsLevel World Settings.",
-                "Create a PlayerController named BP_LoopsPlayerController if you do not already have it; otherwise reuse it.",
-                "In BP_LoopsGameMode Class Defaults assign Player Controller Class=BP_LoopsPlayerController; LoopsLevel → World Settings → GameMode Override=BP_LoopsGameMode.",
-                "Press Play (NOT Simulate)."
+                "In Content/Loops, check if BP_LoopsPlayerController already exists. Reuse it if it does.",
+                "If it does not exist: right-click → Blueprint Class → PlayerController, name BP_LoopsPlayerController.",
+                "Open BP_LoopsGameMode → Class Defaults.",
+                "Set Player Controller Class to BP_LoopsPlayerController.",
+                "Open LoopsLevel → Settings → World Settings.",
+                "Set GameMode Override to BP_LoopsGameMode.",
+                "Click Save Level. Press PLAY, not Simulate."
               ]
             },
             {
@@ -3436,10 +3447,15 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "exec"
               ],
               "actions": [
-                "BP_LoopsPlayerController → Event Graph → Event BeginPlay.",
-                "Connect the WHITE exec chain: BeginPlay → Set Show Mouse Cursor(true, Self) → Set Input Mode Game And UI(Player Controller=Self; no focused widget; mouse lock=Do Not Lock) → Set View Target with Blend(Target=Self, New View Target=Get Actor of Class(Class=CameraActor)).",
-                "Only one camera actor should be in this test level.",
-                "Compile."
+                "Open BP_LoopsPlayerController → Event Graph.",
+                "Find the existing Event BeginPlay (or add Event BeginPlay if none).",
+                "From its WHITE pin add Set Show Mouse Cursor, Target=Self, true.",
+                "From its WHITE output add Set Input Mode Game and UI, Player Controller=Self.",
+                "On Set Input Mode Game and UI leave In Widget to Focus empty and set In Mouse Lock Mode=Do Not Lock.",
+                "From its WHITE output add Set View Target with Blend, Target=Self.",
+                "Add Get Actor of Class and set Class=CameraActor.",
+                "Connect Get Actor of Class → Return Value to Set View Target with Blend → New View Target.",
+                "Keep ONLY one Camera Actor in this test level. Click Compile and Save."
               ]
             },
             {
@@ -3545,10 +3561,13 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "debug"
               ],
               "actions": [
-                "LoopsLevel → Play in Editor.",
-                "Use this order: (1) no PEW → controller/mapping/focus; (2) PEW but no debug ray → deprojection false or wrong WHITE exec; (3) ray hits other objects → target Visibility collision or obstruction; (4) ray hits BP_RisingBlock but remains → Cast Success or BreakBlock wiring.",
-                "Delete or disable any old BP_ClickTarget ActorOnClicked scoring path so one shot never counts twice.",
-                "Save the working shot system."
+                "Open BP_LoopsPlayerController. Press Play, NOT Simulate.",
+                "Click a cube and check whether PEW appears.",
+                "If PEW does not print: check your active PlayerController and IMC_RisingDefence Input Mapping Context.",
+                "If PEW prints but there is NO debug line: check Convert Mouse Location To World Space and the WHITE execution wiring.",
+                "If the line goes through cubes: check BlockMesh Visibility=Block and any object blocking the trace.",
+                "If a debug ray hits BP_RisingBlock but it does not disappear: check Cast Success → BreakBlock.",
+                "Only continue once one left-click removes exactly one cube."
               ]
             }
           ],
@@ -3652,12 +3671,16 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "cast"
               ],
               "actions": [
-                "BP_RisingBlock → Event BeginPlay and Event Tick.",
+                "Open BP_LoopsGameMode → My Blueprint → Variables → +.",
+                "Create the BOOLEAN VARIABLE Finished. Set Default Value=false, then Compile and Save.",
+                "Open BP_RisingBlock → Event Graph.",
                 "On Event BeginPlay call UpdateBlockVisual once.",
-                "On Event Tick use Get Game Mode → Cast To BP_LoopsGameMode → Get Finished → NOT → Branch.",
-                "On True set CurrentHeight = Min(MaxHeight, CurrentHeight + (Tick Delta Seconds * GrowthSpeed)), then call UpdateBlockVisual.",
-                "Compile.",
-                "If BP_LoopsGameMode does not yet have Finished, add Boolean Finished default false now."
+                "On Event Tick add Get Game Mode → Cast To BP_LoopsGameMode (Object=Get Game Mode).",
+                "From the Cast blue As BP_LoopsGameMode pin Get Finished.",
+                "Connect NOT Finished to a Branch Condition. Connect Cast Success WHITE to the Branch WHITE input.",
+                "From Branch True set CurrentHeight=Min(MaxHeight, CurrentHeight + (Tick Delta Seconds × GrowthSpeed)).",
+                "After Set CurrentHeight WHITE output call UpdateBlockVisual.",
+                "Compile and Save BP_RisingBlock."
               ]
             },
             {
@@ -3670,12 +3693,13 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "material"
               ],
               "actions": [
-                "LoopsLevel → Place Actors → Cube mesh (or other simple bar).",
-                "Place a thin horizontal red bar named DangerLine across the lane area at Z=450: e.g.",
-                "Cube scale X=0.1,Y=8,Z=0.05 and location X=200,Y=0,Z=450.",
-                "Give it a bright red material.",
-                "Set its collision to NoCollision so it NEVER blocks the gun's Visibility trace.",
-                "Save."
+                "Open LoopsLevel.",
+                "From Place Actors drag a CUBE into the level. Rename this PLACED ACTOR DangerLine.",
+                "Set its Location X=200, Y=0, Z=450.",
+                "Set its Scale X=0.1, Y=8, Z=0.05 to create a thin horizontal bar.",
+                "Give DangerLine a bright red Material so players can see the losing height.",
+                "In Details → Collision set Collision Presets=NoCollision, so the line does not block shooting.",
+                "Save LoopsLevel."
               ]
             },
             {
@@ -3708,12 +3732,16 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "variable"
               ],
               "actions": [
-                "BP_LoopsGameMode → Functions → SpawnOneBlock.",
-                "Create Function SpawnOneBlock.",
-                "First Branch: NOT Finished AND Length(FreeLanes)>0.",
-                "On True choose a local Integer PickIndex = Random Integer in Range(0, Length(FreeLanes)-1); then local PickLane = FreeLanes[PickIndex] (Array Get) BEFORE removing it.",
-                "After those Set nodes, Remove Index from FreeLanes using PickIndex.",
-                "Do not use a random Y coordinate without reserving its lane."
+                "Open BP_LoopsGameMode → My Blueprint → Functions → +.",
+                "Name the new FUNCTION SpawnOneBlock.",
+                "In My Blueprint → Local Variables click + and create PickIndex (Integer).",
+                "Click + Local Variable again and create PickLane (Integer).",
+                "From the purple Function Entry WHITE pin add Branch.",
+                "To Branch Condition connect (NOT Finished) AND (Length of FreeLanes > 0).",
+                "From Branch True add Set PickIndex. Its value is Random Integer in Range, Min=0, Max=Length(FreeLanes)-1.",
+                "After Set PickIndex add Set PickLane. Its value is FreeLanes Get(Index=PickIndex).",
+                "After Set PickLane, add Remove Index on FreeLanes using PickIndex.",
+                "Keep these WHITE execution pins in order. Compile and Save."
               ]
             },
             {
