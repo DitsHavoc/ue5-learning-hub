@@ -4690,10 +4690,14 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "material"
               ],
               "actions": [
-                "Open BP_RisingBlock → Variables.",
-                "Add FastThreat Boolean default false; tick Instance Editable and Expose on Spawn.",
-                "In Content/Loops create a Material asset M_RisingDanger (red Base Color) and Save; assign it to BlockMesh in Stage 4 Step 2, not to the normal blocks now.",
-                "Compile so FastThreat becomes a Spawn Actor input pin."
+                "Open BP_RisingBlock → My Blueprint → Variables → +.",
+                "Create BOOLEAN VARIABLE FastThreat. Compile; Default Value=false.",
+                "Select FastThreat → Details. Tick Instance Editable and Expose on Spawn.",
+                "Compile and Save; this adds a FastThreat pin to Spawn Actor BP_RisingBlock.",
+                "Open Content Drawer → Content/Loops → right-click → Material.",
+                "Name the new MATERIAL ASSET M_RisingDanger.",
+                "Open it, set Base Color to bright red, then Save.",
+                "Do NOT change the default normal block material yet."
               ]
             },
             {
@@ -4707,12 +4711,18 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "get-set"
               ],
               "actions": [
-                "Open BP_RisingBlock → Event BeginPlay BEFORE UpdateBlockVisual.",
-                "Avoid merging two Branch execution paths.",
-                "Instead, in Event BeginPlay use one straight WHITE execution chain: Set GrowthSpeed → BlockMesh.Set Material(Element Index=0) → UpdateBlockVisual.",
-                "Feed Set GrowthSpeed with a Select Float node controlled by FastThreat (False=35, True=60).",
-                "Feed Set Material with a Select Material node controlled by FastThreat (False=normal material, True=red warning material).",
-                "Compile; do not change the Event Tick growth maths."
+                "Open BP_RisingBlock → Event Graph → Event BeginPlay.",
+                "Find the old Call UpdateBlockVisual.",
+                "Before it add a Set GrowthSpeed node.",
+                "Add Select (Float), with Index=Get FastThreat Boolean.",
+                "Set False Float value=35 and True Float value=60.",
+                "Connect Select output → Set GrowthSpeed value pin.",
+                "Drag BlockMesh from Components as Get → Set Material(Element Index=0).",
+                "Add Select (Material Interface) using Get FastThreat as Boolean Index.",
+                "Set its False material to the existing normal block material and True material to M_RisingDanger.",
+                "Connect Select Material output → Set Material input.",
+                "Connect BeginPlay WHITE → Set GrowthSpeed WHITE → Set Material WHITE → Call UpdateBlockVisual WHITE.",
+                "Compile and Save. Do not change the Event Tick code."
               ]
             },
             {
@@ -4726,9 +4736,14 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "spawn"
               ],
               "actions": [
-                "Open BP_LoopsGameMode → SpawnOneBlock → Spawn Actor Class=BP_RisingBlock.",
-                "Before Spawn Actor, use Random Integer in Range(1,4) == 1 and connect the Boolean to FastThreat on the SAME Spawn Actor node.",
-                "Leave the five FreeLanes array, spawn timing, LaneIndex pin and coordinates untouched."
+                "Open BP_LoopsGameMode → Functions → SpawnOneBlock.",
+                "Find the EXISTING Spawn Actor From Class that creates BP_RisingBlock.",
+                "Find the exposed FastThreat Boolean pin on that Spawn Actor.",
+                "Add Random Integer in Range; Min=1 and Max=4.",
+                "From its Integer result add Equal (Integer); set the other input=1.",
+                "Connect the equality RED Boolean result → Spawn Actor FastThreat input.",
+                "KEEP LaneIndex, Spawn Transform, FreeLanes reservation and WHITE execution unchanged.",
+                "Compile and Save."
               ]
             },
             {
@@ -4741,11 +4756,14 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "playtest"
               ],
               "actions": [
-                "Open LoopsLevel → Play.",
-                "Defend for 60 seconds against normal and red blocks.",
-                "Let a red one reach the line on another attempt and check LoseRound still runs.",
-                "If the game is too hard, change FastThreat GrowthSpeed from 60 to 45; if easy, 65.",
-                "Do not change the maximum 450cm unless the camera/red line are adjusted together."
+                "Open LoopsLevel and press Play.",
+                "Shoot rising blocks for a full 60-second round.",
+                "Look for both normal-coloured blocks and faster red blocks.",
+                "Let one red block reach the danger line on another run; DEFENCE FAILED! should appear.",
+                "Press R and check both types of block still spawn and are shootable.",
+                "If too difficult, change the True value in BP_RisingBlock's Select Float from 60 to 45.",
+                "If too easy, change it to 65.",
+                "Compile and Save. Do not change MaxHeight=450."
               ]
             }
           ],
@@ -4786,10 +4804,13 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "material"
               ],
               "actions": [
-                "Open Artist/designer workstation → Photoshop, 3ds Max or material editor.",
-                "Choose ONE achievable theme: defensive laser turret, anti-virus defence, robot factory overload or alien crystal containment.",
-                "Make a distinctive block material and a readable red danger line; export PNG or FBX as needed.",
-                "Programmer imports copies into local Unreal."
+                "Choose ONE theme: laser turret, anti-virus defence, robot factory or alien crystal containment.",
+                "In Photoshop or another art tool create one simple target texture/image.",
+                "Save editable source in your project art folder. Export PNG (texture) or FBX (mesh).",
+                "Open Unreal Content Drawer → Content/Loops → Import and choose that exported asset.",
+                "Open BP_RisingBlock → Components → BlockMesh and assign the new Material or mesh.",
+                "Keep its Visibility collision response=Block.",
+                "Play the level; the coloured targets should still be easy to see and shoot."
               ]
             },
             {
@@ -4803,11 +4824,14 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "trace"
               ],
               "actions": [
-                "Open BP_LoopsPlayerController → existing IA_RisingFire path.",
-                "After the Line Trace By Channel on hit-TRUE, add a short Play Sound 2D or Spawn Emitter at Location (Hit Result Impact Point) if available.",
-                "You may print '+1' for successful hits during testing.",
-                "Leave the trace endpoint, hit cast and BreakBlock calls untouched.",
-                "Do not play score feedback when Line Trace returns false."
+                "Open BP_LoopsPlayerController → Event Graph → IA_RisingFire Started.",
+                "Find the EXISTING Line Trace By Channel → hit-TRUE Branch → Cast To BP_RisingBlock → BreakBlock chain.",
+                "On Cast Success WHITE output, BEFORE the existing BreakBlock call, add Play Sound 2D.",
+                "Choose a short sound cue/wave available in your project.",
+                "Connect Cast Success WHITE → Play Sound 2D WHITE → EXISTING BreakBlock WHITE.",
+                "KEEP the same BLUE As BP_RisingBlock Target on BreakBlock.",
+                "Do NOT connect feedback to the line trace's hit-FALSE branch.",
+                "Compile, Save and Play; a hit should sound once, a miss should not score."
               ]
             },
             {
@@ -4820,10 +4844,14 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "ui-pass"
               ],
               "actions": [
-                "Open WBP_RisingDefenceHUD and LoopsLevel.",
-                "Add a clear 'DANGER HEIGHT' label near the red line and make it visible from the fixed camera.",
-                "Keep the HUD Canvas non-hit-testable.",
-                "Test all five lanes with the tallest blocks: none should be hidden by Score, Time or instruction labels."
+                "Open LoopsLevel and select the existing DangerLine placed actor.",
+                "Add or position a simple Text Render Actor near the red line reading DANGER HEIGHT.",
+                "Set its colour, size and rotation so the fixed Camera shows it clearly.",
+                "Select the Text Render Actor → Details → Collision; make sure it cannot block Visibility traces.",
+                "Open WBP_RisingDefenceHUD → Designer.",
+                "Keep ROOT Canvas Panel Visibility=Not Hit-Testable (Self & All Children).",
+                "Move Time/Hits labels away from the five shooting lanes.",
+                "Compile, Save and Play. You should be able to aim at all five lanes."
               ]
             },
             {
@@ -4836,11 +4864,14 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "array"
               ],
               "actions": [
-                "Open BP_LoopsGameMode Class Defaults and BP_RisingBlock defaults.",
-                "Playtest with another pair.",
-                "Starter settings: Spawn interval=1.5s, GrowthSpeed=35cm/s, MaxHeight=450cm, round=60s.",
-                "For easier play change GrowthSpeed to 25; for harder play try 45 or Spawn interval=1.1.",
-                "Change ONE number at a time and run a full test; keep FreeLanes protection."
+                "Open LoopsLevel and Play with another student watching.",
+                "Start with SpawnTick timer Time=1.5 seconds, BP_RisingBlock GrowthSpeed=35 and MaxHeight=450.",
+                "Keep BP_LoopsGameMode SecondsLeft=60.",
+                "Ask the tester to play once. Write down whether they win or lose and why.",
+                "If too hard, open BP_RisingBlock → GrowthSpeed Variable and reduce Default Value to 25.",
+                "If too easy, try GrowthSpeed=45 OR change the BP_LoopsGameMode spawn timer to Time=1.1.",
+                "Change ONE value at a time, Compile and Save, then play a FULL round again.",
+                "Make sure FreeLanes still prevents two targets spawning in the same lane."
               ]
             },
             {
@@ -4854,10 +4885,14 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "array"
               ],
               "actions": [
-                "Open LoopsLevel → Play in Editor/Package Project.",
-                "Prepare a 2–5 minute demo or packaged Windows build.",
-                "Explain how the original Loops tutorial created repeated objects, how your timer randomly selects FreeLanes, how a Line Trace By Channel shoots targets, and why you tuned the height limit.",
-                "Demonstrate win, loss and R restart."
+                "Open LoopsLevel and compile/save BP_LoopsGameMode, BP_RisingBlock, BP_LoopsPlayerController and WBP_RisingDefenceHUD.",
+                "Press Play and prepare a 2–5 minute demonstration.",
+                "Show at least one rising block shot using the line trace.",
+                "Show the random lane spawning and explain that FreeLanes is an INTEGER ARRAY.",
+                "Let a block reach the red line to show defeat; press R to restart.",
+                "On another run survive 60 seconds to show victory.",
+                "Capture a screenshot of the original Loops cube tower and one of Rising Defence.",
+                "If college PCs support packaging, package for Windows; otherwise a reliable Play In Editor demo is fine."
               ]
             }
           ],
