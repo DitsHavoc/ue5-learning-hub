@@ -1058,14 +1058,14 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "variable"
               ],
               "actions": [
-                "Open BowlingLevel. In World Outliner count the BP_BowlingPin ACTORS in your level. Write down that number.",
-                "Open Content Drawer → Bowling → BP_BowlingGameMode.",
-                "Under My Blueprint → Variables click +. Name the new VARIABLE PinsDown.",
-                "Set its type to Integer. Compile, set Default Value=0.",
-                "Click + Variable again. Name it Score. Type=Integer, Default Value=0.",
-                "Create VARIABLE GoalPins. Type=Integer, Default Value=the number of placed pins you counted.",
-                "Create VARIABLE RoundFinished. Type=Boolean, Default Value=false (unchecked).",
-                "Compile and Save BP_BowlingGameMode."
+                "Open BowlingLevel. In World Outliner count the actors called BP_BowlingPin. Write the number down.",
+                "Open the Content Drawer and double-click BP_BowlingGameMode.",
+                "In My Blueprint → Variables click + and name the VARIABLE PinsDown.",
+                "Set its type to Integer. Click Compile; set Default Value=0.",
+                "Create a second Integer VARIABLE Score. Compile; Default Value=0.",
+                "Create a third Integer VARIABLE GoalPins. Compile; Default Value=the number of BP_BowlingPin actors you counted.",
+                "Create a Boolean VARIABLE RoundFinished. Compile; leave Default Value unchecked (false).",
+                "Click Compile and Save."
               ]
             },
             {
@@ -1079,10 +1079,12 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "variable"
               ],
               "actions": [
-                "Open BP_BowlingGameMode → My Blueprint → Functions → +.",
-                "Create a function called RecordPin.",
-                "Select the entry node and use Details → Inputs → + to add PinValue (Integer).",
-                "Compile."
+                "Open BP_BowlingGameMode → My Blueprint → Functions.",
+                "Click + beside Functions and name the FUNCTION RecordPin.",
+                "Double-click RecordPin to open its graph.",
+                "Click the purple RecordPin Function Entry node.",
+                "In Details → Inputs click + and name the INPUT PIN PinValue.",
+                "Set its type to Integer. Click Compile and Save. Do not create a separate PinValue variable here."
               ]
             },
             {
@@ -1096,10 +1098,13 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "get-set"
               ],
               "actions": [
-                "Open BP_BowlingGameMode → RecordPin function graph.",
-                "Drag RoundFinished in as Get.",
-                "Add NOT Boolean → Branch.",
-                "Connect the entry white execution pin to the Branch white input and NOT RoundFinished to its Condition."
+                "Open BP_BowlingGameMode → Functions → RecordPin.",
+                "From My Blueprint drag RoundFinished into the graph and choose Get.",
+                "Drag from its red Boolean pin; search NOT Boolean.",
+                "Right-click blank graph → search Branch.",
+                "Connect the purple RecordPin Entry WHITE execution pin to Branch's WHITE input.",
+                "Connect NOT Boolean red output to Branch Condition.",
+                "Leave the Branch False WHITE output disconnected."
               ]
             },
             {
@@ -1113,9 +1118,14 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "get-set"
               ],
               "actions": [
-                "Open BP_BowlingGameMode → RecordPin → True output of the Branch.",
-                "Set PinsDown = PinsDown + 1, then Set Score = Score + PinValue using green Integer arithmetic nodes.",
-                "Wire both white execution pins in order; add Print String after Set Score using a string of your updated Score."
+                "Stay in BP_BowlingGameMode → RecordPin.",
+                "Drag PinsDown from Variables into the graph as Get. From its green pin create Integer + Integer and type 1 in the second input.",
+                "Drag PinsDown in again, choose Set, and connect the + result to its green value pin.",
+                "Connect the existing Branch TRUE WHITE output to Set PinsDown WHITE input.",
+                "Drag Score as Get. Add Integer + Integer; connect the green PinValue INPUT PIN from Function Entry to the second + input.",
+                "Drag Score again as Set; connect the new + result to its green value pin.",
+                "Connect Set PinsDown WHITE output → Set Score WHITE input.",
+                "From Set Score WHITE output add Print String. For In String, use To String (Integer) from Get Score. Compile and Save."
               ]
             },
             {
@@ -1129,12 +1139,14 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "get-set"
               ],
               "actions": [
-                "In RecordPin in BP_BowlingGameMode.",
-                "After Set Score in RecordPin (not directly from Set PinsDown), add >= (Integer) to compare Get PinsDown against GoalPins.",
-                "Plug that into a Branch and wire its white execution input after Set Score.",
-                "On True: Set RoundFinished = true, then Print String \"ALL PINS DOWN!\".",
-                "On False: do nothing.",
-                "Do not replace the earlier Branch that checks NOT RoundFinished."
+                "Stay in BP_BowlingGameMode → RecordPin after Set Score.",
+                "Add an Integer >= Integer node.",
+                "Drag PinsDown as Get to the first >= input, GoalPins as Get to the second.",
+                "Add a Branch. Connect the >= red output to Condition.",
+                "Move the existing Score Print String BEFORE this new Branch if you made one, then connect its WHITE output to the Branch WHITE input.",
+                "From Branch TRUE, drag RoundFinished into the graph as Set. Tick its red value checkbox (true).",
+                "Connect Set RoundFinished WHITE output → Print String with text ALL PINS DOWN!.",
+                "Leave Branch FALSE unconnected. Compile and Save."
               ]
             },
             {
@@ -1148,11 +1160,13 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "custom-event"
               ],
               "actions": [
-                "Open BP_BowlingPin → Variables.",
-                "Create Counted (Boolean; default false).",
-                "Compile.",
-                "Add Event Tick → Branch with NOT Counted as Condition.",
-                "Only continue from True."
+                "Open the BP_BowlingPin Blueprint.",
+                "In My Blueprint → Variables click +. Name the VARIABLE Counted.",
+                "In Details select Boolean. Click Compile; leave Default Value unchecked (false).",
+                "Open Event Graph. Add or reuse Event Tick.",
+                "Add Branch. Connect Event Tick WHITE output → Branch WHITE input.",
+                "Drag Counted as Get; add NOT Boolean; connect NOT output to Branch Condition.",
+                "Only the TRUE path should continue. Compile and Save."
               ]
             },
             {
@@ -1166,11 +1180,14 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "get-set"
               ],
               "actions": [
-                "Open BP_BowlingPin → Event Graph → the True output of your NOT Counted Branch.",
-                "Drag the existing Model (Static Mesh) component into the graph as Get.",
-                "From it add Get Up Vector, then Dot Product (Vector).",
-                "Set the second Vector to X=0, Y=0, Z=1.",
-                "Temporarily convert the Dot Product float to String and Print String from the NOT Counted True execution path; Compile and Play."
+                "Open BP_BowlingPin → Event Graph.",
+                "Drag the EXISTING Static Mesh COMPONENT Model from Components into the graph as Get.",
+                "From its BLUE pin search Get Up Vector. From that output add Dot Product (Vector).",
+                "Set the second Dot Product vector to X=0, Y=0, Z=1.",
+                "From Dot Product output add To String (Float), then connect it to Print String → In String.",
+                "Connect the NOT Counted Branch TRUE WHITE output to Print String WHITE input.",
+                "Compile and Play BowlingLevel. The value for an upright pin should be near 1.",
+                "Stop Play. Remove ONLY the temporary Print String; keep Get Up Vector and Dot Product."
               ]
             },
             {
@@ -1184,10 +1201,13 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "get-set"
               ],
               "actions": [
-                "Open BP_BowlingPin → Event Graph, where Get Up Vector feeds Dot Product.",
-                "Add Float < Float, wire the Dot Product output into A and set B=0.65.",
-                "Add a second Branch: connect the earlier NOT Counted True white execution output into this Branch and connect the Float comparison into Condition.",
-                "Compile."
+                "Open BP_BowlingPin → Event Graph beside Dot Product.",
+                "Drag Dot Product's green output and search Float < Float.",
+                "Set the second < input to 0.65.",
+                "Add a SECOND Branch node.",
+                "Connect NOT Counted Branch TRUE WHITE output → new Branch WHITE input.",
+                "Connect Float < Float red result → new Branch Condition.",
+                "Leave the new Branch FALSE output empty. Compile and Save."
               ]
             },
             {
@@ -1201,10 +1221,16 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "branch"
               ],
               "actions": [
-                "Open BP_BowlingPin → True path of the lean Branch.",
-                "Set Counted = true, then Get Game Mode → Cast To BP_BowlingGameMode → RecordPin with PinValue = 1.",
-                "Ensure the white wires follow that order.",
-                "Compile."
+                "Open BP_BowlingPin → Event Graph → second (lean) Branch.",
+                "Drag Counted as Set into the graph. Tick its Boolean value true.",
+                "Connect the lean Branch TRUE WHITE output → Set Counted WHITE input.",
+                "Add Get Game Mode and Cast To BP_BowlingGameMode.",
+                "Connect Get Game Mode blue Return Value → Cast Object.",
+                "Connect Set Counted WHITE output → Cast WHITE input.",
+                "Drag from Cast As BP_BowlingGameMode BLUE pin; search Call RecordPin.",
+                "Set RecordPin PinValue Integer input to 1.",
+                "Connect Cast Success WHITE → Call RecordPin WHITE input.",
+                "Compile and Save."
               ]
             },
             {
@@ -1217,12 +1243,12 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "debug"
               ],
               "actions": [
-                "Open BowlingLevel → Play In Editor, after saving both GameMode and BP_BowlingPin.",
-                "Press Space once.",
-                "Keep the Output Log or temporary RecordPin Print String visible.",
-                "Knock over one pin and check PinsDown increases to 1, Score to 1.",
-                "Watch the fallen pin for a few more seconds; the numbers should NOT increase again.",
-                "Repeat with another pin."
+                "Open BowlingLevel and press Play.",
+                "Press Space once to bowl.",
+                "Watch BP_BowlingGameMode's temporary Print String or Output Log when a pin falls.",
+                "For one fallen pin, Score should change by exactly 1, not every frame.",
+                "Wait a few seconds; Score should NOT increase again for that same pin.",
+                "Stop Play. Compile and Save both BP_BowlingPin and BP_BowlingGameMode."
               ]
             },
             {
@@ -1235,12 +1261,12 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "get-set"
               ],
               "actions": [
-                "Open the Bowling level → Play.",
-                "Play the BowlingLevel.",
-                "If you cannot aim at different pins, press R only after the next upgrade is built; for this first scoring test use Stop then Play again.",
-                "Knock down at least one pin and confirm each Score increment is one.",
-                "For an all-pins-down test, you may temporarily place just TWO BP_BowlingPin actors in a test copy of the level and set GoalPins=2; when both tip, RoundFinished should turn true.",
-                "Restore the normal lane and GoalPins afterwards."
+                "Open BowlingLevel and press Play again.",
+                "Knock over one pin. Check the printed Score increases by 1.",
+                "For a quick finish test, save a COPY of BowlingLevel and leave exactly two BP_BowlingPin ACTORS in it.",
+                "In the copy, set BP_BowlingGameMode's GoalPins Default Value=2 and Compile.",
+                "Play the copied test level; when both pins tip, look for ALL PINS DOWN!.",
+                "Restore GoalPins to the actual number in your real lane, reopen BowlingLevel and Save."
               ]
             }
           ],
@@ -1323,13 +1349,12 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "physics"
               ],
               "actions": [
-                "Open BP_BowlingBall → Viewport → Components hierarchy.",
                 "Open BP_BowlingBall → Viewport.",
-                "Select the original Model sphere mesh.",
-                "If it is below DefaultSceneRoot, drag Model onto the root so Model becomes the Actor root (do not add another mesh).",
-                "Compile and save.",
-                "In BowlingLevel reselect the placed BP_BowlingBall and confirm it still sits at the lane starting position.",
-                "Test Play: Left/Right still move the ball and Space still bowls before continuing."
+                "In Components find the EXISTING Static Mesh component Model.",
+                "If Model is under DefaultSceneRoot, drag Model onto DefaultSceneRoot and confirm Make New Root.",
+                "Do NOT add a second sphere mesh.",
+                "Compile and Save. Open BowlingLevel and check the ball still sits at the start of the lane.",
+                "Press Play. Left/Right should still aim and Space should still bowl. Stop Play."
               ]
             },
             {
@@ -1343,12 +1368,14 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "exec"
               ],
               "actions": [
-                "Open BP_BowlingBall → Event Graph → Event BeginPlay.",
-                "In BP_BowlingBall → Event Graph, make a new variable StartingBallTransform of type Transform.",
-                "From Event BeginPlay call Get Actor Transform (Self) and then Set StartingBallTransform.",
-                "Compile.",
-                "This happens before the player moves the ball.",
-                "Keep all other Event BeginPlay nodes if present."
+                "Open BP_BowlingBall → My Blueprint → Variables → +.",
+                "Name the new VARIABLE StartingBallTransform. Set type Transform and click Compile.",
+                "Open Event Graph and find Event BeginPlay.",
+                "Right-click and add Get Actor Transform; Target=Self.",
+                "Drag StartingBallTransform from Variables into the graph as Set.",
+                "Connect Get Actor Transform Return Value → Set StartingBallTransform value pin.",
+                "Connect BeginPlay WHITE execution to Set StartingBallTransform. If BeginPlay already has other nodes, connect their WHITE chain AFTER this Set.",
+                "Compile and Save."
               ]
             },
             {
@@ -1361,10 +1388,15 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "custom-event"
               ],
               "actions": [
-                "Open BP_BowlingBall → Event Graph → Add Custom Event ResetBall.",
-                "Drag the Model (root Static Mesh) component onto the graph.",
-                "Wire ResetBall → Set Simulate Physics (Model, false) → Set Actor Transform (New Transform=StartingBallTransform; Sweep=false; Teleport=true).",
-                "Compile."
+                "Open BP_BowlingBall → Event Graph.",
+                "Right-click blank graph → Add Custom Event; name it ResetBall.",
+                "Drag Model from Components into the graph as Get.",
+                "From Model BLUE pin add Set Simulate Physics; untick Simulate.",
+                "Connect ResetBall WHITE output → Set Simulate Physics WHITE input.",
+                "Add Set Actor Transform (Target=Self).",
+                "Drag StartingBallTransform as Get → New Transform input.",
+                "Set Sweep=false and Teleport=true.",
+                "Connect Set Simulate Physics WHITE output → Set Actor Transform WHITE input. Compile."
               ]
             },
             {
@@ -1377,9 +1409,14 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "physics"
               ],
               "actions": [
-                "Open BP_BowlingBall → immediately after Set Actor Transform in ResetBall.",
-                "Wire Set Simulate Physics (Model, true) → Set Physics Linear Velocity (0,0,0) → Set Physics Angular Velocity in Degrees (0,0,0), all targeting Model.",
-                "Compile and save."
+                "Open BP_BowlingBall → ResetBall after Set Actor Transform.",
+                "Drag Model into graph as Get.",
+                "Add Set Simulate Physics (Target=Model); tick Simulate=true.",
+                "Connect Set Actor Transform WHITE output → Set Simulate Physics WHITE input.",
+                "From Model add Set Physics Linear Velocity. Set New Vel X=0, Y=0, Z=0.",
+                "Connect WHITE execution to Set Physics Linear Velocity.",
+                "From Model add Set Physics Angular Velocity in Degrees. Set New Ang Vel X=0, Y=0, Z=0.",
+                "Connect the WHITE chain in that order. Compile and Save."
               ]
             },
             {
@@ -1393,12 +1430,13 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "input"
               ],
               "actions": [
-                "Open BP_BowlingPlayerController → Event Graph → Event BeginPlay.",
-                "In BP_BowlingPlayerController → Event Graph find the original BeginPlay path: Add Mapping Context(BowlingInputs) → Get Actor of Class(BP_BowlingBall) → Set BowlingBall.",
-                "Select the existing Get Actor of Class node: its Return Value must connect to Set BowlingBall.",
-                "Place exactly one BP_BowlingBall in BowlingLevel.",
-                "Compile and Play once; confirm the original arrow keys still move it and Space still bowls.",
-                "Do NOT add a second ball variable or duplicate this lookup."
+                "Open BP_BowlingPlayerController → Event Graph.",
+                "Find the original Event BeginPlay chain that adds BowlingInputs Mapping Context.",
+                "Find Get Actor of Class; its Actor Class must be BP_BowlingBall.",
+                "Make sure its BLUE Return Value connects to the EXISTING Set BowlingBall VARIABLE.",
+                "Do NOT create another BowlingBall variable or duplicate BeginPlay.",
+                "Open BowlingLevel. In World Outliner make sure exactly one BP_BowlingBall ACTOR exists.",
+                "Compile and Play. Confirm Left/Right and Space still work; Stop Play."
               ]
             },
             {
@@ -1412,10 +1450,12 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "input"
               ],
               "actions": [
-                "Open BP_BowlingPlayerController → Variables.",
-                "Create ThrowsUsed (Integer; default 0), MaxThrows (Integer; default 3) and IsBallInMotion (Boolean; default false).",
-                "Compile.",
-                "Keep the existing BP_BowlingBall reference from the original IA_Bowl/IA_Move tutorial; do not add a new ball reference."
+                "Open BP_BowlingPlayerController → My Blueprint → Variables → +.",
+                "Create INTEGER VARIABLE ThrowsUsed. Compile; Default Value=0.",
+                "Create INTEGER VARIABLE MaxThrows. Compile; Default Value=3.",
+                "Create BOOLEAN VARIABLE IsBallInMotion. Compile; Default Value=false (unchecked).",
+                "Keep the original BowlingBall Object Reference already in this controller.",
+                "Click Compile and Save."
               ]
             },
             {
@@ -1429,11 +1469,15 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "input"
               ],
               "actions": [
-                "Open BP_BowlingPlayerController → existing IA_Move input event, before calling BP_BowlingBall.Move.",
-                "Get IsBallInMotion and RoundFinished (via BP_BowlingGameMode).",
-                "Add a Branch using (NOT IsBallInMotion) AND (NOT RoundFinished).",
-                "Only True calls the existing Move custom event.",
-                "Leave the original MoveSpeed and Delta Time mapping from the tutorial unchanged."
+                "Open BP_BowlingPlayerController → Event Graph → existing IA_Move event.",
+                "Find its WHITE execution wire that calls the existing BP_BowlingBall Move event. Disconnect ONLY that wire.",
+                "Add Get Game Mode → Cast To BP_BowlingGameMode; connect Get Game Mode BLUE Return Value to Cast Object.",
+                "Connect IA_Move WHITE execution → Cast WHITE input.",
+                "Drag from the BLUE As BP_BowlingGameMode pin → Get RoundFinished.",
+                "Drag IsBallInMotion as Get. Add NOT Boolean for each of the two values.",
+                "Add AND Boolean; connect the two NOT results. Add Branch with AND → Condition.",
+                "Connect Cast Success WHITE execution → Branch input, then Branch TRUE → EXISTING Move call.",
+                "Keep the original movement inputs and Delta Time values. Compile and Save."
               ]
             },
             {
@@ -1447,12 +1491,15 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "cast"
               ],
               "actions": [
-                "Open BP_BowlingPlayerController → existing IA_Bowl input (Started pin; use your original tutorial name).",
-                "In BP_BowlingPlayerController, locate the existing IA_Bowl Input Action Event.",
-                "Use ONLY its Started execution pin, as taught in the original tutorial.",
-                "Add Get Game Mode → Cast To BP_BowlingGameMode and read RoundFinished.",
-                "Add NOT Boolean for RoundFinished and another NOT for IsBallInMotion.",
-                "Keep the original Bowl call but disconnect its old white execution input until the next step."
+                "Open BP_BowlingPlayerController → Event Graph → existing IA_Bowl event.",
+                "Use only IA_Bowl Started WHITE output, not Triggered or Ongoing.",
+                "Disconnect the old WHITE wire to the EXISTING Bowl call. Keep the Bowl call node and its BowlingBall target.",
+                "Add Get Game Mode → Cast To BP_BowlingGameMode.",
+                "Connect Get Game Mode BLUE Return Value → Cast Object.",
+                "Connect IA_Bowl Started WHITE output → Cast WHITE input.",
+                "From cast's BLUE As BP_BowlingGameMode pin, Get RoundFinished.",
+                "Add NOT Boolean for RoundFinished, and NOT Boolean for Get IsBallInMotion.",
+                "Keep these nodes ready for the next task. Compile."
               ]
             },
             {
@@ -1466,12 +1513,15 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "branch"
               ],
               "actions": [
-                "Stay in BP_BowlingPlayerController → throw input.",
-                "Compare ThrowsUsed < MaxThrows.",
-                "Use AND(Boolean) to combine NOT RoundFinished, NOT IsBallInMotion and the throws comparison (add an input pin to AND if needed).",
-                "Add a Branch: wire Cast To BP_BowlingGameMode Success white execution into the Branch input and AND to Condition.",
-                "Wire ONLY Branch True towards your existing Bowl call.",
-                "False does nothing."
+                "Stay in BP_BowlingPlayerController beside the IA_Bowl Cast.",
+                "Drag ThrowsUsed as Get and MaxThrows as Get.",
+                "Create Integer < Integer; connect ThrowsUsed and MaxThrows.",
+                "Create AND Boolean; click Add Pin until it has THREE Boolean inputs.",
+                "Connect NOT RoundFinished, NOT IsBallInMotion and ThrowsUsed < MaxThrows to the AND inputs.",
+                "Create Branch; connect AND red output → Branch Condition.",
+                "Connect Cast Success WHITE output → Branch WHITE input.",
+                "Connect Branch TRUE towards the existing Bowl call; leave FALSE disconnected.",
+                "Compile and Save."
               ]
             },
             {
@@ -1485,12 +1535,15 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "get-set"
               ],
               "actions": [
-                "Open BP_BowlingPlayerController → True branch of the new throw gate.",
-                "Move the original Bowl call AFTER Set ThrowsUsed=ThrowsUsed+1 and Set IsBallInMotion=true, chaining the white execution pins in that order from Branch True.",
-                "Keep Bowl Target connected to the saved BowlingBall object reference.",
-                "Compile.",
-                "Press Space once: one throw is used.",
-                "Press Space repeatedly during the roll: no extra throw is counted."
+                "Open BP_BowlingPlayerController → IA_Bowl Branch TRUE path.",
+                "Drag ThrowsUsed as Get → Integer + Integer (second input 1).",
+                "Drag ThrowsUsed as Set; connect + result to its green value pin.",
+                "Connect Branch TRUE WHITE → Set ThrowsUsed WHITE input.",
+                "Drag IsBallInMotion as Set, tick true.",
+                "Connect Set ThrowsUsed WHITE → Set IsBallInMotion WHITE.",
+                "Connect Set IsBallInMotion WHITE → the ORIGINAL Bowl call WHITE input.",
+                "Keep the original BLUE BowlingBall target connected to Bowl.",
+                "Compile, Play, press Space once; additional presses while rolling must do nothing."
               ]
             },
             {
@@ -1504,11 +1557,14 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "get-set"
               ],
               "actions": [
-                "Open BP_BowlingPlayerController → after the successful Bowl event.",
-                "From the white execution output of the original Bowl call, add Delay(Duration=4.0).",
-                "Add a Custom Event in BP_BowlingPlayerController called FinishThrow, and connect the Delay Completed white execution to a CALL of FinishThrow (not to the red event definition node).",
-                "Inside the FinishThrow event, add Set IsBallInMotion=false.",
-                "This is in the Event Graph: do not create a Blueprint Function containing Delay."
+                "Open BP_BowlingPlayerController → Event Graph after the existing Bowl call.",
+                "From the Bowl call WHITE output add Delay. Set Duration=4.0.",
+                "Right-click blank graph → Add Custom Event. Name it FinishThrow.",
+                "From Delay Completed WHITE output, search Call FinishThrow; place the CALL node.",
+                "Do NOT connect Delay directly to the red event definition.",
+                "Connect Delay Completed WHITE → Call FinishThrow WHITE input.",
+                "From the RED FinishThrow event output add Set IsBallInMotion with value=false.",
+                "Compile and Save."
               ]
             },
             {
@@ -1522,12 +1578,16 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "replay"
               ],
               "actions": [
-                "Open BP_BowlingPlayerController → FinishThrow, after IsBallInMotion=false.",
-                "In BP_BowlingPlayerController → FinishThrow, AFTER Set IsBallInMotion=false, use Get Game Mode → Cast To BP_BowlingGameMode.",
-                "From Cast Success white execution go to Branch (NOT RoundFinished AND ThrowsUsed<MaxThrows).",
-                "On True, drag BowlingBall variable as Get and call ResetBall on it.",
-                "False does nothing.",
-                "Do not call Open Level here, and do not reset BP_BowlingPin actors."
+                "Open BP_BowlingPlayerController → RED FinishThrow event.",
+                "After Set IsBallInMotion(false), add Get Game Mode → Cast To BP_BowlingGameMode.",
+                "Connect BLUE Return Value of Get Game Mode → Cast Object.",
+                "Connect Set IsBallInMotion WHITE output → Cast WHITE input.",
+                "Get RoundFinished from As BP_BowlingGameMode and add NOT Boolean.",
+                "Get ThrowsUsed and MaxThrows; compare ThrowsUsed < MaxThrows.",
+                "Combine NOT RoundFinished AND ThrowsUsed < MaxThrows; connect to Branch Condition.",
+                "Connect Cast Success WHITE → Branch WHITE input.",
+                "From Branch TRUE drag the EXISTING BowlingBall variable as Get → call ResetBall.",
+                "Connect Branch TRUE WHITE → Call ResetBall WHITE. Leave FALSE for the final-throw task."
               ]
             },
             {
@@ -1540,13 +1600,13 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "playtest"
               ],
               "actions": [
-                "Open BowlingLevel → Play In Editor.",
-                "Press Space once, aiming to knock over only some pins (not all).",
-                "Wait four seconds: the ball should reset and arrow keys should aim again.",
-                "Press Space a second time, again leaving at least one pin standing.",
-                "The ball resets a second time.",
-                "Confirm the first throw’s fallen pins stay down and Score remains.",
-                "If every pin falls early, RoundFinished correctly ends the game; restart Play to test the two-reset case."
+                "Open BowlingLevel and Play.",
+                "Press Space once. Wait four seconds.",
+                "If pins are still standing, the ball should return to its starting position.",
+                "Aim with Left/Right again and press Space a second time.",
+                "Wait four more seconds. The ball should reset again.",
+                "Check previously fallen pins remain knocked down and Score has NOT reset.",
+                "Stop Play. If all pins fell early, that is a valid finish; restart to test with pins still standing."
               ]
             },
             {
@@ -1560,13 +1620,17 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "branch"
               ],
               "actions": [
-                "Open BP_BowlingGameMode → Functions → add FinishRound.",
-                "First open BP_BowlingGameMode → Functions and create FinishRound.",
-                "Branch on NOT RoundFinished; only True sets RoundFinished=true then prints the final Score and PinsDown.",
-                "Compile GameMode.",
-                "Next open BP_BowlingPlayerController → FinishThrow: after the existing Branch that checks NOT RoundFinished AND ThrowsUsed<MaxThrows, use its False path to check (ThrowsUsed>=MaxThrows) AND (NOT RoundFinished).",
-                "On True get the cast BP_BowlingGameMode reference and call FinishRound.",
-                "Do this after the four-second Delay, not on the third Space press."
+                "Open BP_BowlingGameMode → Functions → +. Name the FUNCTION FinishRound.",
+                "Open FinishRound. From purple Function Entry WHITE add Branch.",
+                "Get RoundFinished → NOT Boolean → Branch Condition.",
+                "From Branch TRUE add Set RoundFinished=true, then Print String.",
+                "For Print String use Format Text 'ROUND OVER - Score {S}, Pins {P}' with Get Score and Get PinsDown, convert to String if needed.",
+                "Compile BP_BowlingGameMode.",
+                "Open BP_BowlingPlayerController → RED FinishThrow event → the Branch whose TRUE calls ResetBall.",
+                "From that Branch FALSE WHITE output add a second Branch.",
+                "Condition = (ThrowsUsed >= MaxThrows) AND (NOT RoundFinished), using the current GameMode cast.",
+                "Second Branch TRUE → call FinishRound on that GameMode BLUE reference.",
+                "Compile and Save."
               ]
             },
             {
@@ -1580,11 +1644,16 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "custom-event"
               ],
               "actions": [
-                "Bowling Input Mapping Context and BP_BowlingPlayerController.",
-                "Inside the existing Content/Bowling/Inputs folder, create an Input Action named IA_Restart (Value Type=Digital Boolean).",
-                "Open the already active BowlingInputs Mapping Context and add a mapping for IA_Restart with Keyboard R.",
-                "In BP_BowlingPlayerController Event Graph, add IA_Restart action event and use its Started pin → Get Current Level Name (Remove Prefix String checked) → Open Level (by Name), passing the level name output into Level Name.",
-                "Save BowlingInputs and Compile the controller."
+                "Open Content Drawer → Bowling → Inputs folder.",
+                "Right-click empty space → Input → Input Action; name the ASSET IA_Restart.",
+                "Open IA_Restart and set Value Type=Digital (Boolean). Save.",
+                "Open the EXISTING Input Mapping Context BowlingInputs. Add mapping IA_Restart → Keyboard R. Save.",
+                "Open BP_BowlingPlayerController → Event Graph.",
+                "Right-click and add the IA_Restart Input Action event.",
+                "From its Started WHITE output add Open Level (by Name).",
+                "Add Get Current Level Name; tick Remove Prefix String.",
+                "Connect Get Current Level Name to Open Level → Level Name.",
+                "Compile, Save and Play. Press R after a round: standing pins, ball and counters should reset."
               ]
             }
           ],
