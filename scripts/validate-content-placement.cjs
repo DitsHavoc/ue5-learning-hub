@@ -182,6 +182,14 @@ function audit(root = path.resolve(__dirname, '..')) {
       for(const [i,step] of items(stage.steps).entries()){
         if(!items(step.actions).length||items(step.actions).length<2||items(step.actions).some(x=>typeof x!=='string'||x.trim().length<3))
           fail('Upgrade '+stage.id+' task '+(i+1),'needs at least two direct, readable instructions');
+        if(items(step.actions).some(x=>x.length>210))
+          fail('Upgrade '+stage.id+' task '+(i+1),'one action is too long: split it into short Unreal clicks');
+        if(items(step.actions).some(x=>/^(Open Play |Open With )/.test(x)))
+          fail('Upgrade '+stage.id+' task '+(i+1),'first steps should be direct imperatives');
+        for(const created of items(stage.names).filter(x=>x.at===i+1)){
+          if(!step.actions.join(' ').toLowerCase().includes(created.name.toLowerCase()))
+            fail('Upgrade '+stage.id+' task '+(i+1),'created item '+created.name+' must be named in the actual directions');
+        }
       }
 
       const named=items(stage.names);
