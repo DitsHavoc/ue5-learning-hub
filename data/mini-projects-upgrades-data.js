@@ -2217,12 +2217,11 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "debug"
               ],
               "actions": [
-                "Open your existing BP_ClickerGameMode Blueprint.",
-                "In My Blueprint → Variables, click +.",
-                "Name the new VARIABLE ClickPower. Choose Integer, Compile, set Default Value=1.",
-                "Click + Variable again. Name it UpgradeCost. Choose Integer, Compile, set Default Value=10.",
-                "Keep the existing Score VARIABLE from the starter tutorial. Do NOT create another Score.",
-                "Compile and Save."
+                "Open BP_ClickerGameMode → My Blueprint → Variables → +.",
+                "Create VARIABLE ClickPower. Set type Integer. Click Compile; set Default Value=1.",
+                "Create VARIABLE UpgradeCost. Set type Integer. Compile; set Default Value=10.",
+                "Keep the ORIGINAL Score variable from the starter tutorial. Do not create a second one.",
+                "Click Compile and Save."
               ]
             },
             {
@@ -2236,11 +2235,16 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "get-set"
               ],
               "actions": [
-                "Open your original BP_ClickerGameMode → Functions → +.",
-                "Name the function AddClick.",
-                "Drag Score as Get and ClickPower as Get, add them with Integer + Integer, and set Score to the result.",
-                "Connect the AddClick function entry white execution to Set Score.",
-                "Compile."
+                "Open BP_ClickerGameMode → My Blueprint → Functions → +.",
+                "Name the new FUNCTION AddClick. Double-click to open it.",
+                "Drag Score from Variables into the graph and select Get.",
+                "Drag ClickPower from Variables into the graph and select Get.",
+                "Drag from Get Score's green output and search + (Integer).",
+                "Connect Get ClickPower green output to the other + input.",
+                "Drag Score into the graph again; choose Set.",
+                "Connect the + result → Set Score's green value pin.",
+                "Connect the purple AddClick Function Entry WHITE output → Set Score WHITE input.",
+                "Compile and Save."
               ]
             },
             {
@@ -2253,11 +2257,12 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "custom-event"
               ],
               "actions": [
-                "Open BP_ClickerGameMode → Event Graph → the button event wired from Assign On Clicked.",
-                "Locate the original chain: BeginPlay creates ClickerGameUI, stores ClickerUI, then Assign On Clicked binds the main ClickerButton.",
-                "Follow its red delegate to the separate event that currently adds 1 to Score and calls ClickerUI → SetScoreText.",
-                "Keep that binding.",
-                "Do NOT create another OnClicked event for the main button in the widget."
+                "Open BP_ClickerGameMode → Event Graph.",
+                "Find the EXISTING BeginPlay chain that creates ClickerGameUI and saves a reference in ClickerUI.",
+                "Find Assign On Clicked for the original main ClickerButton.",
+                "Follow its RED Event delegate to the existing click-handling Custom Event.",
+                "Find its original Set Score=Score+1 calculation and the SetScoreText call.",
+                "Leave Assign On Clicked connected. Do not create another OnClicked event in the Widget."
               ]
             },
             {
@@ -2271,11 +2276,14 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "math"
               ],
               "actions": [
-                "Open BP_ClickerGameMode → Event Graph → existing assigned ClickerButton event.",
-                "Disconnect or delete only the original Set Score = Score + 1 calculation.",
-                "From the SAME click event, call your new AddClick function once.",
-                "After it, keep the existing Get ClickerUI → SetScoreText call and connect the updated Score integer to its Score input.",
-                "Compile."
+                "Stay in BP_ClickerGameMode → original main ClickerButton click event.",
+                "Disconnect the old WHITE wire that runs Set Score=Score+1.",
+                "Remove ONLY that old Set Score node and its +1 maths.",
+                "From the original event's WHITE output add a CALL of AddClick.",
+                "Connect CALL AddClick WHITE output → the EXISTING SetScoreText call.",
+                "Keep Get ClickerUI as Target of SetScoreText.",
+                "Drag Score as Get and connect its green Integer output to SetScoreText → Score.",
+                "Compile and Play. One main-button press must add ONE point, not two."
               ]
             },
             {
@@ -2289,11 +2297,16 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "branch"
               ],
               "actions": [
-                "Open BP_ClickerGameMode → Functions → + → name it BuyUpgrade.",
-                "Add Branch with condition Score >= UpgradeCost.",
-                "From True set Score = Score - UpgradeCost, then ClickPower = ClickPower + 1, then UpgradeCost = UpgradeCost * 2.",
-                "Connect the white execution wire through all three Set nodes in that order.",
-                "False does nothing."
+                "Open BP_ClickerGameMode → My Blueprint → Functions → +.",
+                "Create FUNCTION BuyUpgrade.",
+                "From purple Function Entry WHITE add Branch.",
+                "Get Score and UpgradeCost from Variables.",
+                "Connect both to >= (Integer), Score on A and UpgradeCost on B.",
+                "Connect >= Boolean result → Branch Condition.",
+                "On Branch TRUE use Set Score. Value = Get Score - Get UpgradeCost (Integer subtraction).",
+                "From Set Score WHITE output add Set ClickPower. Value = Get ClickPower + 1.",
+                "From Set ClickPower WHITE output add Set UpgradeCost. Value = Get UpgradeCost * 2.",
+                "Leave Branch FALSE empty. Compile and Save."
               ]
             },
             {
@@ -2306,10 +2319,12 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "widget"
               ],
               "actions": [
-                "Open ClickerGameUI Widget → Designer.",
-                "Add a second Button called BuyUpgradeButton, with a child Text widget reading \"Buy Upgrade\".",
-                "Position it clear of the main click button.",
-                "Compile."
+                "Open existing ClickerGameUI Widget Blueprint → Designer.",
+                "Drag a new Button from Palette next to original ClickerButton.",
+                "Rename the NEW Button BuyUpgradeButton in Hierarchy.",
+                "Put a Text widget inside that Button with text Buy Upgrade.",
+                "Tick Is Variable on BuyUpgradeButton; leave original ClickerButton unchanged.",
+                "Compile and Save."
               ]
             },
             {
@@ -2323,12 +2338,16 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "get-set"
               ],
               "actions": [
-                "Open ClickerGameUI Widget → Designer → BuyUpgradeButton → Events → OnClicked (+).",
-                "In ClickerGameUI, select the NEW BuyUpgradeButton and click + for OnClicked.",
-                "Connect that event to Get Game Mode → Cast To BP_ClickerGameMode → BuyUpgrade.",
-                "After BuyUpgrade, use the same cast result to Get Score and call SetScoreText on Self (your current widget) with that number.",
-                "Keep the ORIGINAL ClickerButton assigned in BP_ClickerGameMode; do not add another OnClicked for it.",
-                "Compile."
+                "Open ClickerGameUI → Designer → select BuyUpgradeButton.",
+                "Details → Events → click + beside OnClicked.",
+                "In its Event Graph add Get Game Mode and Cast To BP_ClickerGameMode.",
+                "Connect Get Game Mode BLUE Return Value → Cast Object.",
+                "Connect BuyUpgradeButton OnClicked WHITE → Cast WHITE input.",
+                "From Cast BLUE As BP_ClickerGameMode pin CALL BuyUpgrade.",
+                "Connect Cast Success WHITE → BuyUpgrade WHITE input.",
+                "From BuyUpgrade WHITE output call SetScoreText on Self.",
+                "Drag from Cast BLUE reference → Get Score; wire it into SetScoreText → Score input.",
+                "Compile and Save. Do NOT add a Widget-side handler for the original big ClickerButton."
               ]
             },
             {
@@ -2342,11 +2361,11 @@ window.UE5_MINI_UPGRADE_DATA = {
               ],
               "actions": [
                 "Open the Clicker level and press Play.",
-                "Play the level and confirm a fresh game starts with 0 points.",
-                "Buy Upgrade must do nothing with insufficient funds.",
-                "Click the main button 10 times, then buy once: Score returns to 0, ClickPower becomes 2, and UpgradeCost becomes 20.",
-                "Click the main button once more: Score becomes 2.",
-                "Restart Play for a clean test."
+                "Press Buy Upgrade when Score=0; nothing should be bought.",
+                "Click the main ClickerButton TEN times; Score should read 10.",
+                "Click Buy Upgrade ONCE. Score should become 0, ClickPower=2, UpgradeCost=20.",
+                "Click the main button once more; Score should become 2.",
+                "Stop Play; if Score rises twice per click, remove the duplicate click handler."
               ]
             }
           ],
@@ -2423,12 +2442,13 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "widget"
               ],
               "actions": [
-                "Open ClickerGameUI Widget → Designer.",
-                "In your original ClickerGameUI Widget Designer, KEEP the original ScoreText.",
-                "Do not add a second one.",
-                "Add PowerText and CostText as new Text widgets and tick Is Variable on all three.",
-                "Set placeholder values \"Points: 0\", \"Per click: 1\", \"Next upgrade: 10\".",
-                "Leave ClickerButton and BuyUpgradeButton unchanged."
+                "Open ClickerGameUI → Designer.",
+                "Select the ORIGINAL ScoreText; DO NOT create another ScoreText.",
+                "From Palette add Text widget named PowerText.",
+                "Add another Text widget named CostText.",
+                "Tick Is Variable on ScoreText, PowerText and CostText.",
+                "Set placeholder text: ScoreText 'Points: 0', PowerText 'Per click: 1', CostText 'Next upgrade: 10'.",
+                "Keep ClickerButton and BuyUpgradeButton in place. Compile and Save."
               ]
             },
             {
@@ -2442,10 +2462,13 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "cast"
               ],
               "actions": [
-                "Open ClickerGameUI Widget → Graph → My Blueprint → Functions → +.",
-                "Create a function named RefreshShop.",
-                "Add Get Game Mode, connect its Return Value to Cast To BP_ClickerGameMode, then connect the purple function Entry white execution pin to the Cast.",
-                "Compile the widget."
+                "Open ClickerGameUI → Graph → My Blueprint → Functions → +.",
+                "Create FUNCTION RefreshShop and open it.",
+                "From its purple Function Entry WHITE add Cast To BP_ClickerGameMode.",
+                "Right-click empty graph → Get Game Mode.",
+                "Connect Get Game Mode's BLUE Return Value → Cast Object.",
+                "Connect Function Entry WHITE → Cast WHITE input.",
+                "Keep Cast Success WHITE output ready for next task. Compile."
               ]
             },
             {
@@ -2459,11 +2482,14 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "widget"
               ],
               "actions": [
-                "Open ClickerGameUI → RefreshShop function, after the successful cast.",
-                "Get Score from the BP_ClickerGameMode cast result.",
-                "Add Format Text, set Format to \"Points: {Number}\", and connect Score to the Number pin (allow integer-to-text conversion).",
-                "Drag the ORIGINAL ScoreText widget into the graph as Get; from it add Set Text (Text).",
-                "Connect Format Text to In Text and the Cast success white execution output to Set Text."
+                "Open ClickerGameUI → RefreshShop FUNCTION.",
+                "Drag from Cast's BLUE As BP_ClickerGameMode reference → Get Score.",
+                "Right-click and create Format Text. Set Format to Points: {Number}.",
+                "Connect Get Score green output → Format Text Number pin.",
+                "Drag ORIGINAL ScoreText Widget from Variables into graph as Get.",
+                "Drag from its BLUE reference and search Set Text (Text).",
+                "Connect Format Text output → Set Text's In Text.",
+                "Connect Cast Success WHITE output → Set Text WHITE input. Compile."
               ]
             },
             {
@@ -2477,11 +2503,14 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "get-set"
               ],
               "actions": [
-                "Open ClickerGameUI → RefreshShop, after ScoreText Set Text.",
-                "Add a Format Text for PowerText with \"Per click: {Number}\" from Get ClickPower, and another for CostText with \"Next upgrade: {Number}\" from Get UpgradeCost.",
-                "Call Set Text on each respective widget.",
-                "Chain the white execution wire ScoreText Set Text → PowerText Set Text → CostText Set Text.",
-                "Compile."
+                "Stay in ClickerGameUI → RefreshShop, after ScoreText Set Text.",
+                "From the GameMode Cast BLUE reference Get ClickPower and Get UpgradeCost.",
+                "Add Format Text: Per click: {Number}. Connect ClickPower to Number.",
+                "Drag PowerText Widget into graph as Get; from it add Set Text. Feed it the formatted text.",
+                "Add Format Text: Next upgrade: {Number}. Connect UpgradeCost to Number.",
+                "Drag CostText Widget into graph as Get; from it add Set Text. Feed it the formatted text.",
+                "Connect WHITE execution ScoreText Set Text → PowerText Set Text → CostText Set Text.",
+                "Compile and Save."
               ]
             },
             {
@@ -2494,12 +2523,13 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "refresh"
               ],
               "actions": [
-                "Open BP_ClickerGameMode → Event Graph → original event from Assign On Clicked for ClickerButton.",
-                "Keep the existing event → AddClick function.",
-                "Find the old call Get ClickerUI → SetScoreText(Score) that you kept in Upgrade 1.",
-                "Replace that call with Get ClickerUI → RefreshShop.",
-                "Compile the widget first so BP_ClickerGameMode can find RefreshShop.",
-                "Do NOT add OnClicked to ClickerButton in the widget."
+                "Open and Compile ClickerGameUI so RefreshShop is available to other Blueprints.",
+                "Open BP_ClickerGameMode → Event Graph → original ClickerButton assigned event.",
+                "Find CALL AddClick followed by Get ClickerUI → SetScoreText.",
+                "Remove ONLY the old SetScoreText call.",
+                "Drag from the saved BLUE ClickerUI reference and search CALL RefreshShop.",
+                "Connect AddClick WHITE output → RefreshShop WHITE input.",
+                "Keep Assign On Clicked for the original main button intact. Compile and Save."
               ]
             },
             {
@@ -2512,10 +2542,11 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "refresh"
               ],
               "actions": [
-                "Open ClickerGameUI Widget → BuyUpgradeButton OnClicked event.",
-                "Inside the existing BuyUpgradeButton OnClicked event in ClickerGameUI, after BuyUpgrade replace the older call to SetScoreText with RefreshShop (on Self).",
-                "RefreshShop must run whether the purchase is accepted or rejected.",
-                "Compile."
+                "Open ClickerGameUI → Event Graph → BuyUpgradeButton OnClicked.",
+                "Find the Cast To BP_ClickerGameMode → BuyUpgrade chain.",
+                "Disconnect and remove its old SetScoreText call.",
+                "After BuyUpgrade WHITE output add CALL RefreshShop, Target=Self.",
+                "Compile and Save. RefreshShop also runs if the purchase is rejected."
               ]
             },
             {
@@ -2528,11 +2559,11 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "refresh"
               ],
               "actions": [
-                "Open ClickerGameUI Widget → Graph → Event Construct.",
-                "In ClickerGameUI Event Construct from the original tutorial, remove or disconnect the old hard-coded SetScoreText(0) call.",
-                "Connect Event Construct → RefreshShop instead.",
-                "Compile and Save.",
-                "The displayed starting values are now read from BP_ClickerGameMode."
+                "Open ClickerGameUI → Event Graph → Event Construct.",
+                "Find the old hard-coded SetScoreText(0) call from the starter tutorial.",
+                "Disconnect ONLY the old display call; keep any other Construct actions.",
+                "Connect Event Construct WHITE → CALL RefreshShop.",
+                "Compile and Play. The display must show Points 0, Per click 1 and Next upgrade 10 immediately."
               ]
             },
             {
@@ -2545,10 +2576,12 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "playtest"
               ],
               "actions": [
-                "Open ClickerGameUI Widget → Designer → Screen Size preview.",
-                "Try a smaller viewport.",
-                "Adjust anchors and layout so all text and buttons are visible.",
-                "Then run Play In Editor at a different window size."
+                "Open ClickerGameUI → Designer.",
+                "Change the Screen Size preview to a smaller viewport preset.",
+                "Move PowerText, CostText and the two buttons so none overlap.",
+                "Use a Vertical Box or Anchors if needed; DO NOT delete or rename any existing Widgets.",
+                "Compile and Save. Press Play in a small window and test both buttons.",
+                "Return to normal window size and check it still fits."
               ]
             }
           ],
