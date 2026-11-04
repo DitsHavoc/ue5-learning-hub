@@ -2272,13 +2272,17 @@ window.UE5_MINI_UPGRADE_DATA = {
               ],
               "actions": [
                 "Open BP_ClickerGameMode → My Blueprint → Functions → +.",
-                "Name the FUNCTION BuyUpgrade and open it.",
-                "Add Branch and wire Function Entry WHITE output to Branch WHITE input.",
-                "Drag Score and UpgradeCost as Get; compare with Integer >= Integer.",
-                "Connect the >= result to Branch Condition.",
-                "Branch TRUE → Set Score, with value Get Score - Get UpgradeCost.",
-                "From Set Score WHITE output → Set ClickPower, value Get ClickPower + 1.",
-                "From Set ClickPower WHITE output → Set UpgradeCost, value Get UpgradeCost × 2.",
+                "Name the new FUNCTION BuyUpgrade and double-click it.",
+                "Right-click in the Function graph → Branch. Connect the purple Function Entry WHITE output to Branch WHITE input.",
+                "Drag Score VARIABLE into the graph as Get; drag UpgradeCost in as Get.",
+                "Drag from Get Score's GREEN pin → add >= (Integer). Connect UpgradeCost to its second input.",
+                "Connect the comparison's RED result to Branch Condition.",
+                "Drag Score in again as Set. For its value, connect Get Score → - (Integer) → Get UpgradeCost.",
+                "Connect Branch TRUE WHITE output → Set Score WHITE input.",
+                "Drag ClickPower in as Get, add + (Integer) with second input 1; connect result to Set ClickPower value.",
+                "Connect Set Score WHITE output → Set ClickPower WHITE input.",
+                "Get UpgradeCost → × (Integer), second input 2; connect result to Set UpgradeCost value.",
+                "Connect Set ClickPower WHITE output → Set UpgradeCost WHITE input.",
                 "Leave Branch FALSE unconnected. Compile and Save."
               ]
             },
@@ -2311,14 +2315,15 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "get-set"
               ],
               "actions": [
-                "Open ClickerGameUI → Designer and select BuyUpgradeButton.",
-                "In Details → Events click + beside OnClicked.",
-                "From the new OnClicked WHITE output add Cast To BP_ClickerGameMode.",
-                "Add Get Game Mode and connect its blue Return Value to Cast Object.",
-                "From Cast Success WHITE output call BuyUpgrade on the blue GameMode reference.",
-                "After BuyUpgrade call SetScoreText on Self, the existing Widget.",
-                "Read Score from that same GameMode reference and connect to SetScoreText → Score.",
-                "Compile and Save. Do not create an OnClicked event on the original ClickerButton."
+                "Open ClickerGameUI → Designer and select the NEW BuyUpgradeButton (not the main ClickerButton).",
+                "In Details → Events click + beside OnClicked to create a new button event.",
+                "Open the Widget's Event Graph. From BuyUpgradeButton OnClicked WHITE output add Cast To BP_ClickerGameMode.",
+                "Add Get Game Mode. Connect its BLUE Return Value to Cast → Object.",
+                "Drag from Cast's BLUE As BP_ClickerGameMode output and search Call BuyUpgrade.",
+                "Connect Cast Success WHITE output → BuyUpgrade WHITE input.",
+                "After BuyUpgrade WHITE output call SetScoreText on Self (the current ClickerGameUI Widget).",
+                "From that same BLUE GameMode reference drag Get Score, then connect Score to SetScoreText's green Score INPUT PIN.",
+                "Compile and Save. Keep the existing main ClickerButton binding in BP_ClickerGameMode unchanged."
               ]
             },
             {
@@ -2432,11 +2437,13 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "cast"
               ],
               "actions": [
-                "Open ClickerGameUI → Graph → My Blueprint → Functions → +.",
-                "Name the FUNCTION RefreshShop and open it.",
-                "From its purple Entry WHITE output add Cast To BP_ClickerGameMode.",
-                "Add Get Game Mode and connect its blue Return Value to Cast Object.",
-                "Connect Entry WHITE to Cast WHITE input. Compile."
+                "Open the EXISTING ClickerGameUI Widget Blueprint → Graph.",
+                "Under My Blueprint → Functions click +; name the new FUNCTION RefreshShop.",
+                "Double-click RefreshShop. In its Function graph add Cast To BP_ClickerGameMode.",
+                "Right-click → Get Game Mode. Connect Get Game Mode BLUE Return Value to Cast → Object.",
+                "Connect purple Function Entry WHITE execution output → Cast WHITE input.",
+                "Keep Cast Success WHITE output free; the next task adds the text changes there.",
+                "Click Compile and Save. RefreshShop is a Function, NOT a variable."
               ]
             },
             {
@@ -2450,11 +2457,14 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "widget"
               ],
               "actions": [
-                "In ClickerGameUI → RefreshShop, drag from the blue As BP_ClickerGameMode output and Get Score.",
-                "Add Format Text with format Points: {Number}. Connect Score to Number.",
-                "Drag ScoreText into graph as Get. From it add Set Text (Text).",
-                "Connect the Format Text output to Set Text → In Text.",
-                "Connect Cast Success WHITE output to Set Text WHITE input. Compile."
+                "Open ClickerGameUI → Functions → RefreshShop.",
+                "Find the Cast To BP_ClickerGameMode from the previous task.",
+                "From its BLUE As BP_ClickerGameMode reference drag and choose Get Score.",
+                "Right-click → Format Text. Type Points: {Number} in the Format field.",
+                "Connect Get Score (GREEN Integer) to Format Text's Number input.",
+                "Drag the existing ScoreText TEXT WIDGET from My Blueprint → Variables into the graph as Get.",
+                "From ScoreText's BLUE widget reference drag → Set Text (Text). Connect Format Text output to Set Text → In Text.",
+                "Connect Cast Success WHITE output → Set Text WHITE input. Compile and Save."
               ]
             },
             {
@@ -2468,13 +2478,15 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "get-set"
               ],
               "actions": [
-                "Stay in ClickerGameUI → RefreshShop after ScoreText Set Text.",
-                "From the same GameMode cast reference, Get ClickPower; use Format Text: Per click: {Number}.",
-                "Drag PowerText into graph as Get → Set Text. Connect the formatted Text.",
-                "From the GameMode cast, Get UpgradeCost; use Format Text: Next upgrade: {Number}.",
-                "Drag CostText in as Get → Set Text. Connect formatted Text.",
-                "Wire WHITE execution ScoreText Set Text → PowerText Set Text → CostText Set Text.",
-                "Compile and Save."
+                "Stay in ClickerGameUI → RefreshShop after the existing ScoreText → Set Text.",
+                "From the same BLUE GameMode cast reference choose Get ClickPower.",
+                "Add Format Text with format Per click: {Number}. Connect ClickPower to its Number input.",
+                "Drag the existing PowerText widget into the graph as Get. Drag from its BLUE pin → Set Text.",
+                "Connect Format Text output → PowerText Set Text → In Text.",
+                "From the GameMode cast reference Get UpgradeCost; add Format Text: Next upgrade: {Number}.",
+                "Drag the CostText widget into the graph as Get and add Set Text. Connect the cost's formatted Text to its In Text.",
+                "Connect WHITE execution ScoreText Set Text → PowerText Set Text → CostText Set Text.",
+                "Compile and Save; do not create another refresh Function."
               ]
             },
             {
@@ -2649,11 +2661,14 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "math"
               ],
               "actions": [
-                "Stay in BP_ClickerGameMode → GainPoints.",
-                "Drag from the purple Entry's Amount green pin and add Integer > Integer, with other input 0.",
-                "Add Branch and connect Entry WHITE output to its WHITE input.",
-                "Connect the > Boolean result to Branch Condition.",
-                "Leave Branch FALSE empty. Continue from TRUE."
+                "Open BP_ClickerGameMode → My Blueprint → Functions → GainPoints.",
+                "On the purple GainPoints Entry node find the GREEN Integer INPUT called Amount.",
+                "Drag from Amount → add > (Integer). Type 0 in the second input.",
+                "Right-click empty space → Branch.",
+                "Connect purple Function Entry WHITE output → Branch WHITE input.",
+                "Connect Integer > RED output → Branch Condition.",
+                "Leave Branch FALSE empty. The TRUE path will add points in the next task.",
+                "Compile and Save."
               ]
             },
             {
@@ -2667,11 +2682,16 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "get-set"
               ],
               "actions": [
-                "From GainPoints Branch TRUE add Set Score.",
-                "For its green value pin use Get Score → Integer + Integer, connecting Amount to the other input.",
-                "After Set Score WHITE output add Set TotalEarned.",
-                "For its value use Get TotalEarned → Integer + Integer with Amount as the other input.",
-                "Connect both WHITE Set nodes in order. Compile and Save."
+                "Stay in BP_ClickerGameMode → GainPoints. Find the Branch TRUE output from the previous task.",
+                "Drag Score VARIABLE into the graph as Get and add + (Integer).",
+                "Connect the purple Function Entry's GREEN Amount INPUT PIN to the other + input.",
+                "Drag Score VARIABLE into the graph again as Set; connect + result to Set Score GREEN value pin.",
+                "Connect Branch TRUE WHITE output → Set Score WHITE input.",
+                "Drag TotalEarned VARIABLE in as Get; from its green pin add another + (Integer).",
+                "Connect the SAME Amount input pin to the new + second input.",
+                "Drag TotalEarned in again as Set; connect + result to Set TotalEarned GREEN value pin.",
+                "Connect Set Score WHITE output → Set TotalEarned WHITE input.",
+                "Compile and Save. Spendable Score and lifetime TotalEarned now both increase."
               ]
             },
             {
@@ -2703,12 +2723,17 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "branch"
               ],
               "actions": [
-                "Open BP_ClickerGameMode → Functions → + and name the FUNCTION BuyGranny.",
-                "Open BuyGranny. Add Branch, Entry WHITE → Branch WHITE.",
-                "Condition: Get Score >= Get GrannyCost (Integer comparison).",
-                "Branch TRUE → Set Score, value Get Score - Get GrannyCost.",
-                "Next WHITE → Set GranniesOwned, value Get GranniesOwned + 1.",
-                "Next WHITE → Set GrannyCost, value Ceil to Integer(Get GrannyCost × 1.25).",
+                "Open BP_ClickerGameMode → My Blueprint → Functions → +.",
+                "Name the FUNCTION BuyGranny and double-click it.",
+                "Add Branch; connect purple Function Entry WHITE output to Branch WHITE input.",
+                "Drag Score as Get and GrannyCost as Get. From Get Score add >= (Integer), connecting GrannyCost to the other input.",
+                "Connect comparison RED output to Branch Condition.",
+                "Drag Score in as Set. For value: Get Score → - (Integer) → Get GrannyCost.",
+                "Connect Branch TRUE WHITE output → Set Score WHITE input.",
+                "Drag GranniesOwned as Get; from it add + (Integer) with 1. Connect result to Set GranniesOwned value.",
+                "Connect Set Score WHITE output → Set GranniesOwned WHITE input.",
+                "Drag GrannyCost as Get; add × (Float) with 1.25 then Ceil to Integer, feeding a Set GrannyCost node.",
+                "Connect Set GranniesOwned WHITE output → Set GrannyCost WHITE input.",
                 "Leave Branch FALSE empty. Compile and Save."
               ]
             },
@@ -2724,10 +2749,11 @@ window.UE5_MINI_UPGRADE_DATA = {
               ],
               "actions": [
                 "Open BP_ClickerGameMode → My Blueprint → Functions → +.",
-                "Name the FUNCTION GetProductionPerSecond and open it.",
-                "Select the FUNCTION under My Blueprint and tick Pure in Details.",
-                "Details → Outputs → +. Name the OUTPUT PIN Production and choose Integer.",
-                "Compile. Production is a return pin, not a Blueprint variable."
+                "Name the FUNCTION GetProductionPerSecond and double-click it.",
+                "Click the GetProductionPerSecond Function NAME under My Blueprint (not an unrelated graph node).",
+                "In Details tick the Pure checkbox so the Function has no WHITE execution pins when called.",
+                "In Details → Outputs click +. Name the OUTPUT PIN Production and choose Integer.",
+                "Compile and Save. Production is an output pin on this Function, not a Blueprint VARIABLE."
               ]
             },
             {
@@ -2797,12 +2823,16 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "get-set"
               ],
               "actions": [
-                "Open ClickerGameUI → Graph → RefreshShop.",
-                "Find the existing final CostText Set Text node; keep its WHITE output.",
-                "From the blue GameMode cast read GranniesOwned and GrannyCost.",
-                "Use Format Text Grannies: {Owned} | Next: {Cost} → Set Text on GranniesText.",
-                "From the blue GameMode cast call GetProductionPerSecond; use Format Text Auto: {Rate} / sec → Set Text on PassiveIncomeText.",
-                "Get TotalEarned; use Format Text Lifetime: {Earned} → Set Text on LifetimeText.",
+                "Open ClickerGameUI → My Blueprint → Functions → RefreshShop.",
+                "Find the last existing CostText → Set Text node. Keep its WHITE output connected to the new labels.",
+                "From the existing Cast To BP_ClickerGameMode BLUE reference, Get GranniesOwned and Get GrannyCost.",
+                "Add Format Text: Grannies: {Owned} | Next: {Cost}. Plug both Integer values into the matching green inputs.",
+                "Drag the GranniesText TEXT WIDGET into graph as Get, drag from its BLUE pin and add Set Text; connect formatted Text to In Text.",
+                "From the same BLUE GameMode reference call the PURE GetProductionPerSecond Function.",
+                "Add Format Text: Auto: {Rate} / sec. Feed its Rate from GetProductionPerSecond → Production.",
+                "Drag PassiveIncomeText widget as Get and add Set Text. Connect Auto formatted Text to In Text.",
+                "Get TotalEarned from the GameMode reference. Add Format Text: Lifetime: {Earned}.",
+                "Drag LifetimeText widget as Get and add Set Text. Connect the lifetime formatted Text to In Text.",
                 "Wire WHITE execution CostText Set Text → GranniesText Set Text → PassiveIncomeText Set Text → LifetimeText Set Text.",
                 "Compile and Save."
               ]
@@ -2852,12 +2882,16 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "timer"
               ],
               "actions": [
-                "Open BP_ClickerGameMode → Event Graph → Event BeginPlay.",
-                "Add Sequence after BeginPlay. Then 0 → the ORIGINAL Create Widget → Add to Viewport → Set ClickerUI → Assign On Clicked chain.",
-                "Sequence Then 1 → Set Timer by Event, Time=1.0, Looping=true.",
-                "Connect the Timer's red Event delegate to Create Event → ProduceIncome.",
-                "Compile and Play. AUTO TICK should print once per second.",
-                "Stop and remove only that temporary Print String."
+                "Open BP_ClickerGameMode → Event Graph and find the EXISTING Event BeginPlay.",
+                "Keep the original Widget setup: Create Widget(ClickerGameUI) → Add to Viewport → Set ClickerUI → Assign On Clicked.",
+                "Right-click and add a Sequence node after Event BeginPlay.",
+                "Connect BeginPlay WHITE output → Sequence WHITE input.",
+                "Connect Sequence Then 0 WHITE output → your ORIGINAL Create Widget chain.",
+                "From Sequence Then 1 WHITE output add Set Timer by Event.",
+                "Set Time=1.0 and tick Looping=true.",
+                "Drag from the Timer's RED Event delegate pin → Create Event and choose the existing RED Custom Event ProduceIncome.",
+                "Compile and Save. Press Play and confirm the temporary AUTO TICK prints once a second.",
+                "Stop Play and remove only the temporary Print String inside ProduceIncome, not the Event itself."
               ]
             },
             {
@@ -2870,12 +2904,13 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "refresh"
               ],
               "actions": [
-                "Open BP_ClickerGameMode → Event Graph → ProduceIncome.",
-                "From the Custom Event WHITE output call GainPoints.",
-                "Place a call to the PURE Function GetProductionPerSecond.",
-                "Connect GetProductionPerSecond → Production to GainPoints → Amount.",
-                "Compile, Save, Play. Buy a Granny, then stop clicking.",
-                "Confirm Score and TotalEarned increase once per second."
+                "Open BP_ClickerGameMode → Event Graph → RED Custom Event ProduceIncome.",
+                "From ProduceIncome WHITE output add Call GainPoints (the existing FUNCTION from this upgrade).",
+                "Right-click and search GetProductionPerSecond; select the PURE Function, not a new Custom Event.",
+                "Connect its GREEN Production output to GainPoints's GREEN Amount INPUT PIN.",
+                "Compile and Save.",
+                "Play: buy one Granny, then stop clicking. Score and TotalEarned should increase by 1 each second.",
+                "Do not create a second income timer; Event BeginPlay already starts it once."
               ]
             },
             {
@@ -3055,13 +3090,17 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "branch"
               ],
               "actions": [
-                "Open BP_ClickerGameMode → Functions → +. Name the FUNCTION TrainGrannies.",
-                "Open it. Add Branch; purple Entry WHITE → Branch WHITE.",
-                "Condition: (Get Score >= Get GrannyTrainingCost) AND (Get GranniesOwned > 0).",
-                "Branch TRUE → Set Score, value Get Score - Get GrannyTrainingCost.",
-                "Then Set GrannyRate, value Get GrannyRate × 2.",
-                "Then Set GrannyTrainingCost, value Get GrannyTrainingCost × 2.",
-                "Connect the three Set nodes' WHITE pins in order. Compile and Save."
+                "Open BP_ClickerGameMode → My Blueprint → Functions → +.",
+                "Name the new FUNCTION TrainGrannies; double-click it.",
+                "Add Branch and connect purple Function Entry WHITE output → Branch WHITE input.",
+                "Drag Score and GrannyTrainingCost into graph as Get; add >= (Integer) to compare Score >= GrannyTrainingCost.",
+                "Drag GranniesOwned as Get; add > (Integer) with other input 0.",
+                "Add AND Boolean, connect both comparison RED outputs and connect AND RED result to Branch Condition.",
+                "Drag Score as Set. For its new value use Get Score → - (Integer) → Get GrannyTrainingCost.",
+                "Connect Branch TRUE WHITE output → Set Score WHITE input.",
+                "Get GrannyRate → × (Integer), second input 2 → Set GrannyRate. Connect Set Score WHITE output → Set GrannyRate WHITE input.",
+                "Get GrannyTrainingCost → × (Integer), second input 2 → Set GrannyTrainingCost. Connect Set GrannyRate WHITE output → Set GrannyTrainingCost WHITE input.",
+                "Leave Branch FALSE unconnected. Compile and Save."
               ]
             },
             {
@@ -3111,13 +3150,16 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "binding"
               ],
               "actions": [
-                "Open ClickerGameUI → Graph → RefreshShop Function.",
-                "Find the last existing WHITE Set Text node (LifetimeText).",
-                "From blue BP_ClickerGameMode cast reference read GrannyRate and GrannyTrainingCost.",
-                "Use Format Text Each Granny: {Rate}/sec | Train: {Cost}, feeding both integers.",
-                "Drag TrainingInfoText as Get, create Set Text and connect the Format Text output.",
-                "Wire previous Set Text WHITE output → TrainingInfoText Set Text WHITE input.",
-                "Keep PassiveIncomeText using GetProductionPerSecond. Compile and Save."
+                "Open ClickerGameUI → Graph → My Blueprint → Functions → RefreshShop.",
+                "Find the final Set Text node from the Granny expansion (LifetimeText).",
+                "Find the existing BP_ClickerGameMode Cast. From its BLUE output Get GrannyRate.",
+                "From that same BLUE output Get GrannyTrainingCost.",
+                "Add Format Text and type Each Granny: {Rate}/sec | Train: {Cost}.",
+                "Connect GrannyRate to Rate and GrannyTrainingCost to Cost on Format Text.",
+                "Drag TrainingInfoText TEXT WIDGET into graph as Get, then from its BLUE pin add Set Text.",
+                "Connect formatted Text to Set Text → In Text.",
+                "Connect LifetimeText Set Text WHITE output → TrainingInfoText Set Text WHITE input.",
+                "Compile and Save. Do not change the PassiveIncomeText calculation."
               ]
             },
             {
@@ -3205,13 +3247,16 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "get-set"
               ],
               "actions": [
-                "Open BP_ClickerGameMode → GainPoints Function.",
-                "Locate Set TotalEarned in its TRUE path.",
-                "After that Set's WHITE output add Branch.",
-                "Condition: NOT Get MilestoneReached AND (Get TotalEarned >= Get MilestoneTarget).",
-                "Branch TRUE → Set MilestoneReached(true).",
-                "Optionally add Print String 500 earned! after Set.",
-                "Leave Branch FALSE empty. Compile and Save."
+                "Open BP_ClickerGameMode → Functions → GainPoints.",
+                "Find the existing Set TotalEarned on the TRUE path.",
+                "Drag from Set TotalEarned WHITE output → add Branch.",
+                "Drag MilestoneReached in as Get, then add NOT Boolean.",
+                "Drag TotalEarned and MilestoneTarget in as Get, compare them with >= (Integer).",
+                "Connect NOT MilestoneReached and the >= comparison to AND Boolean.",
+                "Connect AND's RED output to Branch Condition.",
+                "From Branch TRUE WHITE output add Set MilestoneReached and tick its new value TRUE.",
+                "Optionally add Print String: 500 earned! from that Set WHITE output.",
+                "Leave Branch FALSE unconnected. Compile and Save. Keep GainPoints as the only place that updates TotalEarned."
               ]
             },
             {
@@ -3241,13 +3286,15 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "refresh"
               ],
               "actions": [
-                "Open ClickerGameUI → Graph → RefreshShop Function.",
-                "Find its final WHITE Set Text node (TrainingInfoText if training is complete).",
-                "From blue GameMode cast reference read MilestoneReached.",
-                "After the last Set Text add Branch, Condition=MilestoneReached.",
-                "Branch TRUE → Set Visibility(MilestoneText,Visible).",
-                "Branch FALSE → Set Visibility(MilestoneText,Collapsed).",
-                "Compile and Save. Do not make another timer."
+                "Open ClickerGameUI → Functions → RefreshShop.",
+                "Find the last existing Set Text in its WHITE execution chain (TrainingInfoText if you completed Training).",
+                "From the existing BLUE BP_ClickerGameMode cast result get MilestoneReached Boolean.",
+                "Drag from the final Set Text WHITE output and add Branch.",
+                "Connect Get MilestoneReached RED output → Branch Condition.",
+                "Drag MilestoneText TEXT WIDGET into the graph as Get.",
+                "Branch TRUE WHITE output → Set Visibility(Target=MilestoneText, Visibility=Visible).",
+                "Branch FALSE WHITE output → another Set Visibility(Target=MilestoneText, Visibility=Collapsed).",
+                "Compile and Save. Do not add another timer, Widget or Event Construct."
               ]
             },
             {
@@ -3332,14 +3379,16 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "branch"
               ],
               "actions": [
-                "Open BP_ClickerGameMode → Functions → +. Name the FUNCTION BuyFarm.",
-                "Open it. Add Branch; connect purple Entry WHITE to Branch WHITE.",
-                "Condition: Get Score >= Get FarmCost.",
-                "Branch TRUE → Set Score=Get Score - Get FarmCost.",
-                "Then Set FarmsOwned=Get FarmsOwned + 1.",
-                "Then Set FarmCost=Ceil to Integer(Get FarmCost × 1.30).",
-                "Connect the Set nodes' WHITE outputs in order; leave Branch FALSE empty.",
-                "Compile and Save."
+                "Open BP_ClickerGameMode → My Blueprint → Functions → +.",
+                "Name the FUNCTION BuyFarm and double-click it.",
+                "Add Branch and connect purple Function Entry WHITE output → Branch WHITE input.",
+                "Drag Score and FarmCost in as Get; compare with >= (Integer) and connect RED result to Branch Condition.",
+                "On Branch TRUE add Set Score, value from Get Score → - (Integer) → Get FarmCost.",
+                "After Set Score WHITE output add Set FarmsOwned, value Get FarmsOwned → + (Integer) → 1.",
+                "After Set FarmsOwned WHITE output add Set FarmCost.",
+                "For Set FarmCost value, Get FarmCost → × (Float), other input 1.30 → Ceil to Integer.",
+                "Connect Ceil to Integer to Set FarmCost GREEN value pin.",
+                "Leave Branch FALSE unconnected. Compile and Save."
               ]
             },
             {
@@ -3353,13 +3402,14 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "math"
               ],
               "actions": [
-                "Open BP_ClickerGameMode → Function GetProductionPerSecond.",
-                "Keep the original Get GranniesOwned × Get GrannyRate node chain.",
-                "Drag FarmsOwned and FarmRate in as Get.",
-                "Multiply FarmsOwned × FarmRate with Integer × Integer.",
-                "Add the result to GranniesOwned × GrannyRate using Integer + Integer.",
-                "Connect the new sum to the existing Return Node → Production.",
-                "Compile and Save. Do not create another income timer."
+                "Open BP_ClickerGameMode → Functions → GetProductionPerSecond (the existing PURE Function).",
+                "Find the original Get GranniesOwned × Get GrannyRate (Integer Multiply) and its connection to Return Node → Production.",
+                "Leave the Granny multiplication in place, but disconnect only its GREEN wire from the Return Node.",
+                "Drag FarmsOwned VARIABLE into the graph as Get and FarmRate in as Get.",
+                "From Get FarmsOwned add × (Integer); connect FarmRate to its second input.",
+                "Add + (Integer) and connect Granny multiplication result to the first input and Farm multiplication result to the second.",
+                "Connect the + output to Return Node → Production (Integer).",
+                "Compile and Save. Do NOT create another 1-second timer; the old one already calls this Function."
               ]
             },
             {
@@ -3389,14 +3439,19 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "binding"
               ],
               "actions": [
-                "Open ClickerGameUI → Designer → BuyFarmButton → Details → Events → OnClicked +.",
-                "From OnClicked WHITE output add Get Game Mode → Cast To BP_ClickerGameMode.",
-                "From Cast Success WHITE call BuyFarm on the blue GameMode reference.",
-                "After BuyFarm call RefreshShop on Self.",
-                "Open the existing RefreshShop Function; find the previous last Set Text in its WHITE chain.",
-                "From blue GameMode reference Get FarmsOwned and FarmCost.",
-                "Use Format Text Farms: {Owned} | Next: {Cost}, then Set Text on FarmInfoText.",
-                "Wire its WHITE input after the existing last Set Text node. Compile and Save."
+                "Open ClickerGameUI → Designer and select the EXISTING BuyFarmButton.",
+                "In Details → Events click + beside OnClicked.",
+                "From BuyFarmButton OnClicked WHITE output add Cast To BP_ClickerGameMode.",
+                "Add Get Game Mode and connect its BLUE Return Value to Cast Object.",
+                "From Cast BLUE As BP_ClickerGameMode reference choose Call BuyFarm.",
+                "Connect Cast Success WHITE output → BuyFarm WHITE input.",
+                "After BuyFarm WHITE output call RefreshShop on Self.",
+                "Now open ClickerGameUI → Functions → RefreshShop and find its last existing Set Text.",
+                "From the existing GameMode Cast BLUE reference Get FarmsOwned and Get FarmCost.",
+                "Add Format Text: Farms: {Owned} | Next: {Cost}; connect the two Integer values.",
+                "Drag the FarmInfoText TEXT WIDGET into graph as Get; from its BLUE pin add Set Text and feed the formatted Text.",
+                "Connect the old final Set Text WHITE output → FarmInfoText Set Text WHITE input.",
+                "Compile and Save; keep the existing 0.25-second HUD refresh timer."
               ]
             },
             {
