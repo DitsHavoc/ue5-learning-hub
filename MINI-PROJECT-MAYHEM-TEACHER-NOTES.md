@@ -146,7 +146,7 @@ Student and teacher feedback found the previous expansion presentation overwhelm
 
 ## 4 November — complete literal instructions pass for Bowling, Clicker and Rising Defence
 
-Following student/teacher feedback, this pass **finishes** the one-task-at-a-time rewrite started in PR #37. All **141 tasks / 922 direct actions** across Bowling (44 tasks/284 actions), Clicker (52/310) and Rising Defence (45/329) now give literal Unreal editor operations, exact Blueprint names, Variable/Function/Event/Input Pin distinctions, values and WHITE pin order, not paraphrased logic. Balloon Popper's 45-task detailed rewrite is retained unchanged.
+Following student/teacher feedback, this pass **finishes** the one-task-at-a-time rewrite started in PR #37. All **141 tasks / 923 direct actions** across Bowling (44 tasks/284 actions), Clicker (52/310) and Rising Defence (45/329) now give literal Unreal editor operations, exact Blueprint names, Variable/Function/Event/Input Pin distinctions, values and WHITE pin order, not paraphrased logic. Balloon Popper's 45-task detailed rewrite is retained unchanged.
 
 The student page layout still shows a single task, numbered actions, Back and Next task. Existing stage completion keys, independent Minesweeper and all sixteen original Mini-Project starter tutorials are untouched. Critical examples: Bowling RecordPin Score Print String → final-pins Branch uses a single valid WHITE path; Clicker's original bound main-button event is reused rather than adding a duplicate OnClicked; Rising Defence creates Finished before the growth Blueprint reads it, and keeps one assigned PlayerController and one fire Mapping Context.
 
