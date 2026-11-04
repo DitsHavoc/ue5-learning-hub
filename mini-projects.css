@@ -184,3 +184,25 @@
 .mini-mines-rules li+li{margin-top:7px}
 .mini-mines-stage .mini-upgrade-step-names{max-width:100%}
 @media(max-width:700px){.mini-mines-promo{padding:16px}.mini-mines-promo .button{display:block;text-align:center}.mini-mines-promo h2{font-size:19px}}
+
+/* v3.67.3: uncomplicated one-task-at-a-time expansion walkthrough. */
+.mini-upgrade-plain{max-width:940px;margin-inline:auto}
+.mini-upgrade-plain .mini-plain-header{margin-bottom:16px;padding-bottom:15px}
+.mini-upgrade-plain .mini-plain-header h1{font-size:clamp(24px,3vw,32px);line-height:1.2;margin:6px 0}
+.mini-upgrade-plain .mini-plain-header p{line-height:1.55;max-width:65ch;margin:8px 0 0}
+.mini-upgrade-focus{background:#142637;border:1px solid #496479;border-radius:14px;padding:22px 24px;margin:16px 0}
+.mini-upgrade-task-top{display:flex;gap:12px;justify-content:space-between;align-items:center;font-size:13px;font-weight:700;color:#cbe3ef}
+.mini-upgrade-task-progress{height:5px;background:#2c4054;border-radius:6px;overflow:hidden;margin:12px 0 20px}
+.mini-upgrade-task-progress span{display:block;height:100%;background:#78c7d5;border-radius:inherit}
+.mini-upgrade-focus h2{font-size:21px;line-height:1.35;margin:4px 0 20px}
+.mini-upgrade-plain-actions{list-style:decimal;list-style-position:outside;margin:0;padding-left:27px;display:grid;gap:14px}
+.mini-upgrade-plain-actions li{font-size:16px;line-height:1.65;color:#f0f7fc;padding-left:6px;overflow-wrap:anywhere}
+.mini-upgrade-plain-actions li::marker{font-weight:700;color:#8ad8e7}
+.mini-upgrade-task-controls{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:25px;padding-top:18px;border-top:1px solid #354d60}
+.mini-upgrade-task-controls .button{min-width:135px;text-align:center}
+.mini-upgrade-end-label{color:#adddc4;font-weight:700}
+.mini-upgrade-final{background:#15332f;border:1px solid #4d8277;border-radius:13px;padding:20px 24px;margin:16px 0}
+.mini-upgrade-final h2{font-size:20px;margin:0 0 9px}.mini-upgrade-final p{line-height:1.65}.mini-upgrade-final .button{margin-top:8px}
+.mini-upgrade-stage-links{display:flex;flex-wrap:wrap;gap:18px;margin:18px 0 35px;font-size:13px}
+.mini-upgrade-stage-links a{color:#afe1f6;text-decoration:underline}
+@media(max-width:700px){.mini-upgrade-focus{padding:16px 17px}.mini-upgrade-plain-actions{gap:10px;padding-left:24px}.mini-upgrade-plain-actions li{font-size:15px;line-height:1.6}.mini-upgrade-task-top{font-size:12px}.mini-upgrade-task-controls .button{min-width:0;flex:1}.mini-upgrade-task-controls{position:sticky;bottom:8px;z-index:6;background:#142637;padding:14px 2px 6px;margin-top:20px}.mini-upgrade-final{padding:16px}}
