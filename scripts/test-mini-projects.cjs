@@ -61,30 +61,44 @@ async function run(){
       if(minesData?.stages?.length!==9||minesData.stages.reduce((n,s)=>n+s.steps.length,0)!==73)fail.push(device.name+': Minesweeper needs nine complete stages and 73 steps');
       if(await page.locator('#app .mini-upgrade-card').count()!==9)
         fail.push(device.name+': Minesweeper overview needs nine stage cards');
+      // Minesweeper is a single-task walkthrough, not the retired 73-open-accordion page.
+      await page.evaluate(()=>localStorage.removeItem('ue5hub:minesweeper-task:v1'));
       for(const st of minesData.stages){
         await page.goto(base+'/#/mini-projects/complete/minesweeper/'+st.id,{waitUntil:'load'});
-        await page.waitForSelector('.mini-upgrade-step',{timeout:10000});
+        await page.waitForSelector('.mini-upgrade-focus',{timeout:10000});
         const info=await page.evaluate(()=>({
           title:document.querySelector('#app h1')?.textContent,
-          steps:document.querySelectorAll('#app .mini-upgrade-step').length,
-          guides:document.querySelectorAll('#app .mini-upgrade-howto').length,
-          nameGuide:!!document.querySelector('#app .mini-upgrade-name-guide'),
-          fourRows:document.querySelectorAll('#app .mini-upgrade-step .mini-upgrade-instructions > p').length,
-          firstOpen:!!document.querySelector('#app .mini-upgrade-step')?.open,
-          hasFinal:!!document.querySelector('#app .mini-proof details'),
-          hasComplete:!!document.querySelector('#app [data-action="minesweeper-complete"]'),
+          task:document.querySelector('#app .mini-upgrade-task-top')?.textContent,
+          actions:document.querySelectorAll('#app .mini-upgrade-plain-actions > li').length,
+          next:!!document.querySelector('#app [data-action="minesweeper-task"][data-move="1"]'),
+          noOldAccordions:!document.querySelector('#app .mini-upgrade-steps,#app .mini-side-stages'),
           overflow:document.documentElement.scrollWidth>window.innerWidth+2
         }));
-        if(!info.title||info.steps!==st.steps.length||info.guides!==info.steps||!info.nameGuide||
-          info.fourRows!==info.steps*4||!info.firstOpen||!info.hasFinal||!info.hasComplete||info.overflow)
-          fail.push(device.name+' minesweeper/'+st.id+': tutorial broken '+JSON.stringify(info));
+        if(!info.title||!info.task?.includes('Task 1 of')||info.actions<2||!info.next||!info.noOldAccordions||info.overflow)
+          fail.push(device.name+' minesweeper/'+st.id+': simple task view incorrect '+JSON.stringify(info));
       }
+      // Next/Back position is separate from both existing stage completion and the original Mini-Projects.
       await page.goto(base+'/#/mini-projects/complete/minesweeper/setup',{waitUntil:'load'});
+      await page.locator('[data-action="minesweeper-task"][data-move="1"]').click();
+      if(!(await page.locator('.mini-upgrade-task-top').innerText()).includes('Task 2 of 8'))
+        fail.push(device.name+': Minesweeper Next task did not move forward');
+      await page.reload({waitUntil:'load'});
+      if(!(await page.locator('.mini-upgrade-task-top').innerText()).includes('Task 2 of 8'))
+        fail.push(device.name+': Minesweeper task position did not survive reload');
+      await page.locator('[data-action="minesweeper-task"][data-move="-1"]').click();
+      if(!(await page.locator('.mini-upgrade-task-top').innerText()).includes('Task 1 of 8'))
+        fail.push(device.name+': Minesweeper Back task did not move backward');
+      for(let i=1;i<8;i++){
+        await page.locator('[data-action="minesweeper-task"][data-move="1"]').click();
+      }
+      if((await page.locator('.mini-upgrade-task-top').innerText()).includes('Task 8 of 8')===false||
+         await page.locator('[data-action="minesweeper-complete"]').count()!==1)
+        fail.push(device.name+': Minesweeper final task must reveal stage completion');
       await page.locator('[data-action="minesweeper-complete"]').click();
       if(!(await page.evaluate(()=>JSON.parse(localStorage.getItem('ue5hub:minesweeper:v1')||'[]').includes('setup'))))
-        fail.push(device.name+': Minesweeper progress did not save');
+        fail.push(device.name+': Minesweeper stage progress did not save');
       if((await page.evaluate(()=>JSON.parse(localStorage.getItem('ue5hub:mini-projects:v1')||'[]'))).length)
-        fail.push(device.name+': Minesweeper changed the source tutorial progress');
+        fail.push(device.name+': Minesweeper changed original Mini-Project progress');
       await page.reload({waitUntil:'load'});
       if(!(await page.locator('[data-action="minesweeper-complete"]').innerText()).includes('Completed'))
         fail.push(device.name+': Minesweeper completion did not survive reload');
