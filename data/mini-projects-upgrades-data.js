@@ -3890,10 +3890,13 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "variable"
               ],
               "actions": [
-                "Open BP_RisingBlock → Variables.",
-                "In BP_RisingBlock → My Blueprint → Variables → +, create LaneIndex (Integer, default 0, Instance Editable and Expose on Spawn), CurrentHeight (Float, default 60), GrowthSpeed (Float, default 35) and MaxHeight (Float, default 450).",
-                "Compile so LaneIndex appears as a Spawn Actor input pin.",
-                "Keep the same cube with physics disabled."
+                "Open BP_RisingBlock → My Blueprint → Variables → +.",
+                "Create VARIABLE LaneIndex; type Integer, Compile, Default Value=0.",
+                "For LaneIndex tick Instance Editable AND Expose on Spawn; Compile again.",
+                "Create VARIABLE CurrentHeight; Float, Compile, Default Value=60.",
+                "Create VARIABLE GrowthSpeed; Float, Compile, Default Value=35.",
+                "Create VARIABLE MaxHeight; Float, Compile, Default Value=450.",
+                "Compile and Save BP_RisingBlock."
               ]
             },
             {
@@ -3907,10 +3910,17 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "math"
               ],
               "actions": [
-                "Open BP_RisingBlock → Function UpdateBlockVisual.",
-                "Create UpdateBlockVisual (no inputs).",
-                "On BlockMesh call Set Relative Scale 3D with Make Vector (X=1,Y=1,Z=CurrentHeight/100), then Set Relative Location with Make Vector(X=0,Y=0,Z=CurrentHeight/2); wire execution in that order.",
-                "The standard Cube mesh is 100cm tall; the Actor stays at spawn Z=0."
+                "Open BP_RisingBlock → My Blueprint → Functions → +.",
+                "Name the FUNCTION UpdateBlockVisual and open it.",
+                "Drag BlockMesh COMPONENT from Components into graph as Get.",
+                "From BlockMesh BLUE output add Set Relative Scale 3D.",
+                "Get CurrentHeight Float, divide by 100 (Float / Float).",
+                "Add Make Vector: X=1,Y=1,Z=CurrentHeight/100. Connect this Vector → Set Relative Scale 3D New Scale 3D.",
+                "Connect purple UpdateBlockVisual Function Entry WHITE → Set Relative Scale 3D WHITE.",
+                "After that WHITE output add Set Relative Location, Target=BlockMesh.",
+                "Create Make Vector: X=0,Y=0,Z=CurrentHeight/2 (Float / Float).",
+                "Connect it to Set Relative Location New Location, then connect Set Relative Scale WHITE → Set Relative Location WHITE.",
+                "Compile and Save. This keeps the bottom at Z=0 as the cube grows."
               ]
             },
             {
@@ -3925,15 +3935,17 @@ window.UE5_MINI_UPGRADE_DATA = {
               ],
               "actions": [
                 "Open BP_LoopsGameMode → My Blueprint → Variables → +.",
-                "Create the BOOLEAN VARIABLE Finished. Set Default Value=false, then Compile and Save.",
+                "Create BOOLEAN VARIABLE Finished. Compile, Default Value=false; Save.",
                 "Open BP_RisingBlock → Event Graph.",
-                "On Event BeginPlay call UpdateBlockVisual once.",
-                "On Event Tick add Get Game Mode → Cast To BP_LoopsGameMode (Object=Get Game Mode).",
-                "From the Cast blue As BP_LoopsGameMode pin Get Finished.",
-                "Connect NOT Finished to a Branch Condition. Connect Cast Success WHITE to the Branch WHITE input.",
-                "From Branch True set CurrentHeight=Min(MaxHeight, CurrentHeight + (Tick Delta Seconds × GrowthSpeed)).",
-                "After Set CurrentHeight WHITE output call UpdateBlockVisual.",
-                "Compile and Save BP_RisingBlock."
+                "Use Event BeginPlay → CALL UpdateBlockVisual ONCE.",
+                "Use Event Tick → Get Game Mode → Cast To BP_LoopsGameMode.",
+                "Connect Get Game Mode BLUE output → Cast Object, Tick WHITE → Cast WHITE.",
+                "From Cast BLUE output Get Finished; add NOT Boolean and Branch.",
+                "Connect Cast Success WHITE → Branch WHITE; NOT Finished → Branch Condition.",
+                "From Branch TRUE add Set CurrentHeight.",
+                "Build its value with Float maths: Get CurrentHeight + (Event Tick Delta Seconds * Get GrowthSpeed).",
+                "Feed addition into Min(Float), other Min input=Get MaxHeight; feed Min → Set CurrentHeight.",
+                "After Set CurrentHeight WHITE output CALL UpdateBlockVisual. Compile and Save."
               ]
             },
             {
@@ -3947,11 +3959,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               ],
               "actions": [
                 "Open LoopsLevel.",
-                "From Place Actors drag a CUBE into the level. Rename this PLACED ACTOR DangerLine.",
-                "Set its Location X=200, Y=0, Z=450.",
-                "Set its Scale X=0.1, Y=8, Z=0.05 to create a thin horizontal bar.",
-                "Give DangerLine a bright red Material so players can see the losing height.",
-                "In Details → Collision set Collision Presets=NoCollision, so the line does not block shooting.",
+                "Drag a built-in Cube from Place Actors into the level.",
+                "Rename this PLACED ACTOR DangerLine in World Outliner.",
+                "In Details → Transform set Location X=200, Y=0, Z=450.",
+                "Set Scale X=0.1,Y=8,Z=0.05 for a thin horizontal red bar.",
+                "Assign a bright red Material to its Static Mesh.",
+                "Set Details → Collision Presets=NoCollision so the shot ray can pass through it.",
                 "Save LoopsLevel."
               ]
             },
@@ -3966,12 +3979,14 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "custom-event"
               ],
               "actions": [
-                "Open BP_LoopsGameMode → Variables and Event BeginPlay.",
-                "Create FreeLanes as an Integer Array and SpawnTimerHandle as a TimerHandle.",
-                "In BeginPlay REPLACE the old five-cube For Loop exec input, but keep the old nodes unconnected until you test the new system.",
-                "Set FreeLanes using Make Array(0,1,2,3,4).",
-                "Make the new BeginPlay chain reach this Set first.",
-                "The original physics BP_Box remains a separate asset."
+                "Open BP_LoopsGameMode → Variables → +.",
+                "Create VARIABLE FreeLanes. Set element type Integer; click Array container icon. Compile.",
+                "Create VARIABLE SpawnTimerHandle; type Timer Handle. Compile.",
+                "Open BP_LoopsGameMode → Event Graph → EXISTING BeginPlay.",
+                "Find the original five-cube For Loop. Disconnect its WHITE execution input, but leave the old nodes in place for backup.",
+                "From BeginPlay WHITE output add Set FreeLanes.",
+                "Add Make Array with five Integer inputs 0,1,2,3,4 and connect to Set FreeLanes value.",
+                "Connect BeginPlay WHITE → Set FreeLanes WHITE input. Compile and Save."
               ]
             },
             {
@@ -3986,15 +4001,18 @@ window.UE5_MINI_UPGRADE_DATA = {
               ],
               "actions": [
                 "Open BP_LoopsGameMode → My Blueprint → Functions → +.",
-                "Name the new FUNCTION SpawnOneBlock.",
-                "In My Blueprint → Local Variables click + and create PickIndex (Integer).",
-                "Click + Local Variable again and create PickLane (Integer).",
-                "From the purple Function Entry WHITE pin add Branch.",
-                "To Branch Condition connect (NOT Finished) AND (Length of FreeLanes > 0).",
-                "From Branch True add Set PickIndex. Its value is Random Integer in Range, Min=0, Max=Length(FreeLanes)-1.",
-                "After Set PickIndex add Set PickLane. Its value is FreeLanes Get(Index=PickIndex).",
-                "After Set PickLane, add Remove Index on FreeLanes using PickIndex.",
-                "Keep these WHITE execution pins in order. Compile and Save."
+                "Create FUNCTION SpawnOneBlock and open it.",
+                "In My Blueprint → Local Variables click + and create PickIndex, type Integer.",
+                "Create another LOCAL VARIABLE PickLane, type Integer. Compile.",
+                "From purple Function Entry WHITE output add Branch.",
+                "Get Finished → NOT Boolean. Get FreeLanes → Length → > (Integer), other input 0.",
+                "Combine the two red booleans with AND Boolean → Branch Condition.",
+                "From Branch True WHITE add Set PickIndex.",
+                "Build PickIndex value with Random Integer in Range, Min=0, Max=Length(FreeLanes)-1.",
+                "Connect Random Integer result to Set PickIndex value.",
+                "After Set PickIndex WHITE output add Set PickLane; its value is Get FreeLanes[Get PickIndex] (Array Get).",
+                "After Set PickLane WHITE output add Remove Index (Array=FreeLanes; Index=Get PickIndex).",
+                "Compile and Save. Set PickLane BEFORE Remove Index so you don't lose the chosen lane."
               ]
             },
             {
@@ -4008,12 +4026,16 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "spawn"
               ],
               "actions": [
-                "Open BP_LoopsGameMode → SpawnOneBlock after Remove Index.",
-                "Continue white exec to Spawn Actor From Class(Class=BP_RisingBlock, Collision Handling Override=Always Spawn, Ignore Collisions).",
-                "Set Make Transform.Location = Make Vector(X=200,Y=(PickLane-2)*150,Z=0).",
-                "Feed PickLane into the exposed LaneIndex pin.",
-                "Leave rotation 0 and scale 1.",
-                "Compile."
+                "Stay in BP_LoopsGameMode → SpawnOneBlock after Remove Index.",
+                "After Remove Index WHITE output add Spawn Actor From Class.",
+                "Set Class=BP_RisingBlock and Collision Handling Override=Always Spawn, Ignore Collisions.",
+                "Use Make Transform for its Spawn Transform input.",
+                "On Make Transform Location use Make Vector X=200,Y=(Get PickLane - 2) * 150,Z=0.",
+                "Keep Rotation=(0,0,0), Scale=(1,1,1).",
+                "On Spawn Actor node locate exposed Integer input LaneIndex (Compile BP_RisingBlock first if missing).",
+                "Connect Get PickLane to Spawn Actor LaneIndex input.",
+                "Connect Remove Index WHITE output → Spawn Actor WHITE input.",
+                "Compile and Save."
               ]
             },
             {
@@ -4027,11 +4049,17 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "custom-event"
               ],
               "actions": [
-                "Open BP_LoopsGameMode → Event Graph → BeginPlay.",
-                "Make Custom Event SpawnTick → call SpawnOneBlock.",
-                "After BeginPlay sets FreeLanes, call SpawnOneBlock once (one initial threat), then Set Timer by Event(Time=1.5, Looping=true; Event delegate uses Create Event → SpawnTick).",
-                "Promote its Return Value to SpawnTimerHandle.",
-                "There must be only one repeating spawn timer, NOT a timer in each block."
+                "Open BP_LoopsGameMode → Event Graph.",
+                "Right-click empty space → Add Custom Event. Name it SpawnTick.",
+                "From SpawnTick WHITE output CALL the SpawnOneBlock FUNCTION.",
+                "Find BeginPlay → Set FreeLanes (from earlier).",
+                "After Set FreeLanes WHITE output CALL SpawnOneBlock once.",
+                "After that WHITE output add Set Timer by Event.",
+                "Set Time=1.5 and Looping=true.",
+                "From the Timer RED Event delegate pin choose Create Event → SpawnTick.",
+                "Connect Timer Return Value → Set SpawnTimerHandle.",
+                "Wire WHITE Set Timer output → Set SpawnTimerHandle WHITE input.",
+                "Compile and Save. The GameMode starts only ONE repeating spawn timer."
               ]
             },
             {
@@ -4045,13 +4073,17 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "variable"
               ],
               "actions": [
-                "Open BP_LoopsGameMode → Variables and Function RegisterHit.",
-                "Add Hits (Integer, default 0).",
-                "Create Function RegisterHit with an Integer input HitLane.",
-                "First Branch on NOT Finished; on True run Add Unique(Target Array=FreeLanes, New Item=HitLane) → Set Hits=Hits+1.",
-                "Optionally Print String 'HIT +1' after it.",
-                "Compile.",
-                "Do NOT put this function on each block's Event Tick."
+                "Open BP_LoopsGameMode → Variables → +.",
+                "Create VARIABLE Hits; type Integer, Compile, Default Value=0.",
+                "In My Blueprint → Functions click +. Create FUNCTION RegisterHit and open it.",
+                "Select purple Function Entry → Details → Inputs → +.",
+                "Name FUNCTION INPUT PIN HitLane and set type Integer; Compile.",
+                "From Function Entry WHITE output add Branch; Condition=NOT Get Finished.",
+                "On TRUE add Add Unique, Target Array=Get FreeLanes, New Item=HitLane.",
+                "After Add Unique WHITE output add Set Hits.",
+                "Value = Get Hits + 1 (Integer addition).",
+                "After Set Hits add Print String 'HIT +1' for initial test.",
+                "Compile and Save. Do not create a second HitLane variable."
               ]
             },
             {
@@ -4065,11 +4097,16 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "cast"
               ],
               "actions": [
-                "Open BP_RisingBlock → existing Custom Event BreakBlock from Stage 1.",
-                "Replace the direct BreakBlock → Destroy Actor connection.",
-                "Use Get Game Mode → Cast To BP_LoopsGameMode → Branch Condition=NOT Finished; from True call RegisterHit(HitLane=Self.LaneIndex) on that SAME GameMode reference, then Destroy Actor(Self).",
-                "Wire the WHITE exec pins through Cast Success, Branch True, RegisterHit and Destroy Actor in order.",
-                "Never free a lane on a miss."
+                "Open BP_RisingBlock → Event Graph → red BreakBlock Custom Event.",
+                "Disconnect the existing direct BreakBlock → Destroy Actor WHITE wire.",
+                "From BreakBlock WHITE output add Get Game Mode → Cast To BP_LoopsGameMode.",
+                "Connect Get Game Mode BLUE Return Value → Cast Object.",
+                "From Cast BLUE reference Get Finished; NOT Boolean → Branch Condition.",
+                "Connect Cast Success WHITE output → Branch WHITE input.",
+                "From Branch TRUE call RegisterHit on the SAME GameMode blue reference.",
+                "Connect Get LaneIndex Integer → RegisterHit HitLane input.",
+                "After RegisterHit WHITE output connect existing Destroy Actor, Target=Self.",
+                "Compile and Save. Do not return a lane when a shot misses."
               ]
             },
             {
@@ -4084,10 +4121,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               ],
               "actions": [
                 "Open BP_LoopsGameMode → Event Graph.",
-                "Create Custom Event LoseRound.",
-                "Branch on NOT Finished; True → Set Finished=true → Clear and Invalidate Timer by Handle(SpawnTimerHandle) → Print String('DEFENCE FAILED!').",
-                "Leave False unconnected.",
-                "The round's other timer comes in Stage 3."
+                "Right-click → Add Custom Event. Name it LoseRound.",
+                "From LoseRound WHITE output add Branch, Condition=NOT Get Finished.",
+                "Branch TRUE → Set Finished=true.",
+                "After that WHITE output add Clear and Invalidate Timer by Handle.",
+                "Drag SpawnTimerHandle as Get; connect to its Handle input.",
+                "After Clear Timer WHITE output add Print String with text DEFENCE FAILED!.",
+                "Leave Branch FALSE unconnected; Compile and Save."
               ]
             },
             {
@@ -4101,11 +4141,16 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "branch"
               ],
               "actions": [
-                "Open BP_RisingBlock → Event Tick, immediately after UpdateBlockVisual.",
-                "After updating the height, Branch(CurrentHeight >= MaxHeight).",
-                "On True call Get Game Mode → Cast To BP_LoopsGameMode → LoseRound.",
-                "This must happen AFTER Set CurrentHeight and UpdateBlockVisual, only on the NOT Finished tick path.",
-                "Do not Destroy Actor when the block hits the line; leave it showing the reason for defeat."
+                "Open BP_RisingBlock → Event Graph → Event Tick.",
+                "Find the existing sequence Set CurrentHeight → UpdateBlockVisual on Branch TRUE.",
+                "After CALL UpdateBlockVisual WHITE output add a new Branch.",
+                "Connect Get CurrentHeight >= Get MaxHeight (Float comparison) → Branch Condition.",
+                "On TRUE add Get Game Mode → Cast To BP_LoopsGameMode.",
+                "Connect Branch TRUE WHITE output → Cast WHITE input; Get Game Mode BLUE output → Cast Object.",
+                "From Cast BLUE As BP_LoopsGameMode reference CALL LoseRound.",
+                "Connect Cast Success WHITE output → LoseRound WHITE input.",
+                "Do NOT destroy the block at the red bar; leave it showing why the player lost.",
+                "Compile and Save."
               ]
             },
             {
@@ -4118,12 +4163,15 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "playtest"
               ],
               "actions": [
-                "Open LoopsLevel → Play in Editor.",
-                "Test A: watch one block grow, shoot it, confirm its lane is freed and a future spawn can reuse it.",
-                "Test B: let all five lanes fill: no overlaps and no sixth lane.",
-                "Test C: do not shoot until one reaches Z=450: Finished=true and no new blocks.",
-                "If cubes still spawn as a tower, disconnect the old BeginPlay loop.",
-                "If blocks grow below ground, Set Relative Location.Z must be CurrentHeight/2, not 0."
+                "Open LoopsLevel and Play.",
+                "Watch one block grow upwards FROM THE FLOOR; shoot it with the line-trace blaster.",
+                "Check the same lane is freed and can later spawn a new block.",
+                "Let all five lanes fill: no blocks should overlap, and no sixth lane should appear.",
+                "On another run do not shoot until one reaches DangerLine at Z=450.",
+                "GameMode Finished should become true and spawning should stop.",
+                "If old cubes still form a tower, disconnect the ORIGINAL BeginPlay For Loop from WHITE execution.",
+                "If a block grows below ground, check BlockMesh Relative Location Z=CurrentHeight/2.",
+                "Compile and Save both Blueprints before continuing."
               ]
             }
           ],
