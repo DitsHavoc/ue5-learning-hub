@@ -151,36 +151,44 @@ async function run(){
         if(!group.stages.includes(minimum)||await page.locator('.mini-upgrade-mvp').count()!==1)fail.push(device.name+': '+group.id+' missing minimum-game marker');
         for(const stageId of group.stages){
           await page.goto(base+'/#/mini-projects/upgrades/'+group.id+'/'+stageId,{waitUntil:'load'});
-          await page.waitForSelector('.mini-upgrade-step',{timeout:10000});
+          await page.waitForSelector('.mini-upgrade-focus',{timeout:10000});
           const result=await page.evaluate(()=>({
             title:document.querySelector('#app h1')?.textContent,
-            steps:document.querySelectorAll('#app .mini-upgrade-step').length,
-            details:document.querySelectorAll('#app .mini-upgrade-step .mini-upgrade-instructions > p').length,
-            beginnerHelp:document.querySelectorAll('#app .mini-upgrade-howto').length,
-            namedGuide:!!document.querySelector('#app .mini-upgrade-name-guide'),
-            namedStep:document.querySelectorAll('#app .mini-upgrade-step-names').length,
-            helpText:document.querySelector('#app .mini-upgrade-howto-topic p')?.textContent||'',
-            open:document.querySelector('#app .mini-upgrade-step')?.open,
-            images:document.querySelectorAll('#app .mini-upgrade-stage img').length,
-            extraDesigner:!!document.querySelector('#app .mini-upgrade-designer'),
-            hasProof:!!document.querySelector('#app .mini-proof details'),
-            hasPreflight:!!document.querySelector('#app .mini-upgrade-ready p'),
-            hasPitfall:(document.querySelector('#app .mini-proof details')?.textContent||'').includes('Common mistake:'),
-            hasButton:!!document.querySelector('#app [data-action="mini-upgrade-complete"]'),
+            task:document.querySelector('.mini-upgrade-task-top')?.textContent,
+            actions:document.querySelectorAll('#app .mini-upgrade-plain-actions > li').length,
+            noClutter:!document.querySelector('#app .mini-upgrade-name-guide,#app .mini-upgrade-howto,#app .mini-upgrade-instructions,#app .mini-side-stages,#app .mini-proof,#app .mini-upgrade-ready'),
+            hasNext:!!document.querySelector('[data-action="mini-upgrade-task"][data-move="1"]'),
             overflow:document.documentElement.scrollWidth>window.innerWidth+2
           }));
-          if(!result.title||result.steps<4||result.details!==result.steps*4||result.beginnerHelp!==result.steps||!result.namedGuide||(!result.namedStep&&stageId!=='rising-polish')||result.helpText.length<60||!result.open||result.images||result.extraDesigner||!result.hasPreflight||!result.hasPitfall||!result.hasProof||!result.hasButton||result.overflow)
-            fail.push(device.name+' '+group.id+'/'+stageId+': incomplete upgrade page '+JSON.stringify(result));
+          if(!result.title||!result.task?.includes('Task 1 of')||result.actions<2||!result.noClutter||!result.hasNext||result.overflow)
+            fail.push(device.name+' '+group.id+'/'+stageId+': simple task view incorrect '+JSON.stringify(result));
         }
       }
       await page.goto(base+'/#/mini-projects/upgrades/balloon-popper/score',{waitUntil:'load'});
+      await page.locator('[data-action="mini-upgrade-task"][data-move="1"]').click();
+      if(!(await page.locator('.mini-upgrade-task-top').innerText()).includes('Task 2 of 7'))
+        fail.push(device.name+': Next task does not advance');
+      await page.reload({waitUntil:'load'});
+      if(!(await page.locator('.mini-upgrade-task-top').innerText()).includes('Task 2 of 7'))
+        fail.push(device.name+': current task did not survive refresh');
+      await page.locator('[data-action="mini-upgrade-task"][data-move="-1"]').click();
+      if(!(await page.locator('.mini-upgrade-task-top').innerText()).includes('Task 1 of 7'))
+        fail.push(device.name+': Back task does not go back');
+      for(let i=0;i<6;i++){
+        await page.locator('[data-action="mini-upgrade-task"][data-move="1"]').click();
+      }
+      if(!(await page.locator('.mini-upgrade-task-top').innerText()).includes('Task 7 of 7')||
+         await page.locator('[data-action="mini-upgrade-complete"]').count()!==1||
+         await page.locator('.mini-upgrade-final').count()!==1)
+        fail.push(device.name+': final task/test/completion missing');
       await page.locator('[data-action="mini-upgrade-complete"]').click();
       let upgradeDone=await page.evaluate(()=>JSON.parse(localStorage.getItem('ue5hub:mini-upgrades:v1')||'[]').includes('score'));
       if(!upgradeDone)fail.push(device.name+': upgrade progress not persisted');
       let originalDone=await page.evaluate(()=>JSON.parse(localStorage.getItem('ue5hub:mini-projects:v1')||'[]'));
       if(originalDone.length)fail.push(device.name+': upgrade changed original tutorial progress');
       await page.reload({waitUntil:'load'});
-      if(!(await page.locator('[data-action="mini-upgrade-complete"]').innerText()).includes('Completed'))fail.push(device.name+': upgrade completion missing after refresh');
+      if(!(await page.locator('[data-action="mini-upgrade-complete"]').innerText()).includes('Completed'))
+        fail.push(device.name+': upgrade completion missing after refresh');
       await page.locator('[data-action="mini-upgrade-complete"]').click();
       upgradeDone=await page.evaluate(()=>JSON.parse(localStorage.getItem('ue5hub:mini-upgrades:v1')||'[]').includes('score'));
       if(upgradeDone)fail.push(device.name+': cannot undo upgrade completion');

@@ -24,6 +24,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "variable",
                 "debug"
+              ],
+              "actions": [
+                "Open the Content Drawer and double-click BP_BalloonGameMode in the Balloon Popper folder.",
+                "In My Blueprint → Variables, click +.",
+                "Name the new VARIABLE Score.",
+                "In Details, set Variable Type to Integer.",
+                "Click Compile. In Details set Default Value to 0, then Save."
               ]
             },
             {
@@ -35,6 +42,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "function-input",
                 "variable"
+              ],
+              "actions": [
+                "Open BP_BalloonGameMode → My Blueprint → Functions.",
+                "Click + next to Functions. Name the FUNCTION AwardPoints.",
+                "Double-click AwardPoints, then select its purple Function Entry node.",
+                "In Details → Inputs, click + and name the new INPUT PIN Points.",
+                "Set the input type to Integer. Click Compile."
               ]
             },
             {
@@ -46,6 +60,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "get-set",
                 "math"
+              ],
+              "actions": [
+                "Stay in the AwardPoints Function graph.",
+                "Drag the Score variable from My Blueprint into the graph. Choose Get Score.",
+                "Drag from Get Score's green pin, search for + (Integer) and add Integer + Integer.",
+                "Drag the green Points pin from the purple Function Entry node to the second input on +."
               ]
             },
             {
@@ -57,6 +77,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "get-set",
                 "math"
+              ],
+              "actions": [
+                "Drag Score from My Blueprint into AwardPoints again. This time choose Set Score.",
+                "Drag from the + output and search Max (Integer). Set the other Max input to 0.",
+                "Connect Max output to Set Score's green value pin.",
+                "Connect the purple Function Entry WHITE execution pin to Set Score's WHITE input.",
+                "Click Compile and Save."
               ]
             },
             {
@@ -68,6 +95,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "get-set",
                 "debug"
+              ],
+              "actions": [
+                "In AwardPoints, drag from Set Score's WHITE output and choose Print String.",
+                "Drag Score into the graph as Get Score.",
+                "From Get Score add To String (Integer) if needed.",
+                "Add Append (String); type Score: in its first input and plug the score text into its second input.",
+                "Connect Append to Print String → In String. Click Compile."
               ]
             },
             {
@@ -79,6 +113,15 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "cast",
                 "branch"
+              ],
+              "actions": [
+                "Open BP_Balloon → Event Graph.",
+                "Find the EXISTING On Actor Clicked → Set Actor Scale 3D → Branch that checks Actor Scale X >= PopScale.",
+                "Leave the False path alone. From the Branch TRUE WHITE pin, add Cast To BP_BalloonGameMode.",
+                "Right-click → Get Game Mode and connect its blue Return Value to Cast → Object.",
+                "From Cast Success WHITE pin, call AwardPoints (drag from As BP_BalloonGameMode blue pin). Set Points to 1.",
+                "Connect AwardPoints WHITE output to the EXISTING Destroy Actor (Self).",
+                "Compile and Save BP_Balloon. Do not add another On Actor Clicked event."
               ]
             },
             {
@@ -89,6 +132,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "The total increases across different balloon actors, not from 0 for each one.",
               "helpTopics": [
                 "debug"
+              ],
+              "actions": [
+                "Open Balloon Popper Level and press Play.",
+                "Click one balloon until it POPS. Look for Score: 1.",
+                "Pop a DIFFERENT balloon. Look for Score: 2.",
+                "Stop Play, then Save the level."
               ]
             }
           ],
@@ -135,6 +184,15 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "actor",
                 "component"
+              ],
+              "actions": [
+                "Open the Content Drawer → Balloon Popper folder.",
+                "Right-click → Blueprint Class → Actor. Name it BP_BalloonSpawner.",
+                "Open BP_BalloonSpawner. In Components click + Add and choose Box Collision.",
+                "Rename that COMPONENT SpawnArea.",
+                "Select SpawnArea. In Details set Box Extent X=50, Y=350, Z=220.",
+                "Set Rotation X=0, Y=0, Z=0 and Collision Presets=NoCollision.",
+                "Compile and Save."
               ]
             },
             {
@@ -146,6 +204,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "function",
                 "spawn"
+              ],
+              "actions": [
+                "Open BP_BalloonSpawner → My Blueprint → Functions → +.",
+                "Name the FUNCTION SpawnOneBalloon and double-click it.",
+                "Drag SpawnArea from Components into this Function graph as Get.",
+                "Drag from the blue SpawnArea pin, search Get World Location and place it.",
+                "Drag again from SpawnArea and search Get Scaled Box Extent."
               ]
             },
             {
@@ -156,6 +221,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "Random Point in Bounding Box uses SpawnArea Get World Location → Center and Get Scaled Box Extent → Half Size; its output depends on where the actor is placed in the level.",
               "helpTopics": [
                 "spawn"
+              ],
+              "actions": [
+                "In SpawnOneBalloon, right-click and add Random Point in Bounding Box.",
+                "Connect SpawnArea → Get World Location to the node's Center input.",
+                "Connect SpawnArea → Get Scaled Box Extent to its Half Size input.",
+                "Leave the Box rotation at 0,0,0."
               ]
             },
             {
@@ -167,6 +238,16 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "function",
                 "spawn"
+              ],
+              "actions": [
+                "Still in SpawnOneBalloon, add Make Transform.",
+                "Connect Random Point in Bounding Box → Return Value to Make Transform → Location.",
+                "Keep Rotation at 0,0,0 and Scale at 1,1,1.",
+                "Add Spawn Actor From Class. Choose BP_Balloon as its Class.",
+                "Connect Make Transform → Spawn Transform.",
+                "Set Spawn Collision Handling Override to Always Spawn, Ignore Collisions.",
+                "Connect the purple SpawnOneBalloon Function Entry WHITE output to Spawn Actor WHITE input.",
+                "Compile and Save."
               ]
             },
             {
@@ -178,6 +259,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "spawn",
                 "exec"
+              ],
+              "actions": [
+                "Open BP_BalloonSpawner → Event Graph.",
+                "Use the existing Event BeginPlay (or add one if absent).",
+                "From BeginPlay's WHITE pin, add For Loop.",
+                "Set First Index=0 and Last Index=4.",
+                "From Loop Body WHITE output, call SpawnOneBalloon.",
+                "Leave Loop Completed unconnected. Compile and Save."
               ]
             },
             {
@@ -188,6 +277,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "Five new balloons appear inside the spawner volume. If none appear, check BP_BalloonSpawner is placed and its BeginPlay loop runs.",
               "helpTopics": [
                 "level"
+              ],
+              "actions": [
+                "Open Balloon Popper Level.",
+                "Drag ONE BP_BalloonSpawner from the Content Drawer into the level.",
+                "Select the spawner and position or scale its SpawnArea so it sits in the camera view.",
+                "Move the original hand-placed balloons to one side for this first test.",
+                "Press Play. Count FIVE newly spawned balloons. Stop Play."
               ]
             },
             {
@@ -198,6 +294,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "Exactly five newly spawned balloons can be seen and clicked, with no manually placed duplicates remaining.",
               "helpTopics": [
                 "level"
+              ],
+              "actions": [
+                "Once you have seen five NEW balloons, open Balloon Popper Level again.",
+                "Delete the OLD hand-placed BP_Balloon actors and any loose balloon meshes blocking the view.",
+                "Keep your camera, lighting, scenery and ONE BP_BalloonSpawner.",
+                "Select the spawner. Check SpawnArea stays inside the camera view and has NoCollision.",
+                "Save the level and Play. You should now see five balloons, not ten."
               ]
             },
             {
@@ -209,6 +312,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "custom-event",
                 "spawn"
+              ],
+              "actions": [
+                "Open BP_BalloonSpawner → Event Graph.",
+                "Right-click empty space → Add Custom Event.",
+                "Name the EVENT RequestReplacement.",
+                "From its WHITE output, call the existing SpawnOneBalloon FUNCTION.",
+                "Compile and Save."
               ]
             },
             {
@@ -220,17 +330,32 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "cast",
                 "branch"
+              ],
+              "actions": [
+                "Open BP_Balloon → Event Graph → the PopScale Branch TRUE path.",
+                "Keep AwardPoints(Points=1) from the previous upgrade.",
+                "Right-click and add Get Actor of Class; select BP_BalloonSpawner as Actor Class.",
+                "Drag from Get Actor of Class blue Return Value, search Cast To BP_BalloonSpawner.",
+                "Connect Return Value to Cast → Object."
               ]
             },
             {
               "title": "Call the replacement event before destroying the balloon",
               "where": "BP_Balloon → same True pop path.",
-              "do": "Connect AwardPoints white execution output to the Cast white input. From Cast success, call RequestReplacement on the BP_BalloonSpawner reference, then connect that event white output to the existing Destroy Actor (Self). Connect Cast Failed directly to Destroy Actor as a fallback. Compile.",
+              "do": "Connect AwardPoints white execution output to the Cast white input. From Cast success, call RequestReplacement on the BP_BalloonSpawner reference, then connect that event white output to the existing Destroy Actor (Self). Leave Cast Failed unconnected; if the Cast fails, check that BP_BalloonSpawner has been placed in the level. Compile.",
               "why": "One old balloon disappears and one new balloon appears before it is destroyed.",
-              "check": "On a real pop, the sequence AwardPoints → RequestReplacement → Destroy Actor keeps five active balloons.",
+              "check": "When BP_BalloonSpawner exists, the Cast succeeds: AwardPoints → RequestReplacement → Destroy Actor keeps five active balloons.",
               "helpTopics": [
                 "cast",
                 "exec"
+              ],
+              "actions": [
+                "In BP_Balloon, connect AwardPoints WHITE output to Cast To BP_BalloonSpawner WHITE input.",
+                "Drag from As BP_BalloonSpawner's BLUE pin and search RequestReplacement (CALL).",
+                "Connect Cast Success WHITE output to RequestReplacement WHITE input.",
+                "Connect RequestReplacement WHITE output to the EXISTING Destroy Actor (Self).",
+                "Leave Cast Failed unconnected. The spawner must exist in the level for this replacement to work.",
+                "Compile and Save."
               ]
             },
             {
@@ -241,6 +366,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "The five-target loop remains populated through 15 successful pops and all targets can be reached by mouse.",
               "helpTopics": [
                 "playtest"
+              ],
+              "actions": [
+                "Open Balloon Popper Level and press Play.",
+                "POP a balloon fully; do not just click it once.",
+                "Count the balloons. You should still have five.",
+                "Repeat until 15 balloons have popped. Five should remain each time.",
+                "If balloons cannot be clicked, check BP_Balloon's mesh blocks Visibility and BP_BalloonPlayerController has Enable Click Events=true.",
+                "If newly spawned balloons are hidden, move SpawnArea into camera view; keep SpawnArea collision set to NoCollision."
               ]
             }
           ],
@@ -290,6 +423,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "You can see both variables and their default values.",
               "helpTopics": [
                 "variable"
+              ],
+              "actions": [
+                "Open BP_BalloonGameMode → My Blueprint → Variables → +.",
+                "Name a new VARIABLE SecondsLeft. Set type Integer, Compile, then Default Value=60.",
+                "Click + Variable again. Name it RoundEnded.",
+                "Set type Boolean, Compile, and leave its Default Value unchecked (false).",
+                "Save BP_BalloonGameMode."
               ]
             },
             {
@@ -301,6 +441,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "custom-event",
                 "timer"
+              ],
+              "actions": [
+                "Open BP_BalloonGameMode → Event Graph.",
+                "Right-click empty space → Add Custom Event. Name it TickClock.",
+                "From TickClock WHITE output, add Print String and type tick.",
+                "Compile and Save."
               ]
             },
             {
@@ -312,6 +458,15 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "variable",
                 "custom-event"
+              ],
+              "actions": [
+                "Still in BP_BalloonGameMode → Event Graph, find Event BeginPlay.",
+                "From BeginPlay WHITE output, add Set Timer by Event.",
+                "Set Time=1.0 and tick Looping.",
+                "From the red Event pin, drag a wire and choose Create Event; select your TickClock event.",
+                "Right-click the Timer's Return Value pin → Promote to Variable.",
+                "Rename this TIMER HANDLE VARIABLE ClockHandle.",
+                "Compile and Play. Confirm tick appears about once per second. Stop Play."
               ]
             },
             {
@@ -323,6 +478,17 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "timer",
                 "branch"
+              ],
+              "actions": [
+                "Open BP_BalloonGameMode → Event Graph → TickClock.",
+                "Delete the temporary Print String after TickClock.",
+                "From TickClock WHITE pin add Branch.",
+                "Drag RoundEnded as Get, add NOT Boolean, connect NOT output to Branch → Condition.",
+                "From Branch True WHITE output, add Set SecondsLeft.",
+                "For its value: Get SecondsLeft → Integer - Integer (other input 1) → Max (Integer) with other input 0 → Set SecondsLeft value.",
+                "After Set SecondsLeft WHITE output, add a second Branch; its Condition is Get SecondsLeft <= 0.",
+                "Second Branch TRUE → Set RoundEnded(true) → Print String(TIME UP!) → Clear and Invalidate Timer by Handle(ClockHandle).",
+                "Leave the Branch FALSE outputs unconnected. Compile and Save."
               ]
             },
             {
@@ -334,6 +500,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "branch",
                 "math"
+              ],
+              "actions": [
+                "Open BP_BalloonGameMode → AwardPoints FUNCTION.",
+                "Find the WHITE wire from the purple Function Entry to Set Score. Disconnect that one wire.",
+                "Add a Branch between them. Function Entry WHITE → Branch WHITE input.",
+                "Get RoundEnded → NOT Boolean → Branch Condition.",
+                "Branch True WHITE → the EXISTING Set Score node.",
+                "Leave the green score calculation and Print String alone. Compile and Save."
               ]
             },
             {
@@ -345,6 +519,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "variable",
                 "widget"
+              ],
+              "actions": [
+                "In Content Drawer → Balloon Popper, right-click → User Interface → Widget Blueprint → User Widget.",
+                "Name this new WIDGET ASSET WBP_BalloonHUD. Open Designer.",
+                "Add a Text widget and rename it ScoreText. Set its text to Score: 0.",
+                "Add a second Text widget and rename it TimeText. Set text to Time: 60.",
+                "Tick Is Variable on both Text widgets. Compile and Save."
               ]
             },
             {
@@ -355,6 +536,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "In Designer the root Canvas uses Not Hit-Testable (Self Only), with both decorative Text widgets Not Hit-Testable (Self & All Children). You will test real mouse clicks after the widget appears on screen.",
               "helpTopics": [
                 "ui-pass"
+              ],
+              "actions": [
+                "In WBP_BalloonHUD → Designer, select the ROOT Canvas Panel.",
+                "In Details → Behavior → Visibility choose Not Hit-Testable (Self Only).",
+                "Select ScoreText. Set Visibility to Not Hit-Testable (Self & All Children).",
+                "Select TimeText. Set Visibility to Not Hit-Testable (Self & All Children).",
+                "Compile and Save. Keep the root Self Only because the replay button needs clicking later."
               ]
             },
             {
@@ -366,6 +554,16 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "function-output",
                 "binding"
+              ],
+              "actions": [
+                "In WBP_BalloonHUD → Designer, select ScoreText.",
+                "Details → Content → Text → Bind → Create Binding.",
+                "In the created Function graph add Get Game Mode → Cast To BP_BalloonGameMode.",
+                "Wire Get Game Mode blue Return Value to Cast Object and Entry WHITE to Cast WHITE input.",
+                "From As BP_BalloonGameMode blue output, Get Score.",
+                "Create Format Text with format Score: {Value}. Connect Get Score to Value.",
+                "Connect Format Text result to the Return Node's Text output.",
+                "Wire Cast Success WHITE to Return. Compile and Save."
               ]
             },
             {
@@ -377,6 +575,16 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "function-output",
                 "binding"
+              ],
+              "actions": [
+                "Still in WBP_BalloonHUD → Designer, select TimeText.",
+                "Details → Content → Text → Bind → Create Binding.",
+                "In this separate binding add Get Game Mode → Cast To BP_BalloonGameMode.",
+                "Connect Get Game Mode to Cast Object and Function Entry WHITE to Cast input.",
+                "From Cast blue output, Get SecondsLeft.",
+                "Use Format Text: Time: {Value} with Value=SecondsLeft.",
+                "Wire the formatted Text to Return Node's Text pin, and Cast Success WHITE to Return.",
+                "Compile and Save."
               ]
             },
             {
@@ -387,6 +595,15 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "Play Balloon Popper Level: Score: 0 and Time: 60 appear, time decreases, the cursor is visible and clicking through empty HUD space still grows balloons.",
               "helpTopics": [
                 "widget"
+              ],
+              "actions": [
+                "Open BP_BalloonPlayerController → Event Graph → existing BeginPlay.",
+                "KEEP its existing Set Show Mouse Cursor(true) and any Enable Click Events setup.",
+                "After cursor setup, add Create Widget; choose Class=WBP_BalloonHUD, Owning Player=Self.",
+                "Connect its Return Value to Add to Viewport → Target.",
+                "From Add to Viewport WHITE output add Set Input Mode Game and UI, Player Controller=Self.",
+                "Set Hide Cursor During Capture=false. Connect all WHITE execution pins in order.",
+                "Compile, Save, Play. Confirm Score and Time appear and mouse clicks still reach balloons."
               ]
             },
             {
@@ -398,6 +615,15 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "cast",
                 "branch"
+              ],
+              "actions": [
+                "Open BP_Balloon → Event Graph → ORIGINAL On Actor Clicked event.",
+                "Disconnect its WHITE wire going directly into the grow/Set Actor Scale chain.",
+                "From On Actor Clicked WHITE output add Cast To BP_BalloonGameMode; connect Get Game Mode blue Return Value to Cast Object.",
+                "From Cast Success WHITE output add Branch.",
+                "Get RoundEnded → NOT Boolean → Branch Condition.",
+                "Connect Branch True WHITE output back to the ORIGINAL grow chain. Leave False empty.",
+                "Do not change the PopScale or AwardPoints logic. Compile and Save."
               ]
             },
             {
@@ -409,6 +635,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "custom-event",
                 "spawn"
+              ],
+              "actions": [
+                "Open BP_BalloonSpawner → Event Graph → RequestReplacement event.",
+                "Disconnect the WHITE wire from RequestReplacement directly into SpawnOneBalloon.",
+                "Insert Cast To BP_BalloonGameMode (Object=Get Game Mode) → Branch.",
+                "Set Branch Condition to NOT RoundEnded.",
+                "Connect Branch True WHITE to SpawnOneBalloon; leave False empty.",
+                "Leave the BeginPlay five-balloon loop unchanged. Compile and Save."
               ]
             }
           ],
@@ -479,6 +713,15 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "The new result panel is initially Collapsed and does not block clicks during the round.",
               "helpTopics": [
                 "widget"
+              ],
+              "actions": [
+                "Open WBP_BalloonHUD → Designer.",
+                "Inside the existing ROOT Canvas Panel add a Border or Vertical Box. Rename that WIDGET ResultsPanel.",
+                "Inside ResultsPanel add a Text widget called FinalScoreText.",
+                "Add a Button widget named ReplayButton; place a child Text inside with label Play Again.",
+                "Tick Is Variable for ResultsPanel, FinalScoreText and ReplayButton.",
+                "Select ResultsPanel → Visibility=Collapsed. Select ReplayButton → Visibility=Visible.",
+                "Keep the ROOT Canvas Visibility=Not Hit-Testable (Self Only). Compile and Save."
               ]
             },
             {
@@ -490,6 +733,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "custom-event",
                 "cast"
+              ],
+              "actions": [
+                "Open WBP_BalloonHUD → Event Graph.",
+                "Add Custom Event and name it RefreshRoundScreen.",
+                "From its WHITE pin add Cast To BP_BalloonGameMode; Get Game Mode → Cast Object.",
+                "From Cast Success WHITE output add Branch; Get RoundEnded → Branch Condition.",
+                "Branch True → Set Visibility(ResultsPanel, Visible). Branch False → Set Visibility(ResultsPanel, Collapsed).",
+                "Compile and Save."
               ]
             },
             {
@@ -501,6 +752,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "custom-event",
                 "timer"
+              ],
+              "actions": [
+                "In WBP_BalloonHUD → Event Graph, find Event Construct.",
+                "From Construct WHITE output add Set Timer by Event.",
+                "Set Time=0.25, Looping=true.",
+                "From the Timer's red Event pin choose Create Event → RefreshRoundScreen.",
+                "Do not create a second HUD widget. Compile and Save."
               ]
             },
             {
@@ -512,6 +770,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "binding",
                 "branch"
+              ],
+              "actions": [
+                "In WBP_BalloonHUD → RefreshRoundScreen event, find the Branch True path.",
+                "After Set Visibility(ResultsPanel, Visible) add Set Text(Target=FinalScoreText).",
+                "From the existing BP_BalloonGameMode blue cast output Get Score.",
+                "Create Format Text with format Time up! Final score: {Points}. Connect Score to Points.",
+                "Connect Format Text to Set Text and the WHITE Set Visibility output to Set Text WHITE input.",
+                "Compile and Save."
               ]
             },
             {
@@ -523,6 +789,15 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "widget",
                 "replay"
+              ],
+              "actions": [
+                "Open WBP_BalloonHUD → Designer and select ReplayButton.",
+                "In Details → Events click + beside OnClicked.",
+                "In the generated OnClicked event graph add Open Level (by Name).",
+                "Add Get Current Level Name and tick Remove Prefix String.",
+                "Connect Get Current Level Name output to Open Level → Level Name.",
+                "Connect ReplayButton OnClicked WHITE output to Open Level WHITE input.",
+                "Compile and Save."
               ]
             },
             {
@@ -533,6 +808,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "Time Up, frozen scoring, blocked clicks and replay all work. The last saved GameMode uses 60 seconds again, not the temporary five-second test.",
               "helpTopics": [
                 "playtest"
+              ],
+              "actions": [
+                "Open BP_BalloonGameMode → SecondsLeft Variable Default Value.",
+                "Change 60 to 5, Compile and Save TEMPORARILY.",
+                "Open Balloon Popper Level and Play. Pop one balloon before TIME UP.",
+                "After the countdown, check that balloons no longer grow and the result shows the final score.",
+                "Click Play Again. Confirm new round, Score: 0 and five balloons.",
+                "Stop Play. Restore SecondsLeft Default Value to 60, Compile and Save."
               ]
             }
           ],
@@ -582,6 +865,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "The original is red; the new danger material is purple/blue and is clearly distinguishable at normal play size.",
               "helpTopics": [
                 "material"
+              ],
+              "actions": [
+                "In the Balloon Popper folder, right-click the existing M_Balloon MATERIAL → Duplicate.",
+                "Name the new MATERIAL ASSET M_DangerBalloon.",
+                "Open M_DangerBalloon and change the colour to dark purple or electric blue (different from normal red).",
+                "Save."
               ]
             },
             {
@@ -593,6 +882,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "actor",
                 "component"
+              ],
+              "actions": [
+                "In the Balloon Popper folder, right-click BP_Balloon → Duplicate.",
+                "Name the new ACTOR BLUEPRINT BP_DangerBalloon. Open it.",
+                "In Components select the existing BalloonModel Static Mesh.",
+                "Change its Material to M_DangerBalloon.",
+                "Leave all existing click/grow/pop, RoundEnded and replacement nodes as copied. Compile and Save."
               ]
             },
             {
@@ -603,6 +899,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "The copied AwardPoints call uses -2 and BP_Balloon still uses +1. You will test the negative score in Play AFTER the spawner selects danger balloons.",
               "helpTopics": [
                 "branch"
+              ],
+              "actions": [
+                "Open BP_DangerBalloon → Event Graph → PopScale Branch TRUE path.",
+                "Find the copied AwardPoints call.",
+                "Change its Points input from 1 to -2.",
+                "Keep the replacement and Destroy Actor nodes connected. Compile and Save."
               ]
             },
             {
@@ -614,6 +916,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "function",
                 "spawn"
+              ],
+              "actions": [
+                "Open BP_BalloonSpawner → SpawnOneBalloon FUNCTION.",
+                "Add Random Float in Range. Set Min=0.0 and Max=1.0.",
+                "From its Return Value add <= (Float); set the other input to 0.2.",
+                "Leave the existing WHITE execution wire into Spawn Actor untouched."
               ]
             },
             {
@@ -625,6 +933,15 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "variable",
                 "spawn"
+              ],
+              "actions": [
+                "Still in BP_BalloonSpawner → SpawnOneBalloon, find Spawn Actor From Class.",
+                "Drag BACKWARDS from its purple Class pin and search Select (Class).",
+                "Connect the red Boolean result of the <= comparison to Select → Index.",
+                "Set Select False / Option 0 to BP_Balloon.",
+                "Set Select True / Option 1 to BP_DangerBalloon.",
+                "Connect Select's Class output to the original Spawn Actor → Class input.",
+                "Keep the existing Spawn Transform and WHITE execution wires. Compile and Save."
               ]
             },
             {
@@ -636,6 +953,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "spawn",
                 "math"
+              ],
+              "actions": [
+                "Temporarily change the <= threshold from 0.2 to 1.0. Compile and Play.",
+                "All new balloons should be purple/blue danger balloons. Stop Play.",
+                "Change threshold to -1.0. Compile and Play again.",
+                "All new balloons should be normal red balloons. Stop Play.",
+                "Restore threshold to 0.2 for a 20% danger chance. Compile and Save."
               ]
             },
             {
@@ -647,6 +971,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "cast",
                 "branch"
+              ],
+              "actions": [
+                "Open BP_DangerBalloon → Event Graph.",
+                "Check the PopScale Branch TRUE path reads: AwardPoints(-2) → Cast To BP_BalloonSpawner → RequestReplacement → Destroy Actor.",
+                "Check the RoundEnded Branch still prevents clicks after TIME UP.",
+                "Compile and Save."
               ]
             },
             {
@@ -657,6 +987,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "Normal and danger targets look distinct and affect one shared Score correctly. No score drops below zero and one new balloon replaces each pop until the round ends.",
               "helpTopics": [
                 "playtest"
+              ],
+              "actions": [
+                "Open Balloon Popper Level and Play.",
+                "Pop at least 20 balloons (complete pops, not 20 single clicks).",
+                "Normal red balloons give +1. Purple/blue danger balloons subtract 2.",
+                "The score never goes below zero and one replacement appears per pop.",
+                "No new balloons appear after TIME UP. Stop Play and Save."
               ]
             },
             {
@@ -667,6 +1004,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "Both partners can point to a change they made that improves play.",
               "helpTopics": [
                 "art"
+              ],
+              "actions": [
+                "Make one ORIGINAL UI or game asset in Photoshop, 3ds Max or Substance Painter.",
+                "Export PNG or FBX.",
+                "On the Unreal computer import the asset into the Balloon Popper Content folder.",
+                "Use it in the game and Play to check it appears. Save."
               ]
             }
           ],
@@ -713,6 +1056,16 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "GoalPins equals the number of placed BP_BowlingPin actors (e.g. six if the lane contains six), not a guessed fixed total.",
               "helpTopics": [
                 "variable"
+              ],
+              "actions": [
+                "Open BowlingLevel. In World Outliner count the BP_BowlingPin ACTORS in your level. Write down that number.",
+                "Open Content Drawer → Bowling → BP_BowlingGameMode.",
+                "Under My Blueprint → Variables click +. Name the new VARIABLE PinsDown.",
+                "Set its type to Integer. Compile, set Default Value=0.",
+                "Click + Variable again. Name it Score. Type=Integer, Default Value=0.",
+                "Create VARIABLE GoalPins. Type=Integer, Default Value=the number of placed pins you counted.",
+                "Create VARIABLE RoundFinished. Type=Boolean, Default Value=false (unchecked).",
+                "Compile and Save BP_BowlingGameMode."
               ]
             },
             {
@@ -724,6 +1077,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "function-input",
                 "variable"
+              ],
+              "actions": [
+                "Open BP_BowlingGameMode → My Blueprint → Functions → +.",
+                "Create a function called RecordPin.",
+                "Select the entry node and use Details → Inputs → + to add PinValue (Integer).",
+                "Compile."
               ]
             },
             {
@@ -735,6 +1094,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "branch",
                 "get-set"
+              ],
+              "actions": [
+                "Open BP_BowlingGameMode → RecordPin function graph.",
+                "Drag RoundFinished in as Get.",
+                "Add NOT Boolean → Branch.",
+                "Connect the entry white execution pin to the Branch white input and NOT RoundFinished to its Condition."
               ]
             },
             {
@@ -746,6 +1111,11 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "branch",
                 "get-set"
+              ],
+              "actions": [
+                "Open BP_BowlingGameMode → RecordPin → True output of the Branch.",
+                "Set PinsDown = PinsDown + 1, then Set Score = Score + PinValue using green Integer arithmetic nodes.",
+                "Wire both white execution pins in order; add Print String after Set Score using a string of your updated Score."
               ]
             },
             {
@@ -757,6 +1127,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "branch",
                 "get-set"
+              ],
+              "actions": [
+                "In RecordPin in BP_BowlingGameMode.",
+                "After Set Score in RecordPin (not directly from Set PinsDown), add >= (Integer) to compare Get PinsDown against GoalPins.",
+                "Plug that into a Branch and wire its white execution input after Set Score.",
+                "On True: Set RoundFinished = true, then Print String \"ALL PINS DOWN!\".",
+                "On False: do nothing.",
+                "Do not replace the earlier Branch that checks NOT RoundFinished."
               ]
             },
             {
@@ -768,6 +1146,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "variable",
                 "custom-event"
+              ],
+              "actions": [
+                "Open BP_BowlingPin → Variables.",
+                "Create Counted (Boolean; default false).",
+                "Compile.",
+                "Add Event Tick → Branch with NOT Counted as Condition.",
+                "Only continue from True."
               ]
             },
             {
@@ -779,6 +1164,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "branch",
                 "get-set"
+              ],
+              "actions": [
+                "Open BP_BowlingPin → Event Graph → the True output of your NOT Counted Branch.",
+                "Drag the existing Model (Static Mesh) component into the graph as Get.",
+                "From it add Get Up Vector, then Dot Product (Vector).",
+                "Set the second Vector to X=0, Y=0, Z=1.",
+                "Temporarily convert the Dot Product float to String and Print String from the NOT Counted True execution path; Compile and Play."
               ]
             },
             {
@@ -790,6 +1182,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "branch",
                 "get-set"
+              ],
+              "actions": [
+                "Open BP_BowlingPin → Event Graph, where Get Up Vector feeds Dot Product.",
+                "Add Float < Float, wire the Dot Product output into A and set B=0.65.",
+                "Add a second Branch: connect the earlier NOT Counted True white execution output into this Branch and connect the Float comparison into Condition.",
+                "Compile."
               ]
             },
             {
@@ -801,6 +1199,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "cast",
                 "branch"
+              ],
+              "actions": [
+                "Open BP_BowlingPin → True path of the lean Branch.",
+                "Set Counted = true, then Get Game Mode → Cast To BP_BowlingGameMode → RecordPin with PinValue = 1.",
+                "Ensure the white wires follow that order.",
+                "Compile."
               ]
             },
             {
@@ -811,6 +1215,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "One fallen pin awards one point only once, even as it rolls on the floor.",
               "helpTopics": [
                 "debug"
+              ],
+              "actions": [
+                "Open BowlingLevel → Play In Editor, after saving both GameMode and BP_BowlingPin.",
+                "Press Space once.",
+                "Keep the Output Log or temporary RecordPin Print String visible.",
+                "Knock over one pin and check PinsDown increases to 1, Score to 1.",
+                "Watch the fallen pin for a few more seconds; the numbers should NOT increase again.",
+                "Repeat with another pin."
               ]
             },
             {
@@ -821,6 +1233,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "One tilted pin counts once; the game ends when the actual GoalPins number has tipped. Restore any temporary two-pin test layout before continuing.",
               "helpTopics": [
                 "get-set"
+              ],
+              "actions": [
+                "Open the Bowling level → Play.",
+                "Play the BowlingLevel.",
+                "If you cannot aim at different pins, press R only after the next upgrade is built; for this first scoring test use Stop then Play again.",
+                "Knock down at least one pin and confirm each Score increment is one.",
+                "For an all-pins-down test, you may temporarily place just TWO BP_BowlingPin actors in a test copy of the level and set GoalPins=2; when both tip, RoundFinished should turn true.",
+                "Restore the normal lane and GoalPins afterwards."
               ]
             }
           ],
@@ -901,6 +1321,15 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "Model is the root in Components; the original Move and Bowl events work after this change.",
               "helpTopics": [
                 "physics"
+              ],
+              "actions": [
+                "Open BP_BowlingBall → Viewport → Components hierarchy.",
+                "Open BP_BowlingBall → Viewport.",
+                "Select the original Model sphere mesh.",
+                "If it is below DefaultSceneRoot, drag Model onto the root so Model becomes the Actor root (do not add another mesh).",
+                "Compile and save.",
+                "In BowlingLevel reselect the placed BP_BowlingBall and confirm it still sits at the lane starting position.",
+                "Test Play: Left/Right still move the ball and Space still bowls before continuing."
               ]
             },
             {
@@ -912,6 +1341,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "variable",
                 "exec"
+              ],
+              "actions": [
+                "Open BP_BowlingBall → Event Graph → Event BeginPlay.",
+                "In BP_BowlingBall → Event Graph, make a new variable StartingBallTransform of type Transform.",
+                "From Event BeginPlay call Get Actor Transform (Self) and then Set StartingBallTransform.",
+                "Compile.",
+                "This happens before the player moves the ball.",
+                "Keep all other Event BeginPlay nodes if present."
               ]
             },
             {
@@ -922,6 +1359,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "ResetBall contains its first chain: ResetBall → Set Simulate Physics(false) → Set Actor Transform(StartingBallTransform). It will not run in Play until you call it from the Player Controller later.",
               "helpTopics": [
                 "custom-event"
+              ],
+              "actions": [
+                "Open BP_BowlingBall → Event Graph → Add Custom Event ResetBall.",
+                "Drag the Model (root Static Mesh) component onto the graph.",
+                "Wire ResetBall → Set Simulate Physics (Model, false) → Set Actor Transform (New Transform=StartingBallTransform; Sweep=false; Teleport=true).",
+                "Compile."
               ]
             },
             {
@@ -932,6 +1375,11 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "The full ResetBall chain compiles. It is not yet callable through the player controls; you will run the first real reset after connecting FinishThrow.",
               "helpTopics": [
                 "physics"
+              ],
+              "actions": [
+                "Open BP_BowlingBall → immediately after Set Actor Transform in ResetBall.",
+                "Wire Set Simulate Physics (Model, true) → Set Physics Linear Velocity (0,0,0) → Set Physics Angular Velocity in Degrees (0,0,0), all targeting Model.",
+                "Compile and save."
               ]
             },
             {
@@ -943,6 +1391,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "variable",
                 "input"
+              ],
+              "actions": [
+                "Open BP_BowlingPlayerController → Event Graph → Event BeginPlay.",
+                "In BP_BowlingPlayerController → Event Graph find the original BeginPlay path: Add Mapping Context(BowlingInputs) → Get Actor of Class(BP_BowlingBall) → Set BowlingBall.",
+                "Select the existing Get Actor of Class node: its Return Value must connect to Set BowlingBall.",
+                "Place exactly one BP_BowlingBall in BowlingLevel.",
+                "Compile and Play once; confirm the original arrow keys still move it and Space still bowls.",
+                "Do NOT add a second ball variable or duplicate this lookup."
               ]
             },
             {
@@ -954,6 +1410,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "variable",
                 "input"
+              ],
+              "actions": [
+                "Open BP_BowlingPlayerController → Variables.",
+                "Create ThrowsUsed (Integer; default 0), MaxThrows (Integer; default 3) and IsBallInMotion (Boolean; default false).",
+                "Compile.",
+                "Keep the existing BP_BowlingBall reference from the original IA_Bowl/IA_Move tutorial; do not add a new ball reference."
               ]
             },
             {
@@ -965,6 +1427,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "custom-event",
                 "input"
+              ],
+              "actions": [
+                "Open BP_BowlingPlayerController → existing IA_Move input event, before calling BP_BowlingBall.Move.",
+                "Get IsBallInMotion and RoundFinished (via BP_BowlingGameMode).",
+                "Add a Branch using (NOT IsBallInMotion) AND (NOT RoundFinished).",
+                "Only True calls the existing Move custom event.",
+                "Leave the original MoveSpeed and Delta Time mapping from the tutorial unchanged."
               ]
             },
             {
@@ -976,6 +1445,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "input",
                 "cast"
+              ],
+              "actions": [
+                "Open BP_BowlingPlayerController → existing IA_Bowl input (Started pin; use your original tutorial name).",
+                "In BP_BowlingPlayerController, locate the existing IA_Bowl Input Action Event.",
+                "Use ONLY its Started execution pin, as taught in the original tutorial.",
+                "Add Get Game Mode → Cast To BP_BowlingGameMode and read RoundFinished.",
+                "Add NOT Boolean for RoundFinished and another NOT for IsBallInMotion.",
+                "Keep the original Bowl call but disconnect its old white execution input until the next step."
               ]
             },
             {
@@ -987,6 +1464,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "cast",
                 "branch"
+              ],
+              "actions": [
+                "Stay in BP_BowlingPlayerController → throw input.",
+                "Compare ThrowsUsed < MaxThrows.",
+                "Use AND(Boolean) to combine NOT RoundFinished, NOT IsBallInMotion and the throws comparison (add an input pin to AND if needed).",
+                "Add a Branch: wire Cast To BP_BowlingGameMode Success white execution into the Branch input and AND to Condition.",
+                "Wire ONLY Branch True towards your existing Bowl call.",
+                "False does nothing."
               ]
             },
             {
@@ -998,6 +1483,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "branch",
                 "get-set"
+              ],
+              "actions": [
+                "Open BP_BowlingPlayerController → True branch of the new throw gate.",
+                "Move the original Bowl call AFTER Set ThrowsUsed=ThrowsUsed+1 and Set IsBallInMotion=true, chaining the white execution pins in that order from Branch True.",
+                "Keep Bowl Target connected to the saved BowlingBall object reference.",
+                "Compile.",
+                "Press Space once: one throw is used.",
+                "Press Space repeatedly during the roll: no extra throw is counted."
               ]
             },
             {
@@ -1009,6 +1502,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "custom-event",
                 "get-set"
+              ],
+              "actions": [
+                "Open BP_BowlingPlayerController → after the successful Bowl event.",
+                "From the white execution output of the original Bowl call, add Delay(Duration=4.0).",
+                "Add a Custom Event in BP_BowlingPlayerController called FinishThrow, and connect the Delay Completed white execution to a CALL of FinishThrow (not to the red event definition node).",
+                "Inside the FinishThrow event, add Set IsBallInMotion=false.",
+                "This is in the Event Graph: do not create a Blueprint Function containing Delay."
               ]
             },
             {
@@ -1020,6 +1520,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "cast",
                 "replay"
+              ],
+              "actions": [
+                "Open BP_BowlingPlayerController → FinishThrow, after IsBallInMotion=false.",
+                "In BP_BowlingPlayerController → FinishThrow, AFTER Set IsBallInMotion=false, use Get Game Mode → Cast To BP_BowlingGameMode.",
+                "From Cast Success white execution go to Branch (NOT RoundFinished AND ThrowsUsed<MaxThrows).",
+                "On True, drag BowlingBall variable as Get and call ResetBall on it.",
+                "False does nothing.",
+                "Do not call Open Level here, and do not reset BP_BowlingPin actors."
               ]
             },
             {
@@ -1030,6 +1538,15 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "On a round with pins still standing, ball resets after throw 1 and throw 2, and previous pin score is preserved. A complete strike ends the round early instead.",
               "helpTopics": [
                 "playtest"
+              ],
+              "actions": [
+                "Open BowlingLevel → Play In Editor.",
+                "Press Space once, aiming to knock over only some pins (not all).",
+                "Wait four seconds: the ball should reset and arrow keys should aim again.",
+                "Press Space a second time, again leaving at least one pin standing.",
+                "The ball resets a second time.",
+                "Confirm the first throw’s fallen pins stay down and Score remains.",
+                "If every pin falls early, RoundFinished correctly ends the game; restart Play to test the two-reset case."
               ]
             },
             {
@@ -1041,6 +1558,15 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "function",
                 "branch"
+              ],
+              "actions": [
+                "Open BP_BowlingGameMode → Functions → add FinishRound.",
+                "First open BP_BowlingGameMode → Functions and create FinishRound.",
+                "Branch on NOT RoundFinished; only True sets RoundFinished=true then prints the final Score and PinsDown.",
+                "Compile GameMode.",
+                "Next open BP_BowlingPlayerController → FinishThrow: after the existing Branch that checks NOT RoundFinished AND ThrowsUsed<MaxThrows, use its False path to check (ThrowsUsed>=MaxThrows) AND (NOT RoundFinished).",
+                "On True get the cast BP_BowlingGameMode reference and call FinishRound.",
+                "Do this after the four-second Delay, not on the third Space press."
               ]
             },
             {
@@ -1052,6 +1578,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "variable",
                 "custom-event"
+              ],
+              "actions": [
+                "Bowling Input Mapping Context and BP_BowlingPlayerController.",
+                "Inside the existing Content/Bowling/Inputs folder, create an Input Action named IA_Restart (Value Type=Digital Boolean).",
+                "Open the already active BowlingInputs Mapping Context and add a mapping for IA_Restart with Keyboard R.",
+                "In BP_BowlingPlayerController Event Graph, add IA_Restart action event and use its Started pin → Get Current Level Name (Remove Prefix String checked) → Open Level (by Name), passing the level name output into Level Name.",
+                "Save BowlingInputs and Compile the controller."
               ]
             }
           ],
@@ -1145,6 +1678,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "variable",
                 "widget"
+              ],
+              "actions": [
+                "Open the Content Drawer → Bowling → User Interface → Widget Blueprint → User Widget.",
+                "Create WBP_BowlingHUD (User Widget).",
+                "In Designer add ScoreText, PinsText and ThrowsText as Text widgets (tick Is Variable), with placeholder labels \"Score: 0\", \"Pins down: 0\" and \"Throws left: 3\".",
+                "Keep the HUD compact in a corner so the lane is visible.",
+                "No buttons are needed because the player restarts with R."
               ]
             },
             {
@@ -1156,6 +1696,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "function-output",
                 "binding"
+              ],
+              "actions": [
+                "Open WBP_BowlingHUD → Designer → ScoreText → Details → Content → Text → Bind → Create Binding.",
+                "In WBP_BowlingHUD → Designer, select ScoreText → Details → Content → Text → Bind → Create Binding.",
+                "In the generated binding Function, wire the purple Entry execution to Cast To BP_BowlingGameMode, with Get Game Mode → Cast Object.",
+                "Wire Cast Success execution to Return Node execution.",
+                "From the cast result Get Score, use Format Text \"Score: {Value}\" with Score connected to Value, then connect the text output to Return Value.",
+                "Compile."
               ]
             },
             {
@@ -1167,6 +1715,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "function-output",
                 "binding"
+              ],
+              "actions": [
+                "Open WBP_BowlingHUD → Designer → PinsText → Details → Content → Text → Bind → Create Binding.",
+                "WBP_BowlingHUD → Designer → PinsText → Text → Bind → Create Binding.",
+                "In the generated Function, connect Entry white execution → Cast To BP_BowlingGameMode (Object=Get Game Mode) → Return Node white execution.",
+                "From the cast result Get PinsDown → Format Text \"Pins down: {Value}\" → Return Value.",
+                "Compile.",
+                "Do not drag the pin Actor counter into this widget; both values belong to the GameMode."
               ]
             },
             {
@@ -1178,6 +1734,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "function-output",
                 "binding"
+              ],
+              "actions": [
+                "Open WBP_BowlingHUD → ThrowsText → Text → Bind → Create Binding.",
+                "WBP_BowlingHUD → Designer → ThrowsText → Text → Bind → Create Binding.",
+                "In the generated Function, connect Entry white execution → Cast To BP_BowlingPlayerController (Object=Get Owning Player) → Return Node white execution.",
+                "From cast result Get ThrowsUsed and MaxThrows, compute Max(0,MaxThrows-ThrowsUsed) with Integer math.",
+                "Use Format Text \"Throws left: {Value}\" and connect its output to the Return Node Text value."
               ]
             },
             {
@@ -1189,6 +1752,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "input",
                 "widget"
+              ],
+              "actions": [
+                "Open BP_BowlingPlayerController → Event BeginPlay.",
+                "BP_BowlingPlayerController → Event BeginPlay: keep the original chain Add Mapping Context(BowlingInputs) → Get Actor of Class(BP_BowlingBall) → Set BowlingBall.",
+                "AFTER Set BowlingBall, create WBP_BowlingHUD using Create Widget (Owning Player=Self) and then Add to Viewport (connect Create Widget Return Value to the Add to Viewport Target).",
+                "Compile.",
+                "Avoid disconnecting the old input mapping or ball reference."
               ]
             },
             {
@@ -1200,6 +1770,15 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "variable",
                 "custom-event"
+              ],
+              "actions": [
+                "Open BP_BowlingPin → Variables.",
+                "Open BP_BowlingPin → Variables → + and create PinValue (Integer, default=1).",
+                "Tick Instance Editable (eye icon) in Details, then Compile.",
+                "Find the old BP_BowlingPin Event Graph where Cast To BP_BowlingGameMode → RecordPin currently has fixed PinValue=1.",
+                "Replace that fixed pin with Get PinValue from this BP_BowlingPin instance.",
+                "Compile.",
+                "Do NOT change GoalPins or Counted."
               ]
             },
             {
@@ -1210,6 +1789,11 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "Knocking over the special pin adds 3 to Score but just 1 to PinsDown.",
               "helpTopics": [
                 "get-set"
+              ],
+              "actions": [
+                "Open the Bowling level → select one BP_BowlingPin actor.",
+                "Set PinValue = 3 on that instance and give its Static Mesh component a visibly distinct material.",
+                "Leave other pins set to 1."
               ]
             },
             {
@@ -1221,6 +1805,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "variable",
                 "widget"
+              ],
+              "actions": [
+                "Open WBP_BowlingHUD → Designer.",
+                "Add a Text widget named ResultText, tick Is Variable, set initial text to \"ROUND OVER\" and set Visibility=Collapsed.",
+                "Make sure it is readable but does not hide the main Score, Pins or Throws display.",
+                "Compile."
               ]
             },
             {
@@ -1232,6 +1822,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "custom-event",
                 "binding"
+              ],
+              "actions": [
+                "Open WBP_BowlingHUD → Graph → Event Graph.",
+                "In WBP_BowlingHUD → Event Graph, add Custom Event RefreshBowlingResult.",
+                "From its white output connect Get Game Mode → Cast To BP_BowlingGameMode → Branch (Condition=Get RoundFinished).",
+                "On True, use Get Score → Format Text \"ROUND OVER – SCORE: {Value}\" → Set Text(ResultText) → Set Visibility(ResultText,Visible), wiring white execution Set Text → Set Visibility.",
+                "On False Set Visibility(ResultText,Collapsed).",
+                "Compile."
               ]
             },
             {
@@ -1243,6 +1841,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "custom-event",
                 "timer"
+              ],
+              "actions": [
+                "Open WBP_BowlingHUD → Graph → Event Construct.",
+                "From Event Construct call Set Timer by Event, Time=0.25, Looping=true.",
+                "Drag from the red Event delegate pin and select Create Event; bind it to RefreshBowlingResult.",
+                "Only add ONE timer to this HUD instance.",
+                "Compile."
               ]
             },
             {
@@ -1253,6 +1858,15 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "The second round starts with three throws and no leftover score.",
               "helpTopics": [
                 "playtest"
+              ],
+              "actions": [
+                "Open the level twice and press Play.",
+                "Play two full test rounds.",
+                "First, deliberately miss at least one shot and verify Score, Pins down and Throws left are visible while the ball resets twice.",
+                "After the third shot, wait four seconds and check ROUND OVER displays the final Score.",
+                "Press R.",
+                "In the second round, knock over the coloured bonus pin: Score increases by 3 but Pins down by only 1.",
+                "Test R again."
               ]
             }
           ],
@@ -1322,6 +1936,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "event-input",
                 "custom-event"
+              ],
+              "actions": [
+                "Open BP_BowlingBall → Event Graph → original Bowl Custom Event from Mini-Project Stage 4.",
+                "Select the red Bowl Custom Event and add a Float input named Strength (default 200000) in Details → Inputs.",
+                "Find the original Add Force node targeting Model, originally Force X=200000, Y=0, Z=0 with Accel Change enabled.",
+                "Replace its fixed Force vector with Make Vector: X=Strength, Y=0, Z=0.",
+                "Keep Accel Change ticked.",
+                "Compile."
               ]
             },
             {
@@ -1332,6 +1954,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "Space still launches the ball before adding Q/E. If the Force input receives zero, go back and set the Bowl call Strength pin to 200000.",
               "helpTopics": [
                 "input"
+              ],
+              "actions": [
+                "Open BP_BowlingPlayerController → Event Graph → original IA_Bowl Started → Bowl call.",
+                "The Bowl call now has a new Strength input pin.",
+                "Set its pin default to 200000 (the original tutorial value) for now, then Compile and Play once.",
+                "Do not leave the new Strength input at 0.",
+                "You will replace this fixed value with the adjustable one later."
               ]
             },
             {
@@ -1342,6 +1971,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "Both values are visible in the controller details.",
               "helpTopics": [
                 "variable"
+              ],
+              "actions": [
+                "Open BP_BowlingPlayerController → Variables.",
+                "In BP_BowlingPlayerController create BaseThrowPower (Float; default 200000) and PowerMultiplier (Float; default 1.0).",
+                "Use the original known-working X force (200000) as the starting value.",
+                "Compile."
               ]
             },
             {
@@ -1353,6 +1988,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "variable",
                 "input"
+              ],
+              "actions": [
+                "Open the Content Drawer → Bowling → Input folder.",
+                "In Content/Bowling/Inputs, create IA_PowerDown and IA_PowerUp as Input Action assets with Value Type=Digital (Boolean).",
+                "Open BowlingInputs (the original Input Mapping Context already active in the controller) and add mappings IA_PowerDown=Q and IA_PowerUp=E.",
+                "Save.",
+                "Do not create a new Mapping Context."
               ]
             },
             {
@@ -1364,6 +2006,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "input",
                 "get-set"
+              ],
+              "actions": [
+                "Open BP_BowlingPlayerController → Event Graph.",
+                "From IA_PowerDown Started, Set PowerMultiplier = Clamp (Float)(PowerMultiplier-0.25, 0.5, 2.0).",
+                "From IA_PowerUp Started, Set PowerMultiplier = Clamp (Float)(PowerMultiplier+0.25, 0.5, 2.0).",
+                "Print PowerMultiplier for testing."
               ]
             },
             {
@@ -1375,6 +2023,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "input",
                 "math"
+              ],
+              "actions": [
+                "Open BP_BowlingPlayerController → existing gated IA_Bowl chain from Upgrade 2.",
+                "BP_BowlingPlayerController → existing IA_Bowl Started chain → original Bowl call.",
+                "Keep the three-throw gate and counters.",
+                "Multiply BaseThrowPower × PowerMultiplier (Float × Float) and connect that value to the SAME existing Bowl call Strength pin, replacing the temporary 200000 constant.",
+                "Compile.",
+                "Do not add another Bowl call or Add Force node."
               ]
             },
             {
@@ -1385,6 +2041,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "A peer can deliberately choose a soft or powerful shot.",
               "helpTopics": [
                 "playtest"
+              ],
+              "actions": [
+                "Open In Editor and press Play.",
+                "Try PowerMultiplier 0.5, 1.0 and 2.0.",
+                "Reset with R each time.",
+                "Tune BaseThrowPower if the ball never reaches pins or always passes through them.",
+                "Save the working settings."
               ]
             }
           ],
@@ -1453,6 +2116,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "variable",
                 "debug"
+              ],
+              "actions": [
+                "Open your existing BP_ClickerGameMode Blueprint.",
+                "In My Blueprint → Variables, click +.",
+                "Name the new VARIABLE ClickPower. Choose Integer, Compile, set Default Value=1.",
+                "Click + Variable again. Name it UpgradeCost. Choose Integer, Compile, set Default Value=10.",
+                "Keep the existing Score VARIABLE from the starter tutorial. Do NOT create another Score.",
+                "Compile and Save."
               ]
             },
             {
@@ -1464,6 +2135,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "function",
                 "get-set"
+              ],
+              "actions": [
+                "Open your original BP_ClickerGameMode → Functions → +.",
+                "Name the function AddClick.",
+                "Drag Score as Get and ClickPower as Get, add them with Integer + Integer, and set Score to the result.",
+                "Connect the AddClick function entry white execution to Set Score.",
+                "Compile."
               ]
             },
             {
@@ -1474,6 +2152,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "One original assigned click event exists in BP_ClickerGameMode and still responds to the big button.",
               "helpTopics": [
                 "custom-event"
+              ],
+              "actions": [
+                "Open BP_ClickerGameMode → Event Graph → the button event wired from Assign On Clicked.",
+                "Locate the original chain: BeginPlay creates ClickerGameUI, stores ClickerUI, then Assign On Clicked binds the main ClickerButton.",
+                "Follow its red delegate to the separate event that currently adds 1 to Score and calls ClickerUI → SetScoreText.",
+                "Keep that binding.",
+                "Do NOT create another OnClicked event for the main button in the widget."
               ]
             },
             {
@@ -1485,6 +2170,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "get-set",
                 "math"
+              ],
+              "actions": [
+                "Open BP_ClickerGameMode → Event Graph → existing assigned ClickerButton event.",
+                "Disconnect or delete only the original Set Score = Score + 1 calculation.",
+                "From the SAME click event, call your new AddClick function once.",
+                "After it, keep the existing Get ClickerUI → SetScoreText call and connect the updated Score integer to its Score input.",
+                "Compile."
               ]
             },
             {
@@ -1496,6 +2188,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "function",
                 "branch"
+              ],
+              "actions": [
+                "Open BP_ClickerGameMode → Functions → + → name it BuyUpgrade.",
+                "Add Branch with condition Score >= UpgradeCost.",
+                "From True set Score = Score - UpgradeCost, then ClickPower = ClickPower + 1, then UpgradeCost = UpgradeCost * 2.",
+                "Connect the white execution wire through all three Set nodes in that order.",
+                "False does nothing."
               ]
             },
             {
@@ -1506,6 +2205,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "Two different buttons are visible and clickable.",
               "helpTopics": [
                 "widget"
+              ],
+              "actions": [
+                "Open ClickerGameUI Widget → Designer.",
+                "Add a second Button called BuyUpgradeButton, with a child Text widget reading \"Buy Upgrade\".",
+                "Position it clear of the main click button.",
+                "Compile."
               ]
             },
             {
@@ -1517,6 +2222,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "cast",
                 "get-set"
+              ],
+              "actions": [
+                "Open ClickerGameUI Widget → Designer → BuyUpgradeButton → Events → OnClicked (+).",
+                "In ClickerGameUI, select the NEW BuyUpgradeButton and click + for OnClicked.",
+                "Connect that event to Get Game Mode → Cast To BP_ClickerGameMode → BuyUpgrade.",
+                "After BuyUpgrade, use the same cast result to Get Score and call SetScoreText on Self (your current widget) with that number.",
+                "Keep the ORIGINAL ClickerButton assigned in BP_ClickerGameMode; do not add another OnClicked for it.",
+                "Compile."
               ]
             },
             {
@@ -1527,6 +2240,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "The game never produces negative points by buying.",
               "helpTopics": [
                 "playtest"
+              ],
+              "actions": [
+                "Open the Clicker level and press Play.",
+                "Play the level and confirm a fresh game starts with 0 points.",
+                "Buy Upgrade must do nothing with insufficient funds.",
+                "Click the main button 10 times, then buy once: Score returns to 0, ClickPower becomes 2, and UpgradeCost becomes 20.",
+                "Click the main button once more: Score becomes 2.",
+                "Restart Play for a clean test."
               ]
             }
           ],
@@ -1601,6 +2322,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "variable",
                 "widget"
+              ],
+              "actions": [
+                "Open ClickerGameUI Widget → Designer.",
+                "In your original ClickerGameUI Widget Designer, KEEP the original ScoreText.",
+                "Do not add a second one.",
+                "Add PowerText and CostText as new Text widgets and tick Is Variable on all three.",
+                "Set placeholder values \"Points: 0\", \"Per click: 1\", \"Next upgrade: 10\".",
+                "Leave ClickerButton and BuyUpgradeButton unchanged."
               ]
             },
             {
@@ -1612,6 +2341,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "function",
                 "cast"
+              ],
+              "actions": [
+                "Open ClickerGameUI Widget → Graph → My Blueprint → Functions → +.",
+                "Create a function named RefreshShop.",
+                "Add Get Game Mode, connect its Return Value to Cast To BP_ClickerGameMode, then connect the purple function Entry white execution pin to the Cast.",
+                "Compile the widget."
               ]
             },
             {
@@ -1623,6 +2358,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "binding",
                 "widget"
+              ],
+              "actions": [
+                "Open ClickerGameUI → RefreshShop function, after the successful cast.",
+                "Get Score from the BP_ClickerGameMode cast result.",
+                "Add Format Text, set Format to \"Points: {Number}\", and connect Score to the Number pin (allow integer-to-text conversion).",
+                "Drag the ORIGINAL ScoreText widget into the graph as Get; from it add Set Text (Text).",
+                "Connect Format Text to In Text and the Cast success white execution output to Set Text."
               ]
             },
             {
@@ -1634,6 +2376,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "binding",
                 "get-set"
+              ],
+              "actions": [
+                "Open ClickerGameUI → RefreshShop, after ScoreText Set Text.",
+                "Add a Format Text for PowerText with \"Per click: {Number}\" from Get ClickPower, and another for CostText with \"Next upgrade: {Number}\" from Get UpgradeCost.",
+                "Call Set Text on each respective widget.",
+                "Chain the white execution wire ScoreText Set Text → PowerText Set Text → CostText Set Text.",
+                "Compile."
               ]
             },
             {
@@ -1644,6 +2393,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "One main-button click runs AddClick exactly once and RefreshShop updates Score, ClickPower and UpgradeCost.",
               "helpTopics": [
                 "refresh"
+              ],
+              "actions": [
+                "Open BP_ClickerGameMode → Event Graph → original event from Assign On Clicked for ClickerButton.",
+                "Keep the existing event → AddClick function.",
+                "Find the old call Get ClickerUI → SetScoreText(Score) that you kept in Upgrade 1.",
+                "Replace that call with Get ClickerUI → RefreshShop.",
+                "Compile the widget first so BP_ClickerGameMode can find RefreshShop.",
+                "Do NOT add OnClicked to ClickerButton in the widget."
               ]
             },
             {
@@ -1654,6 +2411,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "After a successful purchase, Per click and Next upgrade change immediately.",
               "helpTopics": [
                 "refresh"
+              ],
+              "actions": [
+                "Open ClickerGameUI Widget → BuyUpgradeButton OnClicked event.",
+                "Inside the existing BuyUpgradeButton OnClicked event in ClickerGameUI, after BuyUpgrade replace the older call to SetScoreText with RefreshShop (on Self).",
+                "RefreshShop must run whether the purchase is accepted or rejected.",
+                "Compile."
               ]
             },
             {
@@ -1664,6 +2427,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "On a fresh Play, ScoreText reads Points: 0, PowerText Per click: 1 and CostText Next upgrade: 10 before any click; no stale hard-coded 0 chain remains.",
               "helpTopics": [
                 "refresh"
+              ],
+              "actions": [
+                "Open ClickerGameUI Widget → Graph → Event Construct.",
+                "In ClickerGameUI Event Construct from the original tutorial, remove or disconnect the old hard-coded SetScoreText(0) call.",
+                "Connect Event Construct → RefreshShop instead.",
+                "Compile and Save.",
+                "The displayed starting values are now read from BP_ClickerGameMode."
               ]
             },
             {
@@ -1674,6 +2444,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "No label or button is cut off.",
               "helpTopics": [
                 "playtest"
+              ],
+              "actions": [
+                "Open ClickerGameUI Widget → Designer → Screen Size preview.",
+                "Try a smaller viewport.",
+                "Adjust anchors and layout so all text and buttons are visible.",
+                "Then run Play In Editor at a different window size."
               ]
             }
           ],
@@ -1724,6 +2500,11 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "variable",
                 "debug"
+              ],
+              "actions": [
+                "Open BP_ClickerGameMode → My Blueprint → Variables.",
+                "Create GranniesOwned (Integer; default 0), GrannyRate (Integer; default 1) and GrannyCost (Integer; default 15).",
+                "Compile."
               ]
             },
             {
@@ -1735,6 +2516,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "variable",
                 "debug"
+              ],
+              "actions": [
+                "Open BP_ClickerGameMode → My Blueprint → Variables.",
+                "Keep Score as your spendable points balance.",
+                "Create TotalEarned (Integer; default 0), then Compile.",
+                "Do not deduct from TotalEarned when buying anything."
               ]
             },
             {
@@ -1746,6 +2533,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "function-input",
                 "variable"
+              ],
+              "actions": [
+                "Open BP_ClickerGameMode → My Blueprint → Functions → +.",
+                "Create GainPoints.",
+                "Select its purple entry node, then Details → Inputs → +, add Amount (Integer).",
+                "Compile."
               ]
             },
             {
@@ -1757,6 +2550,11 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "branch",
                 "math"
+              ],
+              "actions": [
+                "Open GainPoints function graph.",
+                "Add comparison Amount > 0 and connect it to a Branch.",
+                "Wire the function entry white execution pin into the Branch."
               ]
             },
             {
@@ -1768,6 +2566,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "branch",
                 "get-set"
+              ],
+              "actions": [
+                "Open GainPoints function → Branch True output.",
+                "Set Score = Score + Amount, then Set TotalEarned = TotalEarned + Amount.",
+                "Wire the white Set nodes in this order and Compile.",
+                "Do not alter TotalEarned in shop purchase functions."
               ]
             },
             {
@@ -1779,6 +2583,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "get-set",
                 "math"
+              ],
+              "actions": [
+                "Open BP_ClickerGameMode → existing AddClick function from Upgrade 1.",
+                "Inside the BP_ClickerGameMode AddClick function, disconnect the old Set Score = Score + ClickPower calculation.",
+                "Instead call GainPoints with Amount connected to ClickPower.",
+                "Leave the existing GameMode assigned ClickerButton event calling AddClick once, followed by Get ClickerUI → RefreshShop.",
+                "Do not add a widget-side main-button handler."
               ]
             },
             {
@@ -1790,6 +2601,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "function",
                 "branch"
+              ],
+              "actions": [
+                "Open BP_ClickerGameMode → Functions → +.",
+                "Create BuyGranny.",
+                "Add Branch with condition Score >= GrannyCost.",
+                "On True, wire Set Score = Score - GrannyCost → Set GranniesOwned = GranniesOwned + 1 → Set GrannyCost = Ceiling(GrannyCost × 1.25).",
+                "Ceiling converts the float price calculation back to an integer.",
+                "False does nothing."
               ]
             },
             {
@@ -1801,6 +2620,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "function-output",
                 "function"
+              ],
+              "actions": [
+                "Open BP_ClickerGameMode → My Blueprint → Functions → +.",
+                "Create a function GetProductionPerSecond.",
+                "Select the function in My Blueprint (or its Entry node) and tick Pure in the Details panel.",
+                "Under Outputs click +, name the new output Production and set its type to Integer; Compile."
               ]
             },
             {
@@ -1812,6 +2637,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "function-output",
                 "get-set"
+              ],
+              "actions": [
+                "Open BP_ClickerGameMode → GetProductionPerSecond function graph.",
+                "Drag GranniesOwned and GrannyRate into the graph as Get, connect them to Multiply (Integer × Integer), and connect the result to Production on the Return Node.",
+                "Compile.",
+                "Do not add a Set Score node to this function."
               ]
             },
             {
@@ -1823,6 +2654,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "variable",
                 "widget"
+              ],
+              "actions": [
+                "Open ClickerGameUI Widget → Designer.",
+                "Add a Button named BuyGrannyButton with text \"Buy Granny\".",
+                "Add Text widgets GranniesText and PassiveIncomeText; tick Is Variable.",
+                "Placeholder text: \"Grannies: 0\" and \"Auto: 0 / sec\".",
+                "Add a Text widget LifetimeText with placeholder \"Lifetime: 0\" and tick Is Variable."
               ]
             },
             {
@@ -1833,6 +2671,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "From a fresh game, manually earn 15, then press Buy Granny: GranniesOwned becomes 1, GrannyCost becomes 19 and spendable Score drops by 15. The automatic timer is added in the next part.",
               "helpTopics": [
                 "cast"
+              ],
+              "actions": [
+                "Open ClickerGameUI Widget → Graph → BuyGrannyButton → OnClicked.",
+                "In ClickerGameUI, add an OnClicked event for the NEW BuyGrannyButton.",
+                "Get Game Mode → Cast To BP_ClickerGameMode → call BuyGranny → call RefreshShop on Self.",
+                "Leave the original ClickerButton binding in BP_ClickerGameMode untouched.",
+                "Compile."
               ]
             },
             {
@@ -1844,6 +2689,15 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "binding",
                 "get-set"
+              ],
+              "actions": [
+                "Open ClickerGameUI Widget → RefreshShop function.",
+                "Open ClickerGameUI → RefreshShop.",
+                "Reuse the successful BP_ClickerGameMode cast already there.",
+                "Read GranniesOwned and GrannyCost, then Set Text on GranniesText using Format Text \"Grannies: {Owned} | Next: {Cost}\".",
+                "Read GetProductionPerSecond and Set Text on PassiveIncomeText using Format Text \"Auto: {Rate} / sec\".",
+                "Read TotalEarned and Set Text on LifetimeText using \"Lifetime: {Earned}\".",
+                "Connect all new Set Text nodes AFTER CostText in the same white execution chain; Compile."
               ]
             },
             {
@@ -1854,6 +2708,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "The purchase and shop labels work even though automatic points are not running yet.",
               "helpTopics": [
                 "playtest"
+              ],
+              "actions": [
+                "Open ClickerGameUI → Play In Editor after connecting BuyGrannyButton.",
+                "Start Play, click to earn at least 15 points, then buy ONE Granny.",
+                "Check the widget shows Grannies: 1, Next: 19 and Auto: 1 / sec.",
+                "At this point the auto income label is a rate preview; points will not rise by themselves until you add the one-second timer below."
               ]
             },
             {
@@ -1865,6 +2725,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "custom-event",
                 "widget"
+              ],
+              "actions": [
+                "Open BP_ClickerGameMode → Event Graph in empty space.",
+                "Create a Custom Event called ProduceIncome.",
+                "Leave your original BeginPlay → Create Widget → Add to Viewport chain untouched.",
+                "Compile."
               ]
             },
             {
@@ -1876,6 +2742,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "custom-event",
                 "timer"
+              ],
+              "actions": [
+                "Open BP_ClickerGameMode → Event BeginPlay.",
+                "Keep your ORIGINAL BeginPlay → Create Widget → Add to Viewport → Set ClickerUI → Assign On Clicked chain intact.",
+                "Add a Sequence immediately after BeginPlay: Then 0 continues to the original chain; Then 1 goes to Set Timer by Event (Time=1.0, Looping ticked).",
+                "Drag from its red Event delegate pin and choose Create Event; select ProduceIncome in the new event chooser.",
+                "Compile.",
+                "The timer must only be started once here, not when buying each Granny."
               ]
             },
             {
@@ -1886,6 +2760,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "After you have bought at least one Granny using the new button, start Play again, buy one, then stop clicking. With a temporary Print String after GainPoints you see Score rise by about 1 per second. Remove the debug print afterwards.",
               "helpTopics": [
                 "refresh"
+              ],
+              "actions": [
+                "Open BP_ClickerGameMode → ProduceIncome.",
+                "Call GetProductionPerSecond and feed its Integer result to GainPoints(Amount).",
+                "GainPoints already ignores zero amounts and updates Score and TotalEarned.",
+                "Compile."
               ]
             },
             {
@@ -1897,6 +2777,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "custom-event",
                 "timer"
+              ],
+              "actions": [
+                "Open ClickerGameUI Widget → Event Construct.",
+                "In ClickerGameUI → Event Graph, leave the existing Event Construct → RefreshShop connection.",
+                "Add Set Timer by Event AFTER the first RefreshShop, Time=0.25, Looping ticked.",
+                "Add a Custom Event RefreshAutoHUD in empty space, connect it to RefreshShop, then from the timer red Event delegate pin choose Create Event assigned to RefreshAutoHUD.",
+                "Do this only once in Construct; keep the existing GameMode production timer separate."
               ]
             },
             {
@@ -1907,6 +2794,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "With two Grannies, the passive rate displays 2 per second and continues without clicking.",
               "helpTopics": [
                 "playtest"
+              ],
+              "actions": [
+                "Open the game from a fresh level and press Play.",
+                "Start Play fresh.",
+                "Earn 15 points by clicking and buy one Granny; the next cost must show 19.",
+                "Continue earning from clicks and from the first Granny until Score is at least 19, buy a second; the next cost shows 24.",
+                "After buying two, stop clicking for three seconds: production increases by around six points (two per second).",
+                "Since automatic income continues during purchases, Score may rise immediately after paying; watch the price and GranniesOwned to verify the purchases."
               ]
             }
           ],
@@ -2029,6 +2924,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "The default rate is 1 and the training price is 100.",
               "helpTopics": [
                 "variable"
+              ],
+              "actions": [
+                "Open BP_ClickerGameMode → Variables.",
+                "Create GrannyTrainingCost (Integer; default 100).",
+                "Keep existing GrannyRate (Integer; default 1).",
+                "Compile."
               ]
             },
             {
@@ -2040,6 +2941,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "function",
                 "branch"
+              ],
+              "actions": [
+                "Open BP_ClickerGameMode → Functions → +.",
+                "Create TrainGrannies.",
+                "Add Branch using (Score >= GrannyTrainingCost) AND (GranniesOwned > 0).",
+                "From True: Set Score = Score - GrannyTrainingCost → Set GrannyRate = GrannyRate × 2 → Set GrannyTrainingCost = GrannyTrainingCost × 2.",
+                "False does nothing.",
+                "Compile."
               ]
             },
             {
@@ -2050,6 +2959,11 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "Both shop options are readable and do not overlap.",
               "helpTopics": [
                 "widget"
+              ],
+              "actions": [
+                "Open ClickerGameUI Widget → Designer.",
+                "Add Button TrainGranniesButton with child Text \"Train Grannies\" and a Text widget TrainingInfoText marked Is Variable.",
+                "Position them next to the Granny purchase controls."
               ]
             },
             {
@@ -2060,6 +2974,11 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "At enough balance, a press changes GrannyRate and the next training cost exactly once.",
               "helpTopics": [
                 "cast"
+              ],
+              "actions": [
+                "Open ClickerGameUI Widget → TrainGranniesButton → OnClicked.",
+                "Use Get Game Mode → Cast To BP_ClickerGameMode → TrainGrannies → RefreshShop.",
+                "Compile."
               ]
             },
             {
@@ -2070,6 +2989,11 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "With 2 Grannies trained once, Auto shows 4/sec; trained twice it shows 8/sec.",
               "helpTopics": [
                 "binding"
+              ],
+              "actions": [
+                "Open ClickerGameUI Widget → RefreshShop.",
+                "Read GrannyRate and GrannyTrainingCost and use Format Text to show \"Each Granny: {Rate}/sec | Train: {Cost}\".",
+                "Keep PassiveIncomeText reading GetProductionPerSecond so the total updates automatically."
               ]
             },
             {
@@ -2080,6 +3004,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "The income rate doubles while lifetime earnings only increase as new cookies are generated.",
               "helpTopics": [
                 "playtest"
+              ],
+              "actions": [
+                "Open the game and press Play.",
+                "With two Grannies, earn at least 100 spendable points.",
+                "Press Train once: the next upgrade costs 200 and Auto changes from 2/sec to 4/sec.",
+                "Score drops by 100 at the moment of purchase but continues earning immediately from passive income; TotalEarned must never decrease."
               ]
             }
           ],
@@ -2130,6 +3060,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "MilestoneReached is false at the start and the goal is 500.",
               "helpTopics": [
                 "variable"
+              ],
+              "actions": [
+                "Open BP_ClickerGameMode → Variables.",
+                "Create MilestoneTarget (Integer; default 500) and MilestoneReached (Boolean; default false).",
+                "Keep Score and TotalEarned from the Granny upgrade.",
+                "Compile."
               ]
             },
             {
@@ -2141,6 +3077,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "branch",
                 "get-set"
+              ],
+              "actions": [
+                "Open BP_ClickerGameMode → GainPoints function from the Granny upgrade.",
+                "After Set TotalEarned, add a Branch with condition (NOT MilestoneReached) AND (TotalEarned >= MilestoneTarget).",
+                "On True set MilestoneReached=true and optionally Print String \"500 earned!\".",
+                "Do not stop the production timer or disable the click button."
               ]
             },
             {
@@ -2151,6 +3093,11 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "No milestone text is visible at the start.",
               "helpTopics": [
                 "widget"
+              ],
+              "actions": [
+                "Open ClickerGameUI Widget → Designer.",
+                "Add a Text widget MilestoneText with text \"500 LIFETIME POINTS!\" and enable Is Variable.",
+                "Set Visibility to Collapsed initially."
               ]
             },
             {
@@ -2161,6 +3108,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "The milestone appears while Granny automatic income continues.",
               "helpTopics": [
                 "refresh"
+              ],
+              "actions": [
+                "Open ClickerGameUI Widget → RefreshShop function.",
+                "From your existing GameMode cast, get MilestoneReached.",
+                "If True, Set Visibility(MilestoneText, Visible); otherwise set it Collapsed.",
+                "Do not create another timer: the Granny stage already refreshes the whole shop every 0.25 seconds."
               ]
             },
             {
@@ -2171,6 +3124,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "The test banner appears at 20 earned points without blocking purchases. Both the target and on-screen wording are restored to 500 for the real game.",
               "helpTopics": [
                 "playtest"
+              ],
+              "actions": [
+                "Open the Clicker level and press Play.",
+                "For a quick test, temporarily set MilestoneTarget default to 20 in BP_ClickerGameMode AND change the MilestoneText placeholder in ClickerGameUI to \"TEST: 20 LIFETIME POINTS!\".",
+                "Restart Play, earn 20 lifetime points from clicks or Grannies, then spend some Score.",
+                "Verify the achievement appears once and does not interrupt the shop.",
+                "Afterwards restore MilestoneTarget=500 and MilestoneText=\"500 LIFETIME POINTS!\", then restart Play again."
               ]
             }
           ],
@@ -2216,6 +3176,11 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "The three starting values are 0, 5 and 100.",
               "helpTopics": [
                 "variable"
+              ],
+              "actions": [
+                "Open BP_ClickerGameMode → Variables.",
+                "Create FarmsOwned (Integer; default 0), FarmRate (Integer; default 5) and FarmCost (Integer; default 100).",
+                "Compile."
               ]
             },
             {
@@ -2227,6 +3192,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "function",
                 "branch"
+              ],
+              "actions": [
+                "Open BP_ClickerGameMode → Functions → +.",
+                "Create BuyFarm.",
+                "Add Branch (Score >= FarmCost).",
+                "From True: Set Score = Score - FarmCost → Set FarmsOwned = FarmsOwned + 1 → Set FarmCost = Ceiling(FarmCost × 1.30).",
+                "Compile."
               ]
             },
             {
@@ -2238,6 +3210,11 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "function-output",
                 "math"
+              ],
+              "actions": [
+                "Open BP_ClickerGameMode → GetProductionPerSecond function.",
+                "Keep the original GranniesOwned × GrannyRate calculation.",
+                "Add FarmsOwned × FarmRate, then add both integer products and connect the sum to the Return Node Production output."
               ]
             },
             {
@@ -2248,6 +3225,11 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "The shop displays both producer types without hiding either.",
               "helpTopics": [
                 "widget"
+              ],
+              "actions": [
+                "Open ClickerGameUI Widget → Designer.",
+                "Add a Farm button named BuyFarmButton and a Text widget FarmInfoText, tick Is Variable.",
+                "Set the placeholder to \"Farms: 0 | Next: 100\"."
               ]
             },
             {
@@ -2258,6 +3240,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "One Farm appears in the shop and 5 extra points/second are added immediately.",
               "helpTopics": [
                 "binding"
+              ],
+              "actions": [
+                "Open ClickerGameUI Widget → Graph.",
+                "BuyFarmButton OnClicked → GameMode BuyFarm → RefreshShop.",
+                "Extend RefreshShop to read FarmsOwned and FarmCost and SetText on FarmInfoText using Format Text.",
+                "Leave the existing automatic UI refresh timer untouched."
               ]
             },
             {
@@ -2269,6 +3257,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "math",
                 "debug"
+              ],
+              "actions": [
+                "Open the game and press Play.",
+                "Test with 3 Grannies (trained once to GrannyRate 2) and 2 Farms (FarmRate 5).",
+                "The expected production is (3×2)+(2×5)=16 points/sec.",
+                "This setup may take a while to earn in normal play; for a quick development test, use the Blueprint debugger or temporarily give the GameMode a larger starting Score, then restore the Score default to 0.",
+                "Watch production for around five seconds without clicks or purchases.",
+                "TotalEarned should increase by roughly 80, and Score by the same amount."
               ]
             },
             {
@@ -2279,6 +3275,11 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "You can explain how your third producer would feed into GetProductionPerSecond without a new timer.",
               "helpTopics": [
                 "art"
+              ],
+              "actions": [
+                "With your partner, sketch a third producer in the shared Teams folder.",
+                "Choose a name, starting cost, income rate and artwork.",
+                "Describe which variables and single GameMode functions you would reuse; only build it if the game is already playable."
               ]
             }
           ],
@@ -2352,6 +3353,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "The original BP_Box loop still works in the backup; you are editing your own copy.",
               "helpTopics": [
                 "backup"
+              ],
+              "actions": [
+                "Open Content/Loops → LoopsLevel and BP_LoopsGameMode.",
+                "Finish the three original Loops tutorials and make a copy of the working project.",
+                "Keep original physics BP_Box untouched.",
+                "If you already made BP_ClickTarget, do not delete your old work: this is a NEW Rising Defence extension, not the old Target Rush waves."
               ]
             },
             {
@@ -2363,6 +3370,17 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "actor",
                 "component"
+              ],
+              "actions": [
+                "Open Content Drawer → Content/Loops.",
+                "Right-click empty space → Blueprint Class → Actor.",
+                "Name the new ACTOR BLUEPRINT BP_RisingBlock and open it.",
+                "In Components click + Add → Static Mesh. Rename this COMPONENT BlockMesh.",
+                "With BlockMesh selected, set Static Mesh to the built-in Cube.",
+                "In Details set Simulate Physics=false and Collision Enabled=Query Only.",
+                "Under Collision responses make Visibility=Block.",
+                "In Transform set Relative Location Z=50.",
+                "Click Compile, then Save."
               ]
             },
             {
@@ -2374,6 +3392,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "spawn",
                 "math"
+              ],
+              "actions": [
+                "Open BP_LoopsGameMode → Event Graph → original BeginPlay For Loop.",
+                "Change the original Spawn Actor From Class Class from BP_Box to BP_RisingBlock, First Index=0, Last Index=4.",
+                "Replace the tower's height maths with Make Vector: X=200, Y=(Loop Index - 2) * 150, Z=0 → Make Transform.Location → Spawn Actor.",
+                "Use Collision Handling Override=Always Spawn, Ignore Collisions.",
+                "Compile and Play."
               ]
             },
             {
@@ -2384,6 +3409,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "The camera preview contains all five blocks and plenty of space above them.",
               "helpTopics": [
                 "level"
+              ],
+              "actions": [
+                "Open LoopsLevel → Place Actors → Camera Actor.",
+                "Place ONE Camera Actor named Cam_RisingDefence at approximately X=-950,Y=0,Z=260, with Rotator Pitch=0,Yaw=0,Roll=0 (faces +X).",
+                "Frame all five cubes; fine-tune camera/FOV if necessary.",
+                "Save the level."
               ]
             },
             {
@@ -2394,6 +3425,15 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "The game actually uses BP_LoopsPlayerController and a visible cursor.",
               "helpTopics": [
                 "level"
+              ],
+              "actions": [
+                "In Content/Loops, check if BP_LoopsPlayerController already exists. Reuse it if it does.",
+                "If it does not exist: right-click → Blueprint Class → PlayerController, name BP_LoopsPlayerController.",
+                "Open BP_LoopsGameMode → Class Defaults.",
+                "Set Player Controller Class to BP_LoopsPlayerController.",
+                "Open LoopsLevel → Settings → World Settings.",
+                "Set GameMode Override to BP_LoopsGameMode.",
+                "Click Save Level. Press PLAY, not Simulate."
               ]
             },
             {
@@ -2405,6 +3445,17 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "cast",
                 "exec"
+              ],
+              "actions": [
+                "Open BP_LoopsPlayerController → Event Graph.",
+                "Find the existing Event BeginPlay (or add Event BeginPlay if none).",
+                "From its WHITE pin add Set Show Mouse Cursor, Target=Self, true.",
+                "From its WHITE output add Set Input Mode Game and UI, Player Controller=Self.",
+                "On Set Input Mode Game and UI leave In Widget to Focus empty and set In Mouse Lock Mode=Do Not Lock.",
+                "From its WHITE output add Set View Target with Blend, Target=Self.",
+                "Add Get Actor of Class and set Class=CameraActor.",
+                "Connect Get Actor of Class → Return Value to Set View Target with Blend → New View Target.",
+                "Keep ONLY one Camera Actor in this test level. Click Compile and Save."
               ]
             },
             {
@@ -2416,6 +3467,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "variable",
                 "input"
+              ],
+              "actions": [
+                "Open Content/Loops → Input assets.",
+                "Create Input Action IA_RisingFire (Value Type=Digital/Boolean).",
+                "Create Input Mapping Context IMC_RisingDefence.",
+                "Map IA_RisingFire to Left Mouse Button.",
+                "If an old IMC_TargetRush is used from earlier work, do not add it as well; this game uses one IMC_RisingDefence.",
+                "Save both assets."
               ]
             },
             {
@@ -2427,6 +3486,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "input",
                 "debug"
+              ],
+              "actions": [
+                "Open BP_LoopsPlayerController → BeginPlay and IA_RisingFire event.",
+                "AFTER Set View Target with Blend on the same BeginPlay exec chain, call Get Enhanced Input Local Player Subsystem → Add Mapping Context(IMC_RisingDefence, Priority=0).",
+                "Add IA_RisingFire event on the controller graph: its Started WHITE pin → Print String('PEW').",
+                "Play inside the game viewport and click once."
               ]
             },
             {
@@ -2438,6 +3503,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "input",
                 "trace"
+              ],
+              "actions": [
+                "Open BP_LoopsPlayerController → IA_RisingFire Started path.",
+                "After the temporary PEW print, call Convert Mouse Location To World Space (also searchable as Deproject Mouse Position to World).",
+                "Branch on its Return Value: only True continues.",
+                "Keep World Location and World Direction.",
+                "Multiply World Direction by 5000.",
+                "Add World Location to that product; this becomes the shot End, and World Location is the Start."
               ]
             },
             {
@@ -2449,6 +3522,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "trace",
                 "branch"
+              ],
+              "actions": [
+                "Open BP_LoopsPlayerController → after deprojection Branch True.",
+                "Add Line Trace By Channel: Start/End from above, Trace Channel=Visibility, Draw Debug Type=For Duration for testing, Ignore Self=true.",
+                "Wire the Branch True WHITE exec to Line Trace By Channel.",
+                "Add Branch using Line Trace Return Value; on True, Break Hit Result from Out Hit and Print String of the Hit Actor display name.",
+                "Compile and Play."
               ]
             },
             {
@@ -2460,6 +3540,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "custom-event",
                 "trace"
+              ],
+              "actions": [
+                "Open BP_RisingBlock and BP_LoopsPlayerController.",
+                "In BP_RisingBlock create Custom Event BreakBlock → Destroy Actor(Target Self).",
+                "In PlayerController, from the trace's hit-TRUE Branch, use Break Hit Result.Hit Actor → Cast To BP_RisingBlock.",
+                "On Cast Success WHITE exec, call BreakBlock on 'As BP_RisingBlock'.",
+                "Remove the temporary Hit Actor Print String only once it works.",
+                "Do not wire Destroy Actor to every shot or to Cast Failed."
               ]
             },
             {
@@ -2471,6 +3559,15 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "cast",
                 "debug"
+              ],
+              "actions": [
+                "Open BP_LoopsPlayerController. Press Play, NOT Simulate.",
+                "Click a cube and check whether PEW appears.",
+                "If PEW does not print: check your active PlayerController and IMC_RisingDefence Input Mapping Context.",
+                "If PEW prints but there is NO debug line: check Convert Mouse Location To World Space and the WHITE execution wiring.",
+                "If the line goes through cubes: check BlockMesh Visibility=Block and any object blocking the trace.",
+                "If a debug ray hits BP_RisingBlock but it does not disappear: check Cast Success → BreakBlock.",
+                "Only continue once one left-click removes exactly one cube."
               ]
             }
           ],
@@ -2538,6 +3635,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "LaneIndex is exposed on Spawn Actor and values 60,35,450 are present.",
               "helpTopics": [
                 "variable"
+              ],
+              "actions": [
+                "Open BP_RisingBlock → Variables.",
+                "In BP_RisingBlock → My Blueprint → Variables → +, create LaneIndex (Integer, default 0, Instance Editable and Expose on Spawn), CurrentHeight (Float, default 60), GrowthSpeed (Float, default 35) and MaxHeight (Float, default 450).",
+                "Compile so LaneIndex appears as a Spawn Actor input pin.",
+                "Keep the same cube with physics disabled."
               ]
             },
             {
@@ -2549,6 +3652,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "function",
                 "math"
+              ],
+              "actions": [
+                "Open BP_RisingBlock → Function UpdateBlockVisual.",
+                "Create UpdateBlockVisual (no inputs).",
+                "On BlockMesh call Set Relative Scale 3D with Make Vector (X=1,Y=1,Z=CurrentHeight/100), then Set Relative Location with Make Vector(X=0,Y=0,Z=CurrentHeight/2); wire execution in that order.",
+                "The standard Cube mesh is 100cm tall; the Actor stays at spawn Z=0."
               ]
             },
             {
@@ -2560,6 +3669,18 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "variable",
                 "cast"
+              ],
+              "actions": [
+                "Open BP_LoopsGameMode → My Blueprint → Variables → +.",
+                "Create the BOOLEAN VARIABLE Finished. Set Default Value=false, then Compile and Save.",
+                "Open BP_RisingBlock → Event Graph.",
+                "On Event BeginPlay call UpdateBlockVisual once.",
+                "On Event Tick add Get Game Mode → Cast To BP_LoopsGameMode (Object=Get Game Mode).",
+                "From the Cast blue As BP_LoopsGameMode pin Get Finished.",
+                "Connect NOT Finished to a Branch Condition. Connect Cast Success WHITE to the Branch WHITE input.",
+                "From Branch True set CurrentHeight=Min(MaxHeight, CurrentHeight + (Tick Delta Seconds × GrowthSpeed)).",
+                "After Set CurrentHeight WHITE output call UpdateBlockVisual.",
+                "Compile and Save BP_RisingBlock."
               ]
             },
             {
@@ -2570,6 +3691,15 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "The red line appears above the growing blocks and bullets pass through it.",
               "helpTopics": [
                 "material"
+              ],
+              "actions": [
+                "Open LoopsLevel.",
+                "From Place Actors drag a CUBE into the level. Rename this PLACED ACTOR DangerLine.",
+                "Set its Location X=200, Y=0, Z=450.",
+                "Set its Scale X=0.1, Y=8, Z=0.05 to create a thin horizontal bar.",
+                "Give DangerLine a bright red Material so players can see the losing height.",
+                "In Details → Collision set Collision Presets=NoCollision, so the line does not block shooting.",
+                "Save LoopsLevel."
               ]
             },
             {
@@ -2581,6 +3711,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "variable",
                 "custom-event"
+              ],
+              "actions": [
+                "Open BP_LoopsGameMode → Variables and Event BeginPlay.",
+                "Create FreeLanes as an Integer Array and SpawnTimerHandle as a TimerHandle.",
+                "In BeginPlay REPLACE the old five-cube For Loop exec input, but keep the old nodes unconnected until you test the new system.",
+                "Set FreeLanes using Make Array(0,1,2,3,4).",
+                "Make the new BeginPlay chain reach this Set first.",
+                "The original physics BP_Box remains a separate asset."
               ]
             },
             {
@@ -2592,6 +3730,18 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "local",
                 "variable"
+              ],
+              "actions": [
+                "Open BP_LoopsGameMode → My Blueprint → Functions → +.",
+                "Name the new FUNCTION SpawnOneBlock.",
+                "In My Blueprint → Local Variables click + and create PickIndex (Integer).",
+                "Click + Local Variable again and create PickLane (Integer).",
+                "From the purple Function Entry WHITE pin add Branch.",
+                "To Branch Condition connect (NOT Finished) AND (Length of FreeLanes > 0).",
+                "From Branch True add Set PickIndex. Its value is Random Integer in Range, Min=0, Max=Length(FreeLanes)-1.",
+                "After Set PickIndex add Set PickLane. Its value is FreeLanes Get(Index=PickIndex).",
+                "After Set PickLane, add Remove Index on FreeLanes using PickIndex.",
+                "Keep these WHITE execution pins in order. Compile and Save."
               ]
             },
             {
@@ -2603,6 +3753,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "array",
                 "spawn"
+              ],
+              "actions": [
+                "Open BP_LoopsGameMode → SpawnOneBlock after Remove Index.",
+                "Continue white exec to Spawn Actor From Class(Class=BP_RisingBlock, Collision Handling Override=Always Spawn, Ignore Collisions).",
+                "Set Make Transform.Location = Make Vector(X=200,Y=(PickLane-2)*150,Z=0).",
+                "Feed PickLane into the exposed LaneIndex pin.",
+                "Leave rotation 0 and scale 1.",
+                "Compile."
               ]
             },
             {
@@ -2614,6 +3772,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "variable",
                 "custom-event"
+              ],
+              "actions": [
+                "Open BP_LoopsGameMode → Event Graph → BeginPlay.",
+                "Make Custom Event SpawnTick → call SpawnOneBlock.",
+                "After BeginPlay sets FreeLanes, call SpawnOneBlock once (one initial threat), then Set Timer by Event(Time=1.5, Looping=true; Event delegate uses Create Event → SpawnTick).",
+                "Promote its Return Value to SpawnTimerHandle.",
+                "There must be only one repeating spawn timer, NOT a timer in each block."
               ]
             },
             {
@@ -2625,6 +3790,15 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "function-input",
                 "variable"
+              ],
+              "actions": [
+                "Open BP_LoopsGameMode → Variables and Function RegisterHit.",
+                "Add Hits (Integer, default 0).",
+                "Create Function RegisterHit with an Integer input HitLane.",
+                "First Branch on NOT Finished; on True run Add Unique(Target Array=FreeLanes, New Item=HitLane) → Set Hits=Hits+1.",
+                "Optionally Print String 'HIT +1' after it.",
+                "Compile.",
+                "Do NOT put this function on each block's Event Tick."
               ]
             },
             {
@@ -2636,6 +3810,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "custom-event",
                 "cast"
+              ],
+              "actions": [
+                "Open BP_RisingBlock → existing Custom Event BreakBlock from Stage 1.",
+                "Replace the direct BreakBlock → Destroy Actor connection.",
+                "Use Get Game Mode → Cast To BP_LoopsGameMode → Branch Condition=NOT Finished; from True call RegisterHit(HitLane=Self.LaneIndex) on that SAME GameMode reference, then Destroy Actor(Self).",
+                "Wire the WHITE exec pins through Cast Success, Branch True, RegisterHit and Destroy Actor in order.",
+                "Never free a lane on a miss."
               ]
             },
             {
@@ -2647,6 +3828,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "custom-event",
                 "timer"
+              ],
+              "actions": [
+                "Open BP_LoopsGameMode → Event Graph.",
+                "Create Custom Event LoseRound.",
+                "Branch on NOT Finished; True → Set Finished=true → Clear and Invalidate Timer by Handle(SpawnTimerHandle) → Print String('DEFENCE FAILED!').",
+                "Leave False unconnected.",
+                "The round's other timer comes in Stage 3."
               ]
             },
             {
@@ -2658,6 +3846,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "cast",
                 "branch"
+              ],
+              "actions": [
+                "Open BP_RisingBlock → Event Tick, immediately after UpdateBlockVisual.",
+                "After updating the height, Branch(CurrentHeight >= MaxHeight).",
+                "On True call Get Game Mode → Cast To BP_LoopsGameMode → LoseRound.",
+                "This must happen AFTER Set CurrentHeight and UpdateBlockVisual, only on the NOT Finished tick path.",
+                "Do not Destroy Actor when the block hits the line; leave it showing the reason for defeat."
               ]
             },
             {
@@ -2668,6 +3863,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "One reliable random-spawn rising-block defence game works; it can lose, but does not yet have a timed victory.",
               "helpTopics": [
                 "playtest"
+              ],
+              "actions": [
+                "Open LoopsLevel → Play in Editor.",
+                "Test A: watch one block grow, shoot it, confirm its lane is freed and a future spawn can reuse it.",
+                "Test B: let all five lanes fill: no overlaps and no sixth lane.",
+                "Test C: do not shoot until one reaches Z=450: Finished=true and no new blocks.",
+                "If cubes still spawn as a tower, disconnect the old BeginPlay loop.",
+                "If blocks grow below ground, Set Relative Location.Z must be CurrentHeight/2, not 0."
               ]
             }
           ],
@@ -2807,6 +4010,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "variable",
                 "array"
+              ],
+              "actions": [
+                "Open BP_LoopsGameMode → Variables.",
+                "Create SecondsLeft (Integer default 60), Won (Boolean default false) and RoundTimerHandle (TimerHandle).",
+                "Keep Finished, Hits, FreeLanes and SpawnTimerHandle from Stage 2.",
+                "Compile."
               ]
             },
             {
@@ -2818,6 +4027,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "variable",
                 "custom-event"
+              ],
+              "actions": [
+                "Open BP_LoopsGameMode → Event Graph → BeginPlay after SpawnTimerHandle is created.",
+                "Create Custom Event CountdownTick.",
+                "In existing BeginPlay, AFTER the FreeLanes → initial SpawnOneBlock → SpawnTimerHandle chain, add Set Timer by Event(Time=1.0,Looping=true; delegate Create Event → CountdownTick).",
+                "Promote Return Value to RoundTimerHandle.",
+                "Do NOT add this timer to SpawnTick or BP_RisingBlock."
               ]
             },
             {
@@ -2829,6 +4045,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "custom-event",
                 "timer"
+              ],
+              "actions": [
+                "Open BP_LoopsGameMode → CountdownTick Custom Event.",
+                "Wire CountdownTick → Branch(NOT Finished).",
+                "On True set SecondsLeft = Max(0, SecondsLeft-1).",
+                "Then Branch(SecondsLeft<=0).",
+                "On True set Finished=true and Won=true, then Clear and Invalidate Timer by Handle(SpawnTimerHandle), then Clear and Invalidate Timer by Handle(RoundTimerHandle), then Print String('YOU HELD THE LINE!').",
+                "A win happens ONLY if the danger height was never reached."
               ]
             },
             {
@@ -2840,6 +4064,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "timer",
                 "branch"
+              ],
+              "actions": [
+                "Open BP_LoopsGameMode → LoseRound event from Stage 2.",
+                "Keep LoseRound's Branch(NOT Finished) → Set Finished=true → Clear SpawnTimerHandle.",
+                "After that, add Set Won=false and Clear and Invalidate Timer by Handle(RoundTimerHandle), then Print String('DEFENCE FAILED!').",
+                "All existing blocks now stop growing because their Tick checks Finished."
               ]
             },
             {
@@ -2851,6 +4081,16 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "variable",
                 "widget"
+              ],
+              "actions": [
+                "Open Content/Loops → User Interface → Widget Blueprint → User Widget.",
+                "Create WBP_RisingDefenceHUD.",
+                "Add Text widgets named TimeText, HitsText and StatusText; tick Is Variable on each.",
+                "Add a small instruction 'Left-click: shoot • R: restart'.",
+                "Set the ROOT Canvas Panel Visibility to Not Hit-Testable (Self & All Children).",
+                "Position the HUD away from the playable columns.",
+                "Set StatusText default 'KEEP BLOCKS BELOW THE RED LINE'.",
+                "Compile."
               ]
             },
             {
@@ -2862,6 +4102,18 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "custom-event",
                 "binding"
+              ],
+              "actions": [
+                "Open WBP_RisingDefenceHUD → Graph.",
+                "Create Custom Event RefreshHUD.",
+                "Use Get Game Mode → Cast To BP_LoopsGameMode.",
+                "On Cast Success use Get SecondsLeft → Format Text('Time: {Value}') → Set Text(TimeText), then Get Hits → Format Text('Hits: {Value}') → Set Text(HitsText), wiring white execution sequentially.",
+                "Then Branch(Get Finished).",
+                "On False set StatusText='KEEP BLOCKS BELOW THE RED LINE'.",
+                "On True use a Branch(Get Won) to set StatusText='YOU HELD THE LINE!",
+                "Press R' or 'DEFENCE FAILED!",
+                "Press R'.",
+                "Compile."
               ]
             },
             {
@@ -2873,6 +4125,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "custom-event",
                 "timer"
+              ],
+              "actions": [
+                "Open WBP_RisingDefenceHUD → Event Construct.",
+                "Event Construct → call RefreshHUD once, then Set Timer by Event(Time=0.25, Looping=true; delegate Create Event → RefreshHUD).",
+                "This timer is UI-only and belongs to the Widget.",
+                "It must NOT call SpawnOneBlock or change the GameMode's countdown."
               ]
             },
             {
@@ -2884,6 +4142,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "input",
                 "widget"
+              ],
+              "actions": [
+                "Open BP_LoopsPlayerController → Event BeginPlay.",
+                "Keep the ONE BeginPlay chain from Stage 1: Show Mouse Cursor → Set Input Mode Game And UI → Set View Target with Blend → Add Mapping Context(IMC_RisingDefence).",
+                "AFTER Add Mapping Context, add Create Widget(Class=WBP_RisingDefenceHUD, Owning Player=Self) → Add to Viewport.",
+                "Do not create another controller or multiple HUD widgets."
               ]
             },
             {
@@ -2895,6 +4159,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "input",
                 "array"
+              ],
+              "actions": [
+                "Open Content/Loops → Input assets and BP_LoopsPlayerController.",
+                "Create Input Action IA_RisingRestart (Digital).",
+                "In the EXISTING IMC_RisingDefence map IA_RisingRestart to Keyboard R.",
+                "In BP_LoopsPlayerController add IA_RisingRestart Started → Open Level(by Name), using Get Current Level Name (Remove Prefix String=true) into Level Name.",
+                "Do NOT call SpawnOneBlock or reset arrays by hand; reloading the map resets everything."
               ]
             },
             {
@@ -2905,6 +4176,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "Both endings occur exactly once, R resets correctly, and final saved values are 60 seconds and 450cm.",
               "helpTopics": [
                 "debug"
+              ],
+              "actions": [
+                "Open LoopsLevel → BP_LoopsGameMode Class Defaults → Play.",
+                "Temporarily set SecondsLeft default=5 and test a WIN by shooting until the timer reaches zero.",
+                "Then keep SecondsLeft=5, temporarily set BP_RisingBlock MaxHeight default=90 and test a LOSS when the block grows to that height.",
+                "Restore SecondsLeft=60 and MaxHeight=450, Compile and Save BOTH Blueprints.",
+                "Test R after both endings."
               ]
             },
             {
@@ -2915,6 +4193,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "Random rise → line-trace fire → score → danger-height fail → 60-second win → R replay all work together.",
               "helpTopics": [
                 "playtest"
+              ],
+              "actions": [
+                "Open LoopsLevel → Play in Editor.",
+                "Play a full run with normal values.",
+                "Watch that fresh threats appear in random lanes, shooting releases them, Hits rises and the limit line is visible.",
+                "Win only after 60 seconds without a breach.",
+                "Intentionally let one reach the line in a second run and confirm you lose.",
+                "The score is the number of blocks shot, so friends can replay to beat each other's score."
               ]
             }
           ],
@@ -3004,6 +4290,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "variable",
                 "material"
+              ],
+              "actions": [
+                "Open BP_RisingBlock → Variables.",
+                "Add FastThreat Boolean default false; tick Instance Editable and Expose on Spawn.",
+                "In Content/Loops create a Material asset M_RisingDanger (red Base Color) and Save; assign it to BlockMesh in Stage 4 Step 2, not to the normal blocks now.",
+                "Compile so FastThreat becomes a Spawn Actor input pin."
               ]
             },
             {
@@ -3015,6 +4307,14 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "branch",
                 "get-set"
+              ],
+              "actions": [
+                "Open BP_RisingBlock → Event BeginPlay BEFORE UpdateBlockVisual.",
+                "Avoid merging two Branch execution paths.",
+                "Instead, in Event BeginPlay use one straight WHITE execution chain: Set GrowthSpeed → BlockMesh.Set Material(Element Index=0) → UpdateBlockVisual.",
+                "Feed Set GrowthSpeed with a Select Float node controlled by FastThreat (False=35, True=60).",
+                "Feed Set Material with a Select Material node controlled by FastThreat (False=normal material, True=red warning material).",
+                "Compile; do not change the Event Tick growth maths."
               ]
             },
             {
@@ -3026,6 +4326,11 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "array",
                 "spawn"
+              ],
+              "actions": [
+                "Open BP_LoopsGameMode → SpawnOneBlock → Spawn Actor Class=BP_RisingBlock.",
+                "Before Spawn Actor, use Random Integer in Range(1,4) == 1 and connect the Boolean to FastThreat on the SAME Spawn Actor node.",
+                "Leave the five FreeLanes array, spawn timing, LaneIndex pin and coordinates untouched."
               ]
             },
             {
@@ -3036,6 +4341,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "Red blocks are shootable, can lose the round, and never break the score or restart.",
               "helpTopics": [
                 "playtest"
+              ],
+              "actions": [
+                "Open LoopsLevel → Play.",
+                "Defend for 60 seconds against normal and red blocks.",
+                "Let a red one reach the line on another attempt and check LoseRound still runs.",
+                "If the game is too hard, change FastThreat GrowthSpeed from 60 to 45; if easy, 65.",
+                "Do not change the maximum 450cm unless the camera/red line are adjusted together."
               ]
             }
           ],
@@ -3074,6 +4386,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "Player can tell at a glance which blocks are threats and what line matters.",
               "helpTopics": [
                 "material"
+              ],
+              "actions": [
+                "Open Artist/designer workstation → Photoshop, 3ds Max or material editor.",
+                "Choose ONE achievable theme: defensive laser turret, anti-virus defence, robot factory overload or alien crystal containment.",
+                "Make a distinctive block material and a readable red danger line; export PNG or FBX as needed.",
+                "Programmer imports copies into local Unreal."
               ]
             },
             {
@@ -3085,6 +4403,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "input",
                 "trace"
+              ],
+              "actions": [
+                "Open BP_LoopsPlayerController → existing IA_RisingFire path.",
+                "After the Line Trace By Channel on hit-TRUE, add a short Play Sound 2D or Spawn Emitter at Location (Hit Result Impact Point) if available.",
+                "You may print '+1' for successful hits during testing.",
+                "Leave the trace endpoint, hit cast and BreakBlock calls untouched.",
+                "Do not play score feedback when Line Trace returns false."
               ]
             },
             {
@@ -3095,6 +4420,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "The win/loss rule is readable even to someone who has never seen the tutorial.",
               "helpTopics": [
                 "ui-pass"
+              ],
+              "actions": [
+                "Open WBP_RisingDefenceHUD and LoopsLevel.",
+                "Add a clear 'DANGER HEIGHT' label near the red line and make it visible from the fixed camera.",
+                "Keep the HUD Canvas non-hit-testable.",
+                "Test all five lanes with the tallest blocks: none should be hidden by Score, Time or instruction labels."
               ]
             },
             {
@@ -3105,6 +4436,13 @@ window.UE5_MINI_UPGRADE_DATA = {
               "check": "Another student can survive at least one fair run, lose predictably, and explain how their score improved.",
               "helpTopics": [
                 "array"
+              ],
+              "actions": [
+                "Open BP_LoopsGameMode Class Defaults and BP_RisingBlock defaults.",
+                "Playtest with another pair.",
+                "Starter settings: Spawn interval=1.5s, GrowthSpeed=35cm/s, MaxHeight=450cm, round=60s.",
+                "For easier play change GrowthSpeed to 25; for harder play try 45 or Spawn interval=1.1.",
+                "Change ONE number at a time and run a full test; keep FreeLanes protection."
               ]
             },
             {
@@ -3116,6 +4454,12 @@ window.UE5_MINI_UPGRADE_DATA = {
               "helpTopics": [
                 "trace",
                 "array"
+              ],
+              "actions": [
+                "Open LoopsLevel → Play in Editor/Package Project.",
+                "Prepare a 2–5 minute demo or packaged Windows build.",
+                "Explain how the original Loops tutorial created repeated objects, how your timer randomly selects FreeLanes, how a Line Trace By Channel shoots targets, and why you tuned the height limit.",
+                "Demonstrate win, loss and R restart."
               ]
             }
           ],
