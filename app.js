@@ -2009,7 +2009,7 @@ function miniUpgradeCards(p){
 }
 function miniUpgradeLanding(){
   return '<div class="mini-shell mini-upgrades">'+miniTrail([{title:'Build',href:'#/build'},{title:'Mini-Projects',href:'#/mini-projects'},{title:'Game jam upgrades'}])+
-    '<header class="mini-header"><span class="eyebrow">MINI-PROJECT MAYHEM • NEXT STEP</span><h1>Upgrade your Mini-Project</h1><p>Finish one original tutorial and follow the Essential stages to the marked Minimum Playable Game. Then choose whether to polish or tackle Creative extensions. Every text-only step gives an exact action and a test.</p></header>'+
+    '<header class="mini-header"><span class="eyebrow">MINI-PROJECT MAYHEM • NEXT STEP</span><h1>Upgrade your Mini-Project</h1><p>Finish one original tutorial and follow the Essential stages to the marked Minimum Playable Game. Then choose whether to polish or tackle Creative extensions. Each upgrade now gives a single task at a time with direct numbered actions.</p></header>'+
     '<div class="mini-upgrade-grid">'+(MINI_UPGRADES.projects||[]).map(p=>'<a class="mini-upgrade-card" href="'+miniUpgradeHref(p.project)+'"><span class="eyebrow">'+p.stages.length+' GUIDED UPGRADES</span><h3>'+esc(p.title)+'</h3><p>'+esc(p.intro)+'</p><strong>Choose this game →</strong></a>').join('')+'</div></div>';
 }
 function miniUpgradeProjectPage(id){
@@ -2017,8 +2017,8 @@ function miniUpgradeProjectPage(id){
   if(!p||!original)return notFound();
   const completed=new Set(miniUpgradesCompleted());
   return '<div class="mini-shell mini-upgrades">'+miniTrail([{title:'Build',href:'#/build'},{title:'Mini-Projects',href:'#/mini-projects'},{title:'Upgrades',href:'#/mini-projects/upgrades'},{title:original.title}])+
-    '<header class="mini-header"><span class="eyebrow">AFTER THE ORIGINAL TUTORIAL • '+p.stages.filter(x=>completed.has(x.id)).length+'/'+p.stages.length+' UPGRADES DONE</span><h1>'+esc(p.title)+'</h1><p>'+esc(p.intro)+'</p><div class="mini-chips"><span>Text-only, step by step</span><span>Programmer + artist/designer</span><span>Essential first • Creative later</span></div><a class="button ghost" href="'+miniHref(id)+'">← Open original '+esc(original.title)+' tutorial</a></header>'+
-    '<section class="mini-information"><h2>Before you start</h2><p>Complete and test the original <a href="'+miniHref(id)+'">'+esc(original.title)+'</a> first. Make a copy or backup of the working project. These upgrade steps use its existing Blueprints and map; if you renamed anything, use your own matching class name.</p><p>Work through the Essential stages in order. Creative stages are stretch work if your game is already playable. Each guide includes Blueprint steps, tests and troubleshooting; your teacher will direct art and design work. Progress is saved in this browser, separately from original stages.</p></section>'+
+    '<header class="mini-header"><span class="eyebrow">AFTER THE ORIGINAL TUTORIAL • '+p.stages.filter(x=>completed.has(x.id)).length+'/'+p.stages.length+' UPGRADES DONE</span><h1>'+esc(p.title)+'</h1><p>'+esc(p.intro)+'</p><div class="mini-chips"><span>One task at a time</span><span>Follow the numbered actions</span><span>Essential first • Creative later</span></div><a class="button ghost" href="'+miniHref(id)+'">← Open original '+esc(original.title)+' tutorial</a></header>'+
+    '<section class="mini-information"><h2>Before you start</h2><p>Complete and test the original <a href="'+miniHref(id)+'">'+esc(original.title)+'</a> first. Make a copy or backup of the working project. These upgrade steps use its existing Blueprints and map; if you renamed anything, use your own matching class name.</p><p>Work through the Essential stages in order. Creative stages are stretch work if your game is already playable. Each page shows one task with exact actions and a clear Next task button; finish the Essential stages first. Your teacher directs art and design work. Progress is saved in this browser, separately from original stages.</p></section>'+
     '<section class="mini-information mini-upgrade-mvp"><span class="eyebrow">YOUR FIRST FINISH LINE</span><h2>Minimum Playable Game</h2><p>'+esc(p.minimumOutcome)+'</p><p>Follow the stages through <strong>'+esc(p.stages.find(x=>x.id===p.minimumStage)?.title||'your core game')+'</strong>. After that, your pair can playtest, polish or add optional features. Completing every page is not required.</p></section>'+
     '<div class="mini-upgrade-grid">'+miniUpgradeCards(p)+'</div>'+
     '<nav class="mini-stage-bottom"><a class="button ghost" href="#/mini-projects/jam">← Game jam brief</a><a class="button primary" href="'+miniUpgradeHref(id,p.stages[0].id)+'">Start first upgrade →</a></nav></div>';
@@ -2033,27 +2033,43 @@ function miniUpgradeDoActions(s){
   if(pieces.length<2)return esc(s);
   return '<span class="mini-upgrade-do-actions">'+pieces.map((x,i)=>'<span class="mini-upgrade-do-action"><b>'+(i+1)+'.</b> '+esc(x)+'</span>').join('')+'</span>';
 }
+/* Student-first expansion instructions: one task on screen, with direct actions only. */
+const MINI_UPGRADE_TASK_STORE='ue5hub:mini-upgrade-task:v1';
+function miniUpgradeTaskPosition(project,stage,total){
+  try{const saved=JSON.parse(localStorage.getItem(MINI_UPGRADE_TASK_STORE)||'{}');
+    const n=Number(saved[project+'/'+stage]||0);
+    return Number.isInteger(n)?Math.max(0,Math.min(Math.max(0,total-1),n)):0;
+  }catch(e){return 0}
+}
+function miniUpgradeSaveTaskPosition(project,stage,step){
+  const store={};try{Object.assign(store,JSON.parse(localStorage.getItem(MINI_UPGRADE_TASK_STORE)||'{}'))}catch(e){}
+  store[project+'/'+stage]=step;
+  localStorage.setItem(MINI_UPGRADE_TASK_STORE,JSON.stringify(store));
+}
 function miniUpgradeStagePage(id,stageId){
   const p=miniUpgradeProject(id),original=miniProject(id),st=p?.stages?.find(x=>x.id===stageId);
   if(!p||!original||!st)return notFound();
   const idx=p.stages.findIndex(x=>x.id===stageId),done=miniUpgradesCompleted().includes(st.id);
-  const prev=p.stages[idx-1],next=p.stages[idx+1];
-  return '<div class="mini-shell mini-upgrades mini-upgrade-stage">'+miniTrail([{title:'Build',href:'#/build'},{title:'Mini-Projects',href:'#/mini-projects'},{title:original.title,href:miniHref(id)},{title:'Upgrades',href:miniUpgradeHref(id)},{title:st.title}])+
-    '<header class="mini-header"><span class="eyebrow">'+esc(original.title)+' • '+esc(st.tier.toUpperCase())+' • UPGRADE '+(idx+1)+' OF '+p.stages.length+'</span><h1>'+esc(st.title)+'</h1><p>'+esc(st.outcome)+'</p><div class="mini-chips"><span>'+(done?'✓ Completed':'Build → check → improve')+'</span><span>Guided steps • named items • extra help</span></div></header>'+
-    '<div class="mini-lesson-grid"><div class="mini-main-column">'+
-    '<section class="mini-information mini-upgrade-ready"><span class="eyebrow">BEFORE YOU TOUCH ANY NODES</span><h2>What should already work?</h2><p>'+esc(st.beforeStart||st.outcome)+'</p><p class="mini-small-note">Make a backup of the working Unreal project. '+esc(st.studentPromise||'Compile, save and test between steps.')+'</p></section>'+
-    '<section class="mini-information"><span class="eyebrow">THIS UPGRADE</span><h2>Your build target</h2><p>'+esc(st.outcome)+'</p></section>'+
-    '<section class="mini-information mini-upgrade-new"><strong>Blueprints made clearer</strong><p>Follow one step at a time. A Variable, Function, Event, Component, Widget and input pin are NOT interchangeable. New names are identified where you create them.</p><p><strong>White arrows = execution order.</strong> Coloured pins carry values or references. Open the extra help if a step uses unfamiliar nodes.</p></section>'+miniUpgradeNameGuide(st)+
-    '<section class="mini-information mini-upgrade-walkthrough"><span class="eyebrow">PROGRAMMER • GUIDED BUILD</span><h2>Follow these steps</h2><div class="mini-upgrade-steps">'+st.steps.map((step,i)=>
-      '<details class="mini-source-section mini-upgrade-step" '+(i===0?'open':'')+'><summary><span class="mini-section-title"><strong>'+(i+1)+'. '+esc(step.title)+'</strong><small>Where → Do → Why → Check</small></span><span class="mini-section-toggle" aria-hidden="true">⌄</span></summary><div class="mini-upgrade-instructions">'+
-      '<p><strong>Go to</strong><span>'+esc(step.where)+'</span></p><p><strong>Do this</strong><span>'+miniUpgradeDoActions(step.do)+'</span></p><p><strong>Why</strong><span>'+esc(step.why)+'</span></p><p class="mini-upgrade-step-check"><strong>Check</strong><span>'+esc(step.check)+'</span></p>'+miniUpgradeStepExtra(step,st,i+1)+'</div></details>').join('')+'</div></section>'+
-    (st.id===p.minimumStage?'<section class="mini-information mini-upgrade-mvp"><span class="eyebrow">YOUR FIRST FINISH LINE</span><h2>Minimum Playable Game</h2><p>Pass the final test below and you have a playable prototype. You can stop to polish, or continue with extra features.</p></section>':'')+
-    '<section class="mini-information mini-proof"><span class="eyebrow">PROVE IT WORKS</span><h2>Final test</h2><p>'+esc(st.check)+'</p><details><summary>If something does not work</summary><p><strong>Common mistake:</strong> '+esc(st.commonMistake||'Check the last step you changed.')+'</p><p>'+esc(st.fix)+'</p></details></section>'+
-    '<section class="mini-complete-panel"><p>Mark complete only after running the game and passing the final test. Upgrade progress is local to this browser and does not change the original tutorial checkmarks.</p><button class="button '+(done?'success':'primary')+'" data-action="mini-upgrade-complete" data-stage="'+esc(st.id)+'">'+(done?'✓ Completed — click to undo':'Mark upgrade complete ✓')+'</button></section>'+
-    '<nav class="mini-stage-bottom" aria-label="Upgrade navigation">'+(prev?'<a class="button ghost" href="'+miniUpgradeHref(id,prev.id)+'">← Previous upgrade</a>':'<a class="button ghost" href="'+miniUpgradeHref(id)+'">← Upgrade overview</a>')+
-    (next?'<a class="button primary" href="'+miniUpgradeHref(id,next.id)+'">Next upgrade →</a>':'<a class="button primary" href="'+miniUpgradeHref(id)+'">All upgrades ✓</a>')+'</nav>'+
-    '</div><aside class="mini-side-column"><div class="mini-information mini-side-stages"><strong>Upgrade pathway</strong>'+p.stages.map((x,i)=>'<a class="'+(x.id===st.id?'current':'')+'" href="'+miniUpgradeHref(id,x.id)+'"><span>'+(miniUpgradesCompleted().includes(x.id)?'✓':i+1)+'</span>'+esc(x.title)+'</a>').join('')+'</div>'+
-    '<div class="mini-information"><strong>Need the starting build?</strong><a href="'+miniHref(id)+'">Return to '+esc(original.title)+' tutorial →</a></div></aside></div></div>';
+  const prev=p.stages[idx-1],next=p.stages[idx+1],n=st.steps.length;
+  const pos=miniUpgradeTaskPosition(id,stageId,n),step=st.steps[pos];
+  const acts=Array.isArray(step.actions)&&step.actions.length?step.actions:[step.where,step.do];
+  return '<div class="mini-shell mini-upgrades mini-upgrade-plain">'+miniTrail([{title:'Build',href:'#/build'},{title:'Mini-Projects',href:'#/mini-projects'},{title:original.title,href:miniHref(id)},{title:'Upgrades',href:miniUpgradeHref(id)},{title:st.title}])+
+    '<header class="mini-header mini-plain-header"><span class="eyebrow">'+esc(original.title)+' • '+esc(st.tier)+' • UPGRADE '+(idx+1)+' OF '+p.stages.length+'</span><h1>'+esc(st.title)+'</h1><p>'+esc(st.outcome)+'</p></header>'+
+    '<main class="mini-upgrade-focus" aria-label="Follow this task">'+
+      '<div class="mini-upgrade-task-top"><span>Task '+(pos+1)+' of '+n+'</span><span>'+(done?'✓ Upgrade completed':'Follow each instruction in order')+'</span></div>'+
+      '<div class="mini-upgrade-task-progress" aria-hidden="true"><span style="width:'+Math.round((pos+1)/n*100)+'%"></span></div>'+
+      '<h2>'+esc(step.title)+'</h2>'+
+      '<ol class="mini-upgrade-plain-actions">'+acts.map(action=>'<li>'+esc(action)+'</li>').join('')+'</ol>'+
+      '<nav class="mini-upgrade-task-controls" aria-label="Task controls">'+
+        (pos>0?'<button class="button ghost" data-action="mini-upgrade-task" data-move="-1" data-project="'+esc(id)+'" data-stage="'+esc(stageId)+'">← Back</button>':'<span></span>')+
+        (pos<n-1?'<button class="button primary" data-action="mini-upgrade-task" data-move="1" data-project="'+esc(id)+'" data-stage="'+esc(stageId)+'">Next task →</button>':'<span class="mini-upgrade-end-label">Last task ✓</span>')+
+      '</nav>'+
+    '</main>'+
+    (pos===n-1?'<section class="mini-upgrade-final"><h2>Now test it</h2><p>'+esc(st.check)+'</p><button class="button '+(done?'success':'primary')+'" data-action="mini-upgrade-complete" data-stage="'+esc(st.id)+'">'+(done?'✓ Completed — click to undo':'Mark upgrade complete ✓')+'</button></section>':'')+
+    '<nav class="mini-upgrade-stage-links" aria-label="Other upgrade stages"><a href="'+miniUpgradeHref(id)+'">All upgrades</a>'+
+      (prev?' <a href="'+miniUpgradeHref(id,prev.id)+'">← Previous upgrade</a>':'')+
+      (next?' <a href="'+miniUpgradeHref(id,next.id)+'">Next upgrade →</a>':'')+
+    '</nav></div>';
 }
 
 /* Full-game tutorial, independent of the 4 original source Mini-Projects. */
@@ -4566,7 +4582,18 @@ document.addEventListener('click',async e=>{
   const b=e.target.closest('[data-action]');if(!b)return;
   const r=b.getBoundingClientRect();completionBurstPoint={x:r.left+r.width/2,y:r.top+r.height/2};
   const a=b.dataset.action;
-  if(a==='minesweeper-complete'){
+  if(a==='mini-upgrade-task'){
+    const project=b.dataset.project||'',stage=b.dataset.stage||'';
+    const s=miniUpgradeProject(project)?.stages?.find(x=>x.id===stage);
+    if(!s)return;
+    const move=Number(b.dataset.move);
+    if(move!==1&&move!==-1)return;
+    const current=miniUpgradeTaskPosition(project,stage,s.steps.length);
+    const next=Math.max(0,Math.min(s.steps.length-1,current+move));
+    miniUpgradeSaveTaskPosition(project,stage,next);
+    route();
+  }
+  else if(a==='minesweeper-complete'){
     const id=b.dataset.stage||'';
     if(!MINESWEEPER?.stages?.some(s=>s.id===id))return;
     const completed=new Set(minesweeperCompleted());
