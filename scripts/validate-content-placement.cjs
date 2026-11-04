@@ -145,7 +145,7 @@ function audit(root = path.resolve(__dirname, '..')) {
       seen.add(name.name);
     }
     for(const [i,s] of items(st.steps).entries()){
-      if(!s.title||!s.where||!s.do||!s.why||!s.check||!items(s.helpTopics).length)
+      if(!s.title||!s.where||!s.do||!s.why||!s.check||!items(s.helpTopics).length||items(s.actions).length<2||items(s.actions).some(a=>typeof a!=='string'||a.length<8))
         fail('Minesweeper '+st.id+' step '+(i+1),'needs complete beginner guidance');
       for(const key of items(s.helpTopics))if(!help[key])
         fail('Minesweeper '+st.id+' step '+(i+1),'unknown help topic '+key);
