@@ -38,3 +38,9 @@ Each of the 73 steps has Go to / Do this / Why / Check. Newly introduced named i
 
 ## Verification and honesty
 Site content checks and desktop/mobile browser regression can verify that all 9 stages, named items, help controls, links and progress rendering exist. They **cannot compile Unreal Engine 5.8 Blueprints or prove all gameplay in editor**. Before prescribing the tutorial to a whole class, work through Stages 1–4 on a college machine and test at least one complete game (loss, win, flag, empty reveal and five restarts). For Windows packaging, an in-editor demo is an acceptable fallback if college PC permissions or installed platform tooling prevent packaging.
+
+## 4 November — single-task beginner rewrite
+
+All 73 original steps across nine stages now have literal numbered actions in `step.actions`: the exact asset, owning Blueprint, new Variable versus input pin, values, WHITE execution order, and a specific result to check. Students see only one task, Back and Next. Each stage completion button appears only on its final task. The existing nine stage IDs and `ue5hub:minesweeper:v1` completion records are unchanged; individual task positions use `ue5hub:minesweeper-task:v1`.
+
+This update leaves the four original Game Jam starter tutorials and all other expansion data untouched. Browser regression checks should verify nine stages/73 tasks, next/back, persistence after reload, stage completion and mobile width. **Editor verification remains required:** Stages 1–4 compile, the first click is always safe, mines are unique, neighbours count correctly, flood terminates, win/loss freezes input and timer, and five consecutive New Game clicks reset every field. Passing website tests is not proof the Blueprints compile.
