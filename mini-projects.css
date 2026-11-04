@@ -198,7 +198,7 @@
 .mini-upgrade-plain-actions{list-style:decimal;list-style-position:outside;margin:0;padding-left:27px;display:grid;gap:14px}
 .mini-upgrade-plain-actions li{font-size:16px;line-height:1.65;color:#f0f7fc;padding-left:6px;overflow-wrap:anywhere}
 .mini-upgrade-plain-actions li::marker{font-weight:700;color:#8ad8e7}
-.mini-upgrade-task-controls{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:25px;padding-top:18px;border-top:1px solid #354d60}
+.mini-upgrade-task-controls{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:25px;padding:18px 8px 8px;border-top:1px solid #354d60;position:sticky;bottom:8px;z-index:6;background:#142637;border-radius:8px}
 .mini-upgrade-task-controls .button{min-width:135px;text-align:center}
 .mini-upgrade-end-label{color:#adddc4;font-weight:700}
 .mini-upgrade-final{background:#15332f;border:1px solid #4d8277;border-radius:13px;padding:20px 24px;margin:16px 0}
