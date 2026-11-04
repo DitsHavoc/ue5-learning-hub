@@ -3707,7 +3707,8 @@ window.UE5_MINI_UPGRADE_DATA = {
               "actions": [
                 "Open BP_LoopsPlayerController → Event Graph → existing Event BeginPlay.",
                 "Find the chain from Set Show Mouse Cursor → Set Input Mode Game And UI → Set View Target with Blend.",
-                "AFTER Set View Target with Blend, add Get Enhanced Input Local Player Subsystem → Add Mapping Context.",
+                "From Self (BP_LoopsPlayerController) add Get EnhancedInputLocalPlayerSubsystem. Connect Self to its Player Controller input.",
+                "Drag from its BLUE Return Value and choose Add Mapping Context; that BLUE wire is the target/subsystem reference.",
                 "Set Mapping Context=IMC_RisingDefence and Priority=0.",
                 "Connect Set View Target with Blend WHITE output to Add Mapping Context WHITE input.",
                 "In empty Event Graph space right-click and search IA_RisingFire. Select its INPUT ACTION EVENT.",
@@ -4036,7 +4037,9 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "From that first SpawnOneBlock WHITE output add Set Timer by Event.",
                 "Set Time=1.5 and tick Looping=true.",
                 "From the Timer's RED Event delegate pin drag and choose Create Event → SpawnTick.",
-                "Right-click the Timer's Return Value (Timer Handle) → Promote to Variable; USE the existing SpawnTimerHandle VARIABLE, or Set it from the Return Value.",
+                "Drag the EXISTING SpawnTimerHandle VARIABLE from My Blueprint into Event Graph and choose Set.",
+                "Connect Timer Return Value → Set SpawnTimerHandle's coloured Timer Handle pin. Wire the Timer's WHITE output into Set SpawnTimerHandle WHITE input.",
+                "Do NOT right-click Promote to Variable here; SpawnTimerHandle already exists.",
                 "Compile and Save. There must be ONE repeating SpawnTimer, not a timer per block."
               ]
             },
@@ -4319,7 +4322,9 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "AFTER the spawn timer's WHITE output add a SECOND Set Timer by Event node.",
                 "Set this round Timer's Time=1.0 and tick Looping=true.",
                 "Drag from its RED Event delegate pin → Create Event → CountdownTick.",
-                "Connect the round Timer's Return Value to Set RoundTimerHandle VARIABLE.",
+                "Drag the EXISTING RoundTimerHandle VARIABLE into Event Graph and choose Set.",
+                "Connect the 1-second Timer Return Value to Set RoundTimerHandle's coloured handle pin.",
+                "Connect the Timer WHITE execution output → Set RoundTimerHandle WHITE input; Compile and Save. Do NOT create another timer-handle variable.",
                 "Compile and Save. This is one 1-second round timer, not one per block."
               ]
             },
@@ -4734,12 +4739,13 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "trace"
               ],
               "actions": [
-                "Open BP_LoopsPlayerController → Event Graph → IA_RisingFire line trace.",
-                "Find Line Trace By Channel → Return Value TRUE Branch.",
-                "After a confirmed BP_RisingBlock Cast Success, add Play Sound 2D with a short imported hit sound (optional), THEN call BreakBlock.",
-                "If no sound asset is available, use Print String +1 temporarily instead.",
-                "Do NOT play hit effects on Trace False or Cast Failed paths.",
-                "Compile, Save and test: every actual hit gives one feedback event."
+                "Open BP_LoopsPlayerController → Event Graph. Find IA_RisingFire → Line Trace By Channel → Branch(Return Value).",
+                "From the Branch TRUE WHITE output, follow your existing Cast To BP_RisingBlock → Call BreakBlock chain.",
+                "For the simplest first feedback, add Print String with text HIT! AFTER successful Cast and BEFORE BreakBlock.",
+                "Compile and Play; hitting a cube shows HIT! exactly once. A missed click must NOT show HIT!.",
+                "Optional sound: in Content/Loops import a short hit WAV. Drag from Cast Success WHITE output and add Play Sound 2D using that Sound Wave.",
+                "Connect Play Sound 2D WHITE output to the ORIGINAL BreakBlock call WHITE input. Keep the BLUE target cast connected.",
+                "Compile, Save and Play. Only confirmed cube hits should play the sound."
               ]
             },
             {
@@ -4752,12 +4758,12 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "ui-pass"
               ],
               "actions": [
-                "Open LoopsLevel and select the placed DangerLine actor.",
-                "Add a readable world text label DANGER HEIGHT or use the existing HUD StatusText.",
-                "Ensure the label is visible from Cam_RisingDefence without covering the blocks.",
-                "Open WBP_RisingDefenceHUD → Designer, select ROOT Canvas Panel.",
-                "Keep Visibility=Not Hit-Testable (Self & All Children) so mouse clicks pass through.",
-                "Play and test shooting all five lanes."
+                "Open LoopsLevel and find the red DangerLine in World Outliner.",
+                "Add a Text Render Actor near the red bar or use a Text label in WBP_RisingDefenceHUD. Set its text DANGER HEIGHT.",
+                "If using a Text Render Actor, position it in front of the shooting camera and set Collision Presets=NoCollision so it does not block the Line Trace.",
+                "If using a UI Text widget, put it above the lanes and keep its Visibility=Not Hit-Testable (Self & All Children).",
+                "Press Play and check the label and red line can both be seen while all five lanes remain clickable.",
+                "Save the level and Widget. Do not let the label cover the cubes or reticle."
               ]
             },
             {
@@ -4770,12 +4776,14 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "array"
               ],
               "actions": [
-                "Open LoopsLevel and play once with defaults: spawn 1.5s, normal GrowthSpeed 35, limit 450, round 60s.",
-                "Have another student play and tell you if the game is too easy or too hard.",
-                "For easier play, open BP_RisingBlock → GrowthSpeed Default Value and try 25.",
-                "For harder play, try GrowthSpeed=45 OR change BP_LoopsGameMode spawn Timer Time=1.1.",
-                "Change ONE value per test and restore any unsuccessful adjustment.",
-                "Compile, Save and check one full victory and one loss."
+                "Open BP_LoopsGameMode → Event Graph and locate Set Timer by Event for SpawnTick. Write down its current Time=1.5.",
+                "Open BP_RisingBlock → Variables → GrowthSpeed; its default should be 35. MaxHeight should be 450.",
+                "Open BP_LoopsGameMode → Variables → SecondsLeft; its default should be 60.",
+                "Play a normal 60-second round and ask a classmate if it is too easy or too difficult.",
+                "To make it EASIER, change BP_RisingBlock → GrowthSpeed DEFAULT to 25; Compile and Save.",
+                "To make it HARDER instead, set GrowthSpeed to 45 OR change SpawnTick Timer Time from 1.5 to 1.1 (choose only ONE change).",
+                "Play a FULL round after each adjustment. Keep FreeLanes, MaxHeight and the red bar unchanged.",
+                "Choose the fairest values and Save both Blueprints."
               ]
             },
             {
@@ -4789,12 +4797,14 @@ window.UE5_MINI_UPGRADE_DATA = {
                 "array"
               ],
               "actions": [
-                "Open LoopsLevel and Save all Blueprints and the map.",
-                "Run a complete game; demonstrate shooting, random growth, Hits, danger-line loss and 60-second survival win.",
-                "Press R after each ending to prove restart works.",
-                "Capture screenshots of an early round, near-danger block and win/loss HUD.",
-                "If college PCs permit, package the Windows game; otherwise demonstrate in Play In Editor.",
-                "Explain which original For Loop idea was reused and which new line trace mechanic makes the game interactive."
+                "Open LoopsLevel and run one complete round. Check that left mouse shoots and red blocks grow upwards from the ground.",
+                "Demonstrate a LOSS by allowing one block to reach DangerLine.",
+                "Press R to restart. Demonstrate a WIN by shooting blocks until the 60-second clock reaches zero.",
+                "Capture a screenshot of the red danger line and score HUD during play.",
+                "Capture a second screenshot of the end-of-round message.",
+                "For a class demo, explain which Blueprint owns FreeLanes and how SpawnOneBlock picks a random lane.",
+                "Show the IA_RisingFire → Line Trace By Channel → Cast → BreakBlock chain in BP_LoopsPlayerController.",
+                "Save project and prepare Play In Editor demonstration (package for Windows only if the computers support packaging)."
               ]
             }
           ],
