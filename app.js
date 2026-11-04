@@ -2089,22 +2089,55 @@ function minesweeperPage(){
   '<div class="mini-upgrade-grid">'+stages.map((st,i)=>'<a class="mini-upgrade-card" href="'+minesweeperHref(st.id)+'"><span class="eyebrow">'+(done.has(st.id)?'✓ COMPLETE':(st.optional?'OPTIONAL':'ESSENTIAL')+' • STAGE '+(i+1))+'</span><h3>'+esc(st.title)+'</h3><p>'+esc(st.outcome)+'</p><strong>Open the walkthrough →</strong></a>').join('')+'</div>'+ 
   '<nav class="mini-stage-bottom"><a class="button ghost" href="#/mini-projects">← Four original Mini-Projects</a></nav></div>';
 }
+
+/* Minesweeper uses its own per-stage task positions; original starter and expansion stores stay unchanged. */
+const MINESWEEPER_TASK_STORE='ue5hub:minesweeper-task:v1';
+function minesweeperTaskPosition(stage,total){
+  try{
+    const saved=JSON.parse(localStorage.getItem(MINESWEEPER_TASK_STORE)||'{}');
+    const n=Number(saved[stage]||0);
+    return Number.isInteger(n)?Math.max(0,Math.min(total-1,n)):0;
+  }catch(e){return 0}
+}
+function minesweeperSaveTaskPosition(stage,position){
+  const saved={};
+  try{Object.assign(saved,JSON.parse(localStorage.getItem(MINESWEEPER_TASK_STORE)||'{}'))}catch(e){}
+  saved[stage]=position;
+  localStorage.setItem(MINESWEEPER_TASK_STORE,JSON.stringify(saved));
+}
 function minesweeperStagePage(stageId){
- const stages=MINESWEEPER?.stages||[],st=stages.find(x=>x.id===stageId);if(!st)return notFound();
- const idx=stages.indexOf(st),prev=stages[idx-1],next=stages[idx+1],done=minesweeperCompleted().includes(st.id);
- return '<div class="mini-shell mini-upgrades mini-upgrade-stage mini-mines-stage">'+miniTrail([{title:'Build',href:'#/build'},{title:'Mini-Projects',href:'#/mini-projects'},{title:'Minesweeper',href:minesweeperHref()},{title:st.title}])+
-  '<header class="mini-header"><span class="eyebrow">MINESWEEPER • '+(st.optional?'OPTIONAL POLISH':'COMPLETE-GAME BUILD')+' • STAGE '+(idx+1)+' OF '+stages.length+'</span><h1>'+esc(st.title)+'</h1><p>'+esc(st.outcome)+'</p><div class="mini-chips"><span>'+(done?'✓ Completed':'Build → test → save')+'</span><span>Named nodes and owner Blueprints</span><span>Extra beginner help</span></div></header>'+
-  '<div class="mini-lesson-grid"><div class="mini-main-column">'+
-  '<section class="mini-information mini-upgrade-ready"><span class="eyebrow">BEFORE YOU START</span><h2>What must already work?</h2><p>'+esc(st.beforeStart)+'</p><p class="mini-small-note">'+esc(st.studentPromise||'Compile, Save and Play after each step.')+'</p></section>'+
-  '<section class="mini-information mini-upgrade-new"><strong>Where do those names go?</strong><p>A Variable, Function, Event, Input Pin, Widget and Level Actor are different things. Open only the step you are completing. Any names created THERE are labelled below that step with their exact type and owning Blueprint.</p></section>'+miniUpgradeNameGuide(st)+
-  '<section class="mini-information mini-upgrade-walkthrough"><span class="eyebrow">COMPLETE BUILD • STEP BY STEP</span><h2>Follow these steps in order</h2><div class="mini-upgrade-steps">'+st.steps.map((step,i)=>
-    '<details class="mini-source-section mini-upgrade-step" '+(i===0?'open':'')+'><summary><span class="mini-section-title"><strong>'+(i+1)+'. '+esc(step.title)+'</strong><small>Where → Do → Why → Check</small></span><span class="mini-section-toggle" aria-hidden="true">⌄</span></summary><div class="mini-upgrade-instructions">'+
-    '<p><strong>Go to</strong><span>'+esc(step.where)+'</span></p><p><strong>Do this</strong><span>'+miniUpgradeDoActions(step.do)+'</span></p><p><strong>Why</strong><span>'+esc(step.why)+'</span></p><p class="mini-upgrade-step-check"><strong>Check</strong><span>'+esc(step.check)+'</span></p>'+miniUpgradeStepExtra(step,st,i+1)+'</div></details>').join('')+'</div></section>'+
-  (st.id==='finish'?'<section class="mini-information mini-upgrade-mvp"><span class="eyebrow">MINIMUM PLAYABLE GAME</span><h2>Your Minesweeper is complete</h2><p>If the final test below passes, the game is finished. Stage 9 is optional.</p></section>':'')+
-  '<section class="mini-information mini-proof"><span class="eyebrow">PROVE IT</span><h2>Stage final test</h2><p>'+esc(st.check)+'</p><details><summary>If something does not work</summary><p>'+esc(st.fix)+'</p><p><strong>Common mistake:</strong> '+esc(st.commonMistake)+'</p></details></section>'+
-  '<section class="mini-complete-panel"><p>Mark complete only when you have tested the step in Unreal. Saved in this browser independently of the four original Mini-Projects.</p><button class="button '+(done?'success':'primary')+'" data-action="minesweeper-complete" data-stage="'+esc(st.id)+'">'+(done?'✓ Completed — click to undo':'Mark stage complete ✓')+'</button></section>'+
-  '<nav class="mini-stage-bottom" aria-label="Minesweeper stage navigation"><a class="button ghost" href="'+minesweeperHref(prev?.id)+'">← '+(prev?'Previous stage':'Overview')+'</a>'+(next?'<a class="button primary" href="'+minesweeperHref(next.id)+'">Next stage →</a>':'<a class="button primary" href="'+minesweeperHref()+'">All stages ✓</a>')+'</nav></div>'+
-  '<aside class="mini-side-column"><div class="mini-information mini-side-stages"><strong>Minesweeper steps</strong>'+stages.map((s,i)=>'<a class="'+(s.id===st.id?'current':'')+'" href="'+minesweeperHref(s.id)+'"><span>'+(minesweeperCompleted().includes(s.id)?'✓':i+1)+'</span>'+esc(s.title)+'</a>').join('')+'</div><div class="mini-information"><strong>Need the whole plan?</strong><a href="'+minesweeperHref()+'">Return to game overview →</a></div></aside></div></div>';
+  const stages=MINESWEEPER?.stages||[],st=stages.find(x=>x.id===stageId);
+  if(!st)return notFound();
+  const idx=stages.indexOf(st),prev=stages[idx-1],next=stages[idx+1],done=minesweeperCompleted().includes(st.id);
+  const count=st.steps.length,pos=minesweeperTaskPosition(st.id,count),step=st.steps[pos];
+  const actions=Array.isArray(step.actions)&&step.actions.length?step.actions:[step.where,step.do].filter(Boolean);
+  return '<div class="mini-shell mini-upgrades mini-upgrade-plain mini-mines-stage">'+miniTrail([
+    {title:'Build',href:'#/build'},{title:'Mini-Projects',href:'#/mini-projects'},
+    {title:'Minesweeper',href:minesweeperHref()},{title:st.title}])+
+   '<header class="mini-header mini-plain-header"><span class="eyebrow">MINESWEEPER • STAGE '+(idx+1)+' OF '+stages.length+(st.optional?' • OPTIONAL':'')+'</span><h1>'+esc(st.title)+'</h1><p>'+esc(st.outcome)+'</p></header>'+
+   '<main class="mini-upgrade-focus" aria-label="Minesweeper: follow one task at a time">'+
+     '<div class="mini-upgrade-task-top"><span>Task '+(pos+1)+' of '+count+'</span><span>'+(done?'✓ Stage completed':'Follow each action in order')+'</span></div>'+
+     '<div class="mini-upgrade-task-progress" aria-hidden="true"><span style="width:'+Math.round((pos+1)/count*100)+'%"></span></div>'+
+     (pos===0?'<p class="mini-small-note"><strong>Before starting:</strong> '+esc(st.beforeStart)+'</p>':'')+
+     '<h2>'+esc(step.title)+'</h2>'+
+     '<ol class="mini-upgrade-plain-actions">'+actions.map(action=>'<li>'+esc(action)+'</li>').join('')+'</ol>'+
+     '<p class="mini-upgrade-step-check"><strong>Check before moving on:</strong> '+esc(step.check)+'</p>'+
+     (step.helpTopics?.length?'<details class="mini-upgrade-howto"><summary>Stuck? Extra Unreal help</summary>'+
+        (step.helpTopics||[]).map(key=>window.UE5_MINI_UPGRADE_HELP?.[key]).filter(Boolean)
+          .map(h=>'<p><strong>'+esc(h.title)+':</strong> '+esc(h.body)+'</p>').join('')+'</details>':'')+
+     '<nav class="mini-upgrade-task-controls" aria-label="Task controls">'+
+       (pos>0?'<button class="button ghost" data-action="minesweeper-task" data-move="-1" data-stage="'+esc(st.id)+'">← Back</button>':'<span></span>')+
+       (pos<count-1?'<button class="button primary" data-action="minesweeper-task" data-move="1" data-stage="'+esc(st.id)+'">Next task →</button>':'<span></span>')+
+     '</nav>'+
+     (pos===count-1?
+        '<section class="mini-information mini-proof"><h3>Stage final test</h3><p>'+esc(st.check)+'</p>'+
+          '<details><summary>If something does not work</summary><p>'+esc(st.fix)+'</p><p>'+esc(st.commonMistake)+'</p></details></section>'+
+        '<section class="mini-complete-panel"><p>Only mark complete after the game passes the test in Unreal.</p>'+
+          '<button class="button '+(done?'success':'primary')+'" data-action="minesweeper-complete" data-stage="'+esc(st.id)+'">'+(done?'✓ Completed — click to undo':'Mark stage complete ✓')+'</button></section>'+
+        '<nav class="mini-stage-bottom"><a class="button ghost" href="'+minesweeperHref(prev?.id)+'">← '+(prev?'Previous stage':'Overview')+'</a>'+
+           (next?'<a class="button primary" href="'+minesweeperHref(next.id)+'">Next stage →</a>':'<a class="button primary" href="'+minesweeperHref()+'">All stages ✓</a>')+'</nav>'
+      :'')+
+    '</main></div>';
 }
 function miniAssetCard(p){
   if(!['balloon-popper','bowling'].includes(p?.id))return '';
@@ -4591,6 +4624,13 @@ document.addEventListener('click',async e=>{
     const current=miniUpgradeTaskPosition(project,stage,s.steps.length);
     const next=Math.max(0,Math.min(s.steps.length-1,current+move));
     miniUpgradeSaveTaskPosition(project,stage,next);
+    route();
+  }
+  else if(a==='minesweeper-task'){
+    const stage=b.dataset.stage||'',st=MINESWEEPER?.stages?.find(s=>s.id===stage),move=Number(b.dataset.move);
+    if(!st||(move!==1&&move!==-1))return;
+    const pos=minesweeperTaskPosition(stage,st.steps.length);
+    minesweeperSaveTaskPosition(stage,Math.max(0,Math.min(st.steps.length-1,pos+move)));
     route();
   }
   else if(a==='minesweeper-complete'){
