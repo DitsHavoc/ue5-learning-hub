@@ -127,6 +127,22 @@ const server = http.createServer((req,res)=>{
       await page.waitForSelector('.level4-stage-list',{timeout:10000});
       if(await page.locator('.level4-stage').count()!==5)failures.push(device.name+': direct research URL does not show all five tasks');
 
+      // Research gallery should show eight grounded game examples with
+      // screenshots, an official/developer talk, a written source and a prompt.
+      const gallery=await page.evaluate(()=>{
+        const cards=[...document.querySelectorAll('.level4-example-card')];
+        return {count:cards.length,images:cards.filter(c=>c.querySelector('img[alt][src]')).length,
+          developerVideos:cards.filter(c=>c.querySelectorAll('.level4-example-links a[href*="youtube.com/watch"]').length===1).length,
+          articles:cards.filter(c=>c.querySelectorAll('.level4-example-links a').length===2).length,
+          prompts:cards.filter(c=>c.querySelector('.level4-example-prompt')).length,
+          annotation:!!document.querySelector('.level4-annotation-example img'),
+          width:document.querySelector('#app').clientWidth,scrollWidth:document.querySelector('#app').scrollWidth};
+      });
+      const galleryPass=gallery.count===8&&gallery.images===8&&gallery.developerVideos===8&&gallery.articles===8&&gallery.prompts===8&&gallery.annotation&&gallery.scrollWidth<=gallery.width+3;
+      console.log((galleryPass?'PASS ':'FAIL ')+device.name+' Level 4 visual gallery -> '+JSON.stringify(gallery));
+      if(!galleryPass)failures.push(device.name+' Level 4 visual gallery -> '+JSON.stringify(gallery));
+
+
 
       if(errors.length)failures.push(device.name+' uncaught browser errors:\n'+[...new Set(errors)].slice(0,4).join('\n'));
       await page.close();

@@ -11,3 +11,35 @@
 /* v3.57.9 — Level 4 Hero Prop studio-checkpoint layout */
 .level4-studio-stage{padding:20px}.level4-studio-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:4px}.level4-studio-card{padding:14px 15px;border-radius:14px;border:1px solid rgba(128,160,255,.16);background:rgba(255,255,255,.035)}.level4-studio-card strong{display:block;margin-bottom:6px;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:#aebcff}.level4-studio-card p{margin:0;line-height:1.55;color:var(--text,#e7edf5)}.level4-studio-tech{grid-column:1/-1;border-left:3px solid rgba(110,164,255,.78);background:rgba(82,116,220,.07)}.level4-studio-check{border-left:3px solid rgba(95,205,151,.68)}.level4-studio-evidence{border-left:3px solid rgba(174,145,255,.72)}.level4-studio-fix{grid-column:1/-1;border-left:3px solid rgba(255,184,82,.68)}
 @media(max-width:800px){.level4-studio-grid{grid-template-columns:1fr}.level4-studio-tech,.level4-studio-fix{grid-column:auto}}
+
+
+/* Level 4 research: image-led professional game references (v3.58.2) */
+.level4-example-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.level4-example-card{min-width:0;display:flex;flex-direction:column;overflow:hidden;border:1px solid rgba(128,160,255,.2);border-radius:18px;background:rgba(11,20,33,.74)}
+.level4-example-picture{position:relative;display:block;aspect-ratio:16/10;overflow:hidden;background:linear-gradient(145deg,#25344e,#0c1423);color:#fff}
+.level4-example-picture img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .22s ease}
+.level4-example-picture:hover img,.level4-example-picture:focus-visible img{transform:scale(1.035)}
+.level4-example-caption{position:absolute;bottom:0;left:0;right:0;padding:8px 12px;font-size:.73rem;line-height:1.35;color:white;background:linear-gradient(transparent,rgba(0,0,0,.82));text-shadow:0 1px 2px #000}
+.level4-example-body{display:flex;flex:1;flex-direction:column;align-items:flex-start;gap:9px;padding:16px}
+.level4-example-role{display:inline-block;border-radius:999px;border:1px solid rgba(139,166,255,.35);padding:5px 9px;color:#c4d0ff;background:rgba(106,130,255,.13);font-size:.73rem;font-weight:800}
+.level4-example-body h3{font-size:1.35rem;margin:2px 0 0;line-height:1.2}
+.level4-example-topic{font-size:.81rem;font-weight:750;color:#a9b8ff}
+.level4-example-body p{margin:0;color:var(--muted,#b8c1cc);line-height:1.52;font-size:.94rem}
+.level4-example-prompt{width:100%;display:grid;gap:5px;padding:12px 13px;border:1px solid rgba(138,163,255,.16);border-radius:12px;background:rgba(94,111,255,.07);font-size:.87rem;line-height:1.47}
+.level4-example-prompt strong{font-size:.71rem;letter-spacing:.08em;text-transform:uppercase;color:#b9c7ff}
+.level4-example-links{display:grid;gap:8px;width:100%;margin-top:auto;padding-top:5px}
+.level4-example-links a{display:flex;align-items:flex-start;gap:7px;line-height:1.42;padding:10px 12px;text-decoration:none;font-weight:750;font-size:.84rem;color:#dce5ff;border-radius:11px;border:1px solid rgba(150,167,255,.25);background:rgba(79,92,174,.12)}
+.level4-example-links a:hover,.level4-example-links a:focus-visible{background:rgba(103,125,220,.22);border-color:rgba(160,176,255,.65)}
+.level4-example-links a span{flex:none}
+.level4-example-footnote{font-size:.87rem;line-height:1.55;color:var(--muted,#b8c1cc);margin:12px 0 0}
+.level4-annotation-example{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:18px;align-items:start;padding:17px;border:1px solid rgba(128,160,255,.18);border-radius:18px;background:rgba(11,20,33,.7)}
+.level4-annotation-example figure{margin:0;min-width:0}
+.level4-annotation-example img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:12px}
+.level4-annotation-example figcaption{padding:8px 0;font-size:.78rem}
+.level4-annotation-example figcaption a{color:var(--text,#dce5ff)}
+.level4-annotation-notes h3{margin:0 0 12px;font-size:1.1rem}
+.level4-annotation-notes ol{display:grid;gap:8px;margin:0;padding-left:1.4rem;line-height:1.48}
+.level4-annotation-notes p{margin:14px 0 0;color:var(--muted,#b8c1cc);line-height:1.5}
+@media(max-width:1050px){.level4-example-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.level4-example-grid,.level4-annotation-example{grid-template-columns:minmax(0,1fr)}.level4-example-body{padding:15px}.level4-annotation-example{padding:12px}}
+@media(prefers-reduced-motion:reduce){.level4-example-picture img{transition:none}.level4-example-picture:hover img,.level4-example-picture:focus-visible img{transform:none}}
