@@ -108,6 +108,168 @@ window.LEVEL4_SPECIALIST_PROJECTS = {
     "submit": "Put your research, examples and planning into one document or presentation and submit it through your Teams assignment.",
     "next": "Use your research to start creating your first asset, feature, design or prototype. Keep the scope achievable and build on the specialism you chose."
   },
+  researchExamples: [
+    {
+      "id": "titanfall-2",
+      "game": "Titanfall 2",
+      "specialism": "Level design • Movement",
+      "eyebrow": "Action blocks, flow & verticality",
+      "image": "https://www.mapcore.org/uploads/monthly_2018_02/11.jpg.735f4558773e6dd1e7c365d92fa441ff.jpg",
+      "imageAlt": "Elevated balcony looking down into an overgrown science atrium in Titanfall 2.",
+      "imageCredit": "Screenshot: Mapcore level breakdown",
+      "imageSource": "https://www.mapcore.org/articles/development/effect-and-cause-titanfall-2-level-breakdown-r96/",
+      "look": "How height, route choices and time-shifting turn one space into different challenges.",
+      "prompt": "Mark a vantage point, a possible route and where the next action happens.",
+      "video": {
+        "label": "Respawn developer talk • Action Blocks (GDC)",
+        "url": "https://www.youtube.com/watch?v=CkHGuHd9BgU"
+      },
+      "article": {
+        "label": "Effect and Cause • Level breakdown",
+        "url": "https://www.mapcore.org/articles/development/effect-and-cause-titanfall-2-level-breakdown-r96/"
+      }
+    },
+    {
+      "id": "doom-eternal",
+      "game": "DOOM Eternal",
+      "specialism": "Gameplay design • Programming",
+      "eyebrow": "Combat loops & player behaviour",
+      "image": "https://www.pcgames.de/screenshots/1280x1024/2020/03/DoomEternal-PCGAMES-Test-Review003-pc-games.jpg",
+      "imageAlt": "DOOM Eternal first-person combat against demons in a large stone arena.",
+      "imageCredit": "Screenshot: PC Games",
+      "imageSource": "https://www.pcgames.de/Doom-Eternal-Spiel-72610/Tests/Review-Video-Performance-Tuning-Release-Termin-1345835/2/",
+      "look": "What encourages movement, target choice and the use of ammo, health and abilities.",
+      "prompt": "Choose one combat rule. Explain what it makes the player do and sketch how you could prototype it.",
+      "video": {
+        "label": "id Software talk • DOOM (2016) combat design",
+        "url": "https://www.youtube.com/watch?v=2KQNpQD8Ayo"
+      },
+      "article": {
+        "label": "DOOM Eternal • Combat design interview",
+        "url": "https://www.gamedeveloper.com/design/q-a-evolving-the-combat-design-of-id-software-s-i-doom-eternal-i-"
+      }
+    },
+    {
+      "id": "uncharted-4",
+      "game": "Uncharted 4",
+      "specialism": "3D modelling • Environment art",
+      "eyebrow": "Concept to finished environment",
+      "image": "https://www.gamepressure.com/uncharted4/gfx/word/8483640.jpg",
+      "imageAlt": "Uncharted 4 jeep amid rocky tracks and trees in Madagascar.",
+      "imageCredit": "Screenshot: Gamepressure",
+      "imageSource": "https://www.gamepressure.com/uncharted4/not-a-cairn-in-the-world/zd8a3a",
+      "look": "How terrain, materials, vegetation, props and landmarks make a space believable.",
+      "prompt": "Identify three reusable assets. Sketch or list how you would model and texture one.",
+      "video": {
+        "label": "Naughty Dog • Cinematic Environment Production (GDC)",
+        "url": "https://www.youtube.com/watch?v=bEIX-EQNZuQ"
+      },
+      "article": {
+        "label": "Uncharted 4 • Environment pipeline",
+        "url": "https://www.gamedeveloper.com/art/video-behind-i-uncharted-4-s-i-environment-production-pipeline"
+      }
+    },
+    {
+      "id": "hades",
+      "game": "Hades",
+      "specialism": "2D art • Character modelling",
+      "eyebrow": "Style, silhouettes & hand-painted detail",
+      "image": "https://images.ctfassets.net/5owu3y35gz1g/7mmFbBQ6ey6ke4dd7fQ72g/f4bca802a1f8f8ce130f8db728f167ee/night_Post_01.jpg?q=80&w=1920",
+      "imageAlt": "Supergiant's illustrated character design of Nyx from Hades.",
+      "imageCredit": "Character artwork: Supergiant Games",
+      "imageSource": "https://www.supergiantgames.com/games/hades/",
+      "look": "How strong silhouettes, colours and hand-painted detail keep characters recognisable.",
+      "prompt": "Pick one character. Annotate shape, colour, costume and how the 2D art influences the model.",
+      "video": {
+        "label": "Supergiant • Making Nyx character art",
+        "url": "https://www.youtube.com/watch?v=cYJ6d1ifSqA"
+      },
+      "article": {
+        "label": "Hades • From painted design to 3D model",
+        "url": "https://www.gamedeveloper.com/art/learn-how-supergiant-brought-i-hades-i-hand-painted-characters-to-life"
+      }
+    },
+    {
+      "id": "god-of-war",
+      "game": "God of War Ragnarök",
+      "specialism": "UI / UX • Player feedback",
+      "eyebrow": "Readable information during action",
+      "image": "https://cdn.playdome.hu/gallery/7845/image50.jpg",
+      "imageAlt": "God of War Ragnarök combat scene with health and status HUD elements.",
+      "imageCredit": "Screenshot: PlayDome",
+      "imageSource": "https://www.playdome.hu/cikk/59377/god-of-war-ragnarok-teszt-sorsdonto-apa-fia-kaland",
+      "look": "What the HUD shows, hides or emphasises while the player is fighting.",
+      "prompt": "Annotate three UI elements. Explain what each communicates and when it matters.",
+      "video": {
+        "label": "Santa Monica Studio • UI for a AAA sequel (GDC)",
+        "url": "https://www.youtube.com/watch?v=C5gfkeFXDq8"
+      },
+      "article": {
+        "label": "Studio presentation • UI design process",
+        "url": "https://sms.playstation.com/stories/gdc-2023-presentations/media/1001"
+      }
+    },
+    {
+      "id": "dead-space",
+      "game": "Dead Space (2023)",
+      "specialism": "Music & sound • Game systems",
+      "eyebrow": "Fear, distance & dynamic audio",
+      "image": "https://www.gamereactor.jp/media/66/conviertenosuno_3876693b.jpg",
+      "imageAlt": "Dead Space remake: Isaac in a dark ship corridor with a creature ahead.",
+      "imageCredit": "Screenshot: Gamereactor",
+      "imageSource": "https://www.gamereactor.jp/dead-space-remake-1235693/",
+      "look": "How breathing, distant sounds, occlusion and quiet sections build suspense.",
+      "prompt": "Record a timecode for one sound. Explain how it changes what you expect or do next.",
+      "video": {
+        "label": "Motive • Audio occlusion developer deep dive",
+        "url": "https://www.youtube.com/watch?v=4LzfGOT6bQo"
+      },
+      "article": {
+        "label": "EA Motive • Audio developer breakdown",
+        "url": "https://www.ea.com/ea-studios/motive/amp/news/focus-on-deadspace-audio-design"
+      }
+    },
+    {
+      "id": "dishonored-2",
+      "game": "Dishonored 2",
+      "specialism": "Level design • Player choice",
+      "eyebrow": "Alternative routes & environmental storytelling",
+      "image": "https://images.gamersyde.com/image_dishonored_2-32054-3262_0015.jpg",
+      "imageAlt": "Dishonored 2 architecture and the streets of Karnaca.",
+      "imageCredit": "Screenshot: Gamersyde",
+      "imageSource": "https://www.gamersyde.com/news_e3_new_dishonored_2_screens-17959_en.html",
+      "look": "How rooftops, doors and changing sight lines support different approaches.",
+      "prompt": "Sketch two ways through the same area. What makes the routes feel different?",
+      "video": {
+        "label": "Arkane level designer • Dishonored 2 Q&A",
+        "url": "https://www.youtube.com/watch?v=rb9_UHGu8HQ"
+      },
+      "article": {
+        "label": "Bethesda / Arkane • Themed missions",
+        "url": "https://bethesda.net/en-US/news/dishonored-2-inside-the-epic-themed-missions"
+      }
+    },
+    {
+      "id": "pyre",
+      "game": "Pyre",
+      "specialism": "Animation • VFX",
+      "eyebrow": "Readable movement & stylised feedback",
+      "image": "https://img.itch.zone/aW1hZ2UvMzkxMDQ1LzE5ODYyOTMuanBn/original/srppae.jpg",
+      "imageAlt": "Pyre by Supergiant Games with characters and bright magic effects in a stylised arena.",
+      "imageCredit": "Screenshot: Supergiant Games",
+      "imageSource": "https://supergiant-games.itch.io/pyre",
+      "look": "How poses, movement arcs and glowing effects explain actions without long instructions.",
+      "prompt": "Capture an action sequence. Mark anticipation, main pose, impact and recovery.",
+      "video": {
+        "label": "Supergiant animator • Transistor & Pyre (GDC)",
+        "url": "https://www.youtube.com/watch?v=g79fH5blPmU"
+      },
+      "article": {
+        "label": "Supergiant animation process • GDC write-up",
+        "url": "https://www.gamedeveloper.com/design/video-building-animating-characters-in-supergiant-s-i-transistor-i-i-pyre-i-"
+      }
+    }
+  ],
   projects: [
     {
       id:'what-happened-here', icon:'✦', title:'What Happened Here?', role:'Environment / Level Design', time:'1–2 weeks',
