@@ -4001,9 +4001,46 @@ function level4SpecialistHub(){
   if(!data)return `<div class="empty">Level 4 project data could not load.</div>`;
   return `<div class="level4-shell">
     <section class="level4-hero"><div class="level4-kicker">${esc(data.intro.kicker)}</div><h1>${esc(data.intro.title)}</h1><p>${esc(data.intro.summary)}</p><div class="level4-warning"><strong>One pathway only.</strong> Choose the discipline you want to develop or show in your portfolio. The goal is one strong specialist outcome, not a quick attempt at every option.</div></section>
+    <section class="level4-section"><div class="level4-section-head"><div><h2>Research before you build</h2><p>One practical 100-minute lesson: play, investigate, collect examples and plan a first outcome in your chosen specialism.</p></div></div><div class="level4-game-ref-grid"><a href="#/level4/research"><strong>Game Development Research — Play, Analyse, Plan</strong><span>3D art, 2D art, programming, UI, level design, audio, animation or VFX. Five clear tasks and a submission checklist.</span><em>Open research task sheet →</em></a></div></section>
     <section class="level4-choice-grid">${data.projects.map(p=>`<a class="level4-choice" href="${p.href||`#/level4/${p.id}`}"><div class="icon">${p.icon}</div><h2>${esc(p.title)}</h2><div class="role">${esc(p.role)} · ${esc(p.time)}</div><p>${esc(p.strap)}</p><div class="go">Open pathway →</div></a>`).join('')}</section>
   </div>`;
 }
+function level4ResearchTaskPage(){
+  const task=window.LEVEL4_SPECIALIST_PROJECTS?.researchTask;
+  if(!task)return notFound();
+  return `<div class="level4-shell">
+    <a class="level4-back" href="#/level4">← Level 4 Specialist Projects</a>
+    <section class="level4-hero">
+      <div class="level4-kicker">${esc(task.label)}</div>
+      <h1>${esc(task.title)}</h1>
+      <p>${esc(task.intro)}</p>
+      <div class="level4-warning"><strong>Your choice matters.</strong> Your six examples and your final plan should match the specialism you select. Not everyone needs to design a level or write code.</div>
+    </section>
+    <section class="level4-section">
+      <div class="level4-section-head"><div><h2>Choose your specialism</h2><p>${esc(task.focus)}</p></div></div>
+      <div class="level4-prompt-grid">${task.specialisms.map(s=>`<article><h3>${esc(s.name)}</h3><p>${esc(s.look)}</p></article>`).join('')}</div>
+    </section>
+    <section class="level4-section">
+      <div class="level4-section-head"><div><h2>Follow the five tasks</h2><p>Work through the tasks in order. Use the check at the end of each one before moving on.</p></div></div>
+      <div class="level4-stage-list">${task.steps.map(s=>`<article class="level4-stage level4-stage-detailed">
+        <div class="level4-stage-top"><div class="level4-stage-num">${esc(s.n)}</div><div><h3>${esc(s.title)}</h3><span class="level4-pill">${esc(s.time)}</span></div></div>
+        <div class="level4-action-box"><strong>What to do</strong><ol class="level4-action-list">${s.actions.map(a=>`<li>${esc(a)}</li>`).join('')}</ol></div>
+        <div class="level4-note level4-check"><strong>Check before moving on</strong>${esc(s.check)}</div>
+      </article>`).join('')}</div>
+    </section>
+    <section class="level4-section">
+      <h2>What you need to submit</h2>
+      <div class="level4-deliver">${task.evidence.map(x=>`<div>□ ${esc(x)}</div>`).join('')}</div>
+      <div class="level4-warning" style="margin-top:14px">${esc(task.submit)}</div>
+    </section>
+    <section class="level4-section">
+      <h2>What comes next?</h2>
+      <p>${esc(task.next)}</p>
+      <a class="button primary" href="#/level4">Explore Level 4 specialist projects →</a>
+    </section>
+  </div>`;
+}
+
 function level4SpecialistProjectPage(id){
  const p=level4ProjectData(id); if(!p)return notFound();
  const visual=p.heroImage?`<figure class="level4-visual"><img src="${p.heroImage}" alt="${esc(p.heroAlt||'Reference image')}" loading="lazy" ${p.heroFallback?`onerror="this.onerror=null;this.src='${p.heroFallback}'"`:''}><figcaption>${p.imageCaption?`<span class="level4-image-caption">${esc(p.imageCaption)}</span>`:''}${p.imageLink?`<a href="${p.imageLink}" ${p.imageLink.startsWith('#/')?'':'target="_blank" rel="noopener"'}>${esc(p.imageCredit||'Reference image')}${p.imageLink.startsWith('#/')?'':' ↗'}</a>`:esc(p.imageCredit||'Reference image')}</figcaption></figure>`:'';
@@ -4062,6 +4099,7 @@ function route(options={}){
   else if(parts[0]==='study'){app.innerHTML=studyHubPage();activate('study')}
   else if(parts[0]==='pathways'&&parts[1]){app.innerHTML=guidedPathPage(parts[1]);activate('pathways')}
   else if(parts[0]==='pathways'){app.innerHTML=guidedPathsPage();activate('pathways')}
+  else if(parts[0]==='level4'&&parts[1]==='research'){app.innerHTML=level4ResearchTaskPage();activate('level4')}
   else if(parts[0]==='level4'&&parts[1]){app.innerHTML=level4SpecialistProjectPage(parts[1]);activate('level4')}
   else if(parts[0]==='level4'){app.innerHTML=level4SpecialistHub();activate('level4')}
   else if(parts[0]==='cpp-path'){app.innerHTML=cppPathwayLanding();activate('level4')}
@@ -5410,6 +5448,10 @@ function buildGlobalSearchIndex(){
   (CAREERS.chapters||[]).forEach(ch=>add({title:ch.title,meta:`Industry & Careers • Level 4 • Chapter ${ch.order}`,href:`#/industry-careers/${ch.id}`,icon:ch.icon||'◎',kind:'career',data:deepSearchText(ch)}));
   (CAREERS.roles||[]).forEach(r=>add({title:r.title,meta:`Industry & Careers • ${r.discipline} role`,href:'#/industry-careers/people',icon:r.icon||'◉',kind:'career-role',data:deepSearchText(r)}));
   (PATHWAYS.paths||[]).forEach(p=>add({title:p.title,meta:'Guided Path • optional route through existing Hub content',href:`#/pathways/${p.id}`,icon:p.icon||'↠',kind:'guided-path',data:deepSearchText(p)}));
+  if(window.LEVEL4_SPECIALIST_PROJECTS?.researchTask){
+    const task=window.LEVEL4_SPECIALIST_PROJECTS.researchTask;
+    add({title:task.title,meta:'Level 4 • Game Development Research • Specialism choice • 100-minute lesson',href:'#/level4/research',icon:'◆',kind:'level4-research',data:deepSearchText(task)});
+  }
   (CPP_SKILL_MISSIONS.missions||[]).forEach(m=>{const i=cppMissionNextIndex(m),s=m.stages?.[i]||m.stages?.[0];add({title:`C++ Mission ${cppMissionSeq(m)} — ${m.title}`,meta:`Level 4 Unreal C++ • ${m.duration||'guided build'} • cumulative L4CppTraining project`,href:`#/cpp-mission/${m.id}/${s?.id||'start'}`,icon:'C++',kind:'cpp-skill-mission',data:deepSearchText(m)})});
   homeworkPaths().forEach(p=>add({title:`Homework: ${p.title}`,meta:`Guided Homework • ${p.time} • Learn → Do → Check → Bring Back`,href:`#/homework/${p.id}`,icon:p.icon||'⌂',kind:'homework-path',data:deepSearchText(p)}));
   (UNREAL_DESIGNER.tracks||[]).forEach(t=>{const m=designModule(t.moduleId);add({title:`Unreal Designer: ${t.shortTitle||m?.title||t.id}`,meta:'Unreal Designer • Theory → Engine → Test → Evidence',href:`#/unreal-designer/${t.id}`,icon:t.icon||'⚙',kind:'unreal-designer',data:deepSearchText({...t,module:m})})});
