@@ -115,7 +115,7 @@ const server = http.createServer((req,res)=>{
           specialisms:document.querySelectorAll('#app .level4-prompt-grid article').length,
           steps:document.querySelectorAll('#app .level4-stage').length,
           evidence:document.querySelectorAll('#app .level4-deliver div').length,
-          search:buildGlobalSearchIndex().some(x=>x.href==='#/level4/research'&&x.text.includes('programming')),
+          search:(()=>{const input=document.querySelector('#globalSearch');if(!input)return false;input.value='Game Development Research';input.dispatchEvent(new Event('input',{bubbles:true}));return !!document.querySelector('#searchPanel a[href="#/level4/research"]');})(),
           width:document.querySelector('#app').getBoundingClientRect().width,
           scrollWidth:document.querySelector('#app').scrollWidth
         }));
