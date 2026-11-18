@@ -99,6 +99,35 @@ const server = http.createServer((req,res)=>{
       }
       if(lessonIds.length!==20)failures.push(device.name+': expected 20 original core lessons; found '+lessonIds.length);
 
+      // Level 4 research is a shared starting task, not another specialist project.
+      // The hub card, direct URL, page content and site search must all work on both viewports.
+      await page.goto(url+'/#/level4',{waitUntil:'load'});
+      await page.waitForSelector('.level4-choice-grid',{timeout:10000});
+      const researchLink=page.locator('.level4-game-ref-grid a[href="#/level4/research"]');
+      if(await researchLink.count()!==1){
+        failures.push(device.name+': research card missing from Level 4 landing');
+      }else{
+        await researchLink.click();
+        await page.waitForSelector('.level4-stage-list',{timeout:10000});
+        const research=await page.evaluate(()=>({
+          hash:location.hash,
+          title:document.querySelector('#app h1')?.textContent?.trim(),
+          specialisms:document.querySelectorAll('#app .level4-prompt-grid article').length,
+          steps:document.querySelectorAll('#app .level4-stage').length,
+          evidence:document.querySelectorAll('#app .level4-deliver div').length,
+          search:buildGlobalSearchIndex().some(x=>x.href==='#/level4/research'&&x.text.includes('programming')),
+          width:document.querySelector('#app').getBoundingClientRect().width,
+          scrollWidth:document.querySelector('#app').scrollWidth
+        }));
+        const pass=research.hash==='#/level4/research'&&research.title?.includes('Game Development Research')&&research.specialisms===7&&research.steps===5&&research.evidence===4&&research.search&&research.scrollWidth<=research.width+3;
+        console.log((pass?'PASS ':'FAIL ')+device.name+' Level 4 research -> '+JSON.stringify(research));
+        if(!pass)failures.push(device.name+' Level 4 research -> '+JSON.stringify(research));
+      }
+      await page.goto(url+'/#/level4/research',{waitUntil:'load'});
+      await page.waitForSelector('.level4-stage-list',{timeout:10000});
+      if(await page.locator('.level4-stage').count()!==5)failures.push(device.name+': direct research URL does not show all five tasks');
+
+
       if(errors.length)failures.push(device.name+' uncaught browser errors:\n'+[...new Set(errors)].slice(0,4).join('\n'));
       await page.close();
     }
