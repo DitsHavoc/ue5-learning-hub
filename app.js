@@ -4005,6 +4005,52 @@ function level4SpecialistHub(){
     <section class="level4-choice-grid">${data.projects.map(p=>`<a class="level4-choice" href="${p.href||`#/level4/${p.id}`}"><div class="icon">${p.icon}</div><h2>${esc(p.title)}</h2><div class="role">${esc(p.role)} · ${esc(p.time)}</div><p>${esc(p.strap)}</p><div class="go">Open pathway →</div></a>`).join('')}</section>
   </div>`;
 }
+function level4ResearchVisuals(){
+  const examples=window.LEVEL4_SPECIALIST_PROJECTS?.researchExamples||[];
+  return `<section class="level4-section" aria-labelledby="l4-research-examples-title">
+    <div class="level4-section-head"><div>
+      <h2 id="l4-research-examples-title">Games worth investigating</h2>
+      <p>Start with one of these professional examples, or choose your own game. Each card has a real game image, something to investigate, a developer video and a written breakdown. You do not need to use all the links.</p>
+    </div></div>
+    <div class="level4-example-grid">${examples.map(e=>`<article class="level4-example-card">
+      <a class="level4-example-picture" href="${esc(e.imageSource)}" target="_blank" rel="noopener noreferrer" aria-label="View image source for ${esc(e.game)}">
+        <img src="${esc(e.image)}" alt="${esc(e.imageAlt)}" loading="lazy" decoding="async">
+        <span class="level4-example-caption">${esc(e.imageCredit)}</span>
+      </a>
+      <div class="level4-example-body">
+        <span class="level4-example-role">${esc(e.specialism)}</span>
+        <h3>${esc(e.game)}</h3>
+        <span class="level4-example-topic">${esc(e.eyebrow)}</span>
+        <p>${esc(e.look)}</p>
+        <div class="level4-example-prompt"><strong>Try this</strong><span>${esc(e.prompt)}</span></div>
+        <div class="level4-example-links">
+          <a href="${esc(e.video.url)}" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">▶</span> ${esc(e.video.label)}</a>
+          <a href="${esc(e.article.url)}" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">↗</span> ${esc(e.article.label)}</a>
+        </div>
+      </div>
+    </article>`).join('')}</div>
+    <p class="level4-example-footnote">Some games shown are intended for mature audiences. You can investigate an age-appropriate alternative or watch suitable development footage instead. Use these links as research sources, not as work to copy.</p>
+  </section>
+  <section class="level4-section">
+    <div class="level4-section-head"><div><h2>What does a useful annotation look like?</h2><p>Do more than label objects. Explain what the developer's decision does for the player.</p></div></div>
+    <div class="level4-annotation-example">
+      <figure>
+        <img src="https://www.mapcore.org/uploads/monthly_2018_02/11.jpg.735f4558773e6dd1e7c365d92fa441ff.jpg" alt="Titanfall 2 elevated balcony overlooking an atrium, used to explain level design annotations." loading="lazy">
+        <figcaption><a href="https://www.mapcore.org/articles/development/effect-and-cause-titanfall-2-level-breakdown-r96/" target="_blank" rel="noopener noreferrer">Titanfall 2 screenshot: Mapcore breakdown ↗</a></figcaption>
+      </figure>
+      <div class="level4-annotation-notes">
+        <h3>Example: a level designer might write…</h3>
+        <ol>
+          <li><strong>Raised walkway:</strong> lets the player look into the next space before entering.</li>
+          <li><strong>Open atrium:</strong> gives room to move and see enemy or cover positions.</li>
+          <li><strong>Different sight lines:</strong> make the player choose how to approach the encounter.</li>
+        </ol>
+        <p>For 3D art, annotate shapes and materials. For UI, explain information and readability. For audio or animation, use a clip and timestamp to identify the moment you mean.</p>
+      </div>
+    </div>
+  </section>`;
+}
+
 function level4ResearchTaskPage(){
   const task=window.LEVEL4_SPECIALIST_PROJECTS?.researchTask;
   if(!task)return notFound();
@@ -4020,6 +4066,7 @@ function level4ResearchTaskPage(){
       <div class="level4-section-head"><div><h2>Choose your specialism</h2><p>${esc(task.focus)}</p></div></div>
       <div class="level4-prompt-grid">${task.specialisms.map(s=>`<article><h3>${esc(s.name)}</h3><p>${esc(s.look)}</p></article>`).join('')}</div>
     </section>
+    ${level4ResearchVisuals()}
     <section class="level4-section">
       <div class="level4-section-head"><div><h2>Follow the five tasks</h2><p>Work through the tasks in order. Use the check at the end of each one before moving on.</p></div></div>
       <div class="level4-stage-list">${task.steps.map(s=>`<article class="level4-stage level4-stage-detailed">
@@ -5450,7 +5497,7 @@ function buildGlobalSearchIndex(){
   (PATHWAYS.paths||[]).forEach(p=>add({title:p.title,meta:'Guided Path • optional route through existing Hub content',href:`#/pathways/${p.id}`,icon:p.icon||'↠',kind:'guided-path',data:deepSearchText(p)}));
   if(window.LEVEL4_SPECIALIST_PROJECTS?.researchTask){
     const task=window.LEVEL4_SPECIALIST_PROJECTS.researchTask;
-    add({title:task.title,meta:'Level 4 • Game Development Research • Specialism choice • 100-minute lesson',href:'#/level4/research',icon:'◆',kind:'level4-research',data:deepSearchText(task)});
+    add({title:task.title,meta:'Level 4 • Game Development Research • Specialism choice • 100-minute lesson',href:'#/level4/research',icon:'◆',kind:'level4-research',data:deepSearchText(task)+' '+deepSearchText(window.LEVEL4_SPECIALIST_PROJECTS.researchExamples||[])});
   }
   (CPP_SKILL_MISSIONS.missions||[]).forEach(m=>{const i=cppMissionNextIndex(m),s=m.stages?.[i]||m.stages?.[0];add({title:`C++ Mission ${cppMissionSeq(m)} — ${m.title}`,meta:`Level 4 Unreal C++ • ${m.duration||'guided build'} • cumulative L4CppTraining project`,href:`#/cpp-mission/${m.id}/${s?.id||'start'}`,icon:'C++',kind:'cpp-skill-mission',data:deepSearchText(m)})});
   homeworkPaths().forEach(p=>add({title:`Homework: ${p.title}`,meta:`Guided Homework • ${p.time} • Learn → Do → Check → Bring Back`,href:`#/homework/${p.id}`,icon:p.icon||'⌂',kind:'homework-path',data:deepSearchText(p)}));
