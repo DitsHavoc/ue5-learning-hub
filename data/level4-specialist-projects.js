@@ -5,6 +5,109 @@ window.LEVEL4_SPECIALIST_PROJECTS = {
     kicker: 'Choose ONE pathway',
     summary: 'Pick the discipline you want to develop. Each pathway is a standalone portfolio-style project with a clear outcome, theory, references, staged tasks and a final quality check.'
   },
+  researchTask: {
+    "title": "Game Development Research — Play, Analyse, Plan",
+    "label": "Level 4 • Research lesson • 1 hour 40 minutes",
+    "intro": "Research a game through the eyes of a developer. Choose one or two specialisms, gather useful examples, and plan a realistic contribution to an FPS or action game project.",
+    "focus": "Choose one or two specialisms. Your research and the work you plan should match your own skills and interests.",
+    "specialisms": [
+      {
+        "name": "3D Modelling",
+        "look": "Weapons, characters, props, environments, shapes, materials and detail."
+      },
+      {
+        "name": "2D Art",
+        "look": "Concept art, characters, visual style, colour palettes, textures and illustrations."
+      },
+      {
+        "name": "Level Design",
+        "look": "Layout, combat spaces, routes, player guidance, pacing and exploration."
+      },
+      {
+        "name": "Programming",
+        "look": "Gameplay mechanics, interaction, combat systems, AI and how systems respond to the player."
+      },
+      {
+        "name": "UI / UX",
+        "look": "HUDs, menus, health bars, icons, readability and player feedback."
+      },
+      {
+        "name": "Music & Sound",
+        "look": "Soundtracks, ambience, sound effects, transitions and audio feedback."
+      },
+      {
+        "name": "Animation & VFX",
+        "look": "Movement, combat animation, impacts, particles and visual effects."
+      }
+    ],
+    "steps": [
+      {
+        "n": "01",
+        "time": "10 minutes",
+        "title": "Choose your specialism",
+        "actions": [
+          "Choose one or two areas from the list above.",
+          "Decide what you might contribute to an FPS or action game.",
+          "Write down the specialism(s) you have chosen and why."
+        ],
+        "check": "You can explain what you will be researching and what kind of work you want to produce."
+      },
+      {
+        "n": "02",
+        "time": "30 minutes",
+        "title": "Play and investigate",
+        "actions": [
+          "Choose a game that demonstrates your specialism well. Focus on one level, scene or feature rather than trying to study everything.",
+          "Play as a developer: pause, replay and investigate how the chosen feature works.",
+          "Ask: What has the developer done? Why does it work? How does it affect the player's experience?",
+          "Note any ideas worth investigating further. If you cannot play the game, use recorded gameplay or a developer breakdown."
+        ],
+        "check": "You have named a game, identified specific features and written short observations — not just a game review."
+      },
+      {
+        "n": "03",
+        "time": "25 minutes",
+        "title": "Gather six annotated examples",
+        "actions": [
+          "Collect at least SIX relevant examples: screenshots, reference images, sketches, or short video/audio examples as appropriate to your specialism.",
+          "Annotate or describe each example with what you noticed and why you think it works.",
+          "For audio and animation, include a timestamp or a link to the exact moment you are discussing.",
+          "Explain one idea you could adapt in your own work. Do not just copy an existing design."
+        ],
+        "check": "All six examples are labelled and each has a useful explanation. Audio examples have links or timestamps."
+      },
+      {
+        "n": "04",
+        "time": "20 minutes",
+        "title": "Develop your own ideas",
+        "actions": [
+          "Turn the research into an initial idea: model sketches, concept art, a level map, gameplay pseudocode, a UI wireframe, an audio plan or an animation storyboard.",
+          "Choose the format that suits your specialism; you do NOT all need to draw a level.",
+          "Label at least three design decisions linked to your research."
+        ],
+        "check": "Someone else can look at your idea and understand what you intend to make and what inspired it."
+      },
+      {
+        "n": "05",
+        "time": "15 minutes",
+        "title": "Make a simple project plan",
+        "actions": [
+          "Write what you want to create and the game(s) or developers that inspired it.",
+          "Identify the software you will use and any skills or techniques you need to practise.",
+          "Pick one small, achievable first outcome to build or test in the next session."
+        ],
+        "check": "You have a clear first step — not a plan to build an entire game in one lesson."
+      }
+    ],
+    "evidence": [
+      "Chosen specialism(s) and game/reference",
+      "At least six annotated research examples",
+      "Initial sketches, diagrams, wireframes, audio plan or equivalent",
+      "Short plan: what, inspiration, software, skills to learn, first step"
+    ],
+    "submit": "Put your research, examples and planning into one document or presentation and submit it through your Teams assignment.",
+    "next": "Use your research to start creating your first asset, feature, design or prototype. Keep the scope achievable and build on the specialism you chose."
+  },
   projects: [
     {
       id:'what-happened-here', icon:'✦', title:'What Happened Here?', role:'Environment / Level Design', time:'1–2 weeks',
